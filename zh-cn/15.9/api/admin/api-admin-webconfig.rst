@@ -106,21 +106,21 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
             "name": "Example Site",
             "description": "示例站点",
             "urls": "https://example.com/",
-            "includedUrls": ".*example\\.com.*",
-            "excludedUrls": ".*\\.(pdf|zip)$",
-            "includedDocUrls": "",
-            "excludedDocUrls": "",
-            "configParameter": "",
+            "included_urls": ".*example\\.com.*",
+            "excluded_urls": ".*\\.(pdf|zip)$",
+            "included_doc_urls": "",
+            "excluded_doc_urls": "",
+            "config_parameter": "",
             "depth": 3,
-            "maxAccessCount": 1000,
-            "userAgent": "Mozilla/5.0",
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "user_agent": "Mozilla/5.0",
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -152,35 +152,35 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
           "name": "Example Site",
           "description": "示例站点",
           "urls": "https://example.com/",
-          "includedUrls": ".*example\\.com.*",
-          "excludedUrls": ".*\\.(pdf|zip)$",
-          "includedDocUrls": "",
-          "excludedDocUrls": "",
-          "configParameter": "",
+          "included_urls": ".*example\\.com.*",
+          "excluded_urls": ".*\\.(pdf|zip)$",
+          "included_doc_urls": "",
+          "excluded_doc_urls": "",
+          "config_parameter": "",
           "depth": 3,
-          "maxAccessCount": 1000,
-          "userAgent": "Mozilla/5.0",
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "user_agent": "Mozilla/5.0",
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   响应中包含在注册和更新时由服务器自动设置的 ``createdBy`` 、 ``createdTime`` 、
-   ``updatedBy`` 、 ``updatedTime`` 、 ``versionNo`` 字段。
-   ``versionNo`` 在更新时为必填项（请参阅后述的"更新Web爬虫设置"）。
+   响应中包含在注册和更新时由服务器自动设置的 ``created_by`` 、 ``created_time`` 、
+   ``updated_by`` 、 ``updated_time`` 、 ``version_no`` 字段。
+   ``version_no`` 在更新时为必填项（请参阅后述的"更新Web爬虫设置"）。
 
 创建Web爬虫设置
 ===============
@@ -201,14 +201,14 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
     {
       "name": "Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "userAgent": "Mozilla/5.0",
-      "numOfThread": 3,
-      "intervalTime": 500,
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe)$",
+      "user_agent": "Mozilla/5.0",
+      "num_of_thread": 3,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -231,34 +231,34 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
    * - ``urls``
      - 是
      - 爬虫起始URL（多个URL用换行符分隔）。使用 ``http:`` 或 ``https:`` 协议指定
-   * - ``includedUrls``
+   * - ``included_urls``
      - 否
      - 爬虫目标URL的正则表达式模式
-   * - ``excludedUrls``
+   * - ``excluded_urls``
      - 否
      - 排除爬虫URL的正则表达式模式
-   * - ``includedDocUrls``
+   * - ``included_doc_urls``
      - 否
      - 索引目标URL的正则表达式模式
-   * - ``excludedDocUrls``
+   * - ``excluded_doc_urls``
      - 否
      - 排除索引URL的正则表达式模式
-   * - ``configParameter``
+   * - ``config_parameter``
      - 否
      - 附加配置参数（ ``key=value`` 格式，每行一项）
    * - ``depth``
      - 否
      - 爬虫深度（0以上）
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - 否
      - 最大访问数（0以上）
-   * - ``userAgent``
+   * - ``user_agent``
      - 是
      - User-Agent字符串（最多200个字符）
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - 是
      - 并行线程数（1以上）
-   * - ``intervalTime``
+   * - ``interval_time``
      - 是
      - 访问间隔（毫秒，0以上）
    * - ``boost``
@@ -267,19 +267,19 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
    * - ``available``
      - 是
      - 启用/禁用（字符串 ``"true"`` / ``"false"``）
-   * - ``sortOrder``
+   * - ``sort_order``
      - 是
      - 显示顺序（0以上）
    * - ``permissions``
      - 否
      - 访问权限角色（多个时用换行符分隔）
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - 否
      - 虚拟主机（多个时用换行符分隔）
 
 .. note::
 
-   ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、 ``updatedTime`` 等审计字段
+   ``created_by`` 、 ``created_time`` 、 ``updated_by`` 、 ``updated_time`` 等审计字段
    由服务器自动设置，无需在请求体中指定。
 
 响应
@@ -309,8 +309,8 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 请求体
 ~~~~~~
 
-更新时，除创建时的字段外，还需要指定用于确定更新目标的 ``id`` 和版本号 ``versionNo`` 。
-``versionNo`` 需填写获取API（GET）响应中包含的当前值。
+更新时，除创建时的字段外，还需要指定用于确定更新目标的 ``id`` 和版本号 ``version_no`` 。
+``version_no`` 需填写获取API（GET）响应中包含的当前值。
 
 .. code-block:: json
 
@@ -318,17 +318,17 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
       "id": "existing_webconfig_id",
       "name": "Updated Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
-      "userAgent": "Mozilla/5.0",
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe|dmg)$",
+      "user_agent": "Mozilla/5.0",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 5,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 5,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 更新时的附加字段
@@ -344,9 +344,9 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
    * - ``id``
      - 是
      - 更新目标的设置ID（最多1000个字符）
-   * - ``versionNo``
+   * - ``version_no``
      - 是
-     - 更新目标的当前版本号。填写获取API（GET）响应中包含的 ``versionNo`` 值
+     - 更新目标的当前版本号。填写获取API（GET）响应中包含的 ``version_no`` 值
 
 响应
 ----
@@ -385,7 +385,7 @@ WebConfig API是用于管理 |Fess| Web爬虫设置的API。
 URL模式示例
 ===========
 
-``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` 中可使用正则表达式。
+``included_urls`` / ``excluded_urls`` / ``included_doc_urls`` / ``excluded_doc_urls`` 中可使用正则表达式。
 
 .. list-table::
    :header-rows: 1
@@ -418,16 +418,16 @@ URL模式示例
          -d '{
            "name": "Corporate Website",
            "urls": "https://www.example.com/",
-           "includedUrls": ".*www\\.example\\.com.*",
-           "excludedUrls": ".*/(login|admin|api)/.*",
-           "userAgent": "Mozilla/5.0",
+           "included_urls": ".*www\\.example\\.com.*",
+           "excluded_urls": ".*/(login|admin|api)/.*",
+           "user_agent": "Mozilla/5.0",
            "depth": 5,
-           "maxAccessCount": 10000,
-           "numOfThread": 3,
-           "intervalTime": 500,
+           "max_access_count": 10000,
+           "num_of_thread": 3,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -442,15 +442,15 @@ URL模式示例
          -d '{
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
-           "includedUrls": ".*docs\\.example\\.com.*",
-           "includedDocUrls": ".*\\.(html|htm)$",
-           "userAgent": "Mozilla/5.0",
-           "maxAccessCount": 50000,
-           "numOfThread": 5,
-           "intervalTime": 200,
+           "included_urls": ".*docs\\.example\\.com.*",
+           "included_doc_urls": ".*\\.(html|htm)$",
+           "user_agent": "Mozilla/5.0",
+           "max_access_count": 50000,
+           "num_of_thread": 5,
+           "interval_time": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 参考信息

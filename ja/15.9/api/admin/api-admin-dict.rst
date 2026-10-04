@@ -179,7 +179,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
         "settings": [
           {
             "id": 1,
-            "dictId": "ZjA5...synonym.txt",
+            "dict_id": "ZjA5...synonym.txt",
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
@@ -233,7 +233,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
         "status": 0,
         "setting": {
           "id": 1,
-          "dictId": "ZjA5...synonym.txt",
+          "dict_id": "ZjA5...synonym.txt",
           "inputs": "検索,サーチ",
           "outputs": "検索,サーチ,リサーチ"
         }
@@ -406,7 +406,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 ============================
 
 辞書項目の作成・更新リクエストボディおよびレスポンスのフィールドは、辞書種別ごとに異なります。
-``id`` （項目ID）と ``dictId`` （辞書ID）はレスポンスに共通して含まれます。
+``id`` （項目ID）と ``dict_id`` （辞書ID）はレスポンスに共通して含まれます。
 
 .. list-table::
    :header-rows: 1

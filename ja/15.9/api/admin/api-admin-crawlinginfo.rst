@@ -67,7 +67,7 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
      - Integer
      - いいえ
      - ページ番号（1から開始、デフォルト: 1）
-   * - ``sessionId``
+   * - ``session_id``
      - String
      - いいえ
      - セッションIDフィルター（部分一致）
@@ -83,17 +83,17 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
         "logs": [
           {
             "id": "crawling_info_id_1",
-            "sessionId": "20250129100000",
+            "session_id": "20250129100000",
             "name": "Default Crawler",
-            "expiredTime": "1738200000000",
-            "createdTime": 1738108800000
+            "expired_time": "1738200000000",
+            "created_time": 1738108800000
           },
           {
             "id": "crawling_info_id_2",
-            "sessionId": "20250128100000",
+            "session_id": "20250128100000",
             "name": "Default Crawler",
-            "expiredTime": "1738113600000",
-            "createdTime": 1738022400000
+            "expired_time": "1738113600000",
+            "created_time": 1738022400000
           }
         ],
         "total": 10
@@ -111,18 +111,18 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
      - 説明
    * - ``id``
      - クロール情報ID
-   * - ``sessionId``
+   * - ``session_id``
      - セッションID
    * - ``name``
      - セッション名
-   * - ``expiredTime``
+   * - ``expired_time``
      - 有効期限（エポックミリ秒。文字列として返されます）
-   * - ``createdTime``
+   * - ``created_time``
      - 作成時刻（エポックミリ秒。数値として返されます）
 
 .. note::
 
-   レスポンスの各ログオブジェクトには、内部的に使用される ``crudMode`` フィールド
+   レスポンスの各ログオブジェクトには、内部的に使用される ``crud_mode`` フィールド
    （CRUD操作モードを示す整数値で、参照時は常に ``0``）が含まれます。
    クライアント側では無視して問題ありません。
 
@@ -146,10 +146,10 @@ CrawlingInfo APIは、|Fess| のクロール情報（クロールセッション
         "status": 0,
         "log": {
           "id": "crawling_info_id_1",
-          "sessionId": "20250129100000",
+          "session_id": "20250129100000",
           "name": "Default Crawler",
-          "expiredTime": "1738200000000",
-          "createdTime": 1738108800000
+          "expired_time": "1738200000000",
+          "created_time": 1738108800000
         }
       }
     }

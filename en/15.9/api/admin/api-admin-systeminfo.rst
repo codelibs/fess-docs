@@ -57,22 +57,22 @@ objects that have ``label`` and ``value``.
       "response": {
         "version": "15.9.0",
         "status": 0,
-        "envProps": [
+        "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
           {"label": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
         ],
-        "systemProps": [
+        "system_props": [
           {"label": "java.version", "value": "21.0.1"},
           {"label": "java.vendor", "value": "Oracle Corporation"},
           {"label": "os.name", "value": "Linux"},
           {"label": "user.dir", "value": "/opt/fess"}
         ],
-        "fessProps": [
+        "fess_props": [
           {"label": "crawler.document.max.site.length", "value": "100"},
           {"label": "indexer.thread.dump.enabled", "value": "true"},
           {"label": "app.cipher.key", "value": "XXXXXXXX"}
         ],
-        "bugReportProps": [
+        "bug_report_props": [
           {"label": "os.name", "value": "Linux"},
           {"label": "java.vm.version", "value": "21.0.1+12"}
         ]
@@ -92,24 +92,24 @@ Response Fields
      - |Fess| product version (e.g. ``15.9.0``).
    * - ``status``
      - Result code indicating the processing outcome. ``0`` means success.
-   * - ``envProps``
+   * - ``env_props``
      - List of OS environment variables (array of ``label`` / ``value``). Values are returned verbatim via ``System.getenv()``.
-   * - ``systemProps``
+   * - ``system_props``
      - List of Java system properties (array of ``label`` / ``value``). Values are returned verbatim via ``System.getProperties()``.
-   * - ``fessProps``
+   * - ``fess_props``
      - List of |Fess| configuration properties (array of ``label`` / ``value``). Includes values from ``fess_config.properties`` and system properties set via the admin UI. Sensitive items are masked (see note below).
-   * - ``bugReportProps``
+   * - ``bug_report_props``
      - List of information collected for bug reports (array of ``label`` / ``value``). Includes key OS and Java runtime system properties (``os.name``, ``os.version``, ``java.vm.version``, etc.) and |Fess| system property values.
 
 .. note::
 
-   In ``fessProps``, the following sensitive configuration values are masked and returned as ``XXXXXXXX``:
+   In ``fess_props``, the following sensitive configuration values are masked and returned as ``XXXXXXXX``:
    ``http.proxy.password``, ``ldap.admin.security.credentials``, ``spnego.preauth.password``,
    ``app.cipher.key``, ``oic.client.id``, ``oic.client.secret``.
 
 .. warning::
 
-   ``envProps`` (environment variables) and ``systemProps`` (Java system properties) are NOT masked —
+   ``env_props`` (environment variables) and ``system_props`` (Java system properties) are NOT masked —
    values are returned as-is. If secrets such as credentials are stored in environment variables
    or system properties, they will appear in the response.
 

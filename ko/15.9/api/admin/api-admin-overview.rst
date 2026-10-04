@@ -517,22 +517,22 @@ Web 크롤링 설정 만들기
          -d '{
            "name": "Example Site",
            "urls": "https://example.com/",
-           "includedUrls": ".*example.com.*",
-           "excludedUrls": "",
-           "userAgent": "Mozilla/5.0 (compatible; Fess)",
-           "numOfThread": 1,
-           "intervalTime": 1000,
+           "included_urls": ".*example.com.*",
+           "excluded_urls": "",
+           "user_agent": "Mozilla/5.0 (compatible; Fess)",
+           "num_of_thread": 1,
+           "interval_time": 1000,
            "boost": 1.0,
-           "maxAccessCount": 1000,
+           "max_access_count": 1000,
            "depth": 3,
-           "sortOrder": 1,
+           "sort_order": 1,
            "available": "true"
          }'
 
 .. note::
 
-   Web 크롤링 설정 만들기에서는 ``name``, ``urls``, ``userAgent``, ``numOfThread``,
-   ``intervalTime``, ``boost``, ``available``, ``sortOrder`` 가 필수입니다. 이들을
+   Web 크롤링 설정 만들기에서는 ``name``, ``urls``, ``user_agent``, ``num_of_thread``,
+   ``interval_time``, ``boost``, ``available``, ``sort_order`` 가 필수입니다. 이들을
    생략하면 검증 오류(``status: 1``)가 됩니다. ``available`` 은 문자열로 지정하며,
    ``"true"`` 또는 ``"false"`` 를 설정합니다.
 

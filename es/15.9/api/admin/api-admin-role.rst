@@ -87,12 +87,12 @@ Respuesta
           {
             "id": "role_id_1",
             "name": "admin",
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "role_id_2",
             "name": "user",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -120,7 +120,7 @@ Respuesta
         "setting": {
           "id": "role_id_1",
           "name": "admin",
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -194,7 +194,7 @@ Cuerpo de la Solicitud
     {
       "id": "existing_role_id",
       "name": "editor_updated",
-      "versionNo": 1
+      "version_no": 1
     }
 
 Descripción de Campos
@@ -216,9 +216,9 @@ Descripción de Campos
    * - ``attributes``
      - No
      - Mapa de atributos. Los valores se especifican como cadenas
-   * - ``versionNo``
+   * - ``version_no``
      - Sí
-     - Número de versión para el bloqueo optimista. Especifique el valor de ``versionNo`` obtenido al obtener el rol
+     - Número de versión para el bloqueo optimista. Especifique el valor de ``version_no`` obtenido al obtener el rol
 
 Respuesta
 ---------

@@ -92,9 +92,9 @@ Respuesta
             "id": "keymatch_id_1",
             "term": "download",
             "query": "title:download OR content:download",
-            "maxSize": 10,
+            "max_size": 10,
             "boost": 10.0,
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -104,8 +104,8 @@ Respuesta
 .. note::
 
    En ``total`` se establece el número total de elementos que coinciden con los criterios de filtrado (no el número de elementos de la página actual).
-   Además de los campos indicados, cada objeto de configuración puede incluir ``virtualHost``,
-   ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime`` cuando dichos valores estén definidos.
+   Además de los campos indicados, cada objeto de configuración puede incluir ``virtual_host``,
+   ``created_by``, ``created_time``, ``updated_by`` y ``updated_time`` cuando dichos valores estén definidos.
 
 Obtener Coincidencia de Clave
 =============================
@@ -129,21 +129,21 @@ Respuesta
           "id": "keymatch_id_1",
           "term": "download",
           "query": "title:download OR content:download",
-          "maxSize": 10,
+          "max_size": 10,
           "boost": 10.0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   ``versionNo`` es el número de versión para el bloqueo optimista. Al actualizar una coincidencia de clave,
-   especifique el ``versionNo`` obtenido en la solicitud de obtención en el cuerpo de la solicitud.
+   ``version_no`` es el número de versión para el bloqueo optimista. Al actualizar una coincidencia de clave,
+   especifique el ``version_no`` obtenido en la solicitud de obtención en el cuerpo de la solicitud.
    Si el ID especificado no existe, se devuelve un error.
 
 Crear Coincidencia de Clave
@@ -165,7 +165,7 @@ Cuerpo de la Solicitud
     {
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing",
-      "maxSize": 5,
+      "max_size": 5,
       "boost": 20.0
     }
 
@@ -188,7 +188,7 @@ Descripción de Campos
      - String
      - Sí
      - Consulta de condición de coincidencia (la longitud máxima sigue el valor de configuración de ``form.admin.max.input.size``)
-   * - ``maxSize``
+   * - ``max_size``
      - Integer
      - Sí
      - Número máximo de resultados mostrados (entero mayor o igual a 0; valor inicial en la pantalla de administración: 10)
@@ -196,16 +196,16 @@ Descripción de Campos
      - Float
      - Sí
      - Valor de impulso (valor inicial en la pantalla de administración: 100.0)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - No
      - Nombre del host virtual (máximo 1000 caracteres; especifíquelo cuando desee alternar las coincidencias de claves por host virtual)
 
 .. note::
 
-   ``maxSize`` y ``boost`` son obligatorios a través de la API. Los valores iniciales son los que se muestran en el formulario
+   ``max_size`` y ``boost`` son obligatorios a través de la API. Los valores iniciales son los que se muestran en el formulario
    de la pantalla de administración y no se aplican en la API. Si se omiten, se producirá un error de validación.
-   Tenga en cuenta que ``createdBy`` y ``createdTime``, aunque se especifiquen en la solicitud, serán sobrescritos por el servidor.
+   Tenga en cuenta que ``created_by`` y ``created_time``, aunque se especifiquen en la solicitud, serán sobrescritos por el servidor.
 
 Respuesta
 ---------
@@ -240,15 +240,15 @@ Cuerpo de la Solicitud
       "id": "existing_keymatch_id",
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing OR content:price",
-      "maxSize": 10,
+      "max_size": 10,
       "boost": 15.0,
-      "versionNo": 1
+      "version_no": 1
     }
 
 Descripción de Campos
 ~~~~~~~~~~~~~~~~~~~~~
 
-Además de los campos de creación (``term``, ``query``, ``maxSize``, ``boost``, ``virtualHost``),
+Además de los campos de creación (``term``, ``query``, ``max_size``, ``boost``, ``virtual_host``),
 se deben especificar los siguientes campos.
 
 .. list-table::
@@ -263,7 +263,7 @@ se deben especificar los siguientes campos.
      - String
      - Sí
      - ID de la coincidencia de clave a actualizar (máximo 1000 caracteres)
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - Sí
      - Número de versión para el bloqueo optimista; especifique el valor obtenido en la solicitud de obtención
@@ -316,7 +316,7 @@ Crear Coincidencia de Clave para Página de Producto
          -d '{
            "term": "product features",
            "query": "url:*/products/* AND (title:features OR content:features)",
-           "maxSize": 10,
+           "max_size": 10,
            "boost": 15.0
          }'
 
@@ -331,7 +331,7 @@ Coincidencia de Clave para Página de Soporte
          -d '{
            "term": "help",
            "query": "url:*/support/* OR url:*/help/* OR url:*/faq/*",
-           "maxSize": 5,
+           "max_size": 5,
            "boost": 20.0
          }'
 

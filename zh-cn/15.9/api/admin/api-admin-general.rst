@@ -64,37 +64,36 @@ General API是用于管理 |Fess| 常规设置（系统整体配置）的API。
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "incrementalCrawling": "true",
-          "dayForCleanup": -1,
-          "crawlingThreadCount": 5,
-          "searchLog": "true",
-          "userInfo": "true",
-          "userFavorite": "false",
-          "webApiJson": "true",
-          "defaultLabelValue": "",
-          "defaultSortValue": "",
-          "appendQueryParameter": "false",
-          "loginRequired": "false",
+          "incremental_crawling": "true",
+          "day_for_cleanup": -1,
+          "crawling_thread_count": 5,
+          "search_log": "true",
+          "user_info": "true",
+          "user_favorite": "false",
+          "web_api_json": "true",
+          "default_label_value": "",
+          "default_sort_value": "",
+          "append_query_parameter": "false",
+          "login_required": "false",
           "thumbnail": "true",
-          "failureCountThreshold": -1,
-          "popularWord": "true",
-          "csvFileEncoding": "UTF-8",
-          "purgeSearchLogDay": 30,
-          "purgeJobLogDay": 30,
-          "purgeUserInfoDay": 30,
-          "purgeSuggestSearchLogDay": 30,
-          "notificationTo": "",
-          "suggestSearchLog": "true",
-          "suggestDocuments": "true",
-          "ldapProviderUrl": "ldap://localhost:389/",
-          "ldapBaseDn": "dc=example,dc=com",
-          "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
-          "ldapAdminSecurityCredentials": null,
-          "logLevel": "",
-          "ssoType": "none",
-          "storageType": "",
-          "notificationLogin": "",
-          "notificationSearchTop": ""
+          "failure_count_threshold": -1,
+          "popular_word": "true",
+          "csv_file_encoding": "UTF-8",
+          "purge_search_log_day": 30,
+          "purge_job_log_day": 30,
+          "purge_user_info_day": 30,
+          "purge_suggest_search_log_day": 30,
+          "notification_to": "",
+          "suggest_search_log": "true",
+          "suggest_documents": "true",
+          "ldap_provider_url": "ldap://localhost:389/",
+          "ldap_base_dn": "dc=example,dc=com",
+          "ldap_admin_security_principal": "cn=admin,dc=example,dc=com",
+          "log_level": "",
+          "sso_type": "none",
+          "storage_type": "",
+          "notification_login": "",
+          "notification_search_top": ""
         }
       }
     }
@@ -108,10 +107,10 @@ General API是用于管理 |Fess| 常规设置（系统整体配置）的API。
 
    出于安全原因，包含凭据的字段不会以实际值返回。
 
-   - LDAP管理员密码 ``ldapAdminSecurityCredentials`` 始终以 ``null`` 返回。
-   - 其他机密字段（``storageAccessKey`` / ``storageSecretKey`` /
-     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
-     ``entraidClientId`` / ``entraidClientSecret``）在已设置的情况下
+   - LDAP管理员密码 ``ldap_admin_security_credentials`` 始终不包含在响应中。
+   - 其他机密字段（``storage_access_key`` / ``storage_secret_key`` /
+     ``oic_client_id`` / ``oic_client_secret`` / ``spnego_preauth_password`` /
+     ``entraid_client_id`` / ``entraid_client_secret``）在已设置的情况下
      以掩码值 ``"**********"`` 返回，未设置时以空字符串（``""``）返回。
 
 更新常规设置
@@ -136,10 +135,10 @@ General API是用于管理 |Fess| 常规设置（系统整体配置）的API。
    以下四个字段为必需字段，**每次** PUT请求中都必须包含这些字段，
    即使是部分更新也是如此。
 
-   - ``dayForCleanup``
-   - ``crawlingThreadCount``
-   - ``failureCountThreshold``
-   - ``csvFileEncoding``
+   - ``day_for_cleanup``
+   - ``crawling_thread_count``
+   - ``failure_count_threshold``
+   - ``csv_file_encoding``
 
    如果缺少其中任何一个，请求将验证失败，API将返回 HTTP 400，
    并附带 ``status: 1`` 和错误 ``message``\ 。由于发送的值会覆盖现有设置，
@@ -162,12 +161,12 @@ General API是用于管理 |Fess| 常规设置（系统整体配置）的API。
 .. code-block:: json
 
     {
-      "incrementalCrawling": "true",
-      "dayForCleanup": -1,
-      "crawlingThreadCount": 10,
-      "failureCountThreshold": 100,
-      "csvFileEncoding": "UTF-8",
-      "popularWord": "true"
+      "incremental_crawling": "true",
+      "day_for_cleanup": -1,
+      "crawling_thread_count": 10,
+      "failure_count_threshold": 100,
+      "csv_file_encoding": "UTF-8",
+      "popular_word": "true"
     }
 
 主要字段
@@ -184,124 +183,124 @@ General API是用于管理 |Fess| 常规设置（系统整体配置）的API。
    * - 字段
      - 必需
      - 说明
-   * - ``incrementalCrawling``
+   * - ``incremental_crawling``
      - 否
      - 增量爬取的启用/禁用
-   * - ``dayForCleanup``
+   * - ``day_for_cleanup``
      - 是
      - 保留已爬取文档的天数（-1=禁用清理；取值范围：-1 至 1000）
-   * - ``crawlingThreadCount``
+   * - ``crawling_thread_count``
      - 是
      - 爬取使用的线程数（取值范围：0 至 100）
-   * - ``failureCountThreshold``
+   * - ``failure_count_threshold``
      - 是
      - 停止URL爬取的失败次数阈值（-1=禁用；取值范围：-1 至 10000）
-   * - ``csvFileEncoding``
+   * - ``csv_file_encoding``
      - 是
      - CSV导出的编码
-   * - ``searchLog``
+   * - ``search_log``
      - 否
      - 搜索查询日志的启用/禁用
-   * - ``userInfo``
+   * - ``user_info``
      - 否
      - 用户信息记录的启用/禁用
-   * - ``userFavorite``
+   * - ``user_favorite``
      - 否
      - 收藏功能的启用/禁用
-   * - ``webApiJson``
+   * - ``web_api_json``
      - 否
      - JSON Web API的启用/禁用
-   * - ``appValue``
+   * - ``app_value``
      - 否
      - 应用程序专用的附加配置值
-   * - ``virtualHostValue``
+   * - ``virtual_host_value``
      - 否
      - 虚拟主机配置（用于多租户环境）
-   * - ``popularWord``
+   * - ``popular_word``
      - 否
      - 热门词汇的统计与显示的启用/禁用
-   * - ``defaultLabelValue``
+   * - ``default_label_value``
      - 否
      - 默认标签值
-   * - ``defaultSortValue``
+   * - ``default_sort_value``
      - 否
      - 默认排序顺序
-   * - ``appendQueryParameter``
+   * - ``append_query_parameter``
      - 否
      - 向搜索结果URL附加查询参数
-   * - ``loginRequired``
+   * - ``login_required``
      - 否
      - 搜索是否需要登录
-   * - ``loginLink``
+   * - ``login_link``
      - 否
      - 搜索页面上登录链接显示的启用/禁用
    * - ``thumbnail``
      - 否
      - 缩略图生成的启用/禁用
-   * - ``resultCollapsed``
+   * - ``result_collapsed``
      - 否
      - 搜索结果中折叠相似文档的启用/禁用
-   * - ``ignoreFailureType``
+   * - ``ignore_failure_type``
      - 否
      - 要忽略的爬取失败类型
-   * - ``crawlingUserAgent``
+   * - ``crawling_user_agent``
      - 否
      - 爬取时发送的User-Agent字符串
-   * - ``purgeSearchLogDay``
+   * - ``purge_search_log_day``
      - 否
      - 保留搜索日志的天数（-1=禁用；取值范围：-1 至 100000）
-   * - ``purgeJobLogDay``
+   * - ``purge_job_log_day``
      - 否
      - 保留作业日志的天数（-1=禁用；取值范围：-1 至 100000）
-   * - ``purgeUserInfoDay``
+   * - ``purge_user_info_day``
      - 否
      - 保留用户信息的天数（-1=禁用；取值范围：-1 至 100000）
-   * - ``purgeSuggestSearchLogDay``
+   * - ``purge_suggest_search_log_day``
      - 否
      - 保留建议搜索日志的天数（0=禁用；取值范围：0 至 100000）
-   * - ``purgeByBots``
+   * - ``purge_by_bots``
      - 否
      - 要丢弃搜索日志的机器人User-Agent
-   * - ``notificationTo``
+   * - ``notification_to``
      - 否
      - 系统通知的接收邮箱地址
-   * - ``notificationLogin``
+   * - ``notification_login``
      - 否
      - 在登录页面显示的通知消息
-   * - ``notificationSearchTop``
+   * - ``notification_search_top``
      - 否
      - 在搜索首页显示的通知消息
-   * - ``notificationAdvanceSearch``
+   * - ``notification_advance_search``
      - 否
      - 在高级搜索页面显示的通知消息
-   * - ``suggestSearchLog``
+   * - ``suggest_search_log``
      - 否
      - 来自搜索日志的建议的启用/禁用
-   * - ``suggestDocuments``
+   * - ``suggest_documents``
      - 否
      - 来自文档的建议的启用/禁用
-   * - ``logLevel``
+   * - ``log_level``
      - 否
      - 系统日志的日志级别
-   * - ``logNotificationEnabled``
+   * - ``log_notification_enabled``
      - 否
      - ERROR/WARN日志通知的启用/禁用
-   * - ``logNotificationLevel``
+   * - ``log_notification_level``
      - 否
      - 日志通知级别
-   * - ``slackWebhookUrls``
+   * - ``slack_webhook_urls``
      - 否
      - 用于通知的Slack Webhook URL
-   * - ``googleChatWebhookUrls``
+   * - ``google_chat_webhook_urls``
      - 否
      - 用于通知的Google Chat Webhook URL
-   * - ``searchUseBrowserLocale``
+   * - ``search_use_browser_locale``
      - 否
      - 搜索时是否使用浏览器语言区域设置
-   * - ``ragLlmName``
+   * - ``rag_llm_name``
      - 否
      - RAG所使用的LLM提供商名称
-   * - ``llmLogLevel``
+   * - ``llm_log_level``
      - 否
      - LLM相关包的日志级别
 
@@ -317,29 +316,29 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也�
 
    * - 字段
      - 说明
-   * - ``ldapProviderUrl``
+   * - ``ldap_provider_url``
      - LDAP连接URL
-   * - ``ldapBaseDn``
+   * - ``ldap_base_dn``
      - LDAP基础DN
-   * - ``ldapSecurityPrincipal``
+   * - ``ldap_security_principal``
      - 用于LDAP绑定的安全主体
-   * - ``ldapAdminSecurityPrincipal``
+   * - ``ldap_admin_security_principal``
      - 用于LDAP管理操作的安全主体
-   * - ``ldapAdminSecurityCredentials``
-     - LDAP管理员密码（在响应中替换为 ``null``）
-   * - ``ldapAccountFilter`` / ``ldapGroupFilter``
+   * - ``ldap_admin_security_credentials``
+     - LDAP管理员密码（不包含在响应中）
+   * - ``ldap_account_filter`` / ``ldap_group_filter``
      - 用户/组搜索过滤器
-   * - ``ldapMemberofAttribute``
+   * - ``ldap_memberof_attribute``
      - 表示组成员关系的LDAP属性名
-   * - ``ssoType``
+   * - ``sso_type``
      - SSO类型（``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``）
-   * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` 等
+   * - ``oic_client_id`` / ``oic_client_secret`` / ``oic_auth_server_url`` 等
      - OpenID Connect的设置
-   * - ``samlIdpEntityid`` / ``samlSpEntityid`` 等
+   * - ``saml_idp_entityid`` / ``saml_sp_entityid`` 等
      - SAML的设置
-   * - ``spnegoKrb5Conf`` / ``spnegoLoginConf`` 等
+   * - ``spnego_krb5_conf`` / ``spnego_login_conf`` 等
      - SPNEGO的设置
-   * - ``entraidClientId`` / ``entraidTenant`` 等
+   * - ``entraid_client_id`` / ``entraid_tenant`` 等
      - Microsoft Entra ID的设置
 
 存储相关字段
@@ -353,24 +352,24 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也�
 
    * - 字段
      - 说明
-   * - ``storageType``
+   * - ``storage_type``
      - 存储类型（``auto`` / ``s3`` / ``gcs``）
-   * - ``storageEndpoint``
+   * - ``storage_endpoint``
      - 存储的端点URL
-   * - ``storageAccessKey`` / ``storageSecretKey``
+   * - ``storage_access_key`` / ``storage_secret_key``
      - 用于认证的访问密钥/私密密钥
-   * - ``storageBucket``
+   * - ``storage_bucket``
      - 存储桶名称
-   * - ``storageRegion``
+   * - ``storage_region``
      - S3的区域
-   * - ``storageProjectId`` / ``storageCredentialsPath``
+   * - ``storage_project_id`` / ``storage_credentials_path``
      - GCS的项目ID / 凭据文件路径
 
 .. note::
 
-   ``ldapAdminSecurityCredentials``、``storageAccessKey`` / ``storageSecretKey``、
-   ``oicClientId`` / ``oicClientSecret``、``entraidClientId`` / ``entraidClientSecret``、
-   ``spnegoPreauthPassword`` 等机密字段，如果将掩码值 ``"**********"`` 原样发送，
+   ``ldap_admin_security_credentials``、``storage_access_key`` / ``storage_secret_key``、
+   ``oic_client_id`` / ``oic_client_secret``、``entraid_client_id`` / ``entraid_client_secret``、
+   ``spnego_preauth_password`` 等机密字段，如果将掩码值 ``"**********"`` 原样发送，
    该值不会被更新，已保存的值将继续保留。只有在需要更改时，才发送实际值。
 
    由于此判断基于去除星号后的字符串是否为空，发送空字符串（``""``）或仅由星号
@@ -399,8 +398,8 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也�
 
 .. note::
 
-   以下示例包含必需字段（``dayForCleanup``、``crawlingThreadCount``、
-   ``failureCountThreshold``、``csvFileEncoding``）。由于这些字段无论修改内容如何
+   以下示例包含必需字段（``day_for_cleanup``、``crawling_thread_count``、
+   ``failure_count_threshold``、``csv_file_encoding``）。由于这些字段无论修改内容如何
    都必须始终发送，实际操作中请通过 ``GET`` 获取当前值后再包含这些字段
    （以下示例使用默认值）。
 
@@ -413,11 +412,11 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "incrementalCrawling": "true",
-           "crawlingThreadCount": 10,
-           "failureCountThreshold": 100,
-           "dayForCleanup": -1,
-           "csvFileEncoding": "UTF-8"
+           "incremental_crawling": "true",
+           "crawling_thread_count": 10,
+           "failure_count_threshold": 100,
+           "day_for_cleanup": -1,
+           "csv_file_encoding": "UTF-8"
          }'
 
 更新日志保留期限
@@ -429,13 +428,13 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "dayForCleanup": -1,
-           "crawlingThreadCount": 5,
-           "failureCountThreshold": -1,
-           "csvFileEncoding": "UTF-8",
-           "purgeSearchLogDay": 90,
-           "purgeJobLogDay": 90,
-           "purgeUserInfoDay": 90
+           "day_for_cleanup": -1,
+           "crawling_thread_count": 5,
+           "failure_count_threshold": -1,
+           "csv_file_encoding": "UTF-8",
+           "purge_search_log_day": 90,
+           "purge_job_log_day": 90,
+           "purge_user_info_day": 90
          }'
 
 更新建议设置
@@ -447,12 +446,12 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "dayForCleanup": -1,
-           "crawlingThreadCount": 5,
-           "failureCountThreshold": -1,
-           "csvFileEncoding": "UTF-8",
-           "suggestSearchLog": "true",
-           "suggestDocuments": "true"
+           "day_for_cleanup": -1,
+           "crawling_thread_count": 5,
+           "failure_count_threshold": -1,
+           "csv_file_encoding": "UTF-8",
+           "suggest_search_log": "true",
+           "suggest_documents": "true"
          }'
 
 参考信息

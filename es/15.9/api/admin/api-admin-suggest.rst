@@ -77,9 +77,9 @@ Respuesta
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "totalWordsNum": 1500,
-          "documentWordsNum": 1200,
-          "queryWordsNum": 450
+          "total_words_num": 1500,
+          "document_words_num": 1200,
+          "query_words_num": 450
         }
       }
     }
@@ -93,18 +93,18 @@ Campos de Respuesta
 
    * - Campo
      - Descripción
-   * - ``setting.totalWordsNum``
+   * - ``setting.total_words_num``
      - Número total de palabras de sugerencia (número de palabras de sugerencia registradas en el índice de sugerencias)
-   * - ``setting.documentWordsNum``
+   * - ``setting.document_words_num``
      - Número de palabras de sugerencia derivadas de documentos (número de palabras de sugerencia con frecuencia de documento igual o superior a 1)
-   * - ``setting.queryWordsNum``
+   * - ``setting.query_words_num``
      - Número de palabras de sugerencia derivadas de consultas de búsqueda (número de palabras de sugerencia con frecuencia de consulta igual o superior a 1)
 
 .. note::
 
-   ``documentWordsNum`` y ``queryWordsNum`` no son excluyentes entre si. Si una palabra de sugerencia tiene origen
+   ``document_words_num`` y ``query_words_num`` no son excluyentes entre si. Si una palabra de sugerencia tiene origen
    tanto en documentos como en consultas de búsqueda, se incluye en el recuento de ambos. Por este motivo,
-   la suma de ``documentWordsNum`` y ``queryWordsNum`` puede no coincidir con ``totalWordsNum``.
+   la suma de ``document_words_num`` y ``query_words_num`` puede no coincidir con ``total_words_num``.
 
 Eliminar Todas las Palabras de Sugerencia
 =========================================

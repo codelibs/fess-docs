@@ -179,7 +179,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
         "settings": [
           {
             "id": 1,
-            "dictId": "ZjA5...synonym.txt",
+            "dict_id": "ZjA5...synonym.txt",
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
@@ -233,7 +233,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
         "status": 0,
         "setting": {
           "id": 1,
-          "dictId": "ZjA5...synonym.txt",
+          "dict_id": "ZjA5...synonym.txt",
           "inputs": "検索,サーチ",
           "outputs": "検索,サーチ,リサーチ"
         }
@@ -406,7 +406,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 ============================
 
 사전 항목의 생성, 업데이트 요청 본문 및 응답의 필드는 사전 종류별로 다릅니다.
-``id`` (항목 ID)와 ``dictId`` (사전 ID)는 응답에 공통으로 포함됩니다.
+``id`` (항목 ID)와 ``dict_id`` (사전 ID)는 응답에 공통으로 포함됩니다.
 
 .. list-table::
    :header-rows: 1

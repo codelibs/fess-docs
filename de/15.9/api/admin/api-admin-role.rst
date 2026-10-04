@@ -87,12 +87,12 @@ Response
           {
             "id": "role_id_1",
             "name": "admin",
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "role_id_2",
             "name": "user",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -120,7 +120,7 @@ Response
         "setting": {
           "id": "role_id_1",
           "name": "admin",
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -194,7 +194,7 @@ Request-Body
     {
       "id": "existing_role_id",
       "name": "editor_updated",
-      "versionNo": 1
+      "version_no": 1
     }
 
 Feldbeschreibungen
@@ -216,9 +216,9 @@ Feldbeschreibungen
    * - ``attributes``
      - Nein
      - Attribut-Map. Werte werden als Zeichenketten angegeben
-   * - ``versionNo``
+   * - ``version_no``
      - Ja
-     - Versionsnummer für optimistisches Sperren. Geben Sie den Wert von ``versionNo`` an, der beim Abrufen der Rolle ermittelt wurde
+     - Versionsnummer für optimistisches Sperren. Geben Sie den Wert von ``version_no`` an, der beim Abrufen der Rolle ermittelt wurde
 
 Response
 --------

@@ -92,11 +92,11 @@ Response
         "settings": [
           {
             "id": "elevate_id_1",
-            "suggestWord": "fess",
+            "suggest_word": "fess",
             "reading": "",
             "permissions": "{role}guest",
             "boost": 100.0,
-            "labelTypeIds": []
+            "label_type_ids": []
           }
         ],
         "total": 5
@@ -123,11 +123,11 @@ Response
         "status": 0,
         "setting": {
           "id": "elevate_id_1",
-          "suggestWord": "fess",
+          "suggest_word": "fess",
           "reading": "",
           "permissions": "{role}guest",
           "boost": 100.0,
-          "labelTypeIds": []
+          "label_type_ids": []
         }
       }
     }
@@ -149,11 +149,11 @@ Request-Body
 .. code-block:: json
 
     {
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest",
       "boost": 100.0,
-      "labelTypeIds": ["label1"]
+      "label_type_ids": ["label1"]
     }
 
 Feldbeschreibungen
@@ -166,7 +166,7 @@ Feldbeschreibungen
    * - Feld
      - Erforderlich
      - Beschreibung
-   * - ``suggestWord``
+   * - ``suggest_word``
      - Ja
      - Das hervorzuhebende Schlüsselwort
    * - ``reading``
@@ -178,7 +178,7 @@ Feldbeschreibungen
    * - ``boost``
      - Ja
      - Boost-Wert (Formular-Standardwert: 100.0)
-   * - ``labelTypeIds``
+   * - ``label_type_ids``
      - Nein
      - Ziel-Label-IDs (Array von Zeichenketten)
 
@@ -213,12 +213,12 @@ Request-Body
 
     {
       "id": "existing_elevate_id",
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
-      "labelTypeIds": ["label1"],
-      "versionNo": 1
+      "label_type_ids": ["label1"],
+      "version_no": 1
     }
 
 .. note::
@@ -226,7 +226,7 @@ Request-Body
    Bei einer Aktualisierung sind zusätzlich zu den Feldern, die bei der Erstellung verwendet werden, folgende Felder erforderlich:
 
    - ``id`` - ID des zu aktualisierenden Elevate Words
-   - ``versionNo`` - Versionsnummer für optimistisches Sperren. Geben Sie den Wert an, der über ``GET /setting/{id}`` abgerufen wurde.
+   - ``version_no`` - Versionsnummer für optimistisches Sperren. Geben Sie den Wert an, der über ``GET /setting/{id}`` abgerufen wurde.
 
 Response
 --------
@@ -326,7 +326,7 @@ Produktnamen hervorheben
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "Product X",
+           "suggest_word": "Product X",
            "boost": 100.0,
            "permissions": "{role}guest"
          }'
@@ -340,9 +340,9 @@ Hervorheben für ein bestimmtes Label
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "API reference",
+           "suggest_word": "API reference",
            "boost": 100.0,
-           "labelTypeIds": ["technical_docs"],
+           "label_type_ids": ["technical_docs"],
            "permissions": "{role}guest"
          }'
 

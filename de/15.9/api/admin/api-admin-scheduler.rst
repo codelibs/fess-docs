@@ -91,14 +91,14 @@ Response
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cronExpression": "0 0 0 * * ?",
-            "scriptType": "javascript",
-            "scriptData": "...",
-            "jobLogging": "true",
+            "cron_expression": "0 0 0 * * ?",
+            "script_type": "javascript",
+            "script_data": "...",
+            "job_logging": "true",
             "crawler": "true",
             "available": "true",
-            "sortOrder": 0,
-            "versionNo": 1,
+            "sort_order": 0,
+            "version_no": 1,
             "running": false
           }
         ],
@@ -112,7 +112,7 @@ Response
 
 .. note::
 
-   Im Response werden ``jobLogging`` / ``crawler`` / ``available`` als Zeichenketten (``"true"`` / ``"false"``) zurückgegeben. ``running`` ist ein boolescher Wert und ein reines Response-Feld, das anzeigt, ob der Job gerade ausgeführt wird (kann im Request nicht gesetzt werden). ``total`` ist die Gesamtanzahl der zur Abfrage passenden Jobs.
+   Im Response werden ``job_logging`` / ``crawler`` / ``available`` als Zeichenketten (``"true"`` / ``"false"``) zurückgegeben. ``running`` ist ein boolescher Wert und ein reines Response-Feld, das anzeigt, ob der Job gerade ausgeführt wird (kann im Request nicht gesetzt werden). ``total`` ist die Gesamtanzahl der zur Abfrage passenden Jobs.
 
 Geplanten Job abrufen
 =====================
@@ -136,14 +136,14 @@ Response
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cronExpression": "0 0 0 * * ?",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": "true",
+          "cron_expression": "0 0 0 * * ?",
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "job_logging": "true",
           "crawler": "true",
           "available": "true",
-          "sortOrder": 0,
-          "versionNo": 1,
+          "sort_order": 0,
+          "version_no": 1,
           "running": false
         }
       }
@@ -168,13 +168,13 @@ Request-Body
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cronExpression": "0 0 2 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": "true",
+      "cron_expression": "0 0 2 * * ?",
+      "script_type": "javascript",
+      "script_data": "return container.getComponent(\"crawlJob\").execute();",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1
+      "sort_order": 1
     }
 
 Feldbeschreibungen
@@ -193,16 +193,16 @@ Feldbeschreibungen
    * - ``target``
      - Ja
      - Ausführungsziel (max. 100 Zeichen). ``all`` oder einen bestimmten Zielnamen angeben
-   * - ``cronExpression``
+   * - ``cron_expression``
      - Nein
      - Cron-Ausdruck (Sekunde Minute Stunde Tag Monat Wochentag). Max. 100 Zeichen, wird als Cron-Ausdruck validiert. Ist das Feld leer, wird der Job nicht geplant und kann nur manuell gestartet werden
-   * - ``scriptType``
+   * - ``script_type``
      - Ja
      - Skript-Typ (max. 100 Zeichen). ``javascript`` (Standard für neue Jobs, festgelegt über die Eigenschaft ``job.default.script``) oder ``groovy`` (erfordert das Plugin ``fess-script-groovy``)
-   * - ``scriptData``
+   * - ``script_data``
      - Nein
      - Ausführungsskript. Die maximale Größe richtet sich nach ``form.admin.max.input.size`` in ``fess_config.properties``
-   * - ``jobLogging``
+   * - ``job_logging``
      - Nein
      - Job-Protokollierung aktivieren (Zeichenkette)
    * - ``crawler``
@@ -211,17 +211,17 @@ Feldbeschreibungen
    * - ``available``
      - Nein
      - Aktiviert/Deaktiviert (Zeichenkette)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Ja
      - Anzeigereihenfolge (Ganzzahl zwischen 0 und 2147483647)
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` sind Zeichenkettenfelder. Im Request aktiviert die Angabe von ``"on"`` oder ``"true"`` (Groß-/Kleinschreibung wird nicht berücksichtigt) das jeweilige Feld; jeder andere Wert (``"false"``, leere Zeichenkette oder nicht angegeben) wird als deaktiviert behandelt. Im Response werden die Werte als ``"true"`` / ``"false"`` zurückgegeben.
+   ``job_logging`` / ``crawler`` / ``available`` sind Zeichenkettenfelder. Im Request aktiviert die Angabe von ``"on"`` oder ``"true"`` (Groß-/Kleinschreibung wird nicht berücksichtigt) das jeweilige Feld; jeder andere Wert (``"false"``, leere Zeichenkette oder nicht angegeben) wird als deaktiviert behandelt. Im Response werden die Werte als ``"true"`` / ``"false"`` zurückgegeben.
 
 .. note::
 
-   ``crudMode`` wird serverseitig automatisch gesetzt und muss im Request nicht angegeben werden. Audit-Felder wie ``createdBy`` / ``createdTime`` werden ebenfalls serverseitig gesetzt.
+   ``crud_mode`` wird serverseitig automatisch gesetzt und muss im Request nicht angegeben werden. Audit-Felder wie ``created_by`` / ``created_time`` werden ebenfalls serverseitig gesetzt.
 
 Response
 --------
@@ -274,19 +274,19 @@ Request-Body
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cronExpression": "0 0 3 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "...",
-      "jobLogging": "true",
+      "cron_expression": "0 0 3 * * ?",
+      "script_type": "javascript",
+      "script_data": "...",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1,
-      "versionNo": 1
+      "sort_order": 1,
+      "version_no": 1
     }
 
 .. note::
 
-   Für Aktualisierungen sind ``id`` (max. 1000 Zeichen) und ``versionNo`` Pflichtfelder. ``versionNo`` wird für optimistisches Sperren verwendet; geben Sie den Wert an, der im GET-Response zurückgegeben wurde. Stimmt der Wert nicht überein, schlägt die Aktualisierung fehl. Die weiteren Pflichtfelder (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) sind dieselben wie beim Erstellen.
+   Für Aktualisierungen sind ``id`` (max. 1000 Zeichen) und ``version_no`` Pflichtfelder. ``version_no`` wird für optimistisches Sperren verwendet; geben Sie den Wert an, der im GET-Response zurückgegeben wurde. Stimmt der Wert nicht überein, schlägt die Aktualisierung fehl. Die weiteren Pflichtfelder (``name`` / ``target`` / ``script_type`` / ``sort_order``) sind dieselben wie beim Erstellen.
 
 Response
 --------
@@ -344,7 +344,7 @@ Response
     {
       "response": {
         "status": 0,
-        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+        "job_log_id": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
 
@@ -357,15 +357,15 @@ Response-Felder
 
    * - Feld
      - Beschreibung
-   * - ``jobLogId``
-     - Job-Protokoll-ID des gestarteten Jobs. Wird ausgegeben, wenn die Job-Protokollierung aktiviert ist. Ist die Job-Protokollierung deaktiviert, ist der Wert ``null``.
+   * - ``job_log_id``
+     - Job-Protokoll-ID des gestarteten Jobs. Wird ausgegeben, wenn die Job-Protokollierung aktiviert ist. Ist die Job-Protokollierung deaktiviert, fehlt das Feld in der Antwort.
 
 Hinweise
 --------
 
 - Wenn der Job bereits läuft, schlägt der Start fehl und es wird ein Fehler zurückgegeben (``status`` ungleich ``0``).
 - Wenn der Job deaktiviert ist (``available`` ist nicht aktiviert), schlägt der Start ebenfalls fehl und es wird ein Fehler zurückgegeben.
-- ``jobLogId`` wird nur ausgegeben, wenn die Job-Protokollierung aktiviert ist (``jobLogging`` ist aktiviert).
+- ``job_log_id`` wird nur ausgegeben, wenn die Job-Protokollierung aktiviert ist (``job_logging`` ist aktiviert).
 
 Job stoppen
 ===========
@@ -405,13 +405,13 @@ Crawl-Job erstellen und ausführen
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cronExpression": "0 0 * * * ?",
-           "scriptType": "javascript",
-           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": "true",
+           "cron_expression": "0 0 * * * ?",
+           "script_type": "javascript",
+           "script_data": "return container.getComponent(\"crawlJob\").execute();",
+           "job_logging": "true",
            "crawler": "true",
            "available": "true",
-           "sortOrder": 1
+           "sort_order": 1
          }'
 
     # Job sofort ausführen

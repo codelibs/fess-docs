@@ -91,14 +91,14 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cronExpression": "0 0 0 * * ?",
-            "scriptType": "javascript",
-            "scriptData": "...",
-            "jobLogging": "true",
+            "cron_expression": "0 0 0 * * ?",
+            "script_type": "javascript",
+            "script_data": "...",
+            "job_logging": "true",
             "crawler": "true",
             "available": "true",
-            "sortOrder": 0,
-            "versionNo": 1,
+            "sort_order": 0,
+            "version_no": 1,
             "running": false
           }
         ],
@@ -112,7 +112,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
 
 .. note::
 
-   응답의 ``jobLogging`` / ``crawler`` / ``available`` 은 문자열（``"true"`` / ``"false"``）로 반환됩니다. ``running`` 은 불리언 값으로, 작업이 현재 실행 중인지 여부를 나타내는 응답 전용 필드입니다（요청에서는 지정할 수 없습니다）。\ ``total`` 은 조건에 일치하는 전체 작업 수입니다.
+   응답의 ``job_logging`` / ``crawler`` / ``available`` 은 문자열（``"true"`` / ``"false"``）로 반환됩니다. ``running`` 은 불리언 값으로, 작업이 현재 실행 중인지 여부를 나타내는 응답 전용 필드입니다（요청에서는 지정할 수 없습니다）。\ ``total`` 은 조건에 일치하는 전체 작업 수입니다.
 
 스케줄 작업 조회
 ======================
@@ -136,14 +136,14 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cronExpression": "0 0 0 * * ?",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": "true",
+          "cron_expression": "0 0 0 * * ?",
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "job_logging": "true",
           "crawler": "true",
           "available": "true",
-          "sortOrder": 0,
-          "versionNo": 1,
+          "sort_order": 0,
+          "version_no": 1,
           "running": false
         }
       }
@@ -168,13 +168,13 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cronExpression": "0 0 2 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": "true",
+      "cron_expression": "0 0 2 * * ?",
+      "script_type": "javascript",
+      "script_data": "return container.getComponent(\"crawlJob\").execute();",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1
+      "sort_order": 1
     }
 
 필드 설명
@@ -193,16 +193,16 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
    * - ``target``
      - 예
      - 실행 대상（최대 100자）。\ ``all`` 또는 특정 대상 이름을 지정합니다
-   * - ``cronExpression``
+   * - ``cron_expression``
      - 아니오
      - Cron 표현식（초 분 시 일 월 요일）。최대 100자이며 Cron 표현식으로 검증됩니다. 비어 있으면 스케줄 실행되지 않고 수동으로만 시작할 수 있습니다
-   * - ``scriptType``
+   * - ``script_type``
      - 예
      - 스크립트 타입（최대 100자）。``javascript``（신규 작업의 기본값. ``job.default.script`` 속성으로 결정）또는 ``groovy``（``fess-script-groovy`` 플러그인 필요）를 지정합니다
-   * - ``scriptData``
+   * - ``script_data``
      - 아니오
      - 실행 스크립트。최대 크기는 ``fess_config.properties`` 의 ``form.admin.max.input.size`` 에 따릅니다
-   * - ``jobLogging``
+   * - ``job_logging``
      - 아니오
      - 작업 로그 기록 활성화（문자열）
    * - ``crawler``
@@ -211,17 +211,17 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
    * - ``available``
      - 아니오
      - 활성화/비활성화（문자열）
-   * - ``sortOrder``
+   * - ``sort_order``
      - 예
      - 표시 순서（0〜2147483647의 정수）
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` 은 문자열 필드입니다. 요청에서 ``"on"`` 또는 ``"true"``\ （대소문자 구분 없음）를 지정하면 활성화되며, 그 외의 값（``"false"``, 빈 문자열, 미지정 등）은 비활성화로 처리됩니다. 응답에서는 ``"true"`` / ``"false"`` 로 반환됩니다.
+   ``job_logging`` / ``crawler`` / ``available`` 은 문자열 필드입니다. 요청에서 ``"on"`` 또는 ``"true"``\ （대소문자 구분 없음）를 지정하면 활성화되며, 그 외의 값（``"false"``, 빈 문자열, 미지정 등）은 비활성화로 처리됩니다. 응답에서는 ``"true"`` / ``"false"`` 로 반환됩니다.
 
 .. note::
 
-   ``crudMode`` 는 서버 측에서 자동으로 설정되므로 요청에서 지정할 필요가 없습니다. ``createdBy`` / ``createdTime`` 등의 감사 필드도 서버 측에서 설정됩니다.
+   ``crud_mode`` 는 서버 측에서 자동으로 설정되므로 요청에서 지정할 필요가 없습니다. ``created_by`` / ``created_time`` 등의 감사 필드도 서버 측에서 설정됩니다.
 
 응답
 ----------
@@ -274,19 +274,19 @@ Cron 표현식 예시
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cronExpression": "0 0 3 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "...",
-      "jobLogging": "true",
+      "cron_expression": "0 0 3 * * ?",
+      "script_type": "javascript",
+      "script_data": "...",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1,
-      "versionNo": 1
+      "sort_order": 1,
+      "version_no": 1
     }
 
 .. note::
 
-   업데이트 시 ``id``\ （최대 1000자）와 ``versionNo`` 는 필수입니다. ``versionNo`` 는 낙관적 잠금에 사용되며, 조회 시 응답에 포함된 값을 지정합니다. 값이 일치하지 않으면 업데이트가 실패합니다. 그 밖의 필수 필드（``name`` / ``target`` / ``scriptType`` / ``sortOrder``）는 작성 시와 동일합니다.
+   업데이트 시 ``id``\ （최대 1000자）와 ``version_no`` 는 필수입니다. ``version_no`` 는 낙관적 잠금에 사용되며, 조회 시 응답에 포함된 값을 지정합니다. 값이 일치하지 않으면 업데이트가 실패합니다. 그 밖의 필수 필드（``name`` / ``target`` / ``script_type`` / ``sort_order``）는 작성 시와 동일합니다.
 
 응답
 ----------
@@ -344,7 +344,7 @@ Cron 표현식 예시
     {
       "response": {
         "status": 0,
-        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+        "job_log_id": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
 
@@ -357,15 +357,15 @@ Cron 표현식 예시
 
    * - 필드
      - 설명
-   * - ``jobLogId``
-     - 시작된 작업의 작업 로그 ID. 작업 로그가 활성화된 경우에 발행됩니다. 작업 로그가 비활성화된 경우에는 ``null`` 이 됩니다.
+   * - ``job_log_id``
+     - 시작된 작업의 작업 로그 ID. 작업 로그가 활성화된 경우에 발행됩니다. 작업 로그가 비활성화된 경우에는 응답에 포함되지 않습니다.
 
 주의 사항
 --------
 
 - 작업이 이미 실행 중인 경우 시작에 실패하고 오류（``status`` 가 ``0`` 이 아닌 값）가 반환됩니다
 - 작업이 비활성화（``available`` 이 활성화되지 않은）된 경우에도 마찬가지로 시작에 실패하고 오류가 반환됩니다
-- ``jobLogId`` 는 작업 로그가 활성화（``jobLogging`` 이 활성화）된 경우에만 발행됩니다
+- ``job_log_id`` 는 작업 로그가 활성화（``job_logging`` 이 활성화）된 경우에만 발행됩니다
 
 작업 중지
 ==========
@@ -405,13 +405,13 @@ Cron 표현식 예시
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cronExpression": "0 0 * * * ?",
-           "scriptType": "javascript",
-           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": "true",
+           "cron_expression": "0 0 * * * ?",
+           "script_type": "javascript",
+           "script_data": "return container.getComponent(\"crawlJob\").execute();",
+           "job_logging": "true",
            "crawler": "true",
            "available": "true",
-           "sortOrder": 1
+           "sort_order": 1
          }'
 
     # 작업을 즉시 실행

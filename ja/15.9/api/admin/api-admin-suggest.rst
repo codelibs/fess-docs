@@ -77,9 +77,9 @@ Suggest APIは、|Fess| のサジェスト機能で利用されるサジェス�
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "totalWordsNum": 1500,
-          "documentWordsNum": 1200,
-          "queryWordsNum": 450
+          "total_words_num": 1500,
+          "document_words_num": 1200,
+          "query_words_num": 450
         }
       }
     }
@@ -93,18 +93,18 @@ Suggest APIは、|Fess| のサジェスト機能で利用されるサジェス�
 
    * - フィールド
      - 説明
-   * - ``setting.totalWordsNum``
+   * - ``setting.total_words_num``
      - サジェストワードの総数（サジェストインデックスに登録されているサジェストワードの件数）
-   * - ``setting.documentWordsNum``
+   * - ``setting.document_words_num``
      - ドキュメント由来のサジェストワード数（ドキュメント頻度が1以上のサジェストワードの件数）
-   * - ``setting.queryWordsNum``
+   * - ``setting.query_words_num``
      - 検索クエリ由来のサジェストワード数（クエリ頻度が1以上のサジェストワードの件数）
 
 .. note::
 
-   ``documentWordsNum`` と ``queryWordsNum`` は排他的ではありません。1つのサジェストワードが
+   ``document_words_num`` と ``query_words_num`` は排他的ではありません。1つのサジェストワードが
    ドキュメントと検索クエリの両方に由来する場合は、両方の件数に含まれます。このため、
-   ``documentWordsNum`` と ``queryWordsNum`` の合計が ``totalWordsNum`` と一致しないことがあります。
+   ``document_words_num`` と ``query_words_num`` の合計が ``total_words_num`` と一致しないことがあります。
 
 全サジェストワードの削除
 ========================

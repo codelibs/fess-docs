@@ -80,25 +80,25 @@ JobLog API是用于查看和管理 |Fess| 作业执行日志的API。
         "logs": [
           {
             "id": "joblog_id_1",
-            "jobName": "Default Crawler",
-            "jobStatus": "ok",
+            "job_name": "Default Crawler",
+            "job_status": "ok",
             "target": "all",
-            "scriptType": "javascript",
-            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-            "scriptResult": "Job completed successfully",
-            "startTime": "1738116000000",
-            "endTime": "1738118723000"
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Job completed successfully",
+            "start_time": "1738116000000",
+            "end_time": "1738118723000"
           },
           {
             "id": "joblog_id_2",
-            "jobName": "Default Crawler",
-            "jobStatus": "fail",
+            "job_name": "Default Crawler",
+            "job_status": "fail",
             "target": "all",
-            "scriptType": "javascript",
-            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-            "scriptResult": "Error: Connection timeout",
-            "startTime": "1738029600000",
-            "endTime": "1738030215000"
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Error: Connection timeout",
+            "start_time": "1738029600000",
+            "end_time": "1738030215000"
           }
         ],
         "total": 100
@@ -116,26 +116,26 @@ JobLog API是用于查看和管理 |Fess| 作业执行日志的API。
      - 说明
    * - ``id``
      - 作业日志ID
-   * - ``jobName``
+   * - ``job_name``
      - 作业名称
-   * - ``jobStatus``
+   * - ``job_status``
      - 作业状态（``ok``: 成功、``fail``: 失败、``running``: 执行中）
    * - ``target``
      - 执行目标（调度器的目标名称，默认值为 ``all``）
-   * - ``scriptType``
+   * - ``script_type``
      - 脚本类型（例: ``javascript``）
-   * - ``scriptData``
+   * - ``script_data``
      - 执行脚本
-   * - ``scriptResult``
+   * - ``script_result``
      - 执行结果
-   * - ``startTime``
+   * - ``start_time``
      - 开始时刻（epoch毫秒；以字符串形式返回）
-   * - ``endTime``
+   * - ``end_time``
      - 结束时刻（epoch毫秒；以字符串形式返回）。执行中的作业不返回此字段。
 
 .. note::
 
-   响应中每个日志对象还包含一个内部字段 ``crudMode``
+   响应中每个日志对象还包含一个内部字段 ``crud_mode``
    （表示CRUD操作模式的整数值，在读取操作时始终为 ``0``）。
    客户端可安全忽略此字段。
 
@@ -159,14 +159,14 @@ JobLog API是用于查看和管理 |Fess| 作业执行日志的API。
         "status": 0,
         "log": {
           "id": "joblog_id_1",
-          "jobName": "Default Crawler",
-          "jobStatus": "ok",
+          "job_name": "Default Crawler",
+          "job_status": "ok",
           "target": "all",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": "1738116000000",
-          "endTime": "1738118723000"
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "script_result": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
+          "start_time": "1738116000000",
+          "end_time": "1738118723000"
         }
       }
     }

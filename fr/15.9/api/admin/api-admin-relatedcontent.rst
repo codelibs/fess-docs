@@ -93,13 +93,13 @@ Réponse
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -110,10 +110,10 @@ Réponse
 
    Chaque élément de ``settings`` ainsi que l'objet ``setting`` retourné par
    l'endpoint d'obtention contiennent les champs de l'entité stockée tels quels.
-   En plus de ``term``, ``content``, ``sortOrder`` et ``virtualHost``, les champs
-   d'audit ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` ainsi que
-   le champ de verrouillage optimiste ``versionNo`` sont également retournés.
-   ``createdTime`` et ``updatedTime`` sont exprimés en millisecondes depuis l'époque
+   En plus de ``term``, ``content``, ``sort_order`` et ``virtual_host``, les champs
+   d'audit ``created_by``, ``created_time``, ``updated_by``, ``updated_time`` ainsi que
+   le champ de verrouillage optimiste ``version_no`` sont également retournés.
+   ``created_time`` et ``updated_time`` sont exprimés en millisecondes depuis l'époque
    (nombres). Les champs non renseignés (null) sont omis de la réponse. De plus,
    l'objet ``response`` de toutes les réponses contient toujours ``version``, qui
    indique la version du produit (voir :doc:`api-admin-overview` pour les détails).
@@ -141,20 +141,20 @@ Réponse
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   La valeur de ``versionNo`` requise lors d'une mise à jour (PUT) est celle
+   La valeur de ``version_no`` requise lors d'une mise à jour (PUT) est celle
    incluse dans cette réponse d'obtention.
 
 Creer un contenu associé
@@ -176,8 +176,8 @@ Corps de la requête
     {
       "term": "search",
       "content": "<div class='related'><h3>About Search</h3><p>Learn more about search features...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": ""
+      "sort_order": 0,
+      "virtual_host": ""
     }
 
 Description des champs
@@ -196,10 +196,10 @@ Description des champs
    * - ``content``
      - **Oui**
      - Contenu HTML à afficher (maximum 10000 caractères)
-   * - ``sortOrder``
+   * - ``sort_order``
      - **Non**
      - Ordre d'affichage (entier compris entre 0 et 2147483647)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - **Non**
      - Hôte virtuel (maximum 1000 caractères)
 
@@ -237,9 +237,9 @@ Corps de la requête
       "id": "existing_content_id",
       "term": "search",
       "content": "<div class='related updated'><h3>About Search</h3><p>Updated information...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": "",
-      "versionNo": 1
+      "sort_order": 0,
+      "virtual_host": "",
+      "version_no": 1
     }
 
 Description des champs
@@ -261,13 +261,13 @@ Description des champs
    * - ``content``
      - **Oui**
      - Contenu HTML à afficher (maximum 10000 caractères)
-   * - ``sortOrder``
+   * - ``sort_order``
      - **Non**
      - Ordre d'affichage (entier compris entre 0 et 2147483647)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - **Non**
      - Hôte virtuel (maximum 1000 caractères)
-   * - ``versionNo``
+   * - ``version_no``
      - **Oui**
      - Numéro de version pour le verrouillage optimiste. Specifier la valeur incluse dans la réponse de ``setting/{id}``.
 
@@ -287,8 +287,8 @@ Réponse
 
 .. note::
 
-   Les champs d'audit tels que ``createdBy``, ``createdTime``, ``updatedBy``,
-   ``updatedTime`` et ``crudMode`` sont ignorés même s'ils sont inclus dans le
+   Les champs d'audit tels que ``created_by``, ``created_time``, ``updated_by``,
+   ``updated_time`` et ``crud_mode`` sont ignorés même s'ils sont inclus dans le
    corps de la requête, car ils sont définis automatiquement côté serveur. Il
    n'est pas nécessaire de les spécifier lors de la création ou de la mise à jour.
 
@@ -328,7 +328,7 @@ Contenu associé pour les informations produit
          -d '{
            "term": "product",
            "content": "<div class=\"product-info\"><h3>Our Products</h3><ul><li>Product A</li><li>Product B</li></ul></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Contenu associé pour les informations de support
@@ -342,7 +342,7 @@ Contenu associé pour les informations de support
          -d '{
            "term": "support",
            "content": "<div><p>Need help? Contact: support@example.com</p></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Informations complémentaires

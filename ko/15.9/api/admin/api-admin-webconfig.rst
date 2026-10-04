@@ -106,21 +106,21 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
             "name": "Example Site",
             "description": "샘플 사이트",
             "urls": "https://example.com/",
-            "includedUrls": ".*example\\.com.*",
-            "excludedUrls": ".*\\.(pdf|zip)$",
-            "includedDocUrls": "",
-            "excludedDocUrls": "",
-            "configParameter": "",
+            "included_urls": ".*example\\.com.*",
+            "excluded_urls": ".*\\.(pdf|zip)$",
+            "included_doc_urls": "",
+            "excluded_doc_urls": "",
+            "config_parameter": "",
             "depth": 3,
-            "maxAccessCount": 1000,
-            "userAgent": "Mozilla/5.0",
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "user_agent": "Mozilla/5.0",
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -152,35 +152,35 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
           "name": "Example Site",
           "description": "샘플 사이트",
           "urls": "https://example.com/",
-          "includedUrls": ".*example\\.com.*",
-          "excludedUrls": ".*\\.(pdf|zip)$",
-          "includedDocUrls": "",
-          "excludedDocUrls": "",
-          "configParameter": "",
+          "included_urls": ".*example\\.com.*",
+          "excluded_urls": ".*\\.(pdf|zip)$",
+          "included_doc_urls": "",
+          "excluded_doc_urls": "",
+          "config_parameter": "",
           "depth": 3,
-          "maxAccessCount": 1000,
-          "userAgent": "Mozilla/5.0",
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "user_agent": "Mozilla/5.0",
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   응답에는 등록 및 업데이트 시 자동으로 설정되는 ``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime``, ``versionNo`` 가 포함됩니다.
-   ``versionNo`` 는 업데이트 시 필요합니다 (아래의 「웹 크롤링 설정 업데이트」를 참조).
+   응답에는 등록 및 업데이트 시 자동으로 설정되는 ``created_by``, ``created_time``,
+   ``updated_by``, ``updated_time``, ``version_no`` 가 포함됩니다.
+   ``version_no`` 는 업데이트 시 필요합니다 (아래의 「웹 크롤링 설정 업데이트」를 참조).
 
 웹 크롤링 설정 생성
 ====================
@@ -201,14 +201,14 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
     {
       "name": "Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "userAgent": "Mozilla/5.0",
-      "numOfThread": 3,
-      "intervalTime": 500,
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe)$",
+      "user_agent": "Mozilla/5.0",
+      "num_of_thread": 3,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -231,34 +231,34 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
    * - ``urls``
      - 예
      - 크롤링 시작 URL (여러 개인 경우 줄바꿈으로 구분). ``http:`` 또는 ``https:`` 로 지정합니다
-   * - ``includedUrls``
+   * - ``included_urls``
      - 아니오
      - 크롤링 대상 URL의 정규 표현식 패턴
-   * - ``excludedUrls``
+   * - ``excluded_urls``
      - 아니오
      - 크롤링 제외 URL의 정규 표현식 패턴
-   * - ``includedDocUrls``
+   * - ``included_doc_urls``
      - 아니오
      - 인덱스 대상 URL의 정규 표현식 패턴
-   * - ``excludedDocUrls``
+   * - ``excluded_doc_urls``
      - 아니오
      - 인덱스 제외 URL의 정규 표현식 패턴
-   * - ``configParameter``
+   * - ``config_parameter``
      - 아니오
      - 추가 설정 파라미터 (``key=value`` 형식, 한 줄에 한 항목)
    * - ``depth``
      - 아니오
      - 크롤링 깊이 (0 이상)
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - 아니오
      - 최대 접근 수 (0 이상)
-   * - ``userAgent``
+   * - ``user_agent``
      - 예
      - User-Agent 문자열 (최대 200자)
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - 예
      - 병렬 스레드 수 (1 이상)
-   * - ``intervalTime``
+   * - ``interval_time``
      - 예
      - 접근 간격 (밀리초, 0 이상)
    * - ``boost``
@@ -267,19 +267,19 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
    * - ``available``
      - 예
      - 활성화/비활성화 (문자열 ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - 예
      - 표시 순서 (0 이상)
    * - ``permissions``
      - 아니오
      - 접근 허용 역할 (여러 개인 경우 줄바꿈으로 구분)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - 아니오
      - 가상 호스트 (여러 개인 경우 줄바꿈으로 구분)
 
 .. note::
 
-   ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` 등의 감사용 필드는
+   ``created_by``, ``created_time``, ``updated_by``, ``updated_time`` 등의 감사용 필드는
    서버 측에서 자동으로 설정되므로 요청 본문에 지정할 필요가 없습니다.
 
 응답
@@ -309,8 +309,8 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
 요청 본문
 ~~~~~~~~~~~~~~~~
 
-업데이트 시에는 생성 시의 필드에 더하여, 업데이트 대상을 식별하는 ``id`` 와 버전 번호 ``versionNo`` 가 필수입니다.
-``versionNo`` 에는 조회 API (GET)의 응답에 포함된 현재 값을 지정합니다.
+업데이트 시에는 생성 시의 필드에 더하여, 업데이트 대상을 식별하는 ``id`` 와 버전 번호 ``version_no`` 가 필수입니다.
+``version_no`` 에는 조회 API (GET)의 응답에 포함된 현재 값을 지정합니다.
 
 .. code-block:: json
 
@@ -318,17 +318,17 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
       "id": "existing_webconfig_id",
       "name": "Updated Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
-      "userAgent": "Mozilla/5.0",
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe|dmg)$",
+      "user_agent": "Mozilla/5.0",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 5,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 5,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 업데이트 시 추가 필드
@@ -344,9 +344,9 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
    * - ``id``
      - 예
      - 업데이트 대상의 설정 ID (최대 1000자)
-   * - ``versionNo``
+   * - ``version_no``
      - 예
-     - 업데이트 대상의 현재 버전 번호. 조회 API (GET)의 응답에 포함된 ``versionNo`` 를 지정합니다
+     - 업데이트 대상의 현재 버전 번호. 조회 API (GET)의 응답에 포함된 ``version_no`` 를 지정합니다
 
 응답
 ----------
@@ -385,7 +385,7 @@ WebConfig API는 |Fess| 의 웹 크롤링 설정을 관리하기 위한 API입�
 URL 패턴 예시
 ===============
 
-``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` 에는 정규 표현식을 지정합니다.
+``included_urls`` / ``excluded_urls`` / ``included_doc_urls`` / ``excluded_doc_urls`` 에는 정규 표현식을 지정합니다.
 
 .. list-table::
    :header-rows: 1
@@ -418,16 +418,16 @@ URL 패턴 예시
          -d '{
            "name": "Corporate Website",
            "urls": "https://www.example.com/",
-           "includedUrls": ".*www\\.example\\.com.*",
-           "excludedUrls": ".*/(login|admin|api)/.*",
-           "userAgent": "Mozilla/5.0",
+           "included_urls": ".*www\\.example\\.com.*",
+           "excluded_urls": ".*/(login|admin|api)/.*",
+           "user_agent": "Mozilla/5.0",
            "depth": 5,
-           "maxAccessCount": 10000,
-           "numOfThread": 3,
-           "intervalTime": 500,
+           "max_access_count": 10000,
+           "num_of_thread": 3,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -442,15 +442,15 @@ URL 패턴 예시
          -d '{
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
-           "includedUrls": ".*docs\\.example\\.com.*",
-           "includedDocUrls": ".*\\.(html|htm)$",
-           "userAgent": "Mozilla/5.0",
-           "maxAccessCount": 50000,
-           "numOfThread": 5,
-           "intervalTime": 200,
+           "included_urls": ".*docs\\.example\\.com.*",
+           "included_doc_urls": ".*\\.(html|htm)$",
+           "user_agent": "Mozilla/5.0",
+           "max_access_count": 50000,
+           "num_of_thread": 5,
+           "interval_time": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 참고 정보

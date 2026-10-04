@@ -98,14 +98,14 @@ HTTP 상태 코드)에 대해서는 :doc:`api-admin-overview` 를 참조하십�
             "id": "token_id_1",
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
-            "parameterName": "permission",
+            "parameter_name": "permission",
             "permissions": "{role}admin-api",
             "expires": "2026-01-01T00:00:00",
-            "createdBy": "admin",
-            "createdTime": 1735689600000,
-            "updatedBy": "admin",
-            "updatedTime": 1735689600000,
-            "versionNo": 1
+            "created_by": "admin",
+            "created_time": 1735689600000,
+            "updated_by": "admin",
+            "updated_time": 1735689600000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -114,9 +114,9 @@ HTTP 상태 코드)에 대해서는 :doc:`api-admin-overview` 를 참조하십�
 
 .. note::
 
-   각 토큰 객체에는 ``createdBy`` , ``createdTime`` , ``updatedBy`` ,
-   ``updatedTime`` , ``versionNo`` 와 같은 감사 정보 및 버전 정보도 포함됩니다.
-   ``createdTime`` 과 ``updatedTime`` 은 에포크 기준 밀리초(숫자)입니다.
+   각 토큰 객체에는 ``created_by`` , ``created_time`` , ``updated_by`` ,
+   ``updated_time`` , ``version_no`` 와 같은 감사 정보 및 버전 정보도 포함됩니다.
+   ``created_time`` 과 ``updated_time`` 은 에포크 기준 밀리초(숫자)입니다.
    값이 ``null`` 인 필드는 응답에서 제외됩니다.
    ``permissions`` 는 줄 바꿈( ``\n`` ) 구분 문자열로 반환됩니다.
 
@@ -142,14 +142,14 @@ HTTP 상태 코드)에 대해서는 :doc:`api-admin-overview` 를 참조하십�
           "id": "token_id_1",
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
-          "parameterName": "permission",
+          "parameter_name": "permission",
           "permissions": "{role}admin-api",
           "expires": "2026-01-01T00:00:00",
-          "createdBy": "admin",
-          "createdTime": 1735689600000,
-          "updatedBy": "admin",
-          "updatedTime": 1735689600000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1735689600000,
+          "updated_by": "admin",
+          "updated_time": 1735689600000,
+          "version_no": 1
         }
       }
     }
@@ -192,7 +192,7 @@ HTTP 상태 코드)에 대해서는 :doc:`api-admin-overview` 를 참조하십�
    * - ``permissions``
      - 아니오
      - 이 토큰에 부여할 권한. 줄 바꿈( ``\n`` ) 구분으로 여러 개를 지정할 수 있습니다 (예: ``{role}admin-api`` ). Admin API를 호출하는 토큰에는 ``api.admin.access.permissions`` (기본값 ``{role}admin-api`` )에 일치하는 권한이 필요합니다.
-   * - ``parameterName``
+   * - ``parameter_name``
      - 아니오
      - 추가 권한을 전달하기 위한 요청 파라미터 이름. 이 토큰으로 인증된 요청에 여기서 지정한 이름의 파라미터가 포함된 경우 해당 값이 ``permissions`` 에 추가됩니다. 생략하면 설정되지 않습니다.
    * - ``expires``
@@ -239,7 +239,7 @@ HTTP 상태 코드)에 대해서는 :doc:`api-admin-overview` 를 참조하십�
       "name": "Updated API Token",
       "permissions": "{role}admin-api\n{role}user",
       "expires": "2026-01-01T00:00:00",
-      "versionNo": 1
+      "version_no": 1
     }
 
 필드 설명
@@ -257,9 +257,9 @@ HTTP 상태 코드)에 대해서는 :doc:`api-admin-overview` 를 참조하십�
    * - ``id``
      - 예
      - 업데이트 대상 토큰 ID
-   * - ``versionNo``
+   * - ``version_no``
      - 예
-     - 낙관적 잠금용 버전 번호. 사전에 조회한 토큰의 ``versionNo`` 를 지정합니다.
+     - 낙관적 잠금용 버전 번호. 사전에 조회한 토큰의 ``version_no`` 를 지정합니다.
 
 .. note::
 

@@ -80,25 +80,25 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
         "logs": [
           {
             "id": "joblog_id_1",
-            "jobName": "Default Crawler",
-            "jobStatus": "ok",
+            "job_name": "Default Crawler",
+            "job_status": "ok",
             "target": "all",
-            "scriptType": "javascript",
-            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-            "scriptResult": "Job completed successfully",
-            "startTime": "1738116000000",
-            "endTime": "1738118723000"
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Job completed successfully",
+            "start_time": "1738116000000",
+            "end_time": "1738118723000"
           },
           {
             "id": "joblog_id_2",
-            "jobName": "Default Crawler",
-            "jobStatus": "fail",
+            "job_name": "Default Crawler",
+            "job_status": "fail",
             "target": "all",
-            "scriptType": "javascript",
-            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-            "scriptResult": "Error: Connection timeout",
-            "startTime": "1738029600000",
-            "endTime": "1738030215000"
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Error: Connection timeout",
+            "start_time": "1738029600000",
+            "end_time": "1738030215000"
           }
         ],
         "total": 100
@@ -116,26 +116,26 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
      - 説明
    * - ``id``
      - ジョブログID
-   * - ``jobName``
+   * - ``job_name``
      - ジョブ名
-   * - ``jobStatus``
+   * - ``job_status``
      - ジョブステータス（``ok``: 成功、``fail``: 失敗、``running``: 実行中）
    * - ``target``
      - 実行対象（スケジューラーのターゲット名。既定値は ``all``）
-   * - ``scriptType``
+   * - ``script_type``
      - スクリプトタイプ（例: ``javascript``）
-   * - ``scriptData``
+   * - ``script_data``
      - 実行スクリプト
-   * - ``scriptResult``
+   * - ``script_result``
      - 実行結果
-   * - ``startTime``
+   * - ``start_time``
      - 開始時刻（エポックミリ秒。文字列として返されます）
-   * - ``endTime``
+   * - ``end_time``
      - 終了時刻（エポックミリ秒。文字列として返されます）。実行中のジョブでは返されません。
 
 .. note::
 
-   レスポンスの各ログオブジェクトには、内部的に使用される ``crudMode`` フィールド
+   レスポンスの各ログオブジェクトには、内部的に使用される ``crud_mode`` フィールド
    （CRUD操作モードを示す整数値で、参照時は常に ``0``）が含まれます。
    クライアント側では無視して問題ありません。
 
@@ -159,14 +159,14 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
         "status": 0,
         "log": {
           "id": "joblog_id_1",
-          "jobName": "Default Crawler",
-          "jobStatus": "ok",
+          "job_name": "Default Crawler",
+          "job_status": "ok",
           "target": "all",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": "1738116000000",
-          "endTime": "1738118723000"
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "script_result": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
+          "start_time": "1738116000000",
+          "end_time": "1738118723000"
         }
       }
     }

@@ -55,22 +55,22 @@ La respuesta incluye ``version``, que indica la versión del producto, ``status`
       "response": {
         "version": "15.9.0",
         "status": 0,
-        "envProps": [
+        "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
           {"label": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
         ],
-        "systemProps": [
+        "system_props": [
           {"label": "java.version", "value": "21.0.1"},
           {"label": "java.vendor", "value": "Oracle Corporation"},
           {"label": "os.name", "value": "Linux"},
           {"label": "user.dir", "value": "/opt/fess"}
         ],
-        "fessProps": [
+        "fess_props": [
           {"label": "crawler.document.max.site.length", "value": "100"},
           {"label": "indexer.thread.dump.enabled", "value": "true"},
           {"label": "app.cipher.key", "value": "XXXXXXXX"}
         ],
-        "bugReportProps": [
+        "bug_report_props": [
           {"label": "os.name", "value": "Linux"},
           {"label": "java.vm.version", "value": "21.0.1+12"}
         ]
@@ -90,24 +90,24 @@ Campos de Respuesta
      - Versión del producto |Fess| (ejemplo: ``15.9.0``).
    * - ``status``
      - Código que indica el resultado del procesamiento. ``0`` significa finalización exitosa.
-   * - ``envProps``
+   * - ``env_props``
      - Lista de variables de entorno (arreglo de ``label`` / ``value``). Se devuelven los valores obtenidos mediante ``System.getenv()`` tal como están.
-   * - ``systemProps``
+   * - ``system_props``
      - Lista de propiedades del sistema de Java (arreglo de ``label`` / ``value``). Se devuelven los valores obtenidos mediante ``System.getProperties()`` tal como están.
-   * - ``fessProps``
+   * - ``fess_props``
      - Lista de propiedades de configuración de |Fess| (arreglo de ``label`` / ``value``). Incluye los valores de configuración de ``fess_config.properties`` y las propiedades del sistema establecidas desde la pantalla de administración. Los elementos sensibles son enmascarados (véase la nota a continuación).
-   * - ``bugReportProps``
+   * - ``bug_report_props``
      - Lista de información recopilada para reportes de errores (arreglo de ``label`` / ``value``). Incluye las principales propiedades del sistema relacionadas con el SO y el entorno de ejecución de Java (``os.name``, ``os.version``, ``java.vm.version``, etc.) y los valores de propiedades del sistema de |Fess|.
 
 .. note::
 
-   En ``fessProps``, los siguientes valores de configuración sensibles son enmascarados y se devuelven como ``XXXXXXXX``:
+   En ``fess_props``, los siguientes valores de configuración sensibles son enmascarados y se devuelven como ``XXXXXXXX``:
    ``http.proxy.password``, ``ldap.admin.security.credentials``, ``spnego.preauth.password``,
    ``app.cipher.key``, ``oic.client.id``, ``oic.client.secret``.
 
 .. warning::
 
-   ``envProps`` (variables de entorno) y ``systemProps`` (propiedades del sistema de Java) no son enmascarados:
+   ``env_props`` (variables de entorno) y ``system_props`` (propiedades del sistema de Java) no son enmascarados:
    los valores configurados se devuelven tal como están. Si las variables de entorno o las propiedades del sistema
    contienen información confidencial como credenciales, esos valores aparecerán en la respuesta.
 

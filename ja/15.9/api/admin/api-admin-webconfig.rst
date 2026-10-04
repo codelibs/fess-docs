@@ -106,21 +106,21 @@ Webクロール設定一覧取得
             "name": "Example Site",
             "description": "サンプルサイト",
             "urls": "https://example.com/",
-            "includedUrls": ".*example\\.com.*",
-            "excludedUrls": ".*\\.(pdf|zip)$",
-            "includedDocUrls": "",
-            "excludedDocUrls": "",
-            "configParameter": "",
+            "included_urls": ".*example\\.com.*",
+            "excluded_urls": ".*\\.(pdf|zip)$",
+            "included_doc_urls": "",
+            "excluded_doc_urls": "",
+            "config_parameter": "",
             "depth": 3,
-            "maxAccessCount": 1000,
-            "userAgent": "Mozilla/5.0",
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "user_agent": "Mozilla/5.0",
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -152,35 +152,35 @@ Webクロール設定取得
           "name": "Example Site",
           "description": "サンプルサイト",
           "urls": "https://example.com/",
-          "includedUrls": ".*example\\.com.*",
-          "excludedUrls": ".*\\.(pdf|zip)$",
-          "includedDocUrls": "",
-          "excludedDocUrls": "",
-          "configParameter": "",
+          "included_urls": ".*example\\.com.*",
+          "excluded_urls": ".*\\.(pdf|zip)$",
+          "included_doc_urls": "",
+          "excluded_doc_urls": "",
+          "config_parameter": "",
           "depth": 3,
-          "maxAccessCount": 1000,
-          "userAgent": "Mozilla/5.0",
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "user_agent": "Mozilla/5.0",
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   レスポンスには、登録・更新時に自動設定される ``createdBy`` 、 ``createdTime`` 、
-   ``updatedBy`` 、 ``updatedTime`` 、 ``versionNo`` が含まれます。
-   ``versionNo`` は更新時に必要です（後述の「Webクロール設定更新」を参照）。
+   レスポンスには、登録・更新時に自動設定される ``created_by`` 、 ``created_time`` 、
+   ``updated_by`` 、 ``updated_time`` 、 ``version_no`` が含まれます。
+   ``version_no`` は更新時に必要です（後述の「Webクロール設定更新」を参照）。
 
 Webクロール設定作成
 ===================
@@ -201,14 +201,14 @@ Webクロール設定作成
     {
       "name": "Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "userAgent": "Mozilla/5.0",
-      "numOfThread": 3,
-      "intervalTime": 500,
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe)$",
+      "user_agent": "Mozilla/5.0",
+      "num_of_thread": 3,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -231,34 +231,34 @@ Webクロール設定作成
    * - ``urls``
      - はい
      - クロール開始URL（複数の場合は改行区切り）。\ ``http:`` または ``https:`` で指定します
-   * - ``includedUrls``
+   * - ``included_urls``
      - いいえ
      - クロール対象URLの正規表現パターン
-   * - ``excludedUrls``
+   * - ``excluded_urls``
      - いいえ
      - クロール除外URLの正規表現パターン
-   * - ``includedDocUrls``
+   * - ``included_doc_urls``
      - いいえ
      - インデックス対象URLの正規表現パターン
-   * - ``excludedDocUrls``
+   * - ``excluded_doc_urls``
      - いいえ
      - インデックス除外URLの正規表現パターン
-   * - ``configParameter``
+   * - ``config_parameter``
      - いいえ
      - 追加設定パラメーター（``key=value`` 形式、1行に1項目）
    * - ``depth``
      - いいえ
      - クロール深度（0以上）
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - いいえ
      - 最大アクセス数（0以上）
-   * - ``userAgent``
+   * - ``user_agent``
      - はい
      - User-Agent文字列（最大200文字）
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - はい
      - 並列スレッド数（1以上）
-   * - ``intervalTime``
+   * - ``interval_time``
      - はい
      - アクセス間隔（ミリ秒、0以上）
    * - ``boost``
@@ -267,19 +267,19 @@ Webクロール設定作成
    * - ``available``
      - はい
      - 有効/無効（文字列 ``"true"`` / ``"false"``）
-   * - ``sortOrder``
+   * - ``sort_order``
      - はい
      - 表示順序（0以上）
    * - ``permissions``
      - いいえ
      - アクセス許可ロール（複数の場合は改行区切り）
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - いいえ
      - 仮想ホスト（複数の場合は改行区切り）
 
 .. note::
 
-   ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、 ``updatedTime`` などの監査用フィールドは
+   ``created_by`` 、 ``created_time`` 、 ``updated_by`` 、 ``updated_time`` などの監査用フィールドは
    サーバー側で自動設定されるため、リクエストボディで指定する必要はありません。
 
 レスポンス
@@ -309,8 +309,8 @@ Webクロール設定更新
 リクエストボディ
 ~~~~~~~~~~~~~~~~
 
-更新時は、作成時のフィールドに加えて、更新対象を特定する ``id`` とバージョン番号 ``versionNo`` が必須です。
-``versionNo`` には取得API（GET）のレスポンスに含まれる現在の値を指定します。
+更新時は、作成時のフィールドに加えて、更新対象を特定する ``id`` とバージョン番号 ``version_no`` が必須です。
+``version_no`` には取得API（GET）のレスポンスに含まれる現在の値を指定します。
 
 .. code-block:: json
 
@@ -318,17 +318,17 @@ Webクロール設定更新
       "id": "existing_webconfig_id",
       "name": "Updated Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
-      "userAgent": "Mozilla/5.0",
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe|dmg)$",
+      "user_agent": "Mozilla/5.0",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 5,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 5,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 更新時の追加フィールド
@@ -344,9 +344,9 @@ Webクロール設定更新
    * - ``id``
      - はい
      - 更新対象の設定ID（最大1000文字）
-   * - ``versionNo``
+   * - ``version_no``
      - はい
-     - 更新対象の現在のバージョン番号。取得API（GET）のレスポンスに含まれる ``versionNo`` を指定します
+     - 更新対象の現在のバージョン番号。取得API（GET）のレスポンスに含まれる ``version_no`` を指定します
 
 レスポンス
 ----------
@@ -385,7 +385,7 @@ Webクロール設定削除
 URLパターンの例
 ===============
 
-``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` には正規表現を指定します。
+``included_urls`` / ``excluded_urls`` / ``included_doc_urls`` / ``excluded_doc_urls`` には正規表現を指定します。
 
 .. list-table::
    :header-rows: 1
@@ -418,16 +418,16 @@ URLパターンの例
          -d '{
            "name": "Corporate Website",
            "urls": "https://www.example.com/",
-           "includedUrls": ".*www\\.example\\.com.*",
-           "excludedUrls": ".*/(login|admin|api)/.*",
-           "userAgent": "Mozilla/5.0",
+           "included_urls": ".*www\\.example\\.com.*",
+           "excluded_urls": ".*/(login|admin|api)/.*",
+           "user_agent": "Mozilla/5.0",
            "depth": 5,
-           "maxAccessCount": 10000,
-           "numOfThread": 3,
-           "intervalTime": 500,
+           "max_access_count": 10000,
+           "num_of_thread": 3,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -442,15 +442,15 @@ URLパターンの例
          -d '{
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
-           "includedUrls": ".*docs\\.example\\.com.*",
-           "includedDocUrls": ".*\\.(html|htm)$",
-           "userAgent": "Mozilla/5.0",
-           "maxAccessCount": 50000,
-           "numOfThread": 5,
-           "intervalTime": 200,
+           "included_urls": ".*docs\\.example\\.com.*",
+           "included_doc_urls": ".*\\.(html|htm)$",
+           "user_agent": "Mozilla/5.0",
+           "max_access_count": 50000,
+           "num_of_thread": 5,
+           "interval_time": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 参考情報

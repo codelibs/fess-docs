@@ -91,14 +91,14 @@ Respuesta
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cronExpression": "0 0 0 * * ?",
-            "scriptType": "javascript",
-            "scriptData": "...",
-            "jobLogging": "true",
+            "cron_expression": "0 0 0 * * ?",
+            "script_type": "javascript",
+            "script_data": "...",
+            "job_logging": "true",
             "crawler": "true",
             "available": "true",
-            "sortOrder": 0,
-            "versionNo": 1,
+            "sort_order": 0,
+            "version_no": 1,
             "running": false
           }
         ],
@@ -112,7 +112,7 @@ Respuesta
 
 .. note::
 
-   En las respuestas, ``jobLogging`` / ``crawler`` / ``available`` se devuelven como cadenas (``"true"`` / ``"false"``). ``running`` es un campo booleano exclusivo de respuesta que indica si el trabajo se está ejecutando en ese momento (no puede especificarse en las solicitudes). ``total`` es el número total de trabajos que coinciden con la consulta.
+   En las respuestas, ``job_logging`` / ``crawler`` / ``available`` se devuelven como cadenas (``"true"`` / ``"false"``). ``running`` es un campo booleano exclusivo de respuesta que indica si el trabajo se está ejecutando en ese momento (no puede especificarse en las solicitudes). ``total`` es el número total de trabajos que coinciden con la consulta.
 
 Obtener Trabajo Programado
 ==========================
@@ -136,14 +136,14 @@ Respuesta
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cronExpression": "0 0 0 * * ?",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": "true",
+          "cron_expression": "0 0 0 * * ?",
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "job_logging": "true",
           "crawler": "true",
           "available": "true",
-          "sortOrder": 0,
-          "versionNo": 1,
+          "sort_order": 0,
+          "version_no": 1,
           "running": false
         }
       }
@@ -168,13 +168,13 @@ Cuerpo de la Solicitud
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cronExpression": "0 0 2 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": "true",
+      "cron_expression": "0 0 2 * * ?",
+      "script_type": "javascript",
+      "script_data": "return container.getComponent(\"crawlJob\").execute();",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1
+      "sort_order": 1
     }
 
 Descripción de Campos
@@ -193,16 +193,16 @@ Descripción de Campos
    * - ``target``
      - Sí
      - Objetivo de ejecución (max. 100 caracteres). Especifique ``all`` o un nombre de objetivo específico
-   * - ``cronExpression``
+   * - ``cron_expression``
      - No
      - Expresión Cron (segundo minuto hora día mes día-semana). Max. 100 caracteres, validada como expresión cron. Si está vacía, el trabajo no se ejecuta de forma programada y solo puede iniciarse manualmente
-   * - ``scriptType``
+   * - ``script_type``
      - Sí
      - Tipo de script (max. 100 caracteres). ``javascript`` (valor predeterminado para trabajos nuevos, determinado por la propiedad ``job.default.script``) o ``groovy`` (requiere el plugin ``fess-script-groovy``)
-   * - ``scriptData``
+   * - ``script_data``
      - No
      - Script de ejecución. El tamaño máximo sigue ``form.admin.max.input.size`` en ``fess_config.properties``
-   * - ``jobLogging``
+   * - ``job_logging``
      - No
      - Habilitar registro de trabajos (cadena)
    * - ``crawler``
@@ -211,17 +211,17 @@ Descripción de Campos
    * - ``available``
      - No
      - Habilitado/Deshabilitado (cadena)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Sí
      - Orden de visualización (entero entre 0 y 2147483647)
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` son campos de cadena. En las solicitudes, especificar ``"on"`` o ``"true"`` (sin distinción de mayúsculas y minúsculas) los habilita; cualquier otro valor (``"false"``, cadena vacía o no especificado) se trata como deshabilitado. En las respuestas se devuelven como ``"true"`` / ``"false"``.
+   ``job_logging`` / ``crawler`` / ``available`` son campos de cadena. En las solicitudes, especificar ``"on"`` o ``"true"`` (sin distinción de mayúsculas y minúsculas) los habilita; cualquier otro valor (``"false"``, cadena vacía o no especificado) se trata como deshabilitado. En las respuestas se devuelven como ``"true"`` / ``"false"``.
 
 .. note::
 
-   ``crudMode`` se establece automáticamente en el servidor y no es necesario especificarlo en las solicitudes. Los campos de auditoría como ``createdBy`` / ``createdTime`` también se establecen en el servidor.
+   ``crud_mode`` se establece automáticamente en el servidor y no es necesario especificarlo en las solicitudes. Los campos de auditoría como ``created_by`` / ``created_time`` también se establecen en el servidor.
 
 Respuesta
 ---------
@@ -274,19 +274,19 @@ Cuerpo de la Solicitud
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cronExpression": "0 0 3 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "...",
-      "jobLogging": "true",
+      "cron_expression": "0 0 3 * * ?",
+      "script_type": "javascript",
+      "script_data": "...",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1,
-      "versionNo": 1
+      "sort_order": 1,
+      "version_no": 1
     }
 
 .. note::
 
-   Para las actualizaciones, ``id`` (max. 1000 caracteres) y ``versionNo`` son obligatorios. ``versionNo`` se utiliza para el bloqueo optimista; especifique el valor devuelto en la respuesta de obtención. Si el valor no coincide, la actualización falla. Los demás campos obligatorios (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) son los mismos que para la creación.
+   Para las actualizaciones, ``id`` (max. 1000 caracteres) y ``version_no`` son obligatorios. ``version_no`` se utiliza para el bloqueo optimista; especifique el valor devuelto en la respuesta de obtención. Si el valor no coincide, la actualización falla. Los demás campos obligatorios (``name`` / ``target`` / ``script_type`` / ``sort_order``) son los mismos que para la creación.
 
 Respuesta
 ---------
@@ -344,7 +344,7 @@ Respuesta
     {
       "response": {
         "status": 0,
-        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+        "job_log_id": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
 
@@ -357,15 +357,15 @@ Campos de Respuesta
 
    * - Campo
      - Descripción
-   * - ``jobLogId``
-     - ID del registro del trabajo iniciado. Se emite cuando el registro de trabajos está habilitado. Es ``null`` cuando el registro de trabajos está deshabilitado.
+   * - ``job_log_id``
+     - ID del registro del trabajo iniciado. Se emite cuando el registro de trabajos está habilitado. Se omite de la respuesta cuando el registro de trabajos está deshabilitado.
 
 Notas
 -----
 
 - Si el trabajo ya está en ejecución, el inicio falla y se devuelve un error (``status`` distinto de ``0``).
 - Si el trabajo está deshabilitado (``available`` no está habilitado), el inicio también falla con un error.
-- ``jobLogId`` solo se emite cuando el registro de trabajos está habilitado (``jobLogging`` está habilitado).
+- ``job_log_id`` solo se emite cuando el registro de trabajos está habilitado (``job_logging`` está habilitado).
 
 Detener Trabajo
 ===============
@@ -405,13 +405,13 @@ Crear y Ejecutar Trabajo de Rastreo
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cronExpression": "0 0 * * * ?",
-           "scriptType": "javascript",
-           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": "true",
+           "cron_expression": "0 0 * * * ?",
+           "script_type": "javascript",
+           "script_data": "return container.getComponent(\"crawlJob\").execute();",
+           "job_logging": "true",
            "crawler": "true",
            "available": "true",
-           "sortOrder": 1
+           "sort_order": 1
          }'
 
     # Ejecutar trabajo inmediatamente

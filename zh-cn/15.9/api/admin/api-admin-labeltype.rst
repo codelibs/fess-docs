@@ -99,16 +99,16 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
             "id": "label_id_1",
             "name": "Documentation",
             "value": "docs",
-            "includedPaths": ".*docs\\.example\\.com.*",
-            "excludedPaths": "",
+            "included_paths": ".*docs\\.example\\.com.*",
+            "excluded_paths": "",
             "permissions": "{role}admin",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -117,8 +117,8 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
 
 .. note::
 
-   每个设置对象中还包含用于审计的 ``createdBy`` / ``createdTime`` / ``updatedBy`` /
-   ``updatedTime``，以及用于乐观锁的 ``versionNo``\ （值为 ``null`` 的
+   每个设置对象中还包含用于审计的 ``created_by`` / ``created_time`` / ``updated_by`` /
+   ``updated_time``，以及用于乐观锁的 ``version_no``\ （值为 ``null`` 的
    字段将被省略）。\ ``response`` 对象中始终包含表示产品版本的
    ``version``，但为简洁起见，后续示例中可能省略该字段。
 
@@ -144,16 +144,16 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
           "id": "label_id_1",
           "name": "Documentation",
           "value": "docs",
-          "includedPaths": ".*docs\\.example\\.com.*",
-          "excludedPaths": "",
+          "included_paths": ".*docs\\.example\\.com.*",
+          "excluded_paths": "",
           "permissions": "{role}admin",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
@@ -177,9 +177,9 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
     {
       "name": "News",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
-      "excludedPaths": ".*/(archive|old)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
+      "excluded_paths": ".*/(archive|old)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest"
     }
 
@@ -202,11 +202,11 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
      - String
      - 是
      - 标签值（搜索时通过 ``label`` 参数使用）。只能使用半角英数字和下划线（``_``），且须符合正则表达式 ``^[a-zA-Z0-9_]+$``\ （最多100个字符）。
-   * - ``includedPaths``
+   * - ``included_paths``
      - String
      - 否
      - 作为标签目标的路径正则表达式。指定多个时用换行符（``\n``）分隔。
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - String
      - 否
      - 从标签目标中排除的路径正则表达式。指定多个时用换行符（``\n``）分隔。
@@ -214,18 +214,18 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
      - String
      - 否
      - 允许访问的角色/组/用户（例如：``{role}admin``）。指定多个时用换行符（``\n``）分隔。
-   * - ``sortOrder``
+   * - ``sort_order``
      - Integer
      - 否
      - 显示顺序（0以上的整数）。未指定时默认为 ``0``\ 。
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - 否
      - 虚拟主机（最多1000个字符）。
 
 .. note::
 
-   ``createdBy`` / ``createdTime`` 等审计字段由服务器端自动设置，
+   ``created_by`` / ``created_time`` 等审计字段由服务器端自动设置，
    无需在请求中指定。
 
 响应
@@ -263,11 +263,11 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
       "id": "existing_label_id",
       "name": "News Articles",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
-      "excludedPaths": ".*/(archive|old|draft)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
+      "excluded_paths": ".*/(archive|old|draft)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest",
-      "versionNo": 1
+      "version_no": 1
     }
 
 更新时，除创建时的字段外，还需要以下必填字段。
@@ -284,10 +284,10 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
      - String
      - 是
      - 要更新的标签类型ID。
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - 是
-     - 用于乐观锁的版本号。请指定获取时响应中包含的 ``versionNo``\ 。若指定的版本与当前版本不一致，更新将失败。
+     - 用于乐观锁的版本号。请指定获取时响应中包含的 ``version_no``\ 。若指定的版本与当前版本不一致，更新将失败。
 
 响应
 ----
@@ -339,8 +339,8 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
          -d '{
            "name": "Technical Documentation",
            "value": "tech_docs",
-           "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
-           "sortOrder": 0,
+           "included_paths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

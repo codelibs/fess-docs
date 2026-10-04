@@ -92,9 +92,9 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
             "id": "keymatch_id_1",
             "term": "download",
             "query": "title:download OR content:download",
-            "maxSize": 10,
+            "max_size": 10,
             "boost": 10.0,
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -104,8 +104,8 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
 .. note::
 
    ``total`` には絞り込み条件に一致する総件数が設定されます（現在のページの件数ではありません）。
-   各設定オブジェクトには上記のフィールドに加えて、値が設定されている場合に ``virtualHost`` 、
-   ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、 ``updatedTime`` が含まれます。
+   各設定オブジェクトには上記のフィールドに加えて、値が設定されている場合に ``virtual_host`` 、
+   ``created_by`` 、 ``created_time`` 、 ``updated_by`` 、 ``updated_time`` が含まれます。
 
 キーマッチ取得
 ==============
@@ -129,21 +129,21 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
           "id": "keymatch_id_1",
           "term": "download",
           "query": "title:download OR content:download",
-          "maxSize": 10,
+          "max_size": 10,
           "boost": 10.0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   ``versionNo`` は楽観ロック用のバージョン番号です。キーマッチを更新する際は、取得時に得られた
-   ``versionNo`` をリクエストボディに指定してください。指定したIDが存在しない場合はエラーが返されます。
+   ``version_no`` は楽観ロック用のバージョン番号です。キーマッチを更新する際は、取得時に得られた
+   ``version_no`` をリクエストボディに指定してください。指定したIDが存在しない場合はエラーが返されます。
 
 キーマッチ作成
 ==============
@@ -164,7 +164,7 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
     {
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing",
-      "maxSize": 5,
+      "max_size": 5,
       "boost": 20.0
     }
 
@@ -187,7 +187,7 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
      - String
      - はい
      - マッチ条件クエリ（最大長は ``form.admin.max.input.size`` の設定値に従う）
-   * - ``maxSize``
+   * - ``max_size``
      - Integer
      - はい
      - 最大表示件数（0以上の整数。管理画面での初期値は10）
@@ -195,16 +195,16 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
      - Float
      - はい
      - ブースト値（管理画面での初期値は100.0）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - いいえ
      - 仮想ホスト名（最大1000文字。仮想ホストごとにキーマッチを切り替える場合に指定）
 
 .. note::
 
-   ``maxSize`` と ``boost`` はAPI経由では必須です。初期値は管理画面のフォームに表示される値であり、
+   ``max_size`` と ``boost`` はAPI経由では必須です。初期値は管理画面のフォームに表示される値であり、
    APIでは適用されません。省略した場合はバリデーションエラーになります。
-   なお、 ``createdBy`` と ``createdTime`` はリクエストで指定してもサーバー側で上書きされます。
+   なお、 ``created_by`` と ``created_time`` はリクエストで指定してもサーバー側で上書きされます。
 
 レスポンス
 ----------
@@ -239,15 +239,15 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
       "id": "existing_keymatch_id",
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing OR content:price",
-      "maxSize": 10,
+      "max_size": 10,
       "boost": 15.0,
-      "versionNo": 1
+      "version_no": 1
     }
 
 フィールド説明
 ~~~~~~~~~~~~~~
 
-作成時のフィールド（ ``term`` 、 ``query`` 、 ``maxSize`` 、 ``boost`` 、 ``virtualHost`` ）に加えて、
+作成時のフィールド（ ``term`` 、 ``query`` 、 ``max_size`` 、 ``boost`` 、 ``virtual_host`` ）に加えて、
 以下のフィールドを指定します。
 
 .. list-table::
@@ -262,7 +262,7 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
      - String
      - はい
      - 更新対象のキーマッチID（最大1000文字）
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - はい
      - 楽観ロック用のバージョン番号。取得時に得られた値を指定
@@ -315,7 +315,7 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
          -d '{
            "term": "product features",
            "query": "url:*/products/* AND (title:features OR content:features)",
-           "maxSize": 10,
+           "max_size": 10,
            "boost": 15.0
          }'
 
@@ -330,7 +330,7 @@ KeyMatch APIは、|Fess| のキーマッチ（検索キーワードと結果の�
          -d '{
            "term": "help",
            "query": "url:*/support/* OR url:*/help/* OR url:*/faq/*",
-           "maxSize": 5,
+           "max_size": 5,
            "boost": 20.0
          }'
 

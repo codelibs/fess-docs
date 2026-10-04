@@ -74,7 +74,7 @@ Paramètres
      - String
      - Non
      - Filtrer par nom de configuration
-   * - ``handlerName``
+   * - ``handler_name``
      - String
      - Non
      - Filtrer par nom de gestionnaire
@@ -96,14 +96,14 @@ Réponse
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
             "description": "Crawler de base de données",
-            "handlerName": "DatabaseDataStore",
-            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
-            "handlerScript": "...",
+            "handler_name": "DatabaseDataStore",
+            "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
+            "handler_script": "...",
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -132,14 +132,14 @@ Réponse
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
           "description": "Crawler de base de données",
-          "handlerName": "DatabaseDataStore",
-          "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
-          "handlerScript": "...",
+          "handler_name": "DatabaseDataStore",
+          "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
+          "handler_script": "...",
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": ""
+          "virtual_hosts": ""
         }
       }
     }
@@ -162,12 +162,12 @@ Corps de la requête
 
     {
       "name": "Product Database",
-      "handlerName": "DatabaseDataStore",
-      "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
-      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
+      "handler_name": "DatabaseDataStore",
+      "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
+      "handler_script": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -187,13 +187,13 @@ Description des champs
    * - ``description``
      - Non
      - Description de la configuration
-   * - ``handlerName``
+   * - ``handler_name``
      - Oui
      - Nom du gestionnaire de datastore
-   * - ``handlerParameter``
+   * - ``handler_parameter``
      - Non
      - Paramètres du gestionnaire (informations de connexion, etc.)
-   * - ``handlerScript``
+   * - ``handler_script``
      - Non
      - Script de transformation des données
    * - ``boost``
@@ -202,13 +202,13 @@ Description des champs
    * - ``available``
      - Oui
      - Activé/Désactivé (chaîne ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Oui
      - Ordre d'affichage
    * - ``permissions``
      - Non
      - Rôles autorisés (séparés par des sauts de ligne si plusieurs)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - Non
      - Hôtes virtuels (séparés par des sauts de ligne si plusieurs)
 
@@ -244,16 +244,16 @@ Corps de la requête
     {
       "id": "existing_dataconfig_id",
       "name": "Updated Product Database",
-      "handlerName": "DatabaseDataStore",
-      "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
-      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
+      "handler_name": "DatabaseDataStore",
+      "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
+      "handler_script": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
       "boost": 1.5,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
-Les requêtes de mise a jour nécessitent les mêmes champs obligatoires que la création (``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``), ainsi que les champs suivants :
+Les requêtes de mise a jour nécessitent les mêmes champs obligatoires que la création (``name``, ``handler_name``, ``boost``, ``available``, ``sort_order``), ainsi que les champs suivants :
 
 .. list-table::
    :header-rows: 1
@@ -265,7 +265,7 @@ Les requêtes de mise a jour nécessitent les mêmes champs obligatoires que la 
    * - ``id``
      - Oui
      - ID de la configuration à mettre à jour
-   * - ``versionNo``
+   * - ``version_no``
      - Oui
      - Numéro de version pour le verrouillage optimiste (indiquer la valeur obtenue lors de la récupération du paramètre)
 
@@ -340,12 +340,12 @@ Configuration de crawl de base de données
          -H "Content-Type: application/json" \
          -d '{
            "name": "User Database",
-           "handlerName": "DatabaseDataStore",
-           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
-           "handlerScript": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
+           "handler_name": "DatabaseDataStore",
+           "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
+           "handler_script": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Informations complémentaires

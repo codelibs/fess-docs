@@ -106,21 +106,21 @@ Response
             "name": "Example Site",
             "description": "Sample site",
             "urls": "https://example.com/",
-            "includedUrls": ".*example\\.com.*",
-            "excludedUrls": ".*\\.(pdf|zip)$",
-            "includedDocUrls": "",
-            "excludedDocUrls": "",
-            "configParameter": "",
+            "included_urls": ".*example\\.com.*",
+            "excluded_urls": ".*\\.(pdf|zip)$",
+            "included_doc_urls": "",
+            "excluded_doc_urls": "",
+            "config_parameter": "",
             "depth": 3,
-            "maxAccessCount": 1000,
-            "userAgent": "Mozilla/5.0",
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "user_agent": "Mozilla/5.0",
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -152,35 +152,35 @@ Response
           "name": "Example Site",
           "description": "Sample site",
           "urls": "https://example.com/",
-          "includedUrls": ".*example\\.com.*",
-          "excludedUrls": ".*\\.(pdf|zip)$",
-          "includedDocUrls": "",
-          "excludedDocUrls": "",
-          "configParameter": "",
+          "included_urls": ".*example\\.com.*",
+          "excluded_urls": ".*\\.(pdf|zip)$",
+          "included_doc_urls": "",
+          "excluded_doc_urls": "",
+          "config_parameter": "",
           "depth": 3,
-          "maxAccessCount": 1000,
-          "userAgent": "Mozilla/5.0",
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "user_agent": "Mozilla/5.0",
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   The response includes ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``, and ``versionNo``,
+   The response includes ``created_by``, ``created_time``, ``updated_by``, ``updated_time``, and ``version_no``,
    which are automatically populated by the server when a configuration is created or updated.
-   ``versionNo`` is required when updating a configuration (see "Update Web Crawl Configuration" below).
+   ``version_no`` is required when updating a configuration (see "Update Web Crawl Configuration" below).
 
 Create Web Crawl Configuration
 ===============================
@@ -201,14 +201,14 @@ Request Body
     {
       "name": "Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "userAgent": "Mozilla/5.0",
-      "numOfThread": 3,
-      "intervalTime": 500,
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe)$",
+      "user_agent": "Mozilla/5.0",
+      "num_of_thread": 3,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -231,34 +231,34 @@ Field Description
    * - ``urls``
      - Yes
      - Crawl start URLs (newline-separated for multiple URLs). Specify using ``http:`` or ``https:``
-   * - ``includedUrls``
+   * - ``included_urls``
      - No
      - Regex pattern for URLs to include in crawling
-   * - ``excludedUrls``
+   * - ``excluded_urls``
      - No
      - Regex pattern for URLs to exclude from crawling
-   * - ``includedDocUrls``
+   * - ``included_doc_urls``
      - No
      - Regex pattern for URLs to include in indexing
-   * - ``excludedDocUrls``
+   * - ``excluded_doc_urls``
      - No
      - Regex pattern for URLs to exclude from indexing
-   * - ``configParameter``
+   * - ``config_parameter``
      - No
      - Additional configuration parameters (``key=value`` format, one entry per line)
    * - ``depth``
      - No
      - Crawl depth (0 or greater)
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - No
      - Maximum access count (0 or greater)
-   * - ``userAgent``
+   * - ``user_agent``
      - Yes
      - User-Agent string (up to 200 characters)
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - Yes
      - Number of parallel threads (1 or greater)
-   * - ``intervalTime``
+   * - ``interval_time``
      - Yes
      - Access interval in milliseconds (0 or greater)
    * - ``boost``
@@ -267,19 +267,19 @@ Field Description
    * - ``available``
      - Yes
      - Enable/disable (string ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Yes
      - Display order (0 or greater)
    * - ``permissions``
      - No
      - Access permission roles (newline-separated for multiple values)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - No
      - Virtual hosts (newline-separated for multiple values)
 
 .. note::
 
-   Audit fields such as ``createdBy``, ``createdTime``, ``updatedBy``, and ``updatedTime`` are
+   Audit fields such as ``created_by``, ``created_time``, ``updated_by``, and ``updated_time`` are
    automatically set by the server and do not need to be included in the request body.
 
 Response
@@ -309,8 +309,8 @@ Request
 Request Body
 ~~~~~~~~~~~~
 
-When updating, ``id`` to identify the target configuration and ``versionNo`` are required in addition to the fields used at creation time.
-Specify the current value of ``versionNo`` as returned in the GET response.
+When updating, ``id`` to identify the target configuration and ``version_no`` are required in addition to the fields used at creation time.
+Specify the current value of ``version_no`` as returned in the GET response.
 
 .. code-block:: json
 
@@ -318,17 +318,17 @@ Specify the current value of ``versionNo`` as returned in the GET response.
       "id": "existing_webconfig_id",
       "name": "Updated Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
-      "userAgent": "Mozilla/5.0",
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe|dmg)$",
+      "user_agent": "Mozilla/5.0",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 5,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 5,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 Additional Fields for Update
@@ -344,9 +344,9 @@ Additional Fields for Update
    * - ``id``
      - Yes
      - ID of the configuration to update (up to 1000 characters)
-   * - ``versionNo``
+   * - ``version_no``
      - Yes
-     - Current version number of the configuration to update. Use the ``versionNo`` value from the GET response.
+     - Current version number of the configuration to update. Use the ``version_no`` value from the GET response.
 
 Response
 --------
@@ -385,7 +385,7 @@ Response
 URL Pattern Examples
 ====================
 
-``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` accept regular expressions.
+``included_urls`` / ``excluded_urls`` / ``included_doc_urls`` / ``excluded_doc_urls`` accept regular expressions.
 
 .. list-table::
    :header-rows: 1
@@ -418,16 +418,16 @@ Corporate Site Crawl Configuration
          -d '{
            "name": "Corporate Website",
            "urls": "https://www.example.com/",
-           "includedUrls": ".*www\\.example\\.com.*",
-           "excludedUrls": ".*/(login|admin|api)/.*",
-           "userAgent": "Mozilla/5.0",
+           "included_urls": ".*www\\.example\\.com.*",
+           "excluded_urls": ".*/(login|admin|api)/.*",
+           "user_agent": "Mozilla/5.0",
            "depth": 5,
-           "maxAccessCount": 10000,
-           "numOfThread": 3,
-           "intervalTime": 500,
+           "max_access_count": 10000,
+           "num_of_thread": 3,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -442,15 +442,15 @@ Documentation Site Crawl Configuration
          -d '{
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
-           "includedUrls": ".*docs\\.example\\.com.*",
-           "includedDocUrls": ".*\\.(html|htm)$",
-           "userAgent": "Mozilla/5.0",
-           "maxAccessCount": 50000,
-           "numOfThread": 5,
-           "intervalTime": 200,
+           "included_urls": ".*docs\\.example\\.com.*",
+           "included_doc_urls": ".*\\.(html|htm)$",
+           "user_agent": "Mozilla/5.0",
+           "max_access_count": 50000,
+           "num_of_thread": 5,
+           "interval_time": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Reference

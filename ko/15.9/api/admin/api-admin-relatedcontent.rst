@@ -93,13 +93,13 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -109,10 +109,10 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
 .. note::
 
    ``settings`` 의 각 요소 및 단일 조회 엔드포인트가 반환하는 ``setting`` 객체에는
-   저장된 엔티티의 필드가 그대로 포함됩니다. ``term``, ``content``, ``sortOrder``,
-   ``virtualHost`` 외에도 감사 필드인 ``createdBy``, ``createdTime``, ``updatedBy``,
-   ``updatedTime`` 과 낙관적 잠금 필드인 ``versionNo`` 도 반환됩니다. ``createdTime``
-   및 ``updatedTime`` 은 에포크 기준 밀리초(숫자)로 표현됩니다. 값이 설정되지 않은
+   저장된 엔티티의 필드가 그대로 포함됩니다. ``term``, ``content``, ``sort_order``,
+   ``virtual_host`` 외에도 감사 필드인 ``created_by``, ``created_time``, ``updated_by``,
+   ``updated_time`` 과 낙관적 잠금 필드인 ``version_no`` 도 반환됩니다. ``created_time``
+   및 ``updated_time`` 은 에포크 기준 밀리초(숫자)로 표현됩니다. 값이 설정되지 않은
    (null) 필드는 응답에서 생략됩니다. 또한 모든 응답의 ``response`` 객체에는 제품
    버전을 나타내는 ``version`` 이 항상 포함됩니다 (자세한 내용은 :doc:`api-admin-overview`
    를 참조하십시오).
@@ -140,20 +140,20 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   업데이트(PUT) 시 필요한 ``versionNo`` 는 이 조회 응답에 포함된 값을 지정합니다.
+   업데이트(PUT) 시 필요한 ``version_no`` 는 이 조회 응답에 포함된 값을 지정합니다.
 
 관련 콘텐츠 만들기
 ==================
@@ -174,8 +174,8 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
     {
       "term": "search",
       "content": "<div class='related'><h3>About Search</h3><p>Learn more about search features...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": ""
+      "sort_order": 0,
+      "virtual_host": ""
     }
 
 필드 설명
@@ -194,10 +194,10 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
    * - ``content``
      - **예**
      - 표시할 HTML 콘텐츠 (최대 10000자)
-   * - ``sortOrder``
+   * - ``sort_order``
      - **아니오**
      - 표시 순서 (0 이상 2147483647 이하의 정수)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - **아니오**
      - 가상 호스트 (최대 1000자)
 
@@ -235,9 +235,9 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
       "id": "existing_content_id",
       "term": "search",
       "content": "<div class='related updated'><h3>About Search</h3><p>Updated information...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": "",
-      "versionNo": 1
+      "sort_order": 0,
+      "virtual_host": "",
+      "version_no": 1
     }
 
 필드 설명
@@ -259,13 +259,13 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
    * - ``content``
      - **예**
      - 표시할 HTML 콘텐츠 (최대 10000자)
-   * - ``sortOrder``
+   * - ``sort_order``
      - **아니오**
      - 표시 순서 (0 이상 2147483647 이하의 정수)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - **아니오**
      - 가상 호스트 (최대 1000자)
-   * - ``versionNo``
+   * - ``version_no``
      - **예**
      - 낙관적 잠금용 버전 번호. ``setting/{id}`` 의 조회 응답에 포함된 값을 지정합니다.
 
@@ -285,8 +285,8 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
 
 .. note::
 
-   ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` 등의 감사 필드나
-   ``crudMode`` 를 요청 본문에 포함해도 서버 측에서 자동으로 설정되므로 무시됩니다.
+   ``created_by``, ``created_time``, ``updated_by``, ``updated_time`` 등의 감사 필드나
+   ``crud_mode`` 를 요청 본문에 포함해도 서버 측에서 자동으로 설정되므로 무시됩니다.
    만들기 또는 업데이트 시 지정할 필요는 없습니다.
 
 관련 콘텐츠 삭제
@@ -325,7 +325,7 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
          -d '{
            "term": "product",
            "content": "<div class=\"product-info\"><h3>Our Products</h3><ul><li>Product A</li><li>Product B</li></ul></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 지원 정보 관련 콘텐츠
@@ -339,7 +339,7 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
          -d '{
            "term": "support",
            "content": "<div><p>Need help? Contact: support@example.com</p></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 참고 정보

@@ -101,16 +101,16 @@ Réponse
             "id": "label_id_1",
             "name": "Documentation",
             "value": "docs",
-            "includedPaths": ".*docs\\.example\\.com.*",
-            "excludedPaths": "",
+            "included_paths": ".*docs\\.example\\.com.*",
+            "excluded_paths": "",
             "permissions": "{role}admin",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -119,8 +119,8 @@ Réponse
 
 .. note::
 
-   Chaque objet de configuration inclut également ``createdBy`` / ``createdTime`` /
-   ``updatedBy`` / ``updatedTime`` à des fins d'audit, ainsi que ``versionNo`` pour le
+   Chaque objet de configuration inclut également ``created_by`` / ``created_time`` /
+   ``updated_by`` / ``updated_time`` à des fins d'audit, ainsi que ``version_no`` pour le
    verrouillage optimiste (les champs dont la valeur est ``null`` sont omis). L'objet
    ``response`` contient toujours ``version``, indiquant la version du produit, mais
    celui-ci peut être omis dans les exemples suivants par souci de concision.
@@ -147,16 +147,16 @@ Réponse
           "id": "label_id_1",
           "name": "Documentation",
           "value": "docs",
-          "includedPaths": ".*docs\\.example\\.com.*",
-          "excludedPaths": "",
+          "included_paths": ".*docs\\.example\\.com.*",
+          "excluded_paths": "",
           "permissions": "{role}admin",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
@@ -180,9 +180,9 @@ Corps de la requête
     {
       "name": "News",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
-      "excludedPaths": ".*/(archive|old)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
+      "excluded_paths": ".*/(archive|old)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest"
     }
 
@@ -205,11 +205,11 @@ Description des champs
      - String
      - Oui
      - Valeur du label (utilisée avec le paramètre ``label`` lors des recherches). Seuls les caractères alphanumériques et les tirets bas (``_``) sont autorisés ; la valeur doit correspondre à l'expression régulière ``^[a-zA-Z0-9_]+$`` (100 caractères maximum).
-   * - ``includedPaths``
+   * - ``included_paths``
      - String
      - Non
      - Expression régulière des chemins cibles du label. Si plusieurs valeurs sont spécifiées, elles sont séparées par un saut de ligne (``\n``).
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - String
      - Non
      - Expression régulière des chemins à exclure du label. Si plusieurs valeurs sont spécifiées, elles sont séparées par un saut de ligne (``\n``).
@@ -217,18 +217,18 @@ Description des champs
      - String
      - Non
      - Rôles, groupes ou utilisateurs autorisés à accéder (ex. : ``{role}admin``). Si plusieurs valeurs sont spécifiées, elles sont séparées par un saut de ligne (``\n``).
-   * - ``sortOrder``
+   * - ``sort_order``
      - Integer
      - Non
      - Ordre d'affichage (entier supérieur ou égal à 0). La valeur par défaut est ``0``.
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - Non
      - Hôte virtuel (1000 caractères maximum).
 
 .. note::
 
-   Les champs d'audit tels que ``createdBy`` / ``createdTime`` sont définis
+   Les champs d'audit tels que ``created_by`` / ``created_time`` sont définis
    automatiquement côté serveur et n'ont pas besoin d'être spécifiés dans la requête.
 
 Réponse
@@ -266,11 +266,11 @@ Corps de la requête
       "id": "existing_label_id",
       "name": "News Articles",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
-      "excludedPaths": ".*/(archive|old|draft)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
+      "excluded_paths": ".*/(archive|old|draft)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest",
-      "versionNo": 1
+      "version_no": 1
     }
 
 Lors d'une mise à jour, les champs suivants sont obligatoires en plus de ceux utilisés lors de la création.
@@ -287,10 +287,10 @@ Lors d'une mise à jour, les champs suivants sont obligatoires en plus de ceux u
      - String
      - Oui
      - ID du type de label à mettre à jour.
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - Oui
-     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur ``versionNo`` présente dans la réponse obtenue lors de la lecture. Si la version spécifiée ne correspond pas à la version actuelle, la mise à jour échoue.
+     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur ``version_no`` présente dans la réponse obtenue lors de la lecture. Si la version spécifiée ne correspond pas à la version actuelle, la mise à jour échoue.
 
 Réponse
 -------
@@ -342,8 +342,8 @@ Création d'un label pour la documentation
          -d '{
            "name": "Technical Documentation",
            "value": "tech_docs",
-           "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
-           "sortOrder": 0,
+           "included_paths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

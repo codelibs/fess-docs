@@ -93,13 +93,13 @@ Response
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -110,10 +110,10 @@ Response
 
    Each element of ``settings`` and the ``setting`` object returned by the get
    endpoint contain the fields of the stored entity as-is. In addition to
-   ``term``, ``content``, ``sortOrder``, and ``virtualHost``, the audit fields
-   ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` and the
-   optimistic-locking field ``versionNo`` are also returned. ``createdTime`` and
-   ``updatedTime`` are expressed as milliseconds since the epoch (numbers). Fields
+   ``term``, ``content``, ``sort_order``, and ``virtual_host``, the audit fields
+   ``created_by``, ``created_time``, ``updated_by``, ``updated_time`` and the
+   optimistic-locking field ``version_no`` are also returned. ``created_time`` and
+   ``updated_time`` are expressed as milliseconds since the epoch (numbers). Fields
    that are not set (null) are omitted from the response. In addition, the
    ``response`` object of every response always includes ``version``, which
    indicates the product version (see :doc:`api-admin-overview` for details).
@@ -141,20 +141,20 @@ Response
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   The ``versionNo`` required when updating (PUT) is the value included in this
+   The ``version_no`` required when updating (PUT) is the value included in this
    get response.
 
 Create Related Content
@@ -176,8 +176,8 @@ Request Body
     {
       "term": "search",
       "content": "<div class='related'><h3>About Search</h3><p>Learn more about search features...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": ""
+      "sort_order": 0,
+      "virtual_host": ""
     }
 
 Field Description
@@ -196,10 +196,10 @@ Field Description
    * - ``content``
      - Yes
      - HTML content to display (max 10000 characters)
-   * - ``sortOrder``
+   * - ``sort_order``
      - No
      - Display order (integer between 0 and 2147483647)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - No
      - Virtual host (max 1000 characters)
 
@@ -237,9 +237,9 @@ Request Body
       "id": "existing_content_id",
       "term": "search",
       "content": "<div class='related updated'><h3>About Search</h3><p>Updated information...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": "",
-      "versionNo": 1
+      "sort_order": 0,
+      "virtual_host": "",
+      "version_no": 1
     }
 
 Field Description
@@ -261,13 +261,13 @@ Field Description
    * - ``content``
      - Yes
      - HTML content to display (max 10000 characters)
-   * - ``sortOrder``
+   * - ``sort_order``
      - No
      - Display order (integer between 0 and 2147483647)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - No
      - Virtual host (max 1000 characters)
-   * - ``versionNo``
+   * - ``version_no``
      - Yes
      - Version number for optimistic locking. Specify the value included in the response of ``setting/{id}``.
 
@@ -287,8 +287,8 @@ Response
 
 .. note::
 
-   Audit fields such as ``createdBy``, ``createdTime``, ``updatedBy``,
-   ``updatedTime`` and ``crudMode`` are ignored even if included in the request
+   Audit fields such as ``created_by``, ``created_time``, ``updated_by``,
+   ``updated_time`` and ``crud_mode`` are ignored even if included in the request
    body, because they are set automatically on the server side. You do not need
    to specify them when creating or updating.
 
@@ -328,7 +328,7 @@ Product Information Related Content
          -d '{
            "term": "product",
            "content": "<div class=\"product-info\"><h3>Our Products</h3><ul><li>Product A</li><li>Product B</li></ul></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Support Information Related Content
@@ -342,7 +342,7 @@ Support Information Related Content
          -d '{
            "term": "support",
            "content": "<div><p>Need help? Contact: support@example.com</p></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Reference

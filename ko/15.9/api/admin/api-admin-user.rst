@@ -105,7 +105,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
             },
             "roles": ["admin"],
             "groups": [],
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 10
@@ -150,7 +150,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
           },
           "roles": ["admin"],
           "groups": [],
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -179,7 +179,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
     {
       "name": "testuser",
       "password": "securepassword",
-      "confirmPassword": "securepassword",
+      "confirm_password": "securepassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User",
@@ -205,7 +205,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
    * - ``password``
      - 아니오
      - 비밀번호
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - 아니오
      - 확인용 비밀번호
    * - ``attributes``
@@ -220,9 +220,9 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
 
 .. note::
 
-   REST API에서는 비밀번호 필수 확인, ``password`` 와 ``confirmPassword`` 의 일치 확인,
+   REST API에서는 비밀번호 필수 확인, ``password`` 와 ``confirm_password`` 의 일치 확인,
    비밀번호 정책 검증을 수행하지 않습니다 (이것들은 관리 UI에서만 적용됩니다).
-   실제 운용 시, ``password`` 의 값이 ``confirmPassword`` 와 일치하는 유효한 값을 지정하는 것을 권장합니다.
+   실제 운용 시, ``password`` 의 값이 ``confirm_password`` 와 일치하는 유효한 값을 지정하는 것을 권장합니다.
 
 ``attributes`` 의 키에는 사용자 엔티티의 속성명 (LDAP 스키마에서 유래한 항목명)을 지정합니다.
 대표적인 키는 다음과 같습니다.
@@ -277,7 +277,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "confirmPassword": "newpassword",
+      "confirm_password": "newpassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User Updated",
@@ -285,7 +285,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
       },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
-      "versionNo": 1
+      "version_no": 1
     }
 
 필드 설명
@@ -304,13 +304,13 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
    * - ``name``
      - 예
      - 사용자명 (로그인 ID)
-   * - ``versionNo``
+   * - ``version_no``
      - 예
      - 버전 번호 (낙관적 잠금용)
    * - ``password``
      - 아니오
      - 새 비밀번호 (지정한 경우에만 업데이트)
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - 아니오
      - 확인용 비밀번호
    * - ``attributes``
@@ -325,8 +325,8 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
 
 .. note::
 
-   업데이트 시 ``id``, ``name``, ``versionNo`` 는 필수입니다.
-   ``versionNo`` 는 대상 사용자 조회(GET) 시 반환되는 값이며, OpenSearch 문서의 버전에 대응합니다.
+   업데이트 시 ``id``, ``name``, ``version_no`` 는 필수입니다.
+   ``version_no`` 는 대상 사용자 조회(GET) 시 반환되는 값이며, OpenSearch 문서의 버전에 대응합니다.
    현재 버전과 일치하지 않으면 충돌로 판단되어 업데이트가 거부됩니다.
 
 응답
@@ -391,7 +391,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "confirmPassword": "SecureP@ss123",
+           "confirm_password": "SecureP@ss123",
            "attributes": {
              "surname": "Doe",
              "givenName": "John",
@@ -413,7 +413,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
            "id": "user_id_123",
            "name": "john.doe",
            "roles": ["user", "editor", "admin"],
-           "versionNo": 1
+           "version_no": 1
          }'
 
 참고 정보

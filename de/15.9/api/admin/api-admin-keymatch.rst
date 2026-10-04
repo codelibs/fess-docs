@@ -92,9 +92,9 @@ Response
             "id": "keymatch_id_1",
             "term": "download",
             "query": "title:download OR content:download",
-            "maxSize": 10,
+            "max_size": 10,
             "boost": 10.0,
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -104,8 +104,8 @@ Response
 .. note::
 
    In ``total`` wird die Gesamtanzahl der Einträge angegeben, die den Filterbedingungen entsprechen (nicht die Anzahl der Einträge auf der aktuellen Seite).
-   Jedes Einstellungsobjekt kann zusätzlich zu den oben genannten Feldern ``virtualHost``,
-   ``createdBy``, ``createdTime``, ``updatedBy`` und ``updatedTime`` enthalten, sofern diese Werte gesetzt sind.
+   Jedes Einstellungsobjekt kann zusätzlich zu den oben genannten Feldern ``virtual_host``,
+   ``created_by``, ``created_time``, ``updated_by`` und ``updated_time`` enthalten, sofern diese Werte gesetzt sind.
 
 KeyMatch abrufen
 ================
@@ -129,21 +129,21 @@ Response
           "id": "keymatch_id_1",
           "term": "download",
           "query": "title:download OR content:download",
-          "maxSize": 10,
+          "max_size": 10,
           "boost": 10.0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   ``versionNo`` ist die Versionsnummer für optimistisches Sperren. Beim Aktualisieren eines KeyMatch-Eintrags muss der beim Abrufen erhaltene
-   ``versionNo``-Wert im Request-Body angegeben werden. Falls die angegebene ID nicht existiert, wird ein Fehler zurückgegeben.
+   ``version_no`` ist die Versionsnummer für optimistisches Sperren. Beim Aktualisieren eines KeyMatch-Eintrags muss der beim Abrufen erhaltene
+   ``version_no``-Wert im Request-Body angegeben werden. Falls die angegebene ID nicht existiert, wird ein Fehler zurückgegeben.
 
 KeyMatch erstellen
 ==================
@@ -164,7 +164,7 @@ Request-Body
     {
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing",
-      "maxSize": 5,
+      "max_size": 5,
       "boost": 20.0
     }
 
@@ -187,7 +187,7 @@ Feldbeschreibungen
      - String
      - Ja
      - Match-Abfrage (maximale Länge gemäß Konfigurationswert ``form.admin.max.input.size``)
-   * - ``maxSize``
+   * - ``max_size``
      - Integer
      - Ja
      - Maximale Anzahl anzuzeigender Einträge (ganzzahlig, mindestens 0; Standardwert im Verwaltungsformular: 10)
@@ -195,16 +195,16 @@ Feldbeschreibungen
      - Float
      - Ja
      - Boost-Wert (Standardwert im Verwaltungsformular: 100.0)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - Nein
      - Name des virtuellen Hosts (maximal 1000 Zeichen; anzugeben, wenn KeyMatch-Einträge pro virtuellem Host unterschieden werden sollen)
 
 .. note::
 
-   ``maxSize`` und ``boost`` sind bei der Verwendung über die API Pflichtfelder. Die Standardwerte werden im Verwaltungsformular angezeigt und gelten
+   ``max_size`` und ``boost`` sind bei der Verwendung über die API Pflichtfelder. Die Standardwerte werden im Verwaltungsformular angezeigt und gelten
    nicht automatisch für die API. Werden diese Felder ausgelassen, wird ein Validierungsfehler zurückgegeben.
-   Hinweis: ``createdBy`` und ``createdTime`` werden auch dann vom Server überschrieben, wenn sie im Request angegeben werden.
+   Hinweis: ``created_by`` und ``created_time`` werden auch dann vom Server überschrieben, wenn sie im Request angegeben werden.
 
 Response
 --------
@@ -239,15 +239,15 @@ Request-Body
       "id": "existing_keymatch_id",
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing OR content:price",
-      "maxSize": 10,
+      "max_size": 10,
       "boost": 15.0,
-      "versionNo": 1
+      "version_no": 1
     }
 
 Feldbeschreibungen
 ~~~~~~~~~~~~~~~~~~
 
-Zusätzlich zu den Feldern beim Erstellen (``term``, ``query``, ``maxSize``, ``boost``, ``virtualHost``) sind folgende Felder anzugeben.
+Zusätzlich zu den Feldern beim Erstellen (``term``, ``query``, ``max_size``, ``boost``, ``virtual_host``) sind folgende Felder anzugeben.
 
 .. list-table::
    :header-rows: 1
@@ -261,7 +261,7 @@ Zusätzlich zu den Feldern beim Erstellen (``term``, ``query``, ``maxSize``, ``b
      - String
      - Ja
      - ID des zu aktualisierenden KeyMatch-Eintrags (maximal 1000 Zeichen)
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - Ja
      - Versionsnummer für optimistisches Sperren; anzugeben ist der beim Abrufen erhaltene Wert
@@ -314,7 +314,7 @@ Produktseiten-KeyMatch erstellen
          -d '{
            "term": "product features",
            "query": "url:*/products/* AND (title:features OR content:features)",
-           "maxSize": 10,
+           "max_size": 10,
            "boost": 15.0
          }'
 
@@ -329,7 +329,7 @@ KeyMatch für Support-Seiten
          -d '{
            "term": "help",
            "query": "url:*/support/* OR url:*/help/* OR url:*/faq/*",
-           "maxSize": 5,
+           "max_size": 5,
            "boost": 20.0
          }'
 

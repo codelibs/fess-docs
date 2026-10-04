@@ -92,11 +92,11 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
         "settings": [
           {
             "id": "elevate_id_1",
-            "suggestWord": "fess",
+            "suggest_word": "fess",
             "reading": "",
             "permissions": "{role}guest",
             "boost": 100.0,
-            "labelTypeIds": []
+            "label_type_ids": []
           }
         ],
         "total": 5
@@ -123,11 +123,11 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
         "status": 0,
         "setting": {
           "id": "elevate_id_1",
-          "suggestWord": "fess",
+          "suggest_word": "fess",
           "reading": "",
           "permissions": "{role}guest",
           "boost": 100.0,
-          "labelTypeIds": []
+          "label_type_ids": []
         }
       }
     }
@@ -149,11 +149,11 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
 .. code-block:: json
 
     {
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest",
       "boost": 100.0,
-      "labelTypeIds": ["label1"]
+      "label_type_ids": ["label1"]
     }
 
 字段说明
@@ -166,7 +166,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
    * - 字段
      - 必需
      - 说明
-   * - ``suggestWord``
+   * - ``suggest_word``
      - 是
      - 提升目标的关键词
    * - ``reading``
@@ -178,7 +178,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
    * - ``boost``
      - 是
      - 提升值（表单初始值：100.0）
-   * - ``labelTypeIds``
+   * - ``label_type_ids``
      - 否
      - 目标标签ID（字符串数组）
 
@@ -213,12 +213,12 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
 
     {
       "id": "existing_elevate_id",
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
-      "labelTypeIds": ["label1"],
-      "versionNo": 1
+      "label_type_ids": ["label1"],
+      "version_no": 1
     }
 
 .. note::
@@ -226,7 +226,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
    更新时，除创建时所需的字段外，还需要以下字段。
 
    - ``id`` - 要更新的提升词ID
-   - ``versionNo`` - 用于乐观锁的版本号。请指定通过 ``GET /setting/{id}`` 获取的值。
+   - ``version_no`` - 用于乐观锁的版本号。请指定通过 ``GET /setting/{id}`` 获取的值。
 
 响应
 ----
@@ -326,7 +326,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "Product X",
+           "suggest_word": "Product X",
            "boost": 100.0,
            "permissions": "{role}guest"
          }'
@@ -340,9 +340,9 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "API reference",
+           "suggest_word": "API reference",
            "boost": 100.0,
-           "labelTypeIds": ["technical_docs"],
+           "label_type_ids": ["technical_docs"],
            "permissions": "{role}guest"
          }'
 

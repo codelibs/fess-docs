@@ -99,16 +99,16 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
             "id": "label_id_1",
             "name": "Documentation",
             "value": "docs",
-            "includedPaths": ".*docs\\.example\\.com.*",
-            "excludedPaths": "",
+            "included_paths": ".*docs\\.example\\.com.*",
+            "excluded_paths": "",
             "permissions": "{role}admin",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -117,8 +117,8 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
 
 .. note::
 
-   各設定オブジェクトには、監査用の ``createdBy`` / ``createdTime`` / ``updatedBy`` /
-   ``updatedTime`` と、楽観的ロック用の ``versionNo`` も含まれます（値が ``null`` の
+   各設定オブジェクトには、監査用の ``created_by`` / ``created_time`` / ``updated_by`` /
+   ``updated_time`` と、楽観的ロック用の ``version_no`` も含まれます（値が ``null`` の
    フィールドは省略されます）。\ ``response`` オブジェクトには製品バージョンを示す
    ``version`` が常に含まれますが、以降の例では簡潔さのために省略している場合があります。
 
@@ -144,16 +144,16 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
           "id": "label_id_1",
           "name": "Documentation",
           "value": "docs",
-          "includedPaths": ".*docs\\.example\\.com.*",
-          "excludedPaths": "",
+          "included_paths": ".*docs\\.example\\.com.*",
+          "excluded_paths": "",
           "permissions": "{role}admin",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
@@ -177,9 +177,9 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
     {
       "name": "News",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
-      "excludedPaths": ".*/(archive|old)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
+      "excluded_paths": ".*/(archive|old)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest"
     }
 
@@ -202,11 +202,11 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
      - String
      - はい
      - ラベル値（検索時に ``label`` パラメーターで使用）。半角英数字とアンダースコア（``_``）のみ使用可能で、正規表現 ``^[a-zA-Z0-9_]+$`` に一致する必要があります（最大100文字）。
-   * - ``includedPaths``
+   * - ``included_paths``
      - String
      - いいえ
      - ラベル対象とするパスの正規表現。複数指定する場合は改行（``\n``）で区切ります。
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - String
      - いいえ
      - ラベル対象から除外するパスの正規表現。複数指定する場合は改行（``\n``）で区切ります。
@@ -214,18 +214,18 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
      - String
      - いいえ
      - アクセスを許可するロール／グループ／ユーザー（例: ``{role}admin``）。複数指定する場合は改行（``\n``）で区切ります。
-   * - ``sortOrder``
+   * - ``sort_order``
      - Integer
      - いいえ
      - 表示順序（0以上の整数）。指定しない場合は ``0`` です。
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - いいえ
      - 仮想ホスト（最大1000文字）。
 
 .. note::
 
-   ``createdBy`` / ``createdTime`` などの監査フィールドはサーバー側で自動的に設定される
+   ``created_by`` / ``created_time`` などの監査フィールドはサーバー側で自動的に設定される
    ため、リクエストでの指定は不要です。
 
 レスポンス
@@ -263,11 +263,11 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
       "id": "existing_label_id",
       "name": "News Articles",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
-      "excludedPaths": ".*/(archive|old|draft)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
+      "excluded_paths": ".*/(archive|old|draft)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest",
-      "versionNo": 1
+      "version_no": 1
     }
 
 更新時は、作成時のフィールドに加えて以下のフィールドが必須です。
@@ -284,10 +284,10 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
      - String
      - はい
      - 更新対象のラベルタイプID。
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - はい
-     - 楽観的ロック用のバージョン番号。取得時のレスポンスに含まれる ``versionNo`` を指定します。指定したバージョンが現在のものと一致しない場合、更新は失敗します。
+     - 楽観的ロック用のバージョン番号。取得時のレスポンスに含まれる ``version_no`` を指定します。指定したバージョンが現在のものと一致しない場合、更新は失敗します。
 
 レスポンス
 ----------
@@ -339,8 +339,8 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
          -d '{
            "name": "Technical Documentation",
            "value": "tech_docs",
-           "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
-           "sortOrder": 0,
+           "included_paths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

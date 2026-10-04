@@ -66,37 +66,36 @@ values such as retention days and thread counts are expressed as numbers.
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "incrementalCrawling": "true",
-          "dayForCleanup": -1,
-          "crawlingThreadCount": 5,
-          "searchLog": "true",
-          "userInfo": "true",
-          "userFavorite": "false",
-          "webApiJson": "true",
-          "defaultLabelValue": "",
-          "defaultSortValue": "",
-          "appendQueryParameter": "false",
-          "loginRequired": "false",
+          "incremental_crawling": "true",
+          "day_for_cleanup": -1,
+          "crawling_thread_count": 5,
+          "search_log": "true",
+          "user_info": "true",
+          "user_favorite": "false",
+          "web_api_json": "true",
+          "default_label_value": "",
+          "default_sort_value": "",
+          "append_query_parameter": "false",
+          "login_required": "false",
           "thumbnail": "true",
-          "failureCountThreshold": -1,
-          "popularWord": "true",
-          "csvFileEncoding": "UTF-8",
-          "purgeSearchLogDay": 30,
-          "purgeJobLogDay": 30,
-          "purgeUserInfoDay": 30,
-          "purgeSuggestSearchLogDay": 30,
-          "notificationTo": "",
-          "suggestSearchLog": "true",
-          "suggestDocuments": "true",
-          "ldapProviderUrl": "ldap://localhost:389/",
-          "ldapBaseDn": "dc=example,dc=com",
-          "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
-          "ldapAdminSecurityCredentials": null,
-          "logLevel": "",
-          "ssoType": "none",
-          "storageType": "",
-          "notificationLogin": "",
-          "notificationSearchTop": ""
+          "failure_count_threshold": -1,
+          "popular_word": "true",
+          "csv_file_encoding": "UTF-8",
+          "purge_search_log_day": 30,
+          "purge_job_log_day": 30,
+          "purge_user_info_day": 30,
+          "purge_suggest_search_log_day": 30,
+          "notification_to": "",
+          "suggest_search_log": "true",
+          "suggest_documents": "true",
+          "ldap_provider_url": "ldap://localhost:389/",
+          "ldap_base_dn": "dc=example,dc=com",
+          "ldap_admin_security_principal": "cn=admin,dc=example,dc=com",
+          "log_level": "",
+          "sso_type": "none",
+          "storage_type": "",
+          "notification_login": "",
+          "notification_search_top": ""
         }
       }
     }
@@ -113,11 +112,11 @@ values such as retention days and thread counts are expressed as numbers.
    For security reasons, fields that contain credentials are not returned with their
    actual values.
 
-   - ``ldapAdminSecurityCredentials`` (LDAP admin password) is always returned as
-     ``null``.
-   - Other secrets (``storageAccessKey``, ``storageSecretKey``, ``oicClientId``,
-     ``oicClientSecret``, ``spnegoPreauthPassword``, ``entraidClientId``,
-     ``entraidClientSecret``) are returned masked as ``"**********"`` when they are
+   - ``ldap_admin_security_credentials`` (LDAP admin password) is never included in
+     the response.
+   - Other secrets (``storage_access_key``, ``storage_secret_key``, ``oic_client_id``,
+     ``oic_client_secret``, ``spnego_preauth_password``, ``entraid_client_id``,
+     ``entraid_client_secret``) are returned masked as ``"**********"`` when they are
      set, or as an empty string (``""``) when they are not set.
 
 Update General Settings
@@ -144,10 +143,10 @@ existing values.
    The following four fields are required and MUST be included in EVERY PUT request,
    even for a partial update:
 
-   - ``dayForCleanup``
-   - ``crawlingThreadCount``
-   - ``failureCountThreshold``
-   - ``csvFileEncoding``
+   - ``day_for_cleanup``
+   - ``crawling_thread_count``
+   - ``failure_count_threshold``
+   - ``csv_file_encoding``
 
    If any of them is missing, the request fails validation and the API returns
    HTTP 400 with ``status: 1`` and an error ``message``. Because the value you send
@@ -173,12 +172,12 @@ existing values.
 .. code-block:: json
 
     {
-      "incrementalCrawling": "true",
-      "dayForCleanup": -1,
-      "crawlingThreadCount": 10,
-      "failureCountThreshold": 100,
-      "csvFileEncoding": "UTF-8",
-      "popularWord": "true"
+      "incremental_crawling": "true",
+      "day_for_cleanup": -1,
+      "crawling_thread_count": 10,
+      "failure_count_threshold": 100,
+      "csv_file_encoding": "UTF-8",
+      "popular_word": "true"
     }
 
 Main Fields
@@ -195,124 +194,124 @@ settings are specified as the strings ``"true"`` / ``"false"``.
    * - Field
      - Required
      - Description
-   * - ``incrementalCrawling``
+   * - ``incremental_crawling``
      - No
      - Enable/disable incremental crawling
-   * - ``dayForCleanup``
+   * - ``day_for_cleanup``
      - Yes
      - Number of days to retain crawled documents (-1 = cleanup disabled; range: -1 to 1000)
-   * - ``crawlingThreadCount``
+   * - ``crawling_thread_count``
      - Yes
      - Number of threads used for crawling (range: 0 to 100)
-   * - ``failureCountThreshold``
+   * - ``failure_count_threshold``
      - Yes
      - Failure count threshold to stop crawling a URL (-1 = disabled; range: -1 to 10000)
-   * - ``csvFileEncoding``
+   * - ``csv_file_encoding``
      - Yes
      - Encoding for CSV export
-   * - ``searchLog``
+   * - ``search_log``
      - No
      - Enable/disable search query logging
-   * - ``userInfo``
+   * - ``user_info``
      - No
      - Enable/disable recording of user information
-   * - ``userFavorite``
+   * - ``user_favorite``
      - No
      - Enable/disable the favorite feature
-   * - ``webApiJson``
+   * - ``web_api_json``
      - No
      - Enable/disable the JSON Web API
-   * - ``appValue``
+   * - ``app_value``
      - No
      - Application-specific additional configuration value
-   * - ``virtualHostValue``
+   * - ``virtual_host_value``
      - No
      - Virtual host configuration (for multi-tenant setups)
-   * - ``popularWord``
+   * - ``popular_word``
      - No
      - Enable/disable aggregation and display of popular words
-   * - ``defaultLabelValue``
+   * - ``default_label_value``
      - No
      - Default label value
-   * - ``defaultSortValue``
+   * - ``default_sort_value``
      - No
      - Default sort order
-   * - ``appendQueryParameter``
+   * - ``append_query_parameter``
      - No
      - Append query parameters to search result URLs
-   * - ``loginRequired``
+   * - ``login_required``
      - No
      - Whether login is required for search
-   * - ``loginLink``
+   * - ``login_link``
      - No
      - Enable or disable display of the login link on the search screen
    * - ``thumbnail``
      - No
      - Enable/disable thumbnail generation
-   * - ``resultCollapsed``
+   * - ``result_collapsed``
      - No
      - Enable or disable collapsing of similar documents in search results
-   * - ``ignoreFailureType``
+   * - ``ignore_failure_type``
      - No
      - Crawl failure types to ignore
-   * - ``crawlingUserAgent``
+   * - ``crawling_user_agent``
      - No
      - User-Agent string sent during crawling
-   * - ``purgeSearchLogDay``
+   * - ``purge_search_log_day``
      - No
      - Number of days to retain search logs (-1 = disabled; range: -1 to 100000)
-   * - ``purgeJobLogDay``
+   * - ``purge_job_log_day``
      - No
      - Number of days to retain job logs (-1 = disabled; range: -1 to 100000)
-   * - ``purgeUserInfoDay``
+   * - ``purge_user_info_day``
      - No
      - Number of days to retain user information (-1 = disabled; range: -1 to 100000)
-   * - ``purgeSuggestSearchLogDay``
+   * - ``purge_suggest_search_log_day``
      - No
      - Number of days to retain suggest search logs (0 = disabled; range: 0 to 100000)
-   * - ``purgeByBots``
+   * - ``purge_by_bots``
      - No
      - Bot User-Agents whose search logs are discarded
-   * - ``notificationTo``
+   * - ``notification_to``
      - No
      - Email address to which system notifications are sent
-   * - ``notificationLogin``
+   * - ``notification_login``
      - No
      - Notification message displayed on the login page
-   * - ``notificationSearchTop``
+   * - ``notification_search_top``
      - No
      - Notification message displayed on the search top page
-   * - ``notificationAdvanceSearch``
+   * - ``notification_advance_search``
      - No
      - Notification message displayed on the advanced search page
-   * - ``suggestSearchLog``
+   * - ``suggest_search_log``
      - No
      - Enable/disable suggest from search logs
-   * - ``suggestDocuments``
+   * - ``suggest_documents``
      - No
      - Enable/disable suggest from documents
-   * - ``logLevel``
+   * - ``log_level``
      - No
      - Log level for system logs
-   * - ``logNotificationEnabled``
+   * - ``log_notification_enabled``
      - No
      - Enable/disable notifications for ERROR/WARN logs
-   * - ``logNotificationLevel``
+   * - ``log_notification_level``
      - No
      - Log notification level
-   * - ``slackWebhookUrls``
+   * - ``slack_webhook_urls``
      - No
      - Slack Webhook URL for notifications
-   * - ``googleChatWebhookUrls``
+   * - ``google_chat_webhook_urls``
      - No
      - Google Chat Webhook URL for notifications
-   * - ``searchUseBrowserLocale``
+   * - ``search_use_browser_locale``
      - No
      - Whether to use the browser locale for search
-   * - ``ragLlmName``
+   * - ``rag_llm_name``
      - No
      - LLM provider name used for RAG
-   * - ``llmLogLevel``
+   * - ``llm_log_level``
      - No
      - Log level for LLM-related packages
 
@@ -329,29 +328,29 @@ correspond to the "General" settings in the admin UI).
 
    * - Field
      - Description
-   * - ``ldapProviderUrl``
+   * - ``ldap_provider_url``
      - LDAP connection URL
-   * - ``ldapBaseDn``
+   * - ``ldap_base_dn``
      - LDAP base DN
-   * - ``ldapSecurityPrincipal``
+   * - ``ldap_security_principal``
      - Security principal for LDAP binding
-   * - ``ldapAdminSecurityPrincipal``
+   * - ``ldap_admin_security_principal``
      - Security principal for LDAP administrative operations
-   * - ``ldapAdminSecurityCredentials``
-     - LDAP administrator password (replaced with ``null`` in the response)
-   * - ``ldapAccountFilter`` / ``ldapGroupFilter``
+   * - ``ldap_admin_security_credentials``
+     - LDAP administrator password (never included in the response)
+   * - ``ldap_account_filter`` / ``ldap_group_filter``
      - User/group search filters
-   * - ``ldapMemberofAttribute``
+   * - ``ldap_memberof_attribute``
      - LDAP attribute name indicating group membership
-   * - ``ssoType``
+   * - ``sso_type``
      - SSO type (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
-   * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` etc.
+   * - ``oic_client_id`` / ``oic_client_secret`` / ``oic_auth_server_url`` etc.
      - OpenID Connect settings
-   * - ``samlIdpEntityid`` / ``samlSpEntityid`` etc.
+   * - ``saml_idp_entityid`` / ``saml_sp_entityid`` etc.
      - SAML settings
-   * - ``spnegoKrb5Conf`` / ``spnegoLoginConf`` etc.
+   * - ``spnego_krb5_conf`` / ``spnego_login_conf`` etc.
      - SPNEGO settings
-   * - ``entraidClientId`` / ``entraidTenant`` etc.
+   * - ``entraid_client_id`` / ``entraid_tenant`` etc.
      - Microsoft Entra ID settings
 
 Storage-Related Fields
@@ -365,24 +364,24 @@ Cloud storage (S3 / GCS) integration settings can also be managed.
 
    * - Field
      - Description
-   * - ``storageType``
+   * - ``storage_type``
      - Storage type (``auto`` / ``s3`` / ``gcs``)
-   * - ``storageEndpoint``
+   * - ``storage_endpoint``
      - Storage endpoint URL
-   * - ``storageAccessKey`` / ``storageSecretKey``
+   * - ``storage_access_key`` / ``storage_secret_key``
      - Access key / secret key for authentication
-   * - ``storageBucket``
+   * - ``storage_bucket``
      - Bucket name
-   * - ``storageRegion``
+   * - ``storage_region``
      - S3 region
-   * - ``storageProjectId`` / ``storageCredentialsPath``
+   * - ``storage_project_id`` / ``storage_credentials_path``
      - GCS project ID / credentials file path
 
 .. note::
 
-   Secret fields such as ``ldapAdminSecurityCredentials``,
-   ``storageAccessKey`` / ``storageSecretKey``, ``oicClientId`` / ``oicClientSecret``,
-   ``entraidClientId`` / ``entraidClientSecret``, and ``spnegoPreauthPassword`` keep
+   Secret fields such as ``ldap_admin_security_credentials``,
+   ``storage_access_key`` / ``storage_secret_key``, ``oic_client_id`` / ``oic_client_secret``,
+   ``entraid_client_id`` / ``entraid_client_secret``, and ``spnego_preauth_password`` keep
    their stored value (are not updated) when the mask value ``"**********"`` is sent
    as-is. Send the actual value only when you want to change it.
 
@@ -416,8 +415,8 @@ Usage Examples
 
 .. note::
 
-   The examples below include the required fields (``dayForCleanup``,
-   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Because
+   The examples below include the required fields (``day_for_cleanup``,
+   ``crawling_thread_count``, ``failure_count_threshold``, ``csv_file_encoding``). Because
    these must always be sent regardless of what you are changing, retrieve the
    current values with ``GET`` and include them in actual operation (the examples
    below use default values).
@@ -431,11 +430,11 @@ Update Crawl Settings
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "incrementalCrawling": "true",
-           "crawlingThreadCount": 10,
-           "failureCountThreshold": 100,
-           "dayForCleanup": -1,
-           "csvFileEncoding": "UTF-8"
+           "incremental_crawling": "true",
+           "crawling_thread_count": 10,
+           "failure_count_threshold": 100,
+           "day_for_cleanup": -1,
+           "csv_file_encoding": "UTF-8"
          }'
 
 Update Log Retention Period
@@ -447,13 +446,13 @@ Update Log Retention Period
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "dayForCleanup": -1,
-           "crawlingThreadCount": 5,
-           "failureCountThreshold": -1,
-           "csvFileEncoding": "UTF-8",
-           "purgeSearchLogDay": 90,
-           "purgeJobLogDay": 90,
-           "purgeUserInfoDay": 90
+           "day_for_cleanup": -1,
+           "crawling_thread_count": 5,
+           "failure_count_threshold": -1,
+           "csv_file_encoding": "UTF-8",
+           "purge_search_log_day": 90,
+           "purge_job_log_day": 90,
+           "purge_user_info_day": 90
          }'
 
 Update Suggest Settings
@@ -465,12 +464,12 @@ Update Suggest Settings
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "dayForCleanup": -1,
-           "crawlingThreadCount": 5,
-           "failureCountThreshold": -1,
-           "csvFileEncoding": "UTF-8",
-           "suggestSearchLog": "true",
-           "suggestDocuments": "true"
+           "day_for_cleanup": -1,
+           "crawling_thread_count": 5,
+           "failure_count_threshold": -1,
+           "csv_file_encoding": "UTF-8",
+           "suggest_search_log": "true",
+           "suggest_documents": "true"
          }'
 
 See Also

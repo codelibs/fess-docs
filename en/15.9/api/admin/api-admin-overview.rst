@@ -519,22 +519,22 @@ Create Web Crawl Configuration
          -d '{
            "name": "Example Site",
            "urls": "https://example.com/",
-           "includedUrls": ".*example.com.*",
-           "excludedUrls": "",
-           "userAgent": "Mozilla/5.0 (compatible; Fess)",
-           "numOfThread": 1,
-           "intervalTime": 1000,
+           "included_urls": ".*example.com.*",
+           "excluded_urls": "",
+           "user_agent": "Mozilla/5.0 (compatible; Fess)",
+           "num_of_thread": 1,
+           "interval_time": 1000,
            "boost": 1.0,
-           "maxAccessCount": 1000,
+           "max_access_count": 1000,
            "depth": 3,
-           "sortOrder": 1,
+           "sort_order": 1,
            "available": "true"
          }'
 
 .. note::
 
-   When creating a Web crawl configuration, ``name``, ``urls``, ``userAgent``, ``numOfThread``,
-   ``intervalTime``, ``boost``, ``available``, and ``sortOrder`` are required. Omitting any of
+   When creating a Web crawl configuration, ``name``, ``urls``, ``user_agent``, ``num_of_thread``,
+   ``interval_time``, ``boost``, ``available``, and ``sort_order`` are required. Omitting any of
    these results in a validation error (``status: 1``). Specify ``available`` as a string, setting
    it to ``"true"`` or ``"false"``.
 

@@ -106,20 +106,20 @@ Response
             "name": "Shared Documents",
             "description": "Gemeinsame Dokumente",
             "paths": "smb://server/share/documents",
-            "includedPaths": ".*\\.pdf$",
-            "excludedPaths": ".*/(temp|cache)/.*",
-            "includedDocPaths": "",
-            "excludedDocPaths": "",
-            "configParameter": "",
+            "included_paths": ".*\\.pdf$",
+            "excluded_paths": ".*/(temp|cache)/.*",
+            "included_doc_paths": "",
+            "excluded_doc_paths": "",
+            "config_parameter": "",
             "depth": 10,
-            "maxAccessCount": 1000,
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -151,34 +151,34 @@ Response
           "name": "Shared Documents",
           "description": "Gemeinsame Dokumente",
           "paths": "smb://server/share/documents",
-          "includedPaths": ".*\\.pdf$",
-          "excludedPaths": ".*/(temp|cache)/.*",
-          "includedDocPaths": "",
-          "excludedDocPaths": "",
-          "configParameter": "",
+          "included_paths": ".*\\.pdf$",
+          "excluded_paths": ".*/(temp|cache)/.*",
+          "included_doc_paths": "",
+          "excluded_doc_paths": "",
+          "config_parameter": "",
           "depth": 10,
-          "maxAccessCount": 1000,
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   Die Response enthält die vom Server automatisch gesetzten Felder ``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime`` und ``versionNo``.
-   ``versionNo`` wird bei der Aktualisierung benötigt (siehe „Datei-Crawl-Konfiguration aktualisieren" weiter unten).
+   Die Response enthält die vom Server automatisch gesetzten Felder ``created_by``, ``created_time``,
+   ``updated_by``, ``updated_time`` und ``version_no``.
+   ``version_no`` wird bei der Aktualisierung benötigt (siehe „Datei-Crawl-Konfiguration aktualisieren" weiter unten).
 
 Datei-Crawl-Konfiguration erstellen
 =====================================
@@ -199,13 +199,13 @@ Request-Body
     {
       "name": "Local Files",
       "paths": "file:///data/documents",
-      "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
-      "excludedPaths": ".*/(temp|backup)/.*",
-      "numOfThread": 2,
-      "intervalTime": 500,
+      "included_paths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
+      "excluded_paths": ".*/(temp|backup)/.*",
+      "num_of_thread": 2,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -228,31 +228,31 @@ Feldbeschreibungen
    * - ``paths``
      - Ja
      - Crawl-Startpfade (bei mehreren durch Zeilenumbruch getrennt). Anzugeben mit einem der Protokolle ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``s3:`` oder ``gcs:``
-   * - ``includedPaths``
+   * - ``included_paths``
      - Nein
      - Regex-Muster für zu crawlende Pfade
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - Nein
      - Regex-Muster für auszuschließende Pfade
-   * - ``includedDocPaths``
+   * - ``included_doc_paths``
      - Nein
      - Regex-Muster für zu indexierende Pfade
-   * - ``excludedDocPaths``
+   * - ``excluded_doc_paths``
      - Nein
      - Regex-Muster für vom Index auszuschließende Pfade
-   * - ``configParameter``
+   * - ``config_parameter``
      - Nein
      - Zusätzliche Konfigurationsparameter (Format ``key=value``, ein Eintrag pro Zeile)
    * - ``depth``
      - Nein
      - Crawl-Tiefe (0 oder größer)
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - Nein
      - Maximale Zugriffsanzahl (0 oder größer)
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - Ja
      - Anzahl paralleler Threads (1 oder größer)
-   * - ``intervalTime``
+   * - ``interval_time``
      - Ja
      - Zugriffsintervall (Millisekunden, 0 oder größer)
    * - ``boost``
@@ -261,19 +261,19 @@ Feldbeschreibungen
    * - ``available``
      - Ja
      - Aktiviert/Deaktiviert (Zeichenkette ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Ja
      - Anzeigereihenfolge (0 oder größer)
    * - ``permissions``
      - Nein
      - Zugriffsberechtigte Rollen (bei mehreren durch Zeilenumbruch getrennt)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - Nein
      - Virtuelle Hosts (bei mehreren durch Zeilenumbruch getrennt)
 
 .. note::
 
-   Audit-Felder wie ``createdBy``, ``createdTime``, ``updatedBy`` und ``updatedTime`` werden
+   Audit-Felder wie ``created_by``, ``created_time``, ``updated_by`` und ``updated_time`` werden
    serverseitig automatisch gesetzt und müssen nicht im Request-Body angegeben werden.
 
 Response
@@ -303,8 +303,8 @@ Request
 Request-Body
 ~~~~~~~~~~~~
 
-Bei der Aktualisierung sind neben den Feldern aus der Erstellung zusätzlich ``id`` zur Identifikation der Zielkonfiguration und ``versionNo`` als Versionsnummer erforderlich.
-Für ``versionNo`` ist der aktuelle Wert aus der Response der Abruf-API (GET) anzugeben.
+Bei der Aktualisierung sind neben den Feldern aus der Erstellung zusätzlich ``id`` zur Identifikation der Zielkonfiguration und ``version_no`` als Versionsnummer erforderlich.
+Für ``version_no`` ist der aktuelle Wert aus der Response der Abruf-API (GET) anzugeben.
 
 .. code-block:: json
 
@@ -312,16 +312,16 @@ Für ``versionNo`` ist der aktuelle Wert aus der Response der Abruf-API (GET) an
       "id": "existing_fileconfig_id",
       "name": "Updated Local Files",
       "paths": "file:///data/documents",
-      "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$",
-      "excludedPaths": ".*/(temp|backup|archive)/.*",
+      "included_paths": ".*\\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$",
+      "excluded_paths": ".*/(temp|backup|archive)/.*",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 3,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 3,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 Zusätzliche Felder bei der Aktualisierung
@@ -337,9 +337,9 @@ Zusätzliche Felder bei der Aktualisierung
    * - ``id``
      - Ja
      - Konfigurations-ID der zu aktualisierenden Konfiguration (max. 1000 Zeichen)
-   * - ``versionNo``
+   * - ``version_no``
      - Ja
-     - Aktuelle Versionsnummer der zu aktualisierenden Konfiguration. Anzugeben ist der ``versionNo``-Wert aus der Response der Abruf-API (GET)
+     - Aktuelle Versionsnummer der zu aktualisierenden Konfiguration. Anzugeben ist der ``version_no``-Wert aus der Response der Abruf-API (GET)
 
 Response
 --------
@@ -418,13 +418,13 @@ Crawl-Konfiguration für lokale Dateien
          -d '{
            "name": "Local Files",
            "paths": "file:///data/documents",
-           "includedPaths": ".*\\.(pdf|doc|docx)$",
-           "excludedPaths": ".*/(temp|backup)/.*",
-           "numOfThread": 2,
-           "intervalTime": 500,
+           "included_paths": ".*\\.(pdf|doc|docx)$",
+           "excluded_paths": ".*/(temp|backup)/.*",
+           "num_of_thread": 2,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -439,14 +439,14 @@ Crawl-Konfiguration für SMB-Freigaben
          -d '{
            "name": "SMB Share",
            "paths": "smb://server/documents",
-           "includedPaths": ".*\\.(pdf|doc|docx)$",
-           "excludedPaths": ".*/(temp|private)/.*",
-           "maxAccessCount": 50000,
-           "numOfThread": 3,
-           "intervalTime": 200,
+           "included_paths": ".*\\.(pdf|doc|docx)$",
+           "excluded_paths": ".*/(temp|private)/.*",
+           "max_access_count": 50000,
+           "num_of_thread": 3,
+           "interval_time": 200,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

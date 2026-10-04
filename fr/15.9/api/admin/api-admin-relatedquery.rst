@@ -90,7 +90,7 @@ Réponse
             "id": "query_id_1",
             "term": "fess",
             "queries": "fess tutorial\nfess installation\nfess configuration",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -99,10 +99,10 @@ Réponse
 
 .. note::
 
-   Chaque paramètre contient ``versionNo`` (numéro de version utilisé pour le verrouillage
-   optimiste). ``virtualHost`` et les champs d'audit (``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime``) ne sont inclus que lorsqu'une valeur est définie.
-   Un ``virtualHost`` vide n'est pas inclus dans la réponse.
+   Chaque paramètre contient ``version_no`` (numéro de version utilisé pour le verrouillage
+   optimiste). ``virtual_host`` et les champs d'audit (``created_by``, ``created_time``,
+   ``updated_by``, ``updated_time``) ne sont inclus que lorsqu'une valeur est définie.
+   Un ``virtual_host`` vide n'est pas inclus dans la réponse.
 
 Obtention d'une requête associée
 =================================
@@ -127,8 +127,8 @@ Réponse
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": "site1.example.com",
-          "versionNo": 1
+          "virtual_host": "site1.example.com",
+          "version_no": 1
         }
       }
     }
@@ -152,7 +152,7 @@ Corps de la requête
     {
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search",
-      "virtualHost": ""
+      "virtual_host": ""
     }
 
 Description des champs
@@ -171,13 +171,13 @@ Description des champs
    * - ``queries``
      - Oui
      - Requêtes associées. Chaîne séparée par des sauts de ligne, une par ligne (les lignes vides sont ignorées ; 10 000 caractères maximum)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - Non
      - Hôte virtuel (1 000 caractères maximum)
 
 .. note::
 
-   ``crudMode`` étant défini automatiquement côté API, il n'est pas nécessaire de l'inclure dans le corps de la requête.
+   ``crud_mode`` étant défini automatiquement côté API, il n'est pas nécessaire de l'inclure dans le corps de la requête.
 
 Réponse
 -------
@@ -213,8 +213,8 @@ Corps de la requête
       "id": "existing_query_id",
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
-      "virtualHost": "",
-      "versionNo": 1
+      "virtual_host": "",
+      "version_no": 1
     }
 
 Description des champs
@@ -236,10 +236,10 @@ Description des champs
    * - ``queries``
      - Oui
      - Requêtes associées. Chaîne séparée par des sauts de ligne, une par ligne (les lignes vides sont ignorées ; 10 000 caractères maximum)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - Non
      - Hôte virtuel (1 000 caractères maximum)
-   * - ``versionNo``
+   * - ``version_no``
      - Oui
      - Numéro de version utilisé pour le verrouillage optimiste. Spécifiez la valeur incluse dans la réponse lors de l'obtention du paramètre
 

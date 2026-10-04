@@ -91,14 +91,14 @@ Response
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cronExpression": "0 0 0 * * ?",
-            "scriptType": "javascript",
-            "scriptData": "...",
-            "jobLogging": "true",
+            "cron_expression": "0 0 0 * * ?",
+            "script_type": "javascript",
+            "script_data": "...",
+            "job_logging": "true",
             "crawler": "true",
             "available": "true",
-            "sortOrder": 0,
-            "versionNo": 1,
+            "sort_order": 0,
+            "version_no": 1,
             "running": false
           }
         ],
@@ -112,7 +112,7 @@ Response
 
 .. note::
 
-   In responses, ``jobLogging`` / ``crawler`` / ``available`` are returned as strings (``"true"`` / ``"false"``). ``running`` is a boolean, response-only field indicating whether the job is currently running (it cannot be set in requests). ``total`` is the total number of jobs matching the query.
+   In responses, ``job_logging`` / ``crawler`` / ``available`` are returned as strings (``"true"`` / ``"false"``). ``running`` is a boolean, response-only field indicating whether the job is currently running (it cannot be set in requests). ``total`` is the total number of jobs matching the query.
 
 Get Scheduled Job
 =================
@@ -136,14 +136,14 @@ Response
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cronExpression": "0 0 0 * * ?",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": "true",
+          "cron_expression": "0 0 0 * * ?",
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "job_logging": "true",
           "crawler": "true",
           "available": "true",
-          "sortOrder": 0,
-          "versionNo": 1,
+          "sort_order": 0,
+          "version_no": 1,
           "running": false
         }
       }
@@ -168,13 +168,13 @@ Request Body
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cronExpression": "0 0 2 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": "true",
+      "cron_expression": "0 0 2 * * ?",
+      "script_type": "javascript",
+      "script_data": "return container.getComponent(\"crawlJob\").execute();",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1
+      "sort_order": 1
     }
 
 Field Description
@@ -193,16 +193,16 @@ Field Description
    * - ``target``
      - Yes
      - Execution target (max 100 characters). Specify ``all`` or a specific target name
-   * - ``cronExpression``
+   * - ``cron_expression``
      - No
      - Cron expression (second minute hour day month day-of-week). Max 100 characters, validated as a cron expression. If empty, the job is not scheduled and can only be started manually
-   * - ``scriptType``
+   * - ``script_type``
      - Yes
      - Script type (max 100 characters). Either ``javascript`` (the default for new jobs, determined by the ``job.default.script`` property) or ``groovy`` (requires the ``fess-script-groovy`` plugin)
-   * - ``scriptData``
+   * - ``script_data``
      - No
      - Execution script. The maximum size follows ``form.admin.max.input.size`` in ``fess_config.properties``
-   * - ``jobLogging``
+   * - ``job_logging``
      - No
      - Enable job logging (string)
    * - ``crawler``
@@ -211,17 +211,17 @@ Field Description
    * - ``available``
      - No
      - Enabled/disabled (string)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Yes
      - Display order (integer between 0 and 2147483647)
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` are string fields. In requests, specifying ``"on"`` or ``"true"`` (case-insensitive) enables them; any other value (``"false"``, empty string, or unset) is treated as disabled. In responses they are returned as ``"true"`` / ``"false"``.
+   ``job_logging`` / ``crawler`` / ``available`` are string fields. In requests, specifying ``"on"`` or ``"true"`` (case-insensitive) enables them; any other value (``"false"``, empty string, or unset) is treated as disabled. In responses they are returned as ``"true"`` / ``"false"``.
 
 .. note::
 
-   ``crudMode`` is set automatically on the server side and does not need to be specified in requests. Audit fields such as ``createdBy`` / ``createdTime`` are also set on the server side.
+   ``crud_mode`` is set automatically on the server side and does not need to be specified in requests. Audit fields such as ``created_by`` / ``created_time`` are also set on the server side.
 
 Response
 --------
@@ -274,19 +274,19 @@ Request Body
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cronExpression": "0 0 3 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "...",
-      "jobLogging": "true",
+      "cron_expression": "0 0 3 * * ?",
+      "script_type": "javascript",
+      "script_data": "...",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1,
-      "versionNo": 1
+      "sort_order": 1,
+      "version_no": 1
     }
 
 .. note::
 
-   For updates, ``id`` (max 1000 characters) and ``versionNo`` are required. ``versionNo`` is used for optimistic locking; specify the value returned in the get response. If the value does not match, the update fails. Other required fields (``name`` / ``target`` / ``scriptType`` / ``sortOrder``) are the same as for creation.
+   For updates, ``id`` (max 1000 characters) and ``version_no`` are required. ``version_no`` is used for optimistic locking; specify the value returned in the get response. If the value does not match, the update fails. Other required fields (``name`` / ``target`` / ``script_type`` / ``sort_order``) are the same as for creation.
 
 Response
 --------
@@ -344,7 +344,7 @@ Response
     {
       "response": {
         "status": 0,
-        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+        "job_log_id": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
 
@@ -357,15 +357,15 @@ Response Fields
 
    * - Field
      - Description
-   * - ``jobLogId``
-     - Job log ID of the started job. Issued when job logging is enabled. If job logging is disabled, it becomes ``null``.
+   * - ``job_log_id``
+     - Job log ID of the started job. Issued when job logging is enabled. If job logging is disabled, it is omitted from the response.
 
 Notes
 -----
 
 - If the job is already running, the start fails and an error is returned (``status`` other than ``0``).
 - If the job is disabled (``available`` is not enabled), the start likewise fails with an error.
-- ``jobLogId`` is issued only when job logging is enabled (``jobLogging`` is enabled).
+- ``job_log_id`` is issued only when job logging is enabled (``job_logging`` is enabled).
 
 Stop Job
 ========
@@ -405,13 +405,13 @@ Create and Run a Crawl Job
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cronExpression": "0 0 * * * ?",
-           "scriptType": "javascript",
-           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": "true",
+           "cron_expression": "0 0 * * * ?",
+           "script_type": "javascript",
+           "script_data": "return container.getComponent(\"crawlJob\").execute();",
+           "job_logging": "true",
            "crawler": "true",
            "available": "true",
-           "sortOrder": 1
+           "sort_order": 1
          }'
 
     # Run job immediately

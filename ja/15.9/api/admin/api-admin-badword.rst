@@ -92,7 +92,7 @@ NGワード一覧取得
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word"
+            "suggest_word": "inappropriate_word"
           }
         ],
         "total": 5
@@ -119,7 +119,7 @@ NGワード取得
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word"
+          "suggest_word": "inappropriate_word"
         }
       }
     }
@@ -141,7 +141,7 @@ NGワード作成
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword"
+      "suggest_word": "spam_keyword"
     }
 
 フィールド説明
@@ -154,7 +154,7 @@ NGワード作成
    * - フィールド
      - 必須
      - 説明
-   * - ``suggestWord``
+   * - ``suggest_word``
      - はい
      - 除外するキーワード（空白文字を含めることはできません）
 
@@ -189,8 +189,8 @@ NGワード更新
 
     {
       "id": "existing_badword_id",
-      "suggestWord": "updated_spam_keyword",
-      "versionNo": 1
+      "suggest_word": "updated_spam_keyword",
+      "version_no": 1
     }
 
 レスポンス
@@ -260,7 +260,7 @@ CSVフォーマット
 ~~~~~~~~~~~~~~~
 
 - 1行目はヘッダー行として読み飛ばされます（列名は任意。ダウンロード時は ``BadWord`` が出力されます）。
-- 2行目以降は、1行に1つのNGワードを ``suggestWord`` として記述します。
+- 2行目以降は、1行に1つのNGワードを ``suggest_word`` として記述します。
 - 値が空白のみの行は無視されます。
 - 単語の先頭に ``--`` を付けると、その単語を削除します（例: ``--spam`` は ``spam`` を削除）。
 - 既に登録済みの単語を指定した場合は更新（更新者・更新日時の再設定）として扱われます。
@@ -306,7 +306,7 @@ CSVは1行目に ``BadWord`` というヘッダー行を持ち、2行目以降�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam"
+           "suggest_word": "spam"
          }'
 
 CSVファイルのアップロード

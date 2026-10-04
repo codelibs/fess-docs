@@ -106,20 +106,20 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
             "name": "Shared Documents",
             "description": "共有ドキュメント",
             "paths": "smb://server/share/documents",
-            "includedPaths": ".*\\.pdf$",
-            "excludedPaths": ".*/(temp|cache)/.*",
-            "includedDocPaths": "",
-            "excludedDocPaths": "",
-            "configParameter": "",
+            "included_paths": ".*\\.pdf$",
+            "excluded_paths": ".*/(temp|cache)/.*",
+            "included_doc_paths": "",
+            "excluded_doc_paths": "",
+            "config_parameter": "",
             "depth": 10,
-            "maxAccessCount": 1000,
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -151,34 +151,34 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
           "name": "Shared Documents",
           "description": "共有ドキュメント",
           "paths": "smb://server/share/documents",
-          "includedPaths": ".*\\.pdf$",
-          "excludedPaths": ".*/(temp|cache)/.*",
-          "includedDocPaths": "",
-          "excludedDocPaths": "",
-          "configParameter": "",
+          "included_paths": ".*\\.pdf$",
+          "excluded_paths": ".*/(temp|cache)/.*",
+          "included_doc_paths": "",
+          "excluded_doc_paths": "",
+          "config_parameter": "",
           "depth": 10,
-          "maxAccessCount": 1000,
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   レスポンスには、登録・更新時に自動設定される ``createdBy`` 、 ``createdTime`` 、
-   ``updatedBy`` 、 ``updatedTime`` 、 ``versionNo`` が含まれます。
-   ``versionNo`` は更新時に必要です（後述の「ファイルクロール設定更新」を参照）。
+   レスポンスには、登録・更新時に自動設定される ``created_by`` 、 ``created_time`` 、
+   ``updated_by`` 、 ``updated_time`` 、 ``version_no`` が含まれます。
+   ``version_no`` は更新時に必要です（後述の「ファイルクロール設定更新」を参照）。
 
 ファイルクロール設定作成
 ========================
@@ -199,13 +199,13 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
     {
       "name": "Local Files",
       "paths": "file:///data/documents",
-      "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
-      "excludedPaths": ".*/(temp|backup)/.*",
-      "numOfThread": 2,
-      "intervalTime": 500,
+      "included_paths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
+      "excluded_paths": ".*/(temp|backup)/.*",
+      "num_of_thread": 2,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -228,31 +228,31 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
    * - ``paths``
      - はい
      - クロール開始パス（複数の場合は改行区切り）。\ ``file:`` 、 ``smb:`` 、 ``smb1:`` 、 ``ftp:`` 、 ``s3:`` 、 ``gcs:`` のいずれかのプロトコルで指定します
-   * - ``includedPaths``
+   * - ``included_paths``
      - いいえ
      - クロール対象パスの正規表現パターン
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - いいえ
      - クロール除外パスの正規表現パターン
-   * - ``includedDocPaths``
+   * - ``included_doc_paths``
      - いいえ
      - インデックス対象パスの正規表現パターン
-   * - ``excludedDocPaths``
+   * - ``excluded_doc_paths``
      - いいえ
      - インデックス除外パスの正規表現パターン
-   * - ``configParameter``
+   * - ``config_parameter``
      - いいえ
      - 追加設定パラメーター（``key=value`` 形式、1行に1項目）
    * - ``depth``
      - いいえ
      - クロール深度（0以上）
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - いいえ
      - 最大アクセス数（0以上）
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - はい
      - 並列スレッド数（1以上）
-   * - ``intervalTime``
+   * - ``interval_time``
      - はい
      - アクセス間隔（ミリ秒、0以上）
    * - ``boost``
@@ -261,19 +261,19 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
    * - ``available``
      - はい
      - 有効/無効（文字列 ``"true"`` / ``"false"``）
-   * - ``sortOrder``
+   * - ``sort_order``
      - はい
      - 表示順序（0以上）
    * - ``permissions``
      - いいえ
      - アクセス許可ロール（複数の場合は改行区切り）
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - いいえ
      - 仮想ホスト（複数の場合は改行区切り）
 
 .. note::
 
-   ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、 ``updatedTime`` などの監査用フィールドは
+   ``created_by`` 、 ``created_time`` 、 ``updated_by`` 、 ``updated_time`` などの監査用フィールドは
    サーバー側で自動設定されるため、リクエストボディで指定する必要はありません。
 
 レスポンス
@@ -303,8 +303,8 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
 リクエストボディ
 ~~~~~~~~~~~~~~~~
 
-更新時は、作成時のフィールドに加えて、更新対象を特定する ``id`` とバージョン番号 ``versionNo`` が必須です。
-``versionNo`` には取得API（GET）のレスポンスに含まれる現在の値を指定します。
+更新時は、作成時のフィールドに加えて、更新対象を特定する ``id`` とバージョン番号 ``version_no`` が必須です。
+``version_no`` には取得API（GET）のレスポンスに含まれる現在の値を指定します。
 
 .. code-block:: json
 
@@ -312,16 +312,16 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
       "id": "existing_fileconfig_id",
       "name": "Updated Local Files",
       "paths": "file:///data/documents",
-      "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$",
-      "excludedPaths": ".*/(temp|backup|archive)/.*",
+      "included_paths": ".*\\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$",
+      "excluded_paths": ".*/(temp|backup|archive)/.*",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 3,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 3,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 更新時の追加フィールド
@@ -337,9 +337,9 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
    * - ``id``
      - はい
      - 更新対象の設定ID（最大1000文字）
-   * - ``versionNo``
+   * - ``version_no``
      - はい
-     - 更新対象の現在のバージョン番号。取得API（GET）のレスポンスに含まれる ``versionNo`` を指定します
+     - 更新対象の現在のバージョン番号。取得API（GET）のレスポンスに含まれる ``version_no`` を指定します
 
 レスポンス
 ----------
@@ -418,13 +418,13 @@ FileConfig APIは、|Fess| のファイルクロール設定を管理するた�
          -d '{
            "name": "Local Files",
            "paths": "file:///data/documents",
-           "includedPaths": ".*\\.(pdf|doc|docx)$",
-           "excludedPaths": ".*/(temp|backup)/.*",
-           "numOfThread": 2,
-           "intervalTime": 500,
+           "included_paths": ".*\\.(pdf|doc|docx)$",
+           "excluded_paths": ".*/(temp|backup)/.*",
+           "num_of_thread": 2,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -439,14 +439,14 @@ SMB共有のクロール設定
          -d '{
            "name": "SMB Share",
            "paths": "smb://server/documents",
-           "includedPaths": ".*\\.(pdf|doc|docx)$",
-           "excludedPaths": ".*/(temp|private)/.*",
-           "maxAccessCount": 50000,
-           "numOfThread": 3,
-           "intervalTime": 200,
+           "included_paths": ".*\\.(pdf|doc|docx)$",
+           "excluded_paths": ".*/(temp|private)/.*",
+           "max_access_count": 50000,
+           "num_of_thread": 3,
+           "interval_time": 200,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

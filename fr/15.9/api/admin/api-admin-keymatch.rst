@@ -92,9 +92,9 @@ Réponse
             "id": "keymatch_id_1",
             "term": "download",
             "query": "title:download OR content:download",
-            "maxSize": 10,
+            "max_size": 10,
             "boost": 10.0,
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -104,8 +104,8 @@ Réponse
 .. note::
 
    ``total`` contient le nombre total d'éléments correspondant aux critères de filtrage (et non le nombre d'éléments de la page courante).
-   En plus des champs ci-dessus, chaque objet de configuration peut inclure ``virtualHost``,
-   ``createdBy``, ``createdTime``, ``updatedBy`` et ``updatedTime`` lorsque des valeurs sont définies.
+   En plus des champs ci-dessus, chaque objet de configuration peut inclure ``virtual_host``,
+   ``created_by``, ``created_time``, ``updated_by`` et ``updated_time`` lorsque des valeurs sont définies.
 
 Obtention d'un KeyMatch
 =======================
@@ -129,21 +129,21 @@ Réponse
           "id": "keymatch_id_1",
           "term": "download",
           "query": "title:download OR content:download",
-          "maxSize": 10,
+          "max_size": 10,
           "boost": 10.0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   ``versionNo`` est le numéro de version utilisé pour le verrouillage optimiste. Lors de la mise à jour d'un KeyMatch,
-   spécifiez la valeur de ``versionNo`` obtenue lors de la récupération dans le corps de la requête.
+   ``version_no`` est le numéro de version utilisé pour le verrouillage optimiste. Lors de la mise à jour d'un KeyMatch,
+   spécifiez la valeur de ``version_no`` obtenue lors de la récupération dans le corps de la requête.
    Si l'identifiant spécifié n'existe pas, une erreur est renvoyée.
 
 Création d'un KeyMatch
@@ -165,7 +165,7 @@ Corps de la requête
     {
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing",
-      "maxSize": 5,
+      "max_size": 5,
       "boost": 20.0
     }
 
@@ -188,7 +188,7 @@ Description des champs
      - String
      - Oui
      - Requête de correspondance (longueur maximale définie par le paramètre ``form.admin.max.input.size``)
-   * - ``maxSize``
+   * - ``max_size``
      - Integer
      - Oui
      - Nombre maximum d'affichages (entier supérieur ou égal à 0 ; valeur initiale dans l'interface d'administration : 10)
@@ -196,16 +196,16 @@ Description des champs
      - Float
      - Oui
      - Valeur de boost (valeur initiale dans l'interface d'administration : 100.0)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - Non
      - Nom d'hôte virtuel (1000 caractères maximum ; à spécifier pour basculer les KeyMatch par hôte virtuel)
 
 .. note::
 
-   ``maxSize`` et ``boost`` sont obligatoires via l'API. Les valeurs initiales affichées dans le formulaire de l'interface d'administration
+   ``max_size`` et ``boost`` sont obligatoires via l'API. Les valeurs initiales affichées dans le formulaire de l'interface d'administration
    ne s'appliquent pas via l'API. En cas d'omission, une erreur de validation est renvoyée.
-   Par ailleurs, ``createdBy`` et ``createdTime`` sont écrasés côté serveur même s'ils sont spécifiés dans la requête.
+   Par ailleurs, ``created_by`` et ``created_time`` sont écrasés côté serveur même s'ils sont spécifiés dans la requête.
 
 Réponse
 -------
@@ -240,15 +240,15 @@ Corps de la requête
       "id": "existing_keymatch_id",
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing OR content:price",
-      "maxSize": 10,
+      "max_size": 10,
       "boost": 15.0,
-      "versionNo": 1
+      "version_no": 1
     }
 
 Description des champs
 ~~~~~~~~~~~~~~~~~~~~~~
 
-En plus des champs de création (``term``, ``query``, ``maxSize``, ``boost``, ``virtualHost``),
+En plus des champs de création (``term``, ``query``, ``max_size``, ``boost``, ``virtual_host``),
 les champs suivants doivent être spécifiés.
 
 .. list-table::
@@ -263,7 +263,7 @@ les champs suivants doivent être spécifiés.
      - String
      - Oui
      - Identifiant du KeyMatch à mettre à jour (1000 caractères maximum)
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - Oui
      - Numéro de version pour le verrouillage optimiste ; spécifier la valeur obtenue lors de la récupération
@@ -316,7 +316,7 @@ Création d'un KeyMatch pour une page produit
          -d '{
            "term": "product features",
            "query": "url:*/products/* AND (title:features OR content:features)",
-           "maxSize": 10,
+           "max_size": 10,
            "boost": 15.0
          }'
 
@@ -331,7 +331,7 @@ KeyMatch pour les pages de support
          -d '{
            "term": "help",
            "query": "url:*/support/* OR url:*/help/* OR url:*/faq/*",
-           "maxSize": 5,
+           "max_size": 5,
            "boost": 20.0
          }'
 

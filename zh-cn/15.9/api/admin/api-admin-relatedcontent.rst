@@ -93,13 +93,13 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -109,10 +109,10 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
 .. note::
 
    ``settings`` 的各元素以及单个获取端点返回的 ``setting`` 对象中，包含所存储实体的字段原始值。除
-   ``term``、``content``、``sortOrder``、``virtualHost`` 之外，审计字段
-   ``createdBy``、``createdTime``、``updatedBy``、``updatedTime`` 以及
-   乐观锁字段 ``versionNo`` 也会一并返回。\ ``createdTime`` 和
-   ``updatedTime`` 以自纪元以来的毫秒数（数值）表示。未设置（null）的字段
+   ``term``、``content``、``sort_order``、``virtual_host`` 之外，审计字段
+   ``created_by``、``created_time``、``updated_by``、``updated_time`` 以及
+   乐观锁字段 ``version_no`` 也会一并返回。\ ``created_time`` 和
+   ``updated_time`` 以自纪元以来的毫秒数（数值）表示。未设置（null）的字段
    将从响应中省略。此外，所有响应的 ``response`` 对象中始终包含表示
    产品版本的 ``version``\ （详情请参阅 :doc:`api-admin-overview`）。
 
@@ -139,20 +139,20 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   更新（PUT）时所需的 ``versionNo``，请指定此获取响应中包含的值。
+   更新（PUT）时所需的 ``version_no``，请指定此获取响应中包含的值。
 
 创建相关内容
 ============
@@ -173,8 +173,8 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
     {
       "term": "search",
       "content": "<div class='related'><h3>About Search</h3><p>Learn more about search features...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": ""
+      "sort_order": 0,
+      "virtual_host": ""
     }
 
 字段说明
@@ -193,10 +193,10 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
    * - ``content``
      - 是
      - 要显示的HTML内容（最多10000个字符）
-   * - ``sortOrder``
+   * - ``sort_order``
      - 否
      - 显示顺序（0到2147483647之间的整数）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - 否
      - 虚拟主机（最多1000个字符）
 
@@ -234,9 +234,9 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
       "id": "existing_content_id",
       "term": "search",
       "content": "<div class='related updated'><h3>About Search</h3><p>Updated information...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": "",
-      "versionNo": 1
+      "sort_order": 0,
+      "virtual_host": "",
+      "version_no": 1
     }
 
 字段说明
@@ -258,13 +258,13 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
    * - ``content``
      - 是
      - 要显示的HTML内容（最多10000个字符）
-   * - ``sortOrder``
+   * - ``sort_order``
      - 否
      - 显示顺序（0到2147483647之间的整数）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - 否
      - 虚拟主机（最多1000个字符）
-   * - ``versionNo``
+   * - ``version_no``
      - 是
      - 乐观锁用的版本号。请指定 ``setting/{id}`` 响应中包含的值。
 
@@ -284,8 +284,8 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
 
 .. note::
 
-   即使在请求体中包含 ``createdBy``、``createdTime``、``updatedBy``、
-   ``updatedTime`` 等审计字段以及 ``crudMode``，由于这些字段在服务器端
+   即使在请求体中包含 ``created_by``、``created_time``、``updated_by``、
+   ``updated_time`` 等审计字段以及 ``crud_mode``，由于这些字段在服务器端
    自动设置，因此会被忽略。创建或更新时无需指定这些字段。
 
 删除相关内容
@@ -324,7 +324,7 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
          -d '{
            "term": "product",
            "content": "<div class=\"product-info\"><h3>Our Products</h3><ul><li>Product A</li><li>Product B</li></ul></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 支持信息相关内容
@@ -338,7 +338,7 @@ RelatedContent API是用于管理 |Fess| 相关内容的API。
          -d '{
            "term": "support",
            "content": "<div><p>Need help? Contact: support@example.com</p></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 参考信息

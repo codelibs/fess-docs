@@ -70,37 +70,36 @@ hilos se expresan como números.
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "incrementalCrawling": "true",
-          "dayForCleanup": -1,
-          "crawlingThreadCount": 5,
-          "searchLog": "true",
-          "userInfo": "true",
-          "userFavorite": "false",
-          "webApiJson": "true",
-          "defaultLabelValue": "",
-          "defaultSortValue": "",
-          "appendQueryParameter": "false",
-          "loginRequired": "false",
+          "incremental_crawling": "true",
+          "day_for_cleanup": -1,
+          "crawling_thread_count": 5,
+          "search_log": "true",
+          "user_info": "true",
+          "user_favorite": "false",
+          "web_api_json": "true",
+          "default_label_value": "",
+          "default_sort_value": "",
+          "append_query_parameter": "false",
+          "login_required": "false",
           "thumbnail": "true",
-          "failureCountThreshold": -1,
-          "popularWord": "true",
-          "csvFileEncoding": "UTF-8",
-          "purgeSearchLogDay": 30,
-          "purgeJobLogDay": 30,
-          "purgeUserInfoDay": 30,
-          "purgeSuggestSearchLogDay": 30,
-          "notificationTo": "",
-          "suggestSearchLog": "true",
-          "suggestDocuments": "true",
-          "ldapProviderUrl": "ldap://localhost:389/",
-          "ldapBaseDn": "dc=example,dc=com",
-          "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
-          "ldapAdminSecurityCredentials": null,
-          "logLevel": "",
-          "ssoType": "none",
-          "storageType": "",
-          "notificationLogin": "",
-          "notificationSearchTop": ""
+          "failure_count_threshold": -1,
+          "popular_word": "true",
+          "csv_file_encoding": "UTF-8",
+          "purge_search_log_day": 30,
+          "purge_job_log_day": 30,
+          "purge_user_info_day": 30,
+          "purge_suggest_search_log_day": 30,
+          "notification_to": "",
+          "suggest_search_log": "true",
+          "suggest_documents": "true",
+          "ldap_provider_url": "ldap://localhost:389/",
+          "ldap_base_dn": "dc=example,dc=com",
+          "ldap_admin_security_principal": "cn=admin,dc=example,dc=com",
+          "log_level": "",
+          "sso_type": "none",
+          "storage_type": "",
+          "notification_login": "",
+          "notification_search_top": ""
         }
       }
     }
@@ -117,11 +116,11 @@ hilos se expresan como números.
    Por razones de seguridad, los campos que contienen credenciales no se devuelven con sus
    valores reales.
 
-   - La contraseña del administrador LDAP ``ldapAdminSecurityCredentials`` siempre se
-     devuelve como ``null``.
-   - Otros secretos (``storageAccessKey`` / ``storageSecretKey`` /
-     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
-     ``entraidClientId`` / ``entraidClientSecret``) se devuelven enmascarados como
+   - La contraseña del administrador LDAP ``ldap_admin_security_credentials`` nunca se
+     incluye en la respuesta.
+   - Otros secretos (``storage_access_key`` / ``storage_secret_key`` /
+     ``oic_client_id`` / ``oic_client_secret`` / ``spnego_preauth_password`` /
+     ``entraid_client_id`` / ``entraid_client_secret``) se devuelven enmascarados como
      ``"**********"`` cuando están configurados, o como una cadena vacía (``""``) cuando
      no lo están.
 
@@ -150,10 +149,10 @@ sus valores existentes.
    Los siguientes cuatro campos son requeridos y DEBEN incluirse en CADA solicitud PUT,
    incluso en una actualización parcial:
 
-   - ``dayForCleanup``
-   - ``crawlingThreadCount``
-   - ``failureCountThreshold``
-   - ``csvFileEncoding``
+   - ``day_for_cleanup``
+   - ``crawling_thread_count``
+   - ``failure_count_threshold``
+   - ``csv_file_encoding``
 
    Si falta alguno de ellos, la solicitud falla la validación y la API devuelve HTTP 400
    con ``status: 1`` y un ``message`` de error. Dado que el valor enviado sobreescribe la
@@ -180,12 +179,12 @@ sus valores existentes.
 .. code-block:: json
 
     {
-      "incrementalCrawling": "true",
-      "dayForCleanup": -1,
-      "crawlingThreadCount": 10,
-      "failureCountThreshold": 100,
-      "csvFileEncoding": "UTF-8",
-      "popularWord": "true"
+      "incremental_crawling": "true",
+      "day_for_cleanup": -1,
+      "crawling_thread_count": 10,
+      "failure_count_threshold": 100,
+      "csv_file_encoding": "UTF-8",
+      "popular_word": "true"
     }
 
 Campos Principales
@@ -204,124 +203,124 @@ activación/desactivación se especifican como las cadenas ``"true"`` /
    * - Campo
      - Requerido
      - Descripción
-   * - ``incrementalCrawling``
+   * - ``incremental_crawling``
      - No
      - Habilitar/deshabilitar el rastreo incremental
-   * - ``dayForCleanup``
+   * - ``day_for_cleanup``
      - Sí
      - Número de días que se conservan los documentos rastreados (-1=limpieza deshabilitada; rango: -1 a 1000)
-   * - ``crawlingThreadCount``
+   * - ``crawling_thread_count``
      - Sí
      - Número de hilos usados para el rastreo (rango: 0 a 100)
-   * - ``failureCountThreshold``
+   * - ``failure_count_threshold``
      - Sí
      - Umbral del número de fallos para detener el rastreo de una URL (-1=deshabilitado; rango: -1 a 10000)
-   * - ``csvFileEncoding``
+   * - ``csv_file_encoding``
      - Sí
      - Codificación de la exportación CSV
-   * - ``searchLog``
+   * - ``search_log``
      - No
      - Habilitar/deshabilitar el registro de consultas de búsqueda
-   * - ``userInfo``
+   * - ``user_info``
      - No
      - Habilitar/deshabilitar el registro de información de usuario
-   * - ``userFavorite``
+   * - ``user_favorite``
      - No
      - Habilitar/deshabilitar la función de favoritos
-   * - ``webApiJson``
+   * - ``web_api_json``
      - No
      - Habilitar/deshabilitar la Web API JSON
-   * - ``appValue``
+   * - ``app_value``
      - No
      - Valor de configuración adicional específico de la aplicación
-   * - ``virtualHostValue``
+   * - ``virtual_host_value``
      - No
      - Configuración de host virtual (para entornos multi-tenant)
-   * - ``popularWord``
+   * - ``popular_word``
      - No
      - Habilitar/deshabilitar la agregación y visualización de palabras populares
-   * - ``defaultLabelValue``
+   * - ``default_label_value``
      - No
      - Valor de etiqueta predeterminado
-   * - ``defaultSortValue``
+   * - ``default_sort_value``
      - No
      - Orden de clasificación predeterminado
-   * - ``appendQueryParameter``
+   * - ``append_query_parameter``
      - No
      - Agregar parámetros de consulta a la URL de los resultados de búsqueda
-   * - ``loginRequired``
+   * - ``login_required``
      - No
      - Si se requiere inicio de sesión para buscar
-   * - ``loginLink``
+   * - ``login_link``
      - No
      - Habilitar o deshabilitar la visualización del enlace de inicio de sesión en la pantalla de búsqueda
    * - ``thumbnail``
      - No
      - Habilitar/deshabilitar la generación de miniaturas
-   * - ``resultCollapsed``
+   * - ``result_collapsed``
      - No
      - Habilitar o deshabilitar el colapso de documentos similares en los resultados de búsqueda
-   * - ``ignoreFailureType``
+   * - ``ignore_failure_type``
      - No
      - Tipos de fallo de rastreo a ignorar
-   * - ``crawlingUserAgent``
+   * - ``crawling_user_agent``
      - No
      - Cadena User-Agent enviada durante el rastreo
-   * - ``purgeSearchLogDay``
+   * - ``purge_search_log_day``
      - No
      - Número de días que se conservan los registros de búsqueda (-1=deshabilitado; rango: -1 a 100000)
-   * - ``purgeJobLogDay``
+   * - ``purge_job_log_day``
      - No
      - Número de días que se conservan los registros de trabajos (-1=deshabilitado; rango: -1 a 100000)
-   * - ``purgeUserInfoDay``
+   * - ``purge_user_info_day``
      - No
      - Número de días que se conserva la información de usuario (-1=deshabilitado; rango: -1 a 100000)
-   * - ``purgeSuggestSearchLogDay``
+   * - ``purge_suggest_search_log_day``
      - No
      - Número de días que se conservan los registros de búsqueda de sugerencias (0=deshabilitado; rango: 0 a 100000)
-   * - ``purgeByBots``
+   * - ``purge_by_bots``
      - No
      - User-Agent de bots cuyos registros de búsqueda se descartan
-   * - ``notificationTo``
+   * - ``notification_to``
      - No
      - Dirección de correo electrónico de destino de las notificaciones del sistema
-   * - ``notificationLogin``
+   * - ``notification_login``
      - No
      - Mensaje de notificación que se muestra en la página de inicio de sesión
-   * - ``notificationSearchTop``
+   * - ``notification_search_top``
      - No
      - Mensaje de notificación que se muestra en la página principal de búsqueda
-   * - ``notificationAdvanceSearch``
+   * - ``notification_advance_search``
      - No
      - Mensaje de notificación que se muestra en la página de búsqueda avanzada
-   * - ``suggestSearchLog``
+   * - ``suggest_search_log``
      - No
      - Habilitar/deshabilitar las sugerencias a partir de los registros de búsqueda
-   * - ``suggestDocuments``
+   * - ``suggest_documents``
      - No
      - Habilitar/deshabilitar las sugerencias a partir de los documentos
-   * - ``logLevel``
+   * - ``log_level``
      - No
      - Nivel de registro del log del sistema
-   * - ``logNotificationEnabled``
+   * - ``log_notification_enabled``
      - No
      - Habilitar/deshabilitar la notificación de logs ERROR/WARN
-   * - ``logNotificationLevel``
+   * - ``log_notification_level``
      - No
      - Nivel de notificación de logs
-   * - ``slackWebhookUrls``
+   * - ``slack_webhook_urls``
      - No
      - URL de Slack Webhook para notificaciones
-   * - ``googleChatWebhookUrls``
+   * - ``google_chat_webhook_urls``
      - No
      - URL de Google Chat Webhook para notificaciones
-   * - ``searchUseBrowserLocale``
+   * - ``search_use_browser_locale``
      - No
      - Si se utiliza el idioma del navegador para la búsqueda
-   * - ``ragLlmName``
+   * - ``rag_llm_name``
      - No
      - Nombre del proveedor LLM utilizado para RAG
-   * - ``llmLogLevel``
+   * - ``llm_log_level``
      - No
      - Nivel de registro para los paquetes relacionados con LLM
 
@@ -339,29 +338,29 @@ ajustes "General" en la interfaz de administración).
 
    * - Campo
      - Descripción
-   * - ``ldapProviderUrl``
+   * - ``ldap_provider_url``
      - URL de conexión LDAP
-   * - ``ldapBaseDn``
+   * - ``ldap_base_dn``
      - DN base de LDAP
-   * - ``ldapSecurityPrincipal``
+   * - ``ldap_security_principal``
      - Principal de seguridad para el enlace (bind) LDAP
-   * - ``ldapAdminSecurityPrincipal``
+   * - ``ldap_admin_security_principal``
      - Principal de seguridad para operaciones administrativas LDAP
-   * - ``ldapAdminSecurityCredentials``
-     - Contraseña del administrador LDAP (se reemplaza por ``null`` en la respuesta)
-   * - ``ldapAccountFilter`` / ``ldapGroupFilter``
+   * - ``ldap_admin_security_credentials``
+     - Contraseña del administrador LDAP (nunca se incluye en la respuesta)
+   * - ``ldap_account_filter`` / ``ldap_group_filter``
      - Filtros de búsqueda de usuarios/grupos
-   * - ``ldapMemberofAttribute``
+   * - ``ldap_memberof_attribute``
      - Nombre del atributo LDAP que indica la pertenencia a un grupo
-   * - ``ssoType``
+   * - ``sso_type``
      - Tipo de SSO (``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``)
-   * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` y otros
+   * - ``oic_client_id`` / ``oic_client_secret`` / ``oic_auth_server_url`` y otros
      - Configuración de OpenID Connect
-   * - ``samlIdpEntityid`` / ``samlSpEntityid`` y otros
+   * - ``saml_idp_entityid`` / ``saml_sp_entityid`` y otros
      - Configuración de SAML
-   * - ``spnegoKrb5Conf`` / ``spnegoLoginConf`` y otros
+   * - ``spnego_krb5_conf`` / ``spnego_login_conf`` y otros
      - Configuración de SPNEGO
-   * - ``entraidClientId`` / ``entraidTenant`` y otros
+   * - ``entraid_client_id`` / ``entraid_tenant`` y otros
      - Configuración de Microsoft Entra ID
 
 Campos Relacionados con Almacenamiento
@@ -376,24 +375,24 @@ en la nube (S3 / GCS).
 
    * - Campo
      - Descripción
-   * - ``storageType``
+   * - ``storage_type``
      - Tipo de almacenamiento (``auto`` / ``s3`` / ``gcs``)
-   * - ``storageEndpoint``
+   * - ``storage_endpoint``
      - URL del endpoint del almacenamiento
-   * - ``storageAccessKey`` / ``storageSecretKey``
+   * - ``storage_access_key`` / ``storage_secret_key``
      - Clave de acceso/clave secreta para la autenticación
-   * - ``storageBucket``
+   * - ``storage_bucket``
      - Nombre del bucket
-   * - ``storageRegion``
+   * - ``storage_region``
      - Región de S3
-   * - ``storageProjectId`` / ``storageCredentialsPath``
+   * - ``storage_project_id`` / ``storage_credentials_path``
      - ID de proyecto de GCS / ruta del archivo de credenciales
 
 .. note::
 
-   Los campos de tipo secreto como ``ldapAdminSecurityCredentials``,
-   ``storageAccessKey`` / ``storageSecretKey``, ``oicClientId`` / ``oicClientSecret``,
-   ``entraidClientId`` / ``entraidClientSecret`` y ``spnegoPreauthPassword`` conservan su
+   Los campos de tipo secreto como ``ldap_admin_security_credentials``,
+   ``storage_access_key`` / ``storage_secret_key``, ``oic_client_id`` / ``oic_client_secret``,
+   ``entraid_client_id`` / ``entraid_client_secret`` y ``spnego_preauth_password`` conservan su
    valor almacenado (no se actualizan) cuando se envía el valor enmascarado ``"**********"``
    tal cual. Envíe el valor real solo cuando desee cambiarlo.
 
@@ -427,8 +426,8 @@ Ejemplos de Uso
 
 .. note::
 
-   Los ejemplos a continuación incluyen los campos requeridos (``dayForCleanup``,
-   ``crawlingThreadCount``, ``failureCountThreshold``, ``csvFileEncoding``). Como estos
+   Los ejemplos a continuación incluyen los campos requeridos (``day_for_cleanup``,
+   ``crawling_thread_count``, ``failure_count_threshold``, ``csv_file_encoding``). Como estos
    deben enviarse siempre independientemente de lo que se desee cambiar, recupere los
    valores actuales con ``GET`` e inclúyalos en la operación real (los ejemplos a
    continuación usan los valores predeterminados).
@@ -442,11 +441,11 @@ Actualizar la Configuración de Rastreo
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "incrementalCrawling": "true",
-           "crawlingThreadCount": 10,
-           "failureCountThreshold": 100,
-           "dayForCleanup": -1,
-           "csvFileEncoding": "UTF-8"
+           "incremental_crawling": "true",
+           "crawling_thread_count": 10,
+           "failure_count_threshold": 100,
+           "day_for_cleanup": -1,
+           "csv_file_encoding": "UTF-8"
          }'
 
 Actualizar el Período de Retención de Registros
@@ -458,13 +457,13 @@ Actualizar el Período de Retención de Registros
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "dayForCleanup": -1,
-           "crawlingThreadCount": 5,
-           "failureCountThreshold": -1,
-           "csvFileEncoding": "UTF-8",
-           "purgeSearchLogDay": 90,
-           "purgeJobLogDay": 90,
-           "purgeUserInfoDay": 90
+           "day_for_cleanup": -1,
+           "crawling_thread_count": 5,
+           "failure_count_threshold": -1,
+           "csv_file_encoding": "UTF-8",
+           "purge_search_log_day": 90,
+           "purge_job_log_day": 90,
+           "purge_user_info_day": 90
          }'
 
 Actualizar la Configuración de Sugerencias
@@ -476,12 +475,12 @@ Actualizar la Configuración de Sugerencias
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "dayForCleanup": -1,
-           "crawlingThreadCount": 5,
-           "failureCountThreshold": -1,
-           "csvFileEncoding": "UTF-8",
-           "suggestSearchLog": "true",
-           "suggestDocuments": "true"
+           "day_for_cleanup": -1,
+           "crawling_thread_count": 5,
+           "failure_count_threshold": -1,
+           "csv_file_encoding": "UTF-8",
+           "suggest_search_log": "true",
+           "suggest_documents": "true"
          }'
 
 Información de Referencia

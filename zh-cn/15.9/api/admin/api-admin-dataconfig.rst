@@ -74,7 +74,7 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
      - String
      - 否
      - 按配置名称过滤
-   * - ``handlerName``
+   * - ``handler_name``
      - String
      - 否
      - 按处理器名称过滤
@@ -96,14 +96,14 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
             "description": "数据库爬虫",
-            "handlerName": "DatabaseDataStore",
-            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
-            "handlerScript": "...",
+            "handler_name": "DatabaseDataStore",
+            "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
+            "handler_script": "...",
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -132,14 +132,14 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
           "description": "数据库爬虫",
-          "handlerName": "DatabaseDataStore",
-          "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
-          "handlerScript": "...",
+          "handler_name": "DatabaseDataStore",
+          "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
+          "handler_script": "...",
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": ""
+          "virtual_hosts": ""
         }
       }
     }
@@ -162,12 +162,12 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
 
     {
       "name": "Product Database",
-      "handlerName": "DatabaseDataStore",
-      "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
-      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
+      "handler_name": "DatabaseDataStore",
+      "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
+      "handler_script": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -187,13 +187,13 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
    * - ``description``
      - 否
      - 设置的说明
-   * - ``handlerName``
+   * - ``handler_name``
      - 是
      - 数据存储处理器名称
-   * - ``handlerParameter``
+   * - ``handler_parameter``
      - 否
      - 处理器参数（连接信息等）
-   * - ``handlerScript``
+   * - ``handler_script``
      - 否
      - 数据转换脚本
    * - ``boost``
@@ -202,13 +202,13 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
    * - ``available``
      - 是
      - 启用/禁用（字符串 ``"true"`` / ``"false"``）
-   * - ``sortOrder``
+   * - ``sort_order``
      - 是
      - 显示顺序
    * - ``permissions``
      - 否
      - 访问权限角色（多个时以换行分隔）
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - 否
      - 虚拟主机（多个时以换行分隔）
 
@@ -244,16 +244,16 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
     {
       "id": "existing_dataconfig_id",
       "name": "Updated Product Database",
-      "handlerName": "DatabaseDataStore",
-      "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
-      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
+      "handler_name": "DatabaseDataStore",
+      "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
+      "handler_script": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
       "boost": 1.5,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
-更新请求需要与创建时相同的必填字段（``name``、``handlerName``、``boost``、``available``、``sortOrder``），以及以下字段：
+更新请求需要与创建时相同的必填字段（``name``、``handler_name``、``boost``、``available``、``sort_order``），以及以下字段：
 
 .. list-table::
    :header-rows: 1
@@ -265,7 +265,7 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
    * - ``id``
      - 是
      - 要更新的配置 ID
-   * - ``versionNo``
+   * - ``version_no``
      - 是
      - 用于乐观锁的版本号（指定获取设置时返回的值）
 
@@ -340,12 +340,12 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
          -H "Content-Type: application/json" \
          -d '{
            "name": "User Database",
-           "handlerName": "DatabaseDataStore",
-           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
-           "handlerScript": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
+           "handler_name": "DatabaseDataStore",
+           "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
+           "handler_script": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 参考信息

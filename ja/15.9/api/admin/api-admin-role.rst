@@ -87,12 +87,12 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
           {
             "id": "role_id_1",
             "name": "admin",
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "role_id_2",
             "name": "user",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -120,7 +120,7 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
         "setting": {
           "id": "role_id_1",
           "name": "admin",
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -194,7 +194,7 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
     {
       "id": "existing_role_id",
       "name": "editor_updated",
-      "versionNo": 1
+      "version_no": 1
     }
 
 フィールド説明
@@ -216,9 +216,9 @@ Role APIは、|Fess| のロールを管理するためのAPIです。
    * - ``attributes``
      - いいえ
      - 属性のマップ。値は文字列で指定します
-   * - ``versionNo``
+   * - ``version_no``
      - はい
-     - 楽観的ロック用のバージョン番号。ロール取得で得た ``versionNo`` の値を指定します
+     - 楽観的ロック用のバージョン番号。ロール取得で得た ``version_no`` の値を指定します
 
 レスポンス
 ----------

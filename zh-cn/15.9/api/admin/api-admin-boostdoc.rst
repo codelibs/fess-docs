@@ -10,18 +10,18 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 使其更容易出现在搜索结果的靠前位置。
 
 提升在索引创建时（爬取时）应用于每个文档。
-条件（``urlExpr``）和提升值（``boostExpr``）按 ``scriptType`` 字段所指定脚本引擎的表达式进行求值。
-``scriptType`` 可指定为 ``javascript`` 或 ``groovy`` （需要 ``fess-script-groovy`` 插件）。管理界面的新建
-画面会预填 ``scriptType`` 为 ``javascript`` ，但如果本API的请求体省略了 ``scriptType`` ，则不会自动补全，
+条件（``url_expr``）和提升值（``boost_expr``）按 ``script_type`` 字段所指定脚本引擎的表达式进行求值。
+``script_type`` 可指定为 ``javascript`` 或 ``groovy`` （需要 ``fess-script-groovy`` 插件）。管理界面的新建
+画面会预填 ``script_type`` 为 ``javascript`` ，但如果本API的请求体省略了 ``script_type`` ，则不会自动补全，
 将按 Groovy 求值。
-多个规则按 ``sortOrder`` 升序依次求值，仅应用第一个条件匹配规则的提升值
+多个规则按 ``sort_order`` 升序依次求值，仅应用第一个条件匹配规则的提升值
 （找到匹配规则后，后续规则将不再求值）。
 
 .. note::
 
-   在管理界面中，``urlExpr`` 显示为"条件"，``boostExpr`` 显示为"提升值表达式"，``scriptType`` 显示为"脚本
-   类型"。``scriptType`` 仅出现在创建、更新、获取（列表与详情）的请求体和响应中，不出现在列表获取的过滤
-   参数（``urlExpr``、``boostExpr``）中。
+   在管理界面中，``url_expr`` 显示为"条件"，``boost_expr`` 显示为"提升值表达式"，``script_type`` 显示为"脚本
+   类型"。``script_type`` 仅出现在创建、更新、获取（列表与详情）的请求体和响应中，不出现在列表获取的过滤
+   参数（``url_expr``、``boost_expr``）中。
    有关配置项的详细信息，请参阅 :doc:`../../admin/boostdoc-guide`。
 
 基础URL
@@ -92,11 +92,11 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
      - Integer
      - 否
      - 页码（从1开始。默认：1）
-   * - ``urlExpr``
+   * - ``url_expr``
      - String
      - 否
      - 按条件表达式筛选（部分匹配）
-   * - ``boostExpr``
+   * - ``boost_expr``
      - String
      - 否
      - 按提升值表达式筛选（部分匹配）
@@ -112,11 +112,11 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
         "settings": [
           {
             "id": "boostdoc_id_1",
-            "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-            "boostExpr": "3.0",
-            "scriptType": "javascript",
-            "sortOrder": 1,
-            "versionNo": 1
+            "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+            "boost_expr": "3.0",
+            "script_type": "javascript",
+            "sort_order": 1,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -125,8 +125,8 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 
 .. note::
 
-   除上述字段外，响应中每条设置对象还包含创建/更新元数据（``createdBy``、``createdTime``、``updatedBy``、``updatedTime``）。
-   ``versionNo`` 在更新（PUT）时为必填项，请在更新前通过获取单条或列表API取得当前值。
+   除上述字段外，响应中每条设置对象还包含创建/更新元数据（``created_by``、``created_time``、``updated_by``、``updated_time``）。
+   ``version_no`` 在更新（PUT）时为必填项，请在更新前通过获取单条或列表API取得当前值。
 
 获取文档提升
 ============
@@ -148,11 +148,11 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
         "status": 0,
         "setting": {
           "id": "boostdoc_id_1",
-          "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-          "boostExpr": "3.0",
-          "scriptType": "javascript",
-          "sortOrder": 1,
-          "versionNo": 1
+          "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+          "boost_expr": "3.0",
+          "script_type": "javascript",
+          "sort_order": 1,
+          "version_no": 1
         }
       }
     }
@@ -174,10 +174,10 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 .. code-block:: json
 
     {
-      "urlExpr": "url.startsWith(\"https://important.example.com/\")",
-      "boostExpr": "5.0",
-      "scriptType": "javascript",
-      "sortOrder": 0
+      "url_expr": "url.startsWith(\"https://important.example.com/\")",
+      "boost_expr": "5.0",
+      "script_type": "javascript",
+      "sort_order": 0
     }
 
 字段说明
@@ -190,16 +190,16 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
    * - 字段
      - 必需
      - 说明
-   * - ``urlExpr``
+   * - ``url_expr``
      - 是
      - 条件表达式。用于判断提升目标文档的脚本表达式，返回 ``Boolean`` 值。对应管理界面的"条件"（最多10000个字符）。
-   * - ``boostExpr``
+   * - ``boost_expr``
      - 是
      - 提升值表达式。返回提升值（数值）的脚本表达式。也可指定如 ``3.0`` 这样的固定值。对应管理界面的"提升值表达式"（最多10000个字符）。
-   * - ``scriptType``
+   * - ``script_type``
      - 否
-     - 用于对 ``urlExpr`` 和 ``boostExpr`` 求值的脚本引擎。可指定 ``javascript`` 或 ``groovy`` （需要 ``fess-script-groovy`` 插件）。对应管理界面的"脚本类型"（最多100个字符）。省略时按 Groovy 求值。
-   * - ``sortOrder``
+     - 用于对 ``url_expr`` 和 ``boost_expr`` 求值的脚本引擎。可指定 ``javascript`` 或 ``groovy`` （需要 ``fess-script-groovy`` 插件）。对应管理界面的"脚本类型"（最多100个字符）。省略时按 Groovy 求值。
+   * - ``sort_order``
      - 是
      - 应用顺序。规则按升序依次求值，应用第一个条件匹配规则的提升值（表单初始值：0，须为0以上的整数）。
 
@@ -234,15 +234,15 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 
     {
       "id": "existing_boostdoc_id",
-      "urlExpr": "url.startsWith(\"https://important.example.com/\")",
-      "boostExpr": "10.0",
-      "scriptType": "javascript",
-      "sortOrder": 0,
-      "versionNo": 1
+      "url_expr": "url.startsWith(\"https://important.example.com/\")",
+      "boost_expr": "10.0",
+      "script_type": "javascript",
+      "sort_order": 0,
+      "version_no": 1
     }
 
-更新时，除创建时的字段外，还需提供 ``id``\ （目标规则的ID，最多1000个字符）和 ``versionNo``\ （用于乐观锁的版本号）。
-``versionNo`` 请通过获取单条或列表API的响应取得当前值后再指定。
+更新时，除创建时的字段外，还需提供 ``id``\ （目标规则的ID，最多1000个字符）和 ``version_no``\ （用于乐观锁的版本号）。
+``version_no`` 请通过获取单条或列表API的响应取得当前值后再指定。
 若版本号不匹配，更新将会失败。
 
 响应
@@ -282,12 +282,12 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
 关于条件表达式与提升值表达式
 ============================
 
-``urlExpr``\ （条件）和 ``boostExpr``\ （提升值表达式）按 ``scriptType``\ （默认：Groovy；仅管理界面的
+``url_expr``\ （条件）和 ``boost_expr``\ （提升值表达式）按 ``script_type``\ （默认：Groovy；仅管理界面的
 新建画面会预填 ``javascript`` ）所指定脚本引擎的表达式进行求值。
 在表达式中，可以通过字段名变量引用索引目标文档的字段值。
 
-- ``urlExpr`` 必须返回 ``Boolean`` 值（例：``url.startsWith("https://docs.example.com/")``）。单纯的正则表达式字符串（例：``.*docs\.example\.com.*``）作为脚本表达式不返回 ``Boolean``，因此无法作为条件使用。若需使用正则表达式，请使用 ``String#matches`` 方法（Groovy 与 JavaScript 写法相同）。
-- ``boostExpr`` 必须返回数值。结果将被转换为 ``float``，仅当大于0时才会应用提升。
+- ``url_expr`` 必须返回 ``Boolean`` 值（例：``url.startsWith("https://docs.example.com/")``）。单纯的正则表达式字符串（例：``.*docs\.example\.com.*``）作为脚本表达式不返回 ``Boolean``，因此无法作为条件使用。若需使用正则表达式，请使用 ``String#matches`` 方法（Groovy 与 JavaScript 写法相同）。
+- ``boost_expr`` 必须返回数值。结果将被转换为 ``float``，仅当大于0时才会应用提升。
 
 .. note::
 
@@ -296,7 +296,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
    ``indexer.favorite.count.enabled``\ （均默认启用）的情况下可引用。
    OpenSearch的日期计算语法（如 ``now - 7d``）在Groovy和JavaScript中均无法使用。
 
-条件表达式（``urlExpr``）示例
+条件表达式（``url_expr``）示例
 ------------------------------
 
 .. list-table::
@@ -312,7 +312,7 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
    * - ``title.contains("发布说明")``
      - 以标题中包含特定词语的文档为目标
 
-提升值表达式（``boostExpr``）示例
+提升值表达式（``boost_expr``）示例
 -----------------------------------
 
 .. list-table::
@@ -340,9 +340,9 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-           "boostExpr": "5.0",
-           "sortOrder": 0
+           "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+           "boost_expr": "5.0",
+           "sort_order": 0
          }'
 
 点击量高的内容提升
@@ -354,9 +354,9 @@ BoostDoc API是用于管理 |Fess| 文档提升设置的API。
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "urlExpr": "url.startsWith(\"https://www.example.com/\")",
-           "boostExpr": "click_count * 0.1 + 1",
-           "sortOrder": 10
+           "url_expr": "url.startsWith(\"https://www.example.com/\")",
+           "boost_expr": "click_count * 0.1 + 1",
+           "sort_order": 10
          }'
 
 参考信息

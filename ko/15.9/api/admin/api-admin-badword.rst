@@ -92,7 +92,7 @@ NG 워드 목록 조회
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word"
+            "suggest_word": "inappropriate_word"
           }
         ],
         "total": 5
@@ -119,7 +119,7 @@ NG 워드 조회
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word"
+          "suggest_word": "inappropriate_word"
         }
       }
     }
@@ -141,7 +141,7 @@ NG 워드 만들기
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword"
+      "suggest_word": "spam_keyword"
     }
 
 필드 설명
@@ -154,7 +154,7 @@ NG 워드 만들기
    * - 필드
      - 필수
      - 설명
-   * - ``suggestWord``
+   * - ``suggest_word``
      - 예
      - 제외할 키워드 (공백 문자를 포함할 수 없습니다)
 
@@ -189,8 +189,8 @@ NG 워드 업데이트
 
     {
       "id": "existing_badword_id",
-      "suggestWord": "updated_spam_keyword",
-      "versionNo": 1
+      "suggest_word": "updated_spam_keyword",
+      "version_no": 1
     }
 
 응답
@@ -260,7 +260,7 @@ CSV 형식
 ~~~~~~~~~~
 
 - 1행째는 헤더 행으로 건너뜁니다 (열 이름은 임의. 다운로드 시에는 ``BadWord`` 가 출력됩니다).
-- 2행째 이후로는 1행에 1개의 NG 워드를 ``suggestWord`` 로 기재합니다.
+- 2행째 이후로는 1행에 1개의 NG 워드를 ``suggest_word`` 로 기재합니다.
 - 값이 공백뿐인 행은 무시됩니다.
 - 단어 앞에 ``--`` 를 붙이면 해당 단어를 삭제합니다 (예: ``--spam`` 은 ``spam`` 을 삭제).
 - 이미 등록된 단어를 지정한 경우에는 업데이트 (업데이트한 사람·업데이트 일시의 재설정)로 처리됩니다.
@@ -306,7 +306,7 @@ CSV는 1행째에 ``BadWord`` 라는 헤더 행을 가지며, 2행째 이후로�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam"
+           "suggest_word": "spam"
          }'
 
 CSV 파일 업로드

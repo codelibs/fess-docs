@@ -101,16 +101,16 @@ Antwort
             "id": "label_id_1",
             "name": "Documentation",
             "value": "docs",
-            "includedPaths": ".*docs\\.example\\.com.*",
-            "excludedPaths": "",
+            "included_paths": ".*docs\\.example\\.com.*",
+            "excluded_paths": "",
             "permissions": "{role}admin",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -119,8 +119,8 @@ Antwort
 
 .. note::
 
-   Jedes Einstellungsobjekt enthält auch die Audit-Felder ``createdBy`` / ``createdTime`` / ``updatedBy`` /
-   ``updatedTime`` sowie ``versionNo`` für optimistisches Sperren (Felder mit dem Wert ``null``
+   Jedes Einstellungsobjekt enthält auch die Audit-Felder ``created_by`` / ``created_time`` / ``updated_by`` /
+   ``updated_time`` sowie ``version_no`` für optimistisches Sperren (Felder mit dem Wert ``null``
    werden weggelassen). Das ``response``-Objekt enthält stets ``version``, das die Produktversion
    angibt; in den folgenden Beispielen wird es der Übersichtlichkeit halber teilweise weggelassen.
 
@@ -146,16 +146,16 @@ Antwort
           "id": "label_id_1",
           "name": "Documentation",
           "value": "docs",
-          "includedPaths": ".*docs\\.example\\.com.*",
-          "excludedPaths": "",
+          "included_paths": ".*docs\\.example\\.com.*",
+          "excluded_paths": "",
           "permissions": "{role}admin",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
@@ -179,9 +179,9 @@ Anfragetext
     {
       "name": "News",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
-      "excludedPaths": ".*/(archive|old)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
+      "excluded_paths": ".*/(archive|old)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest"
     }
 
@@ -204,11 +204,11 @@ Feldbeschreibung
      - String
      - Ja
      - Label-Wert (wird bei der Suche als ``label``-Parameter verwendet). Nur alphanumerische Zeichen und Unterstriche (``_``) sind zulässig; der Wert muss dem regulären Ausdruck ``^[a-zA-Z0-9_]+$`` entsprechen (maximal 100 Zeichen).
-   * - ``includedPaths``
+   * - ``included_paths``
      - String
      - Nein
      - Regulärer Ausdruck für Label-Zielpfade. Bei mehreren Angaben durch Zeilenumbruch (``\n``) trennen.
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - String
      - Nein
      - Regulärer Ausdruck für ausgeschlossene Pfade. Bei mehreren Angaben durch Zeilenumbruch (``\n``) trennen.
@@ -216,18 +216,18 @@ Feldbeschreibung
      - String
      - Nein
      - Zugriffsberechtigte Rollen/Gruppen/Benutzer (Beispiel: ``{role}admin``). Bei mehreren Angaben durch Zeilenumbruch (``\n``) trennen.
-   * - ``sortOrder``
+   * - ``sort_order``
      - Integer
      - Nein
      - Anzeigereihenfolge (ganze Zahl >= 0). Standardwert ist ``0``.
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - Nein
      - Virtueller Host (maximal 1000 Zeichen).
 
 .. note::
 
-   Audit-Felder wie ``createdBy`` / ``createdTime`` werden serverseitig automatisch gesetzt
+   Audit-Felder wie ``created_by`` / ``created_time`` werden serverseitig automatisch gesetzt
    und müssen nicht in der Anfrage angegeben werden.
 
 Antwort
@@ -265,11 +265,11 @@ Anfragetext
       "id": "existing_label_id",
       "name": "News Articles",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
-      "excludedPaths": ".*/(archive|old|draft)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
+      "excluded_paths": ".*/(archive|old|draft)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest",
-      "versionNo": 1
+      "version_no": 1
     }
 
 Bei der Aktualisierung sind zusätzlich zu den Feldern beim Erstellen folgende Felder erforderlich.
@@ -286,10 +286,10 @@ Bei der Aktualisierung sind zusätzlich zu den Feldern beim Erstellen folgende F
      - String
      - Ja
      - ID des zu aktualisierenden Label-Typs.
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - Ja
-     - Versionsnummer für optimistisches Sperren. Geben Sie den ``versionNo``-Wert aus der Abrufantwort an. Stimmt die angegebene Version nicht mit der aktuellen überein, schlägt die Aktualisierung fehl.
+     - Versionsnummer für optimistisches Sperren. Geben Sie den ``version_no``-Wert aus der Abrufantwort an. Stimmt die angegebene Version nicht mit der aktuellen überein, schlägt die Aktualisierung fehl.
 
 Antwort
 -------
@@ -341,8 +341,8 @@ Dokumentations-Label erstellen
          -d '{
            "name": "Technical Documentation",
            "value": "tech_docs",
-           "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
-           "sortOrder": 0,
+           "included_paths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

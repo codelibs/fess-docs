@@ -10,19 +10,19 @@ By configuring document boosts, you can raise the score of documents matching sp
 and make them appear higher in search results.
 
 Boosts are applied to each document at index time (during crawling).
-Both the condition (``urlExpr``) and the boost value (``boostExpr``) are evaluated using the scripting
-engine specified in the ``scriptType`` field. ``scriptType`` can be ``javascript`` or ``groovy`` (which
-requires the ``fess-script-groovy`` plugin). The admin console's create screen prefills ``scriptType``
-with ``javascript``, but if this API's request body omits ``scriptType``, it is not auto-filled and the
+Both the condition (``url_expr``) and the boost value (``boost_expr``) are evaluated using the scripting
+engine specified in the ``script_type`` field. ``script_type`` can be ``javascript`` or ``groovy`` (which
+requires the ``fess-script-groovy`` plugin). The admin console's create screen prefills ``script_type``
+with ``javascript``, but if this API's request body omits ``script_type``, it is not auto-filled and the
 expressions are evaluated as Groovy.
-Multiple rules are evaluated in ascending order of ``sortOrder``, and only the boost value of the first
+Multiple rules are evaluated in ascending order of ``sort_order``, and only the boost value of the first
 matching rule is applied (once a matching rule is found, subsequent rules are not evaluated).
 
 .. note::
 
-   In the admin console, ``urlExpr`` is displayed as "Condition", ``boostExpr`` as "Boost Expression", and
-   ``scriptType`` as "Script Type". ``scriptType`` appears only in the create/update/detail (list and single)
-   request bodies and responses, not in the list filter parameters (``urlExpr``, ``boostExpr``).
+   In the admin console, ``url_expr`` is displayed as "Condition", ``boost_expr`` as "Boost Expression", and
+   ``script_type`` as "Script Type". ``script_type`` appears only in the create/update/detail (list and single)
+   request bodies and responses, not in the list filter parameters (``url_expr``, ``boost_expr``).
    For details on configuration items, refer to :doc:`../../admin/boostdoc-guide`.
 
 Base URL
@@ -93,11 +93,11 @@ Parameters
      - Integer
      - No
      - Page number (starts from 1; default: 1)
-   * - ``urlExpr``
+   * - ``url_expr``
      - String
      - No
      - Filter by condition expression (partial match)
-   * - ``boostExpr``
+   * - ``boost_expr``
      - String
      - No
      - Filter by boost expression (partial match)
@@ -113,11 +113,11 @@ Response
         "settings": [
           {
             "id": "boostdoc_id_1",
-            "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-            "boostExpr": "3.0",
-            "scriptType": "javascript",
-            "sortOrder": 1,
-            "versionNo": 1
+            "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+            "boost_expr": "3.0",
+            "script_type": "javascript",
+            "sort_order": 1,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -127,8 +127,8 @@ Response
 .. note::
 
    In addition to the fields shown above, each setting object in the response also includes
-   creation/update metadata (``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``).
-   ``versionNo`` is required when updating (PUT), so retrieve its current value via the get or list API before updating.
+   creation/update metadata (``created_by``, ``created_time``, ``updated_by``, ``updated_time``).
+   ``version_no`` is required when updating (PUT), so retrieve its current value via the get or list API before updating.
 
 Get Document Boost
 ==================
@@ -150,11 +150,11 @@ Response
         "status": 0,
         "setting": {
           "id": "boostdoc_id_1",
-          "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-          "boostExpr": "3.0",
-          "scriptType": "javascript",
-          "sortOrder": 1,
-          "versionNo": 1
+          "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+          "boost_expr": "3.0",
+          "script_type": "javascript",
+          "sort_order": 1,
+          "version_no": 1
         }
       }
     }
@@ -176,10 +176,10 @@ Request Body
 .. code-block:: json
 
     {
-      "urlExpr": "url.startsWith(\"https://important.example.com/\")",
-      "boostExpr": "5.0",
-      "scriptType": "javascript",
-      "sortOrder": 0
+      "url_expr": "url.startsWith(\"https://important.example.com/\")",
+      "boost_expr": "5.0",
+      "script_type": "javascript",
+      "sort_order": 0
     }
 
 Field Descriptions
@@ -192,16 +192,16 @@ Field Descriptions
    * - Field
      - Required
      - Description
-   * - ``urlExpr``
+   * - ``url_expr``
      - Yes
      - Condition expression. A script expression that determines whether a document should be boosted, returning ``Boolean``. Corresponds to "Condition" in the admin console (maximum 10,000 characters).
-   * - ``boostExpr``
+   * - ``boost_expr``
      - Yes
      - Boost expression. A script expression that returns the boost value (numeric). A fixed value such as ``3.0`` can also be specified. Corresponds to "Boost Expression" in the admin console (maximum 10,000 characters).
-   * - ``scriptType``
+   * - ``script_type``
      - No
-     - The scripting engine used to evaluate ``urlExpr`` and ``boostExpr``. Either ``javascript`` or ``groovy`` (which requires the ``fess-script-groovy`` plugin). Corresponds to "Script Type" in the admin console (maximum 100 characters). If omitted, the expressions are evaluated as Groovy.
-   * - ``sortOrder``
+     - The scripting engine used to evaluate ``url_expr`` and ``boost_expr``. Either ``javascript`` or ``groovy`` (which requires the ``fess-script-groovy`` plugin). Corresponds to "Script Type" in the admin console (maximum 100 characters). If omitted, the expressions are evaluated as Groovy.
+   * - ``sort_order``
      - Yes
      - Evaluation order. Rules are evaluated in ascending order, and the boost value of the first matching rule is applied (form default value: 0; must be an integer of 0 or greater).
 
@@ -236,15 +236,15 @@ Request Body
 
     {
       "id": "existing_boostdoc_id",
-      "urlExpr": "url.startsWith(\"https://important.example.com/\")",
-      "boostExpr": "10.0",
-      "scriptType": "javascript",
-      "sortOrder": 0,
-      "versionNo": 1
+      "url_expr": "url.startsWith(\"https://important.example.com/\")",
+      "boost_expr": "10.0",
+      "script_type": "javascript",
+      "sort_order": 0,
+      "version_no": 1
     }
 
-For updates, in addition to the fields used when creating, ``id`` (the ID of the target rule, up to 1000 characters) and ``versionNo`` (the version number for optimistic locking) are required.
-Specify the current version number from the get or list API response for ``versionNo``. The update fails if the version number does not match.
+For updates, in addition to the fields used when creating, ``id`` (the ID of the target rule, up to 1000 characters) and ``version_no`` (the version number for optimistic locking) are required.
+Specify the current version number from the get or list API response for ``version_no``. The update fails if the version number does not match.
 
 Response
 --------
@@ -283,13 +283,13 @@ Response
 Condition and Boost Expressions
 ================================
 
-Both ``urlExpr`` (condition) and ``boostExpr`` (boost expression) are evaluated using the scripting engine
-specified by ``scriptType`` (default: Groovy; only the admin console's create screen prefills
+Both ``url_expr`` (condition) and ``boost_expr`` (boost expression) are evaluated using the scripting engine
+specified by ``script_type`` (default: Groovy; only the admin console's create screen prefills
 ``javascript``).
 Inside an expression, the field values of the document being indexed can be referenced as variables by field name.
 
-- ``urlExpr`` must return ``Boolean`` (e.g., ``url.startsWith("https://docs.example.com/")``). A plain regular expression string (e.g., ``.*docs\.example\.com.*``) does not return ``Boolean`` as a script expression and therefore does not function as a condition. To use regular expressions, use ``String#matches`` (available with the same notation in both Groovy and JavaScript).
-- ``boostExpr`` must return a numeric value. The result is converted to ``float``, and the boost is applied only when the value is greater than 0.
+- ``url_expr`` must return ``Boolean`` (e.g., ``url.startsWith("https://docs.example.com/")``). A plain regular expression string (e.g., ``.*docs\.example\.com.*``) does not return ``Boolean`` as a script expression and therefore does not function as a condition. To use regular expressions, use ``String#matches`` (available with the same notation in both Groovy and JavaScript).
+- ``boost_expr`` must return a numeric value. The result is converted to ``float``, and the boost is applied only when the value is greater than 0.
 
 .. note::
 
@@ -298,8 +298,8 @@ Inside an expression, the field values of the document being indexed can be refe
    ``indexer.favorite.count.enabled`` are enabled (both enabled by default), respectively.
    OpenSearch date-math syntax such as ``now - 7d`` cannot be used in either Groovy or JavaScript.
 
-urlExpr Examples
-----------------
+url_expr Examples
+-----------------
 
 .. list-table::
    :header-rows: 1
@@ -314,8 +314,8 @@ urlExpr Examples
    * - ``title.contains("Release Notes")``
      - Target documents whose title contains a specific term
 
-boostExpr Examples
-------------------
+boost_expr Examples
+-------------------
 
 .. list-table::
    :header-rows: 1
@@ -342,9 +342,9 @@ Boost a Documentation Site
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-           "boostExpr": "5.0",
-           "sortOrder": 0
+           "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+           "boost_expr": "5.0",
+           "sort_order": 0
          }'
 
 Boost Frequently Clicked Content
@@ -356,9 +356,9 @@ Boost Frequently Clicked Content
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "urlExpr": "url.startsWith(\"https://www.example.com/\")",
-           "boostExpr": "click_count * 0.1 + 1",
-           "sortOrder": 10
+           "url_expr": "url.startsWith(\"https://www.example.com/\")",
+           "boost_expr": "click_count * 0.1 + 1",
+           "sort_order": 10
          }'
 
 Reference

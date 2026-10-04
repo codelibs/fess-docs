@@ -90,7 +90,7 @@ Respuesta
             "attributes": {
               "gidNumber": "1000"
             },
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "group_id_2",
@@ -98,7 +98,7 @@ Respuesta
             "attributes": {
               "gidNumber": "1001"
             },
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -129,7 +129,7 @@ Respuesta
           "attributes": {
             "gidNumber": "1000"
           },
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -209,7 +209,7 @@ Cuerpo de la Solicitud
       "attributes": {
         "gidNumber": "1002"
       },
-      "versionNo": 1
+      "version_no": 1
     }
 
 Descripción de Campos
@@ -231,9 +231,9 @@ Descripción de Campos
    * - ``attributes``
      - No
      - Mapa de atributos (incluye atributos LDAP como ``gidNumber``). Los valores se especifican como cadenas
-   * - ``versionNo``
+   * - ``version_no``
      - Sí
-     - Número de versión para el bloqueo optimista. Especifique el valor de ``versionNo`` obtenido al obtener el grupo
+     - Número de versión para el bloqueo optimista. Especifique el valor de ``version_no`` obtenido al obtener el grupo
 
 Respuesta
 ---------

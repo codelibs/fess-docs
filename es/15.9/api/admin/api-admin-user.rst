@@ -105,7 +105,7 @@ Respuesta
             },
             "roles": ["admin"],
             "groups": [],
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 10
@@ -150,7 +150,7 @@ Respuesta
           },
           "roles": ["admin"],
           "groups": [],
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -179,7 +179,7 @@ Cuerpo de la Solicitud
     {
       "name": "testuser",
       "password": "securepassword",
-      "confirmPassword": "securepassword",
+      "confirm_password": "securepassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User",
@@ -205,7 +205,7 @@ Descripción de Campos
    * - ``password``
      - No
      - Contraseña
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - No
      - Contraseña de confirmación
    * - ``attributes``
@@ -220,8 +220,8 @@ Descripción de Campos
 
 .. note::
 
-   La API REST no realiza la verificación de contraseña obligatoria, la verificación de coincidencia entre ``password`` y ``confirmPassword``, ni la validación de política de contraseñas (éstas se aplican únicamente en la interfaz de administración).
-   En la práctica, se recomienda especificar una ``password`` válida cuyo valor coincida con ``confirmPassword``.
+   La API REST no realiza la verificación de contraseña obligatoria, la verificación de coincidencia entre ``password`` y ``confirm_password``, ni la validación de política de contraseñas (éstas se aplican únicamente en la interfaz de administración).
+   En la práctica, se recomienda especificar una ``password`` válida cuyo valor coincida con ``confirm_password``.
 
 Las claves de ``attributes`` son los nombres de atributos de la entidad de usuario (los nombres de elementos derivados del esquema LDAP).
 Las claves más comunes son:
@@ -276,7 +276,7 @@ Cuerpo de la Solicitud
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "confirmPassword": "newpassword",
+      "confirm_password": "newpassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User Updated",
@@ -284,7 +284,7 @@ Cuerpo de la Solicitud
       },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
-      "versionNo": 1
+      "version_no": 1
     }
 
 Descripción de Campos
@@ -303,13 +303,13 @@ Descripción de Campos
    * - ``name``
      - Sí
      - Nombre de usuario (ID de inicio de sesión)
-   * - ``versionNo``
+   * - ``version_no``
      - Sí
      - Número de versión (para bloqueo optimista)
    * - ``password``
      - No
      - Nueva contraseña (se actualiza solo cuando se especifica)
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - No
      - Contraseña de confirmación
    * - ``attributes``
@@ -324,8 +324,8 @@ Descripción de Campos
 
 .. note::
 
-   En la actualización, ``id``, ``name`` y ``versionNo`` son obligatorios.
-   ``versionNo`` es el valor devuelto al obtener el usuario objetivo (GET), y corresponde a la versión del documento de OpenSearch.
+   En la actualización, ``id``, ``name`` y ``version_no`` son obligatorios.
+   ``version_no`` es el valor devuelto al obtener el usuario objetivo (GET), y corresponde a la versión del documento de OpenSearch.
    Si no coincide con la versión actual, la solicitud se trata como un conflicto y la actualización es rechazada.
 
 Respuesta
@@ -390,7 +390,7 @@ Crear Nuevo Usuario
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "confirmPassword": "SecureP@ss123",
+           "confirm_password": "SecureP@ss123",
            "attributes": {
              "surname": "Doe",
              "givenName": "John",
@@ -412,7 +412,7 @@ Cambiar Roles de Usuario
            "id": "user_id_123",
            "name": "john.doe",
            "roles": ["user", "editor", "admin"],
-           "versionNo": 1
+           "version_no": 1
          }'
 
 Referencia

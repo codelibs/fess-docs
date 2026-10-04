@@ -179,7 +179,7 @@ Dict API是用于管理 |Fess| 词典的API。
         "settings": [
           {
             "id": 1,
-            "dictId": "ZjA5...synonym.txt",
+            "dict_id": "ZjA5...synonym.txt",
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
@@ -233,7 +233,7 @@ Dict API是用于管理 |Fess| 词典的API。
         "status": 0,
         "setting": {
           "id": 1,
-          "dictId": "ZjA5...synonym.txt",
+          "dict_id": "ZjA5...synonym.txt",
           "inputs": "検索,サーチ",
           "outputs": "検索,サーチ,リサーチ"
         }
@@ -406,7 +406,7 @@ Dict API是用于管理 |Fess| 词典的API。
 ====================
 
 词典项目的创建·更新请求体以及响应的字段因词典类型而异。
-``id`` （项目ID）和 ``dictId`` （词典ID）在响应中是共通的。
+``id`` （项目ID）和 ``dict_id`` （词典ID）在响应中是共通的。
 
 .. list-table::
    :header-rows: 1

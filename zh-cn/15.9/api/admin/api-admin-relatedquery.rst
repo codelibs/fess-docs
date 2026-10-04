@@ -89,7 +89,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
             "id": "query_id_1",
             "term": "fess",
             "queries": "fess tutorial\nfess installation\nfess configuration",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -98,9 +98,9 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 
 .. note::
 
-   每条设置均包含 ``versionNo``\ （用于乐观锁的版本号）。\ ``virtualHost``
-   以及审计字段（``createdBy``、``createdTime``、``updatedBy``、``updatedTime``）
-   仅在有值时才会包含在响应中。值为空的 ``virtualHost`` 不会包含在响应中。
+   每条设置均包含 ``version_no``\ （用于乐观锁的版本号）。\ ``virtual_host``
+   以及审计字段（``created_by``、``created_time``、``updated_by``、``updated_time``）
+   仅在有值时才会包含在响应中。值为空的 ``virtual_host`` 不会包含在响应中。
 
 获取相关查询
 ============
@@ -125,8 +125,8 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": "site1.example.com",
-          "versionNo": 1
+          "virtual_host": "site1.example.com",
+          "version_no": 1
         }
       }
     }
@@ -150,7 +150,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
     {
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search",
-      "virtualHost": ""
+      "virtual_host": ""
     }
 
 字段说明
@@ -169,13 +169,13 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
    * - ``queries``
      - 是
      - 相关查询。每行一条，以换行符分隔的字符串（空行将被忽略。最多10000个字符）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - 否
      - 虚拟主机（最多1000个字符）
 
 .. note::
 
-   ``crudMode`` 由API端自动设置，无需包含在请求体中。
+   ``crud_mode`` 由API端自动设置，无需包含在请求体中。
 
 响应
 ----
@@ -211,8 +211,8 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
       "id": "existing_query_id",
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
-      "virtualHost": "",
-      "versionNo": 1
+      "virtual_host": "",
+      "version_no": 1
     }
 
 字段说明
@@ -234,10 +234,10 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
    * - ``queries``
      - 是
      - 相关查询。每行一条，以换行符分隔的字符串（空行将被忽略。最多10000个字符）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - 否
      - 虚拟主机（最多1000个字符）
-   * - ``versionNo``
+   * - ``version_no``
      - 是
      - 用于乐观锁的版本号。请指定获取时响应中包含的值
 
