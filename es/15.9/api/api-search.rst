@@ -30,7 +30,7 @@ Parámetros de solicitud
 .. list-table:: Parámetros de solicitud
 
    * - ``q``
-     - Término de búsqueda (codificado en URL).
+     - Término de búsqueda (codificado en URL). La longitud máxima está limitada por ``api.param.max.length`` (valor predeterminado: 1000). Si se supera, se produce un error ``invalid_request`` (HTTP 400). Este límite es independiente de los límites del motor de búsqueda.
    * - ``start``
      - Posición de inicio desde 0 (integer, ``>=0``, valor predeterminado ``0``).
    * - ``offset``

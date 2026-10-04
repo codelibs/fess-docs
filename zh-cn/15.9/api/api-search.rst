@@ -30,7 +30,7 @@ HTTP 方法            GET
 .. list-table:: 请求参数
 
    * - ``q``
-     - 搜索词（URL 编码）。
+     - 搜索词（URL 编码）。最大长度由 ``api.param.max.length``\ （默认值 1000）限制，超过时返回 ``invalid_request`` 错误（HTTP 400）。该限制与搜索引擎自身的限制无关。
    * - ``start``
      - 从 0 开始的起始位置（integer，\ ``>=0``\ ，默认值 ``0``\ ）。
    * - ``offset``

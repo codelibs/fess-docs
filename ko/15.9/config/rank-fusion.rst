@@ -223,14 +223,19 @@ JVM 시스템 프로퍼티
 
 - ``rank.fusion.timeout`` 은 적용되지 않습니다. 쿼리 임베딩은 검색 요청을 보내기 전에 동기적으로
   계산되므로, 임베딩 프로바이더의 응답이 느리거나 응답하지 않는 경우에는 검색이 프로바이더 측의
-  타임아웃(예: ``content_chunker.embedding.ollama.timeout``)까지 대기하게 됩니다.
+  타임아웃(예: ``content_chunker.embedding.ollama.timeout``)까지 대기하게 됩니다. 프로바이더가
+  재시도하는 경우에는 그 횟수만큼도 더해집니다. 예를 들어 내장 ``opensearch`` 프로바이더는
+  ``content_chunker.embedding.opensearch.timeout``\ (기본값 ``60000`` 밀리초)만큼의 대기를
+  ``content_chunker.embedding.opensearch.retry.max``\ (기본값 ``3``)회까지 반복하므로,
+  응답하지 않는 경우 기본값으로 180초에 재시도 사이의 대기 시간을 더한 시간이 걸릴 수 있습니다.
 - ``rank.fusion.window_size`` 와 ``rank.fusion.threads`` 는 |Fess| 측에서 융합하는 경우에만
   사용됩니다.
 - 검색 엔진 측에서 융합한 검색은 최대 ``rank.fusion.pagination_depth`` 건까지 페이징할 수
   있습니다. 검색 엔진은 각 검색기의 샤드별 상위 ``rank.fusion.pagination_depth`` 건만 융합하기
-  때문입니다. 페이지 수, 다음 페이지 여부, 페이지 번호는 이 건수에서 끝나며, 이를 넘는 위치에서
-  시작하는 페이지를 요청하면 다른 검색에서 ``index.max_result_window`` 를 넘는 페이지를 요청한
-  경우와 같은 오류가 됩니다. 이 범위 안이라도 융합 결과의 마지막 건 이후에서 시작하는
+  때문입니다. 페이지 수, 다음 페이지 여부, 페이지 번호는 이 건수에서 끝나며, 시작 위치
+  (``start``)가 ``rank.fusion.pagination_depth`` 이상인 페이지를 요청하면 다른 검색에서
+  ``index.max_result_window`` 를 넘는 페이지를 요청한 경우와 같은 오류(검색 API v2에서는 HTTP
+  400의 ``invalid_request``)가 됩니다. 이 범위 안이라도 융합 결과의 마지막 건 이후에서 시작하는
   페이지(오래된 링크 등)는 빈 페이지가 됩니다. 검색 엔진 측에서 융합하지 않는 검색은 지금까지와
   마찬가지로 ``index.max_result_window`` 까지 페이징할 수 있습니다.
 - 총 히트 건수는 ``rank.fusion.pagination_depth`` 미만이면 정확합니다. 이 값 이상이 되면 검색
@@ -309,7 +314,14 @@ Rank Fusion이 실제로 동작하고 있는지는 검색 결과에 부여되는
 그래서 같은 쿼리라도 하이브리드 검색의 활성화 여부에 따라 히트 건수가 달라질 수 있습니다.
 
 또한 메인 검색기의 총 히트 건수가 개략값(하한값)으로 반환되는 경우에는 이 보정이 수행되지 않습니다.
-검색 엔진 측에서 융합하는 경우, 총 히트 건수는 융합 후 결과 집합의 건수입니다(:ref:`rank-fusion-engine` 참조).
+또한 패싯(레이블 등)의 건수는 메인 검색기의 검색 결과의 것이 그대로 사용됩니다.
+
+검색 엔진 측에서 융합하는 경우(:ref:`rank-fusion-engine` 참조), 총 히트 건수와 패싯 건수는
+키워드 검색과 시맨틱 검색 양쪽 히트의 합집합을 셉니다. 각 검색기가 샤드별로 제공하는 것은 최대
+``rank.fusion.pagination_depth`` 건이며, 시맨틱 검색기는 추가로 ``content_chunker.search.knn.k``
+건이 상한입니다. 그래서 같은 쿼리라도 ``rank.fusion.engine.enabled`` 를 전환하면 히트 건수도
+패싯 건수도 달라지며, 소규모 인덱스에서는 시맨틱 검색의 히트가 더해지는 검색 엔진 측 융합 쪽이
+더 커지기 쉽습니다.
 
 사용 예
 ========

@@ -212,12 +212,16 @@ JVM 系统属性
 
 - ``rank.fusion.timeout`` 不适用。查询的嵌入会在发送搜索请求之前同步计算，因此如果嵌入提供商
   响应缓慢或无响应，搜索会一直等待，最长直到提供商自身的超时时间（例如
-  ``content_chunker.embedding.ollama.timeout``\ ）。
+  ``content_chunker.embedding.ollama.timeout``\ ）。如果提供商会重试，重试的次数也会累加进来。
+  例如，内置的 ``opensearch`` 提供商会将 ``content_chunker.embedding.opensearch.timeout``\ （默认
+  ``60000`` 毫秒）的等待最多重复 ``content_chunker.embedding.opensearch.retry.max``\ （默认 ``3``\ ）
+  次，因此在提供商无响应时，默认情况下搜索可能被延迟 180 秒，再加上重试之间的等待时间。
 - ``rank.fusion.window_size`` 和 ``rank.fusion.threads`` 仅在由 |Fess| 执行融合时使用。
 - 由搜索引擎融合的搜索最多只能翻页到 ``rank.fusion.pagination_depth`` 条结果，因为搜索引擎
   只融合每个搜索器在每个分片上排名前 ``rank.fusion.pagination_depth`` 的结果。总页数、是否有
-  下一页以及页码都止于此，请求从其之后开始的页面时，会返回与其他搜索请求超过
-  ``index.max_result_window`` 的页面时相同的错误。即使在此范围内，从最后一条融合结果之后开始的
+  下一页以及页码都止于此，请求起始位置（``start``\ ）大于等于 ``rank.fusion.pagination_depth`` 的
+  页面时，会返回与其他搜索请求超过 ``index.max_result_window`` 的页面时相同的错误（在 v2 搜索 API
+  中为 HTTP 400 的 ``invalid_request``\ ）。即使在此范围内，从最后一条融合结果之后开始的
   页面（例如过时的链接）也会返回空页面。不由搜索引擎融合的搜索仍与以前一样，可以翻页到
   ``index.max_result_window``\ 。
 - 总命中数量低于 ``rank.fusion.pagination_depth`` 时是精确的。达到或超过该值时，搜索引擎统计的
@@ -292,7 +296,13 @@ Rank Fusion 在结合关键词搜索与语义搜索的
 因此，即使是相同的查询，启用与不启用混合搜索时的命中数量也可能不同。
 
 另外，当主搜索器的总命中数量以概算值（下限值）返回时，不会进行此修正。
-由搜索引擎执行融合时，总命中数量为融合后结果集的数量（请参阅 :ref:`rank-fusion-engine`\ ）。
+另外，分面（标签等）的数量会原样采用主搜索器的搜索结果。
+
+由搜索引擎执行融合时（请参阅 :ref:`rank-fusion-engine`\ ），总命中数量和分面数量统计的是关键词搜索与
+语义搜索两者命中结果的并集。每个搜索器在每个分片上最多提供 ``rank.fusion.pagination_depth`` 条
+结果，语义搜索器还额外受 ``content_chunker.search.knn.k`` 的限制。因此，同一个查询在切换
+``rank.fusion.engine.enabled`` 后，命中数量和分面数量都会不同；在小规模索引中，由搜索引擎执行融合
+时因为加入了语义搜索的命中，数量往往更大。
 
 使用示例
 ========

@@ -237,17 +237,23 @@ Beachten Sie Folgendes, wenn die Suchmaschine die Fusion durchführt.
 - ``rank.fusion.timeout`` gilt nicht. Das Embedding der Anfrage wird synchron berechnet, bevor die
   Suchanfrage gesendet wird; ein langsamer oder nicht antwortender Embedding-Anbieter verzögert
   die Suche daher bis zum Timeout des Anbieters selbst (zum Beispiel
-  ``content_chunker.embedding.ollama.timeout``).
+  ``content_chunker.embedding.ollama.timeout``). Wiederholt der Anbieter Anfragen, verlängern die
+  Wiederholungen diese Zeit. Der integrierte Anbieter ``opensearch`` wiederholt zum Beispiel
+  das Warten von ``content_chunker.embedding.opensearch.timeout`` (Standardwert ``60000`` ms) bis
+  zu ``content_chunker.embedding.opensearch.retry.max`` (Standardwert ``3``) Mal, sodass ein nicht
+  antwortender Anbieter eine Suche standardmäßig um 180 Sekunden plus die Wartezeiten zwischen
+  den Wiederholungen verzögern kann.
 - ``rank.fusion.window_size`` und ``rank.fusion.threads`` werden nur verwendet, wenn |Fess| die
   Fusion durchführt.
 - Eine fusionierte Suche kann höchstens ``rank.fusion.pagination_depth`` Ergebnisse durchblättern,
   weil die Suchmaschine nur die ersten ``rank.fusion.pagination_depth`` Ergebnisse jedes Suchers pro
   Shard fusioniert. Seitenanzahl, Link zur nächsten Seite und Seitennummern enden dort, und eine
-  Seite, die dahinter beginnt, wird mit demselben Fehler abgelehnt wie bei jeder anderen Suche eine
-  Seite jenseits von ``index.max_result_window``. Eine Seite, die nach dem letzten fusionierten
-  Ergebnis, aber innerhalb dieser Grenze beginnt (zum Beispiel über einen veralteten Link), wird
-  leer zurückgegeben. Suchen, die nicht in der Suchmaschine fusioniert werden, lassen sich wie
-  bisher bis ``index.max_result_window`` durchblättern.
+  Seite, deren Startposition (``start``) ``rank.fusion.pagination_depth`` oder mehr beträgt, wird
+  mit demselben Fehler abgelehnt wie bei jeder anderen Suche eine Seite jenseits von
+  ``index.max_result_window`` (in der Such-API v2 HTTP 400 mit ``invalid_request``). Eine Seite,
+  die nach dem letzten fusionierten Ergebnis, aber innerhalb dieser Grenze beginnt (zum Beispiel
+  über einen veralteten Link), wird leer zurückgegeben. Suchen, die nicht in der Suchmaschine
+  fusioniert werden, lassen sich wie bisher bis ``index.max_result_window`` durchblättern.
 - Die Gesamttrefferzahl ist exakt, solange sie unter ``rank.fusion.pagination_depth`` liegt. Ab
   diesem Wert kann die Suchmaschine weniger Treffer zählen, als tatsächlich übereinstimmen; die
   Zahl wird daher als Untergrenze gemeldet (in der Such-API ist ``record_count_relation`` dann
@@ -333,8 +339,17 @@ Hybridsuche aktiviert ist oder nicht.
 
 Wird die Gesamttrefferzahl des Hauptsuchers als Näherungswert (Untergrenze) zurückgegeben,
 findet diese Korrektur nicht statt.
-Führt die Suchmaschine die Fusion durch, ist die Gesamttrefferzahl die der fusionierten
-Ergebnismenge (siehe :ref:`rank-fusion-engine`).
+Die Facettenzahlen (Labels usw.) werden ebenfalls unverändert aus den Ergebnissen des
+Hauptsuchers übernommen.
+
+Führt die Suchmaschine die Fusion durch (siehe :ref:`rank-fusion-engine`), umfassen die
+Gesamttrefferzahl und die Facettenzahlen die Vereinigungsmenge der Treffer von Schlüsselwortsuche
+und semantischer Suche. Jeder Sucher liefert höchstens ``rank.fusion.pagination_depth``
+Ergebnisse pro Shard, und der semantische Sucher ist zusätzlich auf
+``content_chunker.search.knn.k`` begrenzt. Daher meldet dieselbe Anfrage je nach
+``rank.fusion.engine.enabled`` unterschiedliche Trefferzahlen und Facettenzahlen, und bei einem
+kleinen Index fallen sie tendenziell größer aus, wenn die Suchmaschine die Fusion durchführt, weil
+die semantische Suche ihre Treffer beisteuert.
 
 Anwendungsbeispiele
 ===================
