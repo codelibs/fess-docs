@@ -185,12 +185,16 @@ Réglages dans system.properties
      - Dimension du vecteur d'embedding. Cette valeur est utilisée lors de la création du
        mapping, elle **doit** donc correspondre à la dimension du modèle d'embedding utilisé.
        Elle est lue par deux chemins distincts, au comportement différent. Lors de la création du
-       mapping de l'index, une valeur non définie, non numérique, nulle ou négative, ou
-       supérieure à ``16000`` (le maximum propre au plugin k-NN) entraîne l'utilisation de
-       ``768`` avec un avertissement. À l'exécution du processus d'embedding, en revanche, il n'y
+       mapping de l'index, une valeur non définie entraîne l'utilisation de ``768`` **sans aucun
+       avertissement**, et une valeur vide, non numérique, nulle ou négative, ou supérieure à
+       ``16000`` (le maximum propre au plugin k-NN) entraîne l'utilisation de ``768`` avec un
+       avertissement. À l'exécution du processus d'embedding, en revanche, il n'y
        a aucun repli : une valeur non définie, non numérique, nulle ou négative provoque une
        erreur. Une valeur supérieure à ``16000`` n'est pas rejetée à l'exécution, de sorte que
-       seul le mapping est créé avec ``768``, ce qui aboutit à une incohérence de dimension
+       seul le mapping est créé avec ``768``, ce qui aboutit à une incohérence de dimension. La
+       dimension du mapping ne peut plus être modifiée une fois l'index créé ; pour vous remettre
+       d'un index créé alors que la valeur n'était pas définie, voir *Si l'index a été créé sans
+       dimension* dans *Remarques*
    * - ``content_chunker.job.concurrency``
      - ``2``
      - Nombre de workers parallèles pour la tâche d'indexation
@@ -238,9 +242,11 @@ Réglages dans system.properties
        mapping ; le modifier nécessite de recréer l'index)
    * - ``content_chunker.search.knn.k``
      - ``100``
-     - Nombre de voisins récupérés par requête ANN (agrandi automatiquement pour la pagination
-       profonde lorsque |Fess| effectue la fusion ; utilisé tel quel lorsque la fusion est
-       effectuée côté moteur de recherche)
+     - Nombre de voisins récupérés par shard par la requête ANN. Lorsque |Fess| effectue la
+       fusion, la valeur effective ne descend jamais sous ``rank.fusion.window_size`` divisé par
+       le nombre de moteurs (200 / 2 = 100 par défaut) ; une valeur plus petite n'a donc aucun
+       effet. Lorsque la fusion est effectuée côté moteur de recherche, cette valeur est
+       utilisée telle quelle
    * - ``content_chunker.search.knn.param.ef_search``
      - (non défini)
      - Le paramètre ``ef_search`` pour les requêtes ANN
@@ -268,6 +274,17 @@ Réglages dans system.properties
    reproduit exactement le comportement précédent à longueur fixe. La modification de ces
    paramètres n'affecte que les documents découpés ensuite : un document déjà stocké sous forme
    de tableau de chunks conserve ses frontières jusqu'à ce qu'il soit à nouveau crawlé.
+
+.. note::
+
+   ``content_chunker.length.chunk_size`` s'exprime en caractères, mais un modèle d'embedding ne
+   peut prendre en compte qu'un texte allant jusqu'à sa limite de tokens. |Fess| ne tronque pas le
+   texte soumis à l'embedding ; la partie au-delà de cette limite peut donc ne pas être reflétée
+   dans le vecteur. Choisissez ``chunk_size`` d'après la limite d'entrée du modèle utilisé. Par
+   exemple, mesurée avec ``paraphrase-multilingual-MiniLM-L12-v2`` (128 tokens au maximum), la
+   partie reflétée dans le vecteur était d'environ 440 caractères en anglais et d'environ 210
+   caractères en japonais (cela varie selon le texte). Avec ce modèle, la fin d'un chunk avec la
+   valeur par défaut ``chunk_size=800`` n'est pas reflétée dans le vecteur.
 
 .. note::
 
@@ -308,7 +325,10 @@ Ceux-ci sont définis dans le même fichier ``system.properties`` que ci-dessus.
      - Délai d'expiration de connexion (ms)
    * - ``content_chunker.embedding.opensearch.retry.max``
      - ``3``
-     - Nombre de nouvelles tentatives pour les erreurs transitoires (429, 5xx, etc.)
+     - Nombre maximal de tentatives, première incluse, pour les erreurs transitoires (429, 5xx,
+       etc.). Ce n'est pas le nombre de nouvelles tentatives : ``3`` signifie au plus trois
+       requêtes au total, avec deux attentes entre elles. Une valeur de ``1`` ou moins signifie
+       aucune nouvelle tentative
    * - ``content_chunker.embedding.opensearch.retry.base.delay.ms``
      - ``2000``
      - Délai de base entre les tentatives (ms)
@@ -518,9 +538,16 @@ Vous pouvez vérifier le résultat pour chaque document dans son champ ``content
        ``embedding.name=none``, mais aussi lorsque le plugin du fournisseur indiqué dans
        ``embedding.name`` n'est pas installé
    * - ``skipped``
-     - Traitement ignoré (par ex. ``max_chunks_per_document`` dépassé)
+     - Traitement ignoré. Cela concerne les documents dont le corps est vide (y compris
+       uniquement des espaces), les documents pour lesquels aucun chunk n'a été produit et ceux
+       qui dépassent ``max_chunks_per_document``. Si ``content_chunker.chunker.name`` désigne un
+       chunker inexistant, aucun chunker n'est trouvé et aucun chunk n'est produit : tous les
+       documents se retrouvent alors dans cet état. C'est un état terminal : relancer la tâche ne
+       retraite pas le document
    * - ``fail``
-     - Échec du traitement (vérifiez les journaux)
+     - Échec du traitement (vérifiez les journaux). C'est un état terminal : par défaut, relancer
+       la tâche ne retraite pas le document. Définissez ``content_chunker.job.retry_failed`` à
+       ``true`` pour le retraiter
 
 Vous pouvez vérifier la répartition des statuts en interrogeant directement le moteur de
 recherche ::
@@ -531,6 +558,32 @@ recherche ::
 
 Grâce à l'option ``missing``, les documents dépourvus de ``content_chunk_status`` (autrement dit
 non traités) sont regroupés dans un bucket portant la clé ``pending``.
+
+Jugez de l'état de la tâche de chunking d'après cette répartition de ``content_chunk_status``. Si
+``pending`` diminue et ``done`` (``chunked`` en mode chunking seul) augmente à chaque exécution de
+la tâche, celle-ci progresse. Si ``fail`` apparaît, consultez les journaux de |Fess| pour en
+trouver la cause. ``skipped`` est normal pour des documents tels que ceux dont le corps est vide,
+mais si presque tous les documents sont ``skipped``, soupçonnez une valeur erronée de
+``content_chunker.chunker.name`` (lorsqu'aucun chunker n'est trouvé, un message WARN
+``Chunker not found`` est journalisé).
+
+.. warning::
+
+   Corriger la configuration n'annule pas à lui seul ``skipped`` ni ``fail``. Un document
+   ``skipped`` n'est pas pris en charge lorsque la tâche est relancée (un document crawlé à
+   nouveau revient à l'état non traité), et un document ``fail`` n'est retraité que si
+   ``content_chunker.job.retry_failed`` vaut ``true``. Par exemple, si la tâche a été exécutée
+   avec un ``content_chunker.chunker.name`` erroné et que tous les documents sont devenus
+   ``skipped``, corrigez le nom, supprimez ``content_chunk_status`` comme indiqué ci-dessous,
+   puis relancez la tâche (le champ ``content`` d'un document ``skipped`` n'a pas été réécrit ;
+   il peut donc être traité tel quel) ::
+
+       curl -XPOST "http://localhost:9200/fess.search/_update_by_query" \
+            -H "Content-Type: application/json" -d '
+       {
+         "query": {"term": {"content_chunk_status": "skipped"}},
+         "script": {"source": "ctx._source.remove(\"content_chunk_status\")"}
+       }'
 
 Comportement de la recherche sémantique
 ==========================================
@@ -849,6 +902,47 @@ Pour passer à un modèle d'embedding avec une dimension différente, suivez cet
    fournisseur.
 3. Recréez l'index en suivant *3. Recréer l'index (lors de l'activation sur un déploiement
    existant)* dans *Procédure de configuration*, puis relancez la tâche d'indexation.
+
+Passer à un autre modèle de même dimension
+---------------------------------------------
+
+Si vous remplacez le réglage du modèle d'embedding, par exemple
+``content_chunker.embedding.opensearch.model.id``, par un autre modèle de même dimension, |Fess|
+l'accepte sans aucune erreur ni avertissement. Seule la dimension est vérifiée, et le modèle qui
+a créé les vecteurs n'est pas enregistré dans l'index. Les vecteurs stockés ont alors été créés
+par l'ancien modèle et les vecteurs de requête, lors de la recherche, par le nouveau ; les deux
+vivent dans des espaces vectoriels différents, et la pertinence des résultats de recherche
+s'effondre. La distribution des valeurs de similarité cosinus diffère aussi d'un modèle à
+l'autre : un ``content_chunker.search.min_score`` réglé pour l'ancien modèle peut être trop
+strict pour le nouveau et écarter la plupart des résultats.
+
+Pour changer de modèle, définissez le nouveau modèle, supprimez ``content_chunk_vector`` et
+``content_chunk_status`` avec le même ``_update_by_query`` que dans l'étape 1 de *Changer de
+modèle d'embedding (dimension)* ci-dessus, puis relancez la tâche d'indexation pour régénérer les
+vecteurs de tous les documents (il n'est pas nécessaire de recréer l'index, car la dimension est
+la même). Si vous avez défini ``content_chunker.search.min_score``, réexaminez-le avec le nouveau
+modèle.
+
+Si l'index a été créé sans dimension
+--------------------------------------
+
+Si l'index ``fess.search`` est créé alors que ``content_chunker.embedding.dimension`` n'est pas
+défini, le mapping de ``content_chunk_vector`` reçoit une dimension de ``768`` sans aucun
+avertissement, et elle ne peut plus être modifiée ensuite. Si vous exécutez alors la tâche
+d'indexation, la dimension ne peut pas être lue lors de l'embedding, ce qui est une erreur : les
+documents passent à ``fail``.
+
+- Si le modèle utilisé a une dimension de ``768``, définissez
+  ``content_chunker.embedding.dimension=768``. Elle correspond au mapping ; il n'est donc pas
+  nécessaire de recréer l'index.
+- Sinon, définissez la bonne dimension. Tant que le mapping (``768``) et le réglage divergent,
+  la tâche d'indexation journalise une ERROR et ignore l'exécution. Recréez l'index selon la même
+  méthode que dans l'étape 3 de *Changer de modèle d'embedding (dimension)* ci-dessus.
+
+Dans les deux cas, les documents déjà à l'état ``fail`` ne sont pas retraités automatiquement. Si
+vous recréez l'index, le ``_update_by_query`` de l'étape 1 de *Changer de modèle d'embedding
+(dimension)* supprime aussi ``content_chunk_status``. Si vous ne le recréez pas, définissez
+temporairement ``content_chunker.job.retry_failed`` à ``true`` et relancez la tâche.
 
 Utilisation du disque
 ------------------------

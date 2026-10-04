@@ -241,14 +241,21 @@ Gardez les points suivants à l'esprit lorsque la fusion est effectuée côté m
 - ``rank.fusion.timeout`` ne s'applique pas. L'embedding de la requête est calculé de manière
   synchrone avant l'envoi de la requête de recherche : un fournisseur d'embedding lent ou qui ne
   répond pas retarde donc la recherche jusqu'au délai d'expiration propre à ce fournisseur (par
-  exemple ``content_chunker.embedding.ollama.timeout``).
+  exemple ``content_chunker.embedding.ollama.timeout``). Si le fournisseur effectue de nouvelles
+  tentatives, elles s'ajoutent à ce délai. Par exemple, le fournisseur intégré ``opensearch``
+  répète une attente de ``content_chunker.embedding.opensearch.timeout`` (``60000`` ms par
+  défaut) jusqu'à ``content_chunker.embedding.opensearch.retry.max`` (``3`` par défaut) fois :
+  un fournisseur qui ne répond pas peut donc retarder une recherche de 180 secondes par défaut,
+  plus les attentes entre les tentatives.
 - ``rank.fusion.window_size`` et ``rank.fusion.threads`` ne sont utilisés que lorsque |Fess|
   effectue la fusion.
 - Une recherche fusionnée peut paginer au plus ``rank.fusion.pagination_depth`` résultats, car
   le moteur de recherche ne fusionne que les ``rank.fusion.pagination_depth`` premiers résultats de
   chaque moteur, par shard. Le nombre de pages, le lien vers la page suivante et les numéros de
-  page s'arrêtent là, et une page qui commence au-delà est refusée avec la même erreur qu'une page
-  au-delà de ``index.max_result_window`` pour toute autre recherche. Une page qui commence après le
+  page s'arrêtent là, et une page dont la position de départ (``start``) vaut
+  ``rank.fusion.pagination_depth`` ou plus est refusée avec la même erreur qu'une page au-delà
+  de ``index.max_result_window`` pour toute autre recherche (dans l'API de recherche v2, HTTP 400
+  avec ``invalid_request``). Une page qui commence après le
   dernier résultat fusionné mais dans cette limite (par exemple depuis un lien périmé) est renvoyée
   vide. Les recherches qui ne sont pas fusionnées côté moteur de recherche peuvent toujours paginer
   jusqu'à ``index.max_result_window``.
@@ -336,8 +343,17 @@ recherche hybride est activée ou non.
 
 À noter : lorsque le nombre total de résultats du moteur principal est retourné sous forme de
 valeur approchée (borne inférieure), cette correction n'est pas appliquée.
-Lorsque la fusion est effectuée côté moteur de recherche, le nombre total de résultats est celui de
-l'ensemble de résultats fusionné (voir :ref:`rank-fusion-engine`).
+Les nombres de résultats des facettes (étiquettes, etc.) sont eux aussi repris tels quels des
+résultats du moteur principal.
+
+Lorsque la fusion est effectuée côté moteur de recherche (voir :ref:`rank-fusion-engine`), le
+nombre total de résultats et les nombres de résultats des facettes portent sur l'union des
+résultats de la recherche par mots-clés et de la recherche sémantique. Chaque moteur apporte au
+plus ``rank.fusion.pagination_depth`` résultats par shard, et le moteur sémantique est en outre
+limité par ``content_chunker.search.knn.k``. Pour une même requête, le nombre total de résultats
+et ceux des facettes diffèrent donc selon ``rank.fusion.engine.enabled`` ; sur un petit index, ils
+tendent à être plus élevés lorsque la fusion est effectuée côté moteur de recherche, car la
+recherche sémantique apporte ses résultats.
 
 Exemples d'utilisation
 =======================

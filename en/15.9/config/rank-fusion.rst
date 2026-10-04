@@ -229,16 +229,22 @@ Keep the following in mind when the search engine performs the fusion.
 
 - ``rank.fusion.timeout`` does not apply. The query embedding is computed synchronously before the
   search request is sent, so a slow or unresponsive embedding provider delays the search up to the
-  provider's own timeout (for example ``content_chunker.embedding.ollama.timeout``).
+  provider's own timeout (for example ``content_chunker.embedding.ollama.timeout``). If the
+  provider retries, the retries add to that time. For example, the built-in ``opensearch``
+  provider repeats a wait of ``content_chunker.embedding.opensearch.timeout`` (default ``60000``
+  ms) up to ``content_chunker.embedding.opensearch.retry.max`` (default ``3``) times, so an
+  unresponsive provider can delay a search by 180 seconds by default, plus the waits between
+  retries.
 - ``rank.fusion.window_size`` and ``rank.fusion.threads`` are used only when |Fess| performs the
   fusion.
 - A fused search pages through at most ``rank.fusion.pagination_depth`` results, because the
   search engine fuses only the top ``rank.fusion.pagination_depth`` results of each searcher per
-  shard. The page count, the next-page link and the page numbers stop there, and a page that
-  starts beyond it is refused with the same error as a page beyond ``index.max_result_window`` in
-  any other search. A page that starts after the last fused result but within that limit (for
-  example, from an outdated link) is returned empty. Searches that are not fused in the search
-  engine page up to ``index.max_result_window`` as before.
+  shard. The page count, the next-page link and the page numbers stop there, and a page whose
+  start position (``start``) is ``rank.fusion.pagination_depth`` or more is refused with the same
+  error as a page beyond ``index.max_result_window`` in any other search (in the v2 search API,
+  HTTP 400 with ``invalid_request``). A page that starts after the last fused result but within
+  that limit (for example, from an outdated link) is returned empty. Searches that are not fused
+  in the search engine page up to ``index.max_result_window`` as before.
 - The total hit count is exact while it is below ``rank.fusion.pagination_depth``. At or above it,
   the search engine can count fewer hits than actually match, so the count is reported as a lower
   bound (in the search API, ``record_count_relation`` is ``GREATER_THAN_OR_EQUAL_TO``).
@@ -315,8 +321,15 @@ enabled.
 
 Note that this adjustment is not applied when the total hit count of the main searcher is returned
 as an approximate (lower-bound) value.
-When the search engine performs the fusion, the total hit count is that of the fused result set
-(see :ref:`rank-fusion-engine`).
+The facet counts (labels and so on) are also taken from the main searcher's results as they are.
+
+When the search engine performs the fusion (see :ref:`rank-fusion-engine`), the total hit count
+and the facet counts cover the union of the hits of both keyword search and semantic search. Each
+searcher contributes at most ``rank.fusion.pagination_depth`` results per shard, and the semantic
+searcher is further limited to ``content_chunker.search.knn.k``. As a result, the same query
+reports different counts and facet counts depending on ``rank.fusion.engine.enabled``, and on a
+small index they tend to be larger when the search engine performs the fusion, because semantic
+search contributes its hits.
 
 Usage Examples
 ==============

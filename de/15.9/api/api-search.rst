@@ -30,7 +30,7 @@ Anfrageparameter
 .. list-table:: Anfrageparameter
 
    * - ``q``
-     - Suchbegriff (URL-kodiert).
+     - Suchbegriff (URL-kodiert). Die maximale Länge wird durch ``api.param.max.length`` (Standardwert 1000) begrenzt. Bei Überschreitung wird ein ``invalid_request``-Fehler (HTTP 400) zurückgegeben. Diese Begrenzung ist unabhängig von den Limits der Suchmaschine.
    * - ``start``
      - Startposition (0-basiert; integer, ``>=0``, Standardwert ``0``).
    * - ``offset``

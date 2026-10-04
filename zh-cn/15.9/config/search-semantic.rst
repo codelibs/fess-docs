@@ -152,10 +152,13 @@ system.properties 配置
    * - ``content_chunker.embedding.dimension``
      - ``768``
      - 嵌入向量的维度。创建映射时会使用该值，因此它\ **必须**\ 与您所用嵌入模型的维度一致。该值有
-       两条读取路径，行为并不相同。创建索引映射时，未设置、非数字、小于等于 0、以及超过
-       ``16000``\ （k-NN 插件自身的上限）的情况，都会带警告回退为 ``768``\ 。而在执行嵌入处理时
+       两条读取路径，行为并不相同。创建索引映射时，未设置时会\ **不带任何警告**\ 地回退为 ``768``\ ；
+       为空、非数字、小于等于 0、以及超过 ``16000``\ （k-NN 插件自身的上限）的情况，则会带警告回退为
+       ``768``\ 。而在执行嵌入处理时
        没有任何回退，未设置、非数字、小于等于 0 都会直接出错。由于超过 ``16000`` 的值在运行时并
-       不会被拒绝，届时只有映射会以 ``768`` 创建，从而导致维度不一致
+       不会被拒绝，届时只有映射会以 ``768`` 创建，从而导致维度不一致。映射的维度在索引创建之后无法
+       更改；对于在未设置该值的情况下创建的索引，恢复方法请参阅“注意事项”中的“在未设置维度的情况下
+       创建了索引”
    * - ``content_chunker.job.concurrency``
      - ``2``
      - 索引器任务的并行工作线程数
@@ -195,8 +198,9 @@ system.properties 配置
        ``cosinesimil``\ （会反映到映射中；更改需要重新创建索引）
    * - ``content_chunker.search.knn.k``
      - ``100``
-     - 每次 ANN 查询检索的邻居数量（由 |Fess| 执行融合时，深分页会自动放大；由搜索引擎执行
-       融合时按原值使用）
+     - 每次 ANN 查询在每个分片上检索的邻居数量。由 |Fess| 执行融合时，有效值不会低于
+       ``rank.fusion.window_size`` 除以搜索器数量（默认为 200 ÷ 2 = 100），因此更小的值不起作用。
+       由搜索引擎执行融合时按原值使用
    * - ``content_chunker.search.knn.param.ef_search``
      - （未设置）
      - ANN 查询的 ``ef_search`` 参数
@@ -219,6 +223,14 @@ system.properties 配置
    ``content_chunker.length.boundary.enabled`` 设为 ``false``\ ，或将两个百分比都设为 ``0``\ ，
    可完全复现此前的固定长度行为。修改这些设置只影响之后切分的文档：已经以分块数组形式
    保存的文档会保留原有边界，直到被重新爬取。
+
+.. note::
+
+   ``content_chunker.length.chunk_size`` 以字符数指定，但嵌入模型一次只能接收不超过其 token 上限的
+   文本。|Fess| 不会截断送去嵌入的文本，因此超出上限的部分可能不会反映到向量中。请根据所用模型的
+   输入上限来选择 ``chunk_size``\ 。例如，使用 ``paraphrase-multilingual-MiniLM-L12-v2``\ （最多
+   128 个 token）实测，反映到向量中的范围在英文中约为 440 个字符，在日文中约为 210 个字符（因文本
+   而异）。对于该模型，默认值 ``chunk_size=800`` 的分块的后面部分不会反映到向量中。
 
 .. note::
 
@@ -257,7 +269,8 @@ opensearch 提供商的连接配置
      - 连接超时（毫秒）
    * - ``content_chunker.embedding.opensearch.retry.max``
      - ``3``
-     - 针对瞬时错误（429、5xx 等）的重试次数
+     - 针对瞬时错误（429、5xx 等）的最大尝试次数（包含第一次）。它不是重试次数：\ ``3`` 表示总共最多
+       发出三次请求，中间等待两次。小于等于 ``1`` 表示不重试
    * - ``content_chunker.embedding.opensearch.retry.base.delay.ms``
      - ``2000``
      - 重试的基础退避延迟（毫秒）
@@ -436,9 +449,13 @@ Docker 为 ``/opt/fess/system.properties``\ 。以下各项均写入同一个文
      - 仅完成分块（仅分块模式）。除了 ``embedding.name=none`` 的情况之外，当 ``embedding.name``
        所指定的提供商对应的插件未安装时，也会进入此状态
    * - ``skipped``
-     - 处理被跳过（例如超过了 ``max_chunks_per_document``）
+     - 处理被跳过。包括正文为空（含仅有空白字符）的文档、没有生成任何分块的文档，以及超过
+       ``max_chunks_per_document`` 的文档。如果 ``content_chunker.chunker.name`` 指定了不存在的
+       分块器，则找不到分块器、不会生成分块，所有文档都会进入此状态。这是终止状态：重新运行任务
+       不会再次处理该文档
    * - ``fail``
-     - 处理失败（请检查日志）
+     - 处理失败（请检查日志）。这是终止状态：默认情况下，重新运行任务不会再次处理该文档。
+       将 ``content_chunker.job.retry_failed`` 设为 ``true`` 才会再次处理
 
 您可以直接查询搜索引擎来查看状态分布::
 
@@ -448,6 +465,28 @@ Docker 为 ``/opt/fess/system.properties``\ 。以下各项均写入同一个文
 
 借助 ``missing`` 选项，不带 ``content_chunk_status``\ （即尚未处理）的文档会被聚合到键名为
 ``pending`` 的分桶中。
+
+请根据 ``content_chunk_status`` 的这一数量分布来判断分块任务的状况。如果每次运行任务时
+``pending`` 都在减少、``done``\ （仅分块模式下为 ``chunked``\ ）都在增加，说明进展顺利。
+如果出现 ``fail``\ ，请在 |Fess| 日志中确认原因。对于正文为空的文档等，出现 ``skipped`` 是正常的，
+但如果几乎所有文档都是 ``skipped``\ ，请怀疑 ``content_chunker.chunker.name`` 有误（找不到分块器时
+会输出 ``Chunker not found`` 的 WARN 日志）。
+
+.. warning::
+
+   仅仅修正配置并不会让 ``skipped`` 和 ``fail`` 恢复原状。重新运行任务时不会选中 ``skipped``
+   文档（被重新爬取的文档会回到未处理状态），而 ``fail`` 文档只有在
+   ``content_chunker.job.retry_failed`` 为 ``true`` 时才会再次成为处理对象。例如，如果
+   ``content_chunker.chunker.name`` 有误的情况下运行了任务，导致所有文档都变成 ``skipped``\ ，
+   请在修正名称后，先按如下方式删除 ``content_chunk_status``\ ，再重新运行任务（``skipped``
+   文档的 ``content`` 没有被改写，因此可以直接重新处理）::
+
+       curl -XPOST "http://localhost:9200/fess.search/_update_by_query" \
+            -H "Content-Type: application/json" -d '
+       {
+         "query": {"term": {"content_chunk_status": "skipped"}},
+         "script": {"source": "ctx._source.remove(\"content_chunk_status\")"}
+       }'
 
 语义搜索的工作方式
 ====================
@@ -699,6 +738,36 @@ Vector Indexer** 会在启动时自动注册，但由于默认处于禁用状态
 2. 更改 ``content_chunker.embedding.dimension`` 以及所用提供商的模型设置。
 3. 按照“配置步骤”中的“3. 重新创建索引（在现有部署上启用时）”重新创建索引，并重新运行索引器
    任务。
+
+更换为维度相同的其他模型
+--------------------------
+
+将 ``content_chunker.embedding.opensearch.model.id`` 等嵌入模型设置更改为维度相同的其他模型时，
+|Fess| 不会报错也不会发出警告，直接接受。因为只检查维度，创建向量所用的模型并不会记录在索引中。
+此时已存储的向量由旧模型创建，而搜索时的查询向量由新模型创建，两者处于不同的向量空间，
+搜索结果的相关性会崩溃。此外，余弦相似度的数值分布因模型而异，按旧模型调整过的
+``content_chunker.search.min_score`` 对新模型可能过于严格，导致大部分结果被截掉。
+
+更换模型时，请先设置新模型，再用与上面“更改嵌入模型（维度）”步骤 1 相同的 ``_update_by_query``
+删除 ``content_chunk_vector`` 和 ``content_chunk_status``\ ，然后重新运行索引器任务，为所有文档
+重新生成向量（维度相同，因此无需重新创建索引）。如果设置了 ``content_chunker.search.min_score``\ ，
+请用新模型重新评估。
+
+在未设置维度的情况下创建了索引
+--------------------------------
+
+如果在 ``content_chunker.embedding.dimension`` 未设置的情况下创建 ``fess.search`` 索引，
+``content_chunk_vector`` 的映射会不带任何警告地采用 ``768`` 维，并且之后无法更改。
+此时运行索引器任务，执行嵌入处理时无法读取维度而出错，文档会变为 ``fail``\ 。
+
+- 如果所用模型的维度是 ``768``\ ，请设置 ``content_chunker.embedding.dimension=768``\ 。
+  它与映射一致，因此无需重新创建索引。
+- 否则，请设置正确的维度。在映射（``768``\ ）与设置值不一致期间，索引器任务会输出 ERROR 日志并
+  跳过本次运行。请按上面“更改嵌入模型（维度）”步骤 3 的相同方法重新创建索引。
+
+无论哪种情况，已经变为 ``fail`` 的文档都不会被自动重新处理。如果重新创建索引，上面“更改嵌入模型
+（维度）”步骤 1 的 ``_update_by_query`` 也会删除 ``content_chunk_status``\ 。如果不重新创建，
+请临时将 ``content_chunker.job.retry_failed`` 设为 ``true`` 后重新运行任务。
 
 磁盘使用量
 ----------

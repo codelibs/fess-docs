@@ -30,7 +30,7 @@ HTTP 메서드          GET
 .. list-table:: 요청 파라미터
 
    * - ``q``
-     - 검색어 (URL 인코딩).
+     - 검색어 (URL 인코딩). 최대 문자 수는 ``api.param.max.length`` (기본값 1000) 로 제한됩니다. 초과한 경우 ``invalid_request`` 오류 (HTTP 400) 가 됩니다. 이 제한은 검색 엔진의 제한과는 별개입니다.
    * - ``start``
      - 0 시작 시작 위치 (integer, ``>=0`` , 기본값 ``0`` ).
    * - ``offset``

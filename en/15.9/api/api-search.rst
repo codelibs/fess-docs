@@ -30,7 +30,7 @@ Request Parameters
 .. list-table:: Request Parameters
 
    * - ``q``
-     - Search term (URL-encoded).
+     - Search term (URL-encoded). The maximum length is limited by ``api.param.max.length`` (default 1000). Exceeding it results in an ``invalid_request`` error (HTTP 400). This limit is separate from the search engine's own limits.
    * - ``start``
      - Zero-based start position (integer, ``>=0``, default ``0``).
    * - ``offset``

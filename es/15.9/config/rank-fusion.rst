@@ -236,14 +236,21 @@ Tenga en cuenta lo siguiente cuando la fusión la realiza el motor de búsqueda.
 - ``rank.fusion.timeout`` no se aplica. El embedding de la consulta se calcula de forma síncrona
   antes de enviar la solicitud de búsqueda, por lo que un proveedor de embeddings lento o que no
   responde retrasa la búsqueda hasta el tiempo de espera propio del proveedor (por ejemplo,
-  ``content_chunker.embedding.ollama.timeout``).
+  ``content_chunker.embedding.ollama.timeout``). Si el proveedor reintenta, los reintentos se
+  suman a ese tiempo. Por ejemplo, el proveedor integrado ``opensearch`` repite una espera de
+  ``content_chunker.embedding.opensearch.timeout`` (``60000`` ms de forma predeterminada) hasta
+  ``content_chunker.embedding.opensearch.retry.max`` (``3`` de forma predeterminada) veces, por
+  lo que un proveedor que no responde puede retrasar una búsqueda 180 segundos de forma
+  predeterminada, más las esperas entre reintentos.
 - ``rank.fusion.window_size`` y ``rank.fusion.threads`` solo se utilizan cuando la fusión la
   realiza |Fess|.
 - Una búsqueda fusionada puede paginar como máximo ``rank.fusion.pagination_depth`` resultados,
   porque el motor de búsqueda solo fusiona los primeros ``rank.fusion.pagination_depth``
   resultados de cada buscador por shard. El número de páginas, el enlace a la página siguiente y
-  los números de página se detienen ahí, y una página que empieza más allá se rechaza con el mismo
-  error que, en cualquier otra búsqueda, una página más allá de ``index.max_result_window``. Una
+  los números de página se detienen ahí, y una página cuya posición inicial (``start``) es
+  ``rank.fusion.pagination_depth`` o mayor se rechaza con el mismo error que, en cualquier otra
+  búsqueda, una página más allá de ``index.max_result_window`` (en la API de búsqueda v2, HTTP 400
+  con ``invalid_request``). Una
   página que empieza después del último resultado fusionado pero dentro de ese límite (por
   ejemplo, desde un enlace obsoleto) se devuelve vacía. Las búsquedas que no se fusionan en el
   motor de búsqueda pueden paginar hasta ``index.max_result_window``, como antes.
@@ -331,8 +338,18 @@ híbrida está habilitada o no.
 
 Tenga en cuenta que, si el número total de resultados del buscador principal se devuelve como un
 valor aproximado (un límite inferior), esta corrección no se aplica.
-Cuando la fusión la realiza el motor de búsqueda, el número total de resultados es el del conjunto
-de resultados fusionado (consulte :ref:`rank-fusion-engine`).
+Los recuentos de facetas (etiquetas, etc.) también se toman tal cual de los resultados del buscador
+principal.
+
+Cuando la fusión la realiza el motor de búsqueda (consulte :ref:`rank-fusion-engine`), el número
+total de resultados y los recuentos de facetas abarcan la unión de los resultados de la búsqueda
+por palabras clave y de la búsqueda semántica. Cada buscador aporta como máximo
+``rank.fusion.pagination_depth`` resultados por shard, y el buscador semántico está limitado
+además por ``content_chunker.search.knn.k``. Por ello, una misma consulta informa un número
+total de resultados y unos recuentos de facetas distintos según ``rank.fusion.engine.enabled``, y
+en un índice pequeño suelen
+ser mayores cuando la fusión la realiza el motor de búsqueda, porque la búsqueda semántica aporta
+sus resultados.
 
 Ejemplos de uso
 ===============

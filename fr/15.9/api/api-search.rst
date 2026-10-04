@@ -30,7 +30,7 @@ Paramètres de requête
 .. list-table:: Paramètres de requête
 
    * - ``q``
-     - Terme de recherche (encodé en URL).
+     - Terme de recherche (encodé en URL). La longueur maximale est limitée par ``api.param.max.length`` (valeur par défaut 1000). La dépasser entraîne une erreur ``invalid_request`` (HTTP 400). Cette limite est distincte de celles du moteur de recherche.
    * - ``start``
      - Position de départ à base zéro (entier, ``>=0``, valeur par défaut ``0``).
    * - ``offset``
