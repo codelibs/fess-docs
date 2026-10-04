@@ -48,6 +48,7 @@ Admin API 레퍼런스
    :caption: 검색 튜닝
 
    api-admin-labeltype
+   api-admin-tagtype
    api-admin-keymatch
    api-admin-boostdoc
    api-admin-elevateword

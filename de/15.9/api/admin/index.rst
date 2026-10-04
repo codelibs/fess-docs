@@ -48,6 +48,7 @@ Admin API Referenz
    :caption: Such-Tuning
 
    api-admin-labeltype
+   api-admin-tagtype
    api-admin-keymatch
    api-admin-boostdoc
    api-admin-elevateword

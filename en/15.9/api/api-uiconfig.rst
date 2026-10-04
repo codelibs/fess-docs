@@ -197,7 +197,7 @@ All fields are required.
      - Whether search result export (``GET /api/v2/documents/export``) is enabled (``api.search.export``).
    * - ``user_tag``
      - boolean
-     - Whether tags (``/api/v2/documents/{docId}/tags``) are enabled (``user.tag.enabled``).
+     - Whether per-user tags are enabled (``user.tag.enabled``): the tag endpoints (``/api/v2/tags``, ``/api/v2/documents/{docId}/tags``) answer and search hits carry ``tags``.
    * - ``popular_word``
      - boolean
      - Whether the popular word feature is enabled.

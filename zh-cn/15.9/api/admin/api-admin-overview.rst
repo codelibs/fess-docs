@@ -449,6 +449,8 @@ Admin API在大多数情况下返回 HTTP 状态 ``200``，处理结果通过响
      - 说明
    * - :doc:`api-admin-labeltype`
      - 标签类型
+   * - :doc:`api-admin-tagtype`
+     - 用户标签
    * - :doc:`api-admin-keymatch`
      - 关键词匹配
    * - :doc:`api-admin-boostdoc`

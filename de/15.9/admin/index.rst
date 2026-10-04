@@ -28,6 +28,7 @@ Rollen bis zu Protokollen und Sicherungen.
    fileconfig-guide
    dataconfig-guide
    labeltype-guide
+   tagtype-guide
    keymatch-guide
    boostdoc-guide
    relatedcontent-guide

@@ -452,6 +452,8 @@ Search Tuning
      - Description
    * - :doc:`api-admin-labeltype`
      - Label types
+   * - :doc:`api-admin-tagtype`
+     - Tags
    * - :doc:`api-admin-keymatch`
      - Key match
    * - :doc:`api-admin-boostdoc`

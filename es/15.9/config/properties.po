@@ -573,6 +573,9 @@ msgstr ""
 msgid "Field name for label in the index."
 msgstr ""
 
+msgid "Field name for the user tags of the document in the index."
+msgstr ""
+
 msgid "Field name for MIME type in the index."
 msgstr ""
 
@@ -1122,6 +1125,27 @@ msgstr ""
 msgid "Maximum queue size for click logging."
 msgstr ""
 
+msgid "Whether logged-in users can tag documents. Each tag belongs to the user who created it."
+msgstr ""
+
+msgid "Maximum length of a tag name, in code points."
+msgstr ""
+
+msgid "Maximum number of tags one user can own."
+msgstr ""
+
+msgid "Maximum number of URLs one tag can be put on."
+msgstr ""
+
+msgid "Maximum number of pending tag changes held in memory until they are applied to the documents."
+msgstr ""
+
+msgid "Number of URLs updated per bulk request when tag changes are applied to the documents."
+msgstr ""
+
+msgid "Maximum number of tags visible to one user in a search."
+msgstr ""
+
 msgid "Web"
 msgstr ""
 
@@ -1237,6 +1261,9 @@ msgid "Maximum number of keymatch records to fetch per page."
 msgstr ""
 
 msgid "Maximum number of labeltype records to fetch per page."
+msgstr ""
+
+msgid "Maximum number of tagtype records to fetch per page."
 msgstr ""
 
 msgid "Maximum number of roletype records to fetch per page."
@@ -1543,6 +1570,9 @@ msgid "Online help key for file authentication."
 msgstr ""
 
 msgid "Online help key for label type."
+msgstr ""
+
+msgid "Online help key for tag type."
 msgstr ""
 
 msgid "Online help key for duplicate host."

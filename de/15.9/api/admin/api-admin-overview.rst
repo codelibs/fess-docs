@@ -450,6 +450,8 @@ Such-Tuning
      - Beschreibung
    * - :doc:`api-admin-labeltype`
      - Label-Typen
+   * - :doc:`api-admin-tagtype`
+     - Tags
    * - :doc:`api-admin-keymatch`
      - Key Match
    * - :doc:`api-admin-boostdoc`

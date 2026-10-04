@@ -197,7 +197,7 @@ Todos los campos son obligatorios.
      - Si la exportación de resultados de búsqueda (``GET /api/v2/documents/export``) está habilitada (``api.search.export``).
    * - ``user_tag``
      - boolean
-     - Si las etiquetas de usuario (``/api/v2/documents/{docId}/tags``) están habilitadas (``user.tag.enabled``).
+     - Si las etiquetas de usuario están habilitadas (``user.tag.enabled``): los endpoints de etiquetas (``/api/v2/tags``, ``/api/v2/documents/{docId}/tags``) responden y los resultados de búsqueda incluyen ``tags``.
    * - ``popular_word``
      - boolean
      - Si la función de palabras populares está habilitada.

@@ -85,46 +85,11 @@ Anzeigereihenfolge
 
 Geben Sie die Anzeigereihenfolge der Labels an.
 
-Art
-:::
-
-Geben Sie „Label“ oder „Tag“ an. Ein gewöhnliches Label ist „Label“. „Tag“ ist ein Tag, den Benutzer
-auf der Suchseite hinzufügen (siehe „Tags“ unten). Ein bestehendes Label ohne Art wird als „Label“
-behandelt.
-
-
 Konfiguration löschen
 ---------------------
 
 Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
-
-Tags
-----
-
-Mit ``user.tag.enabled=true`` (Standard: ``false``) in ``fess_config.properties`` können
-angemeldete Benutzer Suchergebnisse taggen. Im mitgelieferten Theme ``bootstrap`` werden Tags an den
-Ergebnissen angezeigt, Benutzer können Tags hinzufügen und eigene entfernen, und eine Facette „Tags“
-grenzt die Ergebnisse ein. Zur API siehe :doc:`../api/api-tag`.
-
-Ein Tag wird als Label der Art „Tag“ gespeichert: Der Name ist der Tag-Name, der Wert der SHA-256
-des Namens, die eingeschlossenen Pfade sind die getaggten URLs (eine je Zeile, exakte
-Übereinstimmung), und die Berechtigungen bestimmen, wer das Tag sehen kann. Ein Benutzer, der ein Tag
-hinzufügt, wird zu dessen Berechtigungen hinzugefügt.
-
-- Ein Tag ist nur sichtbar, wenn die Berechtigungen seines Labels auf den Aufrufer zutreffen.
-  Administratoren können ein Tag auf dieser Seite bearbeiten, um es mit einer Rolle oder Gruppe zu
-  teilen, oder es löschen.
-- Tags mit gleichem Namen werden zu einem Label zusammengeführt; Benutzer, die ein Tag gleichen
-  Namens hinzugefügt haben, sehen daher gegenseitig, wo ihre Tags gesetzt sind.
-- Tags erscheinen weder in der Label-Listen-API (``/api/v2/labels``) noch in der Label-Auswahl der
-  Suchseite.
-- Tags zählen zum Label-Limit (``page.labeltype.max.fetch.size``, Standard: 1000). Ist das Limit
-  erreicht, kann kein neues Tag erstellt werden.
-- Ändert oder löscht ein Administrator ein Tag auf dieser Seite, behalten die indexierten Dokumente die
-  alten Werte, bis sie erneut gecrawlt werden oder der Job „Label Updater“ läuft.
-- Ein Dokument kann bis zu ``user.tag.max.document.tags`` (Standard: 100) Tags haben, ein Tag-Name bis
-  zu ``user.tag.name.max.length`` (Standard: 50) Zeichen.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/labeltype-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/labeltype-2.png

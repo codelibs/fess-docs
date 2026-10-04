@@ -197,7 +197,7 @@ features
      - 搜索结果导出（ ``GET /api/v2/documents/export`` ）是否启用（ ``api.search.export`` ）。
    * - ``user_tag``
      - boolean
-     - 用户标签功能（ ``/api/v2/documents/{docId}/tags`` ）是否启用（ ``user.tag.enabled`` ）。
+     - 是否启用了按用户管理的用户标签（ ``user.tag.enabled`` ）。启用时，用户标签端点（ ``/api/v2/tags`` 、 ``/api/v2/documents/{docId}/tags`` ）可用，搜索命中中包含 ``tags`` 。
    * - ``popular_word``
      - boolean
      - 热门词功能是否启用。
