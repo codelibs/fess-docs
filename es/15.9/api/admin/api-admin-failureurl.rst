@@ -257,8 +257,10 @@ Obtener Lista de URLs Fallidas
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 100, "page": 1}'
 
 Filtrar por Número de Errores
 -----------------------------
@@ -266,17 +268,21 @@ Filtrar por Número de Errores
 .. code-block:: bash
 
     # Obtener solo URLs con 3 o mas errores
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorCountMin=3" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_count_min": 3}'
 
 Filtrar por Nombre de Error
 ---------------------------
 
 .. code-block:: bash
 
-    # errorName almacena el nombre de clase completamente calificado, por lo que debe especificarse con un comodin
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    # error_name almacena el nombre de clase completamente calificado, por lo que debe especificarse con un comodin
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_name": "*ConnectException"}'
 
 Obtener URL Fallida
 -------------------
@@ -308,8 +314,10 @@ Agregación por Tipo de Error
 .. code-block:: bash
 
     # Contar por tipo de error
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
          jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
 
 Información de Referencia

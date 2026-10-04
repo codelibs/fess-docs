@@ -257,8 +257,10 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 100, "page": 1}'
 
 오류 횟수로 필터링
 ----------------------
@@ -266,17 +268,21 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
 .. code-block:: bash
 
     # 3회 이상 오류가 발생한 URL만 조회
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorCountMin=3" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_count_min": 3}'
 
 오류 이름으로 필터링
 --------------------
 
 .. code-block:: bash
 
-    # errorName에는 완전한정 클래스명을 저장하므로 와일드카드를 사용하여 지정합니다
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    # error_name에는 완전한정 클래스명을 저장하므로 와일드카드를 사용하여 지정합니다
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_name": "*ConnectException"}'
 
 실패 URL 조회
 -------------
@@ -308,8 +314,10 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
 .. code-block:: bash
 
     # 오류 타입별 카운트
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
          jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
 
 참고 정보

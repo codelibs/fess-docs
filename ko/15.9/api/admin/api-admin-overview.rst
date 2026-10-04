@@ -124,6 +124,8 @@ Admin API에 대한 접근은 기능별이 아니라 단일 권한 세트로 제
      - Integer
      - 페이지 번호 (1부터 시작. 기본값: 1. 0 이하를 지정한 경우 1로 처리됩니다)
 
+이 파라미터와 각 리소스의 필터 파라미터는 snake_case 키를 사용하는 JSON 요청 본문(예: ``{"size": 50, "page": 1}``)으로 지정합니다. URL 쿼리 문자열로 지정한 값은 무시됩니다.
+
 응답
 ~~~~~~~~~~~~
 
@@ -549,8 +551,10 @@ Web 크롤링 설정 만들기
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/user/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 참고 정보
 ============

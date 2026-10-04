@@ -124,6 +124,8 @@ Admin API的访问不是按功能控制的，而是由单一的权限集控制�
      - Integer
      - 页码（从1开始。默认：1。指定0以下的值时按1处理）
 
+这些参数以及各资源的筛选参数，需在键为 snake_case 的 JSON 请求体中指定（例如 ``{"size": 50, "page": 1}``）。在 URL 查询字符串中指定的值会被忽略。
+
 响应
 ~~~~~~~~
 
@@ -548,8 +550,10 @@ Admin API在大多数情况下返回 HTTP 状态 ``200``，处理结果通过响
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/user/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 参考信息
 ==========

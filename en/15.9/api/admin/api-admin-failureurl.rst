@@ -260,8 +260,10 @@ List Failure URLs
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 100, "page": 1}'
 
 Filter by Error Count
 ---------------------
@@ -269,17 +271,21 @@ Filter by Error Count
 .. code-block:: bash
 
     # Get only URLs with 3 or more errors
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorCountMin=3" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_count_min": 3}'
 
 Filter by Error Name
 --------------------
 
 .. code-block:: bash
 
-    # errorName stores the fully-qualified class name, so specify it with a wildcard
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    # error_name stores the fully-qualified class name, so specify it with a wildcard
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_name": "*ConnectException"}'
 
 Get Failure URL
 ---------------
@@ -311,8 +317,10 @@ Aggregate by Error Type
 .. code-block:: bash
 
     # Count by error type
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
          jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
 
 Reference

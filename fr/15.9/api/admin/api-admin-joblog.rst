@@ -206,8 +206,10 @@ Obtention de la liste des journaux de tâches
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 Extraction des tâches en échec uniquement
 -----------------------------------------
@@ -215,9 +217,11 @@ Extraction des tâches en échec uniquement
 .. code-block:: bash
 
     # Filtrer les taches en echec avec jq
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs[] | select(.jobStatus=="fail")'
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs[] | select(.job_status=="fail")'
 
 Obtention d'un journal de tâche
 --------------------------------
@@ -240,9 +244,11 @@ Calcul du taux de réussite des tâches
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs | {total: length, ok: [.[] | select(.job_status=="ok")] | length, fail: [.[] | select(.job_status=="fail")] | length}'
 
 Informations complémentaires
 ============================

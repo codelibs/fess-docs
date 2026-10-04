@@ -382,8 +382,10 @@ List the Tags of a User
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/tagtype/settings?owner=alice&size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/tagtype/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"owner": "alice", "size": 50, "page": 1}'
 
 See Also
 ========

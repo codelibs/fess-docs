@@ -206,8 +206,10 @@ JobLog API는 |Fess| 의 작업 실행 로그를 참조 및 관리하기 위한 
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 실패한 작업만 추출
 ----------------------
@@ -215,9 +217,11 @@ JobLog API는 |Fess| 의 작업 실행 로그를 참조 및 관리하기 위한 
 .. code-block:: bash
 
     # jq로 실패한 작업을 필터링
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs[] | select(.jobStatus=="fail")'
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs[] | select(.job_status=="fail")'
 
 작업 로그 조회
 ----------------
@@ -240,9 +244,11 @@ JobLog API는 |Fess| 의 작업 실행 로그를 참조 및 관리하기 위한 
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs | {total: length, ok: [.[] | select(.job_status=="ok")] | length, fail: [.[] | select(.job_status=="fail")] | length}'
 
 참고 정보
 =========

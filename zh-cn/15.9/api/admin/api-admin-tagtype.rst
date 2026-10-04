@@ -357,8 +357,10 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/tagtype/settings?owner=alice&size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/tagtype/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"owner": "alice", "size": 50, "page": 1}'
 
 参考信息
 ========

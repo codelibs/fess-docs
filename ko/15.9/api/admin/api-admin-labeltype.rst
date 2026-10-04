@@ -349,8 +349,10 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/labeltype/settings?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/labeltype/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 라벨을 사용한 검색
 --------------------

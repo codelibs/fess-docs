@@ -260,8 +260,10 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 100, "page": 1}'
 
 エラー回数でフィルター
 ----------------------
@@ -269,17 +271,21 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
 .. code-block:: bash
 
     # 3回以上エラーが発生したURLのみ取得
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorCountMin=3" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_count_min": 3}'
 
 エラー名でフィルター
 --------------------
 
 .. code-block:: bash
 
-    # errorName には完全修飾クラス名が格納されるため、ワイルドカードで指定する
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    # error_name には完全修飾クラス名が格納されるため、ワイルドカードで指定する
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_name": "*ConnectException"}'
 
 障害URLの取得
 -------------
@@ -311,8 +317,10 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
 .. code-block:: bash
 
     # エラータイプごとにカウント
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
          jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
 
 参考情報
