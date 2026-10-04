@@ -85,49 +85,11 @@ Orden de clasificación
 
 Especifique el orden de clasificación de las etiquetas.
 
-Tipo
-::::
-
-Indique "Etiqueta" o "Etiqueta de usuario". Una etiqueta normal es "Etiqueta". "Etiqueta de usuario"
-es una etiqueta que los usuarios añaden desde la pantalla de búsqueda (consulte "Etiquetas de
-usuario" más abajo). Una etiqueta existente sin tipo se trata como "Etiqueta".
-
-
 Eliminar configuración
 ----------------------
 
 Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
 Al presionar el botón de eliminar, se eliminará la configuración.
-
-Etiquetas de usuario
---------------------
-
-Con ``user.tag.enabled=true`` (predeterminado: ``false``) en ``fess_config.properties``, los
-usuarios que han iniciado sesión pueden etiquetar los resultados de búsqueda. En el tema incluido
-``bootstrap``, las etiquetas se muestran en los resultados, los usuarios pueden añadir etiquetas y
-quitar las suyas, y una faceta "Etiquetas" acota los resultados. Para la API, consulte
-:doc:`../api/api-tag`.
-
-Una etiqueta de usuario se guarda como una etiqueta del tipo "Etiqueta de usuario": el nombre es el
-nombre de la etiqueta, el valor es el SHA-256 del nombre, las rutas incluidas son las URL etiquetadas
-(una por línea, coincidencia exacta) y los permisos deciden quién puede verla. El usuario que añade
-una etiqueta se agrega a sus permisos.
-
-- Una etiqueta solo es visible cuando los permisos de su etiqueta coinciden con quien llama. Los
-  administradores pueden editarla en esta página para compartirla con un rol o un grupo, o
-  eliminarla.
-- Las etiquetas con el mismo nombre se combinan en una sola, por lo que los usuarios que añadieron una
-  etiqueta con el mismo nombre ven dónde están las etiquetas de los demás.
-- Las etiquetas de usuario no se incluyen en la API de lista de etiquetas (``/api/v2/labels``) ni en
-  las opciones de etiqueta de la pantalla de búsqueda.
-- Cuentan para el límite de etiquetas (``page.labeltype.max.fetch.size``, predeterminado: 1000). Al
-  alcanzarlo, no se pueden crear nuevas.
-- Después de que un administrador cambie o elimine una etiqueta de usuario en esta página, los
-  documentos indexados conservan los valores anteriores hasta que se vuelven a rastrear o se ejecuta
-  el trabajo "Label Updater".
-- Un documento puede tener hasta ``user.tag.max.document.tags`` (predeterminado: 100) etiquetas de
-  usuario, y un nombre puede tener hasta ``user.tag.name.max.length`` (predeterminado: 50)
-  caracteres.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/labeltype-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/labeltype-2.png

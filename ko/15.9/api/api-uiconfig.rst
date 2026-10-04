@@ -197,7 +197,7 @@ features
      - 검색 결과 내보내기( ``GET /api/v2/documents/export`` )가 활성화되어 있는지 여부( ``api.search.export`` ).
    * - ``user_tag``
      - boolean
-     - 태그 기능( ``/api/v2/documents/{docId}/tags`` )이 활성화되어 있는지 여부( ``user.tag.enabled`` ).
+     - 사용자별 태그가 활성화되어 있는지 여부( ``user.tag.enabled`` ). 활성화되어 있으면 태그 엔드포인트( ``/api/v2/tags`` , ``/api/v2/documents/{docId}/tags`` )가 응답하고 검색 히트에 ``tags`` 가 포함됩니다.
    * - ``popular_word``
      - boolean
      - 인기 검색어 기능이 활성화되어 있는지 여부.

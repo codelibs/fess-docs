@@ -48,6 +48,7 @@ Admin API 参考手册
    :caption: 搜索调优
 
    api-admin-labeltype
+   api-admin-tagtype
    api-admin-keymatch
    api-admin-boostdoc
    api-admin-elevateword

@@ -753,6 +753,9 @@ Index
   * - index.field.label
     - Field name for label in the index.
     - ``label``
+  * - index.field.tag
+    - Field name for the user tags of the document in the index.
+    - ``tag``
   * - index.field.mimetype
     - Field name for MIME type in the index.
     - ``mimetype``
@@ -1458,6 +1461,27 @@ Index
   * - logging.click.max.queue.size
     - Maximum queue size for click logging.
     - ``10000``
+  * - user.tag.enabled
+    - Whether logged-in users can tag documents. Each tag belongs to the user who created it.
+    - ``false``
+  * - user.tag.name.max.length
+    - Maximum length of a tag name, in code points.
+    - ``50``
+  * - user.tag.max.tags
+    - Maximum number of tags one user can own.
+    - ``1000``
+  * - user.tag.max.paths
+    - Maximum number of URLs one tag can be put on.
+    - ``10000``
+  * - user.tag.queue.max.size
+    - Maximum number of pending tag changes held in memory until they are applied to the documents.
+    - ``10000``
+  * - user.tag.process.batch.size
+    - Number of URLs updated per bulk request when tag changes are applied to the documents.
+    - ``100``
+  * - user.tag.visible.max.size
+    - Maximum number of tags visible to one user in a search.
+    - ``1000``
 
 Web
 ---
@@ -1585,6 +1609,9 @@ Web
     - ``1000``
   * - page.labeltype.max.fetch.size
     - Maximum number of labeltype records to fetch per page.
+    - ``1000``
+  * - page.tagtype.max.fetch.size
+    - Maximum number of tagtype records to fetch per page.
     - ``1000``
   * - page.roletype.max.fetch.size
     - Maximum number of roletype records to fetch per page.
@@ -1900,6 +1927,9 @@ Web
   * - online.help.name.labeltype
     - Online help key for label type.
     - ``labeltype``
+  * - online.help.name.tagtype
+    - Online help key for tag type.
+    - ``tagtype``
   * - online.help.name.duplicatehost
     - Online help key for duplicate host.
     - ``duplicatehost``
@@ -2265,7 +2295,7 @@ Web
     - ``/var/lib/fess/export``
   * - index.export.exclude.fields
     - Comma-separated document fields omitted from files written by the index export job.
-    - ``cache``
+    - ``cache,tag``
   * - index.export.scroll.size
     - Number of documents fetched per scroll request by the index export job.
     - ``100``

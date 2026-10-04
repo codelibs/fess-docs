@@ -197,7 +197,7 @@ Alle Felder sind Pflichtfelder.
      - Ob der Export von Suchergebnissen (``GET /api/v2/documents/export``) aktiviert ist (``api.search.export``).
    * - ``user_tag``
      - boolean
-     - Ob Tags (``/api/v2/documents/{docId}/tags``) aktiviert sind (``user.tag.enabled``).
+     - Ob benutzereigene Tags aktiviert sind (``user.tag.enabled``): Die Tag-Endpunkte (``/api/v2/tags``, ``/api/v2/documents/{docId}/tags``) antworten, und Suchtreffer enthalten ``tags``.
    * - ``popular_word``
      - boolean
      - Gibt an, ob die Beliebte-Wörter-Funktion aktiviert ist.

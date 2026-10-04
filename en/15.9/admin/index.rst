@@ -28,6 +28,7 @@ logs, and backups.
    fileconfig-guide
    dataconfig-guide
    labeltype-guide
+   tagtype-guide
    keymatch-guide
    boostdoc-guide
    relatedcontent-guide

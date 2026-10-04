@@ -197,7 +197,7 @@ features
      - 検索結果のエクスポート（ ``GET /api/v2/documents/export`` ）が有効かどうか（ ``api.search.export`` ）。
    * - ``user_tag``
      - boolean
-     - タグ機能（ ``/api/v2/documents/{docId}/tags`` ）が有効かどうか（ ``user.tag.enabled`` ）。
+     - ユーザーごとのタグ（ ``/api/v2/tags`` 、 ``/api/v2/documents/{docId}/tags`` ）が有効で、検索結果のヒットに ``tags`` が付くかどうか（ ``user.tag.enabled`` ）。
    * - ``popular_word``
      - boolean
      - 人気ワード機能が有効かどうか。

@@ -48,6 +48,7 @@ Admin API Reference
    :caption: Search Tuning
 
    api-admin-labeltype
+   api-admin-tagtype
    api-admin-keymatch
    api-admin-boostdoc
    api-admin-elevateword

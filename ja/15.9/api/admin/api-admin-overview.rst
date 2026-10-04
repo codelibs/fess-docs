@@ -450,6 +450,8 @@ Admin APIは、ほとんどの場合 HTTP ステータス ``200`` を返し、�
      - 説明
    * - :doc:`api-admin-labeltype`
      - ラベルタイプ
+   * - :doc:`api-admin-tagtype`
+     - タグ
    * - :doc:`api-admin-keymatch`
      - キーマッチ
    * - :doc:`api-admin-boostdoc`

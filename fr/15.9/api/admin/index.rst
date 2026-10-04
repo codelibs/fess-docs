@@ -48,6 +48,7 @@ L'API d'administration |Fess| est une API RESTful permettant d'accéder aux fonc
    :caption: Optimisation de la recherche
 
    api-admin-labeltype
+   api-admin-tagtype
    api-admin-keymatch
    api-admin-boostdoc
    api-admin-elevateword

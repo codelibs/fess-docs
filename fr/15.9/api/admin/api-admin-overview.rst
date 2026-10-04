@@ -454,6 +454,8 @@ Optimisation de la recherche
      - Description
    * - :doc:`api-admin-labeltype`
      - Types de labels
+   * - :doc:`api-admin-tagtype`
+     - Tags
    * - :doc:`api-admin-keymatch`
      - Key Match
    * - :doc:`api-admin-boostdoc`

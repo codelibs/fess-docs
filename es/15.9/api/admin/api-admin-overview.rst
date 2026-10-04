@@ -451,6 +451,8 @@ Ajuste de Búsqueda
      - Descripción
    * - :doc:`api-admin-labeltype`
      - Tipos de etiqueta
+   * - :doc:`api-admin-tagtype`
+     - Etiquetas de usuario
    * - :doc:`api-admin-keymatch`
      - Coincidencia de claves
    * - :doc:`api-admin-boostdoc`

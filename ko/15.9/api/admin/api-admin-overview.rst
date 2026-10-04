@@ -450,6 +450,8 @@ Admin API는 대부분의 경우 HTTP 상태 ``200`` 을 반환하며, 처리 �
      - 설명
    * - :doc:`api-admin-labeltype`
      - 라벨 타입
+   * - :doc:`api-admin-tagtype`
+     - 태그
    * - :doc:`api-admin-keymatch`
      - 키 매치
    * - :doc:`api-admin-boostdoc`
