@@ -10,18 +10,18 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
 検索結果の上位に表示されやすくできます。
 
 ブーストはインデックス作成時（クロール時）に各ドキュメントへ適用されます。
-条件（``urlExpr``）とブースト値（``boostExpr``）は、``scriptType`` フィールドで指定したスクリプトエンジンの式として評価されます。
-``scriptType`` に指定できるのは ``javascript`` と ``groovy``\ （``fess-script-groovy`` プラグインが必要）です。管理画面の新規作成画面では
-``scriptType`` に ``javascript`` があらかじめ入力されますが、このAPIのリクエストボディで ``scriptType`` を省略した場合は
+条件（``url_expr``）とブースト値（``boost_expr``）は、``script_type`` フィールドで指定したスクリプトエンジンの式として評価されます。
+``script_type`` に指定できるのは ``javascript`` と ``groovy``\ （``fess-script-groovy`` プラグインが必要）です。管理画面の新規作成画面では
+``script_type`` に ``javascript`` があらかじめ入力されますが、このAPIのリクエストボディで ``script_type`` を省略した場合は
 自動補完されず、Groovyとして評価されます。
-複数のルールは ``sortOrder`` の昇順で評価され、最初に条件が一致したルールのブースト値のみが適用されます
+複数のルールは ``sort_order`` の昇順で評価され、最初に条件が一致したルールのブースト値のみが適用されます
 （一致したルールが見つかると、それ以降のルールは評価されません）。
 
 .. note::
 
-   管理画面では、``urlExpr`` は「条件」、``boostExpr`` は「ブースト値式」、``scriptType`` は「スクリプト種別」として表示されます。
-   ``scriptType`` は作成・更新・取得（一覧・詳細）のリクエストボディおよびレスポンスにのみ含まれ、
-   一覧取得のフィルタパラメーター（``urlExpr``、``boostExpr``）には含まれません。
+   管理画面では、``url_expr`` は「条件」、``boost_expr`` は「ブースト値式」、``script_type`` は「スクリプト種別」として表示されます。
+   ``script_type`` は作成・更新・取得（一覧・詳細）のリクエストボディおよびレスポンスにのみ含まれ、
+   一覧取得のフィルタパラメーター（``url_expr``、``boost_expr``）には含まれません。
    設定項目の詳細は :doc:`../../admin/boostdoc-guide` を参照してください。
 
 ベースURL
@@ -92,11 +92,11 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
      - Integer
      - いいえ
      - ページ番号（1から開始。デフォルト: 1）
-   * - ``urlExpr``
+   * - ``url_expr``
      - String
      - いいえ
      - 条件式による絞り込み（部分一致）
-   * - ``boostExpr``
+   * - ``boost_expr``
      - String
      - いいえ
      - ブースト値式による絞り込み（部分一致）
@@ -112,11 +112,11 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
         "settings": [
           {
             "id": "boostdoc_id_1",
-            "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-            "boostExpr": "3.0",
-            "scriptType": "javascript",
-            "sortOrder": 1,
-            "versionNo": 1
+            "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+            "boost_expr": "3.0",
+            "script_type": "javascript",
+            "sort_order": 1,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -126,8 +126,8 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
 .. note::
 
    レスポンスの各設定オブジェクトには、上記フィールドに加えて、作成・更新に関するメタデータ
-   （``createdBy``、``createdTime``、``updatedBy``、``updatedTime``）も含まれます。
-   ``versionNo`` は更新（PUT）時に必須となるため、更新前に取得・一覧APIで現在の値を確認してください。
+   （``created_by``、``created_time``、``updated_by``、``updated_time``）も含まれます。
+   ``version_no`` は更新（PUT）時に必須となるため、更新前に取得・一覧APIで現在の値を確認してください。
 
 ドキュメントブースト取得
 ========================
@@ -149,11 +149,11 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
         "status": 0,
         "setting": {
           "id": "boostdoc_id_1",
-          "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-          "boostExpr": "3.0",
-          "scriptType": "javascript",
-          "sortOrder": 1,
-          "versionNo": 1
+          "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+          "boost_expr": "3.0",
+          "script_type": "javascript",
+          "sort_order": 1,
+          "version_no": 1
         }
       }
     }
@@ -175,10 +175,10 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
 .. code-block:: json
 
     {
-      "urlExpr": "url.startsWith(\"https://important.example.com/\")",
-      "boostExpr": "5.0",
-      "scriptType": "javascript",
-      "sortOrder": 0
+      "url_expr": "url.startsWith(\"https://important.example.com/\")",
+      "boost_expr": "5.0",
+      "script_type": "javascript",
+      "sort_order": 0
     }
 
 フィールド説明
@@ -191,16 +191,16 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
    * - フィールド
      - 必須
      - 説明
-   * - ``urlExpr``
+   * - ``url_expr``
      - はい
      - 条件式。ブースト対象のドキュメントを判定するスクリプト式で、``Boolean`` を返します。管理画面の「条件」に相当します（最大10000文字）。
-   * - ``boostExpr``
+   * - ``boost_expr``
      - はい
      - ブースト値式。ブースト値（数値）を返すスクリプト式です。\ ``3.0`` のような固定値も指定できます。管理画面の「ブースト値式」に相当します（最大10000文字）。
-   * - ``scriptType``
+   * - ``script_type``
      - いいえ
-     - ``urlExpr`` と ``boostExpr`` を評価するスクリプトエンジン。\ ``javascript`` または ``groovy``\ （``fess-script-groovy`` プラグインが必要）を指定します。管理画面の「スクリプト種別」に相当します（最大100文字）。省略した場合はGroovyとして評価されます。
-   * - ``sortOrder``
+     - ``url_expr`` と ``boost_expr`` を評価するスクリプトエンジン。\ ``javascript`` または ``groovy``\ （``fess-script-groovy`` プラグインが必要）を指定します。管理画面の「スクリプト種別」に相当します（最大100文字）。省略した場合はGroovyとして評価されます。
+   * - ``sort_order``
      - はい
      - 適用順序。ルールは昇順で評価され、最初に条件が一致したルールのブースト値が適用されます（フォーム初期値: 0、0以上の整数）。
 
@@ -235,15 +235,15 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
 
     {
       "id": "existing_boostdoc_id",
-      "urlExpr": "url.startsWith(\"https://important.example.com/\")",
-      "boostExpr": "10.0",
-      "scriptType": "javascript",
-      "sortOrder": 0,
-      "versionNo": 1
+      "url_expr": "url.startsWith(\"https://important.example.com/\")",
+      "boost_expr": "10.0",
+      "script_type": "javascript",
+      "sort_order": 0,
+      "version_no": 1
     }
 
-更新時は、作成時のフィールドに加えて ``id``\ （更新対象のID、最大1000文字）と ``versionNo``\ （楽観的ロック用のバージョン番号）が必須です。
-``versionNo`` には、取得・一覧APIのレスポンスに含まれる現在のバージョン番号を指定します。バージョン番号が一致しない場合、更新は失敗します。
+更新時は、作成時のフィールドに加えて ``id``\ （更新対象のID、最大1000文字）と ``version_no``\ （楽観的ロック用のバージョン番号）が必須です。
+``version_no`` には、取得・一覧APIのレスポンスに含まれる現在のバージョン番号を指定します。バージョン番号が一致しない場合、更新は失敗します。
 
 レスポンス
 ----------
@@ -282,11 +282,11 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
 条件式・ブースト値式について
 ============================
 
-``urlExpr``\ （条件）と ``boostExpr``\ （ブースト値式）は、``scriptType``\ （既定: Groovy。管理画面の新規作成画面のみ ``javascript`` を事前入力）で指定したスクリプトエンジンの式として評価されます。
+``url_expr``\ （条件）と ``boost_expr``\ （ブースト値式）は、``script_type``\ （既定: Groovy。管理画面の新規作成画面のみ ``javascript`` を事前入力）で指定したスクリプトエンジンの式として評価されます。
 式の中では、インデックス対象ドキュメントのフィールド値をフィールド名の変数として参照できます。
 
-- ``urlExpr`` は ``Boolean`` を返す必要があります（例: ``url.startsWith("https://docs.example.com/")``）。単なる正規表現文字列（例: ``.*docs\.example\.com.*``）はスクリプト式として ``Boolean`` を返さないため、条件として機能しません。正規表現を使う場合は ``String#matches`` を利用します（GroovyとJavaScriptのいずれでも同じ記法で使用できます）。
-- ``boostExpr`` は数値を返す必要があります。結果は ``float`` に変換され、0より大きい場合にのみブーストが適用されます。
+- ``url_expr`` は ``Boolean`` を返す必要があります（例: ``url.startsWith("https://docs.example.com/")``）。単なる正規表現文字列（例: ``.*docs\.example\.com.*``）はスクリプト式として ``Boolean`` を返さないため、条件として機能しません。正規表現を使う場合は ``String#matches`` を利用します（GroovyとJavaScriptのいずれでも同じ記法で使用できます）。
+- ``boost_expr`` は数値を返す必要があります。結果は ``float`` に変換され、0より大きい場合にのみブーストが適用されます。
 
 .. note::
 
@@ -295,8 +295,8 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
    ``indexer.favorite.count.enabled``\ （いずれもデフォルトで有効）の場合に参照できます。
    ``now - 7d`` のようなOpenSearchの日付計算構文は、GroovyでもJavaScriptでも使用できません。
 
-条件式（``urlExpr``）の例
--------------------------
+条件式（``url_expr``）の例
+--------------------------
 
 .. list-table::
    :header-rows: 1
@@ -311,8 +311,8 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
    * - ``title.contains("リリースノート")``
      - タイトルに特定の語を含むドキュメントを対象にする
 
-ブースト値式（``boostExpr``）の例
----------------------------------
+ブースト値式（``boost_expr``）の例
+----------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -339,9 +339,9 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-           "boostExpr": "5.0",
-           "sortOrder": 0
+           "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+           "boost_expr": "5.0",
+           "sort_order": 0
          }'
 
 クリック数の多いコンテンツのブースト
@@ -353,9 +353,9 @@ BoostDoc APIは、|Fess| のドキュメントブースト設定を管理する�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "urlExpr": "url.startsWith(\"https://www.example.com/\")",
-           "boostExpr": "click_count * 0.1 + 1",
-           "sortOrder": 10
+           "url_expr": "url.startsWith(\"https://www.example.com/\")",
+           "boost_expr": "click_count * 0.1 + 1",
+           "sort_order": 10
          }'
 
 参考情報

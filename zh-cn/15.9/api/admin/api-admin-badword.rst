@@ -92,7 +92,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word"
+            "suggest_word": "inappropriate_word"
           }
         ],
         "total": 5
@@ -119,7 +119,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word"
+          "suggest_word": "inappropriate_word"
         }
       }
     }
@@ -141,7 +141,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword"
+      "suggest_word": "spam_keyword"
     }
 
 字段说明
@@ -154,7 +154,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
    * - 字段
      - 必需
      - 说明
-   * - ``suggestWord``
+   * - ``suggest_word``
      - 是
      - 要排除的关键词（不能包含空白字符）
 
@@ -189,8 +189,8 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
 
     {
       "id": "existing_badword_id",
-      "suggestWord": "updated_spam_keyword",
-      "versionNo": 1
+      "suggest_word": "updated_spam_keyword",
+      "version_no": 1
     }
 
 响应
@@ -260,7 +260,7 @@ CSV格式
 ~~~~~~~
 
 - 第一行作为标题行被跳过（列名可任意指定，下载时会输出 ``BadWord``）。
-- 从第二行开始，每行将一个屏蔽词作为 ``suggestWord`` 写入。
+- 从第二行开始，每行将一个屏蔽词作为 ``suggest_word`` 写入。
 - 值为空白的行将被忽略。
 - 在单词前加上 ``--`` 即可删除该单词（例如：``--spam`` 会删除 ``spam``）。
 - 指定已注册的单词时，将被视为更新（更新者和更新时间会被重置）。
@@ -306,7 +306,7 @@ CSV格式
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam"
+           "suggest_word": "spam"
          }'
 
 上传CSV文件

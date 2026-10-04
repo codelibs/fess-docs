@@ -90,7 +90,7 @@ Response
             "id": "query_id_1",
             "term": "fess",
             "queries": "fess tutorial\nfess installation\nfess configuration",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -99,9 +99,9 @@ Response
 
 .. note::
 
-   Each setting includes ``versionNo`` (a version number for optimistic locking). ``virtualHost``
-   and audit fields (``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``) are included
-   only when a value is set. A ``virtualHost`` with an empty value is not included in the response.
+   Each setting includes ``version_no`` (a version number for optimistic locking). ``virtual_host``
+   and audit fields (``created_by``, ``created_time``, ``updated_by``, ``updated_time``) are included
+   only when a value is set. A ``virtual_host`` with an empty value is not included in the response.
 
 Get Related Query
 =================
@@ -126,8 +126,8 @@ Response
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": "site1.example.com",
-          "versionNo": 1
+          "virtual_host": "site1.example.com",
+          "version_no": 1
         }
       }
     }
@@ -151,7 +151,7 @@ Request Body
     {
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search",
-      "virtualHost": ""
+      "virtual_host": ""
     }
 
 Field Description
@@ -170,13 +170,13 @@ Field Description
    * - ``queries``
      - Yes
      - Related queries. A newline-separated string with one entry per line (empty lines are ignored. Maximum 10,000 characters)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - No
      - Virtual host (maximum 1,000 characters)
 
 .. note::
 
-   ``crudMode`` is set automatically on the API side and does not need to be included in the request body.
+   ``crud_mode`` is set automatically on the API side and does not need to be included in the request body.
 
 Response
 --------
@@ -212,8 +212,8 @@ Request Body
       "id": "existing_query_id",
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
-      "virtualHost": "",
-      "versionNo": 1
+      "virtual_host": "",
+      "version_no": 1
     }
 
 Field Description
@@ -235,10 +235,10 @@ Field Description
    * - ``queries``
      - Yes
      - Related queries. A newline-separated string with one entry per line (empty lines are ignored. Maximum 10,000 characters)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - No
      - Virtual host (maximum 1,000 characters)
-   * - ``versionNo``
+   * - ``version_no``
      - Yes
      - Version number for optimistic locking. Specify the value included in the response when the setting was retrieved.
 

@@ -91,14 +91,14 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cronExpression": "0 0 0 * * ?",
-            "scriptType": "javascript",
-            "scriptData": "...",
-            "jobLogging": "true",
+            "cron_expression": "0 0 0 * * ?",
+            "script_type": "javascript",
+            "script_data": "...",
+            "job_logging": "true",
             "crawler": "true",
             "available": "true",
-            "sortOrder": 0,
-            "versionNo": 1,
+            "sort_order": 0,
+            "version_no": 1,
             "running": false
           }
         ],
@@ -112,7 +112,7 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
 
 .. note::
 
-   レスポンス内の ``jobLogging`` / ``crawler`` / ``available`` は文字列（``"true"`` / ``"false"``）として返されます。\ ``running`` はブール値で、ジョブが現在実行中かどうかを示すレスポンス専用フィールドです（リクエストでは指定できません）。\ ``total`` は条件に一致する全ジョブ数です。
+   レスポンス内の ``job_logging`` / ``crawler`` / ``available`` は文字列（``"true"`` / ``"false"``）として返されます。\ ``running`` はブール値で、ジョブが現在実行中かどうかを示すレスポンス専用フィールドです（リクエストでは指定できません）。\ ``total`` は条件に一致する全ジョブ数です。
 
 スケジュールジョブ取得
 ======================
@@ -136,14 +136,14 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cronExpression": "0 0 0 * * ?",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "jobLogging": "true",
+          "cron_expression": "0 0 0 * * ?",
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "job_logging": "true",
           "crawler": "true",
           "available": "true",
-          "sortOrder": 0,
-          "versionNo": 1,
+          "sort_order": 0,
+          "version_no": 1,
           "running": false
         }
       }
@@ -168,13 +168,13 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cronExpression": "0 0 2 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-      "jobLogging": "true",
+      "cron_expression": "0 0 2 * * ?",
+      "script_type": "javascript",
+      "script_data": "return container.getComponent(\"crawlJob\").execute();",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1
+      "sort_order": 1
     }
 
 フィールド説明
@@ -193,16 +193,16 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
    * - ``target``
      - はい
      - 実行対象（最大100文字）。\ ``all`` または特定のターゲット名を指定します
-   * - ``cronExpression``
+   * - ``cron_expression``
      - いいえ
      - Cron式（秒 分 時 日 月 曜日）。最大100文字で、Cron式として検証されます。空の場合はスケジュール実行されず、手動でのみ起動できます
-   * - ``scriptType``
+   * - ``script_type``
      - はい
      - スクリプトタイプ（最大100文字）。\ ``javascript``\ （新規ジョブの既定値。\ ``job.default.script`` プロパティで決まります）または ``groovy``\ （\ ``fess-script-groovy`` プラグインが必要）を指定します
-   * - ``scriptData``
+   * - ``script_data``
      - いいえ
      - 実行スクリプト。最大サイズは ``fess_config.properties`` の ``form.admin.max.input.size`` に従います
-   * - ``jobLogging``
+   * - ``job_logging``
      - いいえ
      - ジョブログの記録を有効化（文字列）
    * - ``crawler``
@@ -211,17 +211,17 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
    * - ``available``
      - いいえ
      - 有効/無効（文字列）
-   * - ``sortOrder``
+   * - ``sort_order``
      - はい
      - 表示順序（0〜2147483647の整数）
 
 .. note::
 
-   ``jobLogging`` / ``crawler`` / ``available`` は文字列フィールドです。リクエストでは ``"on"`` または ``"true"``\ （大文字小文字を区別しない）を指定すると有効になり、それ以外の値（``"false"``、空文字列、未指定など）は無効として扱われます。レスポンスでは ``"true"`` / ``"false"`` として返されます。
+   ``job_logging`` / ``crawler`` / ``available`` は文字列フィールドです。リクエストでは ``"on"`` または ``"true"``\ （大文字小文字を区別しない）を指定すると有効になり、それ以外の値（``"false"``、空文字列、未指定など）は無効として扱われます。レスポンスでは ``"true"`` / ``"false"`` として返されます。
 
 .. note::
 
-   ``crudMode`` はサーバー側で自動的に設定されるため、リクエストで指定する必要はありません。\ ``createdBy`` / ``createdTime`` などの監査フィールドもサーバー側で設定されます。
+   ``crud_mode`` はサーバー側で自動的に設定されるため、リクエストで指定する必要はありません。\ ``created_by`` / ``created_time`` などの監査フィールドもサーバー側で設定されます。
 
 レスポンス
 ----------
@@ -274,19 +274,19 @@ Cron式の例
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cronExpression": "0 0 3 * * ?",
-      "scriptType": "javascript",
-      "scriptData": "...",
-      "jobLogging": "true",
+      "cron_expression": "0 0 3 * * ?",
+      "script_type": "javascript",
+      "script_data": "...",
+      "job_logging": "true",
       "crawler": "true",
       "available": "true",
-      "sortOrder": 1,
-      "versionNo": 1
+      "sort_order": 1,
+      "version_no": 1
     }
 
 .. note::
 
-   更新では ``id``\ （最大1000文字）と ``versionNo`` が必須です。\ ``versionNo`` は楽観的ロックに使用され、取得時のレスポンスに含まれる値を指定します。値が一致しない場合は更新が失敗します。そのほかの必須フィールド（``name`` / ``target`` / ``scriptType`` / ``sortOrder``）は作成時と同様です。
+   更新では ``id``\ （最大1000文字）と ``version_no`` が必須です。\ ``version_no`` は楽観的ロックに使用され、取得時のレスポンスに含まれる値を指定します。値が一致しない場合は更新が失敗します。そのほかの必須フィールド（``name`` / ``target`` / ``script_type`` / ``sort_order``）は作成時と同様です。
 
 レスポンス
 ----------
@@ -344,7 +344,7 @@ Cron式の例
     {
       "response": {
         "status": 0,
-        "jobLogId": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+        "job_log_id": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
       }
     }
 
@@ -357,15 +357,15 @@ Cron式の例
 
    * - フィールド
      - 説明
-   * - ``jobLogId``
-     - 起動したジョブのジョブログID。ジョブログが有効な場合に発行されます。ジョブログが無効な場合は ``null`` になります。
+   * - ``job_log_id``
+     - 起動したジョブのジョブログID。ジョブログが有効な場合に発行されます。ジョブログが無効な場合はレスポンスに含まれません。
 
 注意事項
 --------
 
 - ジョブが既に実行中の場合、起動に失敗しエラー（``status`` が ``0`` 以外）が返されます
 - ジョブが無効（``available`` が有効でない）の場合も、同様に起動に失敗しエラーが返されます
-- ``jobLogId`` は、ジョブログが有効（``jobLogging`` が有効）な場合にのみ発行されます
+- ``job_log_id`` は、ジョブログが有効（``job_logging`` が有効）な場合にのみ発行されます
 
 ジョブ停止
 ==========
@@ -405,13 +405,13 @@ Cron式の例
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cronExpression": "0 0 * * * ?",
-           "scriptType": "javascript",
-           "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-           "jobLogging": "true",
+           "cron_expression": "0 0 * * * ?",
+           "script_type": "javascript",
+           "script_data": "return container.getComponent(\"crawlJob\").execute();",
+           "job_logging": "true",
            "crawler": "true",
            "available": "true",
-           "sortOrder": 1
+           "sort_order": 1
          }'
 
     # ジョブを即座に実行

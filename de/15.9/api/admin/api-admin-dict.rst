@@ -179,7 +179,7 @@ Die Felder der einzelnen Einträge im Array ``settings`` der Antwort unterscheid
         "settings": [
           {
             "id": 1,
-            "dictId": "ZjA5...synonym.txt",
+            "dict_id": "ZjA5...synonym.txt",
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
@@ -233,7 +233,7 @@ Response
         "status": 0,
         "setting": {
           "id": 1,
-          "dictId": "ZjA5...synonym.txt",
+          "dict_id": "ZjA5...synonym.txt",
           "inputs": "検索,サーチ",
           "outputs": "検索,サーチ,リサーチ"
         }
@@ -406,7 +406,7 @@ Eintragsfelder je Wörterbuchtyp
 ===============================
 
 Die Felder im Request-Body zum Erstellen/Aktualisieren von Wörterbucheinträgen sowie in der Antwort unterscheiden sich je Wörterbuchtyp.
-``id`` (Eintrags-ID) und ``dictId`` (Wörterbuch-ID) sind in der Antwort gemeinsam enthalten.
+``id`` (Eintrags-ID) und ``dict_id`` (Wörterbuch-ID) sind in der Antwort gemeinsam enthalten.
 
 .. list-table::
    :header-rows: 1

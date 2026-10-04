@@ -92,7 +92,7 @@ Response
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word"
+            "suggest_word": "inappropriate_word"
           }
         ],
         "total": 5
@@ -119,7 +119,7 @@ Response
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word"
+          "suggest_word": "inappropriate_word"
         }
       }
     }
@@ -141,7 +141,7 @@ Request Body
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword"
+      "suggest_word": "spam_keyword"
     }
 
 Field Description
@@ -154,7 +154,7 @@ Field Description
    * - Field
      - Required
      - Description
-   * - ``suggestWord``
+   * - ``suggest_word``
      - Yes
      - Keyword to exclude (cannot contain whitespace characters)
 
@@ -189,8 +189,8 @@ Request Body
 
     {
       "id": "existing_badword_id",
-      "suggestWord": "updated_spam_keyword",
-      "versionNo": 1
+      "suggest_word": "updated_spam_keyword",
+      "version_no": 1
     }
 
 Response
@@ -260,7 +260,7 @@ CSV Format
 ~~~~~~~~~~
 
 - The first line is skipped as a header row (the column name is arbitrary; ``BadWord`` is written on download).
-- From the second line onward, write one bad word per line as the ``suggestWord``.
+- From the second line onward, write one bad word per line as the ``suggest_word``.
 - Lines whose value is blank are ignored.
 - Prefix a word with ``--`` to delete it (e.g., ``--spam`` deletes ``spam``).
 - Specifying an already-registered word is treated as an update (the updater and update time are reset).
@@ -306,7 +306,7 @@ Exclude Spam Keyword
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam"
+           "suggest_word": "spam"
          }'
 
 Upload CSV File

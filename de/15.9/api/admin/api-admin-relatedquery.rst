@@ -90,7 +90,7 @@ Response
             "id": "query_id_1",
             "term": "fess",
             "queries": "fess tutorial\nfess installation\nfess configuration",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -99,9 +99,9 @@ Response
 
 .. note::
 
-   Jede Einstellung enthält ``versionNo`` (Versionsnummer für optimistisches Sperren). ``virtualHost``
-   und Audit-Felder (``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``) werden nur dann
-   aufgenommen, wenn ein Wert gesetzt ist. Ein leerer ``virtualHost`` wird nicht in die Response aufgenommen.
+   Jede Einstellung enthält ``version_no`` (Versionsnummer für optimistisches Sperren). ``virtual_host``
+   und Audit-Felder (``created_by``, ``created_time``, ``updated_by``, ``updated_time``) werden nur dann
+   aufgenommen, wenn ein Wert gesetzt ist. Ein leerer ``virtual_host`` wird nicht in die Response aufgenommen.
 
 Verwandte Abfrage abrufen
 ==========================
@@ -126,8 +126,8 @@ Response
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": "site1.example.com",
-          "versionNo": 1
+          "virtual_host": "site1.example.com",
+          "version_no": 1
         }
       }
     }
@@ -151,7 +151,7 @@ Request-Body
     {
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search",
-      "virtualHost": ""
+      "virtual_host": ""
     }
 
 Feldbeschreibungen
@@ -170,13 +170,13 @@ Feldbeschreibungen
    * - ``queries``
      - Ja
      - Verwandte Abfragen. Zeilenumbruch-getrennte Zeichenkette mit einem Eintrag pro Zeile (Leerzeilen werden ignoriert; maximal 10000 Zeichen)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - Nein
      - Virtueller Host (maximal 1000 Zeichen)
 
 .. note::
 
-   ``crudMode`` wird serverseitig automatisch gesetzt und muss nicht im Request-Body angegeben werden.
+   ``crud_mode`` wird serverseitig automatisch gesetzt und muss nicht im Request-Body angegeben werden.
 
 Response
 --------
@@ -212,8 +212,8 @@ Request-Body
       "id": "existing_query_id",
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
-      "virtualHost": "",
-      "versionNo": 1
+      "virtual_host": "",
+      "version_no": 1
     }
 
 Feldbeschreibungen
@@ -235,10 +235,10 @@ Feldbeschreibungen
    * - ``queries``
      - Ja
      - Verwandte Abfragen. Zeilenumbruch-getrennte Zeichenkette mit einem Eintrag pro Zeile (Leerzeilen werden ignoriert; maximal 10000 Zeichen)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - Nein
      - Virtueller Host (maximal 1000 Zeichen)
-   * - ``versionNo``
+   * - ``version_no``
      - Ja
      - Versionsnummer für optimistisches Sperren. Geben Sie den beim Abrufen in der Response enthaltenen Wert an.
 

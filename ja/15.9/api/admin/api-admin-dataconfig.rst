@@ -74,7 +74,7 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
      - String
      - いいえ
      - 設定名による絞り込み
-   * - ``handlerName``
+   * - ``handler_name``
      - String
      - いいえ
      - ハンドラー名による絞り込み
@@ -96,14 +96,14 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
             "description": "データベースクローラー",
-            "handlerName": "DatabaseDataStore",
-            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
-            "handlerScript": "...",
+            "handler_name": "DatabaseDataStore",
+            "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
+            "handler_script": "...",
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -132,14 +132,14 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
           "description": "データベースクローラー",
-          "handlerName": "DatabaseDataStore",
-          "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
-          "handlerScript": "...",
+          "handler_name": "DatabaseDataStore",
+          "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
+          "handler_script": "...",
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": ""
+          "virtual_hosts": ""
         }
       }
     }
@@ -162,12 +162,12 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
 
     {
       "name": "Product Database",
-      "handlerName": "DatabaseDataStore",
-      "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
-      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
+      "handler_name": "DatabaseDataStore",
+      "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
+      "handler_script": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -187,13 +187,13 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
    * - ``description``
      - いいえ
      - 設定の説明
-   * - ``handlerName``
+   * - ``handler_name``
      - はい
      - データストアハンドラー名
-   * - ``handlerParameter``
+   * - ``handler_parameter``
      - いいえ
      - ハンドラーパラメーター（接続情報など）
-   * - ``handlerScript``
+   * - ``handler_script``
      - いいえ
      - データ変換スクリプト
    * - ``boost``
@@ -202,13 +202,13 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
    * - ``available``
      - はい
      - 有効/無効（文字列 ``"true"`` / ``"false"``）
-   * - ``sortOrder``
+   * - ``sort_order``
      - はい
      - 表示順序
    * - ``permissions``
      - いいえ
      - アクセス許可ロール（複数の場合は改行区切り）
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - いいえ
      - 仮想ホスト（複数の場合は改行区切り）
 
@@ -244,17 +244,17 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
     {
       "id": "existing_dataconfig_id",
       "name": "Updated Product Database",
-      "handlerName": "DatabaseDataStore",
-      "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
-      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
+      "handler_name": "DatabaseDataStore",
+      "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
+      "handler_script": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
       "boost": 1.5,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
-更新リクエストでは、作成時と同じ必須フィールド（``name`` 、 ``handlerName`` 、 ``boost`` 、
-``available`` 、 ``sortOrder`` ）に加えて、以下のフィールドが必須です。
+更新リクエストでは、作成時と同じ必須フィールド（``name`` 、 ``handler_name`` 、 ``boost`` 、
+``available`` 、 ``sort_order`` ）に加えて、以下のフィールドが必須です。
 
 .. list-table::
    :header-rows: 1
@@ -266,7 +266,7 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
    * - ``id``
      - はい
      - 更新対象の設定ID
-   * - ``versionNo``
+   * - ``version_no``
      - はい
      - 楽観ロック用のバージョン番号（取得時の値を指定）
 
@@ -341,12 +341,12 @@ DataConfig APIは、|Fess| のデータストア設定を管理するためのAP
          -H "Content-Type: application/json" \
          -d '{
            "name": "User Database",
-           "handlerName": "DatabaseDataStore",
-           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
-           "handlerScript": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
+           "handler_name": "DatabaseDataStore",
+           "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
+           "handler_script": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 参考情報

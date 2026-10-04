@@ -178,7 +178,7 @@ Los campos de cada elemento del arreglo ``settings`` de la respuesta varían seg
         "settings": [
           {
             "id": 1,
-            "dictId": "ZjA5...synonym.txt",
+            "dict_id": "ZjA5...synonym.txt",
             "inputs": "busqueda,buscar",
             "outputs": "busqueda,buscar,investigar"
           }
@@ -232,7 +232,7 @@ Respuesta
         "status": 0,
         "setting": {
           "id": 1,
-          "dictId": "ZjA5...synonym.txt",
+          "dict_id": "ZjA5...synonym.txt",
           "inputs": "busqueda,buscar",
           "outputs": "busqueda,buscar,investigar"
         }
@@ -405,7 +405,7 @@ Campos de Elementos por Tipo de Diccionario
 ===========================================
 
 Los campos del cuerpo de la solicitud de creación y actualización de elementos del diccionario, así como los de la respuesta, varían según el tipo de diccionario.
-``id`` (ID del elemento) y ``dictId`` (ID del diccionario) se incluyen en común en la respuesta.
+``id`` (ID del elemento) y ``dict_id`` (ID del diccionario) se incluyen en común en la respuesta.
 
 .. list-table::
    :header-rows: 1

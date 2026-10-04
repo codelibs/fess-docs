@@ -98,14 +98,14 @@ HTTP状态码），请参阅 :doc:`api-admin-overview` 。
             "id": "token_id_1",
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
-            "parameterName": "permission",
+            "parameter_name": "permission",
             "permissions": "{role}admin-api",
             "expires": "2026-01-01T00:00:00",
-            "createdBy": "admin",
-            "createdTime": 1735689600000,
-            "updatedBy": "admin",
-            "updatedTime": 1735689600000,
-            "versionNo": 1
+            "created_by": "admin",
+            "created_time": 1735689600000,
+            "updated_by": "admin",
+            "updated_time": 1735689600000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -114,9 +114,9 @@ HTTP状态码），请参阅 :doc:`api-admin-overview` 。
 
 .. note::
 
-   每个令牌对象中还包含 ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、
-   ``updatedTime`` 、 ``versionNo`` 等审计信息和版本信息。
-   ``createdTime`` 和 ``updatedTime`` 以自纪元起的毫秒数（数值）表示。
+   每个令牌对象中还包含 ``created_by`` 、 ``created_time`` 、 ``updated_by`` 、
+   ``updated_time`` 、 ``version_no`` 等审计信息和版本信息。
+   ``created_time`` 和 ``updated_time`` 以自纪元起的毫秒数（数值）表示。
    值为 ``null`` 的字段将从响应中排除。
    ``permissions`` 以换行符（ ``\n`` ）分隔的字符串形式返回。
 
@@ -142,14 +142,14 @@ HTTP状态码），请参阅 :doc:`api-admin-overview` 。
           "id": "token_id_1",
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
-          "parameterName": "permission",
+          "parameter_name": "permission",
           "permissions": "{role}admin-api",
           "expires": "2026-01-01T00:00:00",
-          "createdBy": "admin",
-          "createdTime": 1735689600000,
-          "updatedBy": "admin",
-          "updatedTime": 1735689600000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1735689600000,
+          "updated_by": "admin",
+          "updated_time": 1735689600000,
+          "version_no": 1
         }
       }
     }
@@ -192,7 +192,7 @@ HTTP状态码），请参阅 :doc:`api-admin-overview` 。
    * - ``permissions``
      - 否
      - 授予此令牌的权限。可使用换行符（ ``\n`` ）分隔指定多个权限（例如： ``{role}admin-api`` ）。调用Admin API的令牌需要具有与 ``api.admin.access.permissions`` （默认值 ``{role}admin-api`` ）匹配的权限。
-   * - ``parameterName``
+   * - ``parameter_name``
      - 否
      - 用于传递附加权限的请求参数名称。当使用此令牌认证的请求中包含此处指定名称的参数时，该参数值将被追加到 ``permissions`` 中。省略时不进行设置。
    * - ``expires``
@@ -239,7 +239,7 @@ HTTP状态码），请参阅 :doc:`api-admin-overview` 。
       "name": "Updated API Token",
       "permissions": "{role}admin-api\n{role}user",
       "expires": "2026-01-01T00:00:00",
-      "versionNo": 1
+      "version_no": 1
     }
 
 字段说明
@@ -257,9 +257,9 @@ HTTP状态码），请参阅 :doc:`api-admin-overview` 。
    * - ``id``
      - 是
      - 待更新的令牌ID
-   * - ``versionNo``
+   * - ``version_no``
      - 是
-     - 用于乐观锁的版本号。请指定预先获取的令牌的 ``versionNo`` 。
+     - 用于乐观锁的版本号。请指定预先获取的令牌的 ``version_no`` 。
 
 .. note::
 

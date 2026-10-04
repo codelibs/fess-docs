@@ -75,9 +75,9 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "totalWordsNum": 1500,
-          "documentWordsNum": 1200,
-          "queryWordsNum": 450
+          "total_words_num": 1500,
+          "document_words_num": 1200,
+          "query_words_num": 450
         }
       }
     }
@@ -91,18 +91,18 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
 
    * - 字段
      - 说明
-   * - ``setting.totalWordsNum``
+   * - ``setting.total_words_num``
      - 建议词总数（建议索引中已注册的建议词数量）
-   * - ``setting.documentWordsNum``
+   * - ``setting.document_words_num``
      - 来源于文档的建议词数（文档频率在1以上的建议词数量）
-   * - ``setting.queryWordsNum``
+   * - ``setting.query_words_num``
      - 来源于搜索查询的建议词数（查询频率在1以上的建议词数量）
 
 .. note::
 
-   ``documentWordsNum`` 与 ``queryWordsNum`` 并非互斥。若一个建议词同时来源于文档和搜索查询，
-   则会同时计入两者的数量。因此，``documentWordsNum`` 与 ``queryWordsNum`` 的合计值不一定
-   与 ``totalWordsNum`` 相等。
+   ``document_words_num`` 与 ``query_words_num`` 并非互斥。若一个建议词同时来源于文档和搜索查询，
+   则会同时计入两者的数量。因此，``document_words_num`` 与 ``query_words_num`` 的合计值不一定
+   与 ``total_words_num`` 相等。
 
 删除所有建议词
 ==============

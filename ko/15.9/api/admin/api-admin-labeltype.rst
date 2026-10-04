@@ -99,16 +99,16 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
             "id": "label_id_1",
             "name": "Documentation",
             "value": "docs",
-            "includedPaths": ".*docs\\.example\\.com.*",
-            "excludedPaths": "",
+            "included_paths": ".*docs\\.example\\.com.*",
+            "excluded_paths": "",
             "permissions": "{role}admin",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -117,8 +117,8 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
 
 .. note::
 
-   각 설정 객체에는 감사용 ``createdBy`` / ``createdTime`` / ``updatedBy`` /
-   ``updatedTime`` 과 낙관적 잠금용 ``versionNo`` 도 포함됩니다(값이 ``null`` 인
+   각 설정 객체에는 감사용 ``created_by`` / ``created_time`` / ``updated_by`` /
+   ``updated_time`` 과 낙관적 잠금용 ``version_no`` 도 포함됩니다(값이 ``null`` 인
    필드는 생략됩니다). ``response`` 객체에는 제품 버전을 나타내는
    ``version`` 이 항상 포함되지만, 이후 예시에서는 간결함을 위해 생략하는 경우가 있습니다.
 
@@ -144,16 +144,16 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
           "id": "label_id_1",
           "name": "Documentation",
           "value": "docs",
-          "includedPaths": ".*docs\\.example\\.com.*",
-          "excludedPaths": "",
+          "included_paths": ".*docs\\.example\\.com.*",
+          "excluded_paths": "",
           "permissions": "{role}admin",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
@@ -177,9 +177,9 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
     {
       "name": "News",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
-      "excludedPaths": ".*/(archive|old)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
+      "excluded_paths": ".*/(archive|old)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest"
     }
 
@@ -202,11 +202,11 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
      - String
      - 예
      - 라벨 값(검색 시 ``label`` 파라미터로 사용). 영숫자와 언더스코어(``_``)만 사용 가능하며, 정규 표현식 ``^[a-zA-Z0-9_]+$`` 에 일치해야 합니다(최대 100자).
-   * - ``includedPaths``
+   * - ``included_paths``
      - String
      - 아니요
      - 라벨 대상 경로의 정규 표현식. 여러 개 지정 시 줄바꿈(``\n``)으로 구분합니다.
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - String
      - 아니요
      - 라벨 대상에서 제외할 경로의 정규 표현식. 여러 개 지정 시 줄바꿈(``\n``)으로 구분합니다.
@@ -214,18 +214,18 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
      - String
      - 아니요
      - 접근을 허용할 역할/그룹/사용자(예: ``{role}admin``). 여러 개 지정 시 줄바꿈(``\n``)으로 구분합니다.
-   * - ``sortOrder``
+   * - ``sort_order``
      - Integer
      - 아니요
      - 표시 순서(0 이상의 정수). 지정하지 않으면 ``0`` 입니다.
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - 아니요
      - 가상 호스트(최대 1000자).
 
 .. note::
 
-   ``createdBy`` / ``createdTime`` 등의 감사 필드는 서버 측에서 자동으로 설정되므로
+   ``created_by`` / ``created_time`` 등의 감사 필드는 서버 측에서 자동으로 설정되므로
    요청에서 지정할 필요가 없습니다.
 
 응답
@@ -263,11 +263,11 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
       "id": "existing_label_id",
       "name": "News Articles",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
-      "excludedPaths": ".*/(archive|old|draft)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
+      "excluded_paths": ".*/(archive|old|draft)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest",
-      "versionNo": 1
+      "version_no": 1
     }
 
 업데이트 시에는 생성 시의 필드에 더해 다음 필드가 필수입니다.
@@ -284,10 +284,10 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
      - String
      - 예
      - 업데이트 대상 라벨 타입 ID.
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - 예
-     - 낙관적 잠금용 버전 번호. 조회 시 응답에 포함된 ``versionNo`` 를 지정합니다. 지정한 버전이 현재 버전과 일치하지 않으면 업데이트가 실패합니다.
+     - 낙관적 잠금용 버전 번호. 조회 시 응답에 포함된 ``version_no`` 를 지정합니다. 지정한 버전이 현재 버전과 일치하지 않으면 업데이트가 실패합니다.
 
 응답
 ----------
@@ -339,8 +339,8 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
          -d '{
            "name": "Technical Documentation",
            "value": "tech_docs",
-           "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
-           "sortOrder": 0,
+           "included_paths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

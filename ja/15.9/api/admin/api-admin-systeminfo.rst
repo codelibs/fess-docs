@@ -57,22 +57,22 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
       "response": {
         "version": "15.9.0",
         "status": 0,
-        "envProps": [
+        "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
           {"label": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
         ],
-        "systemProps": [
+        "system_props": [
           {"label": "java.version", "value": "21.0.1"},
           {"label": "java.vendor", "value": "Oracle Corporation"},
           {"label": "os.name", "value": "Linux"},
           {"label": "user.dir", "value": "/opt/fess"}
         ],
-        "fessProps": [
+        "fess_props": [
           {"label": "crawler.document.max.site.length", "value": "100"},
           {"label": "indexer.thread.dump.enabled", "value": "true"},
           {"label": "app.cipher.key", "value": "XXXXXXXX"}
         ],
-        "bugReportProps": [
+        "bug_report_props": [
           {"label": "os.name", "value": "Linux"},
           {"label": "java.vm.version", "value": "21.0.1+12"}
         ]
@@ -92,24 +92,24 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
      - |Fess| の製品バージョン（例: ``15.9.0``）。
    * - ``status``
      - 処理結果を示すコード。\ ``0`` は正常終了を表します。
-   * - ``envProps``
+   * - ``env_props``
      - 環境変数の一覧（``label`` / ``value`` の配列）。\ ``System.getenv()`` で取得される値がそのまま返されます。
-   * - ``systemProps``
+   * - ``system_props``
      - Javaのシステムプロパティの一覧（``label`` / ``value`` の配列）。\ ``System.getProperties()`` で取得される値がそのまま返されます。
-   * - ``fessProps``
+   * - ``fess_props``
      - |Fess| の設定プロパティの一覧（``label`` / ``value`` の配列）。\ ``fess_config.properties`` の設定値と、管理画面で設定されるシステムプロパティが含まれます。機密性の高い項目はマスクされます（下記の注記を参照）。
-   * - ``bugReportProps``
+   * - ``bug_report_props``
      - バグレポート用に収集される情報の一覧（``label`` / ``value`` の配列）。OSおよびJava実行環境に関する主要なシステムプロパティ（``os.name``、``os.version``、``java.vm.version`` など）と、|Fess| のシステムプロパティ設定値が含まれます。
 
 .. note::
 
-   ``fessProps`` では、以下の機密性の高い設定値はマスクされ、``XXXXXXXX`` として返されます:
+   ``fess_props`` では、以下の機密性の高い設定値はマスクされ、``XXXXXXXX`` として返されます:
    ``http.proxy.password``、``ldap.admin.security.credentials``、``spnego.preauth.password``、
    ``app.cipher.key``、``oic.client.id``、``oic.client.secret``\ 。
 
 .. warning::
 
-   ``envProps``\ （環境変数）と ``systemProps``\ （Javaシステムプロパティ）はマスクされず、
+   ``env_props``\ （環境変数）と ``system_props``\ （Javaシステムプロパティ）はマスクされず、
    設定されている値がそのまま返されます。環境変数やシステムプロパティに認証情報などの
    機密情報を含めている場合、それらがレスポンスに含まれる点に注意してください。
 

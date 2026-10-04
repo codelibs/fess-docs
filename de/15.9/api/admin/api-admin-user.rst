@@ -105,7 +105,7 @@ Antwort
             },
             "roles": ["admin"],
             "groups": [],
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 10
@@ -150,7 +150,7 @@ Antwort
           },
           "roles": ["admin"],
           "groups": [],
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -179,7 +179,7 @@ Anfrage-Body
     {
       "name": "testuser",
       "password": "securepassword",
-      "confirmPassword": "securepassword",
+      "confirm_password": "securepassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User",
@@ -205,7 +205,7 @@ Feldbeschreibungen
    * - ``password``
      - Nein
      - Passwort
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - Nein
      - Bestätigungspasswort
    * - ``attributes``
@@ -220,8 +220,8 @@ Feldbeschreibungen
 
 .. note::
 
-   Die REST API führt keine Pflichtprüfung für das Passwort, keinen Abgleich zwischen ``password`` und ``confirmPassword`` und keine Passwortrichtlinienvalidierung durch (diese werden nur in der Admin-Oberfläche angewendet).
-   In der Praxis wird empfohlen, ein gültiges ``password`` anzugeben, dessen Wert mit ``confirmPassword`` übereinstimmt.
+   Die REST API führt keine Pflichtprüfung für das Passwort, keinen Abgleich zwischen ``password`` und ``confirm_password`` und keine Passwortrichtlinienvalidierung durch (diese werden nur in der Admin-Oberfläche angewendet).
+   In der Praxis wird empfohlen, ein gültiges ``password`` anzugeben, dessen Wert mit ``confirm_password`` übereinstimmt.
 
 Die Schlüssel von ``attributes`` sind die Attributnamen der Benutzerentität (die aus LDAP abgeleiteten Schemaelementnamen).
 Die häufigsten Schlüssel sind:
@@ -276,7 +276,7 @@ Anfrage-Body
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "confirmPassword": "newpassword",
+      "confirm_password": "newpassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User Updated",
@@ -284,7 +284,7 @@ Anfrage-Body
       },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
-      "versionNo": 1
+      "version_no": 1
     }
 
 Feldbeschreibungen
@@ -303,13 +303,13 @@ Feldbeschreibungen
    * - ``name``
      - Ja
      - Benutzername (Login-ID)
-   * - ``versionNo``
+   * - ``version_no``
      - Ja
      - Versionsnummer (für optimistisches Sperren)
    * - ``password``
      - Nein
      - Neues Passwort (wird nur aktualisiert, wenn angegeben)
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - Nein
      - Bestätigungspasswort
    * - ``attributes``
@@ -324,8 +324,8 @@ Feldbeschreibungen
 
 .. note::
 
-   Bei der Aktualisierung sind ``id``, ``name`` und ``versionNo`` erforderlich.
-   ``versionNo`` ist der Wert, der beim Abrufen des Zielbenutzers (GET) zurückgegeben wird, und entspricht der OpenSearch-Dokumentversion.
+   Bei der Aktualisierung sind ``id``, ``name`` und ``version_no`` erforderlich.
+   ``version_no`` ist der Wert, der beim Abrufen des Zielbenutzers (GET) zurückgegeben wird, und entspricht der OpenSearch-Dokumentversion.
    Stimmt er nicht mit der aktuellen Version überein, wird die Anfrage als Konflikt behandelt und die Aktualisierung abgelehnt.
 
 Antwort
@@ -390,7 +390,7 @@ Neuen Benutzer erstellen
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "confirmPassword": "SecureP@ss123",
+           "confirm_password": "SecureP@ss123",
            "attributes": {
              "surname": "Doe",
              "givenName": "John",
@@ -412,7 +412,7 @@ Benutzerrollen ändern
            "id": "user_id_123",
            "name": "john.doe",
            "roles": ["user", "editor", "admin"],
-           "versionNo": 1
+           "version_no": 1
          }'
 
 Referenzinformationen

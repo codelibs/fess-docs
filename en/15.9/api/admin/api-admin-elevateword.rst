@@ -92,11 +92,11 @@ Response
         "settings": [
           {
             "id": "elevate_id_1",
-            "suggestWord": "fess",
+            "suggest_word": "fess",
             "reading": "",
             "permissions": "{role}guest",
             "boost": 100.0,
-            "labelTypeIds": []
+            "label_type_ids": []
           }
         ],
         "total": 5
@@ -123,11 +123,11 @@ Response
         "status": 0,
         "setting": {
           "id": "elevate_id_1",
-          "suggestWord": "fess",
+          "suggest_word": "fess",
           "reading": "",
           "permissions": "{role}guest",
           "boost": 100.0,
-          "labelTypeIds": []
+          "label_type_ids": []
         }
       }
     }
@@ -149,11 +149,11 @@ Request Body
 .. code-block:: json
 
     {
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest",
       "boost": 100.0,
-      "labelTypeIds": ["label1"]
+      "label_type_ids": ["label1"]
     }
 
 Field Description
@@ -166,7 +166,7 @@ Field Description
    * - Field
      - Required
      - Description
-   * - ``suggestWord``
+   * - ``suggest_word``
      - Yes
      - Keyword to elevate
    * - ``reading``
@@ -178,7 +178,7 @@ Field Description
    * - ``boost``
      - Yes
      - Boost value (form default value: 100.0)
-   * - ``labelTypeIds``
+   * - ``label_type_ids``
      - No
      - Target label IDs (array of strings)
 
@@ -213,12 +213,12 @@ Request Body
 
     {
       "id": "existing_elevate_id",
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
-      "labelTypeIds": ["label1"],
-      "versionNo": 1
+      "label_type_ids": ["label1"],
+      "version_no": 1
     }
 
 .. note::
@@ -226,7 +226,7 @@ Request Body
    When updating, the following fields are required in addition to the fields used for creation:
 
    - ``id`` - ID of the elevate word to update
-   - ``versionNo`` - Version number for optimistic locking. Specify the value obtained from ``GET /setting/{id}``.
+   - ``version_no`` - Version number for optimistic locking. Specify the value obtained from ``GET /setting/{id}``.
 
 Response
 --------
@@ -326,7 +326,7 @@ Elevate Product Name
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "Product X",
+           "suggest_word": "Product X",
            "boost": 100.0,
            "permissions": "{role}guest"
          }'
@@ -340,9 +340,9 @@ Elevate to Specific Label
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "API reference",
+           "suggest_word": "API reference",
            "boost": 100.0,
-           "labelTypeIds": ["technical_docs"],
+           "label_type_ids": ["technical_docs"],
            "permissions": "{role}guest"
          }'
 

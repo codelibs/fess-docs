@@ -71,15 +71,15 @@ Parameter
      - String
      - Nein
      - URL-Filter (Wildcards ``*`` ``?`` werden unterstützt)
-   * - ``errorCountMin``
+   * - ``error_count_min``
      - Integer
      - Nein
      - Untergrenze für die Fehleranzahl (größer als oder gleich dem angegebenen Wert)
-   * - ``errorCountMax``
+   * - ``error_count_max``
      - Integer
      - Nein
      - Obergrenze für die Fehleranzahl (kleiner als oder gleich dem angegebenen Wert)
-   * - ``errorName``
+   * - ``error_name``
      - String
      - Nein
      - Fehlername-Filter (Wildcard-Abgleich mit dem gespeicherten vollständig qualifizierten Klassennamen; ``*`` ``?`` werden unterstützt)
@@ -96,22 +96,22 @@ Response
           {
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
-            "threadName": "Crawler-1",
-            "errorName": "java.net.ConnectException",
-            "errorLog": "Connection refused: connect",
-            "errorCount": "3",
-            "lastAccessTime": "1738144800000",
-            "configId": "webConfig_id_1"
+            "thread_name": "Crawler-1",
+            "error_name": "java.net.ConnectException",
+            "error_log": "Connection refused: connect",
+            "error_count": "3",
+            "last_access_time": "1738144800000",
+            "config_id": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
-            "threadName": "Crawler-2",
-            "errorName": "org.codelibs.fess.exception.ContentNotFoundException",
-            "errorLog": "Not found: https://example.com/not-found",
-            "errorCount": "1",
-            "lastAccessTime": "1738143000000",
-            "configId": "webConfig_id_1"
+            "thread_name": "Crawler-2",
+            "error_name": "org.codelibs.fess.exception.ContentNotFoundException",
+            "error_log": "Not found: https://example.com/not-found",
+            "error_count": "1",
+            "last_access_time": "1738143000000",
+            "config_id": "webConfig_id_1"
           }
         ],
         "total": 45
@@ -131,22 +131,22 @@ Response-Felder
      - Fehlgeschlagene-URL-ID
    * - ``url``
      - Die fehlgeschlagene URL
-   * - ``threadName``
+   * - ``thread_name``
      - Thread-Name
-   * - ``errorName``
+   * - ``error_name``
      - Fehlername (vollständig qualifizierter Klassenname der aufgetretenen Ausnahme; z. B. ``java.net.ConnectException``)
-   * - ``errorLog``
+   * - ``error_log``
      - Fehlerprotokoll (Ausnahme-Meldung oder Stack-Trace)
-   * - ``errorCount``
+   * - ``error_count``
      - Anzahl der aufgetretenen Fehler (numerischer Wert als Zeichenkette)
-   * - ``lastAccessTime``
+   * - ``last_access_time``
      - Letzte Zugriffszeit (Epoch-Millisekunden als Zeichenkette)
-   * - ``configId``
+   * - ``config_id``
      - Crawl-Konfigurations-ID
 
 .. note::
 
-   Alle Antwortfelder werden als Zeichenketten (JSON string) zurückgegeben. ``errorCount`` ist ein numerischer Wert, der als Zeichenkette dargestellt wird, und ``lastAccessTime`` sind Epoch-Millisekunden, die als Zeichenkette dargestellt werden.
+   Alle Antwortfelder werden als Zeichenketten (JSON string) zurückgegeben. ``error_count`` ist ein numerischer Wert, der als Zeichenkette dargestellt wird, und ``last_access_time`` sind Epoch-Millisekunden, die als Zeichenkette dargestellt werden.
 
 Fehlgeschlagene URL abrufen
 ===========================
@@ -169,12 +169,12 @@ Response
         "log": {
           "id": "failure_id_1",
           "url": "https://example.com/broken-page",
-          "threadName": "Crawler-1",
-          "errorName": "java.net.ConnectException",
-          "errorLog": "Connection refused: connect",
-          "errorCount": "3",
-          "lastAccessTime": "1738144800000",
-          "configId": "webConfig_id_1"
+          "thread_name": "Crawler-1",
+          "error_name": "java.net.ConnectException",
+          "error_log": "Connection refused: connect",
+          "error_count": "3",
+          "last_access_time": "1738144800000",
+          "config_id": "webConfig_id_1"
         }
       }
     }
@@ -226,7 +226,7 @@ Response
 Fehlertypen
 ===========
 
-``errorName`` speichert den vollständig qualifizierten Klassennamen der Ausnahme, die während des Crawlings aufgetreten ist, genau so wie er erfasst wurde. Es handelt sich nicht um eine feste Aufzählung; je nach ausgelöster Ausnahme kann ein beliebiger Klassenname erscheinen. Im Folgenden sind repräsentative Beispiele aufgeführt.
+``error_name`` speichert den vollständig qualifizierten Klassennamen der Ausnahme, die während des Crawlings aufgetreten ist, genau so wie er erfasst wurde. Es handelt sich nicht um eine feste Aufzählung; je nach ausgelöster Ausnahme kann ein beliebiger Klassenname erscheinen. Im Folgenden sind repräsentative Beispiele aufgeführt.
 
 .. list-table::
    :header-rows: 1
@@ -310,7 +310,7 @@ Nach Fehlertyp aggregieren
     # Anzahl nach Fehlertyp zählen
     curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '[.response.logs[].errorName] | group_by(.) | map({error: .[0], count: length})'
+         jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
 
 Referenzinformationen
 =====================

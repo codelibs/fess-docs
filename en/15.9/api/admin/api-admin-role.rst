@@ -87,12 +87,12 @@ Response
           {
             "id": "role_id_1",
             "name": "admin",
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "role_id_2",
             "name": "user",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -120,7 +120,7 @@ Response
         "setting": {
           "id": "role_id_1",
           "name": "admin",
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -194,7 +194,7 @@ Request Body
     {
       "id": "existing_role_id",
       "name": "editor_updated",
-      "versionNo": 1
+      "version_no": 1
     }
 
 Field Description
@@ -216,9 +216,9 @@ Field Description
    * - ``attributes``
      - No
      - Map of attributes. Values are specified as strings
-   * - ``versionNo``
+   * - ``version_no``
      - Yes
-     - Version number for optimistic locking. Specify the ``versionNo`` value obtained from Get Role
+     - Version number for optimistic locking. Specify the ``version_no`` value obtained from Get Role
 
 Response
 --------

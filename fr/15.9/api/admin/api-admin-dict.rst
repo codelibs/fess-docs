@@ -178,7 +178,7 @@ Les champs de chaque élément du tableau ``settings`` de la réponse varient se
         "settings": [
           {
             "id": 1,
-            "dictId": "ZjA5...synonym.txt",
+            "dict_id": "ZjA5...synonym.txt",
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
@@ -232,7 +232,7 @@ Réponse
         "status": 0,
         "setting": {
           "id": 1,
-          "dictId": "ZjA5...synonym.txt",
+          "dict_id": "ZjA5...synonym.txt",
           "inputs": "検索,サーチ",
           "outputs": "検索,サーチ,リサーチ"
         }
@@ -405,7 +405,7 @@ Champs des entrées par type de dictionnaire
 ===========================================
 
 Les champs du corps de requête de création/mise à jour d'une entrée de dictionnaire ainsi que ceux de la réponse varient selon le type de dictionnaire.
-``id`` (ID de l'entrée) et ``dictId`` (ID du dictionnaire) sont inclus de manière commune dans la réponse.
+``id`` (ID de l'entrée) et ``dict_id`` (ID du dictionnaire) sont inclus de manière commune dans la réponse.
 
 .. list-table::
    :header-rows: 1

@@ -92,7 +92,7 @@ Respuesta
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word"
+            "suggest_word": "inappropriate_word"
           }
         ],
         "total": 5
@@ -119,7 +119,7 @@ Respuesta
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word"
+          "suggest_word": "inappropriate_word"
         }
       }
     }
@@ -141,7 +141,7 @@ Cuerpo de la Solicitud
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword"
+      "suggest_word": "spam_keyword"
     }
 
 Descripción de Campos
@@ -154,7 +154,7 @@ Descripción de Campos
    * - Campo
      - Requerido
      - Descripción
-   * - ``suggestWord``
+   * - ``suggest_word``
      - Sí
      - Palabra clave a excluir (no puede contener espacios en blanco)
 
@@ -189,8 +189,8 @@ Cuerpo de la Solicitud
 
     {
       "id": "existing_badword_id",
-      "suggestWord": "updated_spam_keyword",
-      "versionNo": 1
+      "suggest_word": "updated_spam_keyword",
+      "version_no": 1
     }
 
 Respuesta
@@ -260,7 +260,7 @@ Formato CSV
 ~~~~~~~~~~~
 
 - La primera línea se omite como fila de encabezado (el nombre de la columna es arbitrario; al descargar se escribe ``BadWord``).
-- A partir de la segunda línea, escriba una palabra prohibida por línea como ``suggestWord``.
+- A partir de la segunda línea, escriba una palabra prohibida por línea como ``suggest_word``.
 - Las líneas cuyo valor está en blanco se ignoran.
 - Anteponga ``--`` a una palabra para eliminarla (por ejemplo, ``--spam`` elimina ``spam``).
 - Especificar una palabra ya registrada se trata como una actualización (se restablecen el usuario y la fecha de actualización).
@@ -306,7 +306,7 @@ Excluir Palabra Clave de Spam
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam"
+           "suggest_word": "spam"
          }'
 
 Subir Archivo CSV

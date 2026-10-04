@@ -76,9 +76,9 @@ Réponse
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "totalWordsNum": 1500,
-          "documentWordsNum": 1200,
-          "queryWordsNum": 450
+          "total_words_num": 1500,
+          "document_words_num": 1200,
+          "query_words_num": 450
         }
       }
     }
@@ -92,18 +92,18 @@ Champs de la réponse
 
    * - Champ
      - Description
-   * - ``setting.totalWordsNum``
+   * - ``setting.total_words_num``
      - Nombre total de mots de suggestion (nombre de mots de suggestion enregistrés dans l'index de suggestion)
-   * - ``setting.documentWordsNum``
+   * - ``setting.document_words_num``
      - Nombre de mots de suggestion issus des documents (nombre de mots de suggestion dont la fréquence documentaire est supérieure ou égale à 1)
-   * - ``setting.queryWordsNum``
+   * - ``setting.query_words_num``
      - Nombre de mots de suggestion issus des requêtes de recherche (nombre de mots de suggestion dont la fréquence de requête est supérieure ou égale à 1)
 
 .. note::
 
-   ``documentWordsNum`` et ``queryWordsNum`` ne sont pas exclusifs l'un de l'autre. Si un mot de suggestion est issu
+   ``document_words_num`` et ``query_words_num`` ne sont pas exclusifs l'un de l'autre. Si un mot de suggestion est issu
    à la fois d'un document et d'une requête de recherche, il est comptabilisé dans les deux totaux. Par conséquent,
-   la somme de ``documentWordsNum`` et de ``queryWordsNum`` peut ne pas correspondre à ``totalWordsNum``.
+   la somme de ``document_words_num`` et de ``query_words_num`` peut ne pas correspondre à ``total_words_num``.
 
 Suppression de tous les mots de suggestion
 ==========================================

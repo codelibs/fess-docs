@@ -100,16 +100,16 @@ Respuesta
             "id": "label_id_1",
             "name": "Documentation",
             "value": "docs",
-            "includedPaths": ".*docs\\.example\\.com.*",
-            "excludedPaths": "",
+            "included_paths": ".*docs\\.example\\.com.*",
+            "excluded_paths": "",
             "permissions": "{role}admin",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -118,8 +118,8 @@ Respuesta
 
 .. note::
 
-   Cada objeto de configuración también incluye ``createdBy`` / ``createdTime`` / ``updatedBy`` /
-   ``updatedTime`` para auditoría, y ``versionNo`` para bloqueo optimista (los campos con valor
+   Cada objeto de configuración también incluye ``created_by`` / ``created_time`` / ``updated_by`` /
+   ``updated_time`` para auditoría, y ``version_no`` para bloqueo optimista (los campos con valor
    ``null`` se omiten). El objeto ``response`` siempre contiene ``version``, que indica la versión
    del producto, aunque en los ejemplos siguientes puede omitirse por brevedad.
 
@@ -145,16 +145,16 @@ Respuesta
           "id": "label_id_1",
           "name": "Documentation",
           "value": "docs",
-          "includedPaths": ".*docs\\.example\\.com.*",
-          "excludedPaths": "",
+          "included_paths": ".*docs\\.example\\.com.*",
+          "excluded_paths": "",
           "permissions": "{role}admin",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
@@ -178,9 +178,9 @@ Cuerpo de la solicitud
     {
       "name": "News",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
-      "excludedPaths": ".*/(archive|old)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
+      "excluded_paths": ".*/(archive|old)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest"
     }
 
@@ -203,11 +203,11 @@ Descripción de campos
      - String
      - Sí
      - Valor de la etiqueta (utilizado con el parámetro ``label`` en las búsquedas). Solo se permiten caracteres alfanuméricos ASCII y guión bajo (``_``), y debe coincidir con la expresión regular ``^[a-zA-Z0-9_]+$`` (máximo 100 caracteres).
-   * - ``includedPaths``
+   * - ``included_paths``
      - String
      - No
      - Expresión regular de las rutas a las que se aplica la etiqueta. Si se especifican varias, sepárelas con salto de línea (``\n``).
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - String
      - No
      - Expresión regular de las rutas excluidas de la etiqueta. Si se especifican varias, sepárelas con salto de línea (``\n``).
@@ -215,18 +215,18 @@ Descripción de campos
      - String
      - No
      - Roles, grupos o usuarios con permiso de acceso (por ejemplo: ``{role}admin``). Si se especifican varios, sepárelos con salto de línea (``\n``).
-   * - ``sortOrder``
+   * - ``sort_order``
      - Integer
      - No
      - Orden de visualización (entero mayor o igual a 0). El valor predeterminado es ``0``.
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - No
      - Host virtual (máximo 1000 caracteres).
 
 .. note::
 
-   Los campos de auditoría como ``createdBy`` / ``createdTime`` son establecidos automáticamente
+   Los campos de auditoría como ``created_by`` / ``created_time`` son establecidos automáticamente
    por el servidor, por lo que no es necesario especificarlos en la solicitud.
 
 Respuesta
@@ -264,11 +264,11 @@ Cuerpo de la solicitud
       "id": "existing_label_id",
       "name": "News Articles",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
-      "excludedPaths": ".*/(archive|old|draft)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
+      "excluded_paths": ".*/(archive|old|draft)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest",
-      "versionNo": 1
+      "version_no": 1
     }
 
 En la actualización, además de los campos de creación, los siguientes campos son obligatorios.
@@ -285,10 +285,10 @@ En la actualización, además de los campos de creación, los siguientes campos 
      - String
      - Sí
      - ID del tipo de etiqueta a actualizar.
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - Sí
-     - Número de versión para bloqueo optimista. Especifique el valor de ``versionNo`` incluido en la respuesta al obtener el registro. Si la versión especificada no coincide con la actual, la actualización fallará.
+     - Número de versión para bloqueo optimista. Especifique el valor de ``version_no`` incluido en la respuesta al obtener el registro. Si la versión especificada no coincide con la actual, la actualización fallará.
 
 Respuesta
 ---------
@@ -340,8 +340,8 @@ Crear etiqueta para documentación
          -d '{
            "name": "Technical Documentation",
            "value": "tech_docs",
-           "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
-           "sortOrder": 0,
+           "included_paths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

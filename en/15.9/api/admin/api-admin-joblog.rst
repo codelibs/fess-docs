@@ -81,25 +81,25 @@ Response
         "logs": [
           {
             "id": "joblog_id_1",
-            "jobName": "Default Crawler",
-            "jobStatus": "ok",
+            "job_name": "Default Crawler",
+            "job_status": "ok",
             "target": "all",
-            "scriptType": "javascript",
-            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-            "scriptResult": "Job completed successfully",
-            "startTime": "1738116000000",
-            "endTime": "1738118723000"
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Job completed successfully",
+            "start_time": "1738116000000",
+            "end_time": "1738118723000"
           },
           {
             "id": "joblog_id_2",
-            "jobName": "Default Crawler",
-            "jobStatus": "fail",
+            "job_name": "Default Crawler",
+            "job_status": "fail",
             "target": "all",
-            "scriptType": "javascript",
-            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-            "scriptResult": "Error: Connection timeout",
-            "startTime": "1738029600000",
-            "endTime": "1738030215000"
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Error: Connection timeout",
+            "start_time": "1738029600000",
+            "end_time": "1738030215000"
           }
         ],
         "total": 100
@@ -117,26 +117,26 @@ Response Fields
      - Description
    * - ``id``
      - Job log ID
-   * - ``jobName``
+   * - ``job_name``
      - Job name
-   * - ``jobStatus``
+   * - ``job_status``
      - Job status (``ok``: success, ``fail``: failure, ``running``: in progress)
    * - ``target``
      - Execution target (scheduler target name; default is ``all``)
-   * - ``scriptType``
+   * - ``script_type``
      - Script type (e.g., ``javascript``)
-   * - ``scriptData``
+   * - ``script_data``
      - Execution script
-   * - ``scriptResult``
+   * - ``script_result``
      - Execution result
-   * - ``startTime``
+   * - ``start_time``
      - Start time (epoch milliseconds; returned as a string)
-   * - ``endTime``
+   * - ``end_time``
      - End time (epoch milliseconds; returned as a string). Not returned for running jobs.
 
 .. note::
 
-   Each log object in the response also includes an internal ``crudMode`` field
+   Each log object in the response also includes an internal ``crud_mode`` field
    (an integer indicating the CRUD operation mode, always ``0`` for read operations).
    Clients can safely ignore it.
 
@@ -160,14 +160,14 @@ Response
         "status": 0,
         "log": {
           "id": "joblog_id_1",
-          "jobName": "Default Crawler",
-          "jobStatus": "ok",
+          "job_name": "Default Crawler",
+          "job_status": "ok",
           "target": "all",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": "1738116000000",
-          "endTime": "1738118723000"
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "script_result": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
+          "start_time": "1738116000000",
+          "end_time": "1738118723000"
         }
       }
     }

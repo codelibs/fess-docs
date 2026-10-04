@@ -77,9 +77,9 @@ Response
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "totalWordsNum": 1500,
-          "documentWordsNum": 1200,
-          "queryWordsNum": 450
+          "total_words_num": 1500,
+          "document_words_num": 1200,
+          "query_words_num": 450
         }
       }
     }
@@ -93,18 +93,18 @@ Response Fields
 
    * - Field
      - Description
-   * - ``setting.totalWordsNum``
+   * - ``setting.total_words_num``
      - Total number of suggest words (the number of suggest words registered in the suggest index)
-   * - ``setting.documentWordsNum``
+   * - ``setting.document_words_num``
      - Number of document-derived suggest words (the number of suggest words with a document frequency of 1 or more)
-   * - ``setting.queryWordsNum``
+   * - ``setting.query_words_num``
      - Number of search-query-derived suggest words (the number of suggest words with a query frequency of 1 or more)
 
 .. note::
 
-   ``documentWordsNum`` and ``queryWordsNum`` are not mutually exclusive. If a single suggest word
+   ``document_words_num`` and ``query_words_num`` are not mutually exclusive. If a single suggest word
    is derived from both a document and a search query, it is included in both counts. Therefore,
-   the sum of ``documentWordsNum`` and ``queryWordsNum`` may not equal ``totalWordsNum``.
+   the sum of ``document_words_num`` and ``query_words_num`` may not equal ``total_words_num``.
 
 Delete All Suggest Words
 ========================

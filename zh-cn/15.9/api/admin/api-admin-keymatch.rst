@@ -92,9 +92,9 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
             "id": "keymatch_id_1",
             "term": "download",
             "query": "title:download OR content:download",
-            "maxSize": 10,
+            "max_size": 10,
             "boost": 10.0,
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -104,8 +104,8 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
 .. note::
 
    ``total`` 中设置的是符合筛选条件的总记录数（而非当前页的记录数）。
-   各设置对象除上述字段外，若有值则还会包含 ``virtualHost`` 、
-   ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、 ``updatedTime`` 。
+   各设置对象除上述字段外，若有值则还会包含 ``virtual_host`` 、
+   ``created_by`` 、 ``created_time`` 、 ``updated_by`` 、 ``updated_time`` 。
 
 获取关键词匹配
 ==============
@@ -129,21 +129,21 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
           "id": "keymatch_id_1",
           "term": "download",
           "query": "title:download OR content:download",
-          "maxSize": 10,
+          "max_size": 10,
           "boost": 10.0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   ``versionNo`` 是用于乐观锁的版本号。更新关键词匹配时，请在请求体中指定获取时得到的
-   ``versionNo`` 。若指定的ID不存在，则返回错误。
+   ``version_no`` 是用于乐观锁的版本号。更新关键词匹配时，请在请求体中指定获取时得到的
+   ``version_no`` 。若指定的ID不存在，则返回错误。
 
 创建关键词匹配
 ==============
@@ -164,7 +164,7 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
     {
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing",
-      "maxSize": 5,
+      "max_size": 5,
       "boost": 20.0
     }
 
@@ -187,7 +187,7 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
      - String
      - 是
      - 匹配条件查询（最大长度取决于 ``form.admin.max.input.size`` 的设置值）
-   * - ``maxSize``
+   * - ``max_size``
      - Integer
      - 是
      - 最大显示数量（0以上的整数，管理界面初始值为10）
@@ -195,16 +195,16 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
      - Float
      - 是
      - 提升值（管理界面初始值为100.0）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - 否
      - 虚拟主机名（最大1000个字符，用于按虚拟主机切换关键词匹配时指定）
 
 .. note::
 
-   ``maxSize`` 和 ``boost`` 在通过API调用时为必填项。初始值是管理界面表单中显示的值，
+   ``max_size`` 和 ``boost`` 在通过API调用时为必填项。初始值是管理界面表单中显示的值，
    不适用于API。若省略则会返回验证错误。
-   另外，即使在请求中指定了 ``createdBy`` 和 ``createdTime`` ，服务器端也会将其覆盖。
+   另外，即使在请求中指定了 ``created_by`` 和 ``created_time`` ，服务器端也会将其覆盖。
 
 响应
 ----
@@ -239,15 +239,15 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
       "id": "existing_keymatch_id",
       "term": "pricing",
       "query": "url:*/pricing* OR title:pricing OR content:price",
-      "maxSize": 10,
+      "max_size": 10,
       "boost": 15.0,
-      "versionNo": 1
+      "version_no": 1
     }
 
 字段说明
 ~~~~~~~~
 
-在创建时的字段（ ``term`` 、 ``query`` 、 ``maxSize`` 、 ``boost`` 、 ``virtualHost`` ）基础上，
+在创建时的字段（ ``term`` 、 ``query`` 、 ``max_size`` 、 ``boost`` 、 ``virtual_host`` ）基础上，
 还需指定以下字段。
 
 .. list-table::
@@ -262,7 +262,7 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
      - String
      - 是
      - 待更新的关键词匹配ID（最大1000个字符）
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - 是
      - 乐观锁用版本号，请指定获取时得到的值
@@ -315,7 +315,7 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
          -d '{
            "term": "product features",
            "query": "url:*/products/* AND (title:features OR content:features)",
-           "maxSize": 10,
+           "max_size": 10,
            "boost": 15.0
          }'
 
@@ -330,7 +330,7 @@ KeyMatch API是用于管理 |Fess| 关键词匹配（搜索关键词与结果的
          -d '{
            "term": "help",
            "query": "url:*/support/* OR url:*/help/* OR url:*/faq/*",
-           "maxSize": 5,
+           "max_size": 5,
            "boost": 20.0
          }'
 

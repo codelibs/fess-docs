@@ -106,20 +106,20 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
             "name": "Shared Documents",
             "description": "공유 문서",
             "paths": "smb://server/share/documents",
-            "includedPaths": ".*\\.pdf$",
-            "excludedPaths": ".*/(temp|cache)/.*",
-            "includedDocPaths": "",
-            "excludedDocPaths": "",
-            "configParameter": "",
+            "included_paths": ".*\\.pdf$",
+            "excluded_paths": ".*/(temp|cache)/.*",
+            "included_doc_paths": "",
+            "excluded_doc_paths": "",
+            "config_parameter": "",
             "depth": 10,
-            "maxAccessCount": 1000,
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -151,34 +151,34 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
           "name": "Shared Documents",
           "description": "공유 문서",
           "paths": "smb://server/share/documents",
-          "includedPaths": ".*\\.pdf$",
-          "excludedPaths": ".*/(temp|cache)/.*",
-          "includedDocPaths": "",
-          "excludedDocPaths": "",
-          "configParameter": "",
+          "included_paths": ".*\\.pdf$",
+          "excluded_paths": ".*/(temp|cache)/.*",
+          "included_doc_paths": "",
+          "excluded_doc_paths": "",
+          "config_parameter": "",
           "depth": 10,
-          "maxAccessCount": 1000,
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   응답에는 등록 및 업데이트 시 자동으로 설정되는 ``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime``, ``versionNo`` 가 포함됩니다.
-   ``versionNo`` 는 업데이트 시 필요합니다 (아래의 「파일 크롤링 설정 업데이트」를 참조).
+   응답에는 등록 및 업데이트 시 자동으로 설정되는 ``created_by``, ``created_time``,
+   ``updated_by``, ``updated_time``, ``version_no`` 가 포함됩니다.
+   ``version_no`` 는 업데이트 시 필요합니다 (아래의 「파일 크롤링 설정 업데이트」를 참조).
 
 파일 크롤링 설정 생성
 ========================
@@ -199,13 +199,13 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
     {
       "name": "Local Files",
       "paths": "file:///data/documents",
-      "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
-      "excludedPaths": ".*/(temp|backup)/.*",
-      "numOfThread": 2,
-      "intervalTime": 500,
+      "included_paths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
+      "excluded_paths": ".*/(temp|backup)/.*",
+      "num_of_thread": 2,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -228,31 +228,31 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
    * - ``paths``
      - 예
      - 크롤링 시작 경로 (여러 개인 경우 줄바꿈으로 구분). ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``s3:``, ``gcs:`` 중 하나의 프로토콜로 지정합니다
-   * - ``includedPaths``
+   * - ``included_paths``
      - 아니오
      - 크롤링 대상 경로의 정규 표현식 패턴
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - 아니오
      - 크롤링 제외 경로의 정규 표현식 패턴
-   * - ``includedDocPaths``
+   * - ``included_doc_paths``
      - 아니오
      - 인덱스 대상 경로의 정규 표현식 패턴
-   * - ``excludedDocPaths``
+   * - ``excluded_doc_paths``
      - 아니오
      - 인덱스 제외 경로의 정규 표현식 패턴
-   * - ``configParameter``
+   * - ``config_parameter``
      - 아니오
      - 추가 설정 파라미터 (``key=value`` 형식, 한 줄에 한 항목)
    * - ``depth``
      - 아니오
      - 크롤링 깊이 (0 이상)
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - 아니오
      - 최대 접근 수 (0 이상)
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - 예
      - 병렬 스레드 수 (1 이상)
-   * - ``intervalTime``
+   * - ``interval_time``
      - 예
      - 접근 간격 (밀리초, 0 이상)
    * - ``boost``
@@ -261,19 +261,19 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
    * - ``available``
      - 예
      - 활성화/비활성화 (문자열 ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - 예
      - 표시 순서 (0 이상)
    * - ``permissions``
      - 아니오
      - 접근 허용 역할 (여러 개인 경우 줄바꿈으로 구분)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - 아니오
      - 가상 호스트 (여러 개인 경우 줄바꿈으로 구분)
 
 .. note::
 
-   ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` 등의 감사용 필드는
+   ``created_by``, ``created_time``, ``updated_by``, ``updated_time`` 등의 감사용 필드는
    서버 측에서 자동으로 설정되므로 요청 본문에 지정할 필요가 없습니다.
 
 응답
@@ -303,8 +303,8 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
 요청 본문
 ~~~~~~~~~~~~~~~~
 
-업데이트 시에는 생성 시의 필드에 더하여, 업데이트 대상을 식별하는 ``id`` 와 버전 번호 ``versionNo`` 가 필수입니다.
-``versionNo`` 에는 조회 API (GET)의 응답에 포함된 현재 값을 지정합니다.
+업데이트 시에는 생성 시의 필드에 더하여, 업데이트 대상을 식별하는 ``id`` 와 버전 번호 ``version_no`` 가 필수입니다.
+``version_no`` 에는 조회 API (GET)의 응답에 포함된 현재 값을 지정합니다.
 
 .. code-block:: json
 
@@ -312,16 +312,16 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
       "id": "existing_fileconfig_id",
       "name": "Updated Local Files",
       "paths": "file:///data/documents",
-      "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$",
-      "excludedPaths": ".*/(temp|backup|archive)/.*",
+      "included_paths": ".*\\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$",
+      "excluded_paths": ".*/(temp|backup|archive)/.*",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 3,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 3,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 업데이트 시 추가 필드
@@ -337,9 +337,9 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
    * - ``id``
      - 예
      - 업데이트 대상의 설정 ID (최대 1000자)
-   * - ``versionNo``
+   * - ``version_no``
      - 예
-     - 업데이트 대상의 현재 버전 번호. 조회 API (GET)의 응답에 포함된 ``versionNo`` 를 지정합니다
+     - 업데이트 대상의 현재 버전 번호. 조회 API (GET)의 응답에 포함된 ``version_no`` 를 지정합니다
 
 응답
 ----------
@@ -418,13 +418,13 @@ FileConfig API는 |Fess| 의 파일 크롤링 설정을 관리하기 위한 API�
          -d '{
            "name": "Local Files",
            "paths": "file:///data/documents",
-           "includedPaths": ".*\\.(pdf|doc|docx)$",
-           "excludedPaths": ".*/(temp|backup)/.*",
-           "numOfThread": 2,
-           "intervalTime": 500,
+           "included_paths": ".*\\.(pdf|doc|docx)$",
+           "excluded_paths": ".*/(temp|backup)/.*",
+           "num_of_thread": 2,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -439,14 +439,14 @@ SMB 공유 크롤링 설정
          -d '{
            "name": "SMB Share",
            "paths": "smb://server/documents",
-           "includedPaths": ".*\\.(pdf|doc|docx)$",
-           "excludedPaths": ".*/(temp|private)/.*",
-           "maxAccessCount": 50000,
-           "numOfThread": 3,
-           "intervalTime": 200,
+           "included_paths": ".*\\.(pdf|doc|docx)$",
+           "excluded_paths": ".*/(temp|private)/.*",
+           "max_access_count": 50000,
+           "num_of_thread": 3,
+           "interval_time": 200,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

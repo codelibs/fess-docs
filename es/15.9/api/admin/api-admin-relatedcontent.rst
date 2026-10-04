@@ -93,13 +93,13 @@ Respuesta
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -110,9 +110,9 @@ Respuesta
 
    Cada elemento de ``settings`` y el objeto ``setting`` devuelto por el endpoint de
    obtención contienen los campos de la entidad almacenada tal como están. Además de
-   ``term``, ``content``, ``sortOrder`` y ``virtualHost``, también se devuelven los campos
-   de auditoría ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` y el campo
-   de bloqueo optimista ``versionNo``. ``createdTime`` y ``updatedTime`` se expresan como
+   ``term``, ``content``, ``sort_order`` y ``virtual_host``, también se devuelven los campos
+   de auditoría ``created_by``, ``created_time``, ``updated_by``, ``updated_time`` y el campo
+   de bloqueo optimista ``version_no``. ``created_time`` y ``updated_time`` se expresan como
    milisegundos desde el epoch (números). Los campos que no están establecidos (null) se
    omiten de la respuesta. Además, el objeto ``response`` de todas las respuestas incluye
    siempre ``version``, que indica la versión del producto (consulte :doc:`api-admin-overview`
@@ -141,20 +141,20 @@ Respuesta
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   El valor de ``versionNo`` necesario al actualizar (PUT) es el valor incluido en
+   El valor de ``version_no`` necesario al actualizar (PUT) es el valor incluido en
    esta respuesta de obtención.
 
 Crear Contenido Relacionado
@@ -176,8 +176,8 @@ Cuerpo de la Solicitud
     {
       "term": "search",
       "content": "<div class='related'><h3>About Search</h3><p>Learn more about search features...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": ""
+      "sort_order": 0,
+      "virtual_host": ""
     }
 
 Descripción de Campos
@@ -196,10 +196,10 @@ Descripción de Campos
    * - ``content``
      - Sí
      - Contenido HTML a mostrar (máx. 10000 caracteres)
-   * - ``sortOrder``
+   * - ``sort_order``
      - No
      - Orden de visualización (entero entre 0 y 2147483647)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - No
      - Host virtual (máx. 1000 caracteres)
 
@@ -237,9 +237,9 @@ Cuerpo de la Solicitud
       "id": "existing_content_id",
       "term": "search",
       "content": "<div class='related updated'><h3>About Search</h3><p>Updated information...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": "",
-      "versionNo": 1
+      "sort_order": 0,
+      "virtual_host": "",
+      "version_no": 1
     }
 
 Descripción de Campos
@@ -261,13 +261,13 @@ Descripción de Campos
    * - ``content``
      - Sí
      - Contenido HTML a mostrar (máx. 10000 caracteres)
-   * - ``sortOrder``
+   * - ``sort_order``
      - No
      - Orden de visualización (entero entre 0 y 2147483647)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - No
      - Host virtual (máx. 1000 caracteres)
-   * - ``versionNo``
+   * - ``version_no``
      - Sí
      - Número de versión para el bloqueo optimista. Especifique el valor incluido en la respuesta de ``setting/{id}``.
 
@@ -287,8 +287,8 @@ Respuesta
 
 .. note::
 
-   Los campos de auditoría como ``createdBy``, ``createdTime``, ``updatedBy``,
-   ``updatedTime`` y ``crudMode`` se ignoran aunque se incluyan en el cuerpo de la
+   Los campos de auditoría como ``created_by``, ``created_time``, ``updated_by``,
+   ``updated_time`` y ``crud_mode`` se ignoran aunque se incluyan en el cuerpo de la
    solicitud, ya que son establecidos automáticamente en el lado del servidor. No es
    necesario especificarlos al crear o actualizar.
 
@@ -328,7 +328,7 @@ Contenido Relacionado de Información de Producto
          -d '{
            "term": "product",
            "content": "<div class=\"product-info\"><h3>Our Products</h3><ul><li>Product A</li><li>Product B</li></ul></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Contenido Relacionado de Información de Soporte
@@ -342,7 +342,7 @@ Contenido Relacionado de Información de Soporte
          -d '{
            "term": "support",
            "content": "<div><p>Need help? Contact: support@example.com</p></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Información de Referencia

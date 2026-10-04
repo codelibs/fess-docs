@@ -77,9 +77,9 @@ Suggest API는 |Fess| 의 서제스트 기능에서 사용되는 서제스트 �
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "totalWordsNum": 1500,
-          "documentWordsNum": 1200,
-          "queryWordsNum": 450
+          "total_words_num": 1500,
+          "document_words_num": 1200,
+          "query_words_num": 450
         }
       }
     }
@@ -93,18 +93,18 @@ Suggest API는 |Fess| 의 서제스트 기능에서 사용되는 서제스트 �
 
    * - 필드
      - 설명
-   * - ``setting.totalWordsNum``
+   * - ``setting.total_words_num``
      - 서제스트 워드의 총수(서제스트 인덱스에 등록된 서제스트 워드의 건수)
-   * - ``setting.documentWordsNum``
+   * - ``setting.document_words_num``
      - 문서에서 유래한 서제스트 워드 수(문서 빈도가 1 이상인 서제스트 워드의 건수)
-   * - ``setting.queryWordsNum``
+   * - ``setting.query_words_num``
      - 검색 쿼리에서 유래한 서제스트 워드 수(쿼리 빈도가 1 이상인 서제스트 워드의 건수)
 
 .. note::
 
-   ``documentWordsNum`` 과 ``queryWordsNum`` 은 배타적이지 않습니다. 하나의 서제스트 워드가
+   ``document_words_num`` 과 ``query_words_num`` 은 배타적이지 않습니다. 하나의 서제스트 워드가
    문서와 검색 쿼리 양쪽에서 유래한 경우, 양쪽 건수에 모두 포함됩니다. 이로 인해
-   ``documentWordsNum`` 과 ``queryWordsNum`` 의 합계가 ``totalWordsNum`` 과 일치하지 않을 수 있습니다.
+   ``document_words_num`` 과 ``query_words_num`` 의 합계가 ``total_words_num`` 과 일치하지 않을 수 있습니다.
 
 전체 서제스트 워드 삭제
 ========================

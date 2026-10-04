@@ -98,14 +98,14 @@ Response
             "id": "token_id_1",
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
-            "parameterName": "permission",
+            "parameter_name": "permission",
             "permissions": "{role}admin-api",
             "expires": "2026-01-01T00:00:00",
-            "createdBy": "admin",
-            "createdTime": 1735689600000,
-            "updatedBy": "admin",
-            "updatedTime": 1735689600000,
-            "versionNo": 1
+            "created_by": "admin",
+            "created_time": 1735689600000,
+            "updated_by": "admin",
+            "updated_time": 1735689600000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -114,9 +114,9 @@ Response
 
 .. note::
 
-   Each token object also includes audit and version information such as ``createdBy`` , ``createdTime`` , ``updatedBy`` ,
-   ``updatedTime`` , and ``versionNo`` .
-   ``createdTime`` and ``updatedTime`` are milliseconds since epoch (numeric).
+   Each token object also includes audit and version information such as ``created_by`` , ``created_time`` , ``updated_by`` ,
+   ``updated_time`` , and ``version_no`` .
+   ``created_time`` and ``updated_time`` are milliseconds since epoch (numeric).
    Fields with a value of ``null`` are excluded from the response.
    ``permissions`` is returned as a newline ( ``\n`` ) separated string.
 
@@ -142,14 +142,14 @@ Response
           "id": "token_id_1",
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
-          "parameterName": "permission",
+          "parameter_name": "permission",
           "permissions": "{role}admin-api",
           "expires": "2026-01-01T00:00:00",
-          "createdBy": "admin",
-          "createdTime": 1735689600000,
-          "updatedBy": "admin",
-          "updatedTime": 1735689600000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1735689600000,
+          "updated_by": "admin",
+          "updated_time": 1735689600000,
+          "version_no": 1
         }
       }
     }
@@ -192,7 +192,7 @@ Field Descriptions
    * - ``permissions``
      - No
      - Permissions granted to this token. Multiple permissions can be specified separated by newlines ( ``\n`` ) (example: ``{role}admin-api`` ). Tokens that call the Admin API require a permission matching ``api.admin.access.permissions`` (default value: ``{role}admin-api`` ).
-   * - ``parameterName``
+   * - ``parameter_name``
      - No
      - Request parameter name for passing additional permissions. If a request authenticated with this token contains a parameter with the name specified here, its value will be added to ``permissions`` . If omitted, this is not configured.
    * - ``expires``
@@ -239,7 +239,7 @@ Request Body
       "name": "Updated API Token",
       "permissions": "{role}admin-api\n{role}user",
       "expires": "2026-01-01T00:00:00",
-      "versionNo": 1
+      "version_no": 1
     }
 
 Field Descriptions
@@ -257,9 +257,9 @@ For updates, the following fields are used in addition to the fields used at cre
    * - ``id``
      - Yes
      - ID of the token to update
-   * - ``versionNo``
+   * - ``version_no``
      - Yes
-     - Version number for optimistic locking. Specify the ``versionNo`` of the token retrieved beforehand.
+     - Version number for optimistic locking. Specify the ``version_no`` of the token retrieved beforehand.
 
 .. note::
 

@@ -90,7 +90,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
             "id": "query_id_1",
             "term": "fess",
             "queries": "fess tutorial\nfess installation\nfess configuration",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -99,9 +99,9 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
 
 .. note::
 
-   各設定には ``versionNo``\ （楽観的ロック用のバージョン番号）が含まれます。\ ``virtualHost``
-   や監査用フィールド（``createdBy``、``createdTime``、``updatedBy``、``updatedTime``）は、
-   値が設定されている場合に限り含まれます。値が空の ``virtualHost`` はレスポンスに含まれません。
+   各設定には ``version_no``\ （楽観的ロック用のバージョン番号）が含まれます。\ ``virtual_host``
+   や監査用フィールド（``created_by``、``created_time``、``updated_by``、``updated_time``）は、
+   値が設定されている場合に限り含まれます。値が空の ``virtual_host`` はレスポンスに含まれません。
 
 関連クエリ取得
 ==============
@@ -126,8 +126,8 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": "site1.example.com",
-          "versionNo": 1
+          "virtual_host": "site1.example.com",
+          "version_no": 1
         }
       }
     }
@@ -151,7 +151,7 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
     {
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search",
-      "virtualHost": ""
+      "virtual_host": ""
     }
 
 フィールド説明
@@ -170,13 +170,13 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
    * - ``queries``
      - はい
      - 関連クエリ。1行に1件を記述した改行区切りの文字列です（空行は無視されます。最大10000文字）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - いいえ
      - 仮想ホスト（最大1000文字）
 
 .. note::
 
-   ``crudMode`` はAPI側で自動的に設定されるため、リクエストボディに含める必要はありません。
+   ``crud_mode`` はAPI側で自動的に設定されるため、リクエストボディに含める必要はありません。
 
 レスポンス
 ----------
@@ -212,8 +212,8 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
       "id": "existing_query_id",
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
-      "virtualHost": "",
-      "versionNo": 1
+      "virtual_host": "",
+      "version_no": 1
     }
 
 フィールド説明
@@ -235,10 +235,10 @@ RelatedQuery APIは、|Fess| の関連クエリを管理するためのAPIです
    * - ``queries``
      - はい
      - 関連クエリ。1行に1件を記述した改行区切りの文字列です（空行は無視されます。最大10000文字）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - いいえ
      - 仮想ホスト（最大1000文字）
-   * - ``versionNo``
+   * - ``version_no``
      - はい
      - 楽観的ロック用のバージョン番号。取得時のレスポンスに含まれる値を指定します
 

@@ -93,13 +93,13 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -109,9 +109,9 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 .. note::
 
    ``settings`` の各要素および単一取得の ``setting`` には、保存されているエンティティの
-   フィールドがそのまま含まれます。\ ``term``、``content``、``sortOrder``、``virtualHost`` に
-   加えて、監査用の ``createdBy``・``createdTime``・``updatedBy``・``updatedTime`` と、
-   楽観的ロック用の ``versionNo`` も返されます。\ ``createdTime``・``updatedTime`` は
+   フィールドがそのまま含まれます。\ ``term``、``content``、``sort_order``、``virtual_host`` に
+   加えて、監査用の ``created_by``・``created_time``・``updated_by``・``updated_time`` と、
+   楽観的ロック用の ``version_no`` も返されます。\ ``created_time``・``updated_time`` は
    エポックからのミリ秒（数値）です。値が未設定（null）のフィールドはレスポンスには
    含まれません。また、すべてのレスポンスの ``response`` オブジェクトには、製品バージョンを
    示す ``version`` が常に含まれます（詳細は :doc:`api-admin-overview` を参照）。
@@ -139,20 +139,20 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   更新（PUT）の際に必要となる ``versionNo`` は、この取得結果に含まれる値を指定します。
+   更新（PUT）の際に必要となる ``version_no`` は、この取得結果に含まれる値を指定します。
 
 関連コンテンツ作成
 ==================
@@ -173,8 +173,8 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
     {
       "term": "search",
       "content": "<div class='related'><h3>About Search</h3><p>Learn more about search features...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": ""
+      "sort_order": 0,
+      "virtual_host": ""
     }
 
 フィールド説明
@@ -193,10 +193,10 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
    * - ``content``
      - はい
      - 表示するHTMLコンテンツ（最大10000文字）
-   * - ``sortOrder``
+   * - ``sort_order``
      - いいえ
      - 表示順序（0以上2147483647以下の整数）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - いいえ
      - 仮想ホスト（最大1000文字）
 
@@ -234,9 +234,9 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
       "id": "existing_content_id",
       "term": "search",
       "content": "<div class='related updated'><h3>About Search</h3><p>Updated information...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": "",
-      "versionNo": 1
+      "sort_order": 0,
+      "virtual_host": "",
+      "version_no": 1
     }
 
 フィールド説明
@@ -258,13 +258,13 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
    * - ``content``
      - はい
      - 表示するHTMLコンテンツ（最大10000文字）
-   * - ``sortOrder``
+   * - ``sort_order``
      - いいえ
      - 表示順序（0以上2147483647以下の整数）
-   * - ``virtualHost``
+   * - ``virtual_host``
      - いいえ
      - 仮想ホスト（最大1000文字）
-   * - ``versionNo``
+   * - ``version_no``
      - はい
      - 楽観的ロック用のバージョン番号。\ ``setting/{id}`` の取得結果に含まれる値を指定します。
 
@@ -284,8 +284,8 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
 
 .. note::
 
-   ``createdBy``・``createdTime``・``updatedBy``・``updatedTime`` などの監査フィールドや
-   ``crudMode`` をリクエストボディに含めても、サーバー側で自動的に設定されるため無視されます。
+   ``created_by``・``created_time``・``updated_by``・``updated_time`` などの監査フィールドや
+   ``crud_mode`` をリクエストボディに含めても、サーバー側で自動的に設定されるため無視されます。
    作成・更新時に指定する必要はありません。
 
 関連コンテンツ削除
@@ -324,7 +324,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
          -d '{
            "term": "product",
            "content": "<div class=\"product-info\"><h3>Our Products</h3><ul><li>Product A</li><li>Product B</li></ul></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 サポート情報の関連コンテンツ
@@ -338,7 +338,7 @@ RelatedContent APIは、|Fess| の関連コンテンツを管理するためのA
          -d '{
            "term": "support",
            "content": "<div><p>Need help? Contact: support@example.com</p></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 参考情報

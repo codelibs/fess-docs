@@ -67,7 +67,7 @@ Paramètres
      - Integer
      - Non
      - Numéro de page (base 1, défaut : 1)
-   * - ``sessionId``
+   * - ``session_id``
      - String
      - Non
      - Filtre par ID de session (correspondance partielle)
@@ -83,17 +83,17 @@ Réponse
         "logs": [
           {
             "id": "crawling_info_id_1",
-            "sessionId": "20250129100000",
+            "session_id": "20250129100000",
             "name": "Default Crawler",
-            "expiredTime": "1738200000000",
-            "createdTime": 1738108800000
+            "expired_time": "1738200000000",
+            "created_time": 1738108800000
           },
           {
             "id": "crawling_info_id_2",
-            "sessionId": "20250128100000",
+            "session_id": "20250128100000",
             "name": "Default Crawler",
-            "expiredTime": "1738113600000",
-            "createdTime": 1738022400000
+            "expired_time": "1738113600000",
+            "created_time": 1738022400000
           }
         ],
         "total": 10
@@ -111,18 +111,18 @@ Champs de la réponse
      - Description
    * - ``id``
      - ID de l'information de crawl
-   * - ``sessionId``
+   * - ``session_id``
      - ID de la session
    * - ``name``
      - Nom de la session
-   * - ``expiredTime``
+   * - ``expired_time``
      - Date d'expiration (millisecondes epoch ; retournée sous forme de chaîne)
-   * - ``createdTime``
+   * - ``created_time``
      - Heure de création (millisecondes epoch ; retournée sous forme de nombre)
 
 .. note::
 
-   Chaque objet de journal dans la réponse inclut également un champ interne ``crudMode``
+   Chaque objet de journal dans la réponse inclut également un champ interne ``crud_mode``
    (un entier indiquant le mode d'opération CRUD, toujours ``0`` pour les opérations de lecture).
    Les clients peuvent l'ignorer en toute sécurité.
 
@@ -146,10 +146,10 @@ Réponse
         "status": 0,
         "log": {
           "id": "crawling_info_id_1",
-          "sessionId": "20250129100000",
+          "session_id": "20250129100000",
           "name": "Default Crawler",
-          "expiredTime": "1738200000000",
-          "createdTime": 1738108800000
+          "expired_time": "1738200000000",
+          "created_time": 1738108800000
         }
       }
     }

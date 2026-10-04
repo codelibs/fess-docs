@@ -99,14 +99,14 @@ Réponse
             "id": "token_id_1",
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
-            "parameterName": "permission",
+            "parameter_name": "permission",
             "permissions": "{role}admin-api",
             "expires": "2026-01-01T00:00:00",
-            "createdBy": "admin",
-            "createdTime": 1735689600000,
-            "updatedBy": "admin",
-            "updatedTime": 1735689600000,
-            "versionNo": 1
+            "created_by": "admin",
+            "created_time": 1735689600000,
+            "updated_by": "admin",
+            "updated_time": 1735689600000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -116,9 +116,9 @@ Réponse
 .. note::
 
    Chaque objet jeton contient également des informations d'audit et de version telles que
-   ``createdBy``, ``createdTime``, ``updatedBy``,
-   ``updatedTime`` et ``versionNo``.
-   ``createdTime`` et ``updatedTime`` sont exprimés en millisecondes depuis l'epoch (valeur numérique).
+   ``created_by``, ``created_time``, ``updated_by``,
+   ``updated_time`` et ``version_no``.
+   ``created_time`` et ``updated_time`` sont exprimés en millisecondes depuis l'epoch (valeur numérique).
    Les champs dont la valeur est ``null`` sont exclus de la réponse.
    ``permissions`` est retourné sous forme de chaîne séparée par des sauts de ligne (``\n``).
 
@@ -144,14 +144,14 @@ Réponse
           "id": "token_id_1",
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
-          "parameterName": "permission",
+          "parameter_name": "permission",
           "permissions": "{role}admin-api",
           "expires": "2026-01-01T00:00:00",
-          "createdBy": "admin",
-          "createdTime": 1735689600000,
-          "updatedBy": "admin",
-          "updatedTime": 1735689600000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1735689600000,
+          "updated_by": "admin",
+          "updated_time": 1735689600000,
+          "version_no": 1
         }
       }
     }
@@ -194,7 +194,7 @@ Description des champs
    * - ``permissions``
      - Non
      - Permissions accordées à ce jeton. Plusieurs permissions peuvent être spécifiées en les séparant par des sauts de ligne (``\n``) (exemple : ``{role}admin-api``). Pour les jetons appelant l'API Admin, une permission correspondant à ``api.admin.access.permissions`` (valeur par défaut : ``{role}admin-api``) est requise.
-   * - ``parameterName``
+   * - ``parameter_name``
      - Non
      - Nom du paramètre de requête permettant de transmettre des permissions supplémentaires. Si une requête authentifiée par ce jeton contient un paramètre portant ce nom, sa valeur est ajoutée aux ``permissions``. Si omis, aucun paramètre n'est configuré.
    * - ``expires``
@@ -241,7 +241,7 @@ Corps de la requête
       "name": "Updated API Token",
       "permissions": "{role}admin-api\n{role}user",
       "expires": "2026-01-01T00:00:00",
-      "versionNo": 1
+      "version_no": 1
     }
 
 Description des champs
@@ -259,9 +259,9 @@ En plus des champs utilisés lors de la création, les champs suivants sont empl
    * - ``id``
      - Oui
      - ID du jeton à mettre à jour
-   * - ``versionNo``
+   * - ``version_no``
      - Oui
-     - Numéro de version pour le verrouillage optimiste. Spécifiez le ``versionNo`` du jeton obtenu au préalable.
+     - Numéro de version pour le verrouillage optimiste. Spécifiez le ``version_no`` du jeton obtenu au préalable.
 
 .. note::
 

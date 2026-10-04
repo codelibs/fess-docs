@@ -90,7 +90,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
             "id": "query_id_1",
             "term": "fess",
             "queries": "fess tutorial\nfess installation\nfess configuration",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -99,9 +99,9 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
 
 .. note::
 
-   각 설정에는 ``versionNo`` (낙관적 잠금용 버전 번호)가 포함됩니다. ``virtualHost``
-   및 감사용 필드(``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``)는
-   값이 설정된 경우에만 포함됩니다. 값이 비어 있는 ``virtualHost`` 는 응답에 포함되지 않습니다.
+   각 설정에는 ``version_no`` (낙관적 잠금용 버전 번호)가 포함됩니다. ``virtual_host``
+   및 감사용 필드(``created_by``, ``created_time``, ``updated_by``, ``updated_time``)는
+   값이 설정된 경우에만 포함됩니다. 값이 비어 있는 ``virtual_host`` 는 응답에 포함되지 않습니다.
 
 관련 쿼리 조회
 ==============
@@ -126,8 +126,8 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": "site1.example.com",
-          "versionNo": 1
+          "virtual_host": "site1.example.com",
+          "version_no": 1
         }
       }
     }
@@ -151,7 +151,7 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
     {
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search",
-      "virtualHost": ""
+      "virtual_host": ""
     }
 
 필드 설명
@@ -170,13 +170,13 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
    * - ``queries``
      - 예
      - 관련 쿼리. 한 줄에 한 건씩 작성한 줄바꿈 구분 문자열입니다 (빈 줄은 무시됩니다. 최대 10000자)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - 아니오
      - 가상 호스트 (최대 1000자)
 
 .. note::
 
-   ``crudMode`` 는 API 측에서 자동으로 설정되므로 요청 본문에 포함할 필요가 없습니다.
+   ``crud_mode`` 는 API 측에서 자동으로 설정되므로 요청 본문에 포함할 필요가 없습니다.
 
 응답
 ----
@@ -212,8 +212,8 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
       "id": "existing_query_id",
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
-      "virtualHost": "",
-      "versionNo": 1
+      "virtual_host": "",
+      "version_no": 1
     }
 
 필드 설명
@@ -235,10 +235,10 @@ RelatedQuery API는 |Fess| 의 관련 쿼리를 관리하기 위한 API입니다
    * - ``queries``
      - 예
      - 관련 쿼리. 한 줄에 한 건씩 작성한 줄바꿈 구분 문자열입니다 (빈 줄은 무시됩니다. 최대 10000자)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - 아니오
      - 가상 호스트 (최대 1000자)
-   * - ``versionNo``
+   * - ``version_no``
      - 예
      - 낙관적 잠금용 버전 번호. 조회 시 응답에 포함된 값을 지정합니다
 

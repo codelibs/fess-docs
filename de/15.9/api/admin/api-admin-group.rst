@@ -90,7 +90,7 @@ Response
             "attributes": {
               "gidNumber": "1000"
             },
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "group_id_2",
@@ -98,7 +98,7 @@ Response
             "attributes": {
               "gidNumber": "1001"
             },
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -129,7 +129,7 @@ Response
           "attributes": {
             "gidNumber": "1000"
           },
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -209,7 +209,7 @@ Request-Body
       "attributes": {
         "gidNumber": "1002"
       },
-      "versionNo": 1
+      "version_no": 1
     }
 
 Feldbeschreibungen
@@ -231,9 +231,9 @@ Feldbeschreibungen
    * - ``attributes``
      - Nein
      - Attribut-Map (enthält LDAP-Attribute wie ``gidNumber``). Werte werden als Zeichenketten angegeben
-   * - ``versionNo``
+   * - ``version_no``
      - Ja
-     - Versionsnummer für optimistisches Sperren. Geben Sie den Wert von ``versionNo`` an, der beim Abrufen der Gruppe ermittelt wurde
+     - Versionsnummer für optimistisches Sperren. Geben Sie den Wert von ``version_no`` an, der beim Abrufen der Gruppe ermittelt wurde
 
 Response
 --------

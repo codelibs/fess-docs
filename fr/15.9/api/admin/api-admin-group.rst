@@ -90,7 +90,7 @@ Réponse
             "attributes": {
               "gidNumber": "1000"
             },
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "group_id_2",
@@ -98,7 +98,7 @@ Réponse
             "attributes": {
               "gidNumber": "1001"
             },
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -129,7 +129,7 @@ Réponse
           "attributes": {
             "gidNumber": "1000"
           },
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -209,7 +209,7 @@ Corps de la requête
       "attributes": {
         "gidNumber": "1002"
       },
-      "versionNo": 1
+      "version_no": 1
     }
 
 Description des champs
@@ -231,9 +231,9 @@ Description des champs
    * - ``attributes``
      - Non
      - Map d'attributs (contenant des attributs LDAP comme ``gidNumber``). Les valeurs sont spécifiées sous forme de chaînes de caractères
-   * - ``versionNo``
+   * - ``version_no``
      - Oui
-     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur de ``versionNo`` obtenue lors de l'obtention du groupe
+     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur de ``version_no`` obtenue lors de l'obtention du groupe
 
 Réponse
 -------

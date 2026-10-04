@@ -93,13 +93,13 @@ Response
             "id": "content_id_1",
             "term": "fess",
             "content": "<div>Fess is an open source search server.</div>",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -109,10 +109,10 @@ Response
 .. note::
 
    Jedes Element von ``settings`` sowie das ``setting``-Objekt des Einzelabruf-Endpunkts enthält
-   die Felder der gespeicherten Entität unverändert. Neben ``term``, ``content``, ``sortOrder``
-   und ``virtualHost`` werden auch die Audit-Felder ``createdBy``, ``createdTime``, ``updatedBy``,
-   ``updatedTime`` sowie das Feld ``versionNo`` zur optimistischen Sperrung zurückgegeben.
-   ``createdTime`` und ``updatedTime`` werden als Millisekunden seit dem Epoch-Zeitpunkt (Zahlen)
+   die Felder der gespeicherten Entität unverändert. Neben ``term``, ``content``, ``sort_order``
+   und ``virtual_host`` werden auch die Audit-Felder ``created_by``, ``created_time``, ``updated_by``,
+   ``updated_time`` sowie das Feld ``version_no`` zur optimistischen Sperrung zurückgegeben.
+   ``created_time`` und ``updated_time`` werden als Millisekunden seit dem Epoch-Zeitpunkt (Zahlen)
    angegeben. Felder, die nicht gesetzt sind (null), werden in der Antwort weggelassen. Außerdem
    enthält das ``response``-Objekt jeder Antwort stets ``version``, das die Produktversion angibt
    (Details siehe :doc:`api-admin-overview`).
@@ -140,20 +140,20 @@ Response
           "id": "content_id_1",
           "term": "fess",
           "content": "<div>Fess is an open source search server.</div>",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   Der ``versionNo``-Wert, der beim Aktualisieren (PUT) benötigt wird, ist der in dieser
+   Der ``version_no``-Wert, der beim Aktualisieren (PUT) benötigt wird, ist der in dieser
    Abrufantwort enthaltene Wert.
 
 Verwandten Inhalt erstellen
@@ -175,8 +175,8 @@ Request-Body
     {
       "term": "search",
       "content": "<div class='related'><h3>About Search</h3><p>Learn more about search features...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": ""
+      "sort_order": 0,
+      "virtual_host": ""
     }
 
 Feldbeschreibungen
@@ -195,10 +195,10 @@ Feldbeschreibungen
    * - ``content``
      - Ja
      - Anzuzeigender HTML-Inhalt (max. 10000 Zeichen)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Nein
      - Anzeigereihenfolge (ganze Zahl zwischen 0 und 2147483647)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - Nein
      - Virtueller Host (max. 1000 Zeichen)
 
@@ -236,9 +236,9 @@ Request-Body
       "id": "existing_content_id",
       "term": "search",
       "content": "<div class='related updated'><h3>About Search</h3><p>Updated information...</p></div>",
-      "sortOrder": 0,
-      "virtualHost": "",
-      "versionNo": 1
+      "sort_order": 0,
+      "virtual_host": "",
+      "version_no": 1
     }
 
 Feldbeschreibungen
@@ -260,13 +260,13 @@ Feldbeschreibungen
    * - ``content``
      - Ja
      - Anzuzeigender HTML-Inhalt (max. 10000 Zeichen)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Nein
      - Anzeigereihenfolge (ganze Zahl zwischen 0 und 2147483647)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - Nein
      - Virtueller Host (max. 1000 Zeichen)
-   * - ``versionNo``
+   * - ``version_no``
      - Ja
      - Versionsnummer zur optimistischen Sperrung. Geben Sie den in der Antwort von ``setting/{id}`` enthaltenen Wert an.
 
@@ -286,8 +286,8 @@ Response
 
 .. note::
 
-   Audit-Felder wie ``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime`` sowie
-   ``crudMode`` werden ignoriert, auch wenn sie im Request-Body enthalten sind, da sie
+   Audit-Felder wie ``created_by``, ``created_time``, ``updated_by``, ``updated_time`` sowie
+   ``crud_mode`` werden ignoriert, auch wenn sie im Request-Body enthalten sind, da sie
    serverseitig automatisch gesetzt werden. Sie müssen diese beim Erstellen oder Aktualisieren
    nicht angeben.
 
@@ -327,7 +327,7 @@ Verwandter Inhalt für Produktinformationen
          -d '{
            "term": "product",
            "content": "<div class=\"product-info\"><h3>Our Products</h3><ul><li>Product A</li><li>Product B</li></ul></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Verwandter Inhalt für Support-Informationen
@@ -341,7 +341,7 @@ Verwandter Inhalt für Support-Informationen
          -d '{
            "term": "support",
            "content": "<div><p>Need help? Contact: support@example.com</p></div>",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Referenzinformationen

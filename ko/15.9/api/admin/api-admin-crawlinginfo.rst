@@ -67,7 +67,7 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
      - Integer
      - 아니오
      - 페이지 번호 (1부터 시작, 기본값: 1)
-   * - ``sessionId``
+   * - ``session_id``
      - String
      - 아니오
      - 세션 ID 필터 (부분 일치)
@@ -83,17 +83,17 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
         "logs": [
           {
             "id": "crawling_info_id_1",
-            "sessionId": "20250129100000",
+            "session_id": "20250129100000",
             "name": "Default Crawler",
-            "expiredTime": "1738200000000",
-            "createdTime": 1738108800000
+            "expired_time": "1738200000000",
+            "created_time": 1738108800000
           },
           {
             "id": "crawling_info_id_2",
-            "sessionId": "20250128100000",
+            "session_id": "20250128100000",
             "name": "Default Crawler",
-            "expiredTime": "1738113600000",
-            "createdTime": 1738022400000
+            "expired_time": "1738113600000",
+            "created_time": 1738022400000
           }
         ],
         "total": 10
@@ -111,18 +111,18 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
      - 설명
    * - ``id``
      - 크롤링 정보 ID
-   * - ``sessionId``
+   * - ``session_id``
      - 세션 ID
    * - ``name``
      - 세션 이름
-   * - ``expiredTime``
+   * - ``expired_time``
      - 유효 기간 (에포크 밀리초; 문자열로 반환됨)
-   * - ``createdTime``
+   * - ``created_time``
      - 작성 시각 (에포크 밀리초; 숫자로 반환됨)
 
 .. note::
 
-   응답의 각 로그 오브젝트에는 내부적으로 사용되는 ``crudMode`` 필드
+   응답의 각 로그 오브젝트에는 내부적으로 사용되는 ``crud_mode`` 필드
    (CRUD 작업 모드를 나타내는 정수값으로, 읽기 작업 시 항상 ``0``)가 포함됩니다.
    클라이언트 측에서는 무시해도 됩니다.
 
@@ -146,10 +146,10 @@ CrawlingInfo API는 |Fess| 의 크롤링 정보(크롤링 세션)를 참조 및 
         "status": 0,
         "log": {
           "id": "crawling_info_id_1",
-          "sessionId": "20250129100000",
+          "session_id": "20250129100000",
           "name": "Default Crawler",
-          "expiredTime": "1738200000000",
-          "createdTime": 1738108800000
+          "expired_time": "1738200000000",
+          "created_time": 1738108800000
         }
       }
     }

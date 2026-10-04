@@ -92,7 +92,7 @@ Réponse
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word"
+            "suggest_word": "inappropriate_word"
           }
         ],
         "total": 5
@@ -119,7 +119,7 @@ Réponse
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word"
+          "suggest_word": "inappropriate_word"
         }
       }
     }
@@ -141,7 +141,7 @@ Corps de la requête
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword"
+      "suggest_word": "spam_keyword"
     }
 
 Description des champs
@@ -154,7 +154,7 @@ Description des champs
    * - Champ
      - Requis
      - Description
-   * - ``suggestWord``
+   * - ``suggest_word``
      - Oui
      - Mot-clé à exclure (ne peut pas contenir d'espaces)
 
@@ -189,8 +189,8 @@ Corps de la requête
 
     {
       "id": "existing_badword_id",
-      "suggestWord": "updated_spam_keyword",
-      "versionNo": 1
+      "suggest_word": "updated_spam_keyword",
+      "version_no": 1
     }
 
 Réponse
@@ -260,7 +260,7 @@ Format CSV
 ~~~~~~~~~~
 
 - La première ligne est ignorée en tant que ligne d'en-tête (le nom de colonne est arbitraire ; ``BadWord`` est écrit lors du téléchargement).
-- À partir de la deuxième ligne, écrivez un mot interdit par ligne en tant que ``suggestWord``.
+- À partir de la deuxième ligne, écrivez un mot interdit par ligne en tant que ``suggest_word``.
 - Les lignes dont la valeur est vide sont ignorées.
 - Préfixez un mot par ``--`` pour le supprimer (par exemple, ``--spam`` supprime ``spam``).
 - Spécifier un mot déjà enregistré est traité comme une mise à jour (l'auteur et la date de mise à jour sont réinitialisés).
@@ -306,7 +306,7 @@ Exclusion d'un mot-clé spam
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam"
+           "suggest_word": "spam"
          }'
 
 Téléversement d'un fichier CSV

@@ -90,7 +90,7 @@ Group API是用于管理 |Fess| 组的API。
             "attributes": {
               "gidNumber": "1000"
             },
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "group_id_2",
@@ -98,7 +98,7 @@ Group API是用于管理 |Fess| 组的API。
             "attributes": {
               "gidNumber": "1001"
             },
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -129,7 +129,7 @@ Group API是用于管理 |Fess| 组的API。
           "attributes": {
             "gidNumber": "1000"
           },
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -209,7 +209,7 @@ Group API是用于管理 |Fess| 组的API。
       "attributes": {
         "gidNumber": "1002"
       },
-      "versionNo": 1
+      "version_no": 1
     }
 
 字段说明
@@ -231,9 +231,9 @@ Group API是用于管理 |Fess| 组的API。
    * - ``attributes``
      - 否
      - 属性的映射（包含 ``gidNumber`` 等LDAP属性）。值以字符串指定
-   * - ``versionNo``
+   * - ``version_no``
      - 是
-     - 乐观锁的版本号。指定从获取组获得的 ``versionNo`` 值
+     - 乐观锁的版本号。指定从获取组获得的 ``version_no`` 值
 
 响应
 ----

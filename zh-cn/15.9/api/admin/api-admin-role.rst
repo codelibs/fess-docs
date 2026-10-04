@@ -87,12 +87,12 @@ Role API是用于管理 |Fess| 角色的API。
           {
             "id": "role_id_1",
             "name": "admin",
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "role_id_2",
             "name": "user",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -120,7 +120,7 @@ Role API是用于管理 |Fess| 角色的API。
         "setting": {
           "id": "role_id_1",
           "name": "admin",
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -194,7 +194,7 @@ Role API是用于管理 |Fess| 角色的API。
     {
       "id": "existing_role_id",
       "name": "editor_updated",
-      "versionNo": 1
+      "version_no": 1
     }
 
 字段说明
@@ -216,9 +216,9 @@ Role API是用于管理 |Fess| 角色的API。
    * - ``attributes``
      - 否
      - 属性的映射。值以字符串指定
-   * - ``versionNo``
+   * - ``version_no``
      - 是
-     - 乐观锁的版本号。指定从获取角色获得的 ``versionNo`` 值
+     - 乐观锁的版本号。指定从获取角色获得的 ``version_no`` 值
 
 响应
 ----

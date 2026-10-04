@@ -87,12 +87,12 @@ Réponse
           {
             "id": "role_id_1",
             "name": "admin",
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "role_id_2",
             "name": "user",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -120,7 +120,7 @@ Réponse
         "setting": {
           "id": "role_id_1",
           "name": "admin",
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -194,7 +194,7 @@ Corps de la requête
     {
       "id": "existing_role_id",
       "name": "editor_updated",
-      "versionNo": 1
+      "version_no": 1
     }
 
 Description des champs
@@ -216,9 +216,9 @@ Description des champs
    * - ``attributes``
      - Non
      - Map d'attributs. Les valeurs sont spécifiées sous forme de chaînes de caractères
-   * - ``versionNo``
+   * - ``version_no``
      - Oui
-     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur de ``versionNo`` obtenue lors de l'obtention du rôle
+     - Numéro de version pour le verrouillage optimiste. Spécifiez la valeur de ``version_no`` obtenue lors de l'obtention du rôle
 
 Réponse
 -------

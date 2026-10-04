@@ -74,9 +74,9 @@ Response
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "totalWordsNum": 1500,
-          "documentWordsNum": 1200,
-          "queryWordsNum": 450
+          "total_words_num": 1500,
+          "document_words_num": 1200,
+          "query_words_num": 450
         }
       }
     }
@@ -90,16 +90,16 @@ Response-Felder
 
    * - Feld
      - Beschreibung
-   * - ``setting.totalWordsNum``
+   * - ``setting.total_words_num``
      - Gesamtzahl der Suggest-Wörter (Anzahl der im Suggest-Index registrierten Suggest-Wörter)
-   * - ``setting.documentWordsNum``
+   * - ``setting.document_words_num``
      - Anzahl der aus Dokumenten abgeleiteten Suggest-Wörter (Suggest-Wörter mit einer Dokumenthäufigkeit von 1 oder mehr)
-   * - ``setting.queryWordsNum``
+   * - ``setting.query_words_num``
      - Anzahl der aus Suchanfragen abgeleiteten Suggest-Wörter (Suggest-Wörter mit einer Anfragehäufigkeit von 1 oder mehr)
 
 .. note::
 
-   ``documentWordsNum`` und ``queryWordsNum`` schließen sich nicht gegenseitig aus. Wenn ein Suggest-Wort sowohl aus Dokumenten als auch aus Suchanfragen stammt, wird es in beiden Zählungen berücksichtigt. Daher kann die Summe von ``documentWordsNum`` und ``queryWordsNum`` von ``totalWordsNum`` abweichen.
+   ``document_words_num`` und ``query_words_num`` schließen sich nicht gegenseitig aus. Wenn ein Suggest-Wort sowohl aus Dokumenten als auch aus Suchanfragen stammt, wird es in beiden Zählungen berücksichtigt. Daher kann die Summe von ``document_words_num`` und ``query_words_num`` von ``total_words_num`` abweichen.
 
 Alle Suggest-Wörter löschen
 ============================

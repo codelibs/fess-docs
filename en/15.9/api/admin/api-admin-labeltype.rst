@@ -99,16 +99,16 @@ Response
             "id": "label_id_1",
             "name": "Documentation",
             "value": "docs",
-            "includedPaths": ".*docs\\.example\\.com.*",
-            "excludedPaths": "",
+            "included_paths": ".*docs\\.example\\.com.*",
+            "excluded_paths": "",
             "permissions": "{role}admin",
-            "virtualHost": "",
-            "sortOrder": 0,
-            "createdBy": "admin",
-            "createdTime": 1700000000000,
-            "updatedBy": "admin",
-            "updatedTime": 1700000000000,
-            "versionNo": 1
+            "virtual_host": "",
+            "sort_order": 0,
+            "created_by": "admin",
+            "created_time": 1700000000000,
+            "updated_by": "admin",
+            "updated_time": 1700000000000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -117,8 +117,8 @@ Response
 
 .. note::
 
-   Each settings object also includes ``createdBy`` / ``createdTime`` / ``updatedBy`` /
-   ``updatedTime`` for auditing, and ``versionNo`` for optimistic locking (fields with a
+   Each settings object also includes ``created_by`` / ``created_time`` / ``updated_by`` /
+   ``updated_time`` for auditing, and ``version_no`` for optimistic locking (fields with a
    ``null`` value are omitted). The ``response`` object always includes ``version``
    indicating the product version, but it may be omitted in subsequent examples for brevity.
 
@@ -144,16 +144,16 @@ Response
           "id": "label_id_1",
           "name": "Documentation",
           "value": "docs",
-          "includedPaths": ".*docs\\.example\\.com.*",
-          "excludedPaths": "",
+          "included_paths": ".*docs\\.example\\.com.*",
+          "excluded_paths": "",
           "permissions": "{role}admin",
-          "virtualHost": "",
-          "sortOrder": 0,
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_host": "",
+          "sort_order": 0,
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
@@ -177,9 +177,9 @@ Request Body
     {
       "name": "News",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
-      "excludedPaths": ".*/(archive|old)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/news/.*",
+      "excluded_paths": ".*/(archive|old)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest"
     }
 
@@ -202,11 +202,11 @@ Field Descriptions
      - String
      - Yes
      - Label value (used with the ``label`` parameter in searches). Only alphanumeric characters and underscores (``_``) are allowed; must match the regex ``^[a-zA-Z0-9_]+$`` (max 100 characters).
-   * - ``includedPaths``
+   * - ``included_paths``
      - String
      - No
      - Regular expressions for paths to be labelled. Separate multiple entries with a newline (``\n``).
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - String
      - No
      - Regular expressions for paths to exclude from labelling. Separate multiple entries with a newline (``\n``).
@@ -214,18 +214,18 @@ Field Descriptions
      - String
      - No
      - Roles/groups/users permitted to access (e.g. ``{role}admin``). Separate multiple entries with a newline (``\n``).
-   * - ``sortOrder``
+   * - ``sort_order``
      - Integer
      - No
      - Display order (non-negative integer). Defaults to ``0`` if not specified.
-   * - ``virtualHost``
+   * - ``virtual_host``
      - String
      - No
      - Virtual host (max 1000 characters).
 
 .. note::
 
-   Audit fields such as ``createdBy`` / ``createdTime`` are set automatically on the server side
+   Audit fields such as ``created_by`` / ``created_time`` are set automatically on the server side
    and do not need to be specified in the request.
 
 Response
@@ -263,11 +263,11 @@ Request Body
       "id": "existing_label_id",
       "name": "News Articles",
       "value": "news",
-      "includedPaths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
-      "excludedPaths": ".*/(archive|old|draft)/.*",
-      "sortOrder": 1,
+      "included_paths": ".*news\\.example\\.com.*\n.*example\\.com/(news|articles)/.*",
+      "excluded_paths": ".*/(archive|old|draft)/.*",
+      "sort_order": 1,
       "permissions": "{role}guest",
-      "versionNo": 1
+      "version_no": 1
     }
 
 When updating, the following fields are required in addition to the fields used at creation time.
@@ -284,10 +284,10 @@ When updating, the following fields are required in addition to the fields used 
      - String
      - Yes
      - The ID of the label type to update.
-   * - ``versionNo``
+   * - ``version_no``
      - Integer
      - Yes
-     - Version number for optimistic locking. Specify the ``versionNo`` included in the response when the setting was retrieved. If the specified version does not match the current one, the update will fail.
+     - Version number for optimistic locking. Specify the ``version_no`` included in the response when the setting was retrieved. If the specified version does not match the current one, the update will fail.
 
 Response
 --------
@@ -339,8 +339,8 @@ Create Documentation Label
          -d '{
            "name": "Technical Documentation",
            "value": "tech_docs",
-           "includedPaths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
-           "sortOrder": 0,
+           "included_paths": ".*docs\\.example\\.com.*\n.*example\\.com/documentation/.*",
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 

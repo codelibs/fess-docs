@@ -105,7 +105,7 @@ Réponse
             },
             "roles": ["admin"],
             "groups": [],
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 10
@@ -150,7 +150,7 @@ Réponse
           },
           "roles": ["admin"],
           "groups": [],
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -179,7 +179,7 @@ Corps de la requête
     {
       "name": "testuser",
       "password": "securepassword",
-      "confirmPassword": "securepassword",
+      "confirm_password": "securepassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User",
@@ -205,7 +205,7 @@ Description des champs
    * - ``password``
      - Non
      - Mot de passe
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - Non
      - Mot de passe de confirmation
    * - ``attributes``
@@ -220,8 +220,8 @@ Description des champs
 
 .. note::
 
-   L'API REST n'effectue pas de vérification d'obligation du mot de passe, de vérification de correspondance entre ``password`` et ``confirmPassword``, ni de validation de politique de mot de passe (celles-ci ne s'appliquent que dans l'interface d'administration).
-   En pratique, il est recommandé de spécifier un ``password`` valide dont la valeur correspond à ``confirmPassword``.
+   L'API REST n'effectue pas de vérification d'obligation du mot de passe, de vérification de correspondance entre ``password`` et ``confirm_password``, ni de validation de politique de mot de passe (celles-ci ne s'appliquent que dans l'interface d'administration).
+   En pratique, il est recommandé de spécifier un ``password`` valide dont la valeur correspond à ``confirm_password``.
 
 Les clés de ``attributes`` sont les noms d'attributs de l'entité utilisateur (les noms d'éléments dérivés du schéma LDAP).
 Les clés les plus courantes sont :
@@ -276,7 +276,7 @@ Corps de la requête
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "confirmPassword": "newpassword",
+      "confirm_password": "newpassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User Updated",
@@ -284,7 +284,7 @@ Corps de la requête
       },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
-      "versionNo": 1
+      "version_no": 1
     }
 
 Description des champs
@@ -303,13 +303,13 @@ Description des champs
    * - ``name``
      - Oui
      - Nom d'utilisateur (identifiant de connexion)
-   * - ``versionNo``
+   * - ``version_no``
      - Oui
      - Numéro de version (pour le verrouillage optimiste)
    * - ``password``
      - Non
      - Nouveau mot de passe (mis à jour uniquement si spécifié)
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - Non
      - Mot de passe de confirmation
    * - ``attributes``
@@ -324,8 +324,8 @@ Description des champs
 
 .. note::
 
-   Lors de la mise à jour, ``id``, ``name`` et ``versionNo`` sont obligatoires.
-   ``versionNo`` est la valeur retournée lors de la récupération de l'utilisateur cible (GET), et correspond à la version du document OpenSearch.
+   Lors de la mise à jour, ``id``, ``name`` et ``version_no`` sont obligatoires.
+   ``version_no`` est la valeur retournée lors de la récupération de l'utilisateur cible (GET), et correspond à la version du document OpenSearch.
    Si elle ne correspond pas à la version actuelle, la requête est traitée comme un conflit et la mise à jour est rejetée.
 
 Réponse
@@ -390,7 +390,7 @@ Créer un nouvel utilisateur
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "confirmPassword": "SecureP@ss123",
+           "confirm_password": "SecureP@ss123",
            "attributes": {
              "surname": "Doe",
              "givenName": "John",
@@ -412,7 +412,7 @@ Modifier les rôles d'un utilisateur
            "id": "user_id_123",
            "name": "john.doe",
            "roles": ["user", "editor", "admin"],
-           "versionNo": 1
+           "version_no": 1
          }'
 
 Références

@@ -92,11 +92,11 @@ ElevateWord API는 |Fess| 의 엘리베이트 워드(특정 키워드에서의 �
         "settings": [
           {
             "id": "elevate_id_1",
-            "suggestWord": "fess",
+            "suggest_word": "fess",
             "reading": "",
             "permissions": "{role}guest",
             "boost": 100.0,
-            "labelTypeIds": []
+            "label_type_ids": []
           }
         ],
         "total": 5
@@ -123,11 +123,11 @@ ElevateWord API는 |Fess| 의 엘리베이트 워드(특정 키워드에서의 �
         "status": 0,
         "setting": {
           "id": "elevate_id_1",
-          "suggestWord": "fess",
+          "suggest_word": "fess",
           "reading": "",
           "permissions": "{role}guest",
           "boost": 100.0,
-          "labelTypeIds": []
+          "label_type_ids": []
         }
       }
     }
@@ -149,11 +149,11 @@ ElevateWord API는 |Fess| 의 엘리베이트 워드(특정 키워드에서의 �
 .. code-block:: json
 
     {
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest",
       "boost": 100.0,
-      "labelTypeIds": ["label1"]
+      "label_type_ids": ["label1"]
     }
 
 필드 설명
@@ -166,7 +166,7 @@ ElevateWord API는 |Fess| 의 엘리베이트 워드(특정 키워드에서의 �
    * - 필드
      - 필수
      - 설명
-   * - ``suggestWord``
+   * - ``suggest_word``
      - 예
      - 엘리베이트 대상 키워드
    * - ``reading``
@@ -178,7 +178,7 @@ ElevateWord API는 |Fess| 의 엘리베이트 워드(특정 키워드에서의 �
    * - ``boost``
      - 예
      - 부스트 값 (폼 초기값: 100.0)
-   * - ``labelTypeIds``
+   * - ``label_type_ids``
      - 아니오
      - 대상 라벨 ID (문자열 배열)
 
@@ -213,12 +213,12 @@ ElevateWord API는 |Fess| 의 엘리베이트 워드(특정 키워드에서의 �
 
     {
       "id": "existing_elevate_id",
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
-      "labelTypeIds": ["label1"],
-      "versionNo": 1
+      "label_type_ids": ["label1"],
+      "version_no": 1
     }
 
 .. note::
@@ -226,7 +226,7 @@ ElevateWord API는 |Fess| 의 엘리베이트 워드(특정 키워드에서의 �
    업데이트 시에는 만들기에서 사용하는 필드 외에 다음 필드가 필수입니다.
 
    - ``id`` - 업데이트 대상 엘리베이트 워드의 ID
-   - ``versionNo`` - 낙관적 잠금을 위한 버전 번호. ``GET /setting/{id}`` 로 취득한 값을 지정합니다.
+   - ``version_no`` - 낙관적 잠금을 위한 버전 번호. ``GET /setting/{id}`` 로 취득한 값을 지정합니다.
 
 응답
 ----------
@@ -326,7 +326,7 @@ CSV 파일에서 엘리베이트 워드를 일괄 등록합니다. 파일은 ``m
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "Product X",
+           "suggest_word": "Product X",
            "boost": 100.0,
            "permissions": "{role}guest"
          }'
@@ -340,9 +340,9 @@ CSV 파일에서 엘리베이트 워드를 일괄 등록합니다. 파일은 ``m
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "API reference",
+           "suggest_word": "API reference",
            "boost": 100.0,
-           "labelTypeIds": ["technical_docs"],
+           "label_type_ids": ["technical_docs"],
            "permissions": "{role}guest"
          }'
 

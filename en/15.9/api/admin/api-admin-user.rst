@@ -105,7 +105,7 @@ Response
             },
             "roles": ["admin"],
             "groups": [],
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 10
@@ -150,7 +150,7 @@ Response
           },
           "roles": ["admin"],
           "groups": [],
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -179,7 +179,7 @@ Request Body
     {
       "name": "testuser",
       "password": "securepassword",
-      "confirmPassword": "securepassword",
+      "confirm_password": "securepassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User",
@@ -205,7 +205,7 @@ Field Description
    * - ``password``
      - No
      - Password
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - No
      - Confirmation password
    * - ``attributes``
@@ -220,8 +220,8 @@ Field Description
 
 .. note::
 
-   The REST API does not perform a password-required check, a match check between ``password`` and ``confirmPassword``, or password policy validation (these are applied only in the admin UI).
-   In practice, it is recommended to specify a valid ``password`` whose value matches ``confirmPassword``.
+   The REST API does not perform a password-required check, a match check between ``password`` and ``confirm_password``, or password policy validation (these are applied only in the admin UI).
+   In practice, it is recommended to specify a valid ``password`` whose value matches ``confirm_password``.
 
 The keys of ``attributes`` are the user entity attribute names (the schema item names derived from LDAP).
 The most common keys are:
@@ -276,7 +276,7 @@ Request Body
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "confirmPassword": "newpassword",
+      "confirm_password": "newpassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User Updated",
@@ -284,7 +284,7 @@ Request Body
       },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
-      "versionNo": 1
+      "version_no": 1
     }
 
 Field Description
@@ -303,13 +303,13 @@ Field Description
    * - ``name``
      - Yes
      - Username (login ID)
-   * - ``versionNo``
+   * - ``version_no``
      - Yes
      - Version number (for optimistic locking)
    * - ``password``
      - No
      - New password (updated only when specified)
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - No
      - Confirmation password
    * - ``attributes``
@@ -324,8 +324,8 @@ Field Description
 
 .. note::
 
-   On update, ``id``, ``name``, and ``versionNo`` are required.
-   ``versionNo`` is the value returned when getting the target user (GET), and it corresponds to the OpenSearch document version.
+   On update, ``id``, ``name``, and ``version_no`` are required.
+   ``version_no`` is the value returned when getting the target user (GET), and it corresponds to the OpenSearch document version.
    If it does not match the current version, the request is treated as a conflict and the update is rejected.
 
 Response
@@ -390,7 +390,7 @@ Create New User
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "confirmPassword": "SecureP@ss123",
+           "confirm_password": "SecureP@ss123",
            "attributes": {
              "surname": "Doe",
              "givenName": "John",
@@ -412,7 +412,7 @@ Change User Roles
            "id": "user_id_123",
            "name": "john.doe",
            "roles": ["user", "editor", "admin"],
-           "versionNo": 1
+           "version_no": 1
          }'
 
 Reference

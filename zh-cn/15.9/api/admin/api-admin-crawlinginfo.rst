@@ -67,7 +67,7 @@ CrawlingInfo API是用于查看和管理 |Fess| 爬虫信息（爬虫会话）�
      - Integer
      - 否
      - 页码（从1开始，默认: 1）
-   * - ``sessionId``
+   * - ``session_id``
      - String
      - 否
      - 会话ID过滤（部分匹配）
@@ -83,17 +83,17 @@ CrawlingInfo API是用于查看和管理 |Fess| 爬虫信息（爬虫会话）�
         "logs": [
           {
             "id": "crawling_info_id_1",
-            "sessionId": "20250129100000",
+            "session_id": "20250129100000",
             "name": "Default Crawler",
-            "expiredTime": "1738200000000",
-            "createdTime": 1738108800000
+            "expired_time": "1738200000000",
+            "created_time": 1738108800000
           },
           {
             "id": "crawling_info_id_2",
-            "sessionId": "20250128100000",
+            "session_id": "20250128100000",
             "name": "Default Crawler",
-            "expiredTime": "1738113600000",
-            "createdTime": 1738022400000
+            "expired_time": "1738113600000",
+            "created_time": 1738022400000
           }
         ],
         "total": 10
@@ -111,18 +111,18 @@ CrawlingInfo API是用于查看和管理 |Fess| 爬虫信息（爬虫会话）�
      - 说明
    * - ``id``
      - 爬虫信息ID
-   * - ``sessionId``
+   * - ``session_id``
      - 会话ID
    * - ``name``
      - 会话名称
-   * - ``expiredTime``
+   * - ``expired_time``
      - 有效期限（epoch毫秒；以字符串形式返回）
-   * - ``createdTime``
+   * - ``created_time``
      - 创建时刻（epoch毫秒；以数值形式返回）
 
 .. note::
 
-   响应中每个日志对象还包含一个内部字段 ``crudMode``
+   响应中每个日志对象还包含一个内部字段 ``crud_mode``
    （表示CRUD操作模式的整数值，在读取操作时始终为 ``0``）。
    客户端可安全忽略此字段。
 
@@ -146,10 +146,10 @@ CrawlingInfo API是用于查看和管理 |Fess| 爬虫信息（爬虫会话）�
         "status": 0,
         "log": {
           "id": "crawling_info_id_1",
-          "sessionId": "20250129100000",
+          "session_id": "20250129100000",
           "name": "Default Crawler",
-          "expiredTime": "1738200000000",
-          "createdTime": 1738108800000
+          "expired_time": "1738200000000",
+          "created_time": 1738108800000
         }
       }
     }

@@ -90,7 +90,7 @@ Response
             "attributes": {
               "gidNumber": "1000"
             },
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "group_id_2",
@@ -98,7 +98,7 @@ Response
             "attributes": {
               "gidNumber": "1001"
             },
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -129,7 +129,7 @@ Response
           "attributes": {
             "gidNumber": "1000"
           },
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -209,7 +209,7 @@ Request Body
       "attributes": {
         "gidNumber": "1002"
       },
-      "versionNo": 1
+      "version_no": 1
     }
 
 Field Description
@@ -231,9 +231,9 @@ Field Description
    * - ``attributes``
      - No
      - Map of attributes (includes LDAP attributes such as ``gidNumber``). Values are specified as strings
-   * - ``versionNo``
+   * - ``version_no``
      - Yes
-     - Version number for optimistic locking. Specify the ``versionNo`` value obtained from Get Group
+     - Version number for optimistic locking. Specify the ``version_no`` value obtained from Get Group
 
 Response
 --------

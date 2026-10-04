@@ -106,21 +106,21 @@ Réponse
             "name": "Example Site",
             "description": "Site d'exemple",
             "urls": "https://example.com/",
-            "includedUrls": ".*example\\.com.*",
-            "excludedUrls": ".*\\.(pdf|zip)$",
-            "includedDocUrls": "",
-            "excludedDocUrls": "",
-            "configParameter": "",
+            "included_urls": ".*example\\.com.*",
+            "excluded_urls": ".*\\.(pdf|zip)$",
+            "included_doc_urls": "",
+            "excluded_doc_urls": "",
+            "config_parameter": "",
             "depth": 3,
-            "maxAccessCount": 1000,
-            "userAgent": "Mozilla/5.0",
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "user_agent": "Mozilla/5.0",
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -152,36 +152,36 @@ Réponse
           "name": "Example Site",
           "description": "Site d'exemple",
           "urls": "https://example.com/",
-          "includedUrls": ".*example\\.com.*",
-          "excludedUrls": ".*\\.(pdf|zip)$",
-          "includedDocUrls": "",
-          "excludedDocUrls": "",
-          "configParameter": "",
+          "included_urls": ".*example\\.com.*",
+          "excluded_urls": ".*\\.(pdf|zip)$",
+          "included_doc_urls": "",
+          "excluded_doc_urls": "",
+          "config_parameter": "",
           "depth": 3,
-          "maxAccessCount": 1000,
-          "userAgent": "Mozilla/5.0",
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "user_agent": "Mozilla/5.0",
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   La réponse inclut les champs d'audit ``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime`` et ``versionNo``, qui sont définis automatiquement
+   La réponse inclut les champs d'audit ``created_by``, ``created_time``,
+   ``updated_by``, ``updated_time`` et ``version_no``, qui sont définis automatiquement
    lors de la création ou de la mise à jour.
-   ``versionNo`` est requis lors de la mise à jour (voir la section « Mise à jour d'une configuration de crawl Web » ci-dessous).
+   ``version_no`` est requis lors de la mise à jour (voir la section « Mise à jour d'une configuration de crawl Web » ci-dessous).
 
 Création d'une configuration de crawl Web
 =========================================
@@ -202,14 +202,14 @@ Corps de la requête
     {
       "name": "Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "userAgent": "Mozilla/5.0",
-      "numOfThread": 3,
-      "intervalTime": 500,
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe)$",
+      "user_agent": "Mozilla/5.0",
+      "num_of_thread": 3,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -232,34 +232,34 @@ Description des champs
    * - ``urls``
      - Oui
      - URLs de départ du crawl (séparées par des sauts de ligne si multiples). Indiquez ``http:`` ou ``https:``
-   * - ``includedUrls``
+   * - ``included_urls``
      - Non
      - Expression régulière des URLs à crawler
-   * - ``excludedUrls``
+   * - ``excluded_urls``
      - Non
      - Expression régulière des URLs à exclure du crawl
-   * - ``includedDocUrls``
+   * - ``included_doc_urls``
      - Non
      - Expression régulière des URLs à indexer
-   * - ``excludedDocUrls``
+   * - ``excluded_doc_urls``
      - Non
      - Expression régulière des URLs à exclure de l'indexation
-   * - ``configParameter``
+   * - ``config_parameter``
      - Non
      - Paramètres de configuration supplémentaires (format ``key=value``, un par ligne)
    * - ``depth``
      - Non
      - Profondeur du crawl (0 ou plus)
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - Non
      - Nombre maximum d'accès (0 ou plus)
-   * - ``userAgent``
+   * - ``user_agent``
      - Oui
      - Chaîne User-Agent (200 caractères maximum)
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - Oui
      - Nombre de threads parallèles (1 ou plus)
-   * - ``intervalTime``
+   * - ``interval_time``
      - Oui
      - Intervalle entre les accès (en millisecondes, 0 ou plus)
    * - ``boost``
@@ -268,19 +268,19 @@ Description des champs
    * - ``available``
      - Oui
      - Activé/Désactivé (chaîne ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Oui
      - Ordre d'affichage (0 ou plus)
    * - ``permissions``
      - Non
      - Rôles autorisés (séparés par des sauts de ligne si plusieurs)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - Non
      - Hôtes virtuels (séparés par des sauts de ligne si plusieurs)
 
 .. note::
 
-   Les champs d'audit tels que ``createdBy``, ``createdTime``, ``updatedBy`` et ``updatedTime``
+   Les champs d'audit tels que ``created_by``, ``created_time``, ``updated_by`` et ``updated_time``
    sont définis automatiquement côté serveur et n'ont pas besoin d'être fournis dans le corps de la requête.
 
 Réponse
@@ -310,8 +310,8 @@ Requête
 Corps de la requête
 ~~~~~~~~~~~~~~~~~~~
 
-Lors d'une mise à jour, les champs de création sont complétés par ``id``, qui identifie la configuration à mettre à jour, et ``versionNo``, le numéro de version actuel.
-Indiquez pour ``versionNo`` la valeur renvoyée par l'API de récupération (GET).
+Lors d'une mise à jour, les champs de création sont complétés par ``id``, qui identifie la configuration à mettre à jour, et ``version_no``, le numéro de version actuel.
+Indiquez pour ``version_no`` la valeur renvoyée par l'API de récupération (GET).
 
 .. code-block:: json
 
@@ -319,17 +319,17 @@ Indiquez pour ``versionNo`` la valeur renvoyée par l'API de récupération (GET
       "id": "existing_webconfig_id",
       "name": "Updated Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
-      "userAgent": "Mozilla/5.0",
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe|dmg)$",
+      "user_agent": "Mozilla/5.0",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 5,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 5,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 Champs supplémentaires pour la mise à jour
@@ -345,9 +345,9 @@ Champs supplémentaires pour la mise à jour
    * - ``id``
      - Oui
      - Identifiant de la configuration à mettre à jour (1 000 caractères maximum)
-   * - ``versionNo``
+   * - ``version_no``
      - Oui
-     - Numéro de version actuel de la configuration à mettre à jour. Indiquez la valeur ``versionNo`` contenue dans la réponse de l'API de récupération (GET)
+     - Numéro de version actuel de la configuration à mettre à jour. Indiquez la valeur ``version_no`` contenue dans la réponse de l'API de récupération (GET)
 
 Réponse
 -------
@@ -386,7 +386,7 @@ Réponse
 Exemples de patterns d'URL
 ==========================
 
-Les champs ``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` acceptent des expressions régulières.
+Les champs ``included_urls`` / ``excluded_urls`` / ``included_doc_urls`` / ``excluded_doc_urls`` acceptent des expressions régulières.
 
 .. list-table::
    :header-rows: 1
@@ -419,16 +419,16 @@ Configuration de crawl pour un site d'entreprise
          -d '{
            "name": "Corporate Website",
            "urls": "https://www.example.com/",
-           "includedUrls": ".*www\\.example\\.com.*",
-           "excludedUrls": ".*/(login|admin|api)/.*",
-           "userAgent": "Mozilla/5.0",
+           "included_urls": ".*www\\.example\\.com.*",
+           "excluded_urls": ".*/(login|admin|api)/.*",
+           "user_agent": "Mozilla/5.0",
            "depth": 5,
-           "maxAccessCount": 10000,
-           "numOfThread": 3,
-           "intervalTime": 500,
+           "max_access_count": 10000,
+           "num_of_thread": 3,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -443,15 +443,15 @@ Configuration de crawl pour un site de documentation
          -d '{
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
-           "includedUrls": ".*docs\\.example\\.com.*",
-           "includedDocUrls": ".*\\.(html|htm)$",
-           "userAgent": "Mozilla/5.0",
-           "maxAccessCount": 50000,
-           "numOfThread": 5,
-           "intervalTime": 200,
+           "included_urls": ".*docs\\.example\\.com.*",
+           "included_doc_urls": ".*\\.(html|htm)$",
+           "user_agent": "Mozilla/5.0",
+           "max_access_count": 50000,
+           "num_of_thread": 5,
+           "interval_time": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Informations complémentaires

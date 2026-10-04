@@ -71,15 +71,15 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
      - String
      - いいえ
      - URLフィルター（ワイルドカード ``*`` ``?`` 使用可）
-   * - ``errorCountMin``
+   * - ``error_count_min``
      - Integer
      - いいえ
      - エラー発生回数の下限フィルター（指定値以上）
-   * - ``errorCountMax``
+   * - ``error_count_max``
      - Integer
      - いいえ
      - エラー発生回数の上限フィルター（指定値以下）
-   * - ``errorName``
+   * - ``error_name``
      - String
      - いいえ
      - エラー名フィルター（格納されている完全修飾クラス名に対するワイルドカード検索。\ ``*`` ``?`` 使用可）
@@ -96,22 +96,22 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
           {
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
-            "threadName": "Crawler-1",
-            "errorName": "java.net.ConnectException",
-            "errorLog": "Connection refused: connect",
-            "errorCount": "3",
-            "lastAccessTime": "1738144800000",
-            "configId": "webConfig_id_1"
+            "thread_name": "Crawler-1",
+            "error_name": "java.net.ConnectException",
+            "error_log": "Connection refused: connect",
+            "error_count": "3",
+            "last_access_time": "1738144800000",
+            "config_id": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
-            "threadName": "Crawler-2",
-            "errorName": "org.codelibs.fess.exception.ContentNotFoundException",
-            "errorLog": "Not found: https://example.com/not-found",
-            "errorCount": "1",
-            "lastAccessTime": "1738143000000",
-            "configId": "webConfig_id_1"
+            "thread_name": "Crawler-2",
+            "error_name": "org.codelibs.fess.exception.ContentNotFoundException",
+            "error_log": "Not found: https://example.com/not-found",
+            "error_count": "1",
+            "last_access_time": "1738143000000",
+            "config_id": "webConfig_id_1"
           }
         ],
         "total": 45
@@ -131,23 +131,23 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
      - 障害URL ID
    * - ``url``
      - 失敗したURL
-   * - ``threadName``
+   * - ``thread_name``
      - スレッド名
-   * - ``errorName``
+   * - ``error_name``
      - エラー名（発生した例外の完全修飾クラス名。例: ``java.net.ConnectException``）
-   * - ``errorLog``
+   * - ``error_log``
      - エラーログ（例外のメッセージやスタックトレース）
-   * - ``errorCount``
+   * - ``error_count``
      - エラー発生回数（数値を表す文字列）
-   * - ``lastAccessTime``
+   * - ``last_access_time``
      - 最終アクセス時刻（エポックミリ秒を表す文字列）
-   * - ``configId``
+   * - ``config_id``
      - クロール設定ID
 
 .. note::
 
    レスポンスの各フィールドはすべて文字列（JSON string）として返されます。
-   ``errorCount`` は数値を表す文字列、``lastAccessTime`` はエポックミリ秒を表す文字列です。
+   ``error_count`` は数値を表す文字列、``last_access_time`` はエポックミリ秒を表す文字列です。
 
 障害URL取得
 ===========
@@ -170,12 +170,12 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
         "log": {
           "id": "failure_id_1",
           "url": "https://example.com/broken-page",
-          "threadName": "Crawler-1",
-          "errorName": "java.net.ConnectException",
-          "errorLog": "Connection refused: connect",
-          "errorCount": "3",
-          "lastAccessTime": "1738144800000",
-          "configId": "webConfig_id_1"
+          "thread_name": "Crawler-1",
+          "error_name": "java.net.ConnectException",
+          "error_log": "Connection refused: connect",
+          "error_count": "3",
+          "last_access_time": "1738144800000",
+          "config_id": "webConfig_id_1"
         }
       }
     }
@@ -227,7 +227,7 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
 エラータイプ
 ============
 
-``errorName`` には、クロール中に発生した例外の完全修飾クラス名がそのまま格納されます。
+``error_name`` には、クロール中に発生した例外の完全修飾クラス名がそのまま格納されます。
 固定の列挙値ではなく、発生した例外に応じて任意のクラス名が入ります。
 以下は代表的な例です。
 
@@ -313,7 +313,7 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
     # エラータイプごとにカウント
     curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '[.response.logs[].errorName] | group_by(.) | map({error: .[0], count: length})'
+         jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
 
 参考情報
 ========

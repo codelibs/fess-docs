@@ -90,7 +90,7 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
             "attributes": {
               "gidNumber": "1000"
             },
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "group_id_2",
@@ -98,7 +98,7 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
             "attributes": {
               "gidNumber": "1001"
             },
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -129,7 +129,7 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
           "attributes": {
             "gidNumber": "1000"
           },
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -209,7 +209,7 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
       "attributes": {
         "gidNumber": "1002"
       },
-      "versionNo": 1
+      "version_no": 1
     }
 
 フィールド説明
@@ -231,9 +231,9 @@ Group APIは、|Fess| のグループを管理するためのAPIです。
    * - ``attributes``
      - いいえ
      - 属性のマップ（``gidNumber`` などのLDAP属性を含む）。値は文字列で指定します
-   * - ``versionNo``
+   * - ``version_no``
      - はい
-     - 楽観的ロック用のバージョン番号。グループ取得で得た ``versionNo`` の値を指定します
+     - 楽観的ロック用のバージョン番号。グループ取得で得た ``version_no`` の値を指定します
 
 レスポンス
 ----------

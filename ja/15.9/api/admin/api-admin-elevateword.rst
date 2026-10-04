@@ -92,11 +92,11 @@ ElevateWord APIは、|Fess| のエレベートワード（特定キーワード�
         "settings": [
           {
             "id": "elevate_id_1",
-            "suggestWord": "fess",
+            "suggest_word": "fess",
             "reading": "フェス",
             "permissions": "{role}guest",
             "boost": 100.0,
-            "labelTypeIds": []
+            "label_type_ids": []
           }
         ],
         "total": 5
@@ -123,11 +123,11 @@ ElevateWord APIは、|Fess| のエレベートワード（特定キーワード�
         "status": 0,
         "setting": {
           "id": "elevate_id_1",
-          "suggestWord": "fess",
+          "suggest_word": "fess",
           "reading": "フェス",
           "permissions": "{role}guest",
           "boost": 100.0,
-          "labelTypeIds": []
+          "label_type_ids": []
         }
       }
     }
@@ -149,11 +149,11 @@ ElevateWord APIは、|Fess| のエレベートワード（特定キーワード�
 .. code-block:: json
 
     {
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "ドキュメンテーション",
       "permissions": "{role}guest",
       "boost": 100.0,
-      "labelTypeIds": ["label1"]
+      "label_type_ids": ["label1"]
     }
 
 フィールド説明
@@ -166,7 +166,7 @@ ElevateWord APIは、|Fess| のエレベートワード（特定キーワード�
    * - フィールド
      - 必須
      - 説明
-   * - ``suggestWord``
+   * - ``suggest_word``
      - はい
      - エレベート対象のキーワード
    * - ``reading``
@@ -178,7 +178,7 @@ ElevateWord APIは、|Fess| のエレベートワード（特定キーワード�
    * - ``boost``
      - はい
      - ブースト値（フォーム初期値: 100.0）
-   * - ``labelTypeIds``
+   * - ``label_type_ids``
      - いいえ
      - 対象ラベルID（文字列の配列）
 
@@ -213,12 +213,12 @@ ElevateWord APIは、|Fess| のエレベートワード（特定キーワード�
 
     {
       "id": "existing_elevate_id",
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "ドキュメンテーション",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
-      "labelTypeIds": ["label1"],
-      "versionNo": 1
+      "label_type_ids": ["label1"],
+      "version_no": 1
     }
 
 .. note::
@@ -226,7 +226,7 @@ ElevateWord APIは、|Fess| のエレベートワード（特定キーワード�
    更新時は、作成時のフィールドに加えて以下のフィールドが必須です。
 
    - ``id`` - 更新対象のエレベートワードID
-   - ``versionNo`` - 楽観的ロック用のバージョン番号。\ ``GET /setting/{id}`` で取得した値を指定します。
+   - ``version_no`` - 楽観的ロック用のバージョン番号。\ ``GET /setting/{id}`` で取得した値を指定します。
 
 レスポンス
 ----------
@@ -326,7 +326,7 @@ CSVファイルからエレベートワードを一括登録します。ファ�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "Product X",
+           "suggest_word": "Product X",
            "boost": 100.0,
            "permissions": "{role}guest"
          }'
@@ -340,9 +340,9 @@ CSVファイルからエレベートワードを一括登録します。ファ�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "API reference",
+           "suggest_word": "API reference",
            "boost": 100.0,
-           "labelTypeIds": ["technical_docs"],
+           "label_type_ids": ["technical_docs"],
            "permissions": "{role}guest"
          }'
 

@@ -74,7 +74,7 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
      - String
      - 아니오
      - 설정 이름으로 필터링
-   * - ``handlerName``
+   * - ``handler_name``
      - String
      - 아니오
      - 핸들러 이름으로 필터링
@@ -96,14 +96,14 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
             "id": "dataconfig_id_1",
             "name": "Database Crawler",
             "description": "데이터베이스 크롤러",
-            "handlerName": "DatabaseDataStore",
-            "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
-            "handlerScript": "...",
+            "handler_name": "DatabaseDataStore",
+            "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb",
+            "handler_script": "...",
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -132,14 +132,14 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
           "id": "dataconfig_id_1",
           "name": "Database Crawler",
           "description": "데이터베이스 크롤러",
-          "handlerName": "DatabaseDataStore",
-          "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
-          "handlerScript": "...",
+          "handler_name": "DatabaseDataStore",
+          "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/mydb\nusername=dbuser\npassword=dbpass",
+          "handler_script": "...",
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": ""
+          "virtual_hosts": ""
         }
       }
     }
@@ -162,12 +162,12 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
 
     {
       "name": "Product Database",
-      "handlerName": "DatabaseDataStore",
-      "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
-      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
+      "handler_name": "DatabaseDataStore",
+      "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=pass",
+      "handler_script": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description",
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -187,13 +187,13 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
    * - ``description``
      - 아니오
      - 설정 설명
-   * - ``handlerName``
+   * - ``handler_name``
      - 예
      - 데이터스토어 핸들러 이름
-   * - ``handlerParameter``
+   * - ``handler_parameter``
      - 아니오
      - 핸들러 파라미터 (연결 정보 등)
-   * - ``handlerScript``
+   * - ``handler_script``
      - 아니오
      - 데이터 변환 스크립트
    * - ``boost``
@@ -202,13 +202,13 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
    * - ``available``
      - 예
      - 활성화/비활성화 (문자열 ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - 예
      - 표시 순서
    * - ``permissions``
      - 아니오
      - 접근 허용 역할 (여러 개인 경우 줄바꿈으로 구분)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - 아니오
      - 가상 호스트 (여러 개인 경우 줄바꿈으로 구분)
 
@@ -244,16 +244,16 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
     {
       "id": "existing_dataconfig_id",
       "name": "Updated Product Database",
-      "handlerName": "DatabaseDataStore",
-      "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
-      "handlerScript": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
+      "handler_name": "DatabaseDataStore",
+      "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/products\nusername=user\npassword=newpass",
+      "handler_script": "url=\"https://example.com/product/\" + product_id\ntitle=product_name\ncontent=description + \" \" + features",
       "boost": 1.5,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
-업데이트 요청에는 생성 시와 동일한 필수 필드(``name``, ``handlerName``, ``boost``, ``available``, ``sortOrder``)에 더해 다음 필드가 필수입니다.
+업데이트 요청에는 생성 시와 동일한 필수 필드(``name``, ``handler_name``, ``boost``, ``available``, ``sort_order``)에 더해 다음 필드가 필수입니다.
 
 .. list-table::
    :header-rows: 1
@@ -265,7 +265,7 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
    * - ``id``
      - 예
      - 업데이트할 설정 ID
-   * - ``versionNo``
+   * - ``version_no``
      - 예
      - 낙관적 잠금을 위한 버전 번호(조회 시 얻은 값을 지정)
 
@@ -340,12 +340,12 @@ DataConfig API는 |Fess| 의 데이터스토어 설정을 관리하기 위한 AP
          -H "Content-Type: application/json" \
          -d '{
            "name": "User Database",
-           "handlerName": "DatabaseDataStore",
-           "handlerParameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
-           "handlerScript": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
+           "handler_name": "DatabaseDataStore",
+           "handler_parameter": "driver=org.postgresql.Driver\nurl=jdbc:postgresql://localhost/userdb\nusername=dbuser\npassword=dbpass\nsql=SELECT * FROM users WHERE active=true",
+           "handler_script": "url=\"https://example.com/user/\" + user_id\ntitle=username\ncontent=profile",
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 참고 정보

@@ -106,21 +106,21 @@ Respuesta
             "name": "Example Site",
             "description": "Sitio de ejemplo",
             "urls": "https://example.com/",
-            "includedUrls": ".*example\\.com.*",
-            "excludedUrls": ".*\\.(pdf|zip)$",
-            "includedDocUrls": "",
-            "excludedDocUrls": "",
-            "configParameter": "",
+            "included_urls": ".*example\\.com.*",
+            "excluded_urls": ".*\\.(pdf|zip)$",
+            "included_doc_urls": "",
+            "excluded_doc_urls": "",
+            "config_parameter": "",
             "depth": 3,
-            "maxAccessCount": 1000,
-            "userAgent": "Mozilla/5.0",
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "user_agent": "Mozilla/5.0",
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -152,36 +152,36 @@ Respuesta
           "name": "Example Site",
           "description": "Sitio de ejemplo",
           "urls": "https://example.com/",
-          "includedUrls": ".*example\\.com.*",
-          "excludedUrls": ".*\\.(pdf|zip)$",
-          "includedDocUrls": "",
-          "excludedDocUrls": "",
-          "configParameter": "",
+          "included_urls": ".*example\\.com.*",
+          "excluded_urls": ".*\\.(pdf|zip)$",
+          "included_doc_urls": "",
+          "excluded_doc_urls": "",
+          "config_parameter": "",
           "depth": 3,
-          "maxAccessCount": 1000,
-          "userAgent": "Mozilla/5.0",
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "user_agent": "Mozilla/5.0",
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   La respuesta incluye los campos de auditoría ``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime`` y ``versionNo``, que son asignados automáticamente
+   La respuesta incluye los campos de auditoría ``created_by``, ``created_time``,
+   ``updated_by``, ``updated_time`` y ``version_no``, que son asignados automáticamente
    en el momento del registro o la actualización.
-   ``versionNo`` es obligatorio al actualizar (consulte la sección "Actualizar configuración de rastreo web" a continuación).
+   ``version_no`` es obligatorio al actualizar (consulte la sección "Actualizar configuración de rastreo web" a continuación).
 
 Crear Configuración de Rastreo Web
 ===================================
@@ -202,14 +202,14 @@ Cuerpo de la Solicitud
     {
       "name": "Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe)$",
-      "userAgent": "Mozilla/5.0",
-      "numOfThread": 3,
-      "intervalTime": 500,
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe)$",
+      "user_agent": "Mozilla/5.0",
+      "num_of_thread": 3,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -232,34 +232,34 @@ Descripción de Campos
    * - ``urls``
      - Sí
      - URL de inicio de rastreo (separadas por salto de línea si son múltiples). Se especifica con ``http:`` o ``https:``
-   * - ``includedUrls``
+   * - ``included_urls``
      - No
      - Patrón de expresión regular para URLs a rastrear
-   * - ``excludedUrls``
+   * - ``excluded_urls``
      - No
      - Patrón de expresión regular para URLs a excluir del rastreo
-   * - ``includedDocUrls``
+   * - ``included_doc_urls``
      - No
      - Patrón de expresión regular para URLs a indexar
-   * - ``excludedDocUrls``
+   * - ``excluded_doc_urls``
      - No
      - Patrón de expresión regular para URLs a excluir del índice
-   * - ``configParameter``
+   * - ``config_parameter``
      - No
      - Parámetros de configuración adicionales (formato ``key=value``, un elemento por línea)
    * - ``depth``
      - No
      - Profundidad de rastreo (0 o más)
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - No
      - Número máximo de accesos (0 o más)
-   * - ``userAgent``
+   * - ``user_agent``
      - Sí
      - Cadena User-Agent (máximo 200 caracteres)
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - Sí
      - Número de hilos paralelos (1 o más)
-   * - ``intervalTime``
+   * - ``interval_time``
      - Sí
      - Intervalo de acceso (milisegundos, 0 o más)
    * - ``boost``
@@ -268,19 +268,19 @@ Descripción de Campos
    * - ``available``
      - Sí
      - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Sí
      - Orden de visualización (0 o más)
    * - ``permissions``
      - No
      - Roles con permiso de acceso (separados por saltos de línea si son varios)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - No
      - Hosts virtuales (separados por saltos de línea si son varios)
 
 .. note::
 
-   Los campos de auditoría como ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime``
+   Los campos de auditoría como ``created_by``, ``created_time``, ``updated_by`` y ``updated_time``
    son asignados automáticamente por el servidor, por lo que no es necesario incluirlos en el cuerpo de la solicitud.
 
 Respuesta
@@ -311,8 +311,8 @@ Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Al actualizar, además de los campos de creación, son obligatorios ``id`` para identificar
-el registro a actualizar y ``versionNo`` como número de versión.
-En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de la API de consulta (GET).
+el registro a actualizar y ``version_no`` como número de versión.
+En ``version_no`` se debe especificar el valor actual incluido en la respuesta de la API de consulta (GET).
 
 .. code-block:: json
 
@@ -320,17 +320,17 @@ En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de
       "id": "existing_webconfig_id",
       "name": "Updated Corporate Site",
       "urls": "https://www.example.com/",
-      "includedUrls": ".*www\\.example\\.com.*",
-      "excludedUrls": ".*\\.(pdf|zip|exe|dmg)$",
-      "userAgent": "Mozilla/5.0",
+      "included_urls": ".*www\\.example\\.com.*",
+      "excluded_urls": ".*\\.(pdf|zip|exe|dmg)$",
+      "user_agent": "Mozilla/5.0",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 5,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 5,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 Campos Adicionales para la Actualización
@@ -346,9 +346,9 @@ Campos Adicionales para la Actualización
    * - ``id``
      - Sí
      - ID de la configuración a actualizar (máximo 1000 caracteres)
-   * - ``versionNo``
+   * - ``version_no``
      - Sí
-     - Número de versión actual del registro a actualizar. Se especifica el valor de ``versionNo`` incluido en la respuesta de la API de consulta (GET)
+     - Número de versión actual del registro a actualizar. Se especifica el valor de ``version_no`` incluido en la respuesta de la API de consulta (GET)
 
 Respuesta
 ---------
@@ -387,7 +387,7 @@ Respuesta
 Ejemplos de Patrones de URL
 ============================
 
-En ``includedUrls`` / ``excludedUrls`` / ``includedDocUrls`` / ``excludedDocUrls`` se utilizan expresiones regulares.
+En ``included_urls`` / ``excluded_urls`` / ``included_doc_urls`` / ``excluded_doc_urls`` se utilizan expresiones regulares.
 
 .. list-table::
    :header-rows: 1
@@ -420,16 +420,16 @@ Configuración de Rastreo de Sitio Corporativo
          -d '{
            "name": "Corporate Website",
            "urls": "https://www.example.com/",
-           "includedUrls": ".*www\\.example\\.com.*",
-           "excludedUrls": ".*/(login|admin|api)/.*",
-           "userAgent": "Mozilla/5.0",
+           "included_urls": ".*www\\.example\\.com.*",
+           "excluded_urls": ".*/(login|admin|api)/.*",
+           "user_agent": "Mozilla/5.0",
            "depth": 5,
-           "maxAccessCount": 10000,
-           "numOfThread": 3,
-           "intervalTime": 500,
+           "max_access_count": 10000,
+           "num_of_thread": 3,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -444,15 +444,15 @@ Configuración de Rastreo de Sitio de Documentación
          -d '{
            "name": "Documentation Site",
            "urls": "https://docs.example.com/",
-           "includedUrls": ".*docs\\.example\\.com.*",
-           "includedDocUrls": ".*\\.(html|htm)$",
-           "userAgent": "Mozilla/5.0",
-           "maxAccessCount": 50000,
-           "numOfThread": 5,
-           "intervalTime": 200,
+           "included_urls": ".*docs\\.example\\.com.*",
+           "included_doc_urls": ".*\\.(html|htm)$",
+           "user_agent": "Mozilla/5.0",
+           "max_access_count": 50000,
+           "num_of_thread": 5,
+           "interval_time": 200,
            "boost": 1.5,
            "available": "true",
-           "sortOrder": 0
+           "sort_order": 0
          }'
 
 Información de Referencia

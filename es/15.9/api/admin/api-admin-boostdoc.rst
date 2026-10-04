@@ -11,21 +11,21 @@ coincidan con ciertas condiciones y hacer que aparezcan con mayor facilidad en l
 superiores de los resultados de búsqueda.
 
 El impulso se aplica a cada documento en el momento de la indexación (durante el rastreo).
-La condición (``urlExpr``) y el valor de impulso (``boostExpr``) se evalúan con el motor de scripting
-especificado en el campo ``scriptType``. En ``scriptType`` puede indicarse ``javascript`` o ``groovy``
+La condición (``url_expr``) y el valor de impulso (``boost_expr``) se evalúan con el motor de scripting
+especificado en el campo ``script_type``. En ``script_type`` puede indicarse ``javascript`` o ``groovy``
 (este último requiere el plugin ``fess-script-groovy``). La pantalla de creación del panel de administración
-rellena ``scriptType`` con ``javascript``, pero si esta API omite ``scriptType`` en el cuerpo de la solicitud,
+rellena ``script_type`` con ``javascript``, pero si esta API omite ``script_type`` en el cuerpo de la solicitud,
 no se rellena automáticamente y las expresiones se evalúan como Groovy.
-Las reglas múltiples se evalúan en orden ascendente según ``sortOrder``, y solo se aplica el valor de
+Las reglas múltiples se evalúan en orden ascendente según ``sort_order``, y solo se aplica el valor de
 impulso de la primera regla cuya condición coincida (una vez encontrada una regla que coincida,
 las reglas siguientes no se evalúan).
 
 .. note::
 
-   En el panel de administración, ``urlExpr`` se muestra como "Condición", ``boostExpr`` como "Expresión de valor
-   de impulso" y ``scriptType`` como "Tipo de Script". ``scriptType`` solo aparece en los cuerpos de solicitud y
+   En el panel de administración, ``url_expr`` se muestra como "Condición", ``boost_expr`` como "Expresión de valor
+   de impulso" y ``script_type`` como "Tipo de Script". ``script_type`` solo aparece en los cuerpos de solicitud y
    respuestas de creación/actualización/obtención (lista y detalle), no en los parámetros de filtro de la lista
-   (``urlExpr``, ``boostExpr``).
+   (``url_expr``, ``boost_expr``).
    Para más detalles sobre los elementos de configuración, consulte :doc:`../../admin/boostdoc-guide`.
 
 URL Base
@@ -96,11 +96,11 @@ Parámetros
      - Integer
      - No
      - Número de página (comienza en 1. Predeterminado: 1)
-   * - ``urlExpr``
+   * - ``url_expr``
      - String
      - No
      - Filtrado por expresión de condición (coincidencia parcial)
-   * - ``boostExpr``
+   * - ``boost_expr``
      - String
      - No
      - Filtrado por expresión de valor de impulso (coincidencia parcial)
@@ -116,11 +116,11 @@ Respuesta
         "settings": [
           {
             "id": "boostdoc_id_1",
-            "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-            "boostExpr": "3.0",
-            "scriptType": "javascript",
-            "sortOrder": 1,
-            "versionNo": 1
+            "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+            "boost_expr": "3.0",
+            "script_type": "javascript",
+            "sort_order": 1,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -129,8 +129,8 @@ Respuesta
 
 .. note::
 
-   Además de los campos mostrados anteriormente, cada objeto de configuración en la respuesta incluye también metadatos de creación/actualización (``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``).
-   ``versionNo`` es obligatorio al actualizar (PUT), por lo que debe obtener su valor actual mediante la API de obtención individual o de lista antes de actualizar.
+   Además de los campos mostrados anteriormente, cada objeto de configuración en la respuesta incluye también metadatos de creación/actualización (``created_by``, ``created_time``, ``updated_by``, ``updated_time``).
+   ``version_no`` es obligatorio al actualizar (PUT), por lo que debe obtener su valor actual mediante la API de obtención individual o de lista antes de actualizar.
 
 Obtener Impulso de Documento
 =============================
@@ -152,11 +152,11 @@ Respuesta
         "status": 0,
         "setting": {
           "id": "boostdoc_id_1",
-          "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-          "boostExpr": "3.0",
-          "scriptType": "javascript",
-          "sortOrder": 1,
-          "versionNo": 1
+          "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+          "boost_expr": "3.0",
+          "script_type": "javascript",
+          "sort_order": 1,
+          "version_no": 1
         }
       }
     }
@@ -178,10 +178,10 @@ Cuerpo de la Solicitud
 .. code-block:: json
 
     {
-      "urlExpr": "url.startsWith(\"https://important.example.com/\")",
-      "boostExpr": "5.0",
-      "scriptType": "javascript",
-      "sortOrder": 0
+      "url_expr": "url.startsWith(\"https://important.example.com/\")",
+      "boost_expr": "5.0",
+      "script_type": "javascript",
+      "sort_order": 0
     }
 
 Descripción de Campos
@@ -194,16 +194,16 @@ Descripción de Campos
    * - Campo
      - Requerido
      - Descripción
-   * - ``urlExpr``
+   * - ``url_expr``
      - Sí
      - Expresión de condición. Expresión de script que determina los documentos objetivo del impulso y devuelve ``Boolean``. Corresponde a "Condición" en el panel de administración (máximo 10000 caracteres).
-   * - ``boostExpr``
+   * - ``boost_expr``
      - Sí
      - Expresión de valor de impulso. Expresión de script que devuelve el valor de impulso (numérico). También se puede especificar un valor fijo como ``3.0``. Corresponde a "Expresión de valor de impulso" en el panel de administración (máximo 10000 caracteres).
-   * - ``scriptType``
+   * - ``script_type``
      - No
-     - Motor de scripting utilizado para evaluar ``urlExpr`` y ``boostExpr``. Puede ser ``javascript`` o ``groovy`` (requiere el plugin ``fess-script-groovy``). Corresponde a "Tipo de Script" en el panel de administración (máximo 100 caracteres). Si se omite, las expresiones se evalúan como Groovy.
-   * - ``sortOrder``
+     - Motor de scripting utilizado para evaluar ``url_expr`` y ``boost_expr``. Puede ser ``javascript`` o ``groovy`` (requiere el plugin ``fess-script-groovy``). Corresponde a "Tipo de Script" en el panel de administración (máximo 100 caracteres). Si se omite, las expresiones se evalúan como Groovy.
+   * - ``sort_order``
      - Sí
      - Orden de aplicación. Las reglas se evalúan en orden ascendente y se aplica el valor de impulso de la primera regla cuya condición coincida (valor inicial del formulario: 0; entero mayor o igual a 0).
 
@@ -238,14 +238,14 @@ Cuerpo de la Solicitud
 
     {
       "id": "existing_boostdoc_id",
-      "urlExpr": "url.startsWith(\"https://important.example.com/\")",
-      "boostExpr": "10.0",
-      "scriptType": "javascript",
-      "sortOrder": 0,
-      "versionNo": 1
+      "url_expr": "url.startsWith(\"https://important.example.com/\")",
+      "boost_expr": "10.0",
+      "script_type": "javascript",
+      "sort_order": 0,
+      "version_no": 1
     }
 
-Al actualizar, además de los campos utilizados al crear, ``id`` (el identificador de la regla objetivo, hasta 1000 caracteres) y ``versionNo`` (el número de versión para bloqueo optimista) son obligatorios. Especifique el número de versión actual obtenido desde la respuesta de la API de obtención individual o de lista para ``versionNo``. La actualización falla si el número de versión no coincide.
+Al actualizar, además de los campos utilizados al crear, ``id`` (el identificador de la regla objetivo, hasta 1000 caracteres) y ``version_no`` (el número de versión para bloqueo optimista) son obligatorios. Especifique el número de versión actual obtenido desde la respuesta de la API de obtención individual o de lista para ``version_no``. La actualización falla si el número de versión no coincide.
 
 Respuesta
 ---------
@@ -284,13 +284,13 @@ Respuesta
 Acerca de las Expresiones de Condición y de Valor de Impulso
 =============================================================
 
-``urlExpr`` (condición) y ``boostExpr`` (expresión de valor de impulso) se evalúan con el motor de scripting
-especificado en ``scriptType`` (valor predeterminado: Groovy; solo la pantalla de creación del panel de
+``url_expr`` (condición) y ``boost_expr`` (expresión de valor de impulso) se evalúan con el motor de scripting
+especificado en ``script_type`` (valor predeterminado: Groovy; solo la pantalla de creación del panel de
 administración rellena ``javascript``).
 Dentro de la expresión, se pueden referenciar los valores de campo del documento a indexar como variables con el nombre del campo.
 
-- ``urlExpr`` debe devolver ``Boolean`` (ejemplo: ``url.startsWith("https://docs.example.com/")``). Una simple cadena de expresión regular (ejemplo: ``.*docs\.example\.com.*``) no devuelve ``Boolean`` como expresión de script y por lo tanto no funciona como condición. Para usar expresiones regulares, utilice ``String#matches`` (disponible con la misma notación tanto en Groovy como en JavaScript).
-- ``boostExpr`` debe devolver un valor numérico. El resultado se convierte a ``float`` y el impulso se aplica solo si es mayor que 0.
+- ``url_expr`` debe devolver ``Boolean`` (ejemplo: ``url.startsWith("https://docs.example.com/")``). Una simple cadena de expresión regular (ejemplo: ``.*docs\.example\.com.*``) no devuelve ``Boolean`` como expresión de script y por lo tanto no funciona como condición. Para usar expresiones regulares, utilice ``String#matches`` (disponible con la misma notación tanto en Groovy como en JavaScript).
+- ``boost_expr`` debe devolver un valor numérico. El resultado se convierte a ``float`` y el impulso se aplica solo si es mayor que 0.
 
 .. note::
 
@@ -299,7 +299,7 @@ Dentro de la expresión, se pueden referenciar los valores de campo del document
    ``indexer.favorite.count.enabled`` están habilitados (ambos habilitados por defecto).
    La sintaxis de cálculo de fechas de OpenSearch como ``now - 7d`` no se puede usar ni en Groovy ni en JavaScript.
 
-Ejemplos de Expresión de Condición (``urlExpr``)
+Ejemplos de Expresión de Condición (``url_expr``)
 -------------------------------------------------
 
 .. list-table::
@@ -315,7 +315,7 @@ Ejemplos de Expresión de Condición (``urlExpr``)
    * - ``title.contains("Notas de la version")``
      - Aplica a documentos que contienen una palabra específica en el título
 
-Ejemplos de Expresión de Valor de Impulso (``boostExpr``)
+Ejemplos de Expresión de Valor de Impulso (``boost_expr``)
 ----------------------------------------------------------
 
 .. list-table::
@@ -343,9 +343,9 @@ Impulso de Sitio de Documentación
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "urlExpr": "url.startsWith(\"https://docs.example.com/\")",
-           "boostExpr": "5.0",
-           "sortOrder": 0
+           "url_expr": "url.startsWith(\"https://docs.example.com/\")",
+           "boost_expr": "5.0",
+           "sort_order": 0
          }'
 
 Impulso de Contenido con Muchos Clics
@@ -357,9 +357,9 @@ Impulso de Contenido con Muchos Clics
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "urlExpr": "url.startsWith(\"https://www.example.com/\")",
-           "boostExpr": "click_count * 0.1 + 1",
-           "sortOrder": 10
+           "url_expr": "url.startsWith(\"https://www.example.com/\")",
+           "boost_expr": "click_count * 0.1 + 1",
+           "sort_order": 10
          }'
 
 Información de Referencia

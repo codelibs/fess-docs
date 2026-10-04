@@ -71,15 +71,15 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
      - String
      - 아니오
      - URL 필터 (와일드카드 ``*`` ``?`` 지원)
-   * - ``errorCountMin``
+   * - ``error_count_min``
      - Integer
      - 아니오
      - 오류 횟수의 하한값 (지정한 값 이상)
-   * - ``errorCountMax``
+   * - ``error_count_max``
      - Integer
      - 아니오
      - 오류 횟수의 상한값 (지정한 값 이하)
-   * - ``errorName``
+   * - ``error_name``
      - String
      - 아니오
      - 오류 이름 필터 (저장된 완전한정 클래스명에 대한 와일드카드 매칭; ``*`` ``?`` 지원)
@@ -96,22 +96,22 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
           {
             "id": "failure_id_1",
             "url": "https://example.com/broken-page",
-            "threadName": "Crawler-1",
-            "errorName": "java.net.ConnectException",
-            "errorLog": "Connection refused: connect",
-            "errorCount": "3",
-            "lastAccessTime": "1738144800000",
-            "configId": "webConfig_id_1"
+            "thread_name": "Crawler-1",
+            "error_name": "java.net.ConnectException",
+            "error_log": "Connection refused: connect",
+            "error_count": "3",
+            "last_access_time": "1738144800000",
+            "config_id": "webConfig_id_1"
           },
           {
             "id": "failure_id_2",
             "url": "https://example.com/not-found",
-            "threadName": "Crawler-2",
-            "errorName": "org.codelibs.fess.exception.ContentNotFoundException",
-            "errorLog": "Not found: https://example.com/not-found",
-            "errorCount": "1",
-            "lastAccessTime": "1738143000000",
-            "configId": "webConfig_id_1"
+            "thread_name": "Crawler-2",
+            "error_name": "org.codelibs.fess.exception.ContentNotFoundException",
+            "error_log": "Not found: https://example.com/not-found",
+            "error_count": "1",
+            "last_access_time": "1738143000000",
+            "config_id": "webConfig_id_1"
           }
         ],
         "total": 45
@@ -131,22 +131,22 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
      - 실패 URL ID
    * - ``url``
      - 실패한 URL
-   * - ``threadName``
+   * - ``thread_name``
      - 스레드 이름
-   * - ``errorName``
+   * - ``error_name``
      - 오류 이름 (발생한 예외의 완전한정 클래스명; 예: ``java.net.ConnectException``)
-   * - ``errorLog``
+   * - ``error_log``
      - 오류 로그 (예외 메시지 또는 스택 트레이스)
-   * - ``errorCount``
+   * - ``error_count``
      - 오류 발생 횟수 (문자열로 표현된 숫자값)
-   * - ``lastAccessTime``
+   * - ``last_access_time``
      - 최종 접근 시각 (문자열로 표현된 에포크 밀리초)
-   * - ``configId``
+   * - ``config_id``
      - 크롤링 설정 ID
 
 .. note::
 
-   모든 응답 필드는 문자열(JSON string)로 반환됩니다. ``errorCount`` 는 문자열로 표현된 숫자값이며, ``lastAccessTime`` 은 문자열로 표현된 에포크 밀리초입니다.
+   모든 응답 필드는 문자열(JSON string)로 반환됩니다. ``error_count`` 는 문자열로 표현된 숫자값이며, ``last_access_time`` 은 문자열로 표현된 에포크 밀리초입니다.
 
 실패 URL 조회
 =============
@@ -169,12 +169,12 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
         "log": {
           "id": "failure_id_1",
           "url": "https://example.com/broken-page",
-          "threadName": "Crawler-1",
-          "errorName": "java.net.ConnectException",
-          "errorLog": "Connection refused: connect",
-          "errorCount": "3",
-          "lastAccessTime": "1738144800000",
-          "configId": "webConfig_id_1"
+          "thread_name": "Crawler-1",
+          "error_name": "java.net.ConnectException",
+          "error_log": "Connection refused: connect",
+          "error_count": "3",
+          "last_access_time": "1738144800000",
+          "config_id": "webConfig_id_1"
         }
       }
     }
@@ -226,7 +226,7 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
 오류 타입
 ============
 
-``errorName`` 에는 크롤링 중 발생한 예외의 완전한정 클래스명이 있는 그대로 저장됩니다. 고정된 열거형이 아니며, 발생한 예외에 따라 어떠한 클래스명도 나타날 수 있습니다. 다음은 대표적인 예시입니다.
+``error_name`` 에는 크롤링 중 발생한 예외의 완전한정 클래스명이 있는 그대로 저장됩니다. 고정된 열거형이 아니며, 발생한 예외에 따라 어떠한 클래스명도 나타날 수 있습니다. 다음은 대표적인 예시입니다.
 
 .. list-table::
    :header-rows: 1
@@ -310,7 +310,7 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
     # 오류 타입별 카운트
     curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
          -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '[.response.logs[].errorName] | group_by(.) | map({error: .[0], count: length})'
+         jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
 
 참고 정보
 =========

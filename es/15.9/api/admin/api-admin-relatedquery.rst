@@ -92,7 +92,7 @@ Respuesta
             "id": "query_id_1",
             "term": "fess",
             "queries": "fess tutorial\nfess installation\nfess configuration",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -101,9 +101,9 @@ Respuesta
 
 .. note::
 
-   Cada configuración incluye ``versionNo`` (número de versión para el bloqueo optimista). Los campos
-   ``virtualHost`` y los campos de auditoría (``createdBy``, ``createdTime``, ``updatedBy``, ``updatedTime``)
-   se incluyen únicamente cuando tienen un valor asignado. Un ``virtualHost`` vacío no se incluye
+   Cada configuración incluye ``version_no`` (número de versión para el bloqueo optimista). Los campos
+   ``virtual_host`` y los campos de auditoría (``created_by``, ``created_time``, ``updated_by``, ``updated_time``)
+   se incluyen únicamente cuando tienen un valor asignado. Un ``virtual_host`` vacío no se incluye
    en la respuesta.
 
 Obtener Consulta Relacionada
@@ -129,8 +129,8 @@ Respuesta
           "id": "query_id_1",
           "term": "fess",
           "queries": "fess tutorial\nfess installation\nfess configuration",
-          "virtualHost": "site1.example.com",
-          "versionNo": 1
+          "virtual_host": "site1.example.com",
+          "version_no": 1
         }
       }
     }
@@ -154,7 +154,7 @@ Cuerpo de la Solicitud
     {
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search",
-      "virtualHost": ""
+      "virtual_host": ""
     }
 
 Descripción de Campos
@@ -173,13 +173,13 @@ Descripción de Campos
    * - ``queries``
      - Sí
      - Consultas relacionadas. Cadena separada por saltos de línea, una por línea (las líneas vacías se ignoran; máximo 10000 caracteres)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - No
      - Host virtual (máximo 1000 caracteres)
 
 .. note::
 
-   ``crudMode`` es configurado automáticamente por la API, por lo que no es necesario incluirlo en el cuerpo de la solicitud.
+   ``crud_mode`` es configurado automáticamente por la API, por lo que no es necesario incluirlo en el cuerpo de la solicitud.
 
 Respuesta
 ---------
@@ -215,8 +215,8 @@ Cuerpo de la Solicitud
       "id": "existing_query_id",
       "term": "search",
       "queries": "search tutorial\nsearch syntax\nadvanced search\nsearch tips",
-      "virtualHost": "",
-      "versionNo": 1
+      "virtual_host": "",
+      "version_no": 1
     }
 
 Descripción de Campos
@@ -238,10 +238,10 @@ Descripción de Campos
    * - ``queries``
      - Sí
      - Consultas relacionadas. Cadena separada por saltos de línea, una por línea (las líneas vacías se ignoran; máximo 10000 caracteres)
-   * - ``virtualHost``
+   * - ``virtual_host``
      - No
      - Host virtual (máximo 1000 caracteres)
-   * - ``versionNo``
+   * - ``version_no``
      - Sí
      - Número de versión para el bloqueo optimista. Debe especificarse el valor incluido en la respuesta de la consulta de obtención
 

@@ -57,22 +57,22 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
       "response": {
         "version": "15.9.0",
         "status": 0,
-        "envProps": [
+        "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
           {"label": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
         ],
-        "systemProps": [
+        "system_props": [
           {"label": "java.version", "value": "21.0.1"},
           {"label": "java.vendor", "value": "Oracle Corporation"},
           {"label": "os.name", "value": "Linux"},
           {"label": "user.dir", "value": "/opt/fess"}
         ],
-        "fessProps": [
+        "fess_props": [
           {"label": "crawler.document.max.site.length", "value": "100"},
           {"label": "indexer.thread.dump.enabled", "value": "true"},
           {"label": "app.cipher.key", "value": "XXXXXXXX"}
         ],
-        "bugReportProps": [
+        "bug_report_props": [
           {"label": "os.name", "value": "Linux"},
           {"label": "java.vm.version", "value": "21.0.1+12"}
         ]
@@ -92,24 +92,24 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
      - |Fess| 的产品版本（例如：``15.9.0``）。
    * - ``status``
      - 表示处理结果的状态码。\ ``0`` 表示正常结束。
-   * - ``envProps``
+   * - ``env_props``
      - 环境变量列表（``label`` / ``value`` 的对象数组）。返回通过 ``System.getenv()`` 获取的值，不做任何修改。
-   * - ``systemProps``
+   * - ``system_props``
      - Java系统属性列表（``label`` / ``value`` 的对象数组）。返回通过 ``System.getProperties()`` 获取的值，不做任何修改。
-   * - ``fessProps``
+   * - ``fess_props``
      - |Fess| 配置属性列表（``label`` / ``value`` 的对象数组）。包含 ``fess_config.properties`` 中的配置值以及通过管理界面设置的系统属性。敏感项目将被屏蔽（参见下方注意事项）。
-   * - ``bugReportProps``
+   * - ``bug_report_props``
      - 为错误报告收集的信息列表（``label`` / ``value`` 的对象数组）。包含与OS及Java运行环境相关的主要系统属性（``os.name``、``os.version``、``java.vm.version`` 等）以及 |Fess| 的系统属性设置值。
 
 .. note::
 
-   ``fessProps`` 中，以下敏感配置值将被屏蔽，以 ``XXXXXXXX`` 返回：
+   ``fess_props`` 中，以下敏感配置值将被屏蔽，以 ``XXXXXXXX`` 返回：
    ``http.proxy.password``、``ldap.admin.security.credentials``、``spnego.preauth.password``、
    ``app.cipher.key``、``oic.client.id``、``oic.client.secret``\ 。
 
 .. warning::
 
-   ``envProps``\ （环境变量）和 ``systemProps``\ （Java系统属性）不会被屏蔽，
+   ``env_props``\ （环境变量）和 ``system_props``\ （Java系统属性）不会被屏蔽，
    其值将原样返回。如果环境变量或系统属性中包含认证信息等敏感数据，
    这些信息将出现在响应中，请注意。
 

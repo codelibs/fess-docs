@@ -67,7 +67,7 @@ Parameters
      - Integer
      - No
      - Page number (1-based, default: 1)
-   * - ``sessionId``
+   * - ``session_id``
      - String
      - No
      - Session ID filter (partial match)
@@ -83,17 +83,17 @@ Response
         "logs": [
           {
             "id": "crawling_info_id_1",
-            "sessionId": "20250129100000",
+            "session_id": "20250129100000",
             "name": "Default Crawler",
-            "expiredTime": "1738200000000",
-            "createdTime": 1738108800000
+            "expired_time": "1738200000000",
+            "created_time": 1738108800000
           },
           {
             "id": "crawling_info_id_2",
-            "sessionId": "20250128100000",
+            "session_id": "20250128100000",
             "name": "Default Crawler",
-            "expiredTime": "1738113600000",
-            "createdTime": 1738022400000
+            "expired_time": "1738113600000",
+            "created_time": 1738022400000
           }
         ],
         "total": 10
@@ -111,18 +111,18 @@ Response Fields
      - Description
    * - ``id``
      - Crawl information ID
-   * - ``sessionId``
+   * - ``session_id``
      - Session ID
    * - ``name``
      - Session name
-   * - ``expiredTime``
+   * - ``expired_time``
      - Expiration time (epoch milliseconds; returned as a string)
-   * - ``createdTime``
+   * - ``created_time``
      - Created time (epoch milliseconds; returned as a number)
 
 .. note::
 
-   Each log object in the response also includes an internal ``crudMode`` field
+   Each log object in the response also includes an internal ``crud_mode`` field
    (an integer indicating the CRUD operation mode, always ``0`` for read operations).
    Clients can safely ignore it.
 
@@ -146,10 +146,10 @@ Response
         "status": 0,
         "log": {
           "id": "crawling_info_id_1",
-          "sessionId": "20250129100000",
+          "session_id": "20250129100000",
           "name": "Default Crawler",
-          "expiredTime": "1738200000000",
-          "createdTime": 1738108800000
+          "expired_time": "1738200000000",
+          "created_time": 1738108800000
         }
       }
     }

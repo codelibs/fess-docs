@@ -92,7 +92,7 @@ Response
         "settings": [
           {
             "id": "badword_id_1",
-            "suggestWord": "inappropriate_word"
+            "suggest_word": "inappropriate_word"
           }
         ],
         "total": 5
@@ -119,7 +119,7 @@ Response
         "status": 0,
         "setting": {
           "id": "badword_id_1",
-          "suggestWord": "inappropriate_word"
+          "suggest_word": "inappropriate_word"
         }
       }
     }
@@ -141,7 +141,7 @@ Request-Body
 .. code-block:: json
 
     {
-      "suggestWord": "spam_keyword"
+      "suggest_word": "spam_keyword"
     }
 
 Feldbeschreibungen
@@ -154,7 +154,7 @@ Feldbeschreibungen
    * - Feld
      - Erforderlich
      - Beschreibung
-   * - ``suggestWord``
+   * - ``suggest_word``
      - Ja
      - Das auszuschließende Schlüsselwort (darf keine Leerzeichen enthalten)
 
@@ -189,8 +189,8 @@ Request-Body
 
     {
       "id": "existing_badword_id",
-      "suggestWord": "updated_spam_keyword",
-      "versionNo": 1
+      "suggest_word": "updated_spam_keyword",
+      "version_no": 1
     }
 
 Response
@@ -260,7 +260,7 @@ CSV-Format
 ~~~~~~~~~~
 
 - Die erste Zeile wird als Kopfzeile übersprungen (der Spaltenname ist beliebig; beim Herunterladen wird ``BadWord`` ausgegeben).
-- Ab der zweiten Zeile wird pro Zeile ein Bad Word als ``suggestWord`` angegeben.
+- Ab der zweiten Zeile wird pro Zeile ein Bad Word als ``suggest_word`` angegeben.
 - Zeilen, deren Wert nur aus Leerzeichen besteht, werden ignoriert.
 - Stellen Sie einem Wort ``--`` voran, um es zu löschen (z. B. löscht ``--spam`` das Wort ``spam``).
 - Die Angabe eines bereits registrierten Worts wird als Aktualisierung behandelt (der Bearbeiter und der Aktualisierungszeitpunkt werden zurückgesetzt).
@@ -306,7 +306,7 @@ Spam-Schlüsselwörter ausschließen
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "spam"
+           "suggest_word": "spam"
          }'
 
 CSV-Datei hochladen

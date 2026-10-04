@@ -98,14 +98,14 @@ HTTPステータスコード）については :doc:`api-admin-overview` を参�
             "id": "token_id_1",
             "name": "API Token 1",
             "token": "abcd1234efgh5678",
-            "parameterName": "permission",
+            "parameter_name": "permission",
             "permissions": "{role}admin-api",
             "expires": "2026-01-01T00:00:00",
-            "createdBy": "admin",
-            "createdTime": 1735689600000,
-            "updatedBy": "admin",
-            "updatedTime": 1735689600000,
-            "versionNo": 1
+            "created_by": "admin",
+            "created_time": 1735689600000,
+            "updated_by": "admin",
+            "updated_time": 1735689600000,
+            "version_no": 1
           }
         ],
         "total": 5
@@ -114,9 +114,9 @@ HTTPステータスコード）については :doc:`api-admin-overview` を参�
 
 .. note::
 
-   各トークンオブジェクトには、 ``createdBy`` 、 ``createdTime`` 、 ``updatedBy`` 、
-   ``updatedTime`` 、 ``versionNo`` といった監査情報・バージョン情報も含まれます。
-   ``createdTime`` と ``updatedTime`` はエポックからのミリ秒（数値）です。
+   各トークンオブジェクトには、 ``created_by`` 、 ``created_time`` 、 ``updated_by`` 、
+   ``updated_time`` 、 ``version_no`` といった監査情報・バージョン情報も含まれます。
+   ``created_time`` と ``updated_time`` はエポックからのミリ秒（数値）です。
    値が ``null`` のフィールドはレスポンスから除外されます。
    ``permissions`` は改行（ ``\n`` ）区切りの文字列として返されます。
 
@@ -142,14 +142,14 @@ HTTPステータスコード）については :doc:`api-admin-overview` を参�
           "id": "token_id_1",
           "name": "API Token 1",
           "token": "abcd1234efgh5678",
-          "parameterName": "permission",
+          "parameter_name": "permission",
           "permissions": "{role}admin-api",
           "expires": "2026-01-01T00:00:00",
-          "createdBy": "admin",
-          "createdTime": 1735689600000,
-          "updatedBy": "admin",
-          "updatedTime": 1735689600000,
-          "versionNo": 1
+          "created_by": "admin",
+          "created_time": 1735689600000,
+          "updated_by": "admin",
+          "updated_time": 1735689600000,
+          "version_no": 1
         }
       }
     }
@@ -192,7 +192,7 @@ HTTPステータスコード）については :doc:`api-admin-overview` を参�
    * - ``permissions``
      - いいえ
      - このトークンに付与する権限。改行（ ``\n`` ）区切りで複数指定できます（例: ``{role}admin-api`` ）。Admin APIを呼び出すトークンには、 ``api.admin.access.permissions`` （既定値 ``{role}admin-api`` ）に一致する権限が必要です。
-   * - ``parameterName``
+   * - ``parameter_name``
      - いいえ
      - 追加権限を渡すためのリクエストパラメーター名。このトークンで認証されたリクエストに、ここで指定した名前のパラメーターが含まれる場合、その値が ``permissions`` に追加されます。省略した場合は設定されません。
    * - ``expires``
@@ -239,7 +239,7 @@ HTTPステータスコード）については :doc:`api-admin-overview` を参�
       "name": "Updated API Token",
       "permissions": "{role}admin-api\n{role}user",
       "expires": "2026-01-01T00:00:00",
-      "versionNo": 1
+      "version_no": 1
     }
 
 フィールド説明
@@ -257,9 +257,9 @@ HTTPステータスコード）については :doc:`api-admin-overview` を参�
    * - ``id``
      - はい
      - 更新対象のトークンID
-   * - ``versionNo``
+   * - ``version_no``
      - はい
-     - 楽観ロック用のバージョン番号。事前に取得したトークンの ``versionNo`` を指定します。
+     - 楽観ロック用のバージョン番号。事前に取得したトークンの ``version_no`` を指定します。
 
 .. note::
 

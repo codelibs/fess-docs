@@ -92,11 +92,11 @@ Réponse
         "settings": [
           {
             "id": "elevate_id_1",
-            "suggestWord": "fess",
+            "suggest_word": "fess",
             "reading": "",
             "permissions": "{role}guest",
             "boost": 100.0,
-            "labelTypeIds": []
+            "label_type_ids": []
           }
         ],
         "total": 5
@@ -123,11 +123,11 @@ Réponse
         "status": 0,
         "setting": {
           "id": "elevate_id_1",
-          "suggestWord": "fess",
+          "suggest_word": "fess",
           "reading": "",
           "permissions": "{role}guest",
           "boost": 100.0,
-          "labelTypeIds": []
+          "label_type_ids": []
         }
       }
     }
@@ -149,11 +149,11 @@ Corps de la requête
 .. code-block:: json
 
     {
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest",
       "boost": 100.0,
-      "labelTypeIds": ["label1"]
+      "label_type_ids": ["label1"]
     }
 
 Description des champs
@@ -166,7 +166,7 @@ Description des champs
    * - Champ
      - Requis
      - Description
-   * - ``suggestWord``
+   * - ``suggest_word``
      - Oui
      - Mot-clé à élever
    * - ``reading``
@@ -178,7 +178,7 @@ Description des champs
    * - ``boost``
      - Oui
      - Valeur de boost (valeur initiale du formulaire : 100.0)
-   * - ``labelTypeIds``
+   * - ``label_type_ids``
      - Non
      - ID des labels cibles (tableau de chaînes)
 
@@ -213,12 +213,12 @@ Corps de la requête
 
     {
       "id": "existing_elevate_id",
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
-      "labelTypeIds": ["label1"],
-      "versionNo": 1
+      "label_type_ids": ["label1"],
+      "version_no": 1
     }
 
 .. note::
@@ -226,7 +226,7 @@ Corps de la requête
    Lors de la mise à jour, les champs suivants sont requis en plus des champs utilisés pour la création :
 
    - ``id`` - ID du mot élevé à mettre à jour
-   - ``versionNo`` - Numéro de version pour le verrouillage optimiste. Indiquez la valeur obtenue via ``GET /setting/{id}``.
+   - ``version_no`` - Numéro de version pour le verrouillage optimiste. Indiquez la valeur obtenue via ``GET /setting/{id}``.
 
 Réponse
 -------
@@ -326,7 +326,7 @@ Exemples d'utilisation
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "Product X",
+           "suggest_word": "Product X",
            "boost": 100.0,
            "permissions": "{role}guest"
          }'
@@ -340,9 +340,9 @@ Exemples d'utilisation
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "API reference",
+           "suggest_word": "API reference",
            "boost": 100.0,
-           "labelTypeIds": ["technical_docs"],
+           "label_type_ids": ["technical_docs"],
            "permissions": "{role}guest"
          }'
 

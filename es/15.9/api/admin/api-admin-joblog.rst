@@ -81,25 +81,25 @@ Respuesta
         "logs": [
           {
             "id": "joblog_id_1",
-            "jobName": "Default Crawler",
-            "jobStatus": "ok",
+            "job_name": "Default Crawler",
+            "job_status": "ok",
             "target": "all",
-            "scriptType": "javascript",
-            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-            "scriptResult": "Job completed successfully",
-            "startTime": "1738116000000",
-            "endTime": "1738118723000"
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Job completed successfully",
+            "start_time": "1738116000000",
+            "end_time": "1738118723000"
           },
           {
             "id": "joblog_id_2",
-            "jobName": "Default Crawler",
-            "jobStatus": "fail",
+            "job_name": "Default Crawler",
+            "job_status": "fail",
             "target": "all",
-            "scriptType": "javascript",
-            "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-            "scriptResult": "Error: Connection timeout",
-            "startTime": "1738029600000",
-            "endTime": "1738030215000"
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Error: Connection timeout",
+            "start_time": "1738029600000",
+            "end_time": "1738030215000"
           }
         ],
         "total": 100
@@ -117,26 +117,26 @@ Campos de Respuesta
      - Descripción
    * - ``id``
      - ID del registro de trabajo
-   * - ``jobName``
+   * - ``job_name``
      - Nombre del trabajo
-   * - ``jobStatus``
+   * - ``job_status``
      - Estado del trabajo (``ok``: exitoso, ``fail``: fallido, ``running``: en ejecución)
    * - ``target``
      - Objetivo de ejecución (nombre del objetivo del programador; el valor predeterminado es ``all``)
-   * - ``scriptType``
+   * - ``script_type``
      - Tipo de script (ejemplo: ``javascript``)
-   * - ``scriptData``
+   * - ``script_data``
      - Script ejecutado
-   * - ``scriptResult``
+   * - ``script_result``
      - Resultado de la ejecución
-   * - ``startTime``
+   * - ``start_time``
      - Hora de inicio (milisegundos epoch; devuelto como cadena de texto)
-   * - ``endTime``
+   * - ``end_time``
      - Hora de finalización (milisegundos epoch; devuelto como cadena de texto). No se devuelve para trabajos en ejecución.
 
 .. note::
 
-   Cada objeto de registro en la respuesta incluye también un campo interno ``crudMode``
+   Cada objeto de registro en la respuesta incluye también un campo interno ``crud_mode``
    (un entero que indica el modo de operación CRUD, siempre ``0`` para operaciones de lectura).
    Los clientes pueden ignorarlo sin problema.
 
@@ -160,14 +160,14 @@ Respuesta
         "status": 0,
         "log": {
           "id": "joblog_id_1",
-          "jobName": "Default Crawler",
-          "jobStatus": "ok",
+          "job_name": "Default Crawler",
+          "job_status": "ok",
           "target": "all",
-          "scriptType": "javascript",
-          "scriptData": "return container.getComponent(\"crawlJob\").execute();",
-          "scriptResult": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
-          "startTime": "1738116000000",
-          "endTime": "1738118723000"
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "script_result": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
+          "start_time": "1738116000000",
+          "end_time": "1738118723000"
         }
       }
     }

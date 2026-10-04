@@ -64,37 +64,36 @@ General APIは、|Fess| の一般設定（システム全般に関わる設定�
         "version": "15.9.0",
         "status": 0,
         "setting": {
-          "incrementalCrawling": "true",
-          "dayForCleanup": -1,
-          "crawlingThreadCount": 5,
-          "searchLog": "true",
-          "userInfo": "true",
-          "userFavorite": "false",
-          "webApiJson": "true",
-          "defaultLabelValue": "",
-          "defaultSortValue": "",
-          "appendQueryParameter": "false",
-          "loginRequired": "false",
+          "incremental_crawling": "true",
+          "day_for_cleanup": -1,
+          "crawling_thread_count": 5,
+          "search_log": "true",
+          "user_info": "true",
+          "user_favorite": "false",
+          "web_api_json": "true",
+          "default_label_value": "",
+          "default_sort_value": "",
+          "append_query_parameter": "false",
+          "login_required": "false",
           "thumbnail": "true",
-          "failureCountThreshold": -1,
-          "popularWord": "true",
-          "csvFileEncoding": "UTF-8",
-          "purgeSearchLogDay": 30,
-          "purgeJobLogDay": 30,
-          "purgeUserInfoDay": 30,
-          "purgeSuggestSearchLogDay": 30,
-          "notificationTo": "",
-          "suggestSearchLog": "true",
-          "suggestDocuments": "true",
-          "ldapProviderUrl": "ldap://localhost:389/",
-          "ldapBaseDn": "dc=example,dc=com",
-          "ldapAdminSecurityPrincipal": "cn=admin,dc=example,dc=com",
-          "ldapAdminSecurityCredentials": null,
-          "logLevel": "",
-          "ssoType": "none",
-          "storageType": "",
-          "notificationLogin": "",
-          "notificationSearchTop": ""
+          "failure_count_threshold": -1,
+          "popular_word": "true",
+          "csv_file_encoding": "UTF-8",
+          "purge_search_log_day": 30,
+          "purge_job_log_day": 30,
+          "purge_user_info_day": 30,
+          "purge_suggest_search_log_day": 30,
+          "notification_to": "",
+          "suggest_search_log": "true",
+          "suggest_documents": "true",
+          "ldap_provider_url": "ldap://localhost:389/",
+          "ldap_base_dn": "dc=example,dc=com",
+          "ldap_admin_security_principal": "cn=admin,dc=example,dc=com",
+          "log_level": "",
+          "sso_type": "none",
+          "storage_type": "",
+          "notification_login": "",
+          "notification_search_top": ""
         }
       }
     }
@@ -110,11 +109,11 @@ General APIは、|Fess| の一般設定（システム全般に関わる設定�
    セキュリティ上の理由から、認証情報を含むフィールドはレスポンスにそのままの値では
    含まれません。
 
-   - LDAP管理者パスワード ``ldapAdminSecurityCredentials`` は常に ``null`` で
-     返されます。
-   - その他のシークレット（``storageAccessKey`` / ``storageSecretKey`` /
-     ``oicClientId`` / ``oicClientSecret`` / ``spnegoPreauthPassword`` /
-     ``entraidClientId`` / ``entraidClientSecret``）は、設定されている場合は
+   - LDAP管理者パスワード ``ldap_admin_security_credentials`` は常に
+     レスポンスに含まれません。
+   - その他のシークレット（``storage_access_key`` / ``storage_secret_key`` /
+     ``oic_client_id`` / ``oic_client_secret`` / ``spnego_preauth_password`` /
+     ``entraid_client_id`` / ``entraid_client_secret``）は、設定されている場合は
      ``"**********"`` でマスクされ、設定されていない場合は空文字列（``""``）で
      返されます。
 
@@ -141,10 +140,10 @@ General APIは、|Fess| の一般設定（システム全般に関わる設定�
    次の4つのフィールドは必須であり、**すべての** PUTリクエストに必ず含める必要が
    あります（部分更新の場合も同様です）。
 
-   - ``dayForCleanup``
-   - ``crawlingThreadCount``
-   - ``failureCountThreshold``
-   - ``csvFileEncoding``
+   - ``day_for_cleanup``
+   - ``crawling_thread_count``
+   - ``failure_count_threshold``
+   - ``csv_file_encoding``
 
    いずれかが欠けるとバリデーションに失敗し、API は HTTP 400 で ``status: 1`` と
    エラー ``message`` を返します。送信した値で既存の設定が上書きされるため、値を
@@ -169,12 +168,12 @@ General APIは、|Fess| の一般設定（システム全般に関わる設定�
 .. code-block:: json
 
     {
-      "incrementalCrawling": "true",
-      "dayForCleanup": -1,
-      "crawlingThreadCount": 10,
-      "failureCountThreshold": 100,
-      "csvFileEncoding": "UTF-8",
-      "popularWord": "true"
+      "incremental_crawling": "true",
+      "day_for_cleanup": -1,
+      "crawling_thread_count": 10,
+      "failure_count_threshold": 100,
+      "csv_file_encoding": "UTF-8",
+      "popular_word": "true"
     }
 
 主なフィールド
@@ -191,124 +190,124 @@ General APIは、|Fess| の一般設定（システム全般に関わる設定�
    * - フィールド
      - 必須
      - 説明
-   * - ``incrementalCrawling``
+   * - ``incremental_crawling``
      - いいえ
      - 増分クロールの有効/無効
-   * - ``dayForCleanup``
+   * - ``day_for_cleanup``
      - はい
      - クロール済みドキュメントを保持する日数（-1=クリーンアップ無効。指定範囲: -1〜1000）
-   * - ``crawlingThreadCount``
+   * - ``crawling_thread_count``
      - はい
      - クロールに使用するスレッド数（指定範囲: 0〜100）
-   * - ``failureCountThreshold``
+   * - ``failure_count_threshold``
      - はい
      - URLのクロールを停止する失敗回数のしきい値（-1=無効。指定範囲: -1〜10000）
-   * - ``csvFileEncoding``
+   * - ``csv_file_encoding``
      - はい
      - CSVエクスポートのエンコーディング
-   * - ``searchLog``
+   * - ``search_log``
      - いいえ
      - 検索クエリログの有効/無効
-   * - ``userInfo``
+   * - ``user_info``
      - いいえ
      - ユーザー情報の記録の有効/無効
-   * - ``userFavorite``
+   * - ``user_favorite``
      - いいえ
      - お気に入り機能の有効/無効
-   * - ``webApiJson``
+   * - ``web_api_json``
      - いいえ
      - JSON Web APIの有効/無効
-   * - ``appValue``
+   * - ``app_value``
      - いいえ
      - アプリケーション固有の追加設定値
-   * - ``virtualHostValue``
+   * - ``virtual_host_value``
      - いいえ
      - バーチャルホスト設定（マルチテナント構成用）
-   * - ``popularWord``
+   * - ``popular_word``
      - いいえ
      - 人気ワードの集計・表示の有効/無効
-   * - ``defaultLabelValue``
+   * - ``default_label_value``
      - いいえ
      - 既定のラベル値
-   * - ``defaultSortValue``
+   * - ``default_sort_value``
      - いいえ
      - 既定のソート順
-   * - ``appendQueryParameter``
+   * - ``append_query_parameter``
      - いいえ
      - 検索結果URLへのクエリパラメーター付与
-   * - ``loginRequired``
+   * - ``login_required``
      - いいえ
      - 検索にログインを必須とするか
-   * - ``loginLink``
+   * - ``login_link``
      - いいえ
      - 検索画面へのログインリンク表示の有効/無効
    * - ``thumbnail``
      - いいえ
      - サムネイル生成の有効/無効
-   * - ``resultCollapsed``
+   * - ``result_collapsed``
      - いいえ
      - 類似ドキュメントの検索結果の折りたたみ表示の有効/無効
-   * - ``ignoreFailureType``
+   * - ``ignore_failure_type``
      - いいえ
      - 無視するクロール失敗タイプ
-   * - ``crawlingUserAgent``
+   * - ``crawling_user_agent``
      - いいえ
      - クロール時に送信するUser-Agent文字列
-   * - ``purgeSearchLogDay``
+   * - ``purge_search_log_day``
      - いいえ
      - 検索ログを保持する日数（-1=無効。指定範囲: -1〜100000）
-   * - ``purgeJobLogDay``
+   * - ``purge_job_log_day``
      - いいえ
      - ジョブログを保持する日数（-1=無効。指定範囲: -1〜100000）
-   * - ``purgeUserInfoDay``
+   * - ``purge_user_info_day``
      - いいえ
      - ユーザー情報を保持する日数（-1=無効。指定範囲: -1〜100000）
-   * - ``purgeSuggestSearchLogDay``
+   * - ``purge_suggest_search_log_day``
      - いいえ
      - サジェスト検索ログを保持する日数（0=無効。指定範囲: 0〜100000）
-   * - ``purgeByBots``
+   * - ``purge_by_bots``
      - いいえ
      - 検索ログを破棄する対象のボットUser-Agent
-   * - ``notificationTo``
+   * - ``notification_to``
      - いいえ
      - システム通知の送信先メールアドレス
-   * - ``notificationLogin``
+   * - ``notification_login``
      - いいえ
      - ログインページに表示する通知メッセージ
-   * - ``notificationSearchTop``
+   * - ``notification_search_top``
      - いいえ
      - 検索トップページに表示する通知メッセージ
-   * - ``notificationAdvanceSearch``
+   * - ``notification_advance_search``
      - いいえ
      - 詳細検索ページに表示する通知メッセージ
-   * - ``suggestSearchLog``
+   * - ``suggest_search_log``
      - いいえ
      - 検索ログからのサジェストの有効/無効
-   * - ``suggestDocuments``
+   * - ``suggest_documents``
      - いいえ
      - ドキュメントからのサジェストの有効/無効
-   * - ``logLevel``
+   * - ``log_level``
      - いいえ
      - システムログのログレベル
-   * - ``logNotificationEnabled``
+   * - ``log_notification_enabled``
      - いいえ
      - ERROR/WARNログの通知の有効/無効
-   * - ``logNotificationLevel``
+   * - ``log_notification_level``
      - いいえ
      - ログ通知レベル
-   * - ``slackWebhookUrls``
+   * - ``slack_webhook_urls``
      - いいえ
      - 通知用のSlack Webhook URL
-   * - ``googleChatWebhookUrls``
+   * - ``google_chat_webhook_urls``
      - いいえ
      - 通知用のGoogle Chat Webhook URL
-   * - ``searchUseBrowserLocale``
+   * - ``search_use_browser_locale``
      - いいえ
      - 検索でブラウザのロケールを使用するかどうか
-   * - ``ragLlmName``
+   * - ``rag_llm_name``
      - いいえ
      - RAGで使用するLLMプロバイダー名
-   * - ``llmLogLevel``
+   * - ``llm_log_level``
      - いいえ
      - LLM関連パッケージのログレベル
 
@@ -325,29 +324,29 @@ LDAPおよびSSO（OpenID Connect、SAML、SPNEGO、Entra ID）に関する設�
 
    * - フィールド
      - 説明
-   * - ``ldapProviderUrl``
+   * - ``ldap_provider_url``
      - LDAP接続URL
-   * - ``ldapBaseDn``
+   * - ``ldap_base_dn``
      - LDAPベースDN
-   * - ``ldapSecurityPrincipal``
+   * - ``ldap_security_principal``
      - LDAPバインド用のセキュリティプリンシパル
-   * - ``ldapAdminSecurityPrincipal``
+   * - ``ldap_admin_security_principal``
      - LDAP管理操作用のセキュリティプリンシパル
-   * - ``ldapAdminSecurityCredentials``
-     - LDAP管理者パスワード（レスポンスでは ``null`` に置換）
-   * - ``ldapAccountFilter`` / ``ldapGroupFilter``
+   * - ``ldap_admin_security_credentials``
+     - LDAP管理者パスワード（レスポンスには含まれません）
+   * - ``ldap_account_filter`` / ``ldap_group_filter``
      - ユーザー/グループ検索フィルター
-   * - ``ldapMemberofAttribute``
+   * - ``ldap_memberof_attribute``
      - グループ所属を示すLDAP属性名
-   * - ``ssoType``
+   * - ``sso_type``
      - SSOタイプ（``none`` / ``oic`` / ``saml`` / ``spnego`` / ``entraid``）
-   * - ``oicClientId`` / ``oicClientSecret`` / ``oicAuthServerUrl`` 他
+   * - ``oic_client_id`` / ``oic_client_secret`` / ``oic_auth_server_url`` 他
      - OpenID Connectの設定
-   * - ``samlIdpEntityid`` / ``samlSpEntityid`` 他
+   * - ``saml_idp_entityid`` / ``saml_sp_entityid`` 他
      - SAMLの設定
-   * - ``spnegoKrb5Conf`` / ``spnegoLoginConf`` 他
+   * - ``spnego_krb5_conf`` / ``spnego_login_conf`` 他
      - SPNEGOの設定
-   * - ``entraidClientId`` / ``entraidTenant`` 他
+   * - ``entraid_client_id`` / ``entraid_tenant`` 他
      - Microsoft Entra IDの設定
 
 ストレージ関連フィールド
@@ -361,24 +360,24 @@ LDAPおよびSSO（OpenID Connect、SAML、SPNEGO、Entra ID）に関する設�
 
    * - フィールド
      - 説明
-   * - ``storageType``
+   * - ``storage_type``
      - ストレージタイプ（``auto`` / ``s3`` / ``gcs``）
-   * - ``storageEndpoint``
+   * - ``storage_endpoint``
      - ストレージのエンドポイントURL
-   * - ``storageAccessKey`` / ``storageSecretKey``
+   * - ``storage_access_key`` / ``storage_secret_key``
      - 認証用のアクセスキー/シークレットキー
-   * - ``storageBucket``
+   * - ``storage_bucket``
      - バケット名
-   * - ``storageRegion``
+   * - ``storage_region``
      - S3のリージョン
-   * - ``storageProjectId`` / ``storageCredentialsPath``
+   * - ``storage_project_id`` / ``storage_credentials_path``
      - GCSのプロジェクトID / 認証情報ファイルパス
 
 .. note::
 
-   ``ldapAdminSecurityCredentials``、``storageAccessKey`` / ``storageSecretKey``、
-   ``oicClientId`` / ``oicClientSecret``、``entraidClientId`` / ``entraidClientSecret``、
-   ``spnegoPreauthPassword`` などのシークレット系フィールドは、マスク値
+   ``ldap_admin_security_credentials``、``storage_access_key`` / ``storage_secret_key``、
+   ``oic_client_id`` / ``oic_client_secret``、``entraid_client_id`` / ``entraid_client_secret``、
+   ``spnego_preauth_password`` などのシークレット系フィールドは、マスク値
    ``"**********"`` をそのまま送信した場合、その値は更新されず、保存済みの値が
    維持されます。値を変更する場合のみ、実際の値を送信してください。
 
@@ -412,8 +411,8 @@ LDAPおよびSSO（OpenID Connect、SAML、SPNEGO、Entra ID）に関する設�
 
 .. note::
 
-   以下の例には必須フィールド（``dayForCleanup`` 、``crawlingThreadCount`` 、
-   ``failureCountThreshold`` 、``csvFileEncoding``）が含まれています。これらは変更内容に
+   以下の例には必須フィールド（``day_for_cleanup`` 、``crawling_thread_count`` 、
+   ``failure_count_threshold`` 、``csv_file_encoding``）が含まれています。これらは変更内容に
    関わらず常に送信する必要があるため、実運用では ``GET`` で取得した現在の値を含めて
    ください（以下の例ではデフォルト値を使用しています）。
 
@@ -426,11 +425,11 @@ LDAPおよびSSO（OpenID Connect、SAML、SPNEGO、Entra ID）に関する設�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "incrementalCrawling": "true",
-           "crawlingThreadCount": 10,
-           "failureCountThreshold": 100,
-           "dayForCleanup": -1,
-           "csvFileEncoding": "UTF-8"
+           "incremental_crawling": "true",
+           "crawling_thread_count": 10,
+           "failure_count_threshold": 100,
+           "day_for_cleanup": -1,
+           "csv_file_encoding": "UTF-8"
          }'
 
 ログ保持期間の更新
@@ -442,13 +441,13 @@ LDAPおよびSSO（OpenID Connect、SAML、SPNEGO、Entra ID）に関する設�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "dayForCleanup": -1,
-           "crawlingThreadCount": 5,
-           "failureCountThreshold": -1,
-           "csvFileEncoding": "UTF-8",
-           "purgeSearchLogDay": 90,
-           "purgeJobLogDay": 90,
-           "purgeUserInfoDay": 90
+           "day_for_cleanup": -1,
+           "crawling_thread_count": 5,
+           "failure_count_threshold": -1,
+           "csv_file_encoding": "UTF-8",
+           "purge_search_log_day": 90,
+           "purge_job_log_day": 90,
+           "purge_user_info_day": 90
          }'
 
 サジェスト設定の更新
@@ -460,12 +459,12 @@ LDAPおよびSSO（OpenID Connect、SAML、SPNEGO、Entra ID）に関する設�
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "dayForCleanup": -1,
-           "crawlingThreadCount": 5,
-           "failureCountThreshold": -1,
-           "csvFileEncoding": "UTF-8",
-           "suggestSearchLog": "true",
-           "suggestDocuments": "true"
+           "day_for_cleanup": -1,
+           "crawling_thread_count": 5,
+           "failure_count_threshold": -1,
+           "csv_file_encoding": "UTF-8",
+           "suggest_search_log": "true",
+           "suggest_documents": "true"
          }'
 
 参考情報

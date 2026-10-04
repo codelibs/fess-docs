@@ -179,7 +179,7 @@ The fields of each item in the ``settings`` array of the response differ by dict
         "settings": [
           {
             "id": 1,
-            "dictId": "ZjA5...synonym.txt",
+            "dict_id": "ZjA5...synonym.txt",
             "inputs": "検索,サーチ",
             "outputs": "検索,サーチ,リサーチ"
           }
@@ -233,7 +233,7 @@ Response
         "status": 0,
         "setting": {
           "id": 1,
-          "dictId": "ZjA5...synonym.txt",
+          "dict_id": "ZjA5...synonym.txt",
           "inputs": "検索,サーチ",
           "outputs": "検索,サーチ,リサーチ"
         }
@@ -406,7 +406,7 @@ Item Fields per Dictionary Type
 ===============================
 
 The fields of the request body and response for creating and updating dictionary items differ by dictionary type.
-``id`` (item ID) and ``dictId`` (dictionary ID) are commonly included in the response.
+``id`` (item ID) and ``dict_id`` (dictionary ID) are commonly included in the response.
 
 .. list-table::
    :header-rows: 1

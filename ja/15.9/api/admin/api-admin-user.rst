@@ -105,7 +105,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
             },
             "roles": ["admin"],
             "groups": [],
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 10
@@ -150,7 +150,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
           },
           "roles": ["admin"],
           "groups": [],
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -179,7 +179,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
     {
       "name": "testuser",
       "password": "securepassword",
-      "confirmPassword": "securepassword",
+      "confirm_password": "securepassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User",
@@ -205,7 +205,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
    * - ``password``
      - いいえ
      - パスワード
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - いいえ
      - 確認用パスワード
    * - ``attributes``
@@ -220,7 +220,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
 
 .. note::
 
-   REST APIでは、パスワードの必須チェック、``password`` と ``confirmPassword`` の一致チェック、
+   REST APIでは、パスワードの必須チェック、``password`` と ``confirm_password`` の一致チェック、
    パスワードポリシー検証は行われません（これらは管理画面でのみ適用されます）。
    運用上は、一致する有効な ``password`` を指定することを推奨します。
 
@@ -277,7 +277,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "confirmPassword": "newpassword",
+      "confirm_password": "newpassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User Updated",
@@ -285,7 +285,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
       },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
-      "versionNo": 1
+      "version_no": 1
     }
 
 フィールド説明
@@ -304,13 +304,13 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
    * - ``name``
      - はい
      - ユーザー名（ログインID）
-   * - ``versionNo``
+   * - ``version_no``
      - はい
      - バージョン番号（楽観的ロック用）
    * - ``password``
      - いいえ
      - 新しいパスワード（指定した場合のみ更新）
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - いいえ
      - 確認用パスワード
    * - ``attributes``
@@ -325,8 +325,8 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
 
 .. note::
 
-   更新時は ``id`` ・``name`` ・``versionNo`` が必須です。
-   ``versionNo`` は対象ユーザーの取得（GET）時に返される値で、OpenSearchドキュメントのバージョンに対応します。
+   更新時は ``id`` ・``name`` ・``version_no`` が必須です。
+   ``version_no`` は対象ユーザーの取得（GET）時に返される値で、OpenSearchドキュメントのバージョンに対応します。
    値が現在のバージョンと一致しない場合、競合と判断され更新は拒否されます。
 
 レスポンス
@@ -391,7 +391,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "confirmPassword": "SecureP@ss123",
+           "confirm_password": "SecureP@ss123",
            "attributes": {
              "surname": "Doe",
              "givenName": "John",
@@ -413,7 +413,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
            "id": "user_id_123",
            "name": "john.doe",
            "roles": ["user", "editor", "admin"],
-           "versionNo": 1
+           "version_no": 1
          }'
 
 参考情報

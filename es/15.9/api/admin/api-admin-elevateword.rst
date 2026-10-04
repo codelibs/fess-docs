@@ -92,11 +92,11 @@ Respuesta
         "settings": [
           {
             "id": "elevate_id_1",
-            "suggestWord": "fess",
+            "suggest_word": "fess",
             "reading": "",
             "permissions": "{role}guest",
             "boost": 100.0,
-            "labelTypeIds": []
+            "label_type_ids": []
           }
         ],
         "total": 5
@@ -123,11 +123,11 @@ Respuesta
         "status": 0,
         "setting": {
           "id": "elevate_id_1",
-          "suggestWord": "fess",
+          "suggest_word": "fess",
           "reading": "",
           "permissions": "{role}guest",
           "boost": 100.0,
-          "labelTypeIds": []
+          "label_type_ids": []
         }
       }
     }
@@ -149,11 +149,11 @@ Cuerpo de la Solicitud
 .. code-block:: json
 
     {
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest",
       "boost": 100.0,
-      "labelTypeIds": ["label1"]
+      "label_type_ids": ["label1"]
     }
 
 Descripción de Campos
@@ -166,7 +166,7 @@ Descripción de Campos
    * - Campo
      - Requerido
      - Descripción
-   * - ``suggestWord``
+   * - ``suggest_word``
      - Sí
      - Palabra clave a elevar
    * - ``reading``
@@ -178,7 +178,7 @@ Descripción de Campos
    * - ``boost``
      - Sí
      - Valor de impulso (valor inicial del formulario: 100.0)
-   * - ``labelTypeIds``
+   * - ``label_type_ids``
      - No
      - IDs de etiqueta objetivo (arreglo de cadenas)
 
@@ -213,12 +213,12 @@ Cuerpo de la Solicitud
 
     {
       "id": "existing_elevate_id",
-      "suggestWord": "documentation",
+      "suggest_word": "documentation",
       "reading": "",
       "permissions": "{role}guest\n{role}user",
       "boost": 100.0,
-      "labelTypeIds": ["label1"],
-      "versionNo": 1
+      "label_type_ids": ["label1"],
+      "version_no": 1
     }
 
 .. note::
@@ -226,7 +226,7 @@ Cuerpo de la Solicitud
    Al actualizar, los siguientes campos son obligatorios además de los campos utilizados para la creación:
 
    - ``id`` - ID de la palabra elevada a actualizar
-   - ``versionNo`` - Número de versión para el bloqueo optimista. Especifique el valor obtenido de ``GET /setting/{id}``.
+   - ``version_no`` - Número de versión para el bloqueo optimista. Especifique el valor obtenido de ``GET /setting/{id}``.
 
 Respuesta
 ---------
@@ -326,7 +326,7 @@ Elevar Nombre de Producto
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "Product X",
+           "suggest_word": "Product X",
            "boost": 100.0,
            "permissions": "{role}guest"
          }'
@@ -340,9 +340,9 @@ Elevar a Etiqueta Específica
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "suggestWord": "API reference",
+           "suggest_word": "API reference",
            "boost": 100.0,
-           "labelTypeIds": ["technical_docs"],
+           "label_type_ids": ["technical_docs"],
            "permissions": "{role}guest"
          }'
 

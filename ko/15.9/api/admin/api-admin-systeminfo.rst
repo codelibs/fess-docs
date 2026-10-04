@@ -57,22 +57,22 @@ SystemInfo API는 |Fess| 의 시스템 정보를 조회하기 위한 API입니�
       "response": {
         "version": "15.9.0",
         "status": 0,
-        "envProps": [
+        "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
           {"label": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
         ],
-        "systemProps": [
+        "system_props": [
           {"label": "java.version", "value": "21.0.1"},
           {"label": "java.vendor", "value": "Oracle Corporation"},
           {"label": "os.name", "value": "Linux"},
           {"label": "user.dir", "value": "/opt/fess"}
         ],
-        "fessProps": [
+        "fess_props": [
           {"label": "crawler.document.max.site.length", "value": "100"},
           {"label": "indexer.thread.dump.enabled", "value": "true"},
           {"label": "app.cipher.key", "value": "XXXXXXXX"}
         ],
-        "bugReportProps": [
+        "bug_report_props": [
           {"label": "os.name", "value": "Linux"},
           {"label": "java.vm.version", "value": "21.0.1+12"}
         ]
@@ -92,24 +92,24 @@ SystemInfo API는 |Fess| 의 시스템 정보를 조회하기 위한 API입니�
      - |Fess| 의 제품 버전 (예: ``15.9.0``).
    * - ``status``
      - 처리 결과를 나타내는 코드. ``0`` 은 정상 종료를 의미합니다.
-   * - ``envProps``
+   * - ``env_props``
      - 환경 변수 목록 (``label`` / ``value`` 의 배열). ``System.getenv()`` 로 취득한 값이 그대로 반환됩니다.
-   * - ``systemProps``
+   * - ``system_props``
      - Java의 시스템 프로퍼티 목록 (``label`` / ``value`` 의 배열). ``System.getProperties()`` 로 취득한 값이 그대로 반환됩니다.
-   * - ``fessProps``
+   * - ``fess_props``
      - |Fess| 의 설정 프로퍼티 목록 (``label`` / ``value`` 의 배열). ``fess_config.properties`` 의 설정값과 관리 화면에서 설정된 시스템 프로퍼티가 포함됩니다. 민감한 항목은 마스킹됩니다 (아래 주의 사항 참조).
-   * - ``bugReportProps``
+   * - ``bug_report_props``
      - 버그 리포트용으로 수집되는 정보 목록 (``label`` / ``value`` 의 배열). OS 및 Java 실행 환경에 관한 주요 시스템 프로퍼티 (``os.name``, ``os.version``, ``java.vm.version`` 등) 와 |Fess| 의 시스템 프로퍼티 설정값이 포함됩니다.
 
 .. note::
 
-   ``fessProps`` 에서는 다음 민감한 설정값이 마스킹되어 ``XXXXXXXX`` 로 반환됩니다:
+   ``fess_props`` 에서는 다음 민감한 설정값이 마스킹되어 ``XXXXXXXX`` 로 반환됩니다:
    ``http.proxy.password``, ``ldap.admin.security.credentials``, ``spnego.preauth.password``,
    ``app.cipher.key``, ``oic.client.id``, ``oic.client.secret``.
 
 .. warning::
 
-   ``envProps`` (환경 변수) 와 ``systemProps`` (Java 시스템 프로퍼티) 는 마스킹되지 않으며,
+   ``env_props`` (환경 변수) 와 ``system_props`` (Java 시스템 프로퍼티) 는 마스킹되지 않으며,
    설정된 값이 그대로 반환됩니다. 환경 변수나 시스템 프로퍼티에 인증 정보 등의
    민감한 정보가 포함된 경우, 해당 값들이 응답에 포함되는 점에 주의하십시오.
 

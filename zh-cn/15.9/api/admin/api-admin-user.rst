@@ -105,7 +105,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
             },
             "roles": ["admin"],
             "groups": [],
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 10
@@ -150,7 +150,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
           },
           "roles": ["admin"],
           "groups": [],
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -179,7 +179,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
     {
       "name": "testuser",
       "password": "securepassword",
-      "confirmPassword": "securepassword",
+      "confirm_password": "securepassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User",
@@ -205,7 +205,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
    * - ``password``
      - 否
      - 密码
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - 否
      - 确认密码
    * - ``attributes``
@@ -220,8 +220,8 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
 .. note::
 
-   REST API不执行密码必填检查、``password`` 与 ``confirmPassword`` 的一致性检查，以及密码策略验证（这些仅在管理界面中应用）。
-   实际使用中，建议指定有效的 ``password`` 且其值与 ``confirmPassword`` 一致。
+   REST API不执行密码必填检查、``password`` 与 ``confirm_password`` 的一致性检查，以及密码策略验证（这些仅在管理界面中应用）。
+   实际使用中，建议指定有效的 ``password`` 且其值与 ``confirm_password`` 一致。
 
 ``attributes`` 的键为用户实体的属性名（源自LDAP的模式项目名）。
 常用的键如下：
@@ -276,7 +276,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
       "id": "existing_user_id",
       "name": "testuser",
       "password": "newpassword",
-      "confirmPassword": "newpassword",
+      "confirm_password": "newpassword",
       "attributes": {
         "surname": "Test",
         "givenName": "User Updated",
@@ -284,7 +284,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
       },
       "roles": ["user", "editor"],
       "groups": ["group_id_1", "group_id_2"],
-      "versionNo": 1
+      "version_no": 1
     }
 
 字段说明
@@ -303,13 +303,13 @@ User API是用于管理 |Fess| 用户账户的REST API。
    * - ``name``
      - 是
      - 用户名（登录ID）
-   * - ``versionNo``
+   * - ``version_no``
      - 是
      - 版本号（用于乐观锁）
    * - ``password``
      - 否
      - 新密码（仅在指定时更新）
-   * - ``confirmPassword``
+   * - ``confirm_password``
      - 否
      - 确认密码
    * - ``attributes``
@@ -324,8 +324,8 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
 .. note::
 
-   更新时，``id``、``name`` 和 ``versionNo`` 为必填项。
-   ``versionNo`` 是获取目标用户（GET）时返回的值，对应OpenSearch文档的版本号。
+   更新时，``id``、``name`` 和 ``version_no`` 为必填项。
+   ``version_no`` 是获取目标用户（GET）时返回的值，对应OpenSearch文档的版本号。
    如果与当前版本不匹配，请求将被视为冲突并拒绝更新。
 
 响应
@@ -390,7 +390,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
          -d '{
            "name": "john.doe",
            "password": "SecureP@ss123",
-           "confirmPassword": "SecureP@ss123",
+           "confirm_password": "SecureP@ss123",
            "attributes": {
              "surname": "Doe",
              "givenName": "John",
@@ -412,7 +412,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
            "id": "user_id_123",
            "name": "john.doe",
            "roles": ["user", "editor", "admin"],
-           "versionNo": 1
+           "version_no": 1
          }'
 
 参考信息

@@ -87,12 +87,12 @@ Role API는 |Fess| 의 역할을 관리하기 위한 API입니다.
           {
             "id": "role_id_1",
             "name": "admin",
-            "versionNo": 1
+            "version_no": 1
           },
           {
             "id": "role_id_2",
             "name": "user",
-            "versionNo": 1
+            "version_no": 1
           }
         ],
         "total": 5
@@ -120,7 +120,7 @@ Role API는 |Fess| 의 역할을 관리하기 위한 API입니다.
         "setting": {
           "id": "role_id_1",
           "name": "admin",
-          "versionNo": 1
+          "version_no": 1
         }
       }
     }
@@ -194,7 +194,7 @@ Role API는 |Fess| 의 역할을 관리하기 위한 API입니다.
     {
       "id": "existing_role_id",
       "name": "editor_updated",
-      "versionNo": 1
+      "version_no": 1
     }
 
 필드 설명
@@ -216,9 +216,9 @@ Role API는 |Fess| 의 역할을 관리하기 위한 API입니다.
    * - ``attributes``
      - 아니오
      - 속성의 맵. 값은 문자열로 지정합니다
-   * - ``versionNo``
+   * - ``version_no``
      - 예
-     - 낙관적 잠금을 위한 버전 번호. 역할 조회에서 얻은 ``versionNo`` 값을 지정합니다
+     - 낙관적 잠금을 위한 버전 번호. 역할 조회에서 얻은 ``version_no`` 값을 지정합니다
 
 응답
 ----------

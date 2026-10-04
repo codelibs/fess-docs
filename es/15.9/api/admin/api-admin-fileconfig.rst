@@ -106,20 +106,20 @@ Respuesta
             "name": "Shared Documents",
             "description": "Documentos compartidos",
             "paths": "smb://server/share/documents",
-            "includedPaths": ".*\\.pdf$",
-            "excludedPaths": ".*/(temp|cache)/.*",
-            "includedDocPaths": "",
-            "excludedDocPaths": "",
-            "configParameter": "",
+            "included_paths": ".*\\.pdf$",
+            "excluded_paths": ".*/(temp|cache)/.*",
+            "included_doc_paths": "",
+            "excluded_doc_paths": "",
+            "config_parameter": "",
             "depth": 10,
-            "maxAccessCount": 1000,
-            "numOfThread": 1,
-            "intervalTime": 1000,
+            "max_access_count": 1000,
+            "num_of_thread": 1,
+            "interval_time": 1000,
             "boost": 1.0,
             "available": "true",
             "permissions": "{role}admin",
-            "virtualHosts": "",
-            "sortOrder": 0
+            "virtual_hosts": "",
+            "sort_order": 0
           }
         ],
         "total": 5
@@ -151,35 +151,35 @@ Respuesta
           "name": "Shared Documents",
           "description": "Documentos compartidos",
           "paths": "smb://server/share/documents",
-          "includedPaths": ".*\\.pdf$",
-          "excludedPaths": ".*/(temp|cache)/.*",
-          "includedDocPaths": "",
-          "excludedDocPaths": "",
-          "configParameter": "",
+          "included_paths": ".*\\.pdf$",
+          "excluded_paths": ".*/(temp|cache)/.*",
+          "included_doc_paths": "",
+          "excluded_doc_paths": "",
+          "config_parameter": "",
           "depth": 10,
-          "maxAccessCount": 1000,
-          "numOfThread": 1,
-          "intervalTime": 1000,
+          "max_access_count": 1000,
+          "num_of_thread": 1,
+          "interval_time": 1000,
           "boost": 1.0,
           "available": "true",
-          "sortOrder": 0,
+          "sort_order": 0,
           "permissions": "{role}admin",
-          "virtualHosts": "",
-          "createdBy": "admin",
-          "createdTime": 1700000000000,
-          "updatedBy": "admin",
-          "updatedTime": 1700000000000,
-          "versionNo": 1
+          "virtual_hosts": "",
+          "created_by": "admin",
+          "created_time": 1700000000000,
+          "updated_by": "admin",
+          "updated_time": 1700000000000,
+          "version_no": 1
         }
       }
     }
 
 .. note::
 
-   La respuesta incluye los campos de auditoría ``createdBy``, ``createdTime``,
-   ``updatedBy``, ``updatedTime`` y ``versionNo``, que son asignados automáticamente
+   La respuesta incluye los campos de auditoría ``created_by``, ``created_time``,
+   ``updated_by``, ``updated_time`` y ``version_no``, que son asignados automáticamente
    en el momento del registro o la actualización.
-   ``versionNo`` es obligatorio al actualizar (consulte la sección "Actualizar configuración de rastreo de archivos" a continuación).
+   ``version_no`` es obligatorio al actualizar (consulte la sección "Actualizar configuración de rastreo de archivos" a continuación).
 
 Crear Configuración de Rastreo de Archivos
 ==========================================
@@ -200,13 +200,13 @@ Cuerpo de la Solicitud
     {
       "name": "Local Files",
       "paths": "file:///data/documents",
-      "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
-      "excludedPaths": ".*/(temp|backup)/.*",
-      "numOfThread": 2,
-      "intervalTime": 500,
+      "included_paths": ".*\\.(pdf|doc|docx|xls|xlsx)$",
+      "excluded_paths": ".*/(temp|backup)/.*",
+      "num_of_thread": 2,
+      "interval_time": 500,
       "boost": 1.0,
       "available": "true",
-      "sortOrder": 0,
+      "sort_order": 0,
       "permissions": "{role}admin\n{role}user"
     }
 
@@ -229,31 +229,31 @@ Descripción de Campos
    * - ``paths``
      - Sí
      - Ruta de inicio de rastreo (separadas por salto de línea si son múltiples). Se especifica con uno de los protocolos: ``file:``, ``smb:``, ``smb1:``, ``ftp:``, ``s3:`` o ``gcs:``
-   * - ``includedPaths``
+   * - ``included_paths``
      - No
      - Patrón de expresión regular para rutas a rastrear
-   * - ``excludedPaths``
+   * - ``excluded_paths``
      - No
      - Patrón de expresión regular para rutas a excluir del rastreo
-   * - ``includedDocPaths``
+   * - ``included_doc_paths``
      - No
      - Patrón de expresión regular para rutas a indexar
-   * - ``excludedDocPaths``
+   * - ``excluded_doc_paths``
      - No
      - Patrón de expresión regular para rutas a excluir del índice
-   * - ``configParameter``
+   * - ``config_parameter``
      - No
      - Parámetros de configuración adicionales (formato ``key=value``, un elemento por línea)
    * - ``depth``
      - No
      - Profundidad de rastreo (0 o más)
-   * - ``maxAccessCount``
+   * - ``max_access_count``
      - No
      - Número máximo de accesos (0 o más)
-   * - ``numOfThread``
+   * - ``num_of_thread``
      - Sí
      - Número de hilos paralelos (1 o más)
-   * - ``intervalTime``
+   * - ``interval_time``
      - Sí
      - Intervalo de acceso (milisegundos, 0 o más)
    * - ``boost``
@@ -262,19 +262,19 @@ Descripción de Campos
    * - ``available``
      - Sí
      - Habilitado/Deshabilitado (cadena ``"true"`` / ``"false"``)
-   * - ``sortOrder``
+   * - ``sort_order``
      - Sí
      - Orden de visualización (0 o más)
    * - ``permissions``
      - No
      - Roles con permiso de acceso (separados por saltos de línea si son varios)
-   * - ``virtualHosts``
+   * - ``virtual_hosts``
      - No
      - Hosts virtuales (separados por saltos de línea si son varios)
 
 .. note::
 
-   Los campos de auditoría como ``createdBy``, ``createdTime``, ``updatedBy`` y ``updatedTime``
+   Los campos de auditoría como ``created_by``, ``created_time``, ``updated_by`` y ``updated_time``
    son asignados automáticamente por el servidor, por lo que no es necesario incluirlos en el cuerpo de la solicitud.
 
 Respuesta
@@ -305,8 +305,8 @@ Cuerpo de la Solicitud
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Al actualizar, además de los campos de creación, son obligatorios ``id`` para identificar
-el registro a actualizar y ``versionNo`` como número de versión.
-En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de la API de consulta (GET).
+el registro a actualizar y ``version_no`` como número de versión.
+En ``version_no`` se debe especificar el valor actual incluido en la respuesta de la API de consulta (GET).
 
 .. code-block:: json
 
@@ -314,16 +314,16 @@ En ``versionNo`` se debe especificar el valor actual incluido en la respuesta de
       "id": "existing_fileconfig_id",
       "name": "Updated Local Files",
       "paths": "file:///data/documents",
-      "includedPaths": ".*\\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$",
-      "excludedPaths": ".*/(temp|backup|archive)/.*",
+      "included_paths": ".*\\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$",
+      "excluded_paths": ".*/(temp|backup|archive)/.*",
       "depth": 10,
-      "maxAccessCount": 10000,
-      "numOfThread": 3,
-      "intervalTime": 300,
+      "max_access_count": 10000,
+      "num_of_thread": 3,
+      "interval_time": 300,
       "boost": 1.2,
       "available": "true",
-      "sortOrder": 0,
-      "versionNo": 1
+      "sort_order": 0,
+      "version_no": 1
     }
 
 Campos Adicionales para la Actualización
@@ -339,9 +339,9 @@ Campos Adicionales para la Actualización
    * - ``id``
      - Sí
      - ID de la configuración a actualizar (máximo 1000 caracteres)
-   * - ``versionNo``
+   * - ``version_no``
      - Sí
-     - Número de versión actual del registro a actualizar. Se especifica el valor de ``versionNo`` incluido en la respuesta de la API de consulta (GET)
+     - Número de versión actual del registro a actualizar. Se especifica el valor de ``version_no`` incluido en la respuesta de la API de consulta (GET)
 
 Respuesta
 ---------
@@ -421,13 +421,13 @@ Configuración de Rastreo de Archivos Locales
          -d '{
            "name": "Local Files",
            "paths": "file:///data/documents",
-           "includedPaths": ".*\\.(pdf|doc|docx)$",
-           "excludedPaths": ".*/(temp|backup)/.*",
-           "numOfThread": 2,
-           "intervalTime": 500,
+           "included_paths": ".*\\.(pdf|doc|docx)$",
+           "excluded_paths": ".*/(temp|backup)/.*",
+           "num_of_thread": 2,
+           "interval_time": 500,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
@@ -442,14 +442,14 @@ Configuración de Rastreo de Recurso Compartido SMB
          -d '{
            "name": "SMB Share",
            "paths": "smb://server/documents",
-           "includedPaths": ".*\\.(pdf|doc|docx)$",
-           "excludedPaths": ".*/(temp|private)/.*",
-           "maxAccessCount": 50000,
-           "numOfThread": 3,
-           "intervalTime": 200,
+           "included_paths": ".*\\.(pdf|doc|docx)$",
+           "excluded_paths": ".*/(temp|private)/.*",
+           "max_access_count": 50000,
+           "num_of_thread": 3,
+           "interval_time": 200,
            "boost": 1.0,
            "available": "true",
-           "sortOrder": 0,
+           "sort_order": 0,
            "permissions": "{role}guest"
          }'
 
