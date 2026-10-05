@@ -461,7 +461,7 @@ def check(version: str) -> list[str]:
             continue
         translated = set(parse_po(po_path.read_text(encoding="utf-8")).values()) if po_path.exists() else set()
         for text in _strings(block):
-            if text not in english and _prose(text) not in {_prose(t) for t in translated}:
+            if text not in english and text not in {_prose(t) for t in translated}:
                 problems.append(
                     "%s: %r is neither the English text nor a translation in %s"
                     % (rst_path.relative_to(ROOT), text[:60], po_path.relative_to(ROOT))
