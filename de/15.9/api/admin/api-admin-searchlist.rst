@@ -547,8 +547,10 @@ Dokumente suchen
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/searchlist/docs?q=Fess&size=20" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/searchlist/docs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"q": "Fess", "size": 20}'
 
 Dokument abrufen
 ----------------
@@ -581,8 +583,10 @@ Dokumente per Query löschen
 
 .. code-block:: bash
 
-    curl -X DELETE "http://localhost:8080/api/admin/searchlist/query?q=url:example.com" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X DELETE "http://localhost:8080/api/admin/searchlist/query" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"q": "url:example.com"}'
 
 Referenzinformationen
 =====================

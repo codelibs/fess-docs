@@ -124,6 +124,8 @@ Parameters (pagination):
      - Integer
      - Page number (starts from 1. Default: 1. Values of 0 or less are treated as 1)
 
+Specify these parameters, and the filter parameters of each resource, in a JSON request body with snake_case keys (for example, ``{"size": 50, "page": 1}``). Values given in the URL query string are ignored.
+
 Response
 ~~~~~~~~
 
@@ -551,8 +553,10 @@ List Users
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/user/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 Reference
 =========

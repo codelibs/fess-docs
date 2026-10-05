@@ -206,8 +206,10 @@ Job-Protokolle auflisten
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 Nur fehlgeschlagene Jobs filtern
 ---------------------------------
@@ -215,9 +217,11 @@ Nur fehlgeschlagene Jobs filtern
 .. code-block:: bash
 
     # Fehlgeschlagene Jobs mit jq filtern
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs[] | select(.jobStatus=="fail")'
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs[] | select(.job_status=="fail")'
 
 Job-Protokoll abrufen
 ---------------------
@@ -240,9 +244,11 @@ Job-Erfolgsrate berechnen
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs | {total: length, ok: [.[] | select(.job_status=="ok")] | length, fail: [.[] | select(.job_status=="fail")] | length}'
 
 Referenzinformationen
 =====================

@@ -124,6 +124,8 @@ Parámetros (paginación):
      - Integer
      - Número de página (comienza en 1. Predeterminado: 1. Si se especifica un valor menor o igual a 0, se trata como 1)
 
+Estos parámetros, y los parámetros de filtro de cada recurso, se especifican en un cuerpo de solicitud JSON con claves en snake_case (por ejemplo, ``{"size": 50, "page": 1}``). Los valores indicados en la cadena de consulta de la URL se ignoran.
+
 Respuesta
 ~~~~~~~~~
 
@@ -550,8 +552,10 @@ Obtener Lista de Usuarios
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/user/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 Información de Referencia
 =========================

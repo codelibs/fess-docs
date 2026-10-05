@@ -257,8 +257,10 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=100&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 100, "page": 1}'
 
 按错误次数过滤
 --------------
@@ -266,17 +268,21 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
 .. code-block:: bash
 
     # 仅获取发生3次以上错误的URL
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorCountMin=3" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_count_min": 3}'
 
 按错误名称过滤
 --------------
 
 .. code-block:: bash
 
-    # errorName存储完全限定类名，请使用通配符指定
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?errorName=*ConnectException" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    # error_name存储完全限定类名，请使用通配符指定
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_name": "*ConnectException"}'
 
 获取失败URL
 -----------
@@ -308,8 +314,10 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
 .. code-block:: bash
 
     # 按错误类型计数
-    curl -X GET "http://localhost:8080/api/admin/failureurl/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
          jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
 
 参考信息

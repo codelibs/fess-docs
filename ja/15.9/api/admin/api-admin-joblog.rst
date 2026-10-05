@@ -206,8 +206,10 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 失敗したジョブのみ抽出
 ----------------------
@@ -215,9 +217,11 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
 .. code-block:: bash
 
     # jqで失敗したジョブをフィルター
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs[] | select(.jobStatus=="fail")'
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs[] | select(.job_status=="fail")'
 
 ジョブログの取得
 ----------------
@@ -240,9 +244,11 @@ JobLog APIは、|Fess| のジョブ実行ログを参照・管理するための
 
 .. code-block:: bash
 
-    curl -X GET "http://localhost:8080/api/admin/joblog/logs?size=1000" \
-         -H "Authorization: Bearer YOUR_TOKEN" | \
-         jq '.response.logs | {total: length, ok: [.[] | select(.jobStatus=="ok")] | length, fail: [.[] | select(.jobStatus=="fail")] | length}'
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs | {total: length, ok: [.[] | select(.job_status=="ok")] | length, fail: [.[] | select(.job_status=="fail")] | length}'
 
 参考情報
 ========

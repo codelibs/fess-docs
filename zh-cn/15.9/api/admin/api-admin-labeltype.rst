@@ -349,8 +349,10 @@ HTTP状态码等），请参阅 :doc:`api-admin-overview`。
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/labeltype/settings?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/labeltype/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 使用标签进行搜索
 ----------------

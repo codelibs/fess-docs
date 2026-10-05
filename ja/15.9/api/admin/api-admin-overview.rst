@@ -124,6 +124,8 @@ Admin APIへのアクセスは、機能ごとではなく単一の権限セッ�
      - Integer
      - ページ番号（1から開始。デフォルト: 1。0以下を指定した場合は1として扱われます）
 
+これらのパラメーターと各リソースの絞り込みパラメーターは、snake_case のキーを持つ JSON のリクエストボディ（例: ``{"size": 50, "page": 1}``）で指定します。URL のクエリ文字列で指定した値は無視されます。
+
 レスポンス
 ~~~~~~~~~~
 
@@ -549,8 +551,10 @@ Webクロール設定の作成
 
 .. code-block:: bash
 
-    curl "http://localhost:8080/api/admin/user/settings?size=50&page=1" \
-         -H "Authorization: Bearer YOUR_TOKEN"
+    curl -X GET "http://localhost:8080/api/admin/user/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 参考情報
 ========
