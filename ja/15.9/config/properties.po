@@ -10,2002 +10,2107 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Core"
-msgstr ""
+msgstr "コア"
 
 msgid "The title of the domain for logging and display."
-msgstr ""
+msgstr "ログと表示に使用するドメインのタイトル。"
 
 msgid "Search Engine"
-msgstr ""
+msgstr "検索エンジン"
 
 msgid "The type of search engine backend (e.g., default, opensearch)."
-msgstr ""
+msgstr "検索エンジンバックエンドの種類（例: default、opensearch）。"
 
 msgid "The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)"
-msgstr ""
+msgstr "検索エンジンのHTTPエンドポイントのURL。IPv6環境では、IPv6アドレスを角括弧で囲みます（例: http://[::1]:9200）。"
 
 msgid "Path to SSL certificate authorities for secure HTTP connections."
-msgstr ""
+msgstr "セキュアなHTTP接続に使用するSSL認証局へのパス。"
 
 msgid "Username for authenticating to the search engine."
-msgstr ""
+msgstr "検索エンジンへの認証に使用するユーザー名。"
 
 msgid "Password for authenticating to the search engine."
-msgstr ""
+msgstr "検索エンジンへの認証に使用するパスワード。"
 
 msgid "Interval (ms) for heartbeat checks to the search engine."
-msgstr ""
+msgstr "検索エンジンへのハートビートチェックの間隔（ミリ秒）。"
 
 msgid "Cipher algorithm used for encryption."
-msgstr ""
+msgstr "暗号化に使用する暗号アルゴリズム。"
 
 msgid "Secret key for encryption (change this value for production)."
-msgstr ""
+msgstr "暗号化用の秘密鍵（本番環境ではこの値を変更してください）。"
 
 msgid "Algorithm for digest calculation."
-msgstr ""
+msgstr "ダイジェスト計算のアルゴリズム。"
 
 msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
-msgstr ""
+msgstr "パスワードのハッシュ化（新しい仕組み、Spring Security v5.8互換）。サポート: bcrypt（現時点ではbcryptのみ）。"
 
 msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
-msgstr ""
+msgstr "BCryptのコスト（ログラウンド数）。10はSpring Security v5.8のデフォルトと一致します。範囲: 4-31。"
 
 msgid "Lazy re-hashing on successful login for legacy hashes."
-msgstr ""
+msgstr "レガシーなハッシュに対する、ログイン成功時の遅延再ハッシュ。"
 
 msgid "NOTE: app.digest.algorithm is kept for LEGACY password verification only (pre-upgrade hashes that have no {id} prefix). Do not use for new passwords. Regex pattern for properties to encrypt."
-msgstr ""
+msgstr "注意: app.digest.algorithmはレガシーパスワードの検証専用に残されています（{id}プレフィックスを持たない、アップグレード前のハッシュ）。新しいパスワードには使用しないでください。暗号化するプロパティの正規表現パターン。"
 
 msgid "Regex pattern for sensitive values to mask in debug logs (case-insensitive match against property/env keys)."
-msgstr ""
+msgstr "デバッグログでマスクする機密値の正規表現パターン（プロパティ/環境変数のキーに対する大文字小文字を区別しないマッチ）。"
 
 msgid "Extension names for application customization."
-msgstr ""
+msgstr "アプリケーションのカスタマイズ用の拡張名。"
 
 msgid "Audit log format."
-msgstr ""
+msgstr "監査ログの形式。"
 
 msgid "Script audit log settings."
-msgstr ""
+msgstr "スクリプト監査ログの設定。"
 
 msgid "Maximum characters of script text kept in a script audit log entry; longer text is truncated."
-msgstr ""
+msgstr "スクリプト監査ログの1エントリに保持するスクリプトテキストの最大文字数。これより長いテキストは切り詰められます。"
 
 msgid "JVM options for the crawler process."
-msgstr ""
+msgstr "クローラープロセスのJVMオプション。"
 
 msgid "JVM options (newline-separated) passed to the suggest creator child process."
-msgstr ""
+msgstr "サジェスト作成の子プロセスに渡すJVMオプション（改行区切り）。"
 
 msgid "JVM options for the chunk vector indexer process. Heap budget. This child JVM is only started while the \"Content Chunk Vector Indexer\" job runs, so a generous -Xmx costs nothing when content chunking is off. The live set is dominated by the in-flight batches, each of which retains, per document, the full _source, the document's chunk strings, and the document's embedding vectors: content_chunker.job.bulk_size          (default   20) x content_chunker.max_chunks_per_document (default 1000) x content_chunker.embedding.dimension  (default  768) x 4 bytes per float x content_chunker.job.concurrency      (default    2) = ~117 MB of vectors alone, before chunk strings and document sources. With the shipped defaults the worst case is roughly 190-250 MB live (and ~235 MB of vectors alone at dimension=1536), which does not fit a 256 MB heap with any GC headroom. Raise -Xmx further if you raise bulk_size, max_chunks_per_document, concurrency, or the embedding dimension."
-msgstr ""
+msgstr "チャンクベクトルインデクサープロセスのJVMオプション。ヒープの予算。この子JVMは\"Content Chunk Vector Indexer\"ジョブの実行中にのみ起動されるため、コンテンツのチャンク化が無効の場合は、-Xmxを大きく設定してもコストはかかりません。使用中のメモリは処理中のバッチが大半を占め、各バッチはドキュメントごとに、_source全体、ドキュメントのチャンク文字列、ドキュメントの埋め込みベクトルを保持します: content_chunker.job.bulk_size（デフォルト 20）x content_chunker.max_chunks_per_document（デフォルト 1000）x content_chunker.embedding.dimension（デフォルト 768）x floatあたり4バイト x content_chunker.job.concurrency（デフォルト 2）= ベクトルだけで約117MB（チャンク文字列とドキュメントのソースを除く）。同梱のデフォルト値では最悪の場合の使用量は約190-250MBで（dimension=1536ではベクトルだけで約235MB）、GCの余裕を考慮すると256MBのヒープには収まりません。bulk_size、max_chunks_per_document、concurrency、または埋め込みの次元を増やす場合は、-Xmxをさらに大きくしてください。"
 
 msgid "JVM options for the thumbnail process."
-msgstr ""
+msgstr "サムネイルプロセスのJVMオプション。"
 
 msgid "Job"
-msgstr ""
+msgstr "ジョブ"
 
 msgid "System job IDs for scheduled jobs."
-msgstr ""
+msgstr "スケジュールされたジョブのシステムジョブID。"
 
 msgid "Template for web crawler job title."
-msgstr ""
+msgstr "Webクローラージョブのタイトルのテンプレート。"
 
 msgid "Template for file crawler job title."
-msgstr ""
+msgstr "ファイルクローラージョブのタイトルのテンプレート。"
 
 msgid "Template for data crawler job title."
-msgstr ""
+msgstr "データクローラージョブのタイトルのテンプレート。"
 
 msgid "Script template for job execution."
-msgstr ""
+msgstr "ジョブ実行用のスクリプトテンプレート。"
 
 msgid "Maximum number of crawler processes."
-msgstr ""
+msgstr "クローラープロセスの最大数。"
 
 msgid "Default script language for jobs."
-msgstr ""
+msgstr "ジョブのデフォルトのスクリプト言語。"
 
 msgid "Pattern to filter system properties for jobs."
-msgstr ""
+msgstr "ジョブ用のシステムプロパティを絞り込むパターン。"
 
 msgid "Number of processors to use."
-msgstr ""
+msgstr "使用するプロセッサー数。"
 
 msgid "Path to Java command."
-msgstr ""
+msgstr "Javaコマンドのパス。"
 
 msgid "Path to Python command."
-msgstr ""
+msgstr "Pythonコマンドのパス。"
 
 msgid "Encoding for file paths."
-msgstr ""
+msgstr "ファイルパスのエンコーディング。"
 
 msgid "Whether to use a dedicated temporary directory."
-msgstr ""
+msgstr "専用の一時ディレクトリを使用するかどうか。"
 
 msgid "Maximum length of log output."
-msgstr ""
+msgstr "ログ出力の最大長。"
 
 msgid "Adaptive load control value."
-msgstr ""
+msgstr "適応型負荷制御の値。"
 
 msgid "CPU threshold (%) for web request load control. Returns 429 when CPU >= this value. (100: disabled)"
-msgstr ""
+msgstr "Webリクエストの負荷制御におけるCPUの閾値（%）。CPUがこの値以上の場合は429を返します。（100: 無効）"
 
 msgid "CPU threshold (%) for API request load control. Returns 429 when CPU >= this value. (100: disabled)"
-msgstr ""
+msgstr "APIリクエストの負荷制御におけるCPUの閾値（%）。CPUがこの値以上の場合は429を返します。（100: 無効）"
 
 msgid "Interval (seconds) for monitoring OpenSearch CPU load."
-msgstr ""
+msgstr "OpenSearchのCPU負荷を監視する間隔（秒）。"
 
 msgid "Supported languages."
-msgstr ""
+msgstr "サポートする言語。"
 
 msgid "Length of API access token."
-msgstr ""
+msgstr "APIアクセストークンの長さ。"
 
 msgid "API access token request parameter."
-msgstr ""
+msgstr "APIアクセストークンのリクエストパラメーター。"
 
 msgid "Permissions for API admin access."
-msgstr ""
+msgstr "API管理アクセスのパーミッション。"
 
 msgid "Accepted referers for API search."
-msgstr ""
+msgstr "API検索で受け付けるリファラー。"
 
 msgid "Whether to enable scroll for API search."
-msgstr ""
+msgstr "API検索でスクロールを有効にするかどうか。"
+
+msgid "Whether to enable the end-user export of search results (CSV/JSON) at /api/v2/documents/export."
+msgstr "/api/v2/documents/exportでの検索結果（CSV/JSON）のエンドユーザーによるエクスポートを有効にするかどうか。"
+
+msgid "Maximum number of documents written by one search result export."
+msgstr "1回の検索結果エクスポートで書き出すドキュメントの最大数。"
+
+msgid "Fields written by the search result export (comma-separated). A field that is not an API response field is ignored."
+msgstr "検索結果エクスポートで書き出すフィールド（カンマ区切り）。APIレスポンスのフィールドではないフィールドは無視されます。"
+
+msgid "Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit."
+msgstr "ユーザーごと（ゲストの場合はクライアントIPごと）の、1分あたりの検索結果エクスポートの最大数。0以下の場合は制限を無効にします。"
 
 msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "API JSONレスポンスのヘッダー。Access-Control-*とTiming-Allow-Originはここでは無視されます（CORSはapi.cors.* / CorsFilterで制御されます）。Varyは設定しないでください。"
 
 msgid "Whether to include exceptions in API JSON response."
-msgstr ""
+msgstr "API JSONレスポンスに例外を含めるかどうか。"
 
 msgid "Headers for API GSA response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "API GSAレスポンスのヘッダー。Access-Control-*とTiming-Allow-Originはここでは無視されます（CORSはapi.cors.* / CorsFilterで制御されます）。Varyは設定しないでください。"
 
 msgid "Whether to include exceptions in API GSA response."
-msgstr ""
+msgstr "API GSAレスポンスに例外を含めるかどうか。"
 
 msgid "Headers for API dashboard response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "APIダッシュボードレスポンスのヘッダー。Access-Control-*とTiming-Allow-Originはここでは無視されます（CORSはapi.cors.* / CorsFilterで制御されます）。Varyは設定しないでください。"
 
 msgid "Allowed origins for CORS. \"*\" returns a literal \"*\" (the request Origin is NOT reflected) and disables credentials. Set explicit origins (newline- or comma-separated) to allow credentialed cross-origin access."
-msgstr ""
+msgstr "CORSで許可するオリジン。\"*\"はリテラルの\"*\"を返し（リクエストのOriginは反映されません）、認証情報を無効にします。認証情報付きのクロスオリジンアクセスを許可するには、明示的なオリジン（改行区切りまたはカンマ区切り）を設定してください。"
 
 msgid "Allowed HTTP methods for CORS."
-msgstr ""
+msgstr "CORSで許可するHTTPメソッド。"
 
 msgid "Max age for CORS preflight requests."
-msgstr ""
+msgstr "CORSプリフライトリクエストの最大有効期間。"
 
 msgid "Allowed request headers for CORS preflight. A static list is returned (Access-Control-Request-Headers is not reflected). Includes X-Fess-CSRF-Token for cross-origin SPAs sending the CSRF token."
-msgstr ""
+msgstr "CORSプリフライトで許可するリクエストヘッダー。静的なリストが返されます（Access-Control-Request-Headersは反映されません）。CSRFトークンを送信するクロスオリジンのSPA向けに、X-Fess-CSRF-Tokenを含みます。"
 
 msgid "Whether to allow credentials for CORS. Honored only for an exact match of an explicit Origin; ignored when api.cors.allow.origin is \"*\"."
-msgstr ""
+msgstr "CORSで認証情報を許可するかどうか。明示的なOriginと完全に一致する場合にのみ有効で、api.cors.allow.originが\"*\"の場合は無視されます。"
 
 msgid "Whether to enable JSONP for API."
-msgstr ""
+msgstr "APIでJSONPを有効にするかどうか。"
 
 msgid "Fields for API ping to search engine."
-msgstr ""
+msgstr "検索エンジンへのAPI pingに使用するフィールド。"
 
 msgid "Rate Limiting"
-msgstr ""
+msgstr "レート制限"
 
 msgid "Whether rate limiting is enabled."
-msgstr ""
+msgstr "レート制限が有効かどうか。"
 
 msgid "Maximum number of requests allowed per window."
-msgstr ""
+msgstr "ウィンドウあたりに許可されるリクエストの最大数。"
 
 msgid "Window size in milliseconds."
-msgstr ""
+msgstr "ウィンドウサイズ（ミリ秒）。"
 
 msgid "Duration in milliseconds to block IP when limit exceeded."
-msgstr ""
+msgstr "制限を超えた場合にIPをブロックする期間（ミリ秒）。"
 
 msgid "Retry-After header value in seconds."
-msgstr ""
+msgstr "Retry-Afterヘッダーの値（秒）。"
 
 msgid "Comma-separated list of whitelisted IPs (e.g., 127.0.0.1,::1)."
-msgstr ""
+msgstr "ホワイトリストに登録するIPのカンマ区切りリスト（例: 127.0.0.1,::1）。"
 
 msgid "Comma-separated list of blocked IPs."
-msgstr ""
+msgstr "ブロックするIPのカンマ区切りリスト。"
 
 msgid "Comma-separated list of trusted proxy IPs. Only trust X-Forwarded-For/X-Real-IP from these IPs."
-msgstr ""
+msgstr "信頼するプロキシIPのカンマ区切りリスト。これらのIPからのX-Forwarded-For/X-Real-IPのみを信頼します。"
 
 msgid "Number of requests between cleanup operations to prevent memory leaks."
-msgstr ""
+msgstr "メモリリークを防ぐための、クリーンアップ操作の間のリクエスト数。"
 
 msgid "Virtual Host: Host:fess.codelibs.org=fess"
-msgstr ""
+msgstr "仮想ホスト: Host:fess.codelibs.org=fess"
 
 msgid "Hostname for the HTTP proxy server."
-msgstr ""
+msgstr "HTTPプロキシサーバーのホスト名。"
 
 msgid "Port number for the HTTP proxy server (e.g., 8080)."
-msgstr ""
+msgstr "HTTPプロキシサーバーのポート番号（例: 8080）。"
 
 msgid "Username for HTTP proxy authentication."
-msgstr ""
+msgstr "HTTPプロキシ認証のユーザー名。"
 
 msgid "Password for HTTP proxy authentication."
-msgstr ""
+msgstr "HTTPプロキシ認証のパスワード。"
 
 msgid "Maximum size (bytes) for HTTP file uploads."
-msgstr ""
+msgstr "HTTPファイルアップロードの最大サイズ（バイト）。"
 
 msgid "Threshold size (bytes) for HTTP file upload buffering."
-msgstr ""
+msgstr "HTTPファイルアップロードのバッファリングの閾値サイズ（バイト）。"
 
 msgid "Maximum number of files allowed per HTTP upload."
-msgstr ""
+msgstr "1回のHTTPアップロードで許可されるファイルの最大数。"
 
 msgid "Index"
-msgstr ""
+msgstr "インデックス"
 
 msgid "Crawler Common"
-msgstr ""
+msgstr "クローラー共通"
 
 msgid "Number of threads for HTTP crawling."
-msgstr ""
+msgstr "HTTPクロールのスレッド数。"
 
 msgid "Serializer type for crawler data (e.g., kryo)."
-msgstr ""
+msgstr "クローラーデータのシリアライザーの種類（例: kryo）。"
 
 msgid "Maximum length of site name in documents."
-msgstr ""
+msgstr "ドキュメント内のサイト名の最大長。"
 
 msgid "Encoding for site names in documents."
-msgstr ""
+msgstr "ドキュメント内のサイト名のエンコーディング。"
 
 msgid "Hostname to use when unknown in documents."
-msgstr ""
+msgstr "ドキュメントでホスト名が不明な場合に使用するホスト名。"
 
 msgid "Whether to use site encoding for English documents."
-msgstr ""
+msgstr "英語のドキュメントでサイトのエンコーディングを使用するかどうか。"
 
 msgid "Whether to append data to documents."
-msgstr ""
+msgstr "ドキュメントにデータを追加するかどうか。"
 
 msgid "Whether to append filename to documents."
-msgstr ""
+msgstr "ドキュメントにファイル名を追加するかどうか。"
 
 msgid "Maximum size of alphanumeric terms in documents."
-msgstr ""
+msgstr "ドキュメント内の英数字単語の最大サイズ。"
 
 msgid "Maximum size of symbol terms in documents."
-msgstr ""
+msgstr "ドキュメント内の記号単語の最大サイズ。"
 
 msgid "Whether to remove duplicate terms in documents."
-msgstr ""
+msgstr "ドキュメント内の重複した単語を削除するかどうか。"
 
 msgid "Unicode space characters for document parsing."
-msgstr ""
+msgstr "ドキュメントの解析に使用するUnicodeの空白文字。"
 
 msgid "Unicode full stop characters for document parsing."
-msgstr ""
+msgstr "ドキュメントの解析に使用するUnicodeの句点文字。"
 
 msgid "Encoding for crawling data."
-msgstr ""
+msgstr "クロールデータのエンコーディング。"
 
 msgid "Supported web protocols for crawling."
-msgstr ""
+msgstr "クロールでサポートするWebプロトコル。"
 
 msgid "Supported file protocols for crawling."
-msgstr ""
+msgstr "クロールでサポートするファイルプロトコル。"
 
 msgid "Pattern for environment variable keys in crawling data."
-msgstr ""
+msgstr "クロールデータ内の環境変数キーのパターン。"
 
 msgid "Whether to ignore robots.txt during crawling."
-msgstr ""
+msgstr "クロール時にrobots.txtを無視するかどうか。"
 
 msgid "Whether to ignore robots meta tags during crawling."
-msgstr ""
+msgstr "クロール時にrobotsメタタグを無視するかどうか。"
 
 msgid "Whether to ignore content exceptions during crawling."
-msgstr ""
+msgstr "クロール時にコンテンツ例外を無視するかどうか。"
 
 msgid "HTTP status codes considered as failure URLs."
-msgstr ""
+msgstr "障害URLとみなすHTTPステータスコード。"
 
 msgid "Interval (seconds) for system monitor during crawling."
-msgstr ""
+msgstr "クロール中のシステム監視の間隔（秒）。"
 
 msgid "Whether to ignore idle threads in hot thread monitoring."
-msgstr ""
+msgstr "ホットスレッド監視でアイドルスレッドを無視するかどうか。"
 
 msgid "Interval for hot thread monitoring (e.g., 500ms)."
-msgstr ""
+msgstr "ホットスレッド監視の間隔（例: 500ms）。"
 
 msgid "Number of snapshots for hot thread monitoring."
-msgstr ""
+msgstr "ホットスレッド監視のスナップショット数。"
 
 msgid "Number of threads for hot thread monitoring."
-msgstr ""
+msgstr "ホットスレッド監視のスレッド数。"
 
 msgid "Timeout for hot thread monitoring (e.g., 30s)."
-msgstr ""
+msgstr "ホットスレッド監視のタイムアウト（例: 30s）。"
 
 msgid "Type of hot thread monitoring (e.g., cpu)."
-msgstr ""
+msgstr "ホットスレッド監視の種類（例: cpu）。"
 
 msgid "Metadata fields to exclude from document content."
-msgstr ""
+msgstr "ドキュメントのコンテンツから除外するメタデータフィールド。"
 
 msgid "Mapping for document metadata names."
-msgstr ""
+msgstr "ドキュメントのメタデータ名のマッピング。"
 
 msgid "Crawler HTML"
-msgstr ""
+msgstr "クローラーHTML"
 
 msgid "XPath to extract main content from HTML documents."
-msgstr ""
+msgstr "HTMLドキュメントからメインコンテンツを抽出するXPath。"
 
 msgid "XPath to extract language attribute from HTML documents."
-msgstr ""
+msgstr "HTMLドキュメントから言語属性を抽出するXPath。"
 
 msgid "XPath to extract digest (description) from HTML documents."
-msgstr ""
+msgstr "HTMLドキュメントからダイジェスト（説明）を抽出するXPath。"
 
 msgid "XPath to extract canonical URL from HTML documents."
-msgstr ""
+msgstr "HTMLドキュメントからカノニカルURLを抽出するXPath。"
 
 msgid "HTML tags to prune (remove) during document processing."
-msgstr ""
+msgstr "ドキュメント処理中に削除（プルーニング）するHTMLタグ。"
 
 msgid "Maximum length of digest extracted from HTML documents."
-msgstr ""
+msgstr "HTMLドキュメントから抽出するダイジェストの最大長。"
 
 msgid "Default language for HTML documents."
-msgstr ""
+msgstr "HTMLドキュメントのデフォルト言語。"
 
 msgid "Patterns to include for HTML index processing."
-msgstr ""
+msgstr "HTMLのインデックス処理に含めるパターン。"
 
 msgid "Patterns to exclude for HTML index processing."
-msgstr ""
+msgstr "HTMLのインデックス処理から除外するパターン。"
 
 msgid "Patterns to include for HTML search processing."
-msgstr ""
+msgstr "HTMLの検索処理に含めるパターン。"
 
 msgid "Patterns to exclude for HTML search processing."
-msgstr ""
+msgstr "HTMLの検索処理から除外するパターン。"
 
 msgid "Crawler File"
-msgstr ""
+msgstr "クローラーファイル"
 
 msgid "Encoding for file names in documents."
-msgstr ""
+msgstr "ドキュメント内のファイル名のエンコーディング。"
 
 msgid "Label to use when a file has no title."
-msgstr ""
+msgstr "ファイルにタイトルがない場合に使用するラベル。"
 
 msgid "Whether to ignore files with empty content."
-msgstr ""
+msgstr "コンテンツが空のファイルを無視するかどうか。"
 
 msgid "Maximum length of file title in documents."
-msgstr ""
+msgstr "ドキュメント内のファイルタイトルの最大長。"
 
 msgid "Maximum length of file digest in documents."
-msgstr ""
+msgstr "ドキュメント内のファイルダイジェストの最大長。"
 
 msgid "Whether to append meta content from files."
-msgstr ""
+msgstr "ファイルのメタコンテンツを追加するかどうか。"
 
 msgid "Whether to append body content from files."
-msgstr ""
+msgstr "ファイルの本文コンテンツを追加するかどうか。"
 
 msgid "Default language for file documents."
-msgstr ""
+msgstr "ファイルドキュメントのデフォルト言語。"
 
 msgid "Patterns to include for file index processing."
-msgstr ""
+msgstr "ファイルのインデックス処理に含めるパターン。"
 
 msgid "Patterns to exclude for file index processing."
-msgstr ""
+msgstr "ファイルのインデックス処理から除外するパターン。"
 
 msgid "Patterns to include for file search processing."
-msgstr ""
+msgstr "ファイルの検索処理に含めるパターン。"
 
 msgid "Patterns to exclude for file search processing."
-msgstr ""
+msgstr "ファイルの検索処理から除外するパターン。"
+
+msgid "Whether to index the owner of crawled files (SMB, local file system and FTP). The crawl config parameter config.owner.enabled overrides it."
+msgstr "クロールしたファイル（SMB、ローカルファイルシステム、FTP）の所有者をインデックスするかどうか。クロール設定のパラメーターconfig.owner.enabledで上書きされます。"
+
+msgid "Whether to index the last modifier of crawled files, read from the document metadata and falling back to the file owner. The crawl config parameter config.last.modifier.enabled overrides it."
+msgstr "クロールしたファイルの最終更新者をインデックスするかどうか。ドキュメントのメタデータから読み取り、取得できない場合はファイルの所有者にフォールバックします。クロール設定のパラメーターconfig.last.modifier.enabledで上書きされます。"
 
 msgid "Crawler Cache"
-msgstr ""
+msgstr "クローラーキャッシュ"
 
 msgid "Whether document cache is enabled."
-msgstr ""
+msgstr "ドキュメントキャッシュが有効かどうか。"
 
 msgid "Maximum size (bytes) for document cache."
-msgstr ""
+msgstr "ドキュメントキャッシュの最大サイズ（バイト）。"
 
 msgid "Supported MIME types for document cache."
-msgstr ""
+msgstr "ドキュメントキャッシュでサポートするMIMEタイプ。"
 
 msgid ",text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME types for HTML document cache."
-msgstr ""
+msgstr ",text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation HTMLドキュメントキャッシュのMIMEタイプ。"
 
 msgid "Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type)."
-msgstr ""
+msgstr "MIMEタイプ検出用の、拡張子からMIMEタイプへのオーバーライドマッピング（1行に1つ: .ext=mime/type）。"
+
+msgid "Whether to extract text from images and scanned PDFs with Tesseract OCR (requires the tesseract command)."
+msgstr "Tesseract OCRで画像やスキャンしたPDFからテキストを抽出するかどうか（tesseractコマンドが必要）。"
+
+msgid "Tesseract OCR languages, joined with '+' (e.g. jpn+eng)."
+msgstr "'+'で連結したTesseract OCRの言語（例: jpn+eng）。"
+
+msgid "Timeout in seconds for one Tesseract OCR run."
+msgstr "Tesseract OCRの1回の実行のタイムアウト（秒）。"
 
 msgid "Indexer"
-msgstr ""
+msgstr "インデクサー"
 
 msgid "Whether to enable thread dump for the indexer."
-msgstr ""
+msgstr "インデクサーでスレッドダンプを有効にするかどうか。"
 
 msgid "Maximum number of unprocessed documents for the indexer."
-msgstr ""
+msgstr "インデクサーの未処理ドキュメントの最大数。"
 
 msgid "Whether to enable click count tracking in the indexer."
-msgstr ""
+msgstr "インデクサーでクリック数の追跡を有効にするかどうか。"
 
 msgid "Whether to enable favorite count tracking in the indexer."
-msgstr ""
+msgstr "インデクサーでお気に入り数の追跡を有効にするかどうか。"
 
 msgid "Commit margin time (ms) for webfs in the indexer."
-msgstr ""
+msgstr "インデクサーのwebfsのコミットマージン時間（ミリ秒）。"
 
 msgid "Maximum number of empty lists for webfs in the indexer."
-msgstr ""
+msgstr "インデクサーのwebfsの空リストの最大数。"
 
 msgid "Update interval (ms) for webfs in the indexer."
-msgstr ""
+msgstr "インデクサーのwebfsの更新間隔（ミリ秒）。"
 
 msgid "Maximum document cache size for webfs in the indexer."
-msgstr ""
+msgstr "インデクサーのwebfsの最大ドキュメントキャッシュサイズ。"
 
 msgid "Maximum document request size (bytes) for webfs in the indexer."
-msgstr ""
+msgstr "インデクサーのwebfsの最大ドキュメントリクエストサイズ（バイト）。"
 
 msgid "Maximum document cache size for data in the indexer."
-msgstr ""
+msgstr "インデクサーのデータの最大ドキュメントキャッシュサイズ。"
 
 msgid "Maximum document request size (bytes) for data in the indexer."
-msgstr ""
+msgstr "インデクサーのデータの最大ドキュメントリクエストサイズ（バイト）。"
 
 msgid "Maximum delete cache size for data in the indexer."
-msgstr ""
+msgstr "インデクサーのデータの最大削除キャッシュサイズ。"
 
 msgid "Maximum redirect count for data in the indexer."
-msgstr ""
+msgstr "インデクサーのデータの最大リダイレクト回数。"
 
 msgid "Fields used for language detection in the indexer."
-msgstr ""
+msgstr "インデクサーの言語検出に使用するフィールド。"
 
 msgid "Length of text for language detection in the indexer."
-msgstr ""
+msgstr "インデクサーの言語検出に使用するテキストの長さ。"
 
 msgid "Maximum result window size for the indexer."
-msgstr ""
+msgstr "インデクサーの最大結果ウィンドウサイズ。"
 
 msgid "Maximum number of search documents for the indexer."
-msgstr ""
+msgstr "インデクサーの検索ドキュメントの最大数。"
 
 msgid "Index Settings"
-msgstr ""
+msgstr "インデックス設定"
 
 msgid "Codec type for the index."
-msgstr ""
+msgstr "インデックスのコーデックの種類。"
 
 msgid "Number of primary shards for the index."
-msgstr ""
+msgstr "インデックスのプライマリシャード数。"
 
 msgid "Auto expand replicas setting for the index."
-msgstr ""
+msgstr "インデックスのレプリカ自動拡張の設定。"
 
 msgid "Digest algorithm for index IDs."
-msgstr ""
+msgstr "インデックスIDのダイジェストアルゴリズム。"
 
 msgid "Initial password for the index user."
-msgstr ""
+msgstr "インデックスユーザーの初期パスワード。"
 
 msgid "Field Names"
-msgstr ""
+msgstr "フィールド名"
 
 msgid "Field name for favorite count in the index."
-msgstr ""
+msgstr "インデックス内のお気に入り数のフィールド名。"
 
 msgid "Field name for click count in the index."
-msgstr ""
+msgstr "インデックス内のクリック数のフィールド名。"
 
 msgid "Field name for config ID in the index."
-msgstr ""
+msgstr "インデックス内の設定IDのフィールド名。"
 
 msgid "Field name for expiration date in the index."
-msgstr ""
+msgstr "インデックス内の有効期限のフィールド名。"
 
 msgid "Field name for URL in the index."
-msgstr ""
+msgstr "インデックス内のURLのフィールド名。"
 
 msgid "Field name for document ID in the index."
-msgstr ""
+msgstr "インデックス内のドキュメントIDのフィールド名。"
 
 msgid "Field name for internal ID in the index."
-msgstr ""
+msgstr "インデックス内の内部IDのフィールド名。"
 
 msgid "Field name for version in the index."
-msgstr ""
+msgstr "インデックス内のバージョンのフィールド名。"
 
 msgid "Field name for sequence number in the index."
-msgstr ""
+msgstr "インデックス内のシーケンス番号のフィールド名。"
 
 msgid "Field name for primary term in the index."
-msgstr ""
+msgstr "インデックス内のプライマリタームのフィールド名。"
 
 msgid "Field name for language in the index."
-msgstr ""
+msgstr "インデックス内の言語のフィールド名。"
 
 msgid "Field name for cache status in the index."
-msgstr ""
+msgstr "インデックス内のキャッシュ状態のフィールド名。"
 
 msgid "Field name for last modified date in the index."
-msgstr ""
+msgstr "インデックス内の最終更新日のフィールド名。"
+
+msgid "Field name for the ETag response header of the crawled document in the index."
+msgstr "インデックス内の、クロールしたドキュメントのETagレスポンスヘッダーのフィールド名。"
+
+msgid "Field name for the owner of the crawled file in the index."
+msgstr "インデックス内の、クロールしたファイルの所有者のフィールド名。"
+
+msgid "Field name for the last modifier of the crawled file in the index."
+msgstr "インデックス内の、クロールしたファイルの最終更新者のフィールド名。"
 
 msgid "Field name for anchor in the index."
-msgstr ""
+msgstr "インデックス内のアンカーのフィールド名。"
 
 msgid "Field name for segment in the index."
-msgstr ""
+msgstr "インデックス内のセグメントのフィールド名。"
 
 msgid "Field name for role in the index."
-msgstr ""
+msgstr "インデックス内のロールのフィールド名。"
 
 msgid "Field name for boost value in the index."
-msgstr ""
+msgstr "インデックス内のブースト値のフィールド名。"
 
 msgid "Field name for creation date in the index."
-msgstr ""
+msgstr "インデックス内の作成日のフィールド名。"
 
 msgid "Field name for timestamp in the index."
-msgstr ""
+msgstr "インデックス内のタイムスタンプのフィールド名。"
 
 msgid "Field name for label in the index."
-msgstr ""
+msgstr "インデックス内のラベルのフィールド名。"
 
 msgid "Field name for the user tags of the document in the index."
-msgstr ""
+msgstr "インデックス内のドキュメントのユーザータグのフィールド名。"
 
 msgid "Field name for MIME type in the index."
-msgstr ""
+msgstr "インデックス内のMIMEタイプのフィールド名。"
 
 msgid "Field name for parent ID in the index."
-msgstr ""
+msgstr "インデックス内の親IDのフィールド名。"
 
 msgid "Field name for important content in the index."
-msgstr ""
+msgstr "インデックス内の重要なコンテンツのフィールド名。"
 
 msgid "Field name for content in the index."
-msgstr ""
+msgstr "インデックス内のコンテンツのフィールド名。"
 
 msgid "Field name for content minhash bits in the index."
-msgstr ""
+msgstr "インデックス内のコンテンツのminhashビットのフィールド名。"
 
 msgid "Field name for cache in the index."
-msgstr ""
+msgstr "インデックス内のキャッシュのフィールド名。"
 
 msgid "Field name for digest in the index."
-msgstr ""
+msgstr "インデックス内のダイジェストのフィールド名。"
 
 msgid "Field name for title in the index."
-msgstr ""
+msgstr "インデックス内のタイトルのフィールド名。"
 
 msgid "Field name for host in the index."
-msgstr ""
+msgstr "インデックス内のホストのフィールド名。"
 
 msgid "Field name for site in the index."
-msgstr ""
+msgstr "インデックス内のサイトのフィールド名。"
 
 msgid "Field name for content length in the index."
-msgstr ""
+msgstr "インデックス内のコンテンツ長のフィールド名。"
 
 msgid "Field name for file type in the index."
-msgstr ""
+msgstr "インデックス内のファイルタイプのフィールド名。"
 
 msgid "Field name for file name in the index."
-msgstr ""
+msgstr "インデックス内のファイル名のフィールド名。"
 
 msgid "Field name for thumbnail in the index."
-msgstr ""
+msgstr "インデックス内のサムネイルのフィールド名。"
 
 msgid "Field name for virtual host in the index."
-msgstr ""
+msgstr "インデックス内の仮想ホストのフィールド名。"
 
 msgid "Field name for content title in the response."
-msgstr ""
+msgstr "レスポンス内のコンテンツタイトルのフィールド名。"
 
 msgid "Field name for content description in the response."
-msgstr ""
+msgstr "レスポンス内のコンテンツ説明のフィールド名。"
 
 msgid "Field name for URL link in the response."
-msgstr ""
+msgstr "レスポンス内のURLリンクのフィールド名。"
 
 msgid "Field name for site path in the response."
-msgstr ""
+msgstr "レスポンス内のサイトパスのフィールド名。"
 
 msgid "Maximum length of content title in the response."
-msgstr ""
+msgstr "レスポンス内のコンテンツタイトルの最大長。"
 
 msgid "Maximum length of site path in the response."
-msgstr ""
+msgstr "レスポンス内のサイトパスの最大長。"
 
 msgid "Whether to enable content title highlighting in the response."
-msgstr ""
+msgstr "レスポンスでコンテンツタイトルのハイライトを有効にするかどうか。"
 
 msgid "Inline MIME types for the response."
-msgstr ""
+msgstr "レスポンスのインラインMIMEタイプ。"
 
 msgid "HTTP headers for the response. Access-Control-* and Timing-Allow-Origin are ignored (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary here."
-msgstr ""
+msgstr "レスポンスのHTTPヘッダー。Access-Control-*とTiming-Allow-Originは無視されます（CORSはapi.cors.* / CorsFilterで制御されます）。ここでVaryは設定しないでください。"
 
 msgid "Document Index"
-msgstr ""
+msgstr "ドキュメントインデックス"
 
 msgid "Index name for search documents."
-msgstr ""
+msgstr "検索ドキュメントのインデックス名。"
 
 msgid "Index name for update documents."
-msgstr ""
+msgstr "更新ドキュメントのインデックス名。"
 
 msgid "Index name for suggest documents."
-msgstr ""
+msgstr "サジェストドキュメントのインデックス名。"
 
 msgid "Index name for crawler documents."
-msgstr ""
+msgstr "クローラードキュメントのインデックス名。"
 
 msgid "Number of primary shards for crawler queue index."
-msgstr ""
+msgstr "クローラーキューインデックスのプライマリシャード数。"
 
 msgid "Number of primary shards for crawler data index."
-msgstr ""
+msgstr "クローラーデータインデックスのプライマリシャード数。"
 
 msgid "Number of primary shards for crawler filter index."
-msgstr ""
+msgstr "クローラーフィルターインデックスのプライマリシャード数。"
 
 msgid "Number of replicas for crawler queue index."
-msgstr ""
+msgstr "クローラーキューインデックスのレプリカ数。"
 
 msgid "Number of replicas for crawler data index."
-msgstr ""
+msgstr "クローラーデータインデックスのレプリカ数。"
 
 msgid "Number of replicas for crawler filter index."
-msgstr ""
+msgstr "クローラーフィルターインデックスのレプリカ数。"
 
 msgid "Index name for configuration data."
-msgstr ""
+msgstr "設定データのインデックス名。"
 
 msgid "Index name for user data."
-msgstr ""
+msgstr "ユーザーデータのインデックス名。"
 
 msgid "Index name for log data."
-msgstr ""
+msgstr "ログデータのインデックス名。"
 
 msgid "Prefix for dictionary index names."
-msgstr ""
+msgstr "辞書インデックス名のプレフィックス。"
 
 msgid "Document Management"
-msgstr ""
+msgstr "ドキュメント管理"
 
 msgid "Array-type fields for admin in the index."
-msgstr ""
+msgstr "インデックス内の管理用の配列型フィールド。"
 
 msgid "Date-type fields for admin in the index."
-msgstr ""
+msgstr "インデックス内の管理用の日付型フィールド。"
 
 msgid "Integer-type fields for admin in the index."
-msgstr ""
+msgstr "インデックス内の管理用の整数型フィールド。"
 
 msgid "Long-type fields for admin in the index."
-msgstr ""
+msgstr "インデックス内の管理用のlong型フィールド。"
 
 msgid "Float-type fields for admin in the index."
-msgstr ""
+msgstr "インデックス内の管理用のfloat型フィールド。"
 
 msgid "Double-type fields for admin in the index."
-msgstr ""
+msgstr "インデックス内の管理用のdouble型フィールド。"
 
 msgid "Required fields for admin in the index."
-msgstr ""
+msgstr "インデックス内の管理用の必須フィールド。"
 
 msgid "Timeouts"
-msgstr ""
+msgstr "タイムアウト"
 
 msgid "Timeout for index search operations."
-msgstr ""
+msgstr "インデックス検索操作のタイムアウト。"
 
 msgid "Timeout for scroll search operations."
-msgstr ""
+msgstr "スクロール検索操作のタイムアウト。"
 
 msgid "Timeout for index operations."
-msgstr ""
+msgstr "インデックス操作のタイムアウト。"
 
 msgid "Timeout for bulk index operations."
-msgstr ""
+msgstr "バルクインデックス操作のタイムアウト。"
 
 msgid "Timeout for delete operations in the index."
-msgstr ""
+msgstr "インデックス内の削除操作のタイムアウト。"
 
 msgid "Timeout for index health checks."
-msgstr ""
+msgstr "インデックスのヘルスチェックのタイムアウト。"
 
 msgid "Timeout for index indices operations."
-msgstr ""
+msgstr "インデックスのindices操作のタイムアウト。"
 
 msgid "File Types"
-msgstr ""
+msgstr "ファイルタイプ"
 
 msgid "Mapping of MIME types to filetype labels for indexing."
-msgstr ""
+msgstr "インデックス作成用の、MIMEタイプからファイルタイプラベルへのマッピング。"
 
 msgid "Number of documents to process per reindex operation."
-msgstr ""
+msgstr "1回の再インデックス操作で処理するドキュメント数。"
 
 msgid "Request body template for reindex operations."
-msgstr ""
+msgstr "再インデックス操作のリクエストボディのテンプレート。"
 
 msgid "Requests per second for reindex operations (\"adaptive\" for auto)."
-msgstr ""
+msgstr "再インデックス操作の1秒あたりのリクエスト数（自動の場合は\"adaptive\"）。"
 
 msgid "Whether to refresh the index after reindexing."
-msgstr ""
+msgstr "再インデックス後にインデックスをリフレッシュするかどうか。"
 
 msgid "Timeout for reindex operations."
-msgstr ""
+msgstr "再インデックス操作のタイムアウト。"
 
 msgid "Scroll timeout for reindex operations."
-msgstr ""
+msgstr "再インデックス操作のスクロールタイムアウト。"
 
 msgid "Maximum number of documents for reindex operations."
-msgstr ""
+msgstr "再インデックス操作のドキュメントの最大数。"
 
 msgid "Query"
-msgstr ""
+msgstr "クエリ"
 
 msgid "Maximum length of search queries."
-msgstr ""
+msgstr "検索クエリの最大長。"
 
 msgid "Timeout (ms) for search queries."
-msgstr ""
+msgstr "検索クエリのタイムアウト（ミリ秒）。"
 
 msgid "Whether to log searches whose results are incomplete because the query timed out or a shard failed."
-msgstr ""
+msgstr "クエリのタイムアウトやシャードの障害により結果が不完全になった検索をログに記録するかどうか。"
 
 msgid "Maximum number of total hits to track in queries. Only a positive number or true is supported: false leaves the response without a hit count, and a search that asks for it, here or as a search parameter, is refused."
-msgstr ""
+msgstr "クエリで追跡する総ヒット数の最大値。サポートされるのは正の数またはtrueのみです。falseを指定するとレスポンスにヒット数が含まれなくなり、ヒット数を要求する検索（ここでの設定または検索パラメーターのいずれによる場合も）は拒否されます。"
 
 msgid "Fields used for geo search queries."
-msgstr ""
+msgstr "位置情報検索クエリで使用するフィールド。"
 
 msgid "Parameter name for browser language in queries."
-msgstr ""
+msgstr "クエリでのブラウザーの言語のパラメーター名。"
 
 msgid "Whether to replace term with prefix query."
-msgstr ""
+msgstr "単語をプレフィックスクエリに置き換えるかどうか。"
 
 msgid "Minimum hit count for OR search queries."
-msgstr ""
+msgstr "OR検索クエリの最小ヒット数。"
 
 msgid "Unicode terminal characters for query highlighting."
-msgstr ""
+msgstr "クエリのハイライトに使用するUnicodeの終端文字。"
 
 msgid "Fragment size for query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのフラグメントサイズ。"
 
 msgid "Number of fragments for query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのフラグメント数。"
 
 msgid "Type of query highlighting."
-msgstr ""
+msgstr "クエリのハイライトの種類。"
 
 msgid "Tag to use before highlighted text."
-msgstr ""
+msgstr "ハイライトされたテキストの前に使用するタグ。"
 
 msgid "Tag to use after highlighted text."
-msgstr ""
+msgstr "ハイライトされたテキストの後に使用するタグ。"
 
 msgid "Boundary characters for query highlighting."
-msgstr ""
+msgstr "クエリのハイライトの境界文字。"
 
 msgid "Maximum scan for query highlight boundaries."
-msgstr ""
+msgstr "クエリのハイライト境界の最大スキャン。"
 
 msgid "Scanner type for query highlight boundaries."
-msgstr ""
+msgstr "クエリのハイライト境界のスキャナーの種類。"
 
 msgid "Encoder type for query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのエンコーダーの種類。"
 
 msgid "Whether to force source for query highlighting."
-msgstr ""
+msgstr "クエリのハイライトでソースを強制するかどうか。"
 
 msgid "Fragmenter type for query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのフラグメンターの種類。"
 
 msgid "Offset for query highlight fragments."
-msgstr ""
+msgstr "クエリのハイライトフラグメントのオフセット。"
 
 msgid "Size for no-match query highlight."
-msgstr ""
+msgstr "一致しない場合のクエリのハイライトのサイズ。"
 
 msgid "Order for query highlight fragments."
-msgstr ""
+msgstr "クエリのハイライトフラグメントの順序。"
 
 msgid "Phrase limit for query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのフレーズ上限。"
 
 msgid "Fields for content description in query highlighting."
-msgstr ""
+msgstr "クエリのハイライトでコンテンツ説明に使用するフィールド。"
 
 msgid "Whether to detect boundary position in query highlighting."
-msgstr ""
+msgstr "クエリのハイライトで境界位置を検出するかどうか。"
 
 msgid "Type for text fragment in query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのテキストフラグメントの種類。"
 
 msgid "Size for text fragment in query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのテキストフラグメントのサイズ。"
 
 msgid "Prefix length for text fragment in query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのテキストフラグメントのプレフィックス長。"
 
 msgid "Suffix length for text fragment in query highlighting."
-msgstr ""
+msgstr "クエリのハイライトのテキストフラグメントのサフィックス長。"
 
 msgid "Maximum search result offset for queries."
-msgstr ""
+msgstr "クエリの検索結果オフセットの最大値。"
 
 msgid "Additional default fields for queries."
-msgstr ""
+msgstr "クエリの追加のデフォルトフィールド。"
 
 msgid "Additional fields fetched from the index for search results. The search API returns a field added here only if it is also listed in query.additional.api.response.fields."
-msgstr ""
+msgstr "検索結果のためにインデックスから取得する追加フィールド。ここに追加したフィールドは、query.additional.api.response.fieldsにも記載されている場合にのみ、検索APIが返します。"
 
 msgid "Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only); it does not fetch them. A field must also be fetched: add it to query.additional.response.fields for the search API, or to query.additional.scroll.response.fields for the scroll API. Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response."
-msgstr ""
+msgstr "クエリの追加のAPIレスポンスフィールド。このキーはv2 APIレスポンスの許可リストにフィールドを追加するだけ（追加のみ）で、フィールドを取得しません。フィールドは取得もされる必要があります。検索APIの場合はquery.additional.response.fieldsに、スクロールAPIの場合はquery.additional.scroll.response.fieldsに追加してください。ACLフィールドや内部フィールド（例: role、virtual_host）は追加しないでください。追加すると、検索APIのレスポンスにアクセス制御情報が公開されます。"
 
 msgid "Additional fields fetched from the index for scroll search results. The scroll API returns a field added here only if it is also listed in query.additional.api.response.fields."
-msgstr ""
+msgstr "スクロール検索結果のためにインデックスから取得する追加フィールド。ここに追加したフィールドは、query.additional.api.response.fieldsにも記載されている場合にのみ、スクロールAPIが返します。"
 
 msgid "Additional cache response fields for queries."
-msgstr ""
+msgstr "クエリの追加のキャッシュレスポンスフィールド。"
 
 msgid "Additional highlighted fields for queries."
-msgstr ""
+msgstr "クエリの追加のハイライトフィールド。"
 
 msgid "Additional search fields for queries."
-msgstr ""
+msgstr "クエリの追加の検索フィールド。"
 
 msgid "Additional facet fields for queries."
-msgstr ""
+msgstr "クエリの追加のファセットフィールド。"
 
 msgid "Additional sort fields for queries."
-msgstr ""
+msgstr "クエリの追加のソートフィールド。"
 
 msgid "Additional analyzed fields for queries."
-msgstr ""
+msgstr "クエリの追加の解析対象フィールド。"
 
 msgid "Additional not-analyzed fields for queries."
-msgstr ""
+msgstr "クエリの追加の解析対象外フィールド。"
 
 msgid "Fields for GSA response in queries."
-msgstr ""
+msgstr "クエリのGSAレスポンスのフィールド。"
 
 msgid "Default language for GSA queries."
-msgstr ""
+msgstr "GSAクエリのデフォルト言語。"
 
 msgid "Default sort for GSA queries."
-msgstr ""
+msgstr "GSAクエリのデフォルトのソート。"
 
 msgid "Meta prefix for GSA queries."
-msgstr ""
+msgstr "GSAクエリのメタプレフィックス。"
 
 msgid "Charset field for GSA index queries."
-msgstr ""
+msgstr "GSAインデックスクエリの文字セットフィールド。"
 
 msgid "Content type field for GSA index queries."
-msgstr ""
+msgstr "GSAインデックスクエリのコンテンツタイプフィールド。"
 
 msgid "Maximum concurrent group results for collapse queries."
-msgstr ""
+msgstr "折りたたみクエリの最大同時グループ結果数。"
 
 msgid "Inner hits name for collapse queries."
-msgstr ""
+msgstr "折りたたみクエリのinner hits名。"
 
 msgid "Inner hits size for collapse queries."
-msgstr ""
+msgstr "折りたたみクエリのinner hitsのサイズ。"
 
 msgid "Sorts for inner hits in collapse queries."
-msgstr ""
+msgstr "折りたたみクエリのinner hitsのソート。"
 
 msgid "Default languages for queries."
-msgstr ""
+msgstr "クエリのデフォルト言語。"
 
 msgid "Default preference for JSON queries."
-msgstr ""
+msgstr "JSONクエリのデフォルトのpreference。"
 
 msgid "Default preference for GSA queries."
-msgstr ""
+msgstr "GSAクエリのデフォルトのpreference。"
 
 msgid "Language mapping for queries."
-msgstr ""
+msgstr "クエリの言語マッピング。"
 
 msgid "Boost"
-msgstr ""
+msgstr "ブースト"
 
 msgid "Boost value for title field in queries."
-msgstr ""
+msgstr "クエリのタイトルフィールドのブースト値。"
 
 msgid "Boost value for title field with language in queries."
-msgstr ""
+msgstr "クエリの言語付きタイトルフィールドのブースト値。"
 
 msgid "Boost value for content field in queries."
-msgstr ""
+msgstr "クエリのコンテンツフィールドのブースト値。"
 
 msgid "Boost value for content field with language in queries."
-msgstr ""
+msgstr "クエリの言語付きコンテンツフィールドのブースト値。"
 
 msgid "Boost value for important content field in queries."
-msgstr ""
+msgstr "クエリの重要なコンテンツフィールドのブースト値。"
 
 msgid "Boost value for important content field with language in queries."
-msgstr ""
+msgstr "クエリの言語付きの重要なコンテンツフィールドのブースト値。"
 
 msgid "Minimum length for fuzzy boosting in queries."
-msgstr ""
+msgstr "クエリのファジーブーストの最小長。"
 
 msgid "Boost value for fuzzy title queries."
-msgstr ""
+msgstr "ファジータイトルクエリのブースト値。"
 
 msgid "Fuzziness for fuzzy title queries."
-msgstr ""
+msgstr "ファジータイトルクエリのファジネス。"
 
 msgid "Number of expansions for fuzzy title queries."
-msgstr ""
+msgstr "ファジータイトルクエリの展開数。"
 
 msgid "Prefix length for fuzzy title queries."
-msgstr ""
+msgstr "ファジータイトルクエリのプレフィックス長。"
 
 msgid "Whether to allow transpositions in fuzzy title queries."
-msgstr ""
+msgstr "ファジータイトルクエリで転置を許可するかどうか。"
 
 msgid "Boost value for fuzzy content queries."
-msgstr ""
+msgstr "ファジーコンテンツクエリのブースト値。"
 
 msgid "Fuzziness for fuzzy content queries."
-msgstr ""
+msgstr "ファジーコンテンツクエリのファジネス。"
 
 msgid "Number of expansions for fuzzy content queries."
-msgstr ""
+msgstr "ファジーコンテンツクエリの展開数。"
 
 msgid "Prefix length for fuzzy content queries."
-msgstr ""
+msgstr "ファジーコンテンツクエリのプレフィックス長。"
 
 msgid "Whether to allow transpositions in fuzzy content queries."
-msgstr ""
+msgstr "ファジーコンテンツクエリで転置を許可するかどうか。"
 
 msgid "Default query type."
-msgstr ""
+msgstr "デフォルトのクエリタイプ。"
 
 msgid "Tie breaker value for dismax queries."
-msgstr ""
+msgstr "dismaxクエリのタイブレーカー値。"
 
 msgid "Minimum should match value for boolean queries."
-msgstr ""
+msgstr "ブールクエリのminimum should matchの値。"
 
 msgid "Number of expansions for prefix queries."
-msgstr ""
+msgstr "プレフィックスクエリの展開数。"
 
 msgid "Slop value for prefix queries."
-msgstr ""
+msgstr "プレフィックスクエリのスロップ値。"
 
 msgid "Prefix length for fuzzy queries."
-msgstr ""
+msgstr "ファジークエリのプレフィックス長。"
 
 msgid "Number of expansions for fuzzy queries."
-msgstr ""
+msgstr "ファジークエリの展開数。"
 
 msgid "Whether to allow transpositions in fuzzy queries."
-msgstr ""
+msgstr "ファジークエリで転置を許可するかどうか。"
 
 msgid "Facet"
-msgstr ""
+msgstr "ファセット"
 
 msgid "Fields for facet queries."
-msgstr ""
+msgstr "ファセットクエリのフィールド。"
 
 msgid "Size of facet fields."
-msgstr ""
+msgstr "ファセットフィールドのサイズ。"
 
 msgid "Upper clamp for facet.size (applied at the search chokepoint)."
-msgstr ""
+msgstr "facet.sizeの上限クランプ（検索のチョークポイントで適用されます）。"
 
 msgid "Minimum document count for facet fields."
-msgstr ""
+msgstr "ファセットフィールドの最小ドキュメント数。"
 
 msgid "Upper clamp for facet.minDocCount (applied at the search chokepoint)."
-msgstr ""
+msgstr "facet.minDocCountの上限クランプ（検索のチョークポイントで適用されます）。"
 
 msgid "Sort order for facet fields."
-msgstr ""
+msgstr "ファセットフィールドのソート順。"
 
 msgid "Value for missing facet fields."
-msgstr ""
+msgstr "欠落したファセットフィールドの値。"
 
 msgid "Facet queries definition."
-msgstr ""
+msgstr "ファセットクエリの定義。"
 
 msgid "Ranking"
-msgstr ""
+msgstr "ランキング"
 
 msgid "Window size for rank fusion."
-msgstr ""
+msgstr "ランクフュージョンのウィンドウサイズ。"
 
 msgid "Rank constant for rank fusion."
-msgstr ""
+msgstr "ランクフュージョンのランク定数。"
 
 msgid "Number of threads for rank fusion."
-msgstr ""
+msgstr "ランクフュージョンのスレッド数。"
 
 msgid "Maximum time (milliseconds) to wait for the searchers other than the main one when Fess fuses their results itself (rank.fusion.engine.enabled=false). A searcher that has not answered by then is left out of that search, and the results are flagged as partial and timed out. The main searcher is always waited for. 0 or less waits without a limit."
-msgstr ""
+msgstr "Fessが結果を自分で融合する場合（rank.fusion.engine.enabled=false）に、メイン以外のサーチャーを待機する最大時間（ミリ秒）。それまでに応答しなかったサーチャーはその検索から除外され、結果は部分的かつタイムアウトとしてマークされます。メインのサーチャーは常に待機されます。0以下の場合は制限なしで待機します。"
 
 msgid "Score field for rank fusion."
-msgstr ""
+msgstr "ランクフュージョンのスコアフィールド。"
 
 msgid "Whether the search engine performs rank fusion. When true, the searchers that can take part contribute their queries to a single request, so facets and total hits describe the fused result set. When false, Fess fuses the searchers' results itself."
-msgstr ""
+msgstr "検索エンジンがランクフュージョンを行うかどうか。trueの場合、参加できるサーチャーが単一のリクエストにクエリを提供するため、ファセットと総ヒット数は融合後の結果セットを表します。falseの場合、Fessがサーチャーの結果を自分で融合します。"
 
 msgid "How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean."
-msgstr ""
+msgstr "検索エンジンが融合したスコアを結合する方法: rrf、arithmetic_mean、geometric_mean、harmonic_meanのいずれか。"
 
-msgid "How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf."
-msgstr ""
+msgid "How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf. z_score can only be combined with arithmetic_mean; any other mean is refused and Fess fuses the results itself."
+msgstr "結合前にスコアを正規化する方法: min_max、l2、z_scoreのいずれか。rrfでは無視されます。z_scoreはarithmetic_meanとのみ組み合わせられます。それ以外の平均との組み合わせは拒否され、Fessが結果を自分で融合します。"
 
 msgid "Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally."
-msgstr ""
+msgstr "検索エンジン側の融合におけるサーチャーごとの重み。name:weightのペアで指定します（例: default:0.7,semantic_chunk:0.3）。重みの合計は1.0でなければならず、参加するすべてのサーチャーを指定する必要があります。空の場合は均等に重み付けします。"
 
 msgid "How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks: a fused search pages through this many results, and never more than indexer.max.result.window.size."
-msgstr ""
+msgstr "各サーチャーが検索エンジン側の融合にシャードごとに提供する結果の件数。これは、クライアントがページングできる深さと、エンジンが順位付けするドキュメントの集合の両方を制限します。融合した検索はこの件数までページングでき、indexer.max.result.window.sizeを超えることはありません。"
 
 msgid "ACL"
-msgstr ""
+msgstr "ACL"
 
 msgid "Whether to get SMB roles from a file."
-msgstr ""
+msgstr "ファイルからSMBのロールを取得するかどうか。"
 
 msgid "Available SID types for SMB."
-msgstr ""
+msgstr "SMBで利用可能なSIDタイプ。"
 
 msgid "Whether to get file roles from a file."
-msgstr ""
+msgstr "ファイルからファイルのロールを取得するかどうか。"
 
 msgid "Whether to get FTP roles from a file."
-msgstr ""
+msgstr "ファイルからFTPのロールを取得するかどうか。"
 
 msgid "Backup"
-msgstr ""
+msgstr "バックアップ"
 
 msgid "Target files for index backup."
-msgstr ""
+msgstr "インデックスバックアップの対象ファイル。"
 
 msgid "Target log files for index backup."
-msgstr ""
+msgstr "インデックスバックアップの対象ログファイル。"
 
 msgid "Timeout for loading index backup logs."
-msgstr ""
+msgstr "インデックスバックアップログの読み込みのタイムアウト。"
 
 msgid "Logging"
-msgstr ""
+msgstr "ログ出力"
 
 msgid "Application packages for logging."
-msgstr ""
+msgstr "ログ出力のアプリケーションパッケージ。"
 
 msgid "Whether to enable search docs logging."
-msgstr ""
+msgstr "検索ドキュメントのログ出力を有効にするかどうか。"
 
 msgid "Fields to log for search docs."
-msgstr ""
+msgstr "検索ドキュメントのログに出力するフィールド。"
 
 msgid "Whether to use a log file for search logging."
-msgstr ""
+msgstr "検索ログの記録にログファイルを使用するかどうか。"
 
 msgid "Maximum queue size for search logging."
-msgstr ""
+msgstr "検索ログの記録の最大キューサイズ。"
 
 msgid "Maximum queue size for click logging."
-msgstr ""
+msgstr "クリックログの記録の最大キューサイズ。"
+
+msgid "Maximum queue size for chat usage logging."
+msgstr "チャット利用状況の記録の最大キューサイズ。"
+
+msgid "Whether to record the search conditions of logged-in users for the search history."
+msgstr "ログイン中のユーザーの検索条件を検索履歴用に記録するかどうか。"
+
+msgid "Maximum number of search history entries returned per user."
+msgstr "ユーザーごとに返される検索履歴エントリの最大数。"
 
 msgid "Whether logged-in users can tag documents. Each tag belongs to the user who created it."
-msgstr ""
+msgstr "ログイン中のユーザーがドキュメントにタグを付けられるかどうか。各タグは作成したユーザーに属します。"
 
 msgid "Maximum length of a tag name, in code points."
-msgstr ""
+msgstr "タグ名の最大長（コードポイント単位）。"
 
 msgid "Maximum number of tags one user can own."
-msgstr ""
+msgstr "1人のユーザーが所有できるタグの最大数。"
 
 msgid "Maximum number of URLs one tag can be put on."
-msgstr ""
+msgstr "1つのタグを付けられるURLの最大数。"
 
 msgid "Maximum number of pending tag changes held in memory until they are applied to the documents."
-msgstr ""
+msgstr "ドキュメントに反映されるまでメモリ上に保持する、保留中のタグ変更の最大数。"
 
 msgid "Number of URLs updated per bulk request when tag changes are applied to the documents."
-msgstr ""
+msgstr "タグの変更をドキュメントに反映するときに、1回のバルクリクエストで更新するURLの数。"
 
 msgid "Maximum number of tags visible to one user in a search."
-msgstr ""
+msgstr "検索で1人のユーザーに見えるタグの最大数。"
 
 msgid "Web"
-msgstr ""
+msgstr "Web"
 
 msgid "Maximum input size for admin forms."
-msgstr ""
+msgstr "管理フォームの最大入力サイズ。"
 
 msgid "Whether to enable label in admin config forms."
-msgstr ""
+msgstr "管理設定フォームでラベルを有効にするかどうか。"
 
 msgid "Default template name for admin forms."
-msgstr ""
+msgstr "管理フォームのデフォルトのテンプレート名。"
 
 msgid "Whether to enable OSDD link (OpenSearch Description Document)."
-msgstr ""
+msgstr "OSDDリンク（OpenSearch Description Document）を有効にするかどうか。"
 
 msgid "Whether to enable the clipboard copy icon."
-msgstr ""
+msgstr "クリップボードへのコピーアイコンを有効にするかどうか。"
 
 msgid "Admin user names for authentication."
-msgstr ""
+msgstr "認証用の管理者ユーザー名。"
 
 msgid "Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set."
-msgstr ""
+msgstr "authentication.admin.usersを大文字小文字を区別せずに照合するかどうか: auto、true、falseのいずれか。autoはldap.provider.urlが設定されている場合に大文字小文字を区別しません。"
 
 msgid "Admin role names for authentication."
-msgstr ""
+msgstr "認証用の管理者ロール名。"
 
 msgid "Default permissions for search roles."
-msgstr ""
+msgstr "検索ロールのデフォルトのパーミッション。"
 
 msgid "Default display permissions for search roles."
-msgstr ""
+msgstr "検索ロールのデフォルトの表示パーミッション。"
 
 msgid "Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles."
-msgstr ""
+msgstr "role.search.guest.permissionsは空にしないでください。これは、匿名の検索ロールセットを空にしないためのゲストロールの初期値になります。解決されたロールセットが空の場合、ロールフィルターはスキップされ（フェイルオープン）、ロールベースのアクセス制御が無効になり、ドキュメントが匿名ユーザーに公開される可能性があります。検索ロールのゲスト用パーミッション。"
 
 msgid "Prefix for user roles in search."
-msgstr ""
+msgstr "検索におけるユーザーロールのプレフィックス。"
 
 msgid "Prefix for group roles in search."
-msgstr ""
+msgstr "検索におけるグループロールのプレフィックス。"
 
 msgid "Prefix for role roles in search."
-msgstr ""
+msgstr "検索におけるroleロールのプレフィックス。"
 
 msgid "Prefix for denied roles in search."
-msgstr ""
+msgstr "検索における拒否ロールのプレフィックス。"
 
 msgid "The default path of cookie (basically '/' if no context path)"
-msgstr ""
+msgstr "Cookieのデフォルトのパス（コンテキストパスがない場合は基本的に'/'）。"
 
 msgid "The default expire of cookie in seconds e.g. 31556926: one year, 86400: one day"
-msgstr ""
+msgstr "Cookieのデフォルトの有効期限（秒）。例: 31556926: 1年、86400: 1日。"
 
 msgid "Session tracking modes"
-msgstr ""
+msgstr "セッション追跡モード"
 
 msgid "Whether to add the Secure attribute to the session cookie (JSESSIONID) at startup. When blank (default), Tomcat's automatic behavior is used (Secure is added only for HTTPS requests). Set to true for production HTTPS deployments, especially when TLS is terminated at a reverse proxy. When true, the cookie is not sent over HTTP, so sessions will not be established for plain HTTP; keep it blank for localhost development. The Secure attribute is also required when SameSite=none is used. Changing this value requires a restart."
-msgstr ""
+msgstr "起動時にセッションCookie（JSESSIONID）にSecure属性を追加するかどうか。空欄（デフォルト）の場合はTomcatの自動動作が使用されます（SecureはHTTPSリクエストにのみ追加されます）。本番のHTTPSデプロイでは、特にTLSをリバースプロキシで終端している場合は、trueに設定してください。trueの場合、CookieはHTTPでは送信されないため、平文のHTTPではセッションが確立されません。localhostでの開発では空欄のままにしてください。SameSite=noneを使用する場合も、Secure属性が必要です。この値を変更するには再起動が必要です。"
 
 msgid "Comma-separated list of request parameter keys to store in cookies before SSO login."
-msgstr ""
+msgstr "SSOログイン前にCookieに保存するリクエストパラメーターキーのカンマ区切りリスト。"
 
 msgid "Comma-separated list of required parameter keys that must be present to store in cookies."
-msgstr ""
+msgstr "Cookieに保存するために存在している必要がある必須パラメーターキーのカンマ区切りリスト。"
 
 msgid "Maximum length of the encoded search parameters stored in cookies."
-msgstr ""
+msgstr "Cookieに保存するエンコード済み検索パラメーターの最大長。"
 
 msgid "Maximum size in bytes the stored search parameters may decompress to. The bound above applies to the gzipped cookie, which is no bound on what it expands to, and the cookie comes from the client."
-msgstr ""
+msgstr "保存された検索パラメーターを展開できる最大サイズ（バイト）。上記の上限はgzip圧縮されたCookieに適用されますが、これは展開後のサイズを制限するものではなく、Cookieはクライアントから送られてきます。"
 
 msgid "Maximum length of the query string built when restoring the stored search parameters after login. Restoring them is a convenience and the login is not, so a longer one is dropped rather than written to a Location header the container would refuse. Percent-encoding multiplies a CJK query by nine, so this is far smaller than the query itself may be. Raise it together with tomcat.maxHttpHeaderSize in tomcat_config.properties, which bounds the response headers."
-msgstr ""
+msgstr "ログイン後に保存した検索パラメーターを復元するときに組み立てるクエリ文字列の最大長。復元は利便性のためのものですがログインはそうではないため、これを超える場合は、コンテナが拒否するLocationヘッダーに書き込まれず、破棄されます。パーセントエンコードによりCJKのクエリは9倍になるため、この値はクエリ自体が取りうる長さよりはるかに小さくなります。レスポンスヘッダーを制限するtomcat_config.propertiesのtomcat.maxHttpHeaderSizeと合わせて引き上げてください。"
 
 msgid "Cookie name used to store encoded search parameters before SSO login."
-msgstr ""
+msgstr "SSOログイン前にエンコード済み検索パラメーターを保存するために使用するCookie名。"
 
 msgid "Whether to set HttpOnly attribute to the search parameter cookie."
-msgstr ""
+msgstr "検索パラメーターCookieにHttpOnly属性を設定するかどうか。"
 
 msgid "Whether to set Secure attribute to the search parameter cookie. Should be true in production environments using HTTPS."
-msgstr ""
+msgstr "検索パラメーターCookieにSecure属性を設定するかどうか。HTTPSを使用する本番環境ではtrueにしてください。"
 
 msgid "Max-Age (in seconds) for the search parameter cookie. Use -1 for session-only cookies."
-msgstr ""
+msgstr "検索パラメーターCookieのMax-Age（秒）。セッション限りのCookieにするには-1を使用します。"
 
 msgid "Domain attribute for the search parameter cookie. Set to the domain scope you want the cookie to be available on (e.g., example.com)."
-msgstr ""
+msgstr "検索パラメーターCookieのDomain属性。Cookieを利用可能にしたいドメインの範囲を設定します（例: example.com）。"
 
 msgid "Path attribute for the search parameter cookie. Typically set to \"/\" or the context path of the app."
-msgstr ""
+msgstr "検索パラメーターCookieのPath属性。通常は\"/\"またはアプリケーションのコンテキストパスを設定します。"
 
 msgid "SameSite attribute for the search parameter cookie. Valid values: Lax, Strict, None"
-msgstr ""
+msgstr "検索パラメーターCookieのSameSite属性。有効な値: Lax、Strict、None"
 
 msgid "The size of one page for paging"
-msgstr ""
+msgstr "ページングの1ページのサイズ"
 
 msgid "The size of page range for paging"
-msgstr ""
+msgstr "ページングのページ範囲のサイズ"
 
 msgid "The option 'fillLimit' of page range for paging"
-msgstr ""
+msgstr "ページングのページ範囲のオプション'fillLimit'"
 
 msgid "Fetch Page Size"
-msgstr ""
+msgstr "取得ページサイズ"
 
 msgid "Maximum number of docboost records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するドキュメントブーストレコードの最大数。"
 
 msgid "Maximum number of keymatch records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するキーマッチレコードの最大数。"
 
 msgid "Maximum number of labeltype records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するラベルタイプレコードの最大数。"
 
 msgid "Maximum number of tagtype records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するタグタイプレコードの最大数。"
 
 msgid "Maximum number of roletype records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するロールタイプレコードの最大数。"
 
 msgid "Maximum number of user records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するユーザーレコードの最大数。"
 
 msgid "Maximum number of role records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するロールレコードの最大数。"
 
 msgid "Maximum number of group records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するグループレコードの最大数。"
 
 msgid "Maximum number of crawling info parameters to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するクロール情報パラメーターの最大数。"
 
 msgid "Maximum number of crawling info records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するクロール情報レコードの最大数。"
 
 msgid "Maximum number of data config records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するデータストア設定レコードの最大数。"
 
 msgid "Maximum number of web config records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するウェブ設定レコードの最大数。"
 
 msgid "Maximum number of file config records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するファイルシステム設定レコードの最大数。"
 
 msgid "Maximum number of duplicate host records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得する重複ホストレコードの最大数。"
 
 msgid "Maximum number of failure URL records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得する障害URLレコードの最大数。"
 
 msgid "Maximum number of favorite log records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するお気に入りログレコードの最大数。"
 
 msgid "Maximum number of file auth records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するファイル認証レコードの最大数。"
 
 msgid "Maximum number of web auth records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するウェブ認証レコードの最大数。"
 
 msgid "Maximum number of path mapping records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するパスマッピングレコードの最大数。"
 
 msgid "Maximum number of request header records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するリクエストヘッダーレコードの最大数。"
 
 msgid "Maximum number of scheduled job records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するスケジュールジョブレコードの最大数。"
 
 msgid "Maximum number of elevate word records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得する追加ワードレコードの最大数。"
 
 msgid "Maximum number of bad word records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得する除外ワードレコードの最大数。"
 
 msgid "Maximum number of dictionary records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得する辞書レコードの最大数。"
 
 msgid "Maximum number of related content records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得する関連コンテンツレコードの最大数。"
 
 msgid "Maximum number of related query records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得する関連クエリーレコードの最大数。"
 
 msgid "Maximum number of thumbnail queue records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するサムネイルキューレコードの最大数。"
 
 msgid "Maximum number of thumbnail purge records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するサムネイルパージレコードの最大数。"
 
 msgid "Maximum number of score booster records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得するスコアブースターレコードの最大数。"
 
 msgid "Maximum number of search log records to fetch per page."
-msgstr ""
+msgstr "1ページあたりに取得する検索ログレコードの最大数。"
 
 msgid "Whether to track total hits in search list page."
-msgstr ""
+msgstr "検索リストページで総ヒット数を追跡するかどうか。"
 
 msgid "Maximum content length (in characters) rendered on the search list edit page."
-msgstr ""
+msgstr "検索リスト編集ページに表示するコンテンツ長の最大値（文字数）。"
 
 msgid "Search Page"
-msgstr ""
+msgstr "検索ページ"
 
 msgid "Default start page for search results."
-msgstr ""
+msgstr "検索結果のデフォルトの開始ページ。"
 
 msgid "Default size of search results per page."
-msgstr ""
+msgstr "1ページあたりの検索結果のデフォルトサイズ。"
 
 msgid "Maximum size of search results per page."
-msgstr ""
+msgstr "1ページあたりの検索結果の最大サイズ。"
 
 msgid "Maximum length of a v2 API string query parameter (q, sort, sdh). OWASP API4:2023."
-msgstr ""
+msgstr "v2 APIの文字列クエリパラメーター（q、sort、sdh）の最大長。OWASP API4:2023。"
 
 msgid "Maximum number of values for a v2 API repeatable query parameter."
-msgstr ""
+msgstr "v2 APIの繰り返し指定可能なクエリパラメーターの値の最大数。"
 
 msgid "Maximum click-log timestamp (rt, epoch ms) accepted by the v2 click API. OWASP API4:2023."
-msgstr ""
+msgstr "v2クリックAPIが受け付けるクリックログのタイムスタンプ（rt、エポックミリ秒）の最大値。OWASP API4:2023。"
 
 msgid "searchlog"
-msgstr ""
+msgstr "検索ログ"
 
 msgid "Request headers to include in search log."
-msgstr ""
+msgstr "検索ログに含めるリクエストヘッダー。"
 
 msgid "Batch size for search log processing."
-msgstr ""
+msgstr "検索ログ処理のバッチサイズ。"
+
+msgid "Number of days of search logs read when generating related queries from search logs."
+msgstr "検索ログから関連クエリーを生成するときに読み込む検索ログの日数。"
+
+msgid "Maximum number of terms generated per virtual host."
+msgstr "仮想ホストごとに生成される語の最大数。"
+
+msgid "Maximum number of related queries generated per term."
+msgstr "1つの語ごとに生成される関連クエリーの最大数。"
+
+msgid "Minimum number of distinct user sessions required for a term and for each of its related queries."
+msgstr "語とその各関連クエリーに必要な、異なるユーザーセッションの最小数。"
+
+msgid "Interval (minutes) after a search within which a follow-up search of the same session counts as a refinement."
+msgstr "検索後、同じセッションの後続の検索を言い換えとみなす間隔（分）。"
+
+msgid "Maximum number of search logs of a term read to find the sessions that searched it."
+msgstr "その語を検索したセッションを見つけるために読み込む、語の検索ログの最大数。"
+
+msgid "Maximum number of sessions per term whose follow-up searches are read."
+msgstr "後続の検索を読み込む、語ごとのセッションの最大数。"
+
+msgid "Maximum number of follow-up search logs read per term."
+msgstr "語ごとに読み込む後続の検索ログの最大数。"
+
+msgid "Minimum length (in characters) of a generated term or related query."
+msgstr "生成される語または関連クエリーの最小の長さ（文字数）。"
+
+msgid "Maximum length (in characters) of a generated term or related query."
+msgstr "生成される語または関連クエリーの最大の長さ（文字数）。"
+
+msgid "docreport Maximum number of duplicate groups the document report screen shows, largest first."
+msgstr "docreport ドキュメントレポート画面に表示する重複グループの最大数（大きい順）。"
+
+msgid "Maximum number of documents the document report screen lists for each duplicate group."
+msgstr "ドキュメントレポート画面で重複グループごとに一覧表示するドキュメントの最大数。"
+
+msgid "Number of content signatures read per request when the duplicate report is downloaded as CSV."
+msgstr "重複レポートをCSVとしてダウンロードするときに、1回のリクエストで読み込むコンテンツ署名の数。"
+
+msgid "Default number of days since the last modification after which a document counts as dormant."
+msgstr "ドキュメントを休眠とみなす、最終更新からの日数のデフォルト値。"
 
 msgid "Minimum width for HTML images in thumbnails."
-msgstr ""
+msgstr "サムネイルに使用するHTML画像の最小幅。"
 
 msgid "Minimum height for HTML images in thumbnails."
-msgstr ""
+msgstr "サムネイルに使用するHTML画像の最小高さ。"
 
 msgid "Maximum aspect ratio for HTML images in thumbnails."
-msgstr ""
+msgstr "サムネイルに使用するHTML画像の最大アスペクト比。"
 
 msgid "Width of generated thumbnail images."
-msgstr ""
+msgstr "生成されるサムネイル画像の幅。"
 
 msgid "Height of generated thumbnail images."
-msgstr ""
+msgstr "生成されるサムネイル画像の高さ。"
 
 msgid "Format of generated thumbnail images."
-msgstr ""
+msgstr "生成されるサムネイル画像の形式。"
 
 msgid "XPath to select images for thumbnails."
-msgstr ""
+msgstr "サムネイル用の画像を選択するXPath。"
 
 msgid "File extensions to exclude from thumbnail generation."
-msgstr ""
+msgstr "サムネイル生成から除外するファイル拡張子。"
 
 msgid "Interval for thumbnail generator."
-msgstr ""
+msgstr "サムネイルジェネレーターの間隔。"
 
 msgid "Targets for thumbnail generator (e.g., all)."
-msgstr ""
+msgstr "サムネイルジェネレーターの対象（例: all）。"
 
 msgid "Whether the thumbnail crawler is enabled."
-msgstr ""
+msgstr "サムネイルクローラーが有効かどうか。"
 
 msgid "Interval for system monitor in thumbnail processing."
-msgstr ""
+msgstr "サムネイル処理におけるシステム監視の間隔。"
 
 msgid "User"
-msgstr ""
+msgstr "ユーザー"
 
 msgid "User code settings"
-msgstr ""
+msgstr "ユーザーコードの設定"
 
 msgid "User code minimum length."
-msgstr ""
+msgstr "ユーザーコードの最小長。"
 
 msgid "User code maximum length."
-msgstr ""
+msgstr "ユーザーコードの最大長。"
 
 msgid "User code pattern for validation."
-msgstr ""
+msgstr "ユーザーコードの検証用パターン。"
 
 msgid "Name to display in the From field of emails."
-msgstr ""
+msgstr "メールのFromフィールドに表示する名前。"
 
 msgid "Email address to use in the From field."
-msgstr ""
+msgstr "Fromフィールドに使用するメールアドレス。"
 
 msgid "Hostname for the mail server."
-msgstr ""
+msgstr "メールサーバーのホスト名。"
 
 msgid "Target name for the scheduler."
-msgstr ""
+msgstr "スケジューラーのターゲット名。"
 
 msgid "Job class for the scheduler."
-msgstr ""
+msgstr "スケジューラーのジョブクラス。"
 
 msgid "Mode for concurrent execution in the scheduler."
-msgstr ""
+msgstr "スケジューラーの並行実行のモード。"
 
 msgid "Interval for scheduler monitoring."
-msgstr ""
+msgstr "スケジューラー監視の間隔。"
 
 msgid "Interval (seconds) for polling heartbeats and events."
-msgstr ""
+msgstr "ハートビートとイベントをポーリングする間隔（秒）。"
 
 msgid "Time-to-live (ms) for instance heartbeat documents."
-msgstr ""
+msgstr "インスタンスのハートビートドキュメントの有効期間（ミリ秒）。"
 
 msgid "Time-to-live (ms) for operation lock documents."
-msgstr ""
+msgstr "操作ロックドキュメントの有効期間（ミリ秒）。"
 
 msgid "Maximum number of retries for acquiring an operation lock."
-msgstr ""
+msgstr "操作ロックの取得の最大リトライ回数。"
 
 msgid "Time-to-live (ms) for event notification documents."
-msgstr ""
+msgstr "イベント通知ドキュメントの有効期間（ミリ秒）。"
 
 msgid "Base link for online help."
-msgstr ""
+msgstr "オンラインヘルプのベースリンク。"
 
 msgid "Installation guide link for online help."
-msgstr ""
+msgstr "オンラインヘルプのインストールガイドのリンク。"
 
 msgid "End-of-life information link for online help."
-msgstr ""
+msgstr "オンラインヘルプのサポート終了情報のリンク。"
 
 msgid "Online help key for failure URL."
-msgstr ""
+msgstr "障害URLのオンラインヘルプキー。"
 
 msgid "Online help key for elevate word."
-msgstr ""
+msgstr "追加ワードのオンラインヘルプキー。"
 
 msgid "Online help key for request header."
-msgstr ""
+msgstr "リクエストヘッダーのオンラインヘルプキー。"
 
 msgid "Online help key for synonym dictionary."
-msgstr ""
+msgstr "同義語辞書のオンラインヘルプキー。"
 
 msgid "Online help key for dictionary."
-msgstr ""
+msgstr "辞書のオンラインヘルプキー。"
 
 msgid "Online help key for Kuromoji dictionary."
-msgstr ""
+msgstr "Kuromoji辞書のオンラインヘルプキー。"
 
 msgid "Online help key for protected words dictionary."
-msgstr ""
+msgstr "Protwords辞書のオンラインヘルプキー。"
 
 msgid "Online help key for stopwords dictionary."
-msgstr ""
+msgstr "ストップワード辞書のオンラインヘルプキー。"
 
 msgid "Online help key for stemmer override dictionary."
-msgstr ""
+msgstr "Stemmer上書き辞書のオンラインヘルプキー。"
 
 msgid "Online help key for mapping dictionary."
-msgstr ""
+msgstr "マッピング辞書のオンラインヘルプキー。"
 
 msgid "Online help key for web config."
-msgstr ""
+msgstr "ウェブ設定のオンラインヘルプキー。"
 
 msgid "Online help key for search list."
-msgstr ""
+msgstr "検索リストのオンラインヘルプキー。"
 
 msgid "Online help key for log."
-msgstr ""
+msgstr "ログのオンラインヘルプキー。"
 
 msgid "Online help key for general settings."
-msgstr ""
+msgstr "全般設定のオンラインヘルプキー。"
 
 msgid "Online help key for role."
-msgstr ""
+msgstr "ロールのオンラインヘルプキー。"
 
 msgid "Online help key for job log."
-msgstr ""
+msgstr "ジョブログのオンラインヘルプキー。"
 
 msgid "Online help key for keymatch."
-msgstr ""
+msgstr "キーマッチのオンラインヘルプキー。"
 
 msgid "Online help key for related query."
-msgstr ""
+msgstr "関連クエリーのオンラインヘルプキー。"
 
 msgid "Online help key for related content."
-msgstr ""
+msgstr "関連コンテンツのオンラインヘルプキー。"
 
 msgid "Online help key for wizard."
-msgstr ""
+msgstr "ウィザードのオンラインヘルプキー。"
 
 msgid "Online help key for bad word."
-msgstr ""
+msgstr "除外ワードのオンラインヘルプキー。"
 
 msgid "Online help key for path mapping."
-msgstr ""
+msgstr "パスマッピングのオンラインヘルプキー。"
 
 msgid "Online help key for boost document."
-msgstr ""
+msgstr "ドキュメントブーストのオンラインヘルプキー。"
 
 msgid "Online help key for data config."
-msgstr ""
+msgstr "データストア設定のオンラインヘルプキー。"
 
 msgid "Online help key for system info."
-msgstr ""
+msgstr "システム情報のオンラインヘルプキー。"
 
 msgid "Online help key for user."
-msgstr ""
+msgstr "ユーザーのオンラインヘルプキー。"
 
 msgid "Online help key for group."
-msgstr ""
+msgstr "グループのオンラインヘルプキー。"
 
 msgid "Online help key for dashboard."
-msgstr ""
+msgstr "ダッシュボードのオンラインヘルプキー。"
 
 msgid "Online help key for web authentication."
-msgstr ""
+msgstr "ウェブ認証のオンラインヘルプキー。"
 
 msgid "Online help key for file config."
-msgstr ""
+msgstr "ファイルシステム設定のオンラインヘルプキー。"
 
 msgid "Online help key for file authentication."
-msgstr ""
+msgstr "ファイル認証のオンラインヘルプキー。"
 
 msgid "Online help key for label type."
-msgstr ""
+msgstr "ラベルタイプのオンラインヘルプキー。"
 
 msgid "Online help key for tag type."
-msgstr ""
+msgstr "タグタイプのオンラインヘルプキー。"
 
 msgid "Online help key for duplicate host."
-msgstr ""
+msgstr "重複ホストのオンラインヘルプキー。"
 
 msgid "Online help key for scheduler."
-msgstr ""
+msgstr "スケジューラーのオンラインヘルプキー。"
 
 msgid "Online help key for crawling info."
-msgstr ""
+msgstr "クロール情報のオンラインヘルプキー。"
 
 msgid "Online help key for backup."
-msgstr ""
+msgstr "バックアップのオンラインヘルプキー。"
 
 msgid "Online help key for upgrade."
-msgstr ""
+msgstr "アップグレードのオンラインヘルプキー。"
 
 msgid "Online help key for search request."
-msgstr ""
+msgstr "検索リクエストのオンラインヘルプキー。"
 
 msgid "Online help key for access token."
-msgstr ""
+msgstr "アクセストークンのオンラインヘルプキー。"
 
 msgid "Online help key for suggest."
-msgstr ""
+msgstr "サジェストのオンラインヘルプキー。"
 
 msgid "Online help key for search log."
-msgstr ""
+msgstr "検索ログのオンラインヘルプキー。"
 
 msgid "Online help key for maintenance."
-msgstr ""
+msgstr "メンテナンスのオンラインヘルプキー。"
 
 msgid "Online help key for plugin."
-msgstr ""
+msgstr "プラグインのオンラインヘルプキー。"
 
 msgid "Online help key for storage."
-msgstr ""
+msgstr "ストレージのオンラインヘルプキー。"
 
 msgid "Supported languages for online help."
-msgstr ""
+msgstr "オンラインヘルプでサポートする言語。"
 
 msgid "Forum link for user support."
-msgstr ""
+msgstr "ユーザーサポート用のフォーラムのリンク。"
 
 msgid "Supported languages for the forum."
-msgstr ""
+msgstr "フォーラムでサポートする言語。"
 
 msgid "Seed value for popular word suggestion."
-msgstr ""
+msgstr "人気ワードのサジェストのシード値。"
 
 msgid "Tags for popular word suggestion."
-msgstr ""
+msgstr "人気ワードのサジェストのタグ。"
 
 msgid "Fields for popular word suggestion."
-msgstr ""
+msgstr "人気ワードのサジェストのフィールド。"
 
 msgid "Excluded words for popular word suggestion."
-msgstr ""
+msgstr "人気ワードのサジェストから除外する単語。"
 
 msgid "Number of popular words to suggest."
-msgstr ""
+msgstr "サジェストする人気ワードの数。"
 
 msgid "Window size for popular word suggestion."
-msgstr ""
+msgstr "人気ワードのサジェストのウィンドウサイズ。"
 
 msgid "Query frequency for popular word suggestion."
-msgstr ""
+msgstr "人気ワードのサジェストのクエリ頻度。"
 
 msgid "Minimum hit count for suggestion."
-msgstr ""
+msgstr "サジェストの最小ヒット数。"
 
 msgid "Field for suggestion contents."
-msgstr ""
+msgstr "サジェストのコンテンツ用フィールド。"
 
 msgid "Field for suggestion tags."
-msgstr ""
+msgstr "サジェストのタグ用フィールド。"
 
 msgid "Field for suggestion roles."
-msgstr ""
+msgstr "サジェストのロール用フィールド。"
 
 msgid "Index contents for suggestion."
-msgstr ""
+msgstr "サジェスト用のインデックスコンテンツ。"
 
 msgid "Interval for suggestion update requests."
-msgstr ""
+msgstr "サジェスト更新リクエストの間隔。"
 
 msgid "Number of documents per suggestion update request."
-msgstr ""
+msgstr "サジェスト更新リクエストあたりのドキュメント数。"
 
 msgid "Percentage limit for suggestion update contents."
-msgstr ""
+msgstr "サジェスト更新コンテンツのパーセンテージ上限。"
 
 msgid "Maximum number of suggestion update contents."
-msgstr ""
+msgstr "サジェスト更新コンテンツの最大数。"
 
 msgid "Maximum document size for suggestion update."
-msgstr ""
+msgstr "サジェスト更新のドキュメントの最大サイズ。"
 
 msgid "Scroll size for suggestion source reader."
-msgstr ""
+msgstr "サジェストソースリーダーのスクロールサイズ。"
 
 msgid "Cache size for popular word suggestion."
-msgstr ""
+msgstr "人気ワードのサジェストのキャッシュサイズ。"
 
 msgid "Cache expiration (seconds) for popular word suggestion."
-msgstr ""
+msgstr "人気ワードのサジェストのキャッシュの有効期限（秒）。"
 
 msgid "Permissions for suggestion search log."
-msgstr ""
+msgstr "サジェスト用検索ログのパーミッション。"
 
 msgid "Interval for system monitor in suggestion."
-msgstr ""
+msgstr "サジェストにおけるシステム監視の間隔。"
 
 msgid "Whether LDAP admin is enabled."
-msgstr ""
+msgstr "LDAP管理が有効かどうか。"
 
 msgid "User filter for LDAP admin."
-msgstr ""
+msgstr "LDAP管理のユーザーフィルター。"
 
 msgid "Base DN for LDAP admin user."
-msgstr ""
+msgstr "LDAP管理ユーザーのベースDN。"
 
 msgid "Object classes for LDAP admin user."
-msgstr ""
+msgstr "LDAP管理ユーザーのオブジェクトクラス。"
 
 msgid "Role filter for LDAP admin."
-msgstr ""
+msgstr "LDAP管理のロールフィルター。"
 
 msgid "Base DN for LDAP admin role."
-msgstr ""
+msgstr "LDAP管理ロールのベースDN。"
 
 msgid "Object classes for LDAP admin role."
-msgstr ""
+msgstr "LDAP管理ロールのオブジェクトクラス。"
 
 msgid "Group filter for LDAP admin."
-msgstr ""
+msgstr "LDAP管理のグループフィルター。"
 
 msgid "Base DN for LDAP admin group."
-msgstr ""
+msgstr "LDAP管理グループのベースDN。"
 
 msgid "Object classes for LDAP admin group."
-msgstr ""
+msgstr "LDAP管理グループのオブジェクトクラス。"
 
 msgid "Whether to sync password for LDAP admin."
-msgstr ""
+msgstr "LDAP管理でパスワードを同期するかどうか。"
 
 msgid "Whether to validate LDAP authentication."
-msgstr ""
+msgstr "LDAP認証を検証するかどうか。"
 
 msgid "Timeout (milliseconds) to establish an LDAP connection. This also bounds the TLS handshake and the initial bind response. 0 or less leaves it to the JDK/OS default."
-msgstr ""
+msgstr "LDAP接続を確立するまでのタイムアウト（ミリ秒）。TLSハンドシェイクと最初のバインド応答も、この値が上限になります。0以下の場合はJDK/OSのデフォルトに任せます。"
 
 msgid "Timeout (milliseconds) to wait for an LDAP response after the connection is bound. 0 or less waits indefinitely."
-msgstr ""
+msgstr "接続がバインドされた後にLDAPの応答を待つタイムアウト（ミリ秒）。0以下の場合は無期限に待機します。"
 
 msgid "Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit."
-msgstr ""
+msgstr "LDAP検索のサーバー側の時間制限（ミリ秒）。0以下の場合は無制限です。"
 
 msgid "Maximum username length for LDAP."
-msgstr ""
+msgstr "LDAPのユーザー名の最大長。"
 
 msgid "Whether to ignore NetBIOS name in LDAP."
-msgstr ""
+msgstr "LDAPでNetBIOS名を無視するかどうか。"
 
 msgid "Whether to allow underscores in LDAP group names."
-msgstr ""
+msgstr "LDAPのグループ名でアンダースコアを許可するかどうか。"
 
 msgid "Whether to use lowercase for LDAP permission names."
-msgstr ""
+msgstr "LDAPのパーミッション名を小文字にするかどうか。"
 
 msgid "Whether to allow empty permissions in LDAP."
-msgstr ""
+msgstr "LDAPで空のパーミッションを許可するかどうか。"
 
 msgid "Whether to use samAccountName for LDAP group."
-msgstr ""
+msgstr "LDAPのグループにsamAccountNameを使用するかどうか。"
 
 msgid "Whether LDAP role search for user is enabled."
-msgstr ""
+msgstr "ユーザーのLDAPロール検索が有効かどうか。"
 
 msgid "Whether LDAP role search for group is enabled."
-msgstr ""
+msgstr "グループのLDAPロール検索が有効かどうか。"
 
 msgid "Whether LDAP role search for role is enabled."
-msgstr ""
+msgstr "ロールのLDAPロール検索が有効かどうか。"
 
 msgid "LDAP attribute for surname."
-msgstr ""
+msgstr "姓のLDAP属性。"
 
 msgid "LDAP attribute for given name."
-msgstr ""
+msgstr "名のLDAP属性。"
 
 msgid "LDAP attribute for employee number."
-msgstr ""
+msgstr "従業員番号のLDAP属性。"
 
 msgid "LDAP attribute for mail."
-msgstr ""
+msgstr "メールのLDAP属性。"
 
 msgid "LDAP attribute for telephone number."
-msgstr ""
+msgstr "電話番号のLDAP属性。"
 
 msgid "LDAP attribute for home phone."
-msgstr ""
+msgstr "自宅電話のLDAP属性。"
 
 msgid "LDAP attribute for home postal address."
-msgstr ""
+msgstr "自宅の郵便住所のLDAP属性。"
 
 msgid "LDAP attribute for labeled URI."
-msgstr ""
+msgstr "ラベル付きURIのLDAP属性。"
 
 msgid "LDAP attribute for room number."
-msgstr ""
+msgstr "部屋番号のLDAP属性。"
 
 msgid "LDAP attribute for description."
-msgstr ""
+msgstr "説明のLDAP属性。"
 
 msgid "LDAP attribute for title."
-msgstr ""
+msgstr "役職のLDAP属性。"
 
 msgid "LDAP attribute for pager."
-msgstr ""
+msgstr "ページャーのLDAP属性。"
 
 msgid "LDAP attribute for street."
-msgstr ""
+msgstr "番地のLDAP属性。"
 
 msgid "LDAP attribute for postal code."
-msgstr ""
+msgstr "郵便番号のLDAP属性。"
 
 msgid "LDAP attribute for physical delivery office name."
-msgstr ""
+msgstr "物理的な配達オフィス名のLDAP属性。"
 
 msgid "LDAP attribute for destination indicator."
-msgstr ""
+msgstr "宛先インジケーターのLDAP属性。"
 
 msgid "LDAP attribute for international ISDN number."
-msgstr ""
+msgstr "国際ISDN番号のLDAP属性。"
 
 msgid "LDAP attribute for state."
-msgstr ""
+msgstr "都道府県のLDAP属性。"
 
 msgid "LDAP attribute for employee type."
-msgstr ""
+msgstr "従業員タイプのLDAP属性。"
 
 msgid "LDAP attribute for facsimile telephone number."
-msgstr ""
+msgstr "ファクシミリ番号のLDAP属性。"
 
 msgid "LDAP attribute for post office box."
-msgstr ""
+msgstr "私書箱のLDAP属性。"
 
 msgid "LDAP attribute for initials."
-msgstr ""
+msgstr "イニシャルのLDAP属性。"
 
 msgid "LDAP attribute for car license."
-msgstr ""
+msgstr "車両ナンバーのLDAP属性。"
 
 msgid "LDAP attribute for mobile."
-msgstr ""
+msgstr "携帯電話のLDAP属性。"
 
 msgid "LDAP attribute for postal address."
-msgstr ""
+msgstr "郵便住所のLDAP属性。"
 
 msgid "LDAP attribute for city."
-msgstr ""
+msgstr "市区町村のLDAP属性。"
 
 msgid "LDAP attribute for teletex terminal identifier."
-msgstr ""
+msgstr "テレテックス端末識別子のLDAP属性。"
 
 msgid "LDAP attribute for X.121 address."
-msgstr ""
+msgstr "X.121アドレスのLDAP属性。"
 
 msgid "LDAP attribute for business category."
-msgstr ""
+msgstr "業種のLDAP属性。"
 
 msgid "LDAP attribute for registered address."
-msgstr ""
+msgstr "登録住所のLDAP属性。"
 
 msgid "LDAP attribute for display name."
-msgstr ""
+msgstr "表示名のLDAP属性。"
 
 msgid "LDAP attribute for preferred language."
-msgstr ""
+msgstr "優先言語のLDAP属性。"
 
 msgid "LDAP attribute for department number."
-msgstr ""
+msgstr "部署番号のLDAP属性。"
 
 msgid "LDAP attribute for UID number."
-msgstr ""
+msgstr "UID番号のLDAP属性。"
 
 msgid "LDAP attribute for GID number."
-msgstr ""
+msgstr "GID番号のLDAP属性。"
 
 msgid "LDAP attribute for home directory."
-msgstr ""
+msgstr "ホームディレクトリのLDAP属性。"
 
 msgid "Plugin repository URLs."
-msgstr ""
+msgstr "プラグインリポジトリのURL。"
 
 msgid "Version filter for plugins."
-msgstr ""
+msgstr "プラグインのバージョンフィルター。"
 
 msgid "Maximum number of items per page in storage."
-msgstr ""
+msgstr "ストレージの1ページあたりの最大項目数。"
 
 msgid "List of invalid admin passwords."
-msgstr ""
+msgstr "無効な管理者パスワードのリスト。"
 
 msgid "Minimum password length (0 to disable)."
-msgstr ""
+msgstr "パスワードの最小長（0で無効）。"
 
 msgid "Maximum length of a password field."
-msgstr ""
+msgstr "パスワードフィールドの最大長。"
 
 msgid "Require uppercase letters in password."
-msgstr ""
+msgstr "パスワードに大文字を必須にします。"
 
 msgid "Require lowercase letters in password."
-msgstr ""
+msgstr "パスワードに小文字を必須にします。"
 
 msgid "Require digits in password."
-msgstr ""
+msgstr "パスワードに数字を必須にします。"
 
 msgid "Require special characters in password."
-msgstr ""
+msgstr "パスワードに特殊文字を必須にします。"
 
 msgid "Whether RAG chat feature is enabled."
-msgstr ""
+msgstr "RAGチャット機能が有効かどうか。"
+
+msgid "Whether to record the usage of each RAG chat request (user, time, LLM calls and tokens) in the chat log. The question and the answer are never recorded."
+msgstr "RAGチャットの各リクエストの利用状況（ユーザー、時刻、LLM呼び出しとトークン）をチャットログに記録するかどうか。質問と回答が記録されることはありません。"
 
 msgid "Chat generation settings."
-msgstr ""
+msgstr "チャット生成の設定。"
+
+msgid "Maximum number of times one chat request regenerates its search query and searches again when the search finds no documents or, in the streaming chat, none of the hits is judged relevant. Each regeneration makes one LLM call, plus one relevance evaluation call when the new search has hits (0 disables)."
+msgstr "検索でドキュメントが見つからなかった場合、またはストリーミングチャットでヒットしたものがどれも関連があると判断されなかった場合に、1回のチャットリクエストが検索クエリを再生成して再検索する最大回数。再生成のたびにLLM呼び出しが1回行われ、新しい検索にヒットがある場合はさらに関連性評価の呼び出しが1回行われます（0で無効）。"
 
 msgid "Session settings."
-msgstr ""
+msgstr "セッションの設定。"
 
 msgid "Maximum cached chat sessions; least recently accessed are evicted above it (0 or less means 100)."
-msgstr ""
+msgstr "キャッシュするチャットセッションの最大数。これを超えると、最後にアクセスされたのが最も古いものから破棄されます（0以下の場合は100）。"
 
 msgid "Maximum messages kept in one chat session; older turns are trimmed on each new message."
-msgstr ""
+msgstr "1つのチャットセッションに保持するメッセージの最大数。新しいメッセージのたびに、古いターンは切り詰められます。"
 
 msgid "Enhanced RAG flow settings. Fields to retrieve for full document content."
-msgstr ""
+msgstr "拡張RAGフローの設定。ドキュメントの全コンテンツのために取得するフィールド。"
 
 msgid "Highlight settings for RAG search."
-msgstr ""
+msgstr "RAG検索のハイライト設定。"
 
 msgid "Number of highlight fragments per document in the RAG chat context search."
-msgstr ""
+msgstr "RAGチャットのコンテキスト検索における、ドキュメントあたりのハイライトフラグメント数。"
 
 msgid "Large-document handling for answer generation. Documents whose content_length exceeds this value use highlighted passages instead of full content in the answer context."
-msgstr ""
+msgstr "回答生成における大きなドキュメントの扱い。content_lengthがこの値を超えるドキュメントは、回答コンテキストで全コンテンツの代わりにハイライトされた抜粋を使用します。"
 
 msgid "Highlight settings used when extracting passages from large documents for the answer context."
-msgstr ""
+msgstr "回答コンテキスト用に大きなドキュメントから抜粋を取り出すときに使用するハイライト設定。"
 
 msgid "Number of highlight fragments taken from each oversized document for the answer context."
-msgstr ""
+msgstr "回答コンテキスト用に、サイズの大きい各ドキュメントから取り出すハイライトフラグメント数。"
 
 msgid "History content mode for assistant messages. smart_summary           - drop assistant body, keep only past search query + referenced titles per turn (default, recommended) full                    - send the whole assistant response source_titles           - body + referenced titles suffix source_titles_and_urls  - \"[References: title (url), ...]\" only truncated               - truncate assistant response at history.assistant.max.chars none                    - drop assistant turns from history"
-msgstr ""
+msgstr "アシスタントメッセージの履歴コンテンツモード。smart_summary - アシスタントの本文を破棄し、ターンごとに過去の検索クエリ + 参照したタイトルのみを保持（デフォルト、推奨） full - アシスタントの応答全体を送信 source_titles - 本文 + 参照したタイトルを末尾に付加 source_titles_and_urls - \"[References: title (url), ...]\" のみ truncated - history.assistant.max.charsでアシスタントの応答を切り詰める none - 履歴からアシスタントのターンを破棄"
 
 msgid "Maximum number of referenced document titles included per turn in smart_summary history mode."
-msgstr ""
+msgstr "smart_summary履歴モードで、ターンごとに含める参照ドキュメントタイトルの最大数。"
+
+msgid "Maximum number of parts a document is split into when chatting about a single document longer than the LLM context budget. Each part is summarized separately and the summaries are combined into the answer; parts beyond this number are not used. A request about such a document makes up to this many LLM calls plus one for the answer, on every turn."
+msgstr "LLMのコンテキスト予算より長い単一のドキュメントについてチャットするときに、ドキュメントを分割するパーツの最大数。各パーツは個別に要約され、要約は回答にまとめられます。この数を超えるパーツは使用されません。そのようなドキュメントに関するリクエストは、毎ターン、最大でこの数のLLM呼び出しに加えて回答用の1回のLLM呼び出しを行います。"
+
+msgid "Language the LLM is asked to answer in. browser  - the language of the user's browser or UI locale; no instruction for English (default) none     - no language instruction; the LLM usually answers in the language of the question en, ja.. - always answer in this language"
+msgstr "LLMに回答を求める言語。browser - ユーザーのブラウザーまたはUIロケールの言語。英語の場合は指示なし（デフォルト） none - 言語の指示なし。LLMは通常、質問と同じ言語で回答する en, ja.. - 常にこの言語で回答する"
 
 msgid "Index Export"
-msgstr ""
+msgstr "インデックスエクスポート"
 
 msgid "Comma-separated document fields omitted from files written by the index export job."
-msgstr ""
+msgstr "インデックスエクスポートジョブが書き出すファイルから除外する、ドキュメントフィールドのカンマ区切りリスト。"
 
 msgid "Number of documents fetched per scroll request by the index export job."
-msgstr ""
+msgstr "インデックスエクスポートジョブが1回のスクロールリクエストで取得するドキュメント数。"
 
 msgid "Output format for exported documents; only html and json are accepted, anything else fails the job."
-msgstr ""
+msgstr "エクスポートするドキュメントの出力形式。受け付けるのはhtmlとjsonのみで、それ以外の場合はジョブが失敗します。"
 
 msgid "Log Notification Interval (seconds) for flushing log notification buffer to search engine."
-msgstr ""
+msgstr "ログ通知 ログ通知バッファを検索エンジンにフラッシュする間隔（秒）。"
 
 msgid "Maximum length of notification details text."
-msgstr ""
+msgstr "通知の詳細テキストの最大長。"
 
 msgid "Maximum number of events to display in notification."
-msgstr ""
+msgstr "通知に表示するイベントの最大数。"
 
 msgid "Maximum length of each log message in notification."
-msgstr ""
+msgstr "通知内の各ログメッセージの最大長。"
 
 msgid "Maximum number of events to fetch from search engine per notification job."
-msgstr ""
+msgstr "通知ジョブごとに検索エンジンから取得するイベントの最大数。"
 
 msgid "Maximum number of events to buffer in memory."
-msgstr ""
+msgstr "メモリ上にバッファするイベントの最大数。"
 
 msgid "Interval (seconds) for the notification job cycle, used in notification messages."
-msgstr ""
+msgstr "通知ジョブのサイクルの間隔（秒）。通知メッセージで使用されます。"
 
 msgid "Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
-msgstr ""
+msgstr "静的テーマシステム（docs/superpowers/specs/2026-05-21-fess-static-theme-design.mdを参照）"
 
 msgid "Maximum size (bytes) of an uploaded theme archive."
-msgstr ""
+msgstr "アップロードされたテーマアーカイブの最大サイズ（バイト）。"
 
 msgid "Maximum total extracted size (bytes); extraction aborts once it is exceeded."
-msgstr ""
+msgstr "展開後の合計サイズの最大値（バイト）。これを超えると展開は中止されます。"
 
 msgid "Maximum number of entries allowed in an uploaded theme archive."
-msgstr ""
+msgstr "アップロードされたテーマアーカイブで許可されるエントリの最大数。"
 
 msgid "Maximum uncompressed/compressed ratio for a single theme archive entry."
-msgstr ""
+msgstr "テーマアーカイブの1つのエントリに対する、非圧縮/圧縮比の最大値。"
 
 msgid "Maximum cumulative uncompressed/compressed ratio for the whole archive (zip-bomb guard)."
-msgstr ""
+msgstr "アーカイブ全体に対する、非圧縮/圧縮比の累積の最大値（zipボム対策）。"
 
 msgid "Compressed bytes read before the cumulative zip ratio check applies; smaller archives skip it."
-msgstr ""
+msgstr "累積zip比のチェックが適用されるまでに読み込む圧縮済みバイト数。これより小さいアーカイブはチェックをスキップします。"
 
 msgid "Retention (days) for a replaced theme directory before the cleanup sweep removes it."
-msgstr ""
+msgstr "置き換えられたテーマディレクトリを、クリーンアップ処理が削除するまで保持する期間（日）。"
+
+msgid "Repository URLs (comma separated) that static themes are downloaded from."
+msgstr "静的テーマのダウンロード元のリポジトリURL（カンマ区切り）。"
+
+msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
+msgstr "静的テーマのHTMLページのContent-Security-Policyにおけるframe-ancestorsディレクティブの値。これらをフレームに埋め込むことができるオリジンです。デフォルトの'none'は、どのページにも埋め込みを許可しません。WebKit（Safari）は、テーマのファイルプレビューとキャッシュ表示が使用するblob:フレームにもframe-ancestorsを適用するため、値が'none'の間はそれらが空白で表示されます。ディレクティブを削除するには値を空のままにします。どちらの場合もX-Frame-Options: DENYが送信され、すべてのブラウザーでページがフレームに入らないようにします（frame-ancestorsを尊重するブラウザーはそのヘッダーを無視します）。"
 
 msgid "Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-* headers, then from the servlet request."
-msgstr ""
+msgstr "任意: このFessインスタンスの正規の外部オリジン（カンマ/改行区切り）。例: https://fess.example.com。設定すると、これらはv2のCSRF Originチェックで、転送ヘッダーを信頼せずに同一オリジンとして扱われます。rate.limit.trusted.proxiesに記載されていないリバースプロキシの背後での利用を推奨します。空の場合、ターゲットオリジンは、信頼するプロキシのX-Forwarded-*ヘッダーから、次にサーブレットリクエストから再構築されます。"
 
 msgid "Login attempts allowed per client IP each minute; 0 or less disables the gate."
-msgstr ""
+msgstr "クライアントIPごとに1分あたりに許可されるログイン試行回数。0以下の場合はこの制限を無効にします。"
 
 msgid "Login attempts allowed per client IP and user name each minute; also gates password change."
-msgstr ""
+msgstr "クライアントIPとユーザー名の組ごとに1分あたりに許可されるログイン試行回数。パスワード変更も制限します。"
 
 msgid "Lockout (seconds) applied once a login rate limit is exceeded; 0 or less disables the lockout."
-msgstr ""
+msgstr "ログインのレート制限を超えた時点で適用されるロックアウト（秒）。0以下の場合はロックアウトを無効にします。"
 
 msgid "Maximum login rate-limit buckets held in memory; idle buckets are evicted at the cap."
-msgstr ""
+msgstr "メモリ上に保持するログインレート制限バケットの最大数。上限に達すると、アイドル状態のバケットは破棄されます。"
 
 msgid "Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (\": keepalive\\n\\n\") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds."
-msgstr ""
+msgstr "/api/v2/chat/streamが送信するSSEキープアライブpingの間隔。pingはコメントのみの行（\": keepalive\\n\\n\"）で、イベントストリームには影響しませんが、長いLLMフェーズの間にアイドル接続を切断する中間装置（nginxのデフォルトのproxy_read_timeoutは60s）を回避します。<=0を設定すると無効になります。単位: ミリ秒。"

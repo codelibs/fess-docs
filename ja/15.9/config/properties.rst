@@ -15,7 +15,7 @@ one, fill in ``properties.po`` beside this file.
 .. fess repository; translations come from properties.po beside this file.
 .. Regenerate with tools/update_properties_doc.sh.
 
-Core
+コア
 ----
 
 .. list-table::
@@ -25,71 +25,71 @@ Core
     - Description
     - Default
   * - domain.title
-    - The title of the domain for logging and display.
+    - ログと表示に使用するドメインのタイトル。
     - ``Fess``
 
-.. list-table:: Search Engine
+.. list-table:: 検索エンジン
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - search_engine.type
-    - The type of search engine backend (e.g., default, opensearch).
+    - 検索エンジンバックエンドの種類（例: default、opensearch）。
     - ``default``
   * - search_engine.http.url
-    - The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)
+    - 検索エンジンのHTTPエンドポイントのURL。IPv6環境では、IPv6アドレスを角括弧で囲みます（例: http://[::1]:9200）。
     - ``http://localhost:9200``
   * - search_engine.http.ssl.certificate_authorities
-    - Path to SSL certificate authorities for secure HTTP connections.
+    - セキュアなHTTP接続に使用するSSL認証局へのパス。
     - (empty)
   * - search_engine.username
-    - Username for authenticating to the search engine.
+    - 検索エンジンへの認証に使用するユーザー名。
     - (empty)
   * - search_engine.password
-    - Password for authenticating to the search engine.
+    - 検索エンジンへの認証に使用するパスワード。
     - (empty)
   * - search_engine.heartbeat_interval
-    - Interval (ms) for heartbeat checks to the search engine.
+    - 検索エンジンへのハートビートチェックの間隔（ミリ秒）。
     - ``10000``
   * - app.cipher.algorithm
-    - Cipher algorithm used for encryption.
+    - 暗号化に使用する暗号アルゴリズム。
     - ``aes``
   * - app.cipher.key
-    - Secret key for encryption (change this value for production).
+    - 暗号化用の秘密鍵（本番環境ではこの値を変更してください）。
     - ``___change__me___``
   * - app.digest.algorithm
-    - Algorithm for digest calculation.
+    - ダイジェスト計算のアルゴリズム。
     - ``sha256``
   * - app.password.algorithm
-    - Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)
+    - パスワードのハッシュ化（新しい仕組み、Spring Security v5.8互換）。サポート: bcrypt（現時点ではbcryptのみ）。
     - ``bcrypt``
   * - app.password.bcrypt.cost
-    - BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31.
+    - BCryptのコスト（ログラウンド数）。10はSpring Security v5.8のデフォルトと一致します。範囲: 4-31。
     - ``10``
   * - app.password.upgrade.enabled
-    - Lazy re-hashing on successful login for legacy hashes.
+    - レガシーなハッシュに対する、ログイン成功時の遅延再ハッシュ。
     - ``true``
   * - app.encrypt.property.pattern
-    - NOTE: app.digest.algorithm is kept for LEGACY password verification only (pre-upgrade hashes that have no {id} prefix). Do not use for new passwords. Regex pattern for properties to encrypt.
+    - 注意: app.digest.algorithmはレガシーパスワードの検証専用に残されています（{id}プレフィックスを持たない、アップグレード前のハッシュ）。新しいパスワードには使用しないでください。暗号化するプロパティの正規表現パターン。
     - ``.*password|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
-    - Regex pattern for sensitive values to mask in debug logs (case-insensitive match against property/env keys).
+    - デバッグログでマスクする機密値の正規表現パターン（プロパティ/環境変数のキーに対する大文字小文字を区別しないマッチ）。
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
   * - app.extension.names
-    - Extension names for application customization.
+    - アプリケーションのカスタマイズ用の拡張名。
     - (empty)
   * - app.audit.log.format
-    - Audit log format.
+    - 監査ログの形式。
     - (empty)
   * - script.audit.log.enabled
-    - Script audit log settings.
+    - スクリプト監査ログの設定。
     - ``true``
   * - script.audit.log.max.length
-    - Maximum characters of script text kept in a script audit log entry; longer text is truncated.
+    - スクリプト監査ログの1エントリに保持するスクリプトテキストの最大文字数。これより長いテキストは切り詰められます。
     - ``100``
   * - jvm.crawler.options
-    - JVM options for the crawler process.
+    - クローラープロセスのJVMオプション。
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -127,7 +127,7 @@ Core
       | ``-Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider``
       | ``-Dorg.apache.pdfbox.rendering.UsePureJavaCMYKConversion=true``
   * - jvm.suggest.options
-    - JVM options (newline-separated) passed to the suggest creator child process.
+    - サジェスト作成の子プロセスに渡すJVMオプション（改行区切り）。
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -157,7 +157,7 @@ Core
       | ``-Dlog4j2.formatMsgNoLookups=true``
       | ``-Dlog4j.skipJansi=true``
   * - jvm.chunk.options
-    - JVM options for the chunk vector indexer process. Heap budget. This child JVM is only started while the "Content Chunk Vector Indexer" job runs, so a generous -Xmx costs nothing when content chunking is off. The live set is dominated by the in-flight batches, each of which retains, per document, the full _source, the document's chunk strings, and the document's embedding vectors: content_chunker.job.bulk_size          (default   20) x content_chunker.max_chunks_per_document (default 1000) x content_chunker.embedding.dimension  (default  768) x 4 bytes per float x content_chunker.job.concurrency      (default    2) = ~117 MB of vectors alone, before chunk strings and document sources. With the shipped defaults the worst case is roughly 190-250 MB live (and ~235 MB of vectors alone at dimension=1536), which does not fit a 256 MB heap with any GC headroom. Raise -Xmx further if you raise bulk_size, max_chunks_per_document, concurrency, or the embedding dimension.
+    - チャンクベクトルインデクサープロセスのJVMオプション。ヒープの予算。この子JVMは"Content Chunk Vector Indexer"ジョブの実行中にのみ起動されるため、コンテンツのチャンク化が無効の場合は、-Xmxを大きく設定してもコストはかかりません。使用中のメモリは処理中のバッチが大半を占め、各バッチはドキュメントごとに、_source全体、ドキュメントのチャンク文字列、ドキュメントの埋め込みベクトルを保持します: content_chunker.job.bulk_size（デフォルト 20）x content_chunker.max_chunks_per_document（デフォルト 1000）x content_chunker.embedding.dimension（デフォルト 768）x floatあたり4バイト x content_chunker.job.concurrency（デフォルト 2）= ベクトルだけで約117MB（チャンク文字列とドキュメントのソースを除く）。同梱のデフォルト値では最悪の場合の使用量は約190-250MBで（dimension=1536ではベクトルだけで約235MB）、GCの余裕を考慮すると256MBのヒープには収まりません。bulk_size、max_chunks_per_document、concurrency、または埋め込みの次元を増やす場合は、-Xmxをさらに大きくしてください。
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -187,7 +187,7 @@ Core
       | ``-Dlog4j2.formatMsgNoLookups=true``
       | ``-Dlog4j.skipJansi=true``
   * - jvm.thumbnail.options
-    - JVM options for the thumbnail process.
+    - サムネイルプロセスのJVMオプション。
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -224,123 +224,135 @@ Core
       | ``-Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider``
       | ``-Dorg.apache.pdfbox.rendering.UsePureJavaCMYKConversion=true``
 
-.. list-table:: Job
+.. list-table:: ジョブ
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - job.system.job.ids
-    - System job IDs for scheduled jobs.
+    - スケジュールされたジョブのシステムジョブID。
     - ``default_crawler``
   * - job.template.title.web
-    - Template for web crawler job title.
+    - Webクローラージョブのタイトルのテンプレート。
     - ``Web Crawler - {0}``
   * - job.template.title.file
-    - Template for file crawler job title.
+    - ファイルクローラージョブのタイトルのテンプレート。
     - ``File Crawler - {0}``
   * - job.template.title.data
-    - Template for data crawler job title.
+    - データクローラージョブのタイトルのテンプレート。
     - ``Data Crawler - {0}``
   * - job.template.script
-    - Script template for job execution.
+    - ジョブ実行用のスクリプトテンプレート。
     - ``return container.getComponent("crawlJob").logLevel("info").webConfigIds([{0}]).fileConfigIds([{1}]).dataConfigIds([{2}]).jobExecutor(executor).execute();``
   * - job.max.crawler.processes
-    - Maximum number of crawler processes.
+    - クローラープロセスの最大数。
     - ``0``
   * - job.default.script
-    - Default script language for jobs.
+    - ジョブのデフォルトのスクリプト言語。
     - ``javascript``
   * - job.system.property.filter.pattern
-    - Pattern to filter system properties for jobs.
+    - ジョブ用のシステムプロパティを絞り込むパターン。
     - (empty)
   * - processors
-    - Number of processors to use.
+    - 使用するプロセッサー数。
     - ``0``
   * - java.command.path
-    - Path to Java command.
+    - Javaコマンドのパス。
     - ``java``
   * - python.command.path
-    - Path to Python command.
+    - Pythonコマンドのパス。
     - ``python``
   * - path.encoding
-    - Encoding for file paths.
+    - ファイルパスのエンコーディング。
     - ``UTF-8``
   * - use.own.tmp.dir
-    - Whether to use a dedicated temporary directory.
+    - 専用の一時ディレクトリを使用するかどうか。
     - ``true``
   * - max.log.output.length
-    - Maximum length of log output.
+    - ログ出力の最大長。
     - ``4000``
   * - adaptive.load.control
-    - Adaptive load control value.
+    - 適応型負荷制御の値。
     - ``50``
   * - web.load.control
-    - CPU threshold (%) for web request load control. Returns 429 when CPU >= this value. (100: disabled)
+    - Webリクエストの負荷制御におけるCPUの閾値（%）。CPUがこの値以上の場合は429を返します。（100: 無効）
     - ``100``
   * - api.load.control
-    - CPU threshold (%) for API request load control. Returns 429 when CPU >= this value. (100: disabled)
+    - APIリクエストの負荷制御におけるCPUの閾値（%）。CPUがこの値以上の場合は429を返します。（100: 無効）
     - ``100``
   * - load.control.monitor.interval
-    - Interval (seconds) for monitoring OpenSearch CPU load.
+    - OpenSearchのCPU負荷を監視する間隔（秒）。
     - ``1``
   * - supported.languages
-    - Supported languages.
+    - サポートする言語。
     - ``ar,bg,bn,ca,ckb_IQ,cs,da,de,el,en_IE,en,es,et,eu,fa,fi,fr,gl,gu,he,hi,hr,hu,hy,id,it,ja,ko,lt,lv,mk,ml,nl,no,pa,pl,pt_BR,pt,ro,ru,si,sq,sv,ta,te,th,tl,tr,uk,ur,vi,zh_CN,zh_TW,zh``
   * - api.access.token.length
-    - Length of API access token.
+    - APIアクセストークンの長さ。
     - ``60``
   * - api.access.token.request.parameter
-    - API access token request parameter.
+    - APIアクセストークンのリクエストパラメーター。
     - (empty)
   * - api.admin.access.permissions
-    - Permissions for API admin access.
+    - API管理アクセスのパーミッション。
     - ``Radmin-api``
   * - api.search.accept.referers
-    - Accepted referers for API search.
+    - API検索で受け付けるリファラー。
     - (empty)
   * - api.search.scroll
-    - Whether to enable scroll for API search.
+    - API検索でスクロールを有効にするかどうか。
     - ``false``
+  * - api.search.export
+    - /api/v2/documents/exportでの検索結果（CSV/JSON）のエンドユーザーによるエクスポートを有効にするかどうか。
+    - ``false``
+  * - api.search.export.max.size
+    - 1回の検索結果エクスポートで書き出すドキュメントの最大数。
+    - ``1000``
+  * - api.search.export.fields
+    - 検索結果エクスポートで書き出すフィールド（カンマ区切り）。APIレスポンスのフィールドではないフィールドは無視されます。
+    - ``title,url_link,last_modified,content_length,filetype``
+  * - api.search.export.rate.limit.per.minute
+    - ユーザーごと（ゲストの場合はクライアントIPごと）の、1分あたりの検索結果エクスポートの最大数。0以下の場合は制限を無効にします。
+    - ``10``
   * - api.json.response.headers
-    - Headers for API JSON response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - API JSONレスポンスのヘッダー。Access-Control-\*とTiming-Allow-Originはここでは無視されます（CORSはapi.cors.\* / CorsFilterで制御されます）。Varyは設定しないでください。
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.json.response.exception.included
-    - Whether to include exceptions in API JSON response.
+    - API JSONレスポンスに例外を含めるかどうか。
     - ``false``
   * - api.gsa.response.headers
-    - Headers for API GSA response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - API GSAレスポンスのヘッダー。Access-Control-\*とTiming-Allow-Originはここでは無視されます（CORSはapi.cors.\* / CorsFilterで制御されます）。Varyは設定しないでください。
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.gsa.response.exception.included
-    - Whether to include exceptions in API GSA response.
+    - API GSAレスポンスに例外を含めるかどうか。
     - ``false``
   * - api.dashboard.response.headers
-    - Headers for API dashboard response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - APIダッシュボードレスポンスのヘッダー。Access-Control-\*とTiming-Allow-Originはここでは無視されます（CORSはapi.cors.\* / CorsFilterで制御されます）。Varyは設定しないでください。
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.cors.allow.origin
-    - Allowed origins for CORS. "\*" returns a literal "\*" (the request Origin is NOT reflected) and disables credentials. Set explicit origins (newline- or comma-separated) to allow credentialed cross-origin access.
+    - CORSで許可するオリジン。"\*"はリテラルの"\*"を返し（リクエストのOriginは反映されません）、認証情報を無効にします。認証情報付きのクロスオリジンアクセスを許可するには、明示的なオリジン（改行区切りまたはカンマ区切り）を設定してください。
     - ``*``
   * - api.cors.allow.methods
-    - Allowed HTTP methods for CORS.
+    - CORSで許可するHTTPメソッド。
     - ``GET, POST, OPTIONS, DELETE, PUT``
   * - api.cors.max.age
-    - Max age for CORS preflight requests.
+    - CORSプリフライトリクエストの最大有効期間。
     - ``3600``
   * - api.cors.allow.headers
-    - Allowed request headers for CORS preflight. A static list is returned (Access-Control-Request-Headers is not reflected). Includes X-Fess-CSRF-Token for cross-origin SPAs sending the CSRF token.
+    - CORSプリフライトで許可するリクエストヘッダー。静的なリストが返されます（Access-Control-Request-Headersは反映されません）。CSRFトークンを送信するクロスオリジンのSPA向けに、X-Fess-CSRF-Tokenを含みます。
     - ``Origin, Content-Type, Accept, Authorization, X-Requested-With, X-Fess-CSRF-Token``
   * - api.cors.allow.credentials
-    - Whether to allow credentials for CORS. Honored only for an exact match of an explicit Origin; ignored when api.cors.allow.origin is "\*".
+    - CORSで認証情報を許可するかどうか。明示的なOriginと完全に一致する場合にのみ有効で、api.cors.allow.originが"\*"の場合は無視されます。
     - ``true``
   * - api.jsonp.enabled
-    - Whether to enable JSONP for API.
+    - APIでJSONPを有効にするかどうか。
     - ``false``
   * - api.ping.search_engine.fields
-    - Fields for API ping to search engine.
+    - 検索エンジンへのAPI pingに使用するフィールド。
     - ``status,timed_out``
 
-Rate Limiting
--------------
+レート制限
+----------
 
 .. list-table::
   :header-rows: 1
@@ -349,601 +361,626 @@ Rate Limiting
     - Description
     - Default
   * - rate.limit.enabled
-    - Whether rate limiting is enabled.
+    - レート制限が有効かどうか。
     - ``false``
   * - rate.limit.requests.per.window
-    - Maximum number of requests allowed per window.
+    - ウィンドウあたりに許可されるリクエストの最大数。
     - ``100``
   * - rate.limit.window.ms
-    - Window size in milliseconds.
+    - ウィンドウサイズ（ミリ秒）。
     - ``60000``
   * - rate.limit.block.duration.ms
-    - Duration in milliseconds to block IP when limit exceeded.
+    - 制限を超えた場合にIPをブロックする期間（ミリ秒）。
     - ``300000``
   * - rate.limit.retry.after.seconds
-    - Retry-After header value in seconds.
+    - Retry-Afterヘッダーの値（秒）。
     - ``60``
   * - rate.limit.whitelist.ips
-    - Comma-separated list of whitelisted IPs (e.g., 127.0.0.1,::1).
+    - ホワイトリストに登録するIPのカンマ区切りリスト（例: 127.0.0.1,::1）。
     - ``127.0.0.1,::1``
   * - rate.limit.blocked.ips
-    - Comma-separated list of blocked IPs.
+    - ブロックするIPのカンマ区切りリスト。
     - (empty)
   * - rate.limit.trusted.proxies
-    - Comma-separated list of trusted proxy IPs. Only trust X-Forwarded-For/X-Real-IP from these IPs.
+    - 信頼するプロキシIPのカンマ区切りリスト。これらのIPからのX-Forwarded-For/X-Real-IPのみを信頼します。
     - ``127.0.0.1,::1``
   * - rate.limit.cleanup.interval
-    - Number of requests between cleanup operations to prevent memory leaks.
+    - メモリリークを防ぐための、クリーンアップ操作の間のリクエスト数。
     - ``1000``
   * - virtual.host.headers
-    - Virtual Host: Host:fess.codelibs.org=fess
+    - 仮想ホスト: Host:fess.codelibs.org=fess
     - (empty)
   * - http.proxy.host
-    - Hostname for the HTTP proxy server.
+    - HTTPプロキシサーバーのホスト名。
     - (empty)
   * - http.proxy.port
-    - Port number for the HTTP proxy server (e.g., 8080).
+    - HTTPプロキシサーバーのポート番号（例: 8080）。
     - ``8080``
   * - http.proxy.username
-    - Username for HTTP proxy authentication.
+    - HTTPプロキシ認証のユーザー名。
     - (empty)
   * - http.proxy.password
-    - Password for HTTP proxy authentication.
+    - HTTPプロキシ認証のパスワード。
     - (empty)
   * - http.fileupload.max.size
-    - Maximum size (bytes) for HTTP file uploads.
+    - HTTPファイルアップロードの最大サイズ（バイト）。
     - ``262144000``
   * - http.fileupload.threshold.size
-    - Threshold size (bytes) for HTTP file upload buffering.
+    - HTTPファイルアップロードのバッファリングの閾値サイズ（バイト）。
     - ``262144``
   * - http.fileupload.max.file.count
-    - Maximum number of files allowed per HTTP upload.
+    - 1回のHTTPアップロードで許可されるファイルの最大数。
     - ``10``
 
-Index
------
+インデックス
+------------
 
-.. list-table:: Crawler Common
+.. list-table:: クローラー共通
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.http.thread_pool.size
-    - Number of threads for HTTP crawling.
+    - HTTPクロールのスレッド数。
     - ``0``
   * - crawler.data.serializer
-    - Serializer type for crawler data (e.g., kryo).
+    - クローラーデータのシリアライザーの種類（例: kryo）。
     - ``kryo``
   * - crawler.document.max.site.length
-    - Maximum length of site name in documents.
+    - ドキュメント内のサイト名の最大長。
     - ``100``
   * - crawler.document.site.encoding
-    - Encoding for site names in documents.
+    - ドキュメント内のサイト名のエンコーディング。
     - ``UTF-8``
   * - crawler.document.unknown.hostname
-    - Hostname to use when unknown in documents.
+    - ドキュメントでホスト名が不明な場合に使用するホスト名。
     - ``unknown``
   * - crawler.document.use.site.encoding.on.english
-    - Whether to use site encoding for English documents.
+    - 英語のドキュメントでサイトのエンコーディングを使用するかどうか。
     - ``false``
   * - crawler.document.append.data
-    - Whether to append data to documents.
+    - ドキュメントにデータを追加するかどうか。
     - ``true``
   * - crawler.document.append.filename
-    - Whether to append filename to documents.
+    - ドキュメントにファイル名を追加するかどうか。
     - ``false``
   * - crawler.document.max.alphanum.term.size
-    - Maximum size of alphanumeric terms in documents.
+    - ドキュメント内の英数字単語の最大サイズ。
     - ``20``
   * - crawler.document.max.symbol.term.size
-    - Maximum size of symbol terms in documents.
+    - ドキュメント内の記号単語の最大サイズ。
     - ``10``
   * - crawler.document.duplicate.term.removed
-    - Whether to remove duplicate terms in documents.
+    - ドキュメント内の重複した単語を削除するかどうか。
     - ``false``
   * - crawler.document.space.chars
-    - Unicode space characters for document parsing.
+    - ドキュメントの解析に使用するUnicodeの空白文字。
     - ``u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6``
   * - crawler.document.fullstop.chars
-    - Unicode full stop characters for document parsing.
+    - ドキュメントの解析に使用するUnicodeの句点文字。
     - ``u002eu06d4u2e3cu3002``
   * - crawler.crawling.data.encoding
-    - Encoding for crawling data.
+    - クロールデータのエンコーディング。
     - ``UTF-8``
   * - crawler.web.protocols
-    - Supported web protocols for crawling.
+    - クロールでサポートするWebプロトコル。
     - ``http,https``
   * - crawler.file.protocols
-    - Supported file protocols for crawling.
+    - クロールでサポートするファイルプロトコル。
     - ``file,smb,smb1,ftp``
   * - crawler.data.env.param.key.pattern
-    - Pattern for environment variable keys in crawling data.
+    - クロールデータ内の環境変数キーのパターン。
     - ``^FESS_ENV_.*``
   * - crawler.ignore.robots.txt
-    - Whether to ignore robots.txt during crawling.
+    - クロール時にrobots.txtを無視するかどうか。
     - ``false``
   * - crawler.ignore.robots.tags
-    - Whether to ignore robots meta tags during crawling.
+    - クロール時にrobotsメタタグを無視するかどうか。
     - ``false``
   * - crawler.ignore.content.exception
-    - Whether to ignore content exceptions during crawling.
+    - クロール時にコンテンツ例外を無視するかどうか。
     - ``true``
   * - crawler.failure.url.status.codes
-    - HTTP status codes considered as failure URLs.
+    - 障害URLとみなすHTTPステータスコード。
     - ``404,403,410``
   * - crawler.system.monitor.interval
-    - Interval (seconds) for system monitor during crawling.
+    - クロール中のシステム監視の間隔（秒）。
     - ``60``
   * - crawler.hotthread.ignore_idle_threads
-    - Whether to ignore idle threads in hot thread monitoring.
+    - ホットスレッド監視でアイドルスレッドを無視するかどうか。
     - ``true``
   * - crawler.hotthread.interval
-    - Interval for hot thread monitoring (e.g., 500ms).
+    - ホットスレッド監視の間隔（例: 500ms）。
     - ``500ms``
   * - crawler.hotthread.snapshots
-    - Number of snapshots for hot thread monitoring.
+    - ホットスレッド監視のスナップショット数。
     - ``10``
   * - crawler.hotthread.threads
-    - Number of threads for hot thread monitoring.
+    - ホットスレッド監視のスレッド数。
     - ``3``
   * - crawler.hotthread.timeout
-    - Timeout for hot thread monitoring (e.g., 30s).
+    - ホットスレッド監視のタイムアウト（例: 30s）。
     - ``30s``
   * - crawler.hotthread.type
-    - Type of hot thread monitoring (e.g., cpu).
+    - ホットスレッド監視の種類（例: cpu）。
     - ``cpu``
   * - crawler.metadata.content.excludes
-    - Metadata fields to exclude from document content.
+    - ドキュメントのコンテンツから除外するメタデータフィールド。
     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
   * - crawler.metadata.name.mapping
-    - Mapping for document metadata names.
+    - ドキュメントのメタデータ名のマッピング。
     - | ``title=title:string``
       | ``Title=title:string``
       | ``dc:title=title:string``
+      | ``frontmatter.title=title:string``
 
-.. list-table:: Crawler HTML
+.. list-table:: クローラーHTML
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.html.content.xpath
-    - XPath to extract main content from HTML documents.
+    - HTMLドキュメントからメインコンテンツを抽出するXPath。
     - ``//BODY``
   * - crawler.document.html.lang.xpath
-    - XPath to extract language attribute from HTML documents.
+    - HTMLドキュメントから言語属性を抽出するXPath。
     - ``//HTML/@lang``
   * - crawler.document.html.digest.xpath
-    - XPath to extract digest (description) from HTML documents.
+    - HTMLドキュメントからダイジェスト（説明）を抽出するXPath。
     - ``//META[@name='description']/@content``
   * - crawler.document.html.canonical.xpath
-    - XPath to extract canonical URL from HTML documents.
+    - HTMLドキュメントからカノニカルURLを抽出するXPath。
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
-    - HTML tags to prune (remove) during document processing.
+    - ドキュメント処理中に削除（プルーニング）するHTMLタグ。
     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
-    - Maximum length of digest extracted from HTML documents.
+    - HTMLドキュメントから抽出するダイジェストの最大長。
     - ``120``
   * - crawler.document.html.default.lang
-    - Default language for HTML documents.
+    - HTMLドキュメントのデフォルト言語。
     - (empty)
   * - crawler.document.html.default.include.index.patterns
-    - Patterns to include for HTML index processing.
+    - HTMLのインデックス処理に含めるパターン。
     - (empty)
   * - crawler.document.html.default.exclude.index.patterns
-    - Patterns to exclude for HTML index processing.
+    - HTMLのインデックス処理から除外するパターン。
     - ``(?i).*(css|js|jpeg|jpg|gif|png|bmp|wmv|xml|ico|exe)``
   * - crawler.document.html.default.include.search.patterns
-    - Patterns to include for HTML search processing.
+    - HTMLの検索処理に含めるパターン。
     - (empty)
   * - crawler.document.html.default.exclude.search.patterns
-    - Patterns to exclude for HTML search processing.
+    - HTMLの検索処理から除外するパターン。
     - (empty)
 
-.. list-table:: Crawler File
+.. list-table:: クローラーファイル
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.file.name.encoding
-    - Encoding for file names in documents.
+    - ドキュメント内のファイル名のエンコーディング。
     - (empty)
   * - crawler.document.file.no.title.label
-    - Label to use when a file has no title.
+    - ファイルにタイトルがない場合に使用するラベル。
     - ``No title.``
   * - crawler.document.file.ignore.empty.content
-    - Whether to ignore files with empty content.
+    - コンテンツが空のファイルを無視するかどうか。
     - ``false``
   * - crawler.document.file.max.title.length
-    - Maximum length of file title in documents.
+    - ドキュメント内のファイルタイトルの最大長。
     - ``100``
   * - crawler.document.file.max.digest.length
-    - Maximum length of file digest in documents.
+    - ドキュメント内のファイルダイジェストの最大長。
     - ``200``
   * - crawler.document.file.append.meta.content
-    - Whether to append meta content from files.
+    - ファイルのメタコンテンツを追加するかどうか。
     - ``true``
   * - crawler.document.file.append.body.content
-    - Whether to append body content from files.
+    - ファイルの本文コンテンツを追加するかどうか。
     - ``true``
   * - crawler.document.file.default.lang
-    - Default language for file documents.
+    - ファイルドキュメントのデフォルト言語。
     - (empty)
   * - crawler.document.file.default.include.index.patterns
-    - Patterns to include for file index processing.
+    - ファイルのインデックス処理に含めるパターン。
     - (empty)
   * - crawler.document.file.default.exclude.index.patterns
-    - Patterns to exclude for file index processing.
+    - ファイルのインデックス処理から除外するパターン。
     - (empty)
   * - crawler.document.file.default.include.search.patterns
-    - Patterns to include for file search processing.
+    - ファイルの検索処理に含めるパターン。
     - (empty)
   * - crawler.document.file.default.exclude.search.patterns
-    - Patterns to exclude for file search processing.
+    - ファイルの検索処理から除外するパターン。
     - (empty)
+  * - crawler.document.file.owner.enabled
+    - クロールしたファイル（SMB、ローカルファイルシステム、FTP）の所有者をインデックスするかどうか。クロール設定のパラメーターconfig.owner.enabledで上書きされます。
+    - ``true``
+  * - crawler.document.file.last.modifier.enabled
+    - クロールしたファイルの最終更新者をインデックスするかどうか。ドキュメントのメタデータから読み取り、取得できない場合はファイルの所有者にフォールバックします。クロール設定のパラメーターconfig.last.modifier.enabledで上書きされます。
+    - ``true``
 
-.. list-table:: Crawler Cache
+.. list-table:: クローラーキャッシュ
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.cache.enabled
-    - Whether document cache is enabled.
+    - ドキュメントキャッシュが有効かどうか。
     - ``true``
   * - crawler.document.cache.max.size
-    - Maximum size (bytes) for document cache.
+    - ドキュメントキャッシュの最大サイズ（バイト）。
     - ``2621440``
   * - crawler.document.cache.supported.mimetypes
-    - Supported MIME types for document cache.
+    - ドキュメントキャッシュでサポートするMIMEタイプ。
     - ``text/html``
   * - crawler.document.cache.html.mimetypes
-    - ,text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME types for HTML document cache.
+    - ,text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation HTMLドキュメントキャッシュのMIMEタイプ。
     - ``text/html``
   * - crawler.document.mimetype.extension.overrides
-    - Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type).
+    - MIMEタイプ検出用の、拡張子からMIMEタイプへのオーバーライドマッピング（1行に1つ: .ext=mime/type）。
     - (empty)
+  * - crawler.document.ocr.enabled
+    - Tesseract OCRで画像やスキャンしたPDFからテキストを抽出するかどうか（tesseractコマンドが必要）。
+    - ``false``
+  * - crawler.document.ocr.language
+    - '+'で連結したTesseract OCRの言語（例: jpn+eng）。
+    - ``eng``
+  * - crawler.document.ocr.timeout
+    - Tesseract OCRの1回の実行のタイムアウト（秒）。
+    - ``120``
 
-.. list-table:: Indexer
+.. list-table:: インデクサー
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - indexer.thread.dump.enabled
-    - Whether to enable thread dump for the indexer.
+    - インデクサーでスレッドダンプを有効にするかどうか。
     - ``true``
   * - indexer.unprocessed.document.size
-    - Maximum number of unprocessed documents for the indexer.
+    - インデクサーの未処理ドキュメントの最大数。
     - ``1000``
   * - indexer.click.count.enabled
-    - Whether to enable click count tracking in the indexer.
+    - インデクサーでクリック数の追跡を有効にするかどうか。
     - ``true``
   * - indexer.favorite.count.enabled
-    - Whether to enable favorite count tracking in the indexer.
+    - インデクサーでお気に入り数の追跡を有効にするかどうか。
     - ``true``
   * - indexer.webfs.commit.margin.time
-    - Commit margin time (ms) for webfs in the indexer.
+    - インデクサーのwebfsのコミットマージン時間（ミリ秒）。
     - ``5000``
   * - indexer.webfs.max.empty.list.count
-    - Maximum number of empty lists for webfs in the indexer.
+    - インデクサーのwebfsの空リストの最大数。
     - ``3600``
   * - indexer.webfs.update.interval
-    - Update interval (ms) for webfs in the indexer.
+    - インデクサーのwebfsの更新間隔（ミリ秒）。
     - ``10000``
   * - indexer.webfs.max.document.cache.size
-    - Maximum document cache size for webfs in the indexer.
+    - インデクサーのwebfsの最大ドキュメントキャッシュサイズ。
     - ``10``
   * - indexer.webfs.max.document.request.size
-    - Maximum document request size (bytes) for webfs in the indexer.
+    - インデクサーのwebfsの最大ドキュメントリクエストサイズ（バイト）。
     - ``1048576``
   * - indexer.data.max.document.cache.size
-    - Maximum document cache size for data in the indexer.
+    - インデクサーのデータの最大ドキュメントキャッシュサイズ。
     - ``10000``
   * - indexer.data.max.document.request.size
-    - Maximum document request size (bytes) for data in the indexer.
+    - インデクサーのデータの最大ドキュメントリクエストサイズ（バイト）。
     - ``1048576``
   * - indexer.data.max.delete.cache.size
-    - Maximum delete cache size for data in the indexer.
+    - インデクサーのデータの最大削除キャッシュサイズ。
     - ``100``
   * - indexer.data.max.redirect.count
-    - Maximum redirect count for data in the indexer.
+    - インデクサーのデータの最大リダイレクト回数。
     - ``10``
   * - indexer.language.fields
-    - Fields used for language detection in the indexer.
+    - インデクサーの言語検出に使用するフィールド。
     - ``content,important_content,title``
   * - indexer.language.detect.length
-    - Length of text for language detection in the indexer.
+    - インデクサーの言語検出に使用するテキストの長さ。
     - ``1000``
   * - indexer.max.result.window.size
-    - Maximum result window size for the indexer.
+    - インデクサーの最大結果ウィンドウサイズ。
     - ``10000``
   * - indexer.max.search.doc.size
-    - Maximum number of search documents for the indexer.
+    - インデクサーの検索ドキュメントの最大数。
     - ``50000``
 
-.. list-table:: Index Settings
+.. list-table:: インデックス設定
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.codec
-    - Codec type for the index.
+    - インデックスのコーデックの種類。
     - ``default``
   * - index.number_of_shards
-    - Number of primary shards for the index.
+    - インデックスのプライマリシャード数。
     - ``5``
   * - index.auto_expand_replicas
-    - Auto expand replicas setting for the index.
+    - インデックスのレプリカ自動拡張の設定。
     - ``0-1``
   * - index.id.digest.algorithm
-    - Digest algorithm for index IDs.
+    - インデックスIDのダイジェストアルゴリズム。
     - ``SHA-512``
   * - index.user.initial_password
-    - Initial password for the index user.
+    - インデックスユーザーの初期パスワード。
     - ``admin``
 
-.. list-table:: Field Names
+.. list-table:: フィールド名
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.field.favorite_count
-    - Field name for favorite count in the index.
+    - インデックス内のお気に入り数のフィールド名。
     - ``favorite_count``
   * - index.field.click_count
-    - Field name for click count in the index.
+    - インデックス内のクリック数のフィールド名。
     - ``click_count``
   * - index.field.config_id
-    - Field name for config ID in the index.
+    - インデックス内の設定IDのフィールド名。
     - ``config_id``
   * - index.field.expires
-    - Field name for expiration date in the index.
+    - インデックス内の有効期限のフィールド名。
     - ``expires``
   * - index.field.url
-    - Field name for URL in the index.
+    - インデックス内のURLのフィールド名。
     - ``url``
   * - index.field.doc_id
-    - Field name for document ID in the index.
+    - インデックス内のドキュメントIDのフィールド名。
     - ``doc_id``
   * - index.field.id
-    - Field name for internal ID in the index.
+    - インデックス内の内部IDのフィールド名。
     - ``_id``
   * - index.field.version
-    - Field name for version in the index.
+    - インデックス内のバージョンのフィールド名。
     - ``_version``
   * - index.field.seq_no
-    - Field name for sequence number in the index.
+    - インデックス内のシーケンス番号のフィールド名。
     - ``_seq_no``
   * - index.field.primary_term
-    - Field name for primary term in the index.
+    - インデックス内のプライマリタームのフィールド名。
     - ``_primary_term``
   * - index.field.lang
-    - Field name for language in the index.
+    - インデックス内の言語のフィールド名。
     - ``lang``
   * - index.field.has_cache
-    - Field name for cache status in the index.
+    - インデックス内のキャッシュ状態のフィールド名。
     - ``has_cache``
   * - index.field.last_modified
-    - Field name for last modified date in the index.
+    - インデックス内の最終更新日のフィールド名。
     - ``last_modified``
+  * - index.field.etag
+    - インデックス内の、クロールしたドキュメントのETagレスポンスヘッダーのフィールド名。
+    - ``etag``
+  * - index.field.owner
+    - インデックス内の、クロールしたファイルの所有者のフィールド名。
+    - ``owner``
+  * - index.field.last_modifier
+    - インデックス内の、クロールしたファイルの最終更新者のフィールド名。
+    - ``last_modifier``
   * - index.field.anchor
-    - Field name for anchor in the index.
+    - インデックス内のアンカーのフィールド名。
     - ``anchor``
   * - index.field.segment
-    - Field name for segment in the index.
+    - インデックス内のセグメントのフィールド名。
     - ``segment``
   * - index.field.role
-    - Field name for role in the index.
+    - インデックス内のロールのフィールド名。
     - ``role``
   * - index.field.boost
-    - Field name for boost value in the index.
+    - インデックス内のブースト値のフィールド名。
     - ``boost``
   * - index.field.created
-    - Field name for creation date in the index.
+    - インデックス内の作成日のフィールド名。
     - ``created``
   * - index.field.timestamp
-    - Field name for timestamp in the index.
+    - インデックス内のタイムスタンプのフィールド名。
     - ``timestamp``
   * - index.field.label
-    - Field name for label in the index.
+    - インデックス内のラベルのフィールド名。
     - ``label``
   * - index.field.tag
-    - Field name for the user tags of the document in the index.
+    - インデックス内のドキュメントのユーザータグのフィールド名。
     - ``tag``
   * - index.field.mimetype
-    - Field name for MIME type in the index.
+    - インデックス内のMIMEタイプのフィールド名。
     - ``mimetype``
   * - index.field.parent_id
-    - Field name for parent ID in the index.
+    - インデックス内の親IDのフィールド名。
     - ``parent_id``
   * - index.field.important_content
-    - Field name for important content in the index.
+    - インデックス内の重要なコンテンツのフィールド名。
     - ``important_content``
   * - index.field.content
-    - Field name for content in the index.
+    - インデックス内のコンテンツのフィールド名。
     - ``content``
   * - index.field.content_minhash_bits
-    - Field name for content minhash bits in the index.
+    - インデックス内のコンテンツのminhashビットのフィールド名。
     - ``content_minhash_bits``
   * - index.field.cache
-    - Field name for cache in the index.
+    - インデックス内のキャッシュのフィールド名。
     - ``cache``
   * - index.field.digest
-    - Field name for digest in the index.
+    - インデックス内のダイジェストのフィールド名。
     - ``digest``
   * - index.field.title
-    - Field name for title in the index.
+    - インデックス内のタイトルのフィールド名。
     - ``title``
   * - index.field.host
-    - Field name for host in the index.
+    - インデックス内のホストのフィールド名。
     - ``host``
   * - index.field.site
-    - Field name for site in the index.
+    - インデックス内のサイトのフィールド名。
     - ``site``
   * - index.field.content_length
-    - Field name for content length in the index.
+    - インデックス内のコンテンツ長のフィールド名。
     - ``content_length``
   * - index.field.filetype
-    - Field name for file type in the index.
+    - インデックス内のファイルタイプのフィールド名。
     - ``filetype``
   * - index.field.filename
-    - Field name for file name in the index.
+    - インデックス内のファイル名のフィールド名。
     - ``filename``
   * - index.field.thumbnail
-    - Field name for thumbnail in the index.
+    - インデックス内のサムネイルのフィールド名。
     - ``thumbnail``
   * - index.field.virtual_host
-    - Field name for virtual host in the index.
+    - インデックス内の仮想ホストのフィールド名。
     - ``virtual_host``
   * - response.field.content_title
-    - Field name for content title in the response.
+    - レスポンス内のコンテンツタイトルのフィールド名。
     - ``content_title``
   * - response.field.content_description
-    - Field name for content description in the response.
+    - レスポンス内のコンテンツ説明のフィールド名。
     - ``content_description``
   * - response.field.url_link
-    - Field name for URL link in the response.
+    - レスポンス内のURLリンクのフィールド名。
     - ``url_link``
   * - response.field.site_path
-    - Field name for site path in the response.
+    - レスポンス内のサイトパスのフィールド名。
     - ``site_path``
   * - response.max.title.length
-    - Maximum length of content title in the response.
+    - レスポンス内のコンテンツタイトルの最大長。
     - ``50``
   * - response.max.site.path.length
-    - Maximum length of site path in the response.
+    - レスポンス内のサイトパスの最大長。
     - ``100``
   * - response.highlight.content_title.enabled
-    - Whether to enable content title highlighting in the response.
+    - レスポンスでコンテンツタイトルのハイライトを有効にするかどうか。
     - ``true``
   * - response.inline.mimetypes
-    - Inline MIME types for the response.
+    - レスポンスのインラインMIMEタイプ。
     - ``application/pdf,text/plain``
   * - response.headers
-    - HTTP headers for the response. Access-Control-\* and Timing-Allow-Origin are ignored (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary here.
+    - レスポンスのHTTPヘッダー。Access-Control-\*とTiming-Allow-Originは無視されます（CORSはapi.cors.\* / CorsFilterで制御されます）。ここでVaryは設定しないでください。
     - | ``text/html=X-XSS-Protection: 1; mode=block``
       | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
-.. list-table:: Document Index
+.. list-table:: ドキュメントインデックス
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.document.search.index
-    - Index name for search documents.
+    - 検索ドキュメントのインデックス名。
     - ``fess.search``
   * - index.document.update.index
-    - Index name for update documents.
+    - 更新ドキュメントのインデックス名。
     - ``fess.update``
   * - index.document.suggest.index
-    - Index name for suggest documents.
+    - サジェストドキュメントのインデックス名。
     - ``fess``
   * - index.document.crawler.index
-    - Index name for crawler documents.
+    - クローラードキュメントのインデックス名。
     - ``fess_crawler``
   * - index.document.crawler.queue.number_of_shards
-    - Number of primary shards for crawler queue index.
+    - クローラーキューインデックスのプライマリシャード数。
     - ``10``
   * - index.document.crawler.data.number_of_shards
-    - Number of primary shards for crawler data index.
+    - クローラーデータインデックスのプライマリシャード数。
     - ``10``
   * - index.document.crawler.filter.number_of_shards
-    - Number of primary shards for crawler filter index.
+    - クローラーフィルターインデックスのプライマリシャード数。
     - ``10``
   * - index.document.crawler.queue.number_of_replicas
-    - Number of replicas for crawler queue index.
+    - クローラーキューインデックスのレプリカ数。
     - ``1``
   * - index.document.crawler.data.number_of_replicas
-    - Number of replicas for crawler data index.
+    - クローラーデータインデックスのレプリカ数。
     - ``1``
   * - index.document.crawler.filter.number_of_replicas
-    - Number of replicas for crawler filter index.
+    - クローラーフィルターインデックスのレプリカ数。
     - ``1``
   * - index.config.index
-    - Index name for configuration data.
+    - 設定データのインデックス名。
     - ``fess_config``
   * - index.user.index
-    - Index name for user data.
+    - ユーザーデータのインデックス名。
     - ``fess_user``
   * - index.log.index
-    - Index name for log data.
+    - ログデータのインデックス名。
     - ``fess_log``
   * - index.dictionary.prefix
-    - Prefix for dictionary index names.
+    - 辞書インデックス名のプレフィックス。
     - (empty)
 
-.. list-table:: Document Management
+.. list-table:: ドキュメント管理
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.admin.array.fields
-    - Array-type fields for admin in the index.
+    - インデックス内の管理用の配列型フィールド。
     - ``lang,role,label,anchor,virtual_host``
   * - index.admin.date.fields
-    - Date-type fields for admin in the index.
+    - インデックス内の管理用の日付型フィールド。
     - ``expires,created,timestamp,last_modified``
   * - index.admin.integer.fields
-    - Integer-type fields for admin in the index.
+    - インデックス内の管理用の整数型フィールド。
     - (empty)
   * - index.admin.long.fields
-    - Long-type fields for admin in the index.
+    - インデックス内の管理用のlong型フィールド。
     - ``content_length,favorite_count,click_count``
   * - index.admin.float.fields
-    - Float-type fields for admin in the index.
+    - インデックス内の管理用のfloat型フィールド。
     - ``boost``
   * - index.admin.double.fields
-    - Double-type fields for admin in the index.
+    - インデックス内の管理用のdouble型フィールド。
     - (empty)
   * - index.admin.required.fields
-    - Required fields for admin in the index.
+    - インデックス内の管理用の必須フィールド。
     - ``url,title,role,boost``
 
-.. list-table:: Timeouts
+.. list-table:: タイムアウト
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.search.timeout
-    - Timeout for index search operations.
+    - インデックス検索操作のタイムアウト。
     - ``3m``
   * - index.scroll.search.timeout
-    - Timeout for scroll search operations.
+    - スクロール検索操作のタイムアウト。
     - ``3m``
   * - index.index.timeout
-    - Timeout for index operations.
+    - インデックス操作のタイムアウト。
     - ``3m``
   * - index.bulk.timeout
-    - Timeout for bulk index operations.
+    - バルクインデックス操作のタイムアウト。
     - ``3m``
   * - index.delete.timeout
-    - Timeout for delete operations in the index.
+    - インデックス内の削除操作のタイムアウト。
     - ``3m``
   * - index.health.timeout
-    - Timeout for index health checks.
+    - インデックスのヘルスチェックのタイムアウト。
     - ``10m``
   * - index.indices.timeout
-    - Timeout for index indices operations.
+    - インデックスのindices操作のタイムアウト。
     - ``1m``
 
-.. list-table:: File Types
+.. list-table:: ファイルタイプ
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.filetype
-    - Mapping of MIME types to filetype labels for indexing.
+    - インデックス作成用の、MIMEタイプからファイルタイプラベルへのマッピング。
     - | ``text/html=html``
       | ``application/msword=word``
       | ``application/vnd.openxmlformats-officedocument.wordprocessingml.document=word``
@@ -996,200 +1033,200 @@ Index
       | ``image/tiff=tiff``
       | ``image/jpeg=jpg``
   * - index.reindex.size
-    - Number of documents to process per reindex operation.
+    - 1回の再インデックス操作で処理するドキュメント数。
     - ``100``
   * - index.reindex.body
-    - Request body template for reindex operations.
+    - 再インデックス操作のリクエストボディのテンプレート。
     - ``{"source":{"index":"__SOURCE_INDEX__","size":__SIZE__},"dest":{"index":"__DEST_INDEX__"},"script":{"source":"__SCRIPT_SOURCE__"}}``
   * - index.reindex.requests_per_second
-    - Requests per second for reindex operations ("adaptive" for auto).
+    - 再インデックス操作の1秒あたりのリクエスト数（自動の場合は"adaptive"）。
     - ``adaptive``
   * - index.reindex.refresh
-    - Whether to refresh the index after reindexing.
+    - 再インデックス後にインデックスをリフレッシュするかどうか。
     - ``false``
   * - index.reindex.timeout
-    - Timeout for reindex operations.
+    - 再インデックス操作のタイムアウト。
     - ``1m``
   * - index.reindex.scroll
-    - Scroll timeout for reindex operations.
+    - 再インデックス操作のスクロールタイムアウト。
     - ``5m``
   * - index.reindex.max_docs
-    - Maximum number of documents for reindex operations.
+    - 再インデックス操作のドキュメントの最大数。
     - (empty)
 
-.. list-table:: Query
+.. list-table:: クエリ
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - query.max.length
-    - Maximum length of search queries.
+    - 検索クエリの最大長。
     - ``1000``
   * - query.timeout
-    - Timeout (ms) for search queries.
+    - 検索クエリのタイムアウト（ミリ秒）。
     - ``10000``
   * - query.timeout.logging
-    - Whether to log searches whose results are incomplete because the query timed out or a shard failed.
+    - クエリのタイムアウトやシャードの障害により結果が不完全になった検索をログに記録するかどうか。
     - ``true``
   * - query.track.total.hits
-    - Maximum number of total hits to track in queries. Only a positive number or true is supported: false leaves the response without a hit count, and a search that asks for it, here or as a search parameter, is refused.
+    - クエリで追跡する総ヒット数の最大値。サポートされるのは正の数またはtrueのみです。falseを指定するとレスポンスにヒット数が含まれなくなり、ヒット数を要求する検索（ここでの設定または検索パラメーターのいずれによる場合も）は拒否されます。
     - ``10000``
   * - query.geo.fields
-    - Fields used for geo search queries.
+    - 位置情報検索クエリで使用するフィールド。
     - ``location``
   * - query.browser.lang.parameter.name
-    - Parameter name for browser language in queries.
+    - クエリでのブラウザーの言語のパラメーター名。
     - ``browser_lang``
   * - query.replace.term.with.prefix.query
-    - Whether to replace term with prefix query.
+    - 単語をプレフィックスクエリに置き換えるかどうか。
     - ``true``
   * - query.orsearch.min.hit.count
-    - Minimum hit count for OR search queries.
+    - OR検索クエリの最小ヒット数。
     - ``-1``
   * - query.highlight.terminal.chars
-    - Unicode terminal characters for query highlighting.
+    - クエリのハイライトに使用するUnicodeの終端文字。
     - ``u0021u002Cu002Eu003Fu0589u061Fu06D4u0700u0701u0702u0964u104Au104Bu1362u1367u1368u166Eu1803u1809u203Cu203Du2047u2048u2049u3002uFE52uFE57uFF01uFF0EuFF1FuFF61``
   * - query.highlight.fragment.size
-    - Fragment size for query highlighting.
+    - クエリのハイライトのフラグメントサイズ。
     - ``60``
   * - query.highlight.number.of.fragments
-    - Number of fragments for query highlighting.
+    - クエリのハイライトのフラグメント数。
     - ``2``
   * - query.highlight.type
-    - Type of query highlighting.
+    - クエリのハイライトの種類。
     - ``fvh``
   * - query.highlight.tag.pre
-    - Tag to use before highlighted text.
+    - ハイライトされたテキストの前に使用するタグ。
     - ``<strong>``
   * - query.highlight.tag.post
-    - Tag to use after highlighted text.
+    - ハイライトされたテキストの後に使用するタグ。
     - ``</strong>``
   * - query.highlight.boundary.chars
-    - Boundary characters for query highlighting.
+    - クエリのハイライトの境界文字。
     - ``u0009u000Au0013u0020``
   * - query.highlight.boundary.max.scan
-    - Maximum scan for query highlight boundaries.
+    - クエリのハイライト境界の最大スキャン。
     - ``20``
   * - query.highlight.boundary.scanner
-    - Scanner type for query highlight boundaries.
+    - クエリのハイライト境界のスキャナーの種類。
     - ``chars``
   * - query.highlight.encoder
-    - Encoder type for query highlighting.
+    - クエリのハイライトのエンコーダーの種類。
     - ``default``
   * - query.highlight.force.source
-    - Whether to force source for query highlighting.
+    - クエリのハイライトでソースを強制するかどうか。
     - ``false``
   * - query.highlight.fragmenter
-    - Fragmenter type for query highlighting.
+    - クエリのハイライトのフラグメンターの種類。
     - ``span``
   * - query.highlight.fragment.offset
-    - Offset for query highlight fragments.
+    - クエリのハイライトフラグメントのオフセット。
     - ``-1``
   * - query.highlight.no.match.size
-    - Size for no-match query highlight.
+    - 一致しない場合のクエリのハイライトのサイズ。
     - ``0``
   * - query.highlight.order
-    - Order for query highlight fragments.
+    - クエリのハイライトフラグメントの順序。
     - ``score``
   * - query.highlight.phrase.limit
-    - Phrase limit for query highlighting.
+    - クエリのハイライトのフレーズ上限。
     - ``256``
   * - query.highlight.content.description.fields
-    - Fields for content description in query highlighting.
+    - クエリのハイライトでコンテンツ説明に使用するフィールド。
     - ``hl_content,digest``
   * - query.highlight.boundary.position.detect
-    - Whether to detect boundary position in query highlighting.
+    - クエリのハイライトで境界位置を検出するかどうか。
     - ``true``
   * - query.highlight.text.fragment.type
-    - Type for text fragment in query highlighting.
+    - クエリのハイライトのテキストフラグメントの種類。
     - ``query``
   * - query.highlight.text.fragment.size
-    - Size for text fragment in query highlighting.
+    - クエリのハイライトのテキストフラグメントのサイズ。
     - ``3``
   * - query.highlight.text.fragment.prefix.length
-    - Prefix length for text fragment in query highlighting.
+    - クエリのハイライトのテキストフラグメントのプレフィックス長。
     - ``5``
   * - query.highlight.text.fragment.suffix.length
-    - Suffix length for text fragment in query highlighting.
+    - クエリのハイライトのテキストフラグメントのサフィックス長。
     - ``5``
   * - query.max.search.result.offset
-    - Maximum search result offset for queries.
+    - クエリの検索結果オフセットの最大値。
     - ``100000``
   * - query.additional.default.fields
-    - Additional default fields for queries.
+    - クエリの追加のデフォルトフィールド。
     - (empty)
   * - query.additional.response.fields
-    - Additional fields fetched from the index for search results. The search API returns a field added here only if it is also listed in query.additional.api.response.fields.
+    - 検索結果のためにインデックスから取得する追加フィールド。ここに追加したフィールドは、query.additional.api.response.fieldsにも記載されている場合にのみ、検索APIが返します。
     - (empty)
   * - query.additional.api.response.fields
-    - Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only); it does not fetch them. A field must also be fetched: add it to query.additional.response.fields for the search API, or to query.additional.scroll.response.fields for the scroll API. Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response.
+    - クエリの追加のAPIレスポンスフィールド。このキーはv2 APIレスポンスの許可リストにフィールドを追加するだけ（追加のみ）で、フィールドを取得しません。フィールドは取得もされる必要があります。検索APIの場合はquery.additional.response.fieldsに、スクロールAPIの場合はquery.additional.scroll.response.fieldsに追加してください。ACLフィールドや内部フィールド（例: role、virtual_host）は追加しないでください。追加すると、検索APIのレスポンスにアクセス制御情報が公開されます。
     - (empty)
   * - query.additional.scroll.response.fields
-    - Additional fields fetched from the index for scroll search results. The scroll API returns a field added here only if it is also listed in query.additional.api.response.fields.
+    - スクロール検索結果のためにインデックスから取得する追加フィールド。ここに追加したフィールドは、query.additional.api.response.fieldsにも記載されている場合にのみ、スクロールAPIが返します。
     - (empty)
   * - query.additional.cache.response.fields
-    - Additional cache response fields for queries.
+    - クエリの追加のキャッシュレスポンスフィールド。
     - (empty)
   * - query.additional.highlighted.fields
-    - Additional highlighted fields for queries.
+    - クエリの追加のハイライトフィールド。
     - (empty)
   * - query.additional.search.fields
-    - Additional search fields for queries.
+    - クエリの追加の検索フィールド。
     - (empty)
   * - query.additional.facet.fields
-    - Additional facet fields for queries.
+    - クエリの追加のファセットフィールド。
     - (empty)
   * - query.additional.sort.fields
-    - Additional sort fields for queries.
+    - クエリの追加のソートフィールド。
     - (empty)
   * - query.additional.analyzed.fields
-    - Additional analyzed fields for queries.
+    - クエリの追加の解析対象フィールド。
     - (empty)
   * - query.additional.not.analyzed.fields
-    - Additional not-analyzed fields for queries.
+    - クエリの追加の解析対象外フィールド。
     - (empty)
   * - query.gsa.response.fields
-    - Fields for GSA response in queries.
+    - クエリのGSAレスポンスのフィールド。
     - ``UE,U,T,RK,S,LANG``
   * - query.gsa.default.lang
-    - Default language for GSA queries.
+    - GSAクエリのデフォルト言語。
     - ``en``
   * - query.gsa.default.sort
-    - Default sort for GSA queries.
+    - GSAクエリのデフォルトのソート。
     - (empty)
   * - query.gsa.meta.prefix
-    - Meta prefix for GSA queries.
+    - GSAクエリのメタプレフィックス。
     - ``MT_``
   * - query.gsa.index.field.charset
-    - Charset field for GSA index queries.
+    - GSAインデックスクエリの文字セットフィールド。
     - ``charset``
   * - query.gsa.index.field.content_type.
-    - Content type field for GSA index queries.
+    - GSAインデックスクエリのコンテンツタイプフィールド。
     - ``content_type``
   * - query.collapse.max.concurrent.group.results
-    - Maximum concurrent group results for collapse queries.
+    - 折りたたみクエリの最大同時グループ結果数。
     - ``4``
   * - query.collapse.inner.hits.name
-    - Inner hits name for collapse queries.
+    - 折りたたみクエリのinner hits名。
     - ``similar_docs``
   * - query.collapse.inner.hits.size
-    - Inner hits size for collapse queries.
+    - 折りたたみクエリのinner hitsのサイズ。
     - ``0``
   * - query.collapse.inner.hits.sorts
-    - Sorts for inner hits in collapse queries.
+    - 折りたたみクエリのinner hitsのソート。
     - (empty)
   * - query.default.languages
-    - Default languages for queries.
+    - クエリのデフォルト言語。
     - (empty)
   * - query.json.default.preference
-    - Default preference for JSON queries.
+    - JSONクエリのデフォルトのpreference。
     - ``_query``
   * - query.gsa.default.preference
-    - Default preference for GSA queries.
+    - GSAクエリのデフォルトのpreference。
     - ``_query``
   * - query.language.mapping
-    - Language mapping for queries.
+    - クエリの言語マッピング。
     - | ``ar=ar``
       | ``bg=bg``
       | ``bn=bn``
@@ -1250,156 +1287,156 @@ Index
       | ``zh_TW=zh-tw``
       | ``zh=zh``
 
-.. list-table:: Boost
+.. list-table:: ブースト
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - query.boost.title
-    - Boost value for title field in queries.
+    - クエリのタイトルフィールドのブースト値。
     - ``0.5``
   * - query.boost.title.lang
-    - Boost value for title field with language in queries.
+    - クエリの言語付きタイトルフィールドのブースト値。
     - ``1.0``
   * - query.boost.content
-    - Boost value for content field in queries.
+    - クエリのコンテンツフィールドのブースト値。
     - ``0.05``
   * - query.boost.content.lang
-    - Boost value for content field with language in queries.
+    - クエリの言語付きコンテンツフィールドのブースト値。
     - ``0.1``
   * - query.boost.important_content
-    - Boost value for important content field in queries.
+    - クエリの重要なコンテンツフィールドのブースト値。
     - ``-1.0``
   * - query.boost.important_content.lang
-    - Boost value for important content field with language in queries.
+    - クエリの言語付きの重要なコンテンツフィールドのブースト値。
     - ``-1.0``
   * - query.boost.fuzzy.min.length
-    - Minimum length for fuzzy boosting in queries.
+    - クエリのファジーブーストの最小長。
     - ``4``
   * - query.boost.fuzzy.title
-    - Boost value for fuzzy title queries.
+    - ファジータイトルクエリのブースト値。
     - ``0.01``
   * - query.boost.fuzzy.title.fuzziness
-    - Fuzziness for fuzzy title queries.
+    - ファジータイトルクエリのファジネス。
     - ``AUTO``
   * - query.boost.fuzzy.title.expansions
-    - Number of expansions for fuzzy title queries.
+    - ファジータイトルクエリの展開数。
     - ``10``
   * - query.boost.fuzzy.title.prefix_length
-    - Prefix length for fuzzy title queries.
+    - ファジータイトルクエリのプレフィックス長。
     - ``0``
   * - query.boost.fuzzy.title.transpositions
-    - Whether to allow transpositions in fuzzy title queries.
+    - ファジータイトルクエリで転置を許可するかどうか。
     - ``true``
   * - query.boost.fuzzy.content
-    - Boost value for fuzzy content queries.
+    - ファジーコンテンツクエリのブースト値。
     - ``0.005``
   * - query.boost.fuzzy.content.fuzziness
-    - Fuzziness for fuzzy content queries.
+    - ファジーコンテンツクエリのファジネス。
     - ``AUTO``
   * - query.boost.fuzzy.content.expansions
-    - Number of expansions for fuzzy content queries.
+    - ファジーコンテンツクエリの展開数。
     - ``10``
   * - query.boost.fuzzy.content.prefix_length
-    - Prefix length for fuzzy content queries.
+    - ファジーコンテンツクエリのプレフィックス長。
     - ``0``
   * - query.boost.fuzzy.content.transpositions
-    - Whether to allow transpositions in fuzzy content queries.
+    - ファジーコンテンツクエリで転置を許可するかどうか。
     - ``true``
   * - query.default.query_type
-    - Default query type.
+    - デフォルトのクエリタイプ。
     - ``bool``
   * - query.dismax.tie_breaker
-    - Tie breaker value for dismax queries.
+    - dismaxクエリのタイブレーカー値。
     - ``0.1``
   * - query.bool.minimum_should_match
-    - Minimum should match value for boolean queries.
+    - ブールクエリのminimum should matchの値。
     - (empty)
   * - query.prefix.expansions
-    - Number of expansions for prefix queries.
+    - プレフィックスクエリの展開数。
     - ``50``
   * - query.prefix.slop
-    - Slop value for prefix queries.
+    - プレフィックスクエリのスロップ値。
     - ``0``
   * - query.fuzzy.prefix_length
-    - Prefix length for fuzzy queries.
+    - ファジークエリのプレフィックス長。
     - ``0``
   * - query.fuzzy.expansions
-    - Number of expansions for fuzzy queries.
+    - ファジークエリの展開数。
     - ``50``
   * - query.fuzzy.transpositions
-    - Whether to allow transpositions in fuzzy queries.
+    - ファジークエリで転置を許可するかどうか。
     - ``true``
 
-.. list-table:: Facet
+.. list-table:: ファセット
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - query.facet.fields
-    - Fields for facet queries.
+    - ファセットクエリのフィールド。
     - ``label``
   * - query.facet.fields.size
-    - Size of facet fields.
+    - ファセットフィールドのサイズ。
     - ``100``
   * - query.facet.fields.size.max
-    - Upper clamp for facet.size (applied at the search chokepoint).
+    - facet.sizeの上限クランプ（検索のチョークポイントで適用されます）。
     - ``1000``
   * - query.facet.fields.min_doc_count
-    - Minimum document count for facet fields.
+    - ファセットフィールドの最小ドキュメント数。
     - ``1``
   * - query.facet.fields.min_doc_count.max
-    - Upper clamp for facet.minDocCount (applied at the search chokepoint).
+    - facet.minDocCountの上限クランプ（検索のチョークポイントで適用されます）。
     - ``2147483647``
   * - query.facet.fields.sort
-    - Sort order for facet fields.
+    - ファセットフィールドのソート順。
     - ``count.desc``
   * - query.facet.fields.missing
-    - Value for missing facet fields.
+    - 欠落したファセットフィールドの値。
     - (empty)
   * - query.facet.queries
-    - Facet queries definition.
+    - ファセットクエリの定義。
     - | ``labels.facet_timestamp_title:labels.facet_timestamp_1day=timestamp:[now/d-1d TO *]	labels.facet_timestamp_1week=timestamp:[now/d-7d TO *]	labels.facet_timestamp_1month=timestamp:[now/d-1M TO *]	labels.facet_timestamp_1year=timestamp:[now/d-1y TO *]``
       | ``labels.facet_contentLength_title:labels.facet_contentLength_10k=content_length:[0 TO 9999]	labels.facet_contentLength_10kto100k=content_length:[10000 TO 99999]	labels.facet_contentLength_100kto500k=content_length:[100000 TO 499999]	labels.facet_contentLength_500kto1m=content_length:[500000 TO 999999]	labels.facet_contentLength_1m=content_length:[1000000 TO *]``
       | ``labels.facet_filetype_title:labels.facet_filetype_html=filetype:html	labels.facet_filetype_word=filetype:word	labels.facet_filetype_excel=filetype:excel	labels.facet_filetype_powerpoint=filetype:powerpoint	labels.facet_filetype_odt=filetype:odt	labels.facet_filetype_ods=filetype:ods	labels.facet_filetype_odp=filetype:odp	labels.facet_filetype_pdf=filetype:pdf	labels.facet_filetype_txt=filetype:txt	labels.facet_filetype_others=filetype:others``
 
-.. list-table:: Ranking
+.. list-table:: ランキング
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - rank.fusion.window_size
-    - Window size for rank fusion.
+    - ランクフュージョンのウィンドウサイズ。
     - ``200``
   * - rank.fusion.rank_constant
-    - Rank constant for rank fusion.
+    - ランクフュージョンのランク定数。
     - ``20``
   * - rank.fusion.threads
-    - Number of threads for rank fusion.
+    - ランクフュージョンのスレッド数。
     - ``-1``
   * - rank.fusion.timeout
-    - Maximum time (milliseconds) to wait for the searchers other than the main one when Fess fuses their results itself (rank.fusion.engine.enabled=false). A searcher that has not answered by then is left out of that search, and the results are flagged as partial and timed out. The main searcher is always waited for. 0 or less waits without a limit.
+    - Fessが結果を自分で融合する場合（rank.fusion.engine.enabled=false）に、メイン以外のサーチャーを待機する最大時間（ミリ秒）。それまでに応答しなかったサーチャーはその検索から除外され、結果は部分的かつタイムアウトとしてマークされます。メインのサーチャーは常に待機されます。0以下の場合は制限なしで待機します。
     - ``10000``
   * - rank.fusion.score_field
-    - Score field for rank fusion.
+    - ランクフュージョンのスコアフィールド。
     - ``rf_score``
   * - rank.fusion.engine.enabled
-    - Whether the search engine performs rank fusion. When true, the searchers that can take part contribute their queries to a single request, so facets and total hits describe the fused result set. When false, Fess fuses the searchers' results itself.
+    - 検索エンジンがランクフュージョンを行うかどうか。trueの場合、参加できるサーチャーが単一のリクエストにクエリを提供するため、ファセットと総ヒット数は融合後の結果セットを表します。falseの場合、Fessがサーチャーの結果を自分で融合します。
     - ``false``
   * - rank.fusion.combination.technique
-    - How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean.
+    - 検索エンジンが融合したスコアを結合する方法: rrf、arithmetic_mean、geometric_mean、harmonic_meanのいずれか。
     - ``rrf``
   * - rank.fusion.normalization.technique
-    - How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf.
+    - 結合前にスコアを正規化する方法: min_max、l2、z_scoreのいずれか。rrfでは無視されます。z_scoreはarithmetic_meanとのみ組み合わせられます。それ以外の平均との組み合わせは拒否され、Fessが結果を自分で融合します。
     - ``min_max``
   * - rank.fusion.combination.weights
-    - Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally.
+    - 検索エンジン側の融合におけるサーチャーごとの重み。name:weightのペアで指定します（例: default:0.7,semantic_chunk:0.3）。重みの合計は1.0でなければならず、参加するすべてのサーチャーを指定する必要があります。空の場合は均等に重み付けします。
     - (empty)
   * - rank.fusion.pagination_depth
-    - How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks: a fused search pages through this many results, and never more than indexer.max.result.window.size.
+    - 各サーチャーが検索エンジン側の融合にシャードごとに提供する結果の件数。これは、クライアントがページングできる深さと、エンジンが順位付けするドキュメントの集合の両方を制限します。融合した検索はこの件数までページングでき、indexer.max.result.window.sizeを超えることはありません。
     - ``1000``
 
 .. list-table:: ACL
@@ -1409,78 +1446,87 @@ Index
     - Description
     - Default
   * - smb.role.from.file
-    - Whether to get SMB roles from a file.
+    - ファイルからSMBのロールを取得するかどうか。
     - ``true``
   * - smb.available.sid.types
-    - Available SID types for SMB.
+    - SMBで利用可能なSIDタイプ。
     - ``1,2,4:2,5:1``
   * - file.role.from.file
-    - Whether to get file roles from a file.
+    - ファイルからファイルのロールを取得するかどうか。
     - ``true``
   * - ftp.role.from.file
-    - Whether to get FTP roles from a file.
+    - ファイルからFTPのロールを取得するかどうか。
     - ``true``
 
-.. list-table:: Backup
+.. list-table:: バックアップ
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.backup.targets
-    - Target files for index backup.
+    - インデックスバックアップの対象ファイル。
     - ``fess_basic_config.bulk,fess_config.bulk,fess_user.bulk,system.properties,fess.json,doc.json``
   * - index.backup.log.targets
-    - Target log files for index backup.
-    - ``click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+    - インデックスバックアップの対象ログファイル。
+    - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
   * - index.backup.log.load.timeout
-    - Timeout for loading index backup logs.
+    - インデックスバックアップログの読み込みのタイムアウト。
     - ``60000``
 
-.. list-table:: Logging
+.. list-table:: ログ出力
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - logging.app.packages
-    - Application packages for logging.
+    - ログ出力のアプリケーションパッケージ。
     - ``org.codelibs,org.dbflute,org.lastaflute``
   * - logging.search.docs.enabled
-    - Whether to enable search docs logging.
+    - 検索ドキュメントのログ出力を有効にするかどうか。
     - ``true``
   * - logging.search.docs.fields
-    - Fields to log for search docs.
+    - 検索ドキュメントのログに出力するフィールド。
     - ``filetype,created,click_count,title,doc_id,url,score,site,filename,host,digest,boost,mimetype,favorite_count,_id,lang,last_modified,content_length,timestamp``
   * - logging.search.use.logfile
-    - Whether to use a log file for search logging.
+    - 検索ログの記録にログファイルを使用するかどうか。
     - ``true``
   * - logging.search.max.queue.size
-    - Maximum queue size for search logging.
+    - 検索ログの記録の最大キューサイズ。
     - ``10000``
   * - logging.click.max.queue.size
-    - Maximum queue size for click logging.
+    - クリックログの記録の最大キューサイズ。
     - ``10000``
+  * - logging.chat.max.queue.size
+    - チャット利用状況の記録の最大キューサイズ。
+    - ``10000``
+  * - search.history.enabled
+    - ログイン中のユーザーの検索条件を検索履歴用に記録するかどうか。
+    - ``true``
+  * - search.history.size
+    - ユーザーごとに返される検索履歴エントリの最大数。
+    - ``10``
   * - user.tag.enabled
-    - Whether logged-in users can tag documents. Each tag belongs to the user who created it.
+    - ログイン中のユーザーがドキュメントにタグを付けられるかどうか。各タグは作成したユーザーに属します。
     - ``false``
   * - user.tag.name.max.length
-    - Maximum length of a tag name, in code points.
+    - タグ名の最大長（コードポイント単位）。
     - ``50``
   * - user.tag.max.tags
-    - Maximum number of tags one user can own.
+    - 1人のユーザーが所有できるタグの最大数。
     - ``1000``
   * - user.tag.max.paths
-    - Maximum number of URLs one tag can be put on.
+    - 1つのタグを付けられるURLの最大数。
     - ``10000``
   * - user.tag.queue.max.size
-    - Maximum number of pending tag changes held in memory until they are applied to the documents.
+    - ドキュメントに反映されるまでメモリ上に保持する、保留中のタグ変更の最大数。
     - ``10000``
   * - user.tag.process.batch.size
-    - Number of URLs updated per bulk request when tag changes are applied to the documents.
+    - タグの変更をドキュメントに反映するときに、1回のバルクリクエストで更新するURLの数。
     - ``100``
   * - user.tag.visible.max.size
-    - Maximum number of tags visible to one user in a search.
+    - 検索で1人のユーザーに見えるタグの最大数。
     - ``1000``
 
 Web
@@ -1493,876 +1539,936 @@ Web
     - Description
     - Default
   * - form.admin.max.input.size
-    - Maximum input size for admin forms.
+    - 管理フォームの最大入力サイズ。
     - ``10000``
   * - form.admin.label.in.config.enabled
-    - Whether to enable label in admin config forms.
+    - 管理設定フォームでラベルを有効にするかどうか。
     - ``false``
   * - form.admin.default.template.name
-    - Default template name for admin forms.
+    - 管理フォームのデフォルトのテンプレート名。
     - ``__TEMPLATE__``
   * - osdd.link.enabled
-    - Whether to enable OSDD link (OpenSearch Description Document).
+    - OSDDリンク（OpenSearch Description Document）を有効にするかどうか。
     - ``auto``
   * - clipboard.copy.icon.enabled
-    - Whether to enable the clipboard copy icon.
+    - クリップボードへのコピーアイコンを有効にするかどうか。
     - ``true``
   * - authentication.admin.users
-    - Admin user names for authentication.
+    - 認証用の管理者ユーザー名。
     - ``admin``
   * - authentication.admin.users.ignore.case
-    - Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set.
+    - authentication.admin.usersを大文字小文字を区別せずに照合するかどうか: auto、true、falseのいずれか。autoはldap.provider.urlが設定されている場合に大文字小文字を区別しません。
     - ``auto``
   * - authentication.admin.roles
-    - Admin role names for authentication.
+    - 認証用の管理者ロール名。
     - ``admin``
   * - role.search.default.permissions
-    - Default permissions for search roles.
+    - 検索ロールのデフォルトのパーミッション。
     - (empty)
   * - role.search.default.display.permissions
-    - Default display permissions for search roles.
+    - 検索ロールのデフォルトの表示パーミッション。
     - ``{role}guest``
   * - role.search.guest.permissions
-    - Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles.
+    - role.search.guest.permissionsは空にしないでください。これは、匿名の検索ロールセットを空にしないためのゲストロールの初期値になります。解決されたロールセットが空の場合、ロールフィルターはスキップされ（フェイルオープン）、ロールベースのアクセス制御が無効になり、ドキュメントが匿名ユーザーに公開される可能性があります。検索ロールのゲスト用パーミッション。
     - ``{role}guest``
   * - role.search.user.prefix
-    - Prefix for user roles in search.
+    - 検索におけるユーザーロールのプレフィックス。
     - ``1``
   * - role.search.group.prefix
-    - Prefix for group roles in search.
+    - 検索におけるグループロールのプレフィックス。
     - ``2``
   * - role.search.role.prefix
-    - Prefix for role roles in search.
+    - 検索におけるroleロールのプレフィックス。
     - ``R``
   * - role.search.denied.prefix
-    - Prefix for denied roles in search.
+    - 検索における拒否ロールのプレフィックス。
     - ``D``
   * - cookie.default.path
-    - The default path of cookie (basically '/' if no context path)
+    - Cookieのデフォルトのパス（コンテキストパスがない場合は基本的に'/'）。
     - ``/``
   * - cookie.default.expire
-    - The default expire of cookie in seconds e.g. 31556926: one year, 86400: one day
+    - Cookieのデフォルトの有効期限（秒）。例: 31556926: 1年、86400: 1日。
     - ``3600``
   * - session.tracking.modes
-    - Session tracking modes
+    - セッション追跡モード
     - ``cookie``
   * - session.cookie.secure
-    - Whether to add the Secure attribute to the session cookie (JSESSIONID) at startup. When blank (default), Tomcat's automatic behavior is used (Secure is added only for HTTPS requests). Set to true for production HTTPS deployments, especially when TLS is terminated at a reverse proxy. When true, the cookie is not sent over HTTP, so sessions will not be established for plain HTTP; keep it blank for localhost development. The Secure attribute is also required when SameSite=none is used. Changing this value requires a restart.
+    - 起動時にセッションCookie（JSESSIONID）にSecure属性を追加するかどうか。空欄（デフォルト）の場合はTomcatの自動動作が使用されます（SecureはHTTPSリクエストにのみ追加されます）。本番のHTTPSデプロイでは、特にTLSをリバースプロキシで終端している場合は、trueに設定してください。trueの場合、CookieはHTTPでは送信されないため、平文のHTTPではセッションが確立されません。localhostでの開発では空欄のままにしてください。SameSite=noneを使用する場合も、Secure属性が必要です。この値を変更するには再起動が必要です。
     - (empty)
   * - cookie.search.parameter.keys
-    - Comma-separated list of request parameter keys to store in cookies before SSO login.
+    - SSOログイン前にCookieに保存するリクエストパラメーターキーのカンマ区切りリスト。
     - ``q,num,sort``
   * - cookie.search.parameter.required_keys
-    - Comma-separated list of required parameter keys that must be present to store in cookies.
+    - Cookieに保存するために存在している必要がある必須パラメーターキーのカンマ区切りリスト。
     - ``q``
   * - cookie.search.parameter.max.length
-    - Maximum length of the encoded search parameters stored in cookies.
+    - Cookieに保存するエンコード済み検索パラメーターの最大長。
     - ``1000``
   * - cookie.search.parameter.max.decompressed.length
-    - Maximum size in bytes the stored search parameters may decompress to. The bound above applies to the gzipped cookie, which is no bound on what it expands to, and the cookie comes from the client.
+    - 保存された検索パラメーターを展開できる最大サイズ（バイト）。上記の上限はgzip圧縮されたCookieに適用されますが、これは展開後のサイズを制限するものではなく、Cookieはクライアントから送られてきます。
     - ``65536``
   * - cookie.search.parameter.max.restored.length
-    - Maximum length of the query string built when restoring the stored search parameters after login. Restoring them is a convenience and the login is not, so a longer one is dropped rather than written to a Location header the container would refuse. Percent-encoding multiplies a CJK query by nine, so this is far smaller than the query itself may be. Raise it together with tomcat.maxHttpHeaderSize in tomcat_config.properties, which bounds the response headers.
+    - ログイン後に保存した検索パラメーターを復元するときに組み立てるクエリ文字列の最大長。復元は利便性のためのものですがログインはそうではないため、これを超える場合は、コンテナが拒否するLocationヘッダーに書き込まれず、破棄されます。パーセントエンコードによりCJKのクエリは9倍になるため、この値はクエリ自体が取りうる長さよりはるかに小さくなります。レスポンスヘッダーを制限するtomcat_config.propertiesのtomcat.maxHttpHeaderSizeと合わせて引き上げてください。
     - ``4096``
   * - cookie.search.parameter.name
-    - Cookie name used to store encoded search parameters before SSO login.
+    - SSOログイン前にエンコード済み検索パラメーターを保存するために使用するCookie名。
     - ``fsrp``
   * - cookie.search.parameter.http_only
-    - Whether to set HttpOnly attribute to the search parameter cookie.
+    - 検索パラメーターCookieにHttpOnly属性を設定するかどうか。
     - ``true``
   * - cookie.search.parameter.secure
-    - Whether to set Secure attribute to the search parameter cookie. Should be true in production environments using HTTPS.
+    - 検索パラメーターCookieにSecure属性を設定するかどうか。HTTPSを使用する本番環境ではtrueにしてください。
     - (empty)
   * - cookie.search.parameter.max_age
-    - Max-Age (in seconds) for the search parameter cookie. Use -1 for session-only cookies.
+    - 検索パラメーターCookieのMax-Age（秒）。セッション限りのCookieにするには-1を使用します。
     - ``60``
   * - cookie.search.parameter.domain
-    - Domain attribute for the search parameter cookie. Set to the domain scope you want the cookie to be available on (e.g., example.com).
+    - 検索パラメーターCookieのDomain属性。Cookieを利用可能にしたいドメインの範囲を設定します（例: example.com）。
     - (empty)
   * - cookie.search.parameter.path
-    - Path attribute for the search parameter cookie. Typically set to "/" or the context path of the app.
+    - 検索パラメーターCookieのPath属性。通常は"/"またはアプリケーションのコンテキストパスを設定します。
     - ``/``
   * - cookie.search.parameter.same_site
-    - SameSite attribute for the search parameter cookie. Valid values: Lax, Strict, None
+    - 検索パラメーターCookieのSameSite属性。有効な値: Lax、Strict、None
     - ``Lax``
   * - paging.page.size
-    - The size of one page for paging
+    - ページングの1ページのサイズ
     - ``25``
   * - paging.page.range.size
-    - The size of page range for paging
+    - ページングのページ範囲のサイズ
     - ``5``
   * - paging.page.range.fill.limit
-    - The option 'fillLimit' of page range for paging
+    - ページングのページ範囲のオプション'fillLimit'
     - ``true``
 
-.. list-table:: Fetch Page Size
+.. list-table:: 取得ページサイズ
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - page.docboost.max.fetch.size
-    - Maximum number of docboost records to fetch per page.
+    - 1ページあたりに取得するドキュメントブーストレコードの最大数。
     - ``1000``
   * - page.keymatch.max.fetch.size
-    - Maximum number of keymatch records to fetch per page.
+    - 1ページあたりに取得するキーマッチレコードの最大数。
     - ``1000``
   * - page.labeltype.max.fetch.size
-    - Maximum number of labeltype records to fetch per page.
+    - 1ページあたりに取得するラベルタイプレコードの最大数。
     - ``1000``
   * - page.tagtype.max.fetch.size
-    - Maximum number of tagtype records to fetch per page.
+    - 1ページあたりに取得するタグタイプレコードの最大数。
     - ``1000``
   * - page.roletype.max.fetch.size
-    - Maximum number of roletype records to fetch per page.
+    - 1ページあたりに取得するロールタイプレコードの最大数。
     - ``1000``
   * - page.user.max.fetch.size
-    - Maximum number of user records to fetch per page.
+    - 1ページあたりに取得するユーザーレコードの最大数。
     - ``1000``
   * - page.role.max.fetch.size
-    - Maximum number of role records to fetch per page.
+    - 1ページあたりに取得するロールレコードの最大数。
     - ``1000``
   * - page.group.max.fetch.size
-    - Maximum number of group records to fetch per page.
+    - 1ページあたりに取得するグループレコードの最大数。
     - ``1000``
   * - page.crawling.info.param.max.fetch.size
-    - Maximum number of crawling info parameters to fetch per page.
+    - 1ページあたりに取得するクロール情報パラメーターの最大数。
     - ``100``
   * - page.crawling.info.max.fetch.size
-    - Maximum number of crawling info records to fetch per page.
+    - 1ページあたりに取得するクロール情報レコードの最大数。
     - ``1000``
   * - page.data.config.max.fetch.size
-    - Maximum number of data config records to fetch per page.
+    - 1ページあたりに取得するデータストア設定レコードの最大数。
     - ``100``
   * - page.web.config.max.fetch.size
-    - Maximum number of web config records to fetch per page.
+    - 1ページあたりに取得するウェブ設定レコードの最大数。
     - ``100``
   * - page.file.config.max.fetch.size
-    - Maximum number of file config records to fetch per page.
+    - 1ページあたりに取得するファイルシステム設定レコードの最大数。
     - ``100``
   * - page.duplicate.host.max.fetch.size
-    - Maximum number of duplicate host records to fetch per page.
+    - 1ページあたりに取得する重複ホストレコードの最大数。
     - ``1000``
   * - page.failure.url.max.fetch.size
-    - Maximum number of failure URL records to fetch per page.
+    - 1ページあたりに取得する障害URLレコードの最大数。
     - ``1000``
   * - page.favorite.log.max.fetch.size
-    - Maximum number of favorite log records to fetch per page.
+    - 1ページあたりに取得するお気に入りログレコードの最大数。
     - ``100``
   * - page.file.auth.max.fetch.size
-    - Maximum number of file auth records to fetch per page.
+    - 1ページあたりに取得するファイル認証レコードの最大数。
     - ``100``
   * - page.web.auth.max.fetch.size
-    - Maximum number of web auth records to fetch per page.
+    - 1ページあたりに取得するウェブ認証レコードの最大数。
     - ``100``
   * - page.path.mapping.max.fetch.size
-    - Maximum number of path mapping records to fetch per page.
+    - 1ページあたりに取得するパスマッピングレコードの最大数。
     - ``1000``
   * - page.request.header.max.fetch.size
-    - Maximum number of request header records to fetch per page.
+    - 1ページあたりに取得するリクエストヘッダーレコードの最大数。
     - ``1000``
   * - page.scheduled.job.max.fetch.size
-    - Maximum number of scheduled job records to fetch per page.
+    - 1ページあたりに取得するスケジュールジョブレコードの最大数。
     - ``100``
   * - page.elevate.word.max.fetch.size
-    - Maximum number of elevate word records to fetch per page.
+    - 1ページあたりに取得する追加ワードレコードの最大数。
     - ``1000``
   * - page.bad.word.max.fetch.size
-    - Maximum number of bad word records to fetch per page.
+    - 1ページあたりに取得する除外ワードレコードの最大数。
     - ``1000``
   * - page.dictionary.max.fetch.size
-    - Maximum number of dictionary records to fetch per page.
+    - 1ページあたりに取得する辞書レコードの最大数。
     - ``1000``
   * - page.relatedcontent.max.fetch.size
-    - Maximum number of related content records to fetch per page.
+    - 1ページあたりに取得する関連コンテンツレコードの最大数。
     - ``5000``
   * - page.relatedquery.max.fetch.size
-    - Maximum number of related query records to fetch per page.
+    - 1ページあたりに取得する関連クエリーレコードの最大数。
     - ``5000``
   * - page.thumbnail.queue.max.fetch.size
-    - Maximum number of thumbnail queue records to fetch per page.
+    - 1ページあたりに取得するサムネイルキューレコードの最大数。
     - ``100``
   * - page.thumbnail.purge.max.fetch.size
-    - Maximum number of thumbnail purge records to fetch per page.
+    - 1ページあたりに取得するサムネイルパージレコードの最大数。
     - ``100``
   * - page.score.booster.max.fetch.size
-    - Maximum number of score booster records to fetch per page.
+    - 1ページあたりに取得するスコアブースターレコードの最大数。
     - ``1000``
   * - page.searchlog.max.fetch.size
-    - Maximum number of search log records to fetch per page.
+    - 1ページあたりに取得する検索ログレコードの最大数。
     - ``10000``
   * - page.searchlist.track.total.hits
-    - Whether to track total hits in search list page.
+    - 検索リストページで総ヒット数を追跡するかどうか。
     - ``true``
   * - page.searchlist.content.max.length
-    - Maximum content length (in characters) rendered on the search list edit page.
+    - 検索リスト編集ページに表示するコンテンツ長の最大値（文字数）。
     - ``100000``
 
-.. list-table:: Search Page
+.. list-table:: 検索ページ
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - paging.search.page.start
-    - Default start page for search results.
+    - 検索結果のデフォルトの開始ページ。
     - ``0``
   * - paging.search.page.size
-    - Default size of search results per page.
+    - 1ページあたりの検索結果のデフォルトサイズ。
     - ``10``
   * - paging.search.page.max.size
-    - Maximum size of search results per page.
+    - 1ページあたりの検索結果の最大サイズ。
     - ``100``
   * - api.param.max.length
-    - Maximum length of a v2 API string query parameter (q, sort, sdh). OWASP API4:2023.
+    - v2 APIの文字列クエリパラメーター（q、sort、sdh）の最大長。OWASP API4:2023。
     - ``1000``
   * - api.param.max.array.size
-    - Maximum number of values for a v2 API repeatable query parameter.
+    - v2 APIの繰り返し指定可能なクエリパラメーターの値の最大数。
     - ``100``
   * - api.click.max.timestamp
-    - Maximum click-log timestamp (rt, epoch ms) accepted by the v2 click API. OWASP API4:2023.
+    - v2クリックAPIが受け付けるクリックログのタイムスタンプ（rt、エポックミリ秒）の最大値。OWASP API4:2023。
     - ``9999999999999``
   * - searchlog.agg.shard.size
-    - searchlog
+    - 検索ログ
     - ``-1``
   * - searchlog.request.headers
-    - Request headers to include in search log.
+    - 検索ログに含めるリクエストヘッダー。
     - (empty)
   * - searchlog.process.batch_size
-    - Batch size for search log processing.
+    - 検索ログ処理のバッチサイズ。
     - ``100``
+  * - related_query.generate.days
+    - 検索ログから関連クエリーを生成するときに読み込む検索ログの日数。
+    - ``30``
+  * - related_query.generate.term.size
+    - 仮想ホストごとに生成される語の最大数。
+    - ``100``
+  * - related_query.generate.query.size
+    - 1つの語ごとに生成される関連クエリーの最大数。
+    - ``5``
+  * - related_query.generate.min.sessions
+    - 語とその各関連クエリーに必要な、異なるユーザーセッションの最小数。
+    - ``3``
+  * - related_query.generate.session.interval
+    - 検索後、同じセッションの後続の検索を言い換えとみなす間隔（分）。
+    - ``10``
+  * - related_query.generate.seed.log.size
+    - その語を検索したセッションを見つけるために読み込む、語の検索ログの最大数。
+    - ``1000``
+  * - related_query.generate.seed.session.size
+    - 後続の検索を読み込む、語ごとのセッションの最大数。
+    - ``200``
+  * - related_query.generate.log.fetch.size
+    - 語ごとに読み込む後続の検索ログの最大数。
+    - ``2000``
+  * - related_query.generate.query.min.length
+    - 生成される語または関連クエリーの最小の長さ（文字数）。
+    - ``2``
+  * - related_query.generate.query.max.length
+    - 生成される語または関連クエリーの最大の長さ（文字数）。
+    - ``50``
+  * - docreport.duplicate.group.size
+    - docreport ドキュメントレポート画面に表示する重複グループの最大数（大きい順）。
+    - ``100``
+  * - docreport.duplicate.docs.size
+    - ドキュメントレポート画面で重複グループごとに一覧表示するドキュメントの最大数。
+    - ``10``
+  * - docreport.duplicate.export.page.size
+    - 重複レポートをCSVとしてダウンロードするときに、1回のリクエストで読み込むコンテンツ署名の数。
+    - ``10000``
+  * - docreport.dormant.days
+    - ドキュメントを休眠とみなす、最終更新からの日数のデフォルト値。
+    - ``365``
   * - thumbnail.html.image.min.width
-    - Minimum width for HTML images in thumbnails.
+    - サムネイルに使用するHTML画像の最小幅。
     - ``100``
   * - thumbnail.html.image.min.height
-    - Minimum height for HTML images in thumbnails.
+    - サムネイルに使用するHTML画像の最小高さ。
     - ``100``
   * - thumbnail.html.image.max.aspect.ratio
-    - Maximum aspect ratio for HTML images in thumbnails.
+    - サムネイルに使用するHTML画像の最大アスペクト比。
     - ``3.0``
   * - thumbnail.html.image.thumbnail.width
-    - Width of generated thumbnail images.
+    - 生成されるサムネイル画像の幅。
     - ``100``
   * - thumbnail.html.image.thumbnail.height
-    - Height of generated thumbnail images.
+    - 生成されるサムネイル画像の高さ。
     - ``100``
   * - thumbnail.html.image.format
-    - Format of generated thumbnail images.
+    - 生成されるサムネイル画像の形式。
     - ``png``
   * - thumbnail.html.image.xpath
-    - XPath to select images for thumbnails.
+    - サムネイル用の画像を選択するXPath。
     - ``//IMG``
   * - thumbnail.html.image.exclude.extensions
-    - File extensions to exclude from thumbnail generation.
+    - サムネイル生成から除外するファイル拡張子。
     - ``svg,html,css,js``
   * - thumbnail.generator.interval
-    - Interval for thumbnail generator.
+    - サムネイルジェネレーターの間隔。
     - ``0``
   * - thumbnail.generator.targets
-    - Targets for thumbnail generator (e.g., all).
+    - サムネイルジェネレーターの対象（例: all）。
     - ``all``
   * - thumbnail.crawler.enabled
-    - Whether the thumbnail crawler is enabled.
+    - サムネイルクローラーが有効かどうか。
     - ``true``
   * - thumbnail.system.monitor.interval
-    - Interval for system monitor in thumbnail processing.
+    - サムネイル処理におけるシステム監視の間隔。
     - ``60``
 
-.. list-table:: User
+.. list-table:: ユーザー
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - user.code.request.parameter
-    - User code settings
+    - ユーザーコードの設定
     - ``userCode``
   * - user.code.min.length
-    - User code minimum length.
+    - ユーザーコードの最小長。
     - ``20``
   * - user.code.max.length
-    - User code maximum length.
+    - ユーザーコードの最大長。
     - ``100``
   * - user.code.pattern
-    - User code pattern for validation.
+    - ユーザーコードの検証用パターン。
     - ``[a-zA-Z0-9_]+``
   * - mail.from.name
-    - Name to display in the From field of emails.
+    - メールのFromフィールドに表示する名前。
     - ``Administrator``
   * - mail.from.address
-    - Email address to use in the From field.
+    - Fromフィールドに使用するメールアドレス。
     - ``root@localhost``
   * - mail.hostname
-    - Hostname for the mail server.
+    - メールサーバーのホスト名。
     - (empty)
   * - scheduler.target.name
-    - Target name for the scheduler.
+    - スケジューラーのターゲット名。
     - (empty)
   * - scheduler.job.class
-    - Job class for the scheduler.
+    - スケジューラーのジョブクラス。
     - ``org.codelibs.fess.app.job.ScriptExecutorJob``
   * - scheduler.concurrent.exec.mode
-    - Mode for concurrent execution in the scheduler.
+    - スケジューラーの並行実行のモード。
     - ``QUIT``
   * - scheduler.monitor.interval
-    - Interval for scheduler monitoring.
+    - スケジューラー監視の間隔。
     - ``30``
   * - coordinator.poll.interval
-    - Interval (seconds) for polling heartbeats and events.
+    - ハートビートとイベントをポーリングする間隔（秒）。
     - ``60``
   * - coordinator.heartbeat.ttl
-    - Time-to-live (ms) for instance heartbeat documents.
+    - インスタンスのハートビートドキュメントの有効期間（ミリ秒）。
     - ``180000``
   * - coordinator.operation.ttl
-    - Time-to-live (ms) for operation lock documents.
+    - 操作ロックドキュメントの有効期間（ミリ秒）。
     - ``7200000``
   * - coordinator.operation.retry
-    - Maximum number of retries for acquiring an operation lock.
+    - 操作ロックの取得の最大リトライ回数。
     - ``3``
   * - coordinator.event.ttl
-    - Time-to-live (ms) for event notification documents.
+    - イベント通知ドキュメントの有効期間（ミリ秒）。
     - ``600000``
   * - online.help.base.link
-    - Base link for online help.
+    - オンラインヘルプのベースリンク。
     - ``https://fess.codelibs.org/{lang}/{version}/admin/``
   * - online.help.installation
-    - Installation guide link for online help.
+    - オンラインヘルプのインストールガイドのリンク。
     - ``https://fess.codelibs.org/{lang}/{version}/install/install.html``
   * - online.help.eol
-    - End-of-life information link for online help.
+    - オンラインヘルプのサポート終了情報のリンク。
     - ``https://fess.codelibs.org/{lang}/eol.html``
   * - online.help.name.failureurl
-    - Online help key for failure URL.
+    - 障害URLのオンラインヘルプキー。
     - ``failureurl``
   * - online.help.name.elevateword
-    - Online help key for elevate word.
+    - 追加ワードのオンラインヘルプキー。
     - ``elevateword``
   * - online.help.name.reqheader
-    - Online help key for request header.
+    - リクエストヘッダーのオンラインヘルプキー。
     - ``reqheader``
   * - online.help.name.dict.synonym
-    - Online help key for synonym dictionary.
+    - 同義語辞書のオンラインヘルプキー。
     - ``synonym``
   * - online.help.name.dict
-    - Online help key for dictionary.
+    - 辞書のオンラインヘルプキー。
     - ``dict``
   * - online.help.name.dict.kuromoji
-    - Online help key for Kuromoji dictionary.
+    - Kuromoji辞書のオンラインヘルプキー。
     - ``kuromoji``
   * - online.help.name.dict.protwords
-    - Online help key for protected words dictionary.
+    - Protwords辞書のオンラインヘルプキー。
     - ``protwords``
   * - online.help.name.dict.stopwords
-    - Online help key for stopwords dictionary.
+    - ストップワード辞書のオンラインヘルプキー。
     - ``stopwords``
   * - online.help.name.dict.stemmeroverride
-    - Online help key for stemmer override dictionary.
+    - Stemmer上書き辞書のオンラインヘルプキー。
     - ``stemmeroverride``
   * - online.help.name.dict.mapping
-    - Online help key for mapping dictionary.
+    - マッピング辞書のオンラインヘルプキー。
     - ``mapping``
   * - online.help.name.webconfig
-    - Online help key for web config.
+    - ウェブ設定のオンラインヘルプキー。
     - ``webconfig``
   * - online.help.name.searchlist
-    - Online help key for search list.
+    - 検索リストのオンラインヘルプキー。
     - ``searchlist``
   * - online.help.name.log
-    - Online help key for log.
+    - ログのオンラインヘルプキー。
     - ``log``
   * - online.help.name.general
-    - Online help key for general settings.
+    - 全般設定のオンラインヘルプキー。
     - ``general``
   * - online.help.name.role
-    - Online help key for role.
+    - ロールのオンラインヘルプキー。
     - ``role``
   * - online.help.name.joblog
-    - Online help key for job log.
+    - ジョブログのオンラインヘルプキー。
     - ``joblog``
   * - online.help.name.keymatch
-    - Online help key for keymatch.
+    - キーマッチのオンラインヘルプキー。
     - ``keymatch``
   * - online.help.name.relatedquery
-    - Online help key for related query.
+    - 関連クエリーのオンラインヘルプキー。
     - ``relatedquery``
   * - online.help.name.relatedcontent
-    - Online help key for related content.
+    - 関連コンテンツのオンラインヘルプキー。
     - ``relatedcontent``
   * - online.help.name.wizard
-    - Online help key for wizard.
+    - ウィザードのオンラインヘルプキー。
     - ``wizard``
   * - online.help.name.badword
-    - Online help key for bad word.
+    - 除外ワードのオンラインヘルプキー。
     - ``badword``
   * - online.help.name.pathmap
-    - Online help key for path mapping.
+    - パスマッピングのオンラインヘルプキー。
     - ``pathmap``
   * - online.help.name.boostdoc
-    - Online help key for boost document.
+    - ドキュメントブーストのオンラインヘルプキー。
     - ``boostdoc``
   * - online.help.name.dataconfig
-    - Online help key for data config.
+    - データストア設定のオンラインヘルプキー。
     - ``dataconfig``
   * - online.help.name.systeminfo
-    - Online help key for system info.
+    - システム情報のオンラインヘルプキー。
     - ``systeminfo``
   * - online.help.name.user
-    - Online help key for user.
+    - ユーザーのオンラインヘルプキー。
     - ``user``
   * - online.help.name.group
-    - Online help key for group.
+    - グループのオンラインヘルプキー。
     - ``group``
   * - online.help.name.dashboard
-    - Online help key for dashboard.
+    - ダッシュボードのオンラインヘルプキー。
     - ``dashboard``
   * - online.help.name.webauth
-    - Online help key for web authentication.
+    - ウェブ認証のオンラインヘルプキー。
     - ``webauth``
   * - online.help.name.fileconfig
-    - Online help key for file config.
+    - ファイルシステム設定のオンラインヘルプキー。
     - ``fileconfig``
   * - online.help.name.fileauth
-    - Online help key for file authentication.
+    - ファイル認証のオンラインヘルプキー。
     - ``fileauth``
   * - online.help.name.labeltype
-    - Online help key for label type.
+    - ラベルタイプのオンラインヘルプキー。
     - ``labeltype``
   * - online.help.name.tagtype
-    - Online help key for tag type.
+    - タグタイプのオンラインヘルプキー。
     - ``tagtype``
   * - online.help.name.duplicatehost
-    - Online help key for duplicate host.
+    - 重複ホストのオンラインヘルプキー。
     - ``duplicatehost``
   * - online.help.name.scheduler
-    - Online help key for scheduler.
+    - スケジューラーのオンラインヘルプキー。
     - ``scheduler``
   * - online.help.name.crawlinginfo
-    - Online help key for crawling info.
+    - クロール情報のオンラインヘルプキー。
     - ``crawlinginfo``
   * - online.help.name.backup
-    - Online help key for backup.
+    - バックアップのオンラインヘルプキー。
     - ``backup``
   * - online.help.name.upgrade
-    - Online help key for upgrade.
+    - アップグレードのオンラインヘルプキー。
     - ``upgrade``
   * - online.help.name.sereq
-    - Online help key for search request.
+    - 検索リクエストのオンラインヘルプキー。
     - ``sereq``
   * - online.help.name.accesstoken
-    - Online help key for access token.
+    - アクセストークンのオンラインヘルプキー。
     - ``accesstoken``
   * - online.help.name.suggest
-    - Online help key for suggest.
+    - サジェストのオンラインヘルプキー。
     - ``suggest``
   * - online.help.name.searchlog
-    - Online help key for search log.
+    - 検索ログのオンラインヘルプキー。
     - ``searchlog``
   * - online.help.name.maintenance
-    - Online help key for maintenance.
+    - メンテナンスのオンラインヘルプキー。
     - ``maintenance``
   * - online.help.name.plugin
-    - Online help key for plugin.
+    - プラグインのオンラインヘルプキー。
     - ``plugin``
   * - online.help.name.storage
-    - Online help key for storage.
+    - ストレージのオンラインヘルプキー。
     - ``storage``
   * - online.help.supported.langs
-    - Supported languages for online help.
+    - オンラインヘルプでサポートする言語。
     - ``de,es,fr,ja,ko,zh-cn``
   * - forum.link
-    - Forum link for user support.
+    - ユーザーサポート用のフォーラムのリンク。
     - ``https://discuss.codelibs.org/c/Fess{lang}/``
   * - forum.supported.langs
-    - Supported languages for the forum.
+    - フォーラムでサポートする言語。
     - ``en,ja``
   * - suggest.popular.word.seed
-    - Seed value for popular word suggestion.
+    - 人気ワードのサジェストのシード値。
     - ``0``
   * - suggest.popular.word.tags
-    - Tags for popular word suggestion.
+    - 人気ワードのサジェストのタグ。
     - (empty)
   * - suggest.popular.word.fields
-    - Fields for popular word suggestion.
+    - 人気ワードのサジェストのフィールド。
     - (empty)
   * - suggest.popular.word.excludes
-    - Excluded words for popular word suggestion.
+    - 人気ワードのサジェストから除外する単語。
     - (empty)
   * - suggest.popular.word.size
-    - Number of popular words to suggest.
+    - サジェストする人気ワードの数。
     - ``10``
   * - suggest.popular.word.window.size
-    - Window size for popular word suggestion.
+    - 人気ワードのサジェストのウィンドウサイズ。
     - ``30``
   * - suggest.popular.word.query.freq
-    - Query frequency for popular word suggestion.
+    - 人気ワードのサジェストのクエリ頻度。
     - ``10``
   * - suggest.min.hit.count
-    - Minimum hit count for suggestion.
+    - サジェストの最小ヒット数。
     - ``1``
   * - suggest.field.contents
-    - Field for suggestion contents.
+    - サジェストのコンテンツ用フィールド。
     - ``_default``
   * - suggest.field.tags
-    - Field for suggestion tags.
+    - サジェストのタグ用フィールド。
     - ``label``
   * - suggest.field.roles
-    - Field for suggestion roles.
+    - サジェストのロール用フィールド。
     - ``role``
   * - suggest.field.index.contents
-    - Index contents for suggestion.
+    - サジェスト用のインデックスコンテンツ。
     - ``content,title``
   * - suggest.update.request.interval
-    - Interval for suggestion update requests.
+    - サジェスト更新リクエストの間隔。
     - ``0``
   * - suggest.update.doc.per.request
-    - Number of documents per suggestion update request.
+    - サジェスト更新リクエストあたりのドキュメント数。
     - ``2``
   * - suggest.update.contents.limit.num.percentage
-    - Percentage limit for suggestion update contents.
+    - サジェスト更新コンテンツのパーセンテージ上限。
     - ``50%``
   * - suggest.update.contents.limit.num
-    - Maximum number of suggestion update contents.
+    - サジェスト更新コンテンツの最大数。
     - ``10000``
   * - suggest.update.contents.limit.doc.size
-    - Maximum document size for suggestion update.
+    - サジェスト更新のドキュメントの最大サイズ。
     - ``50000``
   * - suggest.source.reader.scroll.size
-    - Scroll size for suggestion source reader.
+    - サジェストソースリーダーのスクロールサイズ。
     - ``1``
   * - suggest.popular.word.cache.size
-    - Cache size for popular word suggestion.
+    - 人気ワードのサジェストのキャッシュサイズ。
     - ``1000``
   * - suggest.popular.word.cache.expire
-    - Cache expiration (seconds) for popular word suggestion.
+    - 人気ワードのサジェストのキャッシュの有効期限（秒）。
     - ``60``
   * - suggest.search.log.permissions
-    - Permissions for suggestion search log.
+    - サジェスト用検索ログのパーミッション。
     - ``{user}guest,{role}guest``
   * - suggest.system.monitor.interval
-    - Interval for system monitor in suggestion.
+    - サジェストにおけるシステム監視の間隔。
     - ``60``
   * - ldap.admin.enabled
-    - Whether LDAP admin is enabled.
+    - LDAP管理が有効かどうか。
     - ``false``
   * - ldap.admin.user.filter
-    - User filter for LDAP admin.
+    - LDAP管理のユーザーフィルター。
     - ``uid=%s``
   * - ldap.admin.user.base.dn
-    - Base DN for LDAP admin user.
+    - LDAP管理ユーザーのベースDN。
     - ``ou=People,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.user.object.classes
-    - Object classes for LDAP admin user.
+    - LDAP管理ユーザーのオブジェクトクラス。
     - ``organizationalPerson,top,person,inetOrgPerson``
   * - ldap.admin.role.filter
-    - Role filter for LDAP admin.
+    - LDAP管理のロールフィルター。
     - ``cn=%s``
   * - ldap.admin.role.base.dn
-    - Base DN for LDAP admin role.
+    - LDAP管理ロールのベースDN。
     - ``ou=Role,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.role.object.classes
-    - Object classes for LDAP admin role.
+    - LDAP管理ロールのオブジェクトクラス。
     - ``groupOfNames``
   * - ldap.admin.group.filter
-    - Group filter for LDAP admin.
+    - LDAP管理のグループフィルター。
     - ``cn=%s``
   * - ldap.admin.group.base.dn
-    - Base DN for LDAP admin group.
+    - LDAP管理グループのベースDN。
     - ``ou=Group,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.group.object.classes
-    - Object classes for LDAP admin group.
+    - LDAP管理グループのオブジェクトクラス。
     - ``groupOfNames``
   * - ldap.admin.sync.password
-    - Whether to sync password for LDAP admin.
+    - LDAP管理でパスワードを同期するかどうか。
     - ``true``
   * - ldap.auth.validation
-    - Whether to validate LDAP authentication.
+    - LDAP認証を検証するかどうか。
     - ``true``
   * - ldap.connect.timeout
-    - Timeout (milliseconds) to establish an LDAP connection. This also bounds the TLS handshake and the initial bind response. 0 or less leaves it to the JDK/OS default.
+    - LDAP接続を確立するまでのタイムアウト（ミリ秒）。TLSハンドシェイクと最初のバインド応答も、この値が上限になります。0以下の場合はJDK/OSのデフォルトに任せます。
     - ``10000``
   * - ldap.read.timeout
-    - Timeout (milliseconds) to wait for an LDAP response after the connection is bound. 0 or less waits indefinitely.
+    - 接続がバインドされた後にLDAPの応答を待つタイムアウト（ミリ秒）。0以下の場合は無期限に待機します。
     - ``30000``
   * - ldap.search.time.limit
-    - Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit.
+    - LDAP検索のサーバー側の時間制限（ミリ秒）。0以下の場合は無制限です。
     - ``60000``
   * - ldap.max.username.length
-    - Maximum username length for LDAP.
+    - LDAPのユーザー名の最大長。
     - ``-1``
   * - ldap.ignore.netbios.name
-    - Whether to ignore NetBIOS name in LDAP.
+    - LDAPでNetBIOS名を無視するかどうか。
     - ``true``
   * - ldap.group.name.with.underscores
-    - Whether to allow underscores in LDAP group names.
+    - LDAPのグループ名でアンダースコアを許可するかどうか。
     - ``false``
   * - ldap.lowercase.permission.name
-    - Whether to use lowercase for LDAP permission names.
+    - LDAPのパーミッション名を小文字にするかどうか。
     - ``false``
   * - ldap.allow.empty.permission
-    - Whether to allow empty permissions in LDAP.
+    - LDAPで空のパーミッションを許可するかどうか。
     - ``true``
   * - ldap.samaccountname.group
-    - Whether to use samAccountName for LDAP group.
+    - LDAPのグループにsamAccountNameを使用するかどうか。
     - ``false``
   * - ldap.role.search.user.enabled
-    - Whether LDAP role search for user is enabled.
+    - ユーザーのLDAPロール検索が有効かどうか。
     - ``true``
   * - ldap.role.search.group.enabled
-    - Whether LDAP role search for group is enabled.
+    - グループのLDAPロール検索が有効かどうか。
     - ``true``
   * - ldap.role.search.role.enabled
-    - Whether LDAP role search for role is enabled.
+    - ロールのLDAPロール検索が有効かどうか。
     - ``true``
   * - ldap.attr.surname
-    - LDAP attribute for surname.
+    - 姓のLDAP属性。
     - ``sn``
   * - ldap.attr.givenName
-    - LDAP attribute for given name.
+    - 名のLDAP属性。
     - ``givenName``
   * - ldap.attr.employeeNumber
-    - LDAP attribute for employee number.
+    - 従業員番号のLDAP属性。
     - ``employeeNumber``
   * - ldap.attr.mail
-    - LDAP attribute for mail.
+    - メールのLDAP属性。
     - ``mail``
   * - ldap.attr.telephoneNumber
-    - LDAP attribute for telephone number.
+    - 電話番号のLDAP属性。
     - ``telephoneNumber``
   * - ldap.attr.homePhone
-    - LDAP attribute for home phone.
+    - 自宅電話のLDAP属性。
     - ``homePhone``
   * - ldap.attr.homePostalAddress
-    - LDAP attribute for home postal address.
+    - 自宅の郵便住所のLDAP属性。
     - ``homePostalAddress``
   * - ldap.attr.labeledURI
-    - LDAP attribute for labeled URI.
+    - ラベル付きURIのLDAP属性。
     - ``labeledURI``
   * - ldap.attr.roomNumber
-    - LDAP attribute for room number.
+    - 部屋番号のLDAP属性。
     - ``roomNumber``
   * - ldap.attr.description
-    - LDAP attribute for description.
+    - 説明のLDAP属性。
     - ``description``
   * - ldap.attr.title
-    - LDAP attribute for title.
+    - 役職のLDAP属性。
     - ``title``
   * - ldap.attr.pager
-    - LDAP attribute for pager.
+    - ページャーのLDAP属性。
     - ``pager``
   * - ldap.attr.street
-    - LDAP attribute for street.
+    - 番地のLDAP属性。
     - ``street``
   * - ldap.attr.postalCode
-    - LDAP attribute for postal code.
+    - 郵便番号のLDAP属性。
     - ``postalCode``
   * - ldap.attr.physicalDeliveryOfficeName
-    - LDAP attribute for physical delivery office name.
+    - 物理的な配達オフィス名のLDAP属性。
     - ``physicalDeliveryOfficeName``
   * - ldap.attr.destinationIndicator
-    - LDAP attribute for destination indicator.
+    - 宛先インジケーターのLDAP属性。
     - ``destinationIndicator``
   * - ldap.attr.internationaliSDNNumber
-    - LDAP attribute for international ISDN number.
+    - 国際ISDN番号のLDAP属性。
     - ``internationaliSDNNumber``
   * - ldap.attr.state
-    - LDAP attribute for state.
+    - 都道府県のLDAP属性。
     - ``st``
   * - ldap.attr.employeeType
-    - LDAP attribute for employee type.
+    - 従業員タイプのLDAP属性。
     - ``employeeType``
   * - ldap.attr.facsimileTelephoneNumber
-    - LDAP attribute for facsimile telephone number.
+    - ファクシミリ番号のLDAP属性。
     - ``facsimileTelephoneNumber``
   * - ldap.attr.postOfficeBox
-    - LDAP attribute for post office box.
+    - 私書箱のLDAP属性。
     - ``postOfficeBox``
   * - ldap.attr.initials
-    - LDAP attribute for initials.
+    - イニシャルのLDAP属性。
     - ``initials``
   * - ldap.attr.carLicense
-    - LDAP attribute for car license.
+    - 車両ナンバーのLDAP属性。
     - ``carLicense``
   * - ldap.attr.mobile
-    - LDAP attribute for mobile.
+    - 携帯電話のLDAP属性。
     - ``mobile``
   * - ldap.attr.postalAddress
-    - LDAP attribute for postal address.
+    - 郵便住所のLDAP属性。
     - ``postalAddress``
   * - ldap.attr.city
-    - LDAP attribute for city.
+    - 市区町村のLDAP属性。
     - ``l``
   * - ldap.attr.teletexTerminalIdentifier
-    - LDAP attribute for teletex terminal identifier.
+    - テレテックス端末識別子のLDAP属性。
     - ``teletexTerminalIdentifier``
   * - ldap.attr.x121Address
-    - LDAP attribute for X.121 address.
+    - X.121アドレスのLDAP属性。
     - ``x121Address``
   * - ldap.attr.businessCategory
-    - LDAP attribute for business category.
+    - 業種のLDAP属性。
     - ``businessCategory``
   * - ldap.attr.registeredAddress
-    - LDAP attribute for registered address.
+    - 登録住所のLDAP属性。
     - ``registeredAddress``
   * - ldap.attr.displayName
-    - LDAP attribute for display name.
+    - 表示名のLDAP属性。
     - ``displayName``
   * - ldap.attr.preferredLanguage
-    - LDAP attribute for preferred language.
+    - 優先言語のLDAP属性。
     - ``preferredLanguage``
   * - ldap.attr.departmentNumber
-    - LDAP attribute for department number.
+    - 部署番号のLDAP属性。
     - ``departmentNumber``
   * - ldap.attr.uidNumber
-    - LDAP attribute for UID number.
+    - UID番号のLDAP属性。
     - ``uidNumber``
   * - ldap.attr.gidNumber
-    - LDAP attribute for GID number.
+    - GID番号のLDAP属性。
     - ``gidNumber``
   * - ldap.attr.homeDirectory
-    - LDAP attribute for home directory.
+    - ホームディレクトリのLDAP属性。
     - ``homeDirectory``
   * - plugin.repositories
-    - Plugin repository URLs.
+    - プラグインリポジトリのURL。
     - ``https://maven.codelibs.org/release/org/codelibs/fess/,https://repo.maven.apache.org/maven2/org/codelibs/fess/,https://fess.codelibs.org/plugin/artifacts.yaml``
   * - plugin.version.filter
-    - Version filter for plugins.
+    - プラグインのバージョンフィルター。
     - (empty)
   * - storage.max.items.in.page
-    - Maximum number of items per page in storage.
+    - ストレージの1ページあたりの最大項目数。
     - ``1000``
   * - password.invalid.admin.passwords
-    - List of invalid admin passwords.
+    - 無効な管理者パスワードのリスト。
     - ``admin``
   * - password.min.length
-    - Minimum password length (0 to disable).
+    - パスワードの最小長（0で無効）。
     - ``8``
   * - password.max.length
-    - Maximum length of a password field.
+    - パスワードフィールドの最大長。
     - ``100``
   * - password.require.uppercase
-    - Require uppercase letters in password.
+    - パスワードに大文字を必須にします。
     - ``false``
   * - password.require.lowercase
-    - Require lowercase letters in password.
+    - パスワードに小文字を必須にします。
     - ``false``
   * - password.require.digit
-    - Require digits in password.
+    - パスワードに数字を必須にします。
     - ``false``
   * - password.require.special.char
-    - Require special characters in password.
+    - パスワードに特殊文字を必須にします。
     - ``false``
   * - rag.chat.enabled
-    - Whether RAG chat feature is enabled.
+    - RAGチャット機能が有効かどうか。
     - ``false``
+  * - rag.chat.log.enabled
+    - RAGチャットの各リクエストの利用状況（ユーザー、時刻、LLM呼び出しとトークン）をチャットログに記録するかどうか。質問と回答が記録されることはありません。
+    - ``true``
   * - rag.chat.context.max.documents
-    - Chat generation settings.
+    - チャット生成の設定。
     - ``5``
+  * - rag.chat.query.regeneration.max.count
+    - 検索でドキュメントが見つからなかった場合、またはストリーミングチャットでヒットしたものがどれも関連があると判断されなかった場合に、1回のチャットリクエストが検索クエリを再生成して再検索する最大回数。再生成のたびにLLM呼び出しが1回行われ、新しい検索にヒットがある場合はさらに関連性評価の呼び出しが1回行われます（0で無効）。
+    - ``2``
   * - rag.chat.session.timeout.minutes
-    - Session settings.
+    - セッションの設定。
     - ``30``
   * - rag.chat.session.max.size
-    - Maximum cached chat sessions; least recently accessed are evicted above it (0 or less means 100).
+    - キャッシュするチャットセッションの最大数。これを超えると、最後にアクセスされたのが最も古いものから破棄されます（0以下の場合は100）。
     - ``10000``
   * - rag.chat.history.max.messages
-    - Maximum messages kept in one chat session; older turns are trimmed on each new message.
+    - 1つのチャットセッションに保持するメッセージの最大数。新しいメッセージのたびに、古いターンは切り詰められます。
     - ``30``
   * - rag.chat.content.fields
-    - Enhanced RAG flow settings. Fields to retrieve for full document content.
+    - 拡張RAGフローの設定。ドキュメントの全コンテンツのために取得するフィールド。
     - ``title,url,content,doc_id,content_title,content_description``
   * - rag.chat.highlight.fragment.size
-    - Highlight settings for RAG search.
+    - RAG検索のハイライト設定。
     - ``500``
   * - rag.chat.highlight.number.of.fragments
-    - Number of highlight fragments per document in the RAG chat context search.
+    - RAGチャットのコンテキスト検索における、ドキュメントあたりのハイライトフラグメント数。
     - ``3``
   * - rag.chat.content.fulltext.max.length
-    - Large-document handling for answer generation. Documents whose content_length exceeds this value use highlighted passages instead of full content in the answer context.
+    - 回答生成における大きなドキュメントの扱い。content_lengthがこの値を超えるドキュメントは、回答コンテキストで全コンテンツの代わりにハイライトされた抜粋を使用します。
     - ``3000``
   * - rag.chat.answer.highlight.fragment.size
-    - Highlight settings used when extracting passages from large documents for the answer context.
+    - 回答コンテキスト用に大きなドキュメントから抜粋を取り出すときに使用するハイライト設定。
     - ``1000``
   * - rag.chat.answer.highlight.number.of.fragments
-    - Number of highlight fragments taken from each oversized document for the answer context.
+    - 回答コンテキスト用に、サイズの大きい各ドキュメントから取り出すハイライトフラグメント数。
     - ``5``
   * - rag.chat.history.assistant.content
-    - History content mode for assistant messages. smart_summary           - drop assistant body, keep only past search query + referenced titles per turn (default, recommended) full                    - send the whole assistant response source_titles           - body + referenced titles suffix source_titles_and_urls  - "[References: title (url), ...]" only truncated               - truncate assistant response at history.assistant.max.chars none                    - drop assistant turns from history
+    - アシスタントメッセージの履歴コンテンツモード。smart_summary - アシスタントの本文を破棄し、ターンごとに過去の検索クエリ + 参照したタイトルのみを保持（デフォルト、推奨） full - アシスタントの応答全体を送信 source_titles - 本文 + 参照したタイトルを末尾に付加 source_titles_and_urls - "[References: title (url), ...]" のみ truncated - history.assistant.max.charsでアシスタントの応答を切り詰める none - 履歴からアシスタントのターンを破棄
     - ``smart_summary``
   * - rag.chat.history.titles.max.count
-    - Maximum number of referenced document titles included per turn in smart_summary history mode.
+    - smart_summary履歴モードで、ターンごとに含める参照ドキュメントタイトルの最大数。
     - ``5``
+  * - rag.chat.document.max.parts
+    - LLMのコンテキスト予算より長い単一のドキュメントについてチャットするときに、ドキュメントを分割するパーツの最大数。各パーツは個別に要約され、要約は回答にまとめられます。この数を超えるパーツは使用されません。そのようなドキュメントに関するリクエストは、毎ターン、最大でこの数のLLM呼び出しに加えて回答用の1回のLLM呼び出しを行います。
+    - ``10``
+  * - rag.chat.response.language
+    - LLMに回答を求める言語。browser - ユーザーのブラウザーまたはUIロケールの言語。英語の場合は指示なし（デフォルト） none - 言語の指示なし。LLMは通常、質問と同じ言語で回答する en, ja.. - 常にこの言語で回答する
+    - ``browser``
   * - index.export.path
-    - Index Export
+    - インデックスエクスポート
     - ``/var/lib/fess/export``
   * - index.export.exclude.fields
-    - Comma-separated document fields omitted from files written by the index export job.
+    - インデックスエクスポートジョブが書き出すファイルから除外する、ドキュメントフィールドのカンマ区切りリスト。
     - ``cache,tag``
   * - index.export.scroll.size
-    - Number of documents fetched per scroll request by the index export job.
+    - インデックスエクスポートジョブが1回のスクロールリクエストで取得するドキュメント数。
     - ``100``
   * - index.export.format
-    - Output format for exported documents; only html and json are accepted, anything else fails the job.
+    - エクスポートするドキュメントの出力形式。受け付けるのはhtmlとjsonのみで、それ以外の場合はジョブが失敗します。
     - ``html``
   * - log.notification.flush.interval
-    - Log Notification Interval (seconds) for flushing log notification buffer to search engine.
+    - ログ通知 ログ通知バッファを検索エンジンにフラッシュする間隔（秒）。
     - ``30``
   * - log.notification.max.details.length
-    - Maximum length of notification details text.
+    - 通知の詳細テキストの最大長。
     - ``3000``
   * - log.notification.max.display.events
-    - Maximum number of events to display in notification.
+    - 通知に表示するイベントの最大数。
     - ``50``
   * - log.notification.max.message.length
-    - Maximum length of each log message in notification.
+    - 通知内の各ログメッセージの最大長。
     - ``200``
   * - log.notification.search.size
-    - Maximum number of events to fetch from search engine per notification job.
+    - 通知ジョブごとに検索エンジンから取得するイベントの最大数。
     - ``1000``
   * - log.notification.buffer.size
-    - Maximum number of events to buffer in memory.
+    - メモリ上にバッファするイベントの最大数。
     - ``1000``
   * - log.notification.interval
-    - Interval (seconds) for the notification job cycle, used in notification messages.
+    - 通知ジョブのサイクルの間隔（秒）。通知メッセージで使用されます。
     - ``300``
   * - theme.directory.path
-    - Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)
+    - 静的テーマシステム（docs/superpowers/specs/2026-05-21-fess-static-theme-design.mdを参照）
     - ``themes``
   * - theme.upload.max.size
-    - Maximum size (bytes) of an uploaded theme archive.
+    - アップロードされたテーマアーカイブの最大サイズ（バイト）。
     - ``52428800``
   * - theme.upload.max.extracted.size
-    - Maximum total extracted size (bytes); extraction aborts once it is exceeded.
+    - 展開後の合計サイズの最大値（バイト）。これを超えると展開は中止されます。
     - ``209715200``
   * - theme.upload.max.entries
-    - Maximum number of entries allowed in an uploaded theme archive.
+    - アップロードされたテーマアーカイブで許可されるエントリの最大数。
     - ``1000``
   * - theme.upload.max.compression.ratio
-    - Maximum uncompressed/compressed ratio for a single theme archive entry.
+    - テーマアーカイブの1つのエントリに対する、非圧縮/圧縮比の最大値。
     - ``100``
   * - theme.upload.zip.ratio.max
-    - Maximum cumulative uncompressed/compressed ratio for the whole archive (zip-bomb guard).
+    - アーカイブ全体に対する、非圧縮/圧縮比の累積の最大値（zipボム対策）。
     - ``50``
   * - theme.upload.zip.ratio.check.threshold.bytes
-    - Compressed bytes read before the cumulative zip ratio check applies; smaller archives skip it.
+    - 累積zip比のチェックが適用されるまでに読み込む圧縮済みバイト数。これより小さいアーカイブはチェックをスキップします。
     - ``65536``
   * - theme.upload.attic.retention.days
-    - Retention (days) for a replaced theme directory before the cleanup sweep removes it.
+    - 置き換えられたテーマディレクトリを、クリーンアップ処理が削除するまで保持する期間（日）。
     - ``7``
+  * - theme.repositories
+    - 静的テーマのダウンロード元のリポジトリURL（カンマ区切り）。
+    - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
+  * - theme.index.frame.ancestors
+    - 静的テーマのHTMLページのContent-Security-Policyにおけるframe-ancestorsディレクティブの値。これらをフレームに埋め込むことができるオリジンです。デフォルトの'none'は、どのページにも埋め込みを許可しません。WebKit（Safari）は、テーマのファイルプレビューとキャッシュ表示が使用するblob:フレームにもframe-ancestorsを適用するため、値が'none'の間はそれらが空白で表示されます。ディレクティブを削除するには値を空のままにします。どちらの場合もX-Frame-Options: DENYが送信され、すべてのブラウザーでページがフレームに入らないようにします（frame-ancestorsを尊重するブラウザーはそのヘッダーを無視します）。
+    - ``'none'``
   * - theme.api.csrf.server.origins
-    - Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-\* headers, then from the servlet request.
+    - 任意: このFessインスタンスの正規の外部オリジン（カンマ/改行区切り）。例: https://fess.example.com。設定すると、これらはv2のCSRF Originチェックで、転送ヘッダーを信頼せずに同一オリジンとして扱われます。rate.limit.trusted.proxiesに記載されていないリバースプロキシの背後での利用を推奨します。空の場合、ターゲットオリジンは、信頼するプロキシのX-Forwarded-\*ヘッダーから、次にサーブレットリクエストから再構築されます。
     - (empty)
   * - theme.api.login.rate.limit.per.ip.per.minute
-    - Login attempts allowed per client IP each minute; 0 or less disables the gate.
+    - クライアントIPごとに1分あたりに許可されるログイン試行回数。0以下の場合はこの制限を無効にします。
     - ``10``
   * - theme.api.login.rate.limit.per.user.per.minute
-    - Login attempts allowed per client IP and user name each minute; also gates password change.
+    - クライアントIPとユーザー名の組ごとに1分あたりに許可されるログイン試行回数。パスワード変更も制限します。
     - ``5``
   * - theme.api.login.lockout.seconds
-    - Lockout (seconds) applied once a login rate limit is exceeded; 0 or less disables the lockout.
+    - ログインのレート制限を超えた時点で適用されるロックアウト（秒）。0以下の場合はロックアウトを無効にします。
     - ``900``
   * - theme.api.login.rate.limit.max.entries
-    - Maximum login rate-limit buckets held in memory; idle buckets are evicted at the cap.
+    - メモリ上に保持するログインレート制限バケットの最大数。上限に達すると、アイドル状態のバケットは破棄されます。
     - ``100000``
   * - api.chat.stream.keepalive.interval.ms
-    - Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (": keepalive\\n\\n") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds.
+    - /api/v2/chat/streamが送信するSSEキープアライブpingの間隔。pingはコメントのみの行（": keepalive\\n\\n"）で、イベントストリームには影響しませんが、長いLLMフェーズの間にアイドル接続を切断する中間装置（nginxのデフォルトのproxy_read_timeoutは60s）を回避します。<=0を設定すると無効になります。単位: ミリ秒。
     - ``15000``
 .. GENERATED-END: properties
