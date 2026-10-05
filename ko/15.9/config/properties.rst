@@ -15,7 +15,7 @@ one, fill in ``properties.po`` beside this file.
 .. fess repository; translations come from properties.po beside this file.
 .. Regenerate with tools/update_properties_doc.sh.
 
-Core
+코어
 ----
 
 .. list-table::
@@ -25,71 +25,71 @@ Core
     - Description
     - Default
   * - domain.title
-    - The title of the domain for logging and display.
+    - 로깅과 표시에 사용하는 도메인의 제목.
     - ``Fess``
 
-.. list-table:: Search Engine
+.. list-table:: 검색 엔진
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - search_engine.type
-    - The type of search engine backend (e.g., default, opensearch).
+    - 검색 엔진 백엔드의 타입(예: default, opensearch).
     - ``default``
   * - search_engine.http.url
-    - The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)
+    - 검색 엔진 HTTP 엔드포인트의 URL입니다. IPv6 환경에서는 IPv6 주소를 대괄호로 감싸십시오(예: http://[::1]:9200)
     - ``http://localhost:9200``
   * - search_engine.http.ssl.certificate_authorities
-    - Path to SSL certificate authorities for secure HTTP connections.
+    - 보안 HTTP 연결에 사용하는 SSL 인증 기관의 경로.
     - (empty)
   * - search_engine.username
-    - Username for authenticating to the search engine.
+    - 검색 엔진 인증에 사용하는 사용자 이름.
     - (empty)
   * - search_engine.password
-    - Password for authenticating to the search engine.
+    - 검색 엔진 인증에 사용하는 비밀번호.
     - (empty)
   * - search_engine.heartbeat_interval
-    - Interval (ms) for heartbeat checks to the search engine.
+    - 검색 엔진에 대한 하트비트 확인 간격(밀리초).
     - ``10000``
   * - app.cipher.algorithm
-    - Cipher algorithm used for encryption.
+    - 암호화에 사용하는 암호 알고리즘.
     - ``aes``
   * - app.cipher.key
-    - Secret key for encryption (change this value for production).
+    - 암호화용 비밀 키(운영 환경에서는 이 값을 변경하십시오).
     - ``___change__me___``
   * - app.digest.algorithm
-    - Algorithm for digest calculation.
+    - 다이제스트 계산용 알고리즘.
     - ``sha256``
   * - app.password.algorithm
-    - Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)
+    - 비밀번호 해싱(새로운 방식, Spring Security v5.8 호환) 지원: bcrypt(현 시점에서는 bcrypt만)
     - ``bcrypt``
   * - app.password.bcrypt.cost
-    - BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31.
+    - BCrypt 코스트(로그 라운드)입니다. 10은 Spring Security v5.8의 기본값과 같습니다. 범위: 4-31.
     - ``10``
   * - app.password.upgrade.enabled
-    - Lazy re-hashing on successful login for legacy hashes.
+    - 레거시 해시에 대해 로그인 성공 시 수행하는 지연 재해싱.
     - ``true``
   * - app.encrypt.property.pattern
-    - NOTE: app.digest.algorithm is kept for LEGACY password verification only (pre-upgrade hashes that have no {id} prefix). Do not use for new passwords. Regex pattern for properties to encrypt.
+    - 참고: app.digest.algorithm 은 레거시 비밀번호 검증 전용으로 유지됩니다(업그레이드 이전의 {id} 접두사가 없는 해시). 새 비밀번호에는 사용하지 마십시오. 암호화할 프로퍼티의 정규 표현식 패턴입니다.
     - ``.*password|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
-    - Regex pattern for sensitive values to mask in debug logs (case-insensitive match against property/env keys).
+    - 디버그 로그에서 마스킹할 민감한 값의 정규 표현식 패턴(프로퍼티/환경 변수 키에 대해 대소문자를 구분하지 않고 일치 판정).
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
   * - app.extension.names
-    - Extension names for application customization.
+    - 애플리케이션 커스터마이즈용 확장 이름.
     - (empty)
   * - app.audit.log.format
-    - Audit log format.
+    - 감사 로그 형식.
     - (empty)
   * - script.audit.log.enabled
-    - Script audit log settings.
+    - 스크립트 감사 로그 설정.
     - ``true``
   * - script.audit.log.max.length
-    - Maximum characters of script text kept in a script audit log entry; longer text is truncated.
+    - 스크립트 감사 로그 항목에 보관하는 스크립트 텍스트의 최대 문자 수이며, 이보다 긴 텍스트는 잘립니다.
     - ``100``
   * - jvm.crawler.options
-    - JVM options for the crawler process.
+    - 크롤러 프로세스용 JVM 옵션.
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -127,7 +127,7 @@ Core
       | ``-Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider``
       | ``-Dorg.apache.pdfbox.rendering.UsePureJavaCMYKConversion=true``
   * - jvm.suggest.options
-    - JVM options (newline-separated) passed to the suggest creator child process.
+    - 서제스트 생성기 자식 프로세스에 전달하는 JVM 옵션(줄바꿈 구분).
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -157,7 +157,7 @@ Core
       | ``-Dlog4j2.formatMsgNoLookups=true``
       | ``-Dlog4j.skipJansi=true``
   * - jvm.chunk.options
-    - JVM options for the chunk vector indexer process. Heap budget. This child JVM is only started while the "Content Chunk Vector Indexer" job runs, so a generous -Xmx costs nothing when content chunking is off. The live set is dominated by the in-flight batches, each of which retains, per document, the full _source, the document's chunk strings, and the document's embedding vectors: content_chunker.job.bulk_size          (default   20) x content_chunker.max_chunks_per_document (default 1000) x content_chunker.embedding.dimension  (default  768) x 4 bytes per float x content_chunker.job.concurrency      (default    2) = ~117 MB of vectors alone, before chunk strings and document sources. With the shipped defaults the worst case is roughly 190-250 MB live (and ~235 MB of vectors alone at dimension=1536), which does not fit a 256 MB heap with any GC headroom. Raise -Xmx further if you raise bulk_size, max_chunks_per_document, concurrency, or the embedding dimension.
+    - 청크 벡터 인덱서 프로세스용 JVM 옵션입니다. 힙 예산. 이 자식 JVM은 "Content Chunk Vector Indexer" 작업이 실행되는 동안에만 시작되므로, 콘텐츠 청킹이 꺼져 있으면 넉넉한 -Xmx를 지정해도 비용이 들지 않습니다. 라이브 세트는 처리 중인 배치가 대부분을 차지하며, 각 배치는 문서마다 전체 _source, 문서의 청크 문자열, 문서의 임베딩 벡터를 유지합니다: content_chunker.job.bulk_size (기본값 20) x content_chunker.max_chunks_per_document (기본값 1000) x content_chunker.embedding.dimension (기본값 768) x float당 4바이트 x content_chunker.job.concurrency (기본값 2) = 청크 문자열과 문서 소스를 제외하고 벡터만으로 약 117 MB입니다. 제공되는 기본값에서 최악의 경우 라이브 세트는 약 190-250 MB이며(dimension=1536에서는 벡터만으로 약 235 MB), 이는 GC 여유를 두면 256 MB 힙에 들어가지 않습니다. bulk_size, max_chunks_per_document, concurrency 또는 임베딩 차원을 올리는 경우에는 -Xmx를 더 올리십시오.
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -187,7 +187,7 @@ Core
       | ``-Dlog4j2.formatMsgNoLookups=true``
       | ``-Dlog4j.skipJansi=true``
   * - jvm.thumbnail.options
-    - JVM options for the thumbnail process.
+    - 썸네일 프로세스용 JVM 옵션.
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -224,135 +224,135 @@ Core
       | ``-Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider``
       | ``-Dorg.apache.pdfbox.rendering.UsePureJavaCMYKConversion=true``
 
-.. list-table:: Job
+.. list-table:: 작업
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - job.system.job.ids
-    - System job IDs for scheduled jobs.
+    - 스케줄된 작업의 시스템 작업 ID.
     - ``default_crawler``
   * - job.template.title.web
-    - Template for web crawler job title.
+    - 웹 크롤러 작업 제목 템플릿.
     - ``Web Crawler - {0}``
   * - job.template.title.file
-    - Template for file crawler job title.
+    - 파일 크롤러 작업 제목 템플릿.
     - ``File Crawler - {0}``
   * - job.template.title.data
-    - Template for data crawler job title.
+    - 데이터 크롤러 작업 제목 템플릿.
     - ``Data Crawler - {0}``
   * - job.template.script
-    - Script template for job execution.
+    - 작업 실행용 스크립트 템플릿.
     - ``return container.getComponent("crawlJob").logLevel("info").webConfigIds([{0}]).fileConfigIds([{1}]).dataConfigIds([{2}]).jobExecutor(executor).execute();``
   * - job.max.crawler.processes
-    - Maximum number of crawler processes.
+    - 크롤러 프로세스의 최대 수.
     - ``0``
   * - job.default.script
-    - Default script language for jobs.
+    - 작업의 기본 스크립트 언어.
     - ``javascript``
   * - job.system.property.filter.pattern
-    - Pattern to filter system properties for jobs.
+    - 작업용 시스템 프로퍼티를 필터링하는 패턴.
     - (empty)
   * - processors
-    - Number of processors to use.
+    - 사용할 프로세서 수.
     - ``0``
   * - java.command.path
-    - Path to Java command.
+    - Java 명령의 경로.
     - ``java``
   * - python.command.path
-    - Path to Python command.
+    - Python 명령의 경로.
     - ``python``
   * - path.encoding
-    - Encoding for file paths.
+    - 파일 경로의 인코딩.
     - ``UTF-8``
   * - use.own.tmp.dir
-    - Whether to use a dedicated temporary directory.
+    - 전용 임시 디렉터리 사용 여부.
     - ``true``
   * - max.log.output.length
-    - Maximum length of log output.
+    - 로그 출력의 최대 길이.
     - ``4000``
   * - adaptive.load.control
-    - Adaptive load control value.
+    - 적응형 부하 제어 값.
     - ``50``
   * - web.load.control
-    - CPU threshold (%) for web request load control. Returns 429 when CPU >= this value. (100: disabled)
+    - 웹 요청 부하 제어용 CPU 임계값(%)입니다. CPU가 이 값 이상이면 429를 반환합니다. (100: 비활성화)
     - ``100``
   * - api.load.control
-    - CPU threshold (%) for API request load control. Returns 429 when CPU >= this value. (100: disabled)
+    - API 요청 부하 제어용 CPU 임계값(%)입니다. CPU가 이 값 이상이면 429를 반환합니다. (100: 비활성화)
     - ``100``
   * - load.control.monitor.interval
-    - Interval (seconds) for monitoring OpenSearch CPU load.
+    - OpenSearch CPU 부하를 모니터링하는 간격(초).
     - ``1``
   * - supported.languages
-    - Supported languages.
+    - 지원하는 언어.
     - ``ar,bg,bn,ca,ckb_IQ,cs,da,de,el,en_IE,en,es,et,eu,fa,fi,fr,gl,gu,he,hi,hr,hu,hy,id,it,ja,ko,lt,lv,mk,ml,nl,no,pa,pl,pt_BR,pt,ro,ru,si,sq,sv,ta,te,th,tl,tr,uk,ur,vi,zh_CN,zh_TW,zh``
   * - api.access.token.length
-    - Length of API access token.
+    - API 액세스 토큰의 길이.
     - ``60``
   * - api.access.token.request.parameter
-    - API access token request parameter.
+    - API 액세스 토큰 요청 파라미터.
     - (empty)
   * - api.admin.access.permissions
-    - Permissions for API admin access.
+    - API 관리 액세스용 권한.
     - ``Radmin-api``
   * - api.search.accept.referers
-    - Accepted referers for API search.
+    - API 검색에서 허용하는 리퍼러.
     - (empty)
   * - api.search.scroll
-    - Whether to enable scroll for API search.
+    - API 검색의 스크롤 활성화 여부.
     - ``false``
   * - api.search.export
-    - Whether to enable the end-user export of search results (CSV/JSON) at /api/v2/documents/export.
+    - /api/v2/documents/export 에서 최종 사용자가 검색 결과(CSV/JSON)를 내보내는 기능의 활성화 여부.
     - ``false``
   * - api.search.export.max.size
-    - Maximum number of documents written by one search result export.
+    - 검색 결과 내보내기 1회에서 출력하는 문서의 최대 수.
     - ``1000``
   * - api.search.export.fields
-    - Fields written by the search result export (comma-separated). A field that is not an API response field is ignored.
+    - 검색 결과 내보내기에서 출력하는 필드(쉼표 구분)입니다. API 응답 필드가 아닌 필드는 무시됩니다.
     - ``title,url_link,last_modified,content_length,filetype``
   * - api.search.export.rate.limit.per.minute
-    - Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit.
+    - 사용자별(게스트는 클라이언트 IP별) 1분당 검색 결과 내보내기의 최대 횟수입니다. 0 이하이면 제한이 비활성화됩니다.
     - ``10``
   * - api.json.response.headers
-    - Headers for API JSON response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - API JSON 응답용 헤더입니다. Access-Control-\* 및 Timing-Allow-Origin 은 여기서 무시됩니다(CORS는 api.cors.\* / CorsFilter 로 제어됩니다). Vary는 설정하지 마십시오.
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.json.response.exception.included
-    - Whether to include exceptions in API JSON response.
+    - API JSON 응답의 예외 포함 여부.
     - ``false``
   * - api.gsa.response.headers
-    - Headers for API GSA response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - API GSA 응답용 헤더입니다. Access-Control-\* 및 Timing-Allow-Origin 은 여기서 무시됩니다(CORS는 api.cors.\* / CorsFilter 로 제어됩니다). Vary는 설정하지 마십시오.
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.gsa.response.exception.included
-    - Whether to include exceptions in API GSA response.
+    - API GSA 응답의 예외 포함 여부.
     - ``false``
   * - api.dashboard.response.headers
-    - Headers for API dashboard response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - API 대시보드 응답용 헤더입니다. Access-Control-\* 및 Timing-Allow-Origin 은 여기서 무시됩니다(CORS는 api.cors.\* / CorsFilter 로 제어됩니다). Vary는 설정하지 마십시오.
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.cors.allow.origin
-    - Allowed origins for CORS. "\*" returns a literal "\*" (the request Origin is NOT reflected) and disables credentials. Set explicit origins (newline- or comma-separated) to allow credentialed cross-origin access.
+    - CORS에서 허용하는 오리진입니다. "\*"를 지정하면 리터럴 "\*"를 반환하며(요청의 Origin은 결코 반영되지 않습니다) 자격 증명이 비활성화됩니다. 자격 증명을 포함한 크로스 오리진 액세스를 허용하려면 명시적인 오리진(줄바꿈 또는 쉼표 구분)을 지정하십시오.
     - ``*``
   * - api.cors.allow.methods
-    - Allowed HTTP methods for CORS.
+    - CORS에서 허용하는 HTTP 메서드.
     - ``GET, POST, OPTIONS, DELETE, PUT``
   * - api.cors.max.age
-    - Max age for CORS preflight requests.
+    - CORS 프리플라이트 요청의 최대 유효 기간.
     - ``3600``
   * - api.cors.allow.headers
-    - Allowed request headers for CORS preflight. A static list is returned (Access-Control-Request-Headers is not reflected). Includes X-Fess-CSRF-Token for cross-origin SPAs sending the CSRF token.
+    - CORS 프리플라이트에서 허용하는 요청 헤더입니다. 고정 목록을 반환합니다(Access-Control-Request-Headers는 반영되지 않습니다). CSRF 토큰을 보내는 크로스 오리진 SPA를 위해 X-Fess-CSRF-Token을 포함합니다.
     - ``Origin, Content-Type, Accept, Authorization, X-Requested-With, X-Fess-CSRF-Token``
   * - api.cors.allow.credentials
-    - Whether to allow credentials for CORS. Honored only for an exact match of an explicit Origin; ignored when api.cors.allow.origin is "\*".
+    - CORS 자격 증명 허용 여부입니다. 명시적인 Origin과 정확히 일치하는 경우에만 적용되며, api.cors.allow.origin 이 "\*"이면 무시됩니다.
     - ``true``
   * - api.jsonp.enabled
-    - Whether to enable JSONP for API.
+    - API의 JSONP 활성화 여부.
     - ``false``
   * - api.ping.search_engine.fields
-    - Fields for API ping to search engine.
+    - 검색 엔진으로의 API ping용 필드.
     - ``status,timed_out``
 
-Rate Limiting
--------------
+속도 제한
+---------
 
 .. list-table::
   :header-rows: 1
@@ -361,626 +361,626 @@ Rate Limiting
     - Description
     - Default
   * - rate.limit.enabled
-    - Whether rate limiting is enabled.
+    - 속도 제한 활성화 여부.
     - ``false``
   * - rate.limit.requests.per.window
-    - Maximum number of requests allowed per window.
+    - 윈도우당 허용되는 최대 요청 수.
     - ``100``
   * - rate.limit.window.ms
-    - Window size in milliseconds.
+    - 윈도우 크기(밀리초).
     - ``60000``
   * - rate.limit.block.duration.ms
-    - Duration in milliseconds to block IP when limit exceeded.
+    - 제한 초과 시 IP를 블록하는 기간(밀리초).
     - ``300000``
   * - rate.limit.retry.after.seconds
-    - Retry-After header value in seconds.
+    - Retry-After 헤더 값(초).
     - ``60``
   * - rate.limit.whitelist.ips
-    - Comma-separated list of whitelisted IPs (e.g., 127.0.0.1,::1).
+    - 화이트리스트에 등록된 IP의 쉼표 구분 목록(예: 127.0.0.1,::1).
     - ``127.0.0.1,::1``
   * - rate.limit.blocked.ips
-    - Comma-separated list of blocked IPs.
+    - 블록된 IP의 쉼표 구분 목록.
     - (empty)
   * - rate.limit.trusted.proxies
-    - Comma-separated list of trusted proxy IPs. Only trust X-Forwarded-For/X-Real-IP from these IPs.
+    - 신뢰하는 프록시 IP의 쉼표 구분 목록입니다. 이 IP로부터 오는 X-Forwarded-For/X-Real-IP만 신뢰합니다.
     - ``127.0.0.1,::1``
   * - rate.limit.cleanup.interval
-    - Number of requests between cleanup operations to prevent memory leaks.
+    - 메모리 누수를 방지하기 위한 클린업 작업 간의 요청 수.
     - ``1000``
   * - virtual.host.headers
-    - Virtual Host: Host:fess.codelibs.org=fess
+    - 가상 호스트: Host:fess.codelibs.org=fess
     - (empty)
   * - http.proxy.host
-    - Hostname for the HTTP proxy server.
+    - HTTP 프록시 서버의 호스트명.
     - (empty)
   * - http.proxy.port
-    - Port number for the HTTP proxy server (e.g., 8080).
+    - HTTP 프록시 서버의 포트 번호(예: 8080).
     - ``8080``
   * - http.proxy.username
-    - Username for HTTP proxy authentication.
+    - HTTP 프록시 인증용 사용자 이름.
     - (empty)
   * - http.proxy.password
-    - Password for HTTP proxy authentication.
+    - HTTP 프록시 인증용 비밀번호.
     - (empty)
   * - http.fileupload.max.size
-    - Maximum size (bytes) for HTTP file uploads.
+    - HTTP 파일 업로드의 최대 크기(바이트).
     - ``262144000``
   * - http.fileupload.threshold.size
-    - Threshold size (bytes) for HTTP file upload buffering.
+    - HTTP 파일 업로드 버퍼링의 임계 크기(바이트).
     - ``262144``
   * - http.fileupload.max.file.count
-    - Maximum number of files allowed per HTTP upload.
+    - HTTP 업로드 1회당 허용되는 최대 파일 수.
     - ``10``
 
-Index
------
+인덱스
+------
 
-.. list-table:: Crawler Common
+.. list-table:: 크롤러 공통
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.http.thread_pool.size
-    - Number of threads for HTTP crawling.
+    - HTTP 크롤링용 스레드 수.
     - ``0``
   * - crawler.data.serializer
-    - Serializer type for crawler data (e.g., kryo).
+    - 크롤러 데이터의 시리얼라이저 타입(예: kryo).
     - ``kryo``
   * - crawler.document.max.site.length
-    - Maximum length of site name in documents.
+    - 문서 내 사이트 이름의 최대 길이.
     - ``100``
   * - crawler.document.site.encoding
-    - Encoding for site names in documents.
+    - 문서 내 사이트 이름의 인코딩.
     - ``UTF-8``
   * - crawler.document.unknown.hostname
-    - Hostname to use when unknown in documents.
+    - 문서에서 호스트명을 알 수 없을 때 사용하는 호스트명.
     - ``unknown``
   * - crawler.document.use.site.encoding.on.english
-    - Whether to use site encoding for English documents.
+    - 영어 문서의 사이트 인코딩 사용 여부.
     - ``false``
   * - crawler.document.append.data
-    - Whether to append data to documents.
+    - 문서에 데이터 추가 여부.
     - ``true``
   * - crawler.document.append.filename
-    - Whether to append filename to documents.
+    - 문서에 파일명 추가 여부.
     - ``false``
   * - crawler.document.max.alphanum.term.size
-    - Maximum size of alphanumeric terms in documents.
+    - 문서 내 영숫자 단어의 최대 크기.
     - ``20``
   * - crawler.document.max.symbol.term.size
-    - Maximum size of symbol terms in documents.
+    - 문서 내 기호 단어의 최대 크기.
     - ``10``
   * - crawler.document.duplicate.term.removed
-    - Whether to remove duplicate terms in documents.
+    - 문서 내 중복 단어 제거 여부.
     - ``false``
   * - crawler.document.space.chars
-    - Unicode space characters for document parsing.
+    - 문서 파싱용 유니코드 공백 문자.
     - ``u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6``
   * - crawler.document.fullstop.chars
-    - Unicode full stop characters for document parsing.
+    - 문서 파싱용 유니코드 마침표 문자.
     - ``u002eu06d4u2e3cu3002``
   * - crawler.crawling.data.encoding
-    - Encoding for crawling data.
+    - 크롤링 데이터의 인코딩.
     - ``UTF-8``
   * - crawler.web.protocols
-    - Supported web protocols for crawling.
+    - 크롤링에서 지원하는 웹 프로토콜.
     - ``http,https``
   * - crawler.file.protocols
-    - Supported file protocols for crawling.
+    - 크롤링에서 지원하는 파일 프로토콜.
     - ``file,smb,smb1,ftp``
   * - crawler.data.env.param.key.pattern
-    - Pattern for environment variable keys in crawling data.
+    - 크롤링 데이터 내 환경 변수 키의 패턴.
     - ``^FESS_ENV_.*``
   * - crawler.ignore.robots.txt
-    - Whether to ignore robots.txt during crawling.
+    - 크롤링 중 robots.txt 무시 여부.
     - ``false``
   * - crawler.ignore.robots.tags
-    - Whether to ignore robots meta tags during crawling.
+    - 크롤링 중 robots 메타 태그 무시 여부.
     - ``false``
   * - crawler.ignore.content.exception
-    - Whether to ignore content exceptions during crawling.
+    - 크롤링 중 콘텐츠 예외 무시 여부.
     - ``true``
   * - crawler.failure.url.status.codes
-    - HTTP status codes considered as failure URLs.
+    - 장애 URL로 간주하는 HTTP 상태 코드.
     - ``404,403,410``
   * - crawler.system.monitor.interval
-    - Interval (seconds) for system monitor during crawling.
+    - 크롤링 중 시스템 모니터링 간격(초).
     - ``60``
   * - crawler.hotthread.ignore_idle_threads
-    - Whether to ignore idle threads in hot thread monitoring.
+    - 핫 스레드 모니터링에서 유휴 스레드 무시 여부.
     - ``true``
   * - crawler.hotthread.interval
-    - Interval for hot thread monitoring (e.g., 500ms).
+    - 핫 스레드 모니터링 간격(예: 500ms).
     - ``500ms``
   * - crawler.hotthread.snapshots
-    - Number of snapshots for hot thread monitoring.
+    - 핫 스레드 모니터링의 스냅샷 수.
     - ``10``
   * - crawler.hotthread.threads
-    - Number of threads for hot thread monitoring.
+    - 핫 스레드 모니터링의 스레드 수.
     - ``3``
   * - crawler.hotthread.timeout
-    - Timeout for hot thread monitoring (e.g., 30s).
+    - 핫 스레드 모니터링의 타임아웃(예: 30s).
     - ``30s``
   * - crawler.hotthread.type
-    - Type of hot thread monitoring (e.g., cpu).
+    - 핫 스레드 모니터링의 타입(예: cpu).
     - ``cpu``
   * - crawler.metadata.content.excludes
-    - Metadata fields to exclude from document content.
+    - 문서 콘텐츠에서 제외할 메타데이터 필드.
     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
   * - crawler.metadata.name.mapping
-    - Mapping for document metadata names.
+    - 문서 메타데이터 이름의 매핑.
     - | ``title=title:string``
       | ``Title=title:string``
       | ``dc:title=title:string``
       | ``frontmatter.title=title:string``
 
-.. list-table:: Crawler HTML
+.. list-table:: 크롤러 HTML
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.html.content.xpath
-    - XPath to extract main content from HTML documents.
+    - HTML 문서에서 주요 콘텐츠를 추출하는 XPath.
     - ``//BODY``
   * - crawler.document.html.lang.xpath
-    - XPath to extract language attribute from HTML documents.
+    - HTML 문서에서 언어 속성을 추출하는 XPath.
     - ``//HTML/@lang``
   * - crawler.document.html.digest.xpath
-    - XPath to extract digest (description) from HTML documents.
+    - HTML 문서에서 다이제스트(설명)를 추출하는 XPath.
     - ``//META[@name='description']/@content``
   * - crawler.document.html.canonical.xpath
-    - XPath to extract canonical URL from HTML documents.
+    - HTML 문서에서 표준 URL을 추출하는 XPath.
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
-    - HTML tags to prune (remove) during document processing.
+    - 문서 처리 중에 프루닝(제거)할 HTML 태그.
     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
-    - Maximum length of digest extracted from HTML documents.
+    - HTML 문서에서 추출하는 다이제스트의 최대 길이.
     - ``120``
   * - crawler.document.html.default.lang
-    - Default language for HTML documents.
+    - HTML 문서의 기본 언어.
     - (empty)
   * - crawler.document.html.default.include.index.patterns
-    - Patterns to include for HTML index processing.
+    - HTML 인덱스 처리에 포함할 패턴.
     - (empty)
   * - crawler.document.html.default.exclude.index.patterns
-    - Patterns to exclude for HTML index processing.
+    - HTML 인덱스 처리에서 제외할 패턴.
     - ``(?i).*(css|js|jpeg|jpg|gif|png|bmp|wmv|xml|ico|exe)``
   * - crawler.document.html.default.include.search.patterns
-    - Patterns to include for HTML search processing.
+    - HTML 검색 처리에 포함할 패턴.
     - (empty)
   * - crawler.document.html.default.exclude.search.patterns
-    - Patterns to exclude for HTML search processing.
+    - HTML 검색 처리에서 제외할 패턴.
     - (empty)
 
-.. list-table:: Crawler File
+.. list-table:: 크롤러 파일
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.file.name.encoding
-    - Encoding for file names in documents.
+    - 문서 내 파일명의 인코딩.
     - (empty)
   * - crawler.document.file.no.title.label
-    - Label to use when a file has no title.
+    - 파일에 제목이 없을 때 사용하는 라벨.
     - ``No title.``
   * - crawler.document.file.ignore.empty.content
-    - Whether to ignore files with empty content.
+    - 내용이 빈 파일 무시 여부.
     - ``false``
   * - crawler.document.file.max.title.length
-    - Maximum length of file title in documents.
+    - 문서 내 파일 제목의 최대 길이.
     - ``100``
   * - crawler.document.file.max.digest.length
-    - Maximum length of file digest in documents.
+    - 문서 내 파일 다이제스트의 최대 길이.
     - ``200``
   * - crawler.document.file.append.meta.content
-    - Whether to append meta content from files.
+    - 파일의 메타 콘텐츠 추가 여부.
     - ``true``
   * - crawler.document.file.append.body.content
-    - Whether to append body content from files.
+    - 파일의 본문 콘텐츠 추가 여부.
     - ``true``
   * - crawler.document.file.default.lang
-    - Default language for file documents.
+    - 파일 문서의 기본 언어.
     - (empty)
   * - crawler.document.file.default.include.index.patterns
-    - Patterns to include for file index processing.
+    - 파일 인덱스 처리에 포함할 패턴.
     - (empty)
   * - crawler.document.file.default.exclude.index.patterns
-    - Patterns to exclude for file index processing.
+    - 파일 인덱스 처리에서 제외할 패턴.
     - (empty)
   * - crawler.document.file.default.include.search.patterns
-    - Patterns to include for file search processing.
+    - 파일 검색 처리에 포함할 패턴.
     - (empty)
   * - crawler.document.file.default.exclude.search.patterns
-    - Patterns to exclude for file search processing.
+    - 파일 검색 처리에서 제외할 패턴.
     - (empty)
   * - crawler.document.file.owner.enabled
-    - Whether to index the owner of crawled files (SMB, local file system and FTP). The crawl config parameter config.owner.enabled overrides it.
+    - 크롤링한 파일(SMB, 로컬 파일 시스템, FTP)의 소유자를 인덱싱할지 여부입니다. 크롤링 설정 파라미터 config.owner.enabled 가 이를 오버라이드합니다.
     - ``true``
   * - crawler.document.file.last.modifier.enabled
-    - Whether to index the last modifier of crawled files, read from the document metadata and falling back to the file owner. The crawl config parameter config.last.modifier.enabled overrides it.
+    - 크롤링한 파일의 최종 수정자를 인덱싱할지 여부입니다. 문서 메타데이터에서 읽으며, 없으면 파일 소유자로 폴백합니다. 크롤링 설정 파라미터 config.last.modifier.enabled 가 이를 오버라이드합니다.
     - ``true``
 
-.. list-table:: Crawler Cache
+.. list-table:: 크롤러 캐시
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.cache.enabled
-    - Whether document cache is enabled.
+    - 문서 캐시 활성화 여부.
     - ``true``
   * - crawler.document.cache.max.size
-    - Maximum size (bytes) for document cache.
+    - 문서 캐시의 최대 크기(바이트).
     - ``2621440``
   * - crawler.document.cache.supported.mimetypes
-    - Supported MIME types for document cache.
+    - 문서 캐시에서 지원하는 MIME 타입.
     - ``text/html``
   * - crawler.document.cache.html.mimetypes
-    - ,text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME types for HTML document cache.
+    - ,text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation HTML 문서 캐시용 MIME 타입.
     - ``text/html``
   * - crawler.document.mimetype.extension.overrides
-    - Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type).
+    - MIME 타입 감지를 위한 확장자에서 MIME 타입으로의 오버라이드 매핑(한 줄에 하나: .ext=mime/type).
     - (empty)
   * - crawler.document.ocr.enabled
-    - Whether to extract text from images and scanned PDFs with Tesseract OCR (requires the tesseract command).
+    - Tesseract OCR로 이미지와 스캔한 PDF에서 텍스트를 추출할지 여부(tesseract 명령 필요).
     - ``false``
   * - crawler.document.ocr.language
-    - Tesseract OCR languages, joined with '+' (e.g. jpn+eng).
+    - '+'로 연결한 Tesseract OCR 언어(예: jpn+eng).
     - ``eng``
   * - crawler.document.ocr.timeout
-    - Timeout in seconds for one Tesseract OCR run.
+    - Tesseract OCR 1회 실행의 타임아웃(초).
     - ``120``
 
-.. list-table:: Indexer
+.. list-table:: 인덱서
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - indexer.thread.dump.enabled
-    - Whether to enable thread dump for the indexer.
+    - 인덱서의 스레드 덤프 활성화 여부.
     - ``true``
   * - indexer.unprocessed.document.size
-    - Maximum number of unprocessed documents for the indexer.
+    - 인덱서의 미처리 문서 최대 수.
     - ``1000``
   * - indexer.click.count.enabled
-    - Whether to enable click count tracking in the indexer.
+    - 인덱서의 클릭 수 추적 활성화 여부.
     - ``true``
   * - indexer.favorite.count.enabled
-    - Whether to enable favorite count tracking in the indexer.
+    - 인덱서의 즐겨찾기 수 추적 활성화 여부.
     - ``true``
   * - indexer.webfs.commit.margin.time
-    - Commit margin time (ms) for webfs in the indexer.
+    - 인덱서의 webfs용 커밋 마진 시간(밀리초).
     - ``5000``
   * - indexer.webfs.max.empty.list.count
-    - Maximum number of empty lists for webfs in the indexer.
+    - 인덱서의 webfs용 빈 목록의 최대 수.
     - ``3600``
   * - indexer.webfs.update.interval
-    - Update interval (ms) for webfs in the indexer.
+    - 인덱서의 webfs용 업데이트 간격(밀리초).
     - ``10000``
   * - indexer.webfs.max.document.cache.size
-    - Maximum document cache size for webfs in the indexer.
+    - 인덱서의 webfs용 문서 캐시 최대 크기.
     - ``10``
   * - indexer.webfs.max.document.request.size
-    - Maximum document request size (bytes) for webfs in the indexer.
+    - 인덱서의 webfs용 문서 요청 최대 크기(바이트).
     - ``1048576``
   * - indexer.data.max.document.cache.size
-    - Maximum document cache size for data in the indexer.
+    - 인덱서의 데이터용 문서 캐시 최대 크기.
     - ``10000``
   * - indexer.data.max.document.request.size
-    - Maximum document request size (bytes) for data in the indexer.
+    - 인덱서의 데이터용 문서 요청 최대 크기(바이트).
     - ``1048576``
   * - indexer.data.max.delete.cache.size
-    - Maximum delete cache size for data in the indexer.
+    - 인덱서의 데이터용 삭제 캐시 최대 크기.
     - ``100``
   * - indexer.data.max.redirect.count
-    - Maximum redirect count for data in the indexer.
+    - 인덱서의 데이터용 최대 리디렉션 횟수.
     - ``10``
   * - indexer.language.fields
-    - Fields used for language detection in the indexer.
+    - 인덱서에서 언어 감지에 사용하는 필드.
     - ``content,important_content,title``
   * - indexer.language.detect.length
-    - Length of text for language detection in the indexer.
+    - 인덱서의 언어 감지용 텍스트 길이.
     - ``1000``
   * - indexer.max.result.window.size
-    - Maximum result window size for the indexer.
+    - 인덱서의 최대 결과 윈도우 크기.
     - ``10000``
   * - indexer.max.search.doc.size
-    - Maximum number of search documents for the indexer.
+    - 인덱서의 검색 문서 최대 수.
     - ``50000``
 
-.. list-table:: Index Settings
+.. list-table:: 인덱스 설정
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.codec
-    - Codec type for the index.
+    - 인덱스의 코덱 타입.
     - ``default``
   * - index.number_of_shards
-    - Number of primary shards for the index.
+    - 인덱스의 프라이머리 샤드 수.
     - ``5``
   * - index.auto_expand_replicas
-    - Auto expand replicas setting for the index.
+    - 인덱스의 레플리카 자동 확장 설정.
     - ``0-1``
   * - index.id.digest.algorithm
-    - Digest algorithm for index IDs.
+    - 인덱스 ID용 다이제스트 알고리즘.
     - ``SHA-512``
   * - index.user.initial_password
-    - Initial password for the index user.
+    - 인덱스 사용자의 초기 비밀번호.
     - ``admin``
 
-.. list-table:: Field Names
+.. list-table:: 필드명
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.field.favorite_count
-    - Field name for favorite count in the index.
+    - 인덱스의 즐겨찾기 수 필드명.
     - ``favorite_count``
   * - index.field.click_count
-    - Field name for click count in the index.
+    - 인덱스의 클릭 수 필드명.
     - ``click_count``
   * - index.field.config_id
-    - Field name for config ID in the index.
+    - 인덱스의 설정 ID 필드명.
     - ``config_id``
   * - index.field.expires
-    - Field name for expiration date in the index.
+    - 인덱스의 만료일 필드명.
     - ``expires``
   * - index.field.url
-    - Field name for URL in the index.
+    - 인덱스의 URL 필드명.
     - ``url``
   * - index.field.doc_id
-    - Field name for document ID in the index.
+    - 인덱스의 문서 ID 필드명.
     - ``doc_id``
   * - index.field.id
-    - Field name for internal ID in the index.
+    - 인덱스의 내부 ID 필드명.
     - ``_id``
   * - index.field.version
-    - Field name for version in the index.
+    - 인덱스의 버전 필드명.
     - ``_version``
   * - index.field.seq_no
-    - Field name for sequence number in the index.
+    - 인덱스의 시퀀스 번호 필드명.
     - ``_seq_no``
   * - index.field.primary_term
-    - Field name for primary term in the index.
+    - 인덱스의 프라이머리 텀 필드명.
     - ``_primary_term``
   * - index.field.lang
-    - Field name for language in the index.
+    - 인덱스의 언어 필드명.
     - ``lang``
   * - index.field.has_cache
-    - Field name for cache status in the index.
+    - 인덱스의 캐시 상태 필드명.
     - ``has_cache``
   * - index.field.last_modified
-    - Field name for last modified date in the index.
+    - 인덱스의 최종 수정일 필드명.
     - ``last_modified``
   * - index.field.etag
-    - Field name for the ETag response header of the crawled document in the index.
+    - 인덱스의 크롤링한 문서의 ETag 응답 헤더 필드명.
     - ``etag``
   * - index.field.owner
-    - Field name for the owner of the crawled file in the index.
+    - 인덱스의 크롤링한 파일의 소유자 필드명.
     - ``owner``
   * - index.field.last_modifier
-    - Field name for the last modifier of the crawled file in the index.
+    - 인덱스의 크롤링한 파일의 최종 수정자 필드명.
     - ``last_modifier``
   * - index.field.anchor
-    - Field name for anchor in the index.
+    - 인덱스의 앵커 필드명.
     - ``anchor``
   * - index.field.segment
-    - Field name for segment in the index.
+    - 인덱스의 세그먼트 필드명.
     - ``segment``
   * - index.field.role
-    - Field name for role in the index.
+    - 인덱스의 역할 필드명.
     - ``role``
   * - index.field.boost
-    - Field name for boost value in the index.
+    - 인덱스의 부스트 값 필드명.
     - ``boost``
   * - index.field.created
-    - Field name for creation date in the index.
+    - 인덱스의 생성일 필드명.
     - ``created``
   * - index.field.timestamp
-    - Field name for timestamp in the index.
+    - 인덱스의 타임스탬프 필드명.
     - ``timestamp``
   * - index.field.label
-    - Field name for label in the index.
+    - 인덱스의 라벨 필드명.
     - ``label``
   * - index.field.tag
-    - Field name for the user tags of the document in the index.
+    - 인덱스의 문서 사용자 태그 필드명.
     - ``tag``
   * - index.field.mimetype
-    - Field name for MIME type in the index.
+    - 인덱스의 MIME 타입 필드명.
     - ``mimetype``
   * - index.field.parent_id
-    - Field name for parent ID in the index.
+    - 인덱스의 부모 ID 필드명.
     - ``parent_id``
   * - index.field.important_content
-    - Field name for important content in the index.
+    - 인덱스의 중요 콘텐츠 필드명.
     - ``important_content``
   * - index.field.content
-    - Field name for content in the index.
+    - 인덱스의 콘텐츠 필드명.
     - ``content``
   * - index.field.content_minhash_bits
-    - Field name for content minhash bits in the index.
+    - 인덱스의 콘텐츠 minhash 비트 필드명.
     - ``content_minhash_bits``
   * - index.field.cache
-    - Field name for cache in the index.
+    - 인덱스의 캐시 필드명.
     - ``cache``
   * - index.field.digest
-    - Field name for digest in the index.
+    - 인덱스의 다이제스트 필드명.
     - ``digest``
   * - index.field.title
-    - Field name for title in the index.
+    - 인덱스의 제목 필드명.
     - ``title``
   * - index.field.host
-    - Field name for host in the index.
+    - 인덱스의 호스트 필드명.
     - ``host``
   * - index.field.site
-    - Field name for site in the index.
+    - 인덱스의 사이트 필드명.
     - ``site``
   * - index.field.content_length
-    - Field name for content length in the index.
+    - 인덱스의 콘텐츠 길이 필드명.
     - ``content_length``
   * - index.field.filetype
-    - Field name for file type in the index.
+    - 인덱스의 파일 타입 필드명.
     - ``filetype``
   * - index.field.filename
-    - Field name for file name in the index.
+    - 인덱스의 파일명 필드명.
     - ``filename``
   * - index.field.thumbnail
-    - Field name for thumbnail in the index.
+    - 인덱스의 썸네일 필드명.
     - ``thumbnail``
   * - index.field.virtual_host
-    - Field name for virtual host in the index.
+    - 인덱스의 가상 호스트 필드명.
     - ``virtual_host``
   * - response.field.content_title
-    - Field name for content title in the response.
+    - 응답의 콘텐츠 제목 필드명.
     - ``content_title``
   * - response.field.content_description
-    - Field name for content description in the response.
+    - 응답의 콘텐츠 설명 필드명.
     - ``content_description``
   * - response.field.url_link
-    - Field name for URL link in the response.
+    - 응답의 URL 링크 필드명.
     - ``url_link``
   * - response.field.site_path
-    - Field name for site path in the response.
+    - 응답의 사이트 경로 필드명.
     - ``site_path``
   * - response.max.title.length
-    - Maximum length of content title in the response.
+    - 응답 내 콘텐츠 제목의 최대 길이.
     - ``50``
   * - response.max.site.path.length
-    - Maximum length of site path in the response.
+    - 응답 내 사이트 경로의 최대 길이.
     - ``100``
   * - response.highlight.content_title.enabled
-    - Whether to enable content title highlighting in the response.
+    - 응답의 콘텐츠 제목 하이라이트 활성화 여부.
     - ``true``
   * - response.inline.mimetypes
-    - Inline MIME types for the response.
+    - 응답의 인라인 MIME 타입.
     - ``application/pdf,text/plain``
   * - response.headers
-    - HTTP headers for the response. Access-Control-\* and Timing-Allow-Origin are ignored (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary here.
+    - 응답용 HTTP 헤더입니다. Access-Control-\* 및 Timing-Allow-Origin 은 무시됩니다(CORS는 api.cors.\* / CorsFilter 로 제어됩니다). 여기서는 Vary를 설정하지 마십시오.
     - | ``text/html=X-XSS-Protection: 1; mode=block``
       | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
-.. list-table:: Document Index
+.. list-table:: 문서 인덱스
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.document.search.index
-    - Index name for search documents.
+    - 검색 문서의 인덱스 이름.
     - ``fess.search``
   * - index.document.update.index
-    - Index name for update documents.
+    - 업데이트 문서의 인덱스 이름.
     - ``fess.update``
   * - index.document.suggest.index
-    - Index name for suggest documents.
+    - 서제스트 문서의 인덱스 이름.
     - ``fess``
   * - index.document.crawler.index
-    - Index name for crawler documents.
+    - 크롤러 문서의 인덱스 이름.
     - ``fess_crawler``
   * - index.document.crawler.queue.number_of_shards
-    - Number of primary shards for crawler queue index.
+    - 크롤러 큐 인덱스의 프라이머리 샤드 수.
     - ``10``
   * - index.document.crawler.data.number_of_shards
-    - Number of primary shards for crawler data index.
+    - 크롤러 데이터 인덱스의 프라이머리 샤드 수.
     - ``10``
   * - index.document.crawler.filter.number_of_shards
-    - Number of primary shards for crawler filter index.
+    - 크롤러 필터 인덱스의 프라이머리 샤드 수.
     - ``10``
   * - index.document.crawler.queue.number_of_replicas
-    - Number of replicas for crawler queue index.
+    - 크롤러 큐 인덱스의 레플리카 수.
     - ``1``
   * - index.document.crawler.data.number_of_replicas
-    - Number of replicas for crawler data index.
+    - 크롤러 데이터 인덱스의 레플리카 수.
     - ``1``
   * - index.document.crawler.filter.number_of_replicas
-    - Number of replicas for crawler filter index.
+    - 크롤러 필터 인덱스의 레플리카 수.
     - ``1``
   * - index.config.index
-    - Index name for configuration data.
+    - 설정 데이터의 인덱스 이름.
     - ``fess_config``
   * - index.user.index
-    - Index name for user data.
+    - 사용자 데이터의 인덱스 이름.
     - ``fess_user``
   * - index.log.index
-    - Index name for log data.
+    - 로그 데이터의 인덱스 이름.
     - ``fess_log``
   * - index.dictionary.prefix
-    - Prefix for dictionary index names.
+    - 사전 인덱스 이름의 접두사.
     - (empty)
 
-.. list-table:: Document Management
+.. list-table:: 문서 관리
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.admin.array.fields
-    - Array-type fields for admin in the index.
+    - 인덱스의 관리용 배열 타입 필드.
     - ``lang,role,label,anchor,virtual_host``
   * - index.admin.date.fields
-    - Date-type fields for admin in the index.
+    - 인덱스의 관리용 날짜 타입 필드.
     - ``expires,created,timestamp,last_modified``
   * - index.admin.integer.fields
-    - Integer-type fields for admin in the index.
+    - 인덱스의 관리용 정수 타입 필드.
     - (empty)
   * - index.admin.long.fields
-    - Long-type fields for admin in the index.
+    - 인덱스의 관리용 Long 타입 필드.
     - ``content_length,favorite_count,click_count``
   * - index.admin.float.fields
-    - Float-type fields for admin in the index.
+    - 인덱스의 관리용 Float 타입 필드.
     - ``boost``
   * - index.admin.double.fields
-    - Double-type fields for admin in the index.
+    - 인덱스의 관리용 Double 타입 필드.
     - (empty)
   * - index.admin.required.fields
-    - Required fields for admin in the index.
+    - 인덱스의 관리용 필수 필드.
     - ``url,title,role,boost``
 
-.. list-table:: Timeouts
+.. list-table:: 타임아웃
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.search.timeout
-    - Timeout for index search operations.
+    - 인덱스 검색 작업의 타임아웃.
     - ``3m``
   * - index.scroll.search.timeout
-    - Timeout for scroll search operations.
+    - 스크롤 검색 작업의 타임아웃.
     - ``3m``
   * - index.index.timeout
-    - Timeout for index operations.
+    - 인덱스 작업의 타임아웃.
     - ``3m``
   * - index.bulk.timeout
-    - Timeout for bulk index operations.
+    - 벌크 인덱스 작업의 타임아웃.
     - ``3m``
   * - index.delete.timeout
-    - Timeout for delete operations in the index.
+    - 인덱스의 삭제 작업 타임아웃.
     - ``3m``
   * - index.health.timeout
-    - Timeout for index health checks.
+    - 인덱스 헬스 체크의 타임아웃.
     - ``10m``
   * - index.indices.timeout
-    - Timeout for index indices operations.
+    - 인덱스 indices 작업의 타임아웃.
     - ``1m``
 
-.. list-table:: File Types
+.. list-table:: 파일 타입
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.filetype
-    - Mapping of MIME types to filetype labels for indexing.
+    - 인덱싱용 MIME 타입과 filetype 라벨의 매핑.
     - | ``text/html=html``
       | ``application/msword=word``
       | ``application/vnd.openxmlformats-officedocument.wordprocessingml.document=word``
@@ -1033,200 +1033,200 @@ Index
       | ``image/tiff=tiff``
       | ``image/jpeg=jpg``
   * - index.reindex.size
-    - Number of documents to process per reindex operation.
+    - 재인덱싱 작업 1회당 처리할 문서 수.
     - ``100``
   * - index.reindex.body
-    - Request body template for reindex operations.
+    - 재인덱싱 작업의 요청 본문 템플릿.
     - ``{"source":{"index":"__SOURCE_INDEX__","size":__SIZE__},"dest":{"index":"__DEST_INDEX__"},"script":{"source":"__SCRIPT_SOURCE__"}}``
   * - index.reindex.requests_per_second
-    - Requests per second for reindex operations ("adaptive" for auto).
+    - 재인덱싱 작업의 초당 요청 수("adaptive"이면 자동).
     - ``adaptive``
   * - index.reindex.refresh
-    - Whether to refresh the index after reindexing.
+    - 재인덱싱 후 인덱스 리프레시 여부.
     - ``false``
   * - index.reindex.timeout
-    - Timeout for reindex operations.
+    - 재인덱싱 작업의 타임아웃.
     - ``1m``
   * - index.reindex.scroll
-    - Scroll timeout for reindex operations.
+    - 재인덱싱 작업의 스크롤 타임아웃.
     - ``5m``
   * - index.reindex.max_docs
-    - Maximum number of documents for reindex operations.
+    - 재인덱싱 작업의 최대 문서 수.
     - (empty)
 
-.. list-table:: Query
+.. list-table:: 쿼리
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - query.max.length
-    - Maximum length of search queries.
+    - 검색 쿼리의 최대 길이.
     - ``1000``
   * - query.timeout
-    - Timeout (ms) for search queries.
+    - 검색 쿼리의 타임아웃(밀리초).
     - ``10000``
   * - query.timeout.logging
-    - Whether to log searches whose results are incomplete because the query timed out or a shard failed.
+    - 쿼리 타임아웃 또는 샤드 실패로 결과가 불완전한 검색의 로그 기록 여부.
     - ``true``
   * - query.track.total.hits
-    - Maximum number of total hits to track in queries. Only a positive number or true is supported: false leaves the response without a hit count, and a search that asks for it, here or as a search parameter, is refused.
+    - 쿼리에서 추적할 총 히트 건수의 최대 수입니다. 양수 또는 true만 지원합니다. false를 지정하면 응답에 히트 건수가 포함되지 않으며, 여기서든 검색 파라미터로든 히트 건수를 요청하는 검색은 거부됩니다.
     - ``10000``
   * - query.geo.fields
-    - Fields used for geo search queries.
+    - 지리 검색 쿼리에 사용하는 필드.
     - ``location``
   * - query.browser.lang.parameter.name
-    - Parameter name for browser language in queries.
+    - 쿼리의 브라우저 언어 파라미터 이름.
     - ``browser_lang``
   * - query.replace.term.with.prefix.query
-    - Whether to replace term with prefix query.
+    - 단어의 접두사 쿼리 치환 여부.
     - ``true``
   * - query.orsearch.min.hit.count
-    - Minimum hit count for OR search queries.
+    - OR 검색 쿼리의 최소 히트 건수.
     - ``-1``
   * - query.highlight.terminal.chars
-    - Unicode terminal characters for query highlighting.
+    - 쿼리 하이라이트용 유니코드 종단 문자.
     - ``u0021u002Cu002Eu003Fu0589u061Fu06D4u0700u0701u0702u0964u104Au104Bu1362u1367u1368u166Eu1803u1809u203Cu203Du2047u2048u2049u3002uFE52uFE57uFF01uFF0EuFF1FuFF61``
   * - query.highlight.fragment.size
-    - Fragment size for query highlighting.
+    - 쿼리 하이라이트의 프래그먼트 크기.
     - ``60``
   * - query.highlight.number.of.fragments
-    - Number of fragments for query highlighting.
+    - 쿼리 하이라이트의 프래그먼트 수.
     - ``2``
   * - query.highlight.type
-    - Type of query highlighting.
+    - 쿼리 하이라이트의 타입.
     - ``fvh``
   * - query.highlight.tag.pre
-    - Tag to use before highlighted text.
+    - 하이라이트된 텍스트 앞에 사용하는 태그.
     - ``<strong>``
   * - query.highlight.tag.post
-    - Tag to use after highlighted text.
+    - 하이라이트된 텍스트 뒤에 사용하는 태그.
     - ``</strong>``
   * - query.highlight.boundary.chars
-    - Boundary characters for query highlighting.
+    - 쿼리 하이라이트의 경계 문자.
     - ``u0009u000Au0013u0020``
   * - query.highlight.boundary.max.scan
-    - Maximum scan for query highlight boundaries.
+    - 쿼리 하이라이트 경계의 최대 스캔.
     - ``20``
   * - query.highlight.boundary.scanner
-    - Scanner type for query highlight boundaries.
+    - 쿼리 하이라이트 경계의 스캐너 타입.
     - ``chars``
   * - query.highlight.encoder
-    - Encoder type for query highlighting.
+    - 쿼리 하이라이트의 인코더 타입.
     - ``default``
   * - query.highlight.force.source
-    - Whether to force source for query highlighting.
+    - 쿼리 하이라이트의 소스 강제 여부.
     - ``false``
   * - query.highlight.fragmenter
-    - Fragmenter type for query highlighting.
+    - 쿼리 하이라이트의 프래그멘터 타입.
     - ``span``
   * - query.highlight.fragment.offset
-    - Offset for query highlight fragments.
+    - 쿼리 하이라이트 프래그먼트의 오프셋.
     - ``-1``
   * - query.highlight.no.match.size
-    - Size for no-match query highlight.
+    - 일치 항목이 없을 때의 쿼리 하이라이트 크기.
     - ``0``
   * - query.highlight.order
-    - Order for query highlight fragments.
+    - 쿼리 하이라이트 프래그먼트의 순서.
     - ``score``
   * - query.highlight.phrase.limit
-    - Phrase limit for query highlighting.
+    - 쿼리 하이라이트의 프레이즈 제한.
     - ``256``
   * - query.highlight.content.description.fields
-    - Fields for content description in query highlighting.
+    - 쿼리 하이라이트에서 콘텐츠 설명에 사용하는 필드.
     - ``hl_content,digest``
   * - query.highlight.boundary.position.detect
-    - Whether to detect boundary position in query highlighting.
+    - 쿼리 하이라이트의 경계 위치 감지 여부.
     - ``true``
   * - query.highlight.text.fragment.type
-    - Type for text fragment in query highlighting.
+    - 쿼리 하이라이트의 텍스트 프래그먼트 타입.
     - ``query``
   * - query.highlight.text.fragment.size
-    - Size for text fragment in query highlighting.
+    - 쿼리 하이라이트의 텍스트 프래그먼트 크기.
     - ``3``
   * - query.highlight.text.fragment.prefix.length
-    - Prefix length for text fragment in query highlighting.
+    - 쿼리 하이라이트의 텍스트 프래그먼트 접두사 길이.
     - ``5``
   * - query.highlight.text.fragment.suffix.length
-    - Suffix length for text fragment in query highlighting.
+    - 쿼리 하이라이트의 텍스트 프래그먼트 접미사 길이.
     - ``5``
   * - query.max.search.result.offset
-    - Maximum search result offset for queries.
+    - 쿼리의 최대 검색 결과 오프셋.
     - ``100000``
   * - query.additional.default.fields
-    - Additional default fields for queries.
+    - 쿼리의 추가 기본 필드.
     - (empty)
   * - query.additional.response.fields
-    - Additional fields fetched from the index for search results. The search API returns a field added here only if it is also listed in query.additional.api.response.fields.
+    - 검색 결과를 위해 인덱스에서 가져오는 추가 필드입니다. 여기에 추가한 필드는 query.additional.api.response.fields 에도 나열된 경우에만 검색 API가 반환합니다.
     - (empty)
   * - query.additional.api.response.fields
-    - Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only); it does not fetch them. A field must also be fetched: add it to query.additional.response.fields for the search API, or to query.additional.scroll.response.fields for the scroll API. Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response.
+    - 쿼리의 추가 API 응답 필드입니다. 이 키는 v2 API 응답 허용 목록에 필드를 추가(추가 전용)할 뿐이며 필드를 가져오지는 않습니다. 필드를 가져오는 설정도 필요합니다. 검색 API에는 query.additional.response.fields 에, 스크롤 API에는 query.additional.scroll.response.fields 에 추가하십시오. ACL 또는 내부 필드(예: role, virtual_host)는 추가하지 마십시오. 추가하면 검색 API 응답에 접근 제어 정보가 노출됩니다.
     - (empty)
   * - query.additional.scroll.response.fields
-    - Additional fields fetched from the index for scroll search results. The scroll API returns a field added here only if it is also listed in query.additional.api.response.fields.
+    - 스크롤 검색 결과를 위해 인덱스에서 가져오는 추가 필드입니다. 여기에 추가한 필드는 query.additional.api.response.fields 에도 나열된 경우에만 스크롤 API가 반환합니다.
     - (empty)
   * - query.additional.cache.response.fields
-    - Additional cache response fields for queries.
+    - 쿼리의 추가 캐시 응답 필드.
     - (empty)
   * - query.additional.highlighted.fields
-    - Additional highlighted fields for queries.
+    - 쿼리의 추가 하이라이트 필드.
     - (empty)
   * - query.additional.search.fields
-    - Additional search fields for queries.
+    - 쿼리의 추가 검색 필드.
     - (empty)
   * - query.additional.facet.fields
-    - Additional facet fields for queries.
+    - 쿼리의 추가 패싯 필드.
     - (empty)
   * - query.additional.sort.fields
-    - Additional sort fields for queries.
+    - 쿼리의 추가 정렬 필드.
     - (empty)
   * - query.additional.analyzed.fields
-    - Additional analyzed fields for queries.
+    - 쿼리의 추가 분석 필드.
     - (empty)
   * - query.additional.not.analyzed.fields
-    - Additional not-analyzed fields for queries.
+    - 쿼리의 추가 비분석 필드.
     - (empty)
   * - query.gsa.response.fields
-    - Fields for GSA response in queries.
+    - 쿼리의 GSA 응답용 필드.
     - ``UE,U,T,RK,S,LANG``
   * - query.gsa.default.lang
-    - Default language for GSA queries.
+    - GSA 쿼리의 기본 언어.
     - ``en``
   * - query.gsa.default.sort
-    - Default sort for GSA queries.
+    - GSA 쿼리의 기본 정렬.
     - (empty)
   * - query.gsa.meta.prefix
-    - Meta prefix for GSA queries.
+    - GSA 쿼리의 메타 접두사.
     - ``MT_``
   * - query.gsa.index.field.charset
-    - Charset field for GSA index queries.
+    - GSA 인덱스 쿼리의 문자셋 필드.
     - ``charset``
   * - query.gsa.index.field.content_type.
-    - Content type field for GSA index queries.
+    - GSA 인덱스 쿼리의 콘텐츠 타입 필드.
     - ``content_type``
   * - query.collapse.max.concurrent.group.results
-    - Maximum concurrent group results for collapse queries.
+    - collapse 쿼리의 최대 동시 그룹 결과 수.
     - ``4``
   * - query.collapse.inner.hits.name
-    - Inner hits name for collapse queries.
+    - collapse 쿼리의 inner hits 이름.
     - ``similar_docs``
   * - query.collapse.inner.hits.size
-    - Inner hits size for collapse queries.
+    - collapse 쿼리의 inner hits 크기.
     - ``0``
   * - query.collapse.inner.hits.sorts
-    - Sorts for inner hits in collapse queries.
+    - collapse 쿼리의 inner hits 정렬.
     - (empty)
   * - query.default.languages
-    - Default languages for queries.
+    - 쿼리의 기본 언어.
     - (empty)
   * - query.json.default.preference
-    - Default preference for JSON queries.
+    - JSON 쿼리의 기본 프리퍼런스.
     - ``_query``
   * - query.gsa.default.preference
-    - Default preference for GSA queries.
+    - GSA 쿼리의 기본 프리퍼런스.
     - ``_query``
   * - query.language.mapping
-    - Language mapping for queries.
+    - 쿼리의 언어 매핑.
     - | ``ar=ar``
       | ``bg=bg``
       | ``bn=bn``
@@ -1287,156 +1287,156 @@ Index
       | ``zh_TW=zh-tw``
       | ``zh=zh``
 
-.. list-table:: Boost
+.. list-table:: 부스트
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - query.boost.title
-    - Boost value for title field in queries.
+    - 쿼리의 제목 필드 부스트 값.
     - ``0.5``
   * - query.boost.title.lang
-    - Boost value for title field with language in queries.
+    - 쿼리의 언어 지정 제목 필드 부스트 값.
     - ``1.0``
   * - query.boost.content
-    - Boost value for content field in queries.
+    - 쿼리의 콘텐츠 필드 부스트 값.
     - ``0.05``
   * - query.boost.content.lang
-    - Boost value for content field with language in queries.
+    - 쿼리의 언어 지정 콘텐츠 필드 부스트 값.
     - ``0.1``
   * - query.boost.important_content
-    - Boost value for important content field in queries.
+    - 쿼리의 중요 콘텐츠 필드 부스트 값.
     - ``-1.0``
   * - query.boost.important_content.lang
-    - Boost value for important content field with language in queries.
+    - 쿼리의 언어 지정 중요 콘텐츠 필드 부스트 값.
     - ``-1.0``
   * - query.boost.fuzzy.min.length
-    - Minimum length for fuzzy boosting in queries.
+    - 쿼리의 퍼지 부스트 최소 길이.
     - ``4``
   * - query.boost.fuzzy.title
-    - Boost value for fuzzy title queries.
+    - 퍼지 제목 쿼리의 부스트 값.
     - ``0.01``
   * - query.boost.fuzzy.title.fuzziness
-    - Fuzziness for fuzzy title queries.
+    - 퍼지 제목 쿼리의 퍼지 정도.
     - ``AUTO``
   * - query.boost.fuzzy.title.expansions
-    - Number of expansions for fuzzy title queries.
+    - 퍼지 제목 쿼리의 확장 수.
     - ``10``
   * - query.boost.fuzzy.title.prefix_length
-    - Prefix length for fuzzy title queries.
+    - 퍼지 제목 쿼리의 접두사 길이.
     - ``0``
   * - query.boost.fuzzy.title.transpositions
-    - Whether to allow transpositions in fuzzy title queries.
+    - 퍼지 제목 쿼리의 전치 허용 여부.
     - ``true``
   * - query.boost.fuzzy.content
-    - Boost value for fuzzy content queries.
+    - 퍼지 콘텐츠 쿼리의 부스트 값.
     - ``0.005``
   * - query.boost.fuzzy.content.fuzziness
-    - Fuzziness for fuzzy content queries.
+    - 퍼지 콘텐츠 쿼리의 퍼지 정도.
     - ``AUTO``
   * - query.boost.fuzzy.content.expansions
-    - Number of expansions for fuzzy content queries.
+    - 퍼지 콘텐츠 쿼리의 확장 수.
     - ``10``
   * - query.boost.fuzzy.content.prefix_length
-    - Prefix length for fuzzy content queries.
+    - 퍼지 콘텐츠 쿼리의 접두사 길이.
     - ``0``
   * - query.boost.fuzzy.content.transpositions
-    - Whether to allow transpositions in fuzzy content queries.
+    - 퍼지 콘텐츠 쿼리의 전치 허용 여부.
     - ``true``
   * - query.default.query_type
-    - Default query type.
+    - 기본 쿼리 타입.
     - ``bool``
   * - query.dismax.tie_breaker
-    - Tie breaker value for dismax queries.
+    - dismax 쿼리의 타이 브레이커 값.
     - ``0.1``
   * - query.bool.minimum_should_match
-    - Minimum should match value for boolean queries.
+    - 불리언 쿼리의 minimum should match 값.
     - (empty)
   * - query.prefix.expansions
-    - Number of expansions for prefix queries.
+    - 접두사 쿼리의 확장 수.
     - ``50``
   * - query.prefix.slop
-    - Slop value for prefix queries.
+    - 접두사 쿼리의 슬롭 값.
     - ``0``
   * - query.fuzzy.prefix_length
-    - Prefix length for fuzzy queries.
+    - 퍼지 쿼리의 접두사 길이.
     - ``0``
   * - query.fuzzy.expansions
-    - Number of expansions for fuzzy queries.
+    - 퍼지 쿼리의 확장 수.
     - ``50``
   * - query.fuzzy.transpositions
-    - Whether to allow transpositions in fuzzy queries.
+    - 퍼지 쿼리의 전치 허용 여부.
     - ``true``
 
-.. list-table:: Facet
+.. list-table:: 패싯
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - query.facet.fields
-    - Fields for facet queries.
+    - 패싯 쿼리용 필드.
     - ``label``
   * - query.facet.fields.size
-    - Size of facet fields.
+    - 패싯 필드의 크기.
     - ``100``
   * - query.facet.fields.size.max
-    - Upper clamp for facet.size (applied at the search chokepoint).
+    - facet.size 의 상한 클램프(검색 초크포인트에서 적용).
     - ``1000``
   * - query.facet.fields.min_doc_count
-    - Minimum document count for facet fields.
+    - 패싯 필드의 최소 문서 수.
     - ``1``
   * - query.facet.fields.min_doc_count.max
-    - Upper clamp for facet.minDocCount (applied at the search chokepoint).
+    - facet.minDocCount 의 상한 클램프(검색 초크포인트에서 적용).
     - ``2147483647``
   * - query.facet.fields.sort
-    - Sort order for facet fields.
+    - 패싯 필드의 정렬 순서.
     - ``count.desc``
   * - query.facet.fields.missing
-    - Value for missing facet fields.
+    - 누락된 패싯 필드의 값.
     - (empty)
   * - query.facet.queries
-    - Facet queries definition.
+    - 패싯 쿼리 정의.
     - | ``labels.facet_timestamp_title:labels.facet_timestamp_1day=timestamp:[now/d-1d TO *]	labels.facet_timestamp_1week=timestamp:[now/d-7d TO *]	labels.facet_timestamp_1month=timestamp:[now/d-1M TO *]	labels.facet_timestamp_1year=timestamp:[now/d-1y TO *]``
       | ``labels.facet_contentLength_title:labels.facet_contentLength_10k=content_length:[0 TO 9999]	labels.facet_contentLength_10kto100k=content_length:[10000 TO 99999]	labels.facet_contentLength_100kto500k=content_length:[100000 TO 499999]	labels.facet_contentLength_500kto1m=content_length:[500000 TO 999999]	labels.facet_contentLength_1m=content_length:[1000000 TO *]``
       | ``labels.facet_filetype_title:labels.facet_filetype_html=filetype:html	labels.facet_filetype_word=filetype:word	labels.facet_filetype_excel=filetype:excel	labels.facet_filetype_powerpoint=filetype:powerpoint	labels.facet_filetype_odt=filetype:odt	labels.facet_filetype_ods=filetype:ods	labels.facet_filetype_odp=filetype:odp	labels.facet_filetype_pdf=filetype:pdf	labels.facet_filetype_txt=filetype:txt	labels.facet_filetype_others=filetype:others``
 
-.. list-table:: Ranking
+.. list-table:: 랭킹
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - rank.fusion.window_size
-    - Window size for rank fusion.
+    - Rank Fusion의 윈도우 크기.
     - ``200``
   * - rank.fusion.rank_constant
-    - Rank constant for rank fusion.
+    - Rank Fusion의 랭크 상수.
     - ``20``
   * - rank.fusion.threads
-    - Number of threads for rank fusion.
+    - Rank Fusion의 스레드 수.
     - ``-1``
   * - rank.fusion.timeout
-    - Maximum time (milliseconds) to wait for the searchers other than the main one when Fess fuses their results itself (rank.fusion.engine.enabled=false). A searcher that has not answered by then is left out of that search, and the results are flagged as partial and timed out. The main searcher is always waited for. 0 or less waits without a limit.
+    - Fess가 검색기의 결과를 직접 융합할 때(rank.fusion.engine.enabled=false) 메인 검색기 이외의 검색기를 기다리는 최대 시간(밀리초)입니다. 그때까지 응답하지 않은 검색기는 해당 검색에서 제외되며, 결과에는 부분 결과이며 타임아웃되었다는 표시가 붙습니다. 메인 검색기는 항상 기다립니다. 0 이하이면 제한 없이 기다립니다.
     - ``10000``
   * - rank.fusion.score_field
-    - Score field for rank fusion.
+    - Rank Fusion의 스코어 필드.
     - ``rf_score``
   * - rank.fusion.engine.enabled
-    - Whether the search engine performs rank fusion. When true, the searchers that can take part contribute their queries to a single request, so facets and total hits describe the fused result set. When false, Fess fuses the searchers' results itself.
+    - 검색 엔진이 Rank Fusion을 수행할지 여부입니다. true이면 참여할 수 있는 검색기가 자신의 쿼리를 하나의 요청에 제공하므로 패싯과 총 히트 건수는 융합된 결과 집합을 나타냅니다. false이면 Fess가 검색기의 결과를 직접 융합합니다.
     - ``false``
   * - rank.fusion.combination.technique
-    - How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean.
+    - 검색 엔진이 융합된 스코어를 결합하는 방식: rrf, arithmetic_mean, geometric_mean 또는 harmonic_mean.
     - ``rrf``
   * - rank.fusion.normalization.technique
-    - How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf. z_score can only be combined with arithmetic_mean; any other mean is refused and Fess fuses the results itself.
+    - 결합하기 전에 스코어를 정규화하는 방식: min_max, l2 또는 z_score. rrf 에서는 무시됩니다. z_score 는 arithmetic_mean 과만 조합할 수 있으며, 그 외의 mean은 거부되고 Fess가 결과를 직접 융합합니다.
     - ``min_max``
   * - rank.fusion.combination.weights
-    - Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally.
+    - 엔진 측 융합에서 검색기별 가중치를 name:weight 쌍으로 지정합니다(예: default:0.7,semantic_chunk:0.3). 가중치의 합은 1.0이어야 하며 참여하는 모든 검색기를 지정해야 합니다. 비워 두면 모든 검색기에 동일한 가중치가 적용됩니다.
     - (empty)
   * - rank.fusion.pagination_depth
-    - How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks: a fused search pages through this many results, and never more than indexer.max.result.window.size.
+    - 엔진 측 융합에서 각 검색기가 샤드별로 제공하는 결과 수입니다. 클라이언트가 페이징할 수 있는 깊이와 엔진이 순위를 매기는 문서 집합의 범위를 모두 제한합니다. 융합된 검색은 이 수만큼의 결과를 페이징하며, indexer.max.result.window.size 를 넘지 않습니다.
     - ``1000``
 
 .. list-table:: ACL
@@ -1446,91 +1446,91 @@ Index
     - Description
     - Default
   * - smb.role.from.file
-    - Whether to get SMB roles from a file.
+    - 파일에서 SMB 역할을 가져올지 여부.
     - ``true``
   * - smb.available.sid.types
-    - Available SID types for SMB.
+    - SMB에서 사용 가능한 SID 타입.
     - ``1,2,4:2,5:1``
   * - file.role.from.file
-    - Whether to get file roles from a file.
+    - 파일에서 파일 역할을 가져올지 여부.
     - ``true``
   * - ftp.role.from.file
-    - Whether to get FTP roles from a file.
+    - 파일에서 FTP 역할을 가져올지 여부.
     - ``true``
 
-.. list-table:: Backup
+.. list-table:: 백업
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.backup.targets
-    - Target files for index backup.
+    - 인덱스 백업 대상 파일.
     - ``fess_basic_config.bulk,fess_config.bulk,fess_user.bulk,system.properties,fess.json,doc.json``
   * - index.backup.log.targets
-    - Target log files for index backup.
+    - 인덱스 백업 대상 로그 파일.
     - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
   * - index.backup.log.load.timeout
-    - Timeout for loading index backup logs.
+    - 인덱스 백업 로그 로딩의 타임아웃.
     - ``60000``
 
-.. list-table:: Logging
+.. list-table:: 로깅
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - logging.app.packages
-    - Application packages for logging.
+    - 로깅용 애플리케이션 패키지.
     - ``org.codelibs,org.dbflute,org.lastaflute``
   * - logging.search.docs.enabled
-    - Whether to enable search docs logging.
+    - 검색 문서 로깅 활성화 여부.
     - ``true``
   * - logging.search.docs.fields
-    - Fields to log for search docs.
+    - 검색 문서에서 로그에 기록할 필드.
     - ``filetype,created,click_count,title,doc_id,url,score,site,filename,host,digest,boost,mimetype,favorite_count,_id,lang,last_modified,content_length,timestamp``
   * - logging.search.use.logfile
-    - Whether to use a log file for search logging.
+    - 검색 로깅의 로그 파일 사용 여부.
     - ``true``
   * - logging.search.max.queue.size
-    - Maximum queue size for search logging.
+    - 검색 로깅의 최대 큐 크기.
     - ``10000``
   * - logging.click.max.queue.size
-    - Maximum queue size for click logging.
+    - 클릭 로깅의 최대 큐 크기.
     - ``10000``
   * - logging.chat.max.queue.size
-    - Maximum queue size for chat usage logging.
+    - 채팅 사용량 로깅의 최대 큐 크기.
     - ``10000``
   * - search.history.enabled
-    - Whether to record the search conditions of logged-in users for the search history.
+    - 검색 이력을 위해 로그인한 사용자의 검색 조건을 기록할지 여부.
     - ``true``
   * - search.history.size
-    - Maximum number of search history entries returned per user.
+    - 사용자별로 반환하는 검색 이력 항목의 최대 수.
     - ``10``
   * - user.tag.enabled
-    - Whether logged-in users can tag documents. Each tag belongs to the user who created it.
+    - 로그인한 사용자가 문서에 태그를 지정할 수 있는지 여부입니다. 각 태그는 만든 사용자에게 속합니다.
     - ``false``
   * - user.tag.name.max.length
-    - Maximum length of a tag name, in code points.
+    - 태그 이름의 최대 길이(코드 포인트 단위).
     - ``50``
   * - user.tag.max.tags
-    - Maximum number of tags one user can own.
+    - 한 사용자가 소유할 수 있는 태그의 최대 수.
     - ``1000``
   * - user.tag.max.paths
-    - Maximum number of URLs one tag can be put on.
+    - 하나의 태그를 붙일 수 있는 URL의 최대 수.
     - ``10000``
   * - user.tag.queue.max.size
-    - Maximum number of pending tag changes held in memory until they are applied to the documents.
+    - 문서에 적용될 때까지 메모리에 보관하는 대기 중인 태그 변경의 최대 수.
     - ``10000``
   * - user.tag.process.batch.size
-    - Number of URLs updated per bulk request when tag changes are applied to the documents.
+    - 태그 변경을 문서에 적용할 때 벌크 요청 1회당 업데이트하는 URL 수.
     - ``100``
   * - user.tag.visible.max.size
-    - Maximum number of tags visible to one user in a search.
+    - 검색에서 한 사용자에게 보이는 태그의 최대 수.
     - ``1000``
 
-Web
----
+웹
+--
 
 .. list-table::
   :header-rows: 1
@@ -1539,936 +1539,936 @@ Web
     - Description
     - Default
   * - form.admin.max.input.size
-    - Maximum input size for admin forms.
+    - 관리 폼의 최대 입력 크기.
     - ``10000``
   * - form.admin.label.in.config.enabled
-    - Whether to enable label in admin config forms.
+    - 관리 설정 폼의 라벨 활성화 여부.
     - ``false``
   * - form.admin.default.template.name
-    - Default template name for admin forms.
+    - 관리 폼의 기본 템플릿 이름.
     - ``__TEMPLATE__``
   * - osdd.link.enabled
-    - Whether to enable OSDD link (OpenSearch Description Document).
+    - OSDD 링크(OpenSearch Description Document) 활성화 여부.
     - ``auto``
   * - clipboard.copy.icon.enabled
-    - Whether to enable the clipboard copy icon.
+    - 클립보드 복사 아이콘 활성화 여부.
     - ``true``
   * - authentication.admin.users
-    - Admin user names for authentication.
+    - 인증용 관리자 사용자 이름.
     - ``admin``
   * - authentication.admin.users.ignore.case
-    - Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set.
+    - authentication.admin.users 를 대소문자 구분 없이 일치시킬지 여부입니다: auto, true 또는 false. auto는 ldap.provider.url 이 설정되어 있으면 대소문자를 무시합니다.
     - ``auto``
   * - authentication.admin.roles
-    - Admin role names for authentication.
+    - 인증용 관리자 역할 이름.
     - ``admin``
   * - role.search.default.permissions
-    - Default permissions for search roles.
+    - 검색 역할의 기본 권한.
     - (empty)
   * - role.search.default.display.permissions
-    - Default display permissions for search roles.
+    - 검색 역할의 기본 표시 권한.
     - ``{role}guest``
   * - role.search.guest.permissions
-    - Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles.
+    - role.search.guest.permissions 는 비워 두지 마십시오. 이 값은 익명 검색 역할 집합이 비지 않도록 유지하는 게스트 역할의 시드가 됩니다. 확정된 역할 집합이 비어 있으면 역할 필터가 건너뛰어져(fail-open) 역할 기반 접근 제어가 무효화되고 문서가 익명 사용자에게 노출될 수 있습니다. 검색 역할의 게스트 권한입니다.
     - ``{role}guest``
   * - role.search.user.prefix
-    - Prefix for user roles in search.
+    - 검색에서 사용자 역할의 접두사.
     - ``1``
   * - role.search.group.prefix
-    - Prefix for group roles in search.
+    - 검색에서 그룹 역할의 접두사.
     - ``2``
   * - role.search.role.prefix
-    - Prefix for role roles in search.
+    - 검색에서 role 역할의 접두사.
     - ``R``
   * - role.search.denied.prefix
-    - Prefix for denied roles in search.
+    - 검색에서 거부된 역할의 접두사.
     - ``D``
   * - cookie.default.path
-    - The default path of cookie (basically '/' if no context path)
+    - 쿠키의 기본 경로(컨텍스트 경로가 없으면 기본적으로 '/')
     - ``/``
   * - cookie.default.expire
-    - The default expire of cookie in seconds e.g. 31556926: one year, 86400: one day
+    - 쿠키의 기본 만료 시간(초) 예: 31556926: 1년, 86400: 1일
     - ``3600``
   * - session.tracking.modes
-    - Session tracking modes
+    - 세션 추적 모드
     - ``cookie``
   * - session.cookie.secure
-    - Whether to add the Secure attribute to the session cookie (JSESSIONID) at startup. When blank (default), Tomcat's automatic behavior is used (Secure is added only for HTTPS requests). Set to true for production HTTPS deployments, especially when TLS is terminated at a reverse proxy. When true, the cookie is not sent over HTTP, so sessions will not be established for plain HTTP; keep it blank for localhost development. The Secure attribute is also required when SameSite=none is used. Changing this value requires a restart.
+    - 시작 시 세션 쿠키(JSESSIONID)에 Secure 속성을 추가할지 여부입니다. 비어 있으면(기본값) Tomcat의 자동 동작이 사용됩니다(Secure는 HTTPS 요청에만 추가됩니다). 운영 환경의 HTTPS 배포, 특히 리버스 프록시에서 TLS를 종료하는 경우에는 true로 설정하십시오. true이면 쿠키가 HTTP로 전송되지 않으므로 일반 HTTP에서는 세션이 수립되지 않습니다. localhost 개발 환경에서는 비워 두십시오. SameSite=none을 사용하는 경우에도 Secure 속성이 필요합니다. 이 값을 변경하려면 재시작이 필요합니다.
     - (empty)
   * - cookie.search.parameter.keys
-    - Comma-separated list of request parameter keys to store in cookies before SSO login.
+    - SSO 로그인 전에 쿠키에 저장할 요청 파라미터 키의 쉼표 구분 목록.
     - ``q,num,sort``
   * - cookie.search.parameter.required_keys
-    - Comma-separated list of required parameter keys that must be present to store in cookies.
+    - 쿠키에 저장하기 위해 반드시 존재해야 하는 필수 파라미터 키의 쉼표 구분 목록.
     - ``q``
   * - cookie.search.parameter.max.length
-    - Maximum length of the encoded search parameters stored in cookies.
+    - 쿠키에 저장하는 인코딩된 검색 파라미터의 최대 길이.
     - ``1000``
   * - cookie.search.parameter.max.decompressed.length
-    - Maximum size in bytes the stored search parameters may decompress to. The bound above applies to the gzipped cookie, which is no bound on what it expands to, and the cookie comes from the client.
+    - 저장된 검색 파라미터를 압축 해제했을 때 허용되는 최대 크기(바이트)입니다. 위의 상한은 gzip으로 압축된 쿠키에 적용되는데, 이는 압축 해제 후의 크기에 대한 제한이 되지 않으며, 쿠키는 클라이언트에서 전달됩니다.
     - ``65536``
   * - cookie.search.parameter.max.restored.length
-    - Maximum length of the query string built when restoring the stored search parameters after login. Restoring them is a convenience and the login is not, so a longer one is dropped rather than written to a Location header the container would refuse. Percent-encoding multiplies a CJK query by nine, so this is far smaller than the query itself may be. Raise it together with tomcat.maxHttpHeaderSize in tomcat_config.properties, which bounds the response headers.
+    - 로그인 후 저장된 검색 파라미터를 복원할 때 만들어지는 쿼리 문자열의 최대 길이입니다. 복원은 편의 기능일 뿐 로그인은 그렇지 않으므로, 이보다 긴 쿼리 문자열은 컨테이너가 거부할 Location 헤더에 쓰지 않고 버립니다. 퍼센트 인코딩은 CJK 쿼리를 9배로 늘리므로, 이 값은 쿼리 자체가 가질 수 있는 길이보다 훨씬 작습니다. 응답 헤더를 제한하는 tomcat_config.properties 의 tomcat.maxHttpHeaderSize 와 함께 올리십시오.
     - ``4096``
   * - cookie.search.parameter.name
-    - Cookie name used to store encoded search parameters before SSO login.
+    - SSO 로그인 전에 인코딩된 검색 파라미터를 저장하는 데 사용하는 쿠키 이름.
     - ``fsrp``
   * - cookie.search.parameter.http_only
-    - Whether to set HttpOnly attribute to the search parameter cookie.
+    - 검색 파라미터 쿠키의 HttpOnly 속성 설정 여부.
     - ``true``
   * - cookie.search.parameter.secure
-    - Whether to set Secure attribute to the search parameter cookie. Should be true in production environments using HTTPS.
+    - 검색 파라미터 쿠키에 Secure 속성을 설정할지 여부입니다. HTTPS를 사용하는 운영 환경에서는 true여야 합니다.
     - (empty)
   * - cookie.search.parameter.max_age
-    - Max-Age (in seconds) for the search parameter cookie. Use -1 for session-only cookies.
+    - 검색 파라미터 쿠키의 Max-Age(초)입니다. 세션 전용 쿠키로 하려면 -1을 사용하십시오.
     - ``60``
   * - cookie.search.parameter.domain
-    - Domain attribute for the search parameter cookie. Set to the domain scope you want the cookie to be available on (e.g., example.com).
+    - 검색 파라미터 쿠키의 Domain 속성입니다. 쿠키를 사용할 수 있게 할 도메인 범위를 설정하십시오(예: example.com).
     - (empty)
   * - cookie.search.parameter.path
-    - Path attribute for the search parameter cookie. Typically set to "/" or the context path of the app.
+    - 검색 파라미터 쿠키의 Path 속성입니다. 일반적으로 "/" 또는 애플리케이션의 컨텍스트 경로로 설정합니다.
     - ``/``
   * - cookie.search.parameter.same_site
-    - SameSite attribute for the search parameter cookie. Valid values: Lax, Strict, None
+    - 검색 파라미터 쿠키의 SameSite 속성입니다. 유효한 값: Lax, Strict, None
     - ``Lax``
   * - paging.page.size
-    - The size of one page for paging
+    - 페이징의 1페이지 크기
     - ``25``
   * - paging.page.range.size
-    - The size of page range for paging
+    - 페이징의 페이지 범위 크기
     - ``5``
   * - paging.page.range.fill.limit
-    - The option 'fillLimit' of page range for paging
+    - 페이징의 페이지 범위 옵션 'fillLimit'
     - ``true``
 
-.. list-table:: Fetch Page Size
+.. list-table:: 가져오기 페이지 크기
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - page.docboost.max.fetch.size
-    - Maximum number of docboost records to fetch per page.
+    - 페이지당 가져올 문서 부스트 레코드의 최대 수.
     - ``1000``
   * - page.keymatch.max.fetch.size
-    - Maximum number of keymatch records to fetch per page.
+    - 페이지당 가져올 키 매치 레코드의 최대 수.
     - ``1000``
   * - page.labeltype.max.fetch.size
-    - Maximum number of labeltype records to fetch per page.
+    - 페이지당 가져올 라벨 유형 레코드의 최대 수.
     - ``1000``
   * - page.tagtype.max.fetch.size
-    - Maximum number of tagtype records to fetch per page.
+    - 페이지당 가져올 태그 유형 레코드의 최대 수.
     - ``1000``
   * - page.roletype.max.fetch.size
-    - Maximum number of roletype records to fetch per page.
+    - 페이지당 가져올 역할 유형 레코드의 최대 수.
     - ``1000``
   * - page.user.max.fetch.size
-    - Maximum number of user records to fetch per page.
+    - 페이지당 가져올 사용자 레코드의 최대 수.
     - ``1000``
   * - page.role.max.fetch.size
-    - Maximum number of role records to fetch per page.
+    - 페이지당 가져올 역할 레코드의 최대 수.
     - ``1000``
   * - page.group.max.fetch.size
-    - Maximum number of group records to fetch per page.
+    - 페이지당 가져올 그룹 레코드의 최대 수.
     - ``1000``
   * - page.crawling.info.param.max.fetch.size
-    - Maximum number of crawling info parameters to fetch per page.
+    - 페이지당 가져올 크롤링 정보 파라미터의 최대 수.
     - ``100``
   * - page.crawling.info.max.fetch.size
-    - Maximum number of crawling info records to fetch per page.
+    - 페이지당 가져올 크롤링 정보 레코드의 최대 수.
     - ``1000``
   * - page.data.config.max.fetch.size
-    - Maximum number of data config records to fetch per page.
+    - 페이지당 가져올 데이터 스토어 설정 레코드의 최대 수.
     - ``100``
   * - page.web.config.max.fetch.size
-    - Maximum number of web config records to fetch per page.
+    - 페이지당 가져올 웹 크롤링 설정 레코드의 최대 수.
     - ``100``
   * - page.file.config.max.fetch.size
-    - Maximum number of file config records to fetch per page.
+    - 페이지당 가져올 파일 크롤링 설정 레코드의 최대 수.
     - ``100``
   * - page.duplicate.host.max.fetch.size
-    - Maximum number of duplicate host records to fetch per page.
+    - 페이지당 가져올 중복 호스트 레코드의 최대 수.
     - ``1000``
   * - page.failure.url.max.fetch.size
-    - Maximum number of failure URL records to fetch per page.
+    - 페이지당 가져올 장애 URL 레코드의 최대 수.
     - ``1000``
   * - page.favorite.log.max.fetch.size
-    - Maximum number of favorite log records to fetch per page.
+    - 페이지당 가져올 즐겨찾기 로그 레코드의 최대 수.
     - ``100``
   * - page.file.auth.max.fetch.size
-    - Maximum number of file auth records to fetch per page.
+    - 페이지당 가져올 파일 인증 레코드의 최대 수.
     - ``100``
   * - page.web.auth.max.fetch.size
-    - Maximum number of web auth records to fetch per page.
+    - 페이지당 가져올 웹 인증 레코드의 최대 수.
     - ``100``
   * - page.path.mapping.max.fetch.size
-    - Maximum number of path mapping records to fetch per page.
+    - 페이지당 가져올 경로 매핑 레코드의 최대 수.
     - ``1000``
   * - page.request.header.max.fetch.size
-    - Maximum number of request header records to fetch per page.
+    - 페이지당 가져올 요청 헤더 레코드의 최대 수.
     - ``1000``
   * - page.scheduled.job.max.fetch.size
-    - Maximum number of scheduled job records to fetch per page.
+    - 페이지당 가져올 스케줄 작업 레코드의 최대 수.
     - ``100``
   * - page.elevate.word.max.fetch.size
-    - Maximum number of elevate word records to fetch per page.
+    - 페이지당 가져올 추가 단어 레코드의 최대 수.
     - ``1000``
   * - page.bad.word.max.fetch.size
-    - Maximum number of bad word records to fetch per page.
+    - 페이지당 가져올 제외 단어 레코드의 최대 수.
     - ``1000``
   * - page.dictionary.max.fetch.size
-    - Maximum number of dictionary records to fetch per page.
+    - 페이지당 가져올 사전 레코드의 최대 수.
     - ``1000``
   * - page.relatedcontent.max.fetch.size
-    - Maximum number of related content records to fetch per page.
+    - 페이지당 가져올 관련 콘텐츠 레코드의 최대 수.
     - ``5000``
   * - page.relatedquery.max.fetch.size
-    - Maximum number of related query records to fetch per page.
+    - 페이지당 가져올 관련 쿼리 레코드의 최대 수.
     - ``5000``
   * - page.thumbnail.queue.max.fetch.size
-    - Maximum number of thumbnail queue records to fetch per page.
+    - 페이지당 가져올 썸네일 큐 레코드의 최대 수.
     - ``100``
   * - page.thumbnail.purge.max.fetch.size
-    - Maximum number of thumbnail purge records to fetch per page.
+    - 페이지당 가져올 썸네일 삭제 레코드의 최대 수.
     - ``100``
   * - page.score.booster.max.fetch.size
-    - Maximum number of score booster records to fetch per page.
+    - 페이지당 가져올 스코어 부스터 레코드의 최대 수.
     - ``1000``
   * - page.searchlog.max.fetch.size
-    - Maximum number of search log records to fetch per page.
+    - 페이지당 가져올 검색 로그 레코드의 최대 수.
     - ``10000``
   * - page.searchlist.track.total.hits
-    - Whether to track total hits in search list page.
+    - 검색 목록 페이지의 총 히트 건수 추적 여부.
     - ``true``
   * - page.searchlist.content.max.length
-    - Maximum content length (in characters) rendered on the search list edit page.
+    - 검색 목록 편집 페이지에 표시하는 콘텐츠의 최대 길이(문자 수).
     - ``100000``
 
-.. list-table:: Search Page
+.. list-table:: 검색 페이지
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - paging.search.page.start
-    - Default start page for search results.
+    - 검색 결과의 기본 시작 페이지.
     - ``0``
   * - paging.search.page.size
-    - Default size of search results per page.
+    - 페이지당 검색 결과의 기본 크기.
     - ``10``
   * - paging.search.page.max.size
-    - Maximum size of search results per page.
+    - 페이지당 검색 결과의 최대 크기.
     - ``100``
   * - api.param.max.length
-    - Maximum length of a v2 API string query parameter (q, sort, sdh). OWASP API4:2023.
+    - v2 API 문자열 쿼리 파라미터(q, sort, sdh)의 최대 길이. OWASP API4:2023.
     - ``1000``
   * - api.param.max.array.size
-    - Maximum number of values for a v2 API repeatable query parameter.
+    - v2 API 반복 가능 쿼리 파라미터의 최대 값 수.
     - ``100``
   * - api.click.max.timestamp
-    - Maximum click-log timestamp (rt, epoch ms) accepted by the v2 click API. OWASP API4:2023.
+    - v2 클릭 API가 받아들이는 클릭 로그 타임스탬프(rt, epoch ms)의 최대값. OWASP API4:2023.
     - ``9999999999999``
   * - searchlog.agg.shard.size
-    - searchlog
+    - 검색 로그
     - ``-1``
   * - searchlog.request.headers
-    - Request headers to include in search log.
+    - 검색 로그에 포함할 요청 헤더.
     - (empty)
   * - searchlog.process.batch_size
-    - Batch size for search log processing.
+    - 검색 로그 처리의 배치 크기.
     - ``100``
   * - related_query.generate.days
-    - Number of days of search logs read when generating related queries from search logs.
+    - 검색 로그에서 관련 쿼리를 생성할 때 읽는 검색 로그의 일수.
     - ``30``
   * - related_query.generate.term.size
-    - Maximum number of terms generated per virtual host.
+    - 가상 호스트당 생성되는 단어의 최대 수.
     - ``100``
   * - related_query.generate.query.size
-    - Maximum number of related queries generated per term.
+    - 단어당 생성되는 관련 쿼리의 최대 수.
     - ``5``
   * - related_query.generate.min.sessions
-    - Minimum number of distinct user sessions required for a term and for each of its related queries.
+    - 단어와 그 관련 쿼리 각각에 필요한 서로 다른 사용자 세션의 최소 수.
     - ``3``
   * - related_query.generate.session.interval
-    - Interval (minutes) after a search within which a follow-up search of the same session counts as a refinement.
+    - 검색 후 같은 세션의 후속 검색이 리파인먼트로 간주되는 간격(분).
     - ``10``
   * - related_query.generate.seed.log.size
-    - Maximum number of search logs of a term read to find the sessions that searched it.
+    - 단어를 검색한 세션을 찾기 위해 읽는 단어별 검색 로그의 최대 수.
     - ``1000``
   * - related_query.generate.seed.session.size
-    - Maximum number of sessions per term whose follow-up searches are read.
+    - 후속 검색을 읽는 단어별 세션의 최대 수.
     - ``200``
   * - related_query.generate.log.fetch.size
-    - Maximum number of follow-up search logs read per term.
+    - 단어별로 읽는 후속 검색 로그의 최대 수.
     - ``2000``
   * - related_query.generate.query.min.length
-    - Minimum length (in characters) of a generated term or related query.
+    - 생성되는 단어 또는 관련 쿼리의 최소 길이(문자 수).
     - ``2``
   * - related_query.generate.query.max.length
-    - Maximum length (in characters) of a generated term or related query.
+    - 생성되는 단어 또는 관련 쿼리의 최대 길이(문자 수).
     - ``50``
   * - docreport.duplicate.group.size
-    - docreport Maximum number of duplicate groups the document report screen shows, largest first.
+    - docreport 문서 리포트 화면에 표시하는 중복 그룹의 최대 수(큰 그룹부터).
     - ``100``
   * - docreport.duplicate.docs.size
-    - Maximum number of documents the document report screen lists for each duplicate group.
+    - 문서 리포트 화면이 중복 그룹마다 나열하는 문서의 최대 수.
     - ``10``
   * - docreport.duplicate.export.page.size
-    - Number of content signatures read per request when the duplicate report is downloaded as CSV.
+    - 중복 리포트를 CSV로 다운로드할 때 요청 1회당 읽는 콘텐츠 서명 수.
     - ``10000``
   * - docreport.dormant.days
-    - Default number of days since the last modification after which a document counts as dormant.
+    - 마지막 수정 후 문서를 휴면으로 간주하는 기본 일수.
     - ``365``
   * - thumbnail.html.image.min.width
-    - Minimum width for HTML images in thumbnails.
+    - 썸네일의 HTML 이미지 최소 너비.
     - ``100``
   * - thumbnail.html.image.min.height
-    - Minimum height for HTML images in thumbnails.
+    - 썸네일의 HTML 이미지 최소 높이.
     - ``100``
   * - thumbnail.html.image.max.aspect.ratio
-    - Maximum aspect ratio for HTML images in thumbnails.
+    - 썸네일의 HTML 이미지 최대 종횡비.
     - ``3.0``
   * - thumbnail.html.image.thumbnail.width
-    - Width of generated thumbnail images.
+    - 생성되는 썸네일 이미지의 너비.
     - ``100``
   * - thumbnail.html.image.thumbnail.height
-    - Height of generated thumbnail images.
+    - 생성되는 썸네일 이미지의 높이.
     - ``100``
   * - thumbnail.html.image.format
-    - Format of generated thumbnail images.
+    - 생성되는 썸네일 이미지의 형식.
     - ``png``
   * - thumbnail.html.image.xpath
-    - XPath to select images for thumbnails.
+    - 썸네일용 이미지를 선택하는 XPath.
     - ``//IMG``
   * - thumbnail.html.image.exclude.extensions
-    - File extensions to exclude from thumbnail generation.
+    - 썸네일 생성에서 제외할 파일 확장자.
     - ``svg,html,css,js``
   * - thumbnail.generator.interval
-    - Interval for thumbnail generator.
+    - 썸네일 생성기의 간격.
     - ``0``
   * - thumbnail.generator.targets
-    - Targets for thumbnail generator (e.g., all).
+    - 썸네일 생성기의 대상(예: all).
     - ``all``
   * - thumbnail.crawler.enabled
-    - Whether the thumbnail crawler is enabled.
+    - 썸네일 크롤러 활성화 여부.
     - ``true``
   * - thumbnail.system.monitor.interval
-    - Interval for system monitor in thumbnail processing.
+    - 썸네일 처리의 시스템 모니터링 간격.
     - ``60``
 
-.. list-table:: User
+.. list-table:: 사용자
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - user.code.request.parameter
-    - User code settings
+    - 사용자 코드 설정
     - ``userCode``
   * - user.code.min.length
-    - User code minimum length.
+    - 사용자 코드의 최소 길이.
     - ``20``
   * - user.code.max.length
-    - User code maximum length.
+    - 사용자 코드의 최대 길이.
     - ``100``
   * - user.code.pattern
-    - User code pattern for validation.
+    - 검증용 사용자 코드 패턴.
     - ``[a-zA-Z0-9_]+``
   * - mail.from.name
-    - Name to display in the From field of emails.
+    - 이메일의 From 필드에 표시할 이름.
     - ``Administrator``
   * - mail.from.address
-    - Email address to use in the From field.
+    - From 필드에 사용할 이메일 주소.
     - ``root@localhost``
   * - mail.hostname
-    - Hostname for the mail server.
+    - 메일 서버의 호스트명.
     - (empty)
   * - scheduler.target.name
-    - Target name for the scheduler.
+    - 스케줄러의 대상 이름.
     - (empty)
   * - scheduler.job.class
-    - Job class for the scheduler.
+    - 스케줄러의 작업 클래스.
     - ``org.codelibs.fess.app.job.ScriptExecutorJob``
   * - scheduler.concurrent.exec.mode
-    - Mode for concurrent execution in the scheduler.
+    - 스케줄러의 동시 실행 모드.
     - ``QUIT``
   * - scheduler.monitor.interval
-    - Interval for scheduler monitoring.
+    - 스케줄러 모니터링 간격.
     - ``30``
   * - coordinator.poll.interval
-    - Interval (seconds) for polling heartbeats and events.
+    - 하트비트와 이벤트를 폴링하는 간격(초).
     - ``60``
   * - coordinator.heartbeat.ttl
-    - Time-to-live (ms) for instance heartbeat documents.
+    - 인스턴스 하트비트 문서의 유효 기간(밀리초).
     - ``180000``
   * - coordinator.operation.ttl
-    - Time-to-live (ms) for operation lock documents.
+    - 오퍼레이션 잠금 문서의 유효 기간(밀리초).
     - ``7200000``
   * - coordinator.operation.retry
-    - Maximum number of retries for acquiring an operation lock.
+    - 오퍼레이션 잠금 획득의 최대 재시도 횟수.
     - ``3``
   * - coordinator.event.ttl
-    - Time-to-live (ms) for event notification documents.
+    - 이벤트 통지 문서의 유효 기간(밀리초).
     - ``600000``
   * - online.help.base.link
-    - Base link for online help.
+    - 온라인 도움말의 기본 링크.
     - ``https://fess.codelibs.org/{lang}/{version}/admin/``
   * - online.help.installation
-    - Installation guide link for online help.
+    - 온라인 도움말의 설치 가이드 링크.
     - ``https://fess.codelibs.org/{lang}/{version}/install/install.html``
   * - online.help.eol
-    - End-of-life information link for online help.
+    - 온라인 도움말의 수명 종료 정보 링크.
     - ``https://fess.codelibs.org/{lang}/eol.html``
   * - online.help.name.failureurl
-    - Online help key for failure URL.
+    - 장애 URL의 온라인 도움말 키.
     - ``failureurl``
   * - online.help.name.elevateword
-    - Online help key for elevate word.
+    - 추가 단어의 온라인 도움말 키.
     - ``elevateword``
   * - online.help.name.reqheader
-    - Online help key for request header.
+    - 요청 헤더의 온라인 도움말 키.
     - ``reqheader``
   * - online.help.name.dict.synonym
-    - Online help key for synonym dictionary.
+    - 동의어 사전의 온라인 도움말 키.
     - ``synonym``
   * - online.help.name.dict
-    - Online help key for dictionary.
+    - 사전의 온라인 도움말 키.
     - ``dict``
   * - online.help.name.dict.kuromoji
-    - Online help key for Kuromoji dictionary.
+    - Kuromoji 사전의 온라인 도움말 키.
     - ``kuromoji``
   * - online.help.name.dict.protwords
-    - Online help key for protected words dictionary.
+    - 보호 단어 사전의 온라인 도움말 키.
     - ``protwords``
   * - online.help.name.dict.stopwords
-    - Online help key for stopwords dictionary.
+    - 불용어 사전의 온라인 도움말 키.
     - ``stopwords``
   * - online.help.name.dict.stemmeroverride
-    - Online help key for stemmer override dictionary.
+    - Stemmer 재정의 사전의 온라인 도움말 키.
     - ``stemmeroverride``
   * - online.help.name.dict.mapping
-    - Online help key for mapping dictionary.
+    - 매핑 사전의 온라인 도움말 키.
     - ``mapping``
   * - online.help.name.webconfig
-    - Online help key for web config.
+    - 웹 크롤링 설정의 온라인 도움말 키.
     - ``webconfig``
   * - online.help.name.searchlist
-    - Online help key for search list.
+    - 검색 목록의 온라인 도움말 키.
     - ``searchlist``
   * - online.help.name.log
-    - Online help key for log.
+    - 로그의 온라인 도움말 키.
     - ``log``
   * - online.help.name.general
-    - Online help key for general settings.
+    - 일반 설정의 온라인 도움말 키.
     - ``general``
   * - online.help.name.role
-    - Online help key for role.
+    - 역할의 온라인 도움말 키.
     - ``role``
   * - online.help.name.joblog
-    - Online help key for job log.
+    - 작업 로그의 온라인 도움말 키.
     - ``joblog``
   * - online.help.name.keymatch
-    - Online help key for keymatch.
+    - 키 매치의 온라인 도움말 키.
     - ``keymatch``
   * - online.help.name.relatedquery
-    - Online help key for related query.
+    - 관련 쿼리의 온라인 도움말 키.
     - ``relatedquery``
   * - online.help.name.relatedcontent
-    - Online help key for related content.
+    - 관련 콘텐츠의 온라인 도움말 키.
     - ``relatedcontent``
   * - online.help.name.wizard
-    - Online help key for wizard.
+    - 구성 마법사의 온라인 도움말 키.
     - ``wizard``
   * - online.help.name.badword
-    - Online help key for bad word.
+    - 제외 단어의 온라인 도움말 키.
     - ``badword``
   * - online.help.name.pathmap
-    - Online help key for path mapping.
+    - 경로 매핑의 온라인 도움말 키.
     - ``pathmap``
   * - online.help.name.boostdoc
-    - Online help key for boost document.
+    - 문서 부스트의 온라인 도움말 키.
     - ``boostdoc``
   * - online.help.name.dataconfig
-    - Online help key for data config.
+    - 데이터 스토어 설정의 온라인 도움말 키.
     - ``dataconfig``
   * - online.help.name.systeminfo
-    - Online help key for system info.
+    - 시스템 정보의 온라인 도움말 키.
     - ``systeminfo``
   * - online.help.name.user
-    - Online help key for user.
+    - 사용자의 온라인 도움말 키.
     - ``user``
   * - online.help.name.group
-    - Online help key for group.
+    - 그룹의 온라인 도움말 키.
     - ``group``
   * - online.help.name.dashboard
-    - Online help key for dashboard.
+    - 대시보드의 온라인 도움말 키.
     - ``dashboard``
   * - online.help.name.webauth
-    - Online help key for web authentication.
+    - 웹 인증의 온라인 도움말 키.
     - ``webauth``
   * - online.help.name.fileconfig
-    - Online help key for file config.
+    - 파일 크롤링 설정의 온라인 도움말 키.
     - ``fileconfig``
   * - online.help.name.fileauth
-    - Online help key for file authentication.
+    - 파일 인증의 온라인 도움말 키.
     - ``fileauth``
   * - online.help.name.labeltype
-    - Online help key for label type.
+    - 라벨 유형의 온라인 도움말 키.
     - ``labeltype``
   * - online.help.name.tagtype
-    - Online help key for tag type.
+    - 태그 유형의 온라인 도움말 키.
     - ``tagtype``
   * - online.help.name.duplicatehost
-    - Online help key for duplicate host.
+    - 중복 호스트의 온라인 도움말 키.
     - ``duplicatehost``
   * - online.help.name.scheduler
-    - Online help key for scheduler.
+    - 스케줄러의 온라인 도움말 키.
     - ``scheduler``
   * - online.help.name.crawlinginfo
-    - Online help key for crawling info.
+    - 크롤링 정보의 온라인 도움말 키.
     - ``crawlinginfo``
   * - online.help.name.backup
-    - Online help key for backup.
+    - 백업의 온라인 도움말 키.
     - ``backup``
   * - online.help.name.upgrade
-    - Online help key for upgrade.
+    - 업그레이드의 온라인 도움말 키.
     - ``upgrade``
   * - online.help.name.sereq
-    - Online help key for search request.
+    - 검색 요청의 온라인 도움말 키.
     - ``sereq``
   * - online.help.name.accesstoken
-    - Online help key for access token.
+    - 액세스 토큰의 온라인 도움말 키.
     - ``accesstoken``
   * - online.help.name.suggest
-    - Online help key for suggest.
+    - 서제스트의 온라인 도움말 키.
     - ``suggest``
   * - online.help.name.searchlog
-    - Online help key for search log.
+    - 검색 로그의 온라인 도움말 키.
     - ``searchlog``
   * - online.help.name.maintenance
-    - Online help key for maintenance.
+    - 유지보수의 온라인 도움말 키.
     - ``maintenance``
   * - online.help.name.plugin
-    - Online help key for plugin.
+    - 플러그인의 온라인 도움말 키.
     - ``plugin``
   * - online.help.name.storage
-    - Online help key for storage.
+    - 스토리지의 온라인 도움말 키.
     - ``storage``
   * - online.help.supported.langs
-    - Supported languages for online help.
+    - 온라인 도움말에서 지원하는 언어.
     - ``de,es,fr,ja,ko,zh-cn``
   * - forum.link
-    - Forum link for user support.
+    - 사용자 지원용 포럼 링크.
     - ``https://discuss.codelibs.org/c/Fess{lang}/``
   * - forum.supported.langs
-    - Supported languages for the forum.
+    - 포럼에서 지원하는 언어.
     - ``en,ja``
   * - suggest.popular.word.seed
-    - Seed value for popular word suggestion.
+    - 인기 단어 서제스트의 시드 값.
     - ``0``
   * - suggest.popular.word.tags
-    - Tags for popular word suggestion.
+    - 인기 단어 서제스트의 태그.
     - (empty)
   * - suggest.popular.word.fields
-    - Fields for popular word suggestion.
+    - 인기 단어 서제스트의 필드.
     - (empty)
   * - suggest.popular.word.excludes
-    - Excluded words for popular word suggestion.
+    - 인기 단어 서제스트의 제외 단어.
     - (empty)
   * - suggest.popular.word.size
-    - Number of popular words to suggest.
+    - 서제스트할 인기 단어 수.
     - ``10``
   * - suggest.popular.word.window.size
-    - Window size for popular word suggestion.
+    - 인기 단어 서제스트의 윈도우 크기.
     - ``30``
   * - suggest.popular.word.query.freq
-    - Query frequency for popular word suggestion.
+    - 인기 단어 서제스트의 쿼리 빈도.
     - ``10``
   * - suggest.min.hit.count
-    - Minimum hit count for suggestion.
+    - 서제스트의 최소 히트 건수.
     - ``1``
   * - suggest.field.contents
-    - Field for suggestion contents.
+    - 서제스트 콘텐츠용 필드.
     - ``_default``
   * - suggest.field.tags
-    - Field for suggestion tags.
+    - 서제스트 태그용 필드.
     - ``label``
   * - suggest.field.roles
-    - Field for suggestion roles.
+    - 서제스트 역할용 필드.
     - ``role``
   * - suggest.field.index.contents
-    - Index contents for suggestion.
+    - 서제스트용 인덱스 콘텐츠.
     - ``content,title``
   * - suggest.update.request.interval
-    - Interval for suggestion update requests.
+    - 서제스트 업데이트 요청 간격.
     - ``0``
   * - suggest.update.doc.per.request
-    - Number of documents per suggestion update request.
+    - 서제스트 업데이트 요청 1회당 문서 수.
     - ``2``
   * - suggest.update.contents.limit.num.percentage
-    - Percentage limit for suggestion update contents.
+    - 서제스트 업데이트 콘텐츠의 비율 제한(퍼센트).
     - ``50%``
   * - suggest.update.contents.limit.num
-    - Maximum number of suggestion update contents.
+    - 서제스트 업데이트 콘텐츠의 최대 수.
     - ``10000``
   * - suggest.update.contents.limit.doc.size
-    - Maximum document size for suggestion update.
+    - 서제스트 업데이트의 최대 문서 크기.
     - ``50000``
   * - suggest.source.reader.scroll.size
-    - Scroll size for suggestion source reader.
+    - 서제스트 소스 리더의 스크롤 크기.
     - ``1``
   * - suggest.popular.word.cache.size
-    - Cache size for popular word suggestion.
+    - 인기 단어 서제스트의 캐시 크기.
     - ``1000``
   * - suggest.popular.word.cache.expire
-    - Cache expiration (seconds) for popular word suggestion.
+    - 인기 단어 서제스트의 캐시 만료 시간(초).
     - ``60``
   * - suggest.search.log.permissions
-    - Permissions for suggestion search log.
+    - 서제스트 검색 로그의 권한.
     - ``{user}guest,{role}guest``
   * - suggest.system.monitor.interval
-    - Interval for system monitor in suggestion.
+    - 서제스트의 시스템 모니터링 간격.
     - ``60``
   * - ldap.admin.enabled
-    - Whether LDAP admin is enabled.
+    - LDAP 관리 활성화 여부.
     - ``false``
   * - ldap.admin.user.filter
-    - User filter for LDAP admin.
+    - LDAP 관리의 사용자 필터.
     - ``uid=%s``
   * - ldap.admin.user.base.dn
-    - Base DN for LDAP admin user.
+    - LDAP 관리 사용자의 베이스 DN.
     - ``ou=People,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.user.object.classes
-    - Object classes for LDAP admin user.
+    - LDAP 관리 사용자의 오브젝트 클래스.
     - ``organizationalPerson,top,person,inetOrgPerson``
   * - ldap.admin.role.filter
-    - Role filter for LDAP admin.
+    - LDAP 관리의 역할 필터.
     - ``cn=%s``
   * - ldap.admin.role.base.dn
-    - Base DN for LDAP admin role.
+    - LDAP 관리 역할의 베이스 DN.
     - ``ou=Role,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.role.object.classes
-    - Object classes for LDAP admin role.
+    - LDAP 관리 역할의 오브젝트 클래스.
     - ``groupOfNames``
   * - ldap.admin.group.filter
-    - Group filter for LDAP admin.
+    - LDAP 관리의 그룹 필터.
     - ``cn=%s``
   * - ldap.admin.group.base.dn
-    - Base DN for LDAP admin group.
+    - LDAP 관리 그룹의 베이스 DN.
     - ``ou=Group,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.group.object.classes
-    - Object classes for LDAP admin group.
+    - LDAP 관리 그룹의 오브젝트 클래스.
     - ``groupOfNames``
   * - ldap.admin.sync.password
-    - Whether to sync password for LDAP admin.
+    - LDAP 관리의 비밀번호 동기화 여부.
     - ``true``
   * - ldap.auth.validation
-    - Whether to validate LDAP authentication.
+    - LDAP 인증 검증 여부.
     - ``true``
   * - ldap.connect.timeout
-    - Timeout (milliseconds) to establish an LDAP connection. This also bounds the TLS handshake and the initial bind response. 0 or less leaves it to the JDK/OS default.
+    - LDAP 연결을 수립하는 타임아웃(밀리초)입니다. TLS 핸드셰이크와 최초 바인드 응답에도 적용됩니다. 0 이하이면 JDK/OS 기본값에 맡깁니다.
     - ``10000``
   * - ldap.read.timeout
-    - Timeout (milliseconds) to wait for an LDAP response after the connection is bound. 0 or less waits indefinitely.
+    - 연결이 바인드된 후 LDAP 응답을 기다리는 타임아웃(밀리초)입니다. 0 이하이면 무기한 기다립니다.
     - ``30000``
   * - ldap.search.time.limit
-    - Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit.
+    - LDAP 검색의 서버 측 시간 제한(밀리초)입니다. 0 이하이면 제한이 없습니다.
     - ``60000``
   * - ldap.max.username.length
-    - Maximum username length for LDAP.
+    - LDAP의 최대 사용자 이름 길이.
     - ``-1``
   * - ldap.ignore.netbios.name
-    - Whether to ignore NetBIOS name in LDAP.
+    - LDAP에서 NetBIOS 이름 무시 여부.
     - ``true``
   * - ldap.group.name.with.underscores
-    - Whether to allow underscores in LDAP group names.
+    - LDAP 그룹 이름에 언더스코어 허용 여부.
     - ``false``
   * - ldap.lowercase.permission.name
-    - Whether to use lowercase for LDAP permission names.
+    - LDAP 권한 이름에 소문자 사용 여부.
     - ``false``
   * - ldap.allow.empty.permission
-    - Whether to allow empty permissions in LDAP.
+    - LDAP에서 빈 권한 허용 여부.
     - ``true``
   * - ldap.samaccountname.group
-    - Whether to use samAccountName for LDAP group.
+    - LDAP 그룹에 samAccountName 사용 여부.
     - ``false``
   * - ldap.role.search.user.enabled
-    - Whether LDAP role search for user is enabled.
+    - 사용자에 대한 LDAP 역할 검색 활성화 여부.
     - ``true``
   * - ldap.role.search.group.enabled
-    - Whether LDAP role search for group is enabled.
+    - 그룹에 대한 LDAP 역할 검색 활성화 여부.
     - ``true``
   * - ldap.role.search.role.enabled
-    - Whether LDAP role search for role is enabled.
+    - 역할에 대한 LDAP 역할 검색 활성화 여부.
     - ``true``
   * - ldap.attr.surname
-    - LDAP attribute for surname.
+    - 성에 대한 LDAP 속성.
     - ``sn``
   * - ldap.attr.givenName
-    - LDAP attribute for given name.
+    - 이름에 대한 LDAP 속성.
     - ``givenName``
   * - ldap.attr.employeeNumber
-    - LDAP attribute for employee number.
+    - 사원 번호에 대한 LDAP 속성.
     - ``employeeNumber``
   * - ldap.attr.mail
-    - LDAP attribute for mail.
+    - 메일에 대한 LDAP 속성.
     - ``mail``
   * - ldap.attr.telephoneNumber
-    - LDAP attribute for telephone number.
+    - 전화번호에 대한 LDAP 속성.
     - ``telephoneNumber``
   * - ldap.attr.homePhone
-    - LDAP attribute for home phone.
+    - 자택 전화에 대한 LDAP 속성.
     - ``homePhone``
   * - ldap.attr.homePostalAddress
-    - LDAP attribute for home postal address.
+    - 자택 우편 주소에 대한 LDAP 속성.
     - ``homePostalAddress``
   * - ldap.attr.labeledURI
-    - LDAP attribute for labeled URI.
+    - 라벨이 붙은 URI에 대한 LDAP 속성.
     - ``labeledURI``
   * - ldap.attr.roomNumber
-    - LDAP attribute for room number.
+    - 방 번호에 대한 LDAP 속성.
     - ``roomNumber``
   * - ldap.attr.description
-    - LDAP attribute for description.
+    - 설명에 대한 LDAP 속성.
     - ``description``
   * - ldap.attr.title
-    - LDAP attribute for title.
+    - 직함에 대한 LDAP 속성.
     - ``title``
   * - ldap.attr.pager
-    - LDAP attribute for pager.
+    - 호출기에 대한 LDAP 속성.
     - ``pager``
   * - ldap.attr.street
-    - LDAP attribute for street.
+    - 도로명에 대한 LDAP 속성.
     - ``street``
   * - ldap.attr.postalCode
-    - LDAP attribute for postal code.
+    - 우편번호에 대한 LDAP 속성.
     - ``postalCode``
   * - ldap.attr.physicalDeliveryOfficeName
-    - LDAP attribute for physical delivery office name.
+    - 우편물 배달 사무소 이름에 대한 LDAP 속성.
     - ``physicalDeliveryOfficeName``
   * - ldap.attr.destinationIndicator
-    - LDAP attribute for destination indicator.
+    - 목적지 표시자에 대한 LDAP 속성.
     - ``destinationIndicator``
   * - ldap.attr.internationaliSDNNumber
-    - LDAP attribute for international ISDN number.
+    - 국제 ISDN 번호에 대한 LDAP 속성.
     - ``internationaliSDNNumber``
   * - ldap.attr.state
-    - LDAP attribute for state.
+    - 주에 대한 LDAP 속성.
     - ``st``
   * - ldap.attr.employeeType
-    - LDAP attribute for employee type.
+    - 직원 유형에 대한 LDAP 속성.
     - ``employeeType``
   * - ldap.attr.facsimileTelephoneNumber
-    - LDAP attribute for facsimile telephone number.
+    - 팩스 전화번호에 대한 LDAP 속성.
     - ``facsimileTelephoneNumber``
   * - ldap.attr.postOfficeBox
-    - LDAP attribute for post office box.
+    - 사서함에 대한 LDAP 속성.
     - ``postOfficeBox``
   * - ldap.attr.initials
-    - LDAP attribute for initials.
+    - 이니셜에 대한 LDAP 속성.
     - ``initials``
   * - ldap.attr.carLicense
-    - LDAP attribute for car license.
+    - 자동차 면허에 대한 LDAP 속성.
     - ``carLicense``
   * - ldap.attr.mobile
-    - LDAP attribute for mobile.
+    - 휴대전화에 대한 LDAP 속성.
     - ``mobile``
   * - ldap.attr.postalAddress
-    - LDAP attribute for postal address.
+    - 우편 주소에 대한 LDAP 속성.
     - ``postalAddress``
   * - ldap.attr.city
-    - LDAP attribute for city.
+    - 도시에 대한 LDAP 속성.
     - ``l``
   * - ldap.attr.teletexTerminalIdentifier
-    - LDAP attribute for teletex terminal identifier.
+    - 텔레텍스 단말 식별자에 대한 LDAP 속성.
     - ``teletexTerminalIdentifier``
   * - ldap.attr.x121Address
-    - LDAP attribute for X.121 address.
+    - X.121 주소에 대한 LDAP 속성.
     - ``x121Address``
   * - ldap.attr.businessCategory
-    - LDAP attribute for business category.
+    - 비즈니스 카테고리에 대한 LDAP 속성.
     - ``businessCategory``
   * - ldap.attr.registeredAddress
-    - LDAP attribute for registered address.
+    - 등록 주소에 대한 LDAP 속성.
     - ``registeredAddress``
   * - ldap.attr.displayName
-    - LDAP attribute for display name.
+    - 표시 이름에 대한 LDAP 속성.
     - ``displayName``
   * - ldap.attr.preferredLanguage
-    - LDAP attribute for preferred language.
+    - 선호 언어에 대한 LDAP 속성.
     - ``preferredLanguage``
   * - ldap.attr.departmentNumber
-    - LDAP attribute for department number.
+    - 부서 번호에 대한 LDAP 속성.
     - ``departmentNumber``
   * - ldap.attr.uidNumber
-    - LDAP attribute for UID number.
+    - UID 번호에 대한 LDAP 속성.
     - ``uidNumber``
   * - ldap.attr.gidNumber
-    - LDAP attribute for GID number.
+    - GID 번호에 대한 LDAP 속성.
     - ``gidNumber``
   * - ldap.attr.homeDirectory
-    - LDAP attribute for home directory.
+    - 홈 디렉터리에 대한 LDAP 속성.
     - ``homeDirectory``
   * - plugin.repositories
-    - Plugin repository URLs.
+    - 플러그인 저장소 URL.
     - ``https://maven.codelibs.org/release/org/codelibs/fess/,https://repo.maven.apache.org/maven2/org/codelibs/fess/,https://fess.codelibs.org/plugin/artifacts.yaml``
   * - plugin.version.filter
-    - Version filter for plugins.
+    - 플러그인의 버전 필터.
     - (empty)
   * - storage.max.items.in.page
-    - Maximum number of items per page in storage.
+    - 스토리지의 페이지당 최대 항목 수.
     - ``1000``
   * - password.invalid.admin.passwords
-    - List of invalid admin passwords.
+    - 유효하지 않은 관리자 비밀번호 목록.
     - ``admin``
   * - password.min.length
-    - Minimum password length (0 to disable).
+    - 비밀번호의 최소 길이(0이면 비활성화).
     - ``8``
   * - password.max.length
-    - Maximum length of a password field.
+    - 비밀번호 필드의 최대 길이.
     - ``100``
   * - password.require.uppercase
-    - Require uppercase letters in password.
+    - 비밀번호에 대문자를 요구합니다.
     - ``false``
   * - password.require.lowercase
-    - Require lowercase letters in password.
+    - 비밀번호에 소문자를 요구합니다.
     - ``false``
   * - password.require.digit
-    - Require digits in password.
+    - 비밀번호에 숫자를 요구합니다.
     - ``false``
   * - password.require.special.char
-    - Require special characters in password.
+    - 비밀번호에 특수 문자를 요구합니다.
     - ``false``
   * - rag.chat.enabled
-    - Whether RAG chat feature is enabled.
+    - RAG 채팅 기능 활성화 여부.
     - ``false``
   * - rag.chat.log.enabled
-    - Whether to record the usage of each RAG chat request (user, time, LLM calls and tokens) in the chat log. The question and the answer are never recorded.
+    - RAG 채팅 요청마다의 사용 내역(사용자, 시간, LLM 호출 및 토큰)을 채팅 로그에 기록할지 여부입니다. 질문과 답변은 절대 기록되지 않습니다.
     - ``true``
   * - rag.chat.context.max.documents
-    - Chat generation settings.
+    - 채팅 생성 설정.
     - ``5``
   * - rag.chat.query.regeneration.max.count
-    - Maximum number of times one chat request regenerates its search query and searches again when the search finds no documents or, in the streaming chat, none of the hits is judged relevant. Each regeneration makes one LLM call, plus one relevance evaluation call when the new search has hits (0 disables).
+    - 검색에서 문서가 하나도 발견되지 않는 경우(스트리밍 채팅에서는 어떤 히트도 관련 있다고 판정되지 않는 경우), 하나의 채팅 요청이 검색 쿼리를 다시 생성하여 재검색하는 최대 횟수입니다. 재생성할 때마다 LLM 호출이 1회 발생하며, 새 검색에 히트가 있으면 관련성 평가 호출이 1회 추가됩니다(0이면 비활성화).
     - ``2``
   * - rag.chat.session.timeout.minutes
-    - Session settings.
+    - 세션 설정.
     - ``30``
   * - rag.chat.session.max.size
-    - Maximum cached chat sessions; least recently accessed are evicted above it (0 or less means 100).
+    - 캐시하는 채팅 세션의 최대 수이며, 이를 넘으면 가장 오래전에 접근한 세션부터 제거됩니다(0 이하는 100을 의미).
     - ``10000``
   * - rag.chat.history.max.messages
-    - Maximum messages kept in one chat session; older turns are trimmed on each new message.
+    - 하나의 채팅 세션에 유지하는 메시지의 최대 수이며, 새 메시지가 올 때마다 오래된 턴이 삭제됩니다.
     - ``30``
   * - rag.chat.content.fields
-    - Enhanced RAG flow settings. Fields to retrieve for full document content.
+    - 강화된 RAG 플로우 설정입니다. 문서 전체 콘텐츠를 가져오는 필드입니다.
     - ``title,url,content,doc_id,content_title,content_description``
   * - rag.chat.highlight.fragment.size
-    - Highlight settings for RAG search.
+    - RAG 검색의 하이라이트 설정.
     - ``500``
   * - rag.chat.highlight.number.of.fragments
-    - Number of highlight fragments per document in the RAG chat context search.
+    - RAG 채팅 컨텍스트 검색에서 문서당 하이라이트 프래그먼트 수.
     - ``3``
   * - rag.chat.content.fulltext.max.length
-    - Large-document handling for answer generation. Documents whose content_length exceeds this value use highlighted passages instead of full content in the answer context.
+    - 답변 생성 시의 대용량 문서 처리입니다. content_length가 이 값을 초과하는 문서는 답변 컨텍스트에서 전체 콘텐츠 대신 하이라이트된 구절을 사용합니다.
     - ``3000``
   * - rag.chat.answer.highlight.fragment.size
-    - Highlight settings used when extracting passages from large documents for the answer context.
+    - 답변 컨텍스트를 위해 대용량 문서에서 구절을 추출할 때 사용하는 하이라이트 설정.
     - ``1000``
   * - rag.chat.answer.highlight.number.of.fragments
-    - Number of highlight fragments taken from each oversized document for the answer context.
+    - 답변 컨텍스트를 위해 크기가 큰 문서마다 가져오는 하이라이트 프래그먼트 수.
     - ``5``
   * - rag.chat.history.assistant.content
-    - History content mode for assistant messages. smart_summary           - drop assistant body, keep only past search query + referenced titles per turn (default, recommended) full                    - send the whole assistant response source_titles           - body + referenced titles suffix source_titles_and_urls  - "[References: title (url), ...]" only truncated               - truncate assistant response at history.assistant.max.chars none                    - drop assistant turns from history
+    - 어시스턴트 메시지의 이력 콘텐츠 모드입니다. smart_summary - 어시스턴트 본문은 제외하고 턴마다 과거 검색 쿼리와 참조한 제목만 유지(기본값, 권장) full - 어시스턴트 응답 전체를 전송 source_titles - 본문 + 참조한 제목 접미 source_titles_and_urls - "[References: title (url), ...]" 만 truncated - history.assistant.max.chars 에서 어시스턴트 응답을 잘라냄 none - 이력에서 어시스턴트 턴을 제외
     - ``smart_summary``
   * - rag.chat.history.titles.max.count
-    - Maximum number of referenced document titles included per turn in smart_summary history mode.
+    - smart_summary 이력 모드에서 턴마다 포함하는 참조 문서 제목의 최대 수.
     - ``5``
   * - rag.chat.document.max.parts
-    - Maximum number of parts a document is split into when chatting about a single document longer than the LLM context budget. Each part is summarized separately and the summaries are combined into the answer; parts beyond this number are not used. A request about such a document makes up to this many LLM calls plus one for the answer, on every turn.
+    - LLM 컨텍스트 예산보다 긴 단일 문서에 대해 채팅할 때 문서를 분할하는 파트의 최대 수입니다. 각 파트는 개별적으로 요약되고 요약들이 답변으로 결합되며, 이 수를 넘는 파트는 사용되지 않습니다. 이러한 문서에 대한 요청은 매 턴마다 최대 이 수만큼의 LLM 호출에 답변용 호출 1회를 더해 수행합니다.
     - ``10``
   * - rag.chat.response.language
-    - Language the LLM is asked to answer in. browser  - the language of the user's browser or UI locale; no instruction for English (default) none     - no language instruction; the LLM usually answers in the language of the question en, ja.. - always answer in this language
+    - LLM에게 답변을 요청하는 언어입니다. browser - 사용자 브라우저 또는 UI 로캘의 언어. 영어에 대한 지시는 없음(기본값) none - 언어 지시 없음. LLM은 보통 질문의 언어로 답변함 en, ja.. - 항상 이 언어로 답변
     - ``browser``
   * - index.export.path
-    - Index Export
+    - 인덱스 내보내기
     - ``/var/lib/fess/export``
   * - index.export.exclude.fields
-    - Comma-separated document fields omitted from files written by the index export job.
+    - 인덱스 내보내기 작업이 쓰는 파일에서 제외하는 문서 필드(쉼표 구분).
     - ``cache,tag``
   * - index.export.scroll.size
-    - Number of documents fetched per scroll request by the index export job.
+    - 인덱스 내보내기 작업의 스크롤 요청 1회당 가져오는 문서 수.
     - ``100``
   * - index.export.format
-    - Output format for exported documents; only html and json are accepted, anything else fails the job.
+    - 내보낸 문서의 출력 형식이며, html과 json만 허용되고 그 외의 값은 작업을 실패시킵니다.
     - ``html``
   * - log.notification.flush.interval
-    - Log Notification Interval (seconds) for flushing log notification buffer to search engine.
+    - 로그 통지 로그 통지 버퍼를 검색 엔진으로 플러시하는 간격(초).
     - ``30``
   * - log.notification.max.details.length
-    - Maximum length of notification details text.
+    - 통지 상세 텍스트의 최대 길이.
     - ``3000``
   * - log.notification.max.display.events
-    - Maximum number of events to display in notification.
+    - 통지에 표시할 이벤트의 최대 수.
     - ``50``
   * - log.notification.max.message.length
-    - Maximum length of each log message in notification.
+    - 통지 내 각 로그 메시지의 최대 길이.
     - ``200``
   * - log.notification.search.size
-    - Maximum number of events to fetch from search engine per notification job.
+    - 통지 작업당 검색 엔진에서 가져오는 이벤트의 최대 수.
     - ``1000``
   * - log.notification.buffer.size
-    - Maximum number of events to buffer in memory.
+    - 메모리에 버퍼링하는 이벤트의 최대 수.
     - ``1000``
   * - log.notification.interval
-    - Interval (seconds) for the notification job cycle, used in notification messages.
+    - 통지 작업 주기의 간격(초)이며, 통지 메시지에 사용됩니다.
     - ``300``
   * - theme.directory.path
-    - Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)
+    - 정적 테마 시스템(docs/superpowers/specs/2026-05-21-fess-static-theme-design.md 참조)
     - ``themes``
   * - theme.upload.max.size
-    - Maximum size (bytes) of an uploaded theme archive.
+    - 업로드한 테마 아카이브의 최대 크기(바이트).
     - ``52428800``
   * - theme.upload.max.extracted.size
-    - Maximum total extracted size (bytes); extraction aborts once it is exceeded.
+    - 압축 해제 후 총 크기의 최대값(바이트)이며, 이를 초과하면 압축 해제가 중단됩니다.
     - ``209715200``
   * - theme.upload.max.entries
-    - Maximum number of entries allowed in an uploaded theme archive.
+    - 업로드한 테마 아카이브에 허용되는 항목의 최대 수.
     - ``1000``
   * - theme.upload.max.compression.ratio
-    - Maximum uncompressed/compressed ratio for a single theme archive entry.
+    - 테마 아카이브의 단일 항목에 대한 비압축/압축 비율의 최대값.
     - ``100``
   * - theme.upload.zip.ratio.max
-    - Maximum cumulative uncompressed/compressed ratio for the whole archive (zip-bomb guard).
+    - 아카이브 전체에 대한 누적 비압축/압축 비율의 최대값(zip 폭탄 방어).
     - ``50``
   * - theme.upload.zip.ratio.check.threshold.bytes
-    - Compressed bytes read before the cumulative zip ratio check applies; smaller archives skip it.
+    - 누적 zip 비율 검사가 적용되기 전에 읽는 압축 바이트 수이며, 이보다 작은 아카이브는 검사를 건너뜁니다.
     - ``65536``
   * - theme.upload.attic.retention.days
-    - Retention (days) for a replaced theme directory before the cleanup sweep removes it.
+    - 교체된 테마 디렉터리를 클린업 스윕이 삭제하기 전까지의 보존 기간(일).
     - ``7``
   * - theme.repositories
-    - Repository URLs (comma separated) that static themes are downloaded from.
+    - 정적 테마를 다운로드하는 저장소 URL(쉼표 구분).
     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
   * - theme.index.frame.ancestors
-    - Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header).
+    - 정적 테마의 HTML 페이지에 붙는 Content-Security-Policy의 frame-ancestors 디렉티브 값으로, 해당 페이지를 프레임에 포함할 수 있는 오리진입니다. 기본값 'none'은 어떤 페이지도 이를 포함할 수 없게 합니다. WebKit(Safari)은 테마의 파일 미리보기와 캐시 보기가 사용하는 blob: 프레임에도 frame-ancestors를 적용하므로, 값이 'none'인 동안은 이들이 빈 화면으로 표시됩니다. 디렉티브를 제거하려면 값을 비워 두십시오. X-Frame-Options: DENY는 어느 쪽이든 전송되며 모든 브라우저에서 해당 페이지가 프레임에 들어가지 않게 합니다(frame-ancestors를 따르는 브라우저는 그 헤더를 무시합니다).
     - ``'none'``
   * - theme.api.csrf.server.origins
-    - Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-\* headers, then from the servlet request.
+    - 선택 사항: 이 Fess 인스턴스의 표준 외부 오리진(쉼표/줄바꿈 구분)입니다. 예: https://fess.example.com. 설정하면 전달된 헤더를 신뢰하지 않고 v2 CSRF Origin 검사에서 이들을 동일 오리진으로 취급합니다. rate.limit.trusted.proxies 에 등록되지 않은 리버스 프록시 뒤에서 사용하기를 권장합니다. 비어 있으면 신뢰하는 프록시의 X-Forwarded-\* 헤더에서, 그다음으로 서블릿 요청에서 대상 오리진을 재구성합니다.
     - (empty)
   * - theme.api.login.rate.limit.per.ip.per.minute
-    - Login attempts allowed per client IP each minute; 0 or less disables the gate.
+    - 클라이언트 IP당 1분에 허용되는 로그인 시도 횟수이며, 0 이하이면 이 제한(게이트)이 비활성화됩니다.
     - ``10``
   * - theme.api.login.rate.limit.per.user.per.minute
-    - Login attempts allowed per client IP and user name each minute; also gates password change.
+    - 클라이언트 IP 및 사용자 이름별로 1분에 허용되는 로그인 시도 횟수이며, 비밀번호 변경에도 이 제한이 적용됩니다.
     - ``5``
   * - theme.api.login.lockout.seconds
-    - Lockout (seconds) applied once a login rate limit is exceeded; 0 or less disables the lockout.
+    - 로그인 속도 제한을 초과하면 적용되는 잠금 시간(초)이며, 0 이하이면 잠금이 비활성화됩니다.
     - ``900``
   * - theme.api.login.rate.limit.max.entries
-    - Maximum login rate-limit buckets held in memory; idle buckets are evicted at the cap.
+    - 메모리에 보관하는 로그인 속도 제한 버킷의 최대 수이며, 상한에 도달하면 유휴 버킷부터 제거됩니다.
     - ``100000``
   * - api.chat.stream.keepalive.interval.ms
-    - Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (": keepalive\\n\\n") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds.
+    - /api/v2/chat/stream 이 내보내는 SSE keep-alive ping의 간격입니다. ping은 주석만 있는 행(": keepalive\\n\\n")으로 이벤트 스트림에 영향을 주지 않으며, 긴 LLM 단계 동안 유휴 연결을 끊는 중간 장치(nginx의 기본 proxy_read_timeout은 60s)를 무력화합니다. 비활성화하려면 <=0으로 설정하십시오. 단위: 밀리초.
     - ``15000``
 .. GENERATED-END: properties

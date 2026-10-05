@@ -10,2107 +10,2107 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Core"
-msgstr ""
+msgstr "核心"
 
 msgid "The title of the domain for logging and display."
-msgstr ""
+msgstr "用于日志记录和显示的域标题。"
 
 msgid "Search Engine"
-msgstr ""
+msgstr "搜索引擎"
 
 msgid "The type of search engine backend (e.g., default, opensearch)."
-msgstr ""
+msgstr "搜索引擎后端的类型（例如 default、opensearch）。"
 
 msgid "The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)"
-msgstr ""
+msgstr "搜索引擎 HTTP 端点的 URL。在 IPv6 环境中，请用方括号括住 IPv6 地址（例如 http://[::1]:9200）"
 
 msgid "Path to SSL certificate authorities for secure HTTP connections."
-msgstr ""
+msgstr "用于安全 HTTP 连接的 SSL 证书颁发机构的路径。"
 
 msgid "Username for authenticating to the search engine."
-msgstr ""
+msgstr "用于向搜索引擎进行认证的用户名。"
 
 msgid "Password for authenticating to the search engine."
-msgstr ""
+msgstr "用于向搜索引擎进行认证的密码。"
 
 msgid "Interval (ms) for heartbeat checks to the search engine."
-msgstr ""
+msgstr "对搜索引擎进行心跳检查的间隔（毫秒）。"
 
 msgid "Cipher algorithm used for encryption."
-msgstr ""
+msgstr "用于加密的密码算法。"
 
 msgid "Secret key for encryption (change this value for production)."
-msgstr ""
+msgstr "加密用的密钥（生产环境请更改此值）。"
 
 msgid "Algorithm for digest calculation."
-msgstr ""
+msgstr "用于计算摘要的算法。"
 
 msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
-msgstr ""
+msgstr "密码哈希（新机制，兼容 Spring Security v5.8）。支持：bcrypt（目前仅此一种）"
 
 msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
-msgstr ""
+msgstr "BCrypt 的 cost（对数轮数）。10 与 Spring Security v5.8 的默认值一致。范围：4-31。"
 
 msgid "Lazy re-hashing on successful login for legacy hashes."
-msgstr ""
+msgstr "登录成功时对旧版哈希进行延迟重新哈希。"
 
 msgid "NOTE: app.digest.algorithm is kept for LEGACY password verification only (pre-upgrade hashes that have no {id} prefix). Do not use for new passwords. Regex pattern for properties to encrypt."
-msgstr ""
+msgstr "注意：app.digest.algorithm 仅为 旧版密码校验而保留（针对没有 {id} 前缀的升级前哈希）。请勿用于新密码。要加密的属性的正则表达式。"
 
 msgid "Regex pattern for sensitive values to mask in debug logs (case-insensitive match against property/env keys)."
-msgstr ""
+msgstr "调试日志中要遮蔽的敏感值的正则表达式（对属性/环境变量键进行不区分大小写的匹配）。"
 
 msgid "Extension names for application customization."
-msgstr ""
+msgstr "用于应用程序定制的扩展名称。"
 
 msgid "Audit log format."
-msgstr ""
+msgstr "审计日志格式。"
 
 msgid "Script audit log settings."
-msgstr ""
+msgstr "脚本审计日志设置。"
 
 msgid "Maximum characters of script text kept in a script audit log entry; longer text is truncated."
-msgstr ""
+msgstr "脚本审计日志条目中保留的脚本文本的最大字符数；更长的文本会被截断。"
 
 msgid "JVM options for the crawler process."
-msgstr ""
+msgstr "爬虫进程的 JVM 选项。"
 
 msgid "JVM options (newline-separated) passed to the suggest creator child process."
-msgstr ""
+msgstr "传递给建议创建器子进程的 JVM 选项（以换行分隔）。"
 
 msgid "JVM options for the chunk vector indexer process. Heap budget. This child JVM is only started while the \"Content Chunk Vector Indexer\" job runs, so a generous -Xmx costs nothing when content chunking is off. The live set is dominated by the in-flight batches, each of which retains, per document, the full _source, the document's chunk strings, and the document's embedding vectors: content_chunker.job.bulk_size          (default   20) x content_chunker.max_chunks_per_document (default 1000) x content_chunker.embedding.dimension  (default  768) x 4 bytes per float x content_chunker.job.concurrency      (default    2) = ~117 MB of vectors alone, before chunk strings and document sources. With the shipped defaults the worst case is roughly 190-250 MB live (and ~235 MB of vectors alone at dimension=1536), which does not fit a 256 MB heap with any GC headroom. Raise -Xmx further if you raise bulk_size, max_chunks_per_document, concurrency, or the embedding dimension."
-msgstr ""
+msgstr "分块向量索引器进程的 JVM 选项。堆内存预算。该子 JVM 仅在 \"Content Chunk Vector Indexer\" 作业运行期间启动，因此在内容分块关闭时，设置较大的 -Xmx 不会产生任何开销。存活对象集主要由处理中的批次构成，每个批次对每个文档都会保留完整的 _source、该文档的分块字符串以及该文档的嵌入向量：content_chunker.job.bulk_size（默认 20）x content_chunker.max_chunks_per_document（默认 1000）x content_chunker.embedding.dimension（默认 768）x 每个 float 4 字节 x content_chunker.job.concurrency（默认 2）= 仅向量就约 117 MB，尚未计入分块字符串和文档源。在默认配置下，最坏情况下存活内存约为 190-250 MB（在 dimension=1536 时仅向量就约 235 MB），这无法装入 256 MB 的堆，且没有任何 GC 余量。如果提高 bulk_size、max_chunks_per_document、concurrency 或嵌入维度，请进一步提高 -Xmx。"
 
 msgid "JVM options for the thumbnail process."
-msgstr ""
+msgstr "缩略图进程的 JVM 选项。"
 
 msgid "Job"
-msgstr ""
+msgstr "作业"
 
 msgid "System job IDs for scheduled jobs."
-msgstr ""
+msgstr "计划任务的系统作业 ID。"
 
 msgid "Template for web crawler job title."
-msgstr ""
+msgstr "Web 爬虫作业标题的模板。"
 
 msgid "Template for file crawler job title."
-msgstr ""
+msgstr "文件爬虫作业标题的模板。"
 
 msgid "Template for data crawler job title."
-msgstr ""
+msgstr "数据存储爬虫作业标题的模板。"
 
 msgid "Script template for job execution."
-msgstr ""
+msgstr "作业执行的脚本模板。"
 
 msgid "Maximum number of crawler processes."
-msgstr ""
+msgstr "爬虫进程的最大数量。"
 
 msgid "Default script language for jobs."
-msgstr ""
+msgstr "作业的默认脚本语言。"
 
 msgid "Pattern to filter system properties for jobs."
-msgstr ""
+msgstr "用于过滤作业的系统属性的模式。"
 
 msgid "Number of processors to use."
-msgstr ""
+msgstr "要使用的处理器数量。"
 
 msgid "Path to Java command."
-msgstr ""
+msgstr "Java 命令的路径。"
 
 msgid "Path to Python command."
-msgstr ""
+msgstr "Python 命令的路径。"
 
 msgid "Encoding for file paths."
-msgstr ""
+msgstr "文件路径的编码。"
 
 msgid "Whether to use a dedicated temporary directory."
-msgstr ""
+msgstr "是否使用专用临时目录。"
 
 msgid "Maximum length of log output."
-msgstr ""
+msgstr "日志输出的最大长度。"
 
 msgid "Adaptive load control value."
-msgstr ""
+msgstr "自适应负载控制值。"
 
 msgid "CPU threshold (%) for web request load control. Returns 429 when CPU >= this value. (100: disabled)"
-msgstr ""
+msgstr "Web 请求负载控制的 CPU 阈值（%）。当 CPU >= 此值时返回 429。（100：禁用）"
 
 msgid "CPU threshold (%) for API request load control. Returns 429 when CPU >= this value. (100: disabled)"
-msgstr ""
+msgstr "API 请求负载控制的 CPU 阈值（%）。当 CPU >= 此值时返回 429。（100：禁用）"
 
 msgid "Interval (seconds) for monitoring OpenSearch CPU load."
-msgstr ""
+msgstr "监控 OpenSearch CPU 负载的间隔（秒）。"
 
 msgid "Supported languages."
-msgstr ""
+msgstr "支持的语言。"
 
 msgid "Length of API access token."
-msgstr ""
+msgstr "API 访问令牌的长度。"
 
 msgid "API access token request parameter."
-msgstr ""
+msgstr "API 访问令牌的请求参数。"
 
 msgid "Permissions for API admin access."
-msgstr ""
+msgstr "API 管理访问的权限。"
 
 msgid "Accepted referers for API search."
-msgstr ""
+msgstr "API 搜索接受的 Referer。"
 
 msgid "Whether to enable scroll for API search."
-msgstr ""
+msgstr "是否为 API 搜索启用滚动。"
 
 msgid "Whether to enable the end-user export of search results (CSV/JSON) at /api/v2/documents/export."
-msgstr ""
+msgstr "是否在 /api/v2/documents/export 启用最终用户的搜索结果导出（CSV/JSON）。"
 
 msgid "Maximum number of documents written by one search result export."
-msgstr ""
+msgstr "一次搜索结果导出写入的最大文档数。"
 
 msgid "Fields written by the search result export (comma-separated). A field that is not an API response field is ignored."
-msgstr ""
+msgstr "搜索结果导出写入的字段（逗号分隔）。不是 API 响应字段的字段会被忽略。"
 
 msgid "Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit."
-msgstr ""
+msgstr "每个用户每分钟的搜索结果导出最大次数（访客按每个客户端 IP 计算）。0 或更小的值表示禁用该限制。"
 
 msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "API JSON 响应的头信息。Access-Control-* 和 Timing-Allow-Origin 在此处会被忽略（CORS 由 api.cors.* / CorsFilter 控制）。请勿设置 Vary。"
 
 msgid "Whether to include exceptions in API JSON response."
-msgstr ""
+msgstr "API JSON 响应中是否包含异常。"
 
 msgid "Headers for API GSA response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "API GSA 响应的头信息。Access-Control-* 和 Timing-Allow-Origin 在此处会被忽略（CORS 由 api.cors.* / CorsFilter 控制）。请勿设置 Vary。"
 
 msgid "Whether to include exceptions in API GSA response."
-msgstr ""
+msgstr "API GSA 响应中是否包含异常。"
 
 msgid "Headers for API dashboard response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "API 仪表板响应的头信息。Access-Control-* 和 Timing-Allow-Origin 在此处会被忽略（CORS 由 api.cors.* / CorsFilter 控制）。请勿设置 Vary。"
 
 msgid "Allowed origins for CORS. \"*\" returns a literal \"*\" (the request Origin is NOT reflected) and disables credentials. Set explicit origins (newline- or comma-separated) to allow credentialed cross-origin access."
-msgstr ""
+msgstr "CORS 允许的来源。\"*\" 会返回字面量 \"*\"（请求的 Origin 不会被回显），并禁用凭据。设置明确的来源（以换行或逗号分隔）可允许带凭据的跨域访问。"
 
 msgid "Allowed HTTP methods for CORS."
-msgstr ""
+msgstr "CORS 允许的 HTTP 方法。"
 
 msgid "Max age for CORS preflight requests."
-msgstr ""
+msgstr "CORS 预检请求的最大有效期。"
 
 msgid "Allowed request headers for CORS preflight. A static list is returned (Access-Control-Request-Headers is not reflected). Includes X-Fess-CSRF-Token for cross-origin SPAs sending the CSRF token."
-msgstr ""
+msgstr "CORS 预检允许的请求头。返回的是静态列表（不会回显 Access-Control-Request-Headers）。包含 X-Fess-CSRF-Token，供发送 CSRF 令牌的跨域 SPA 使用。"
 
 msgid "Whether to allow credentials for CORS. Honored only for an exact match of an explicit Origin; ignored when api.cors.allow.origin is \"*\"."
-msgstr ""
+msgstr "是否允许 CORS 使用凭据。仅对明确指定的 Origin 的完全匹配生效；当 api.cors.allow.origin 为 \"*\" 时会被忽略。"
 
 msgid "Whether to enable JSONP for API."
-msgstr ""
+msgstr "是否为 API 启用 JSONP。"
 
 msgid "Fields for API ping to search engine."
-msgstr ""
+msgstr "API 对搜索引擎执行 ping 时使用的字段。"
 
 msgid "Rate Limiting"
-msgstr ""
+msgstr "速率限制"
 
 msgid "Whether rate limiting is enabled."
-msgstr ""
+msgstr "是否启用速率限制。"
 
 msgid "Maximum number of requests allowed per window."
-msgstr ""
+msgstr "每个窗口允许的最大请求数。"
 
 msgid "Window size in milliseconds."
-msgstr ""
+msgstr "窗口大小（毫秒）。"
 
 msgid "Duration in milliseconds to block IP when limit exceeded."
-msgstr ""
+msgstr "超过限制时阻止 IP 的持续时间（毫秒）。"
 
 msgid "Retry-After header value in seconds."
-msgstr ""
+msgstr "Retry-After 头的值（秒）。"
 
 msgid "Comma-separated list of whitelisted IPs (e.g., 127.0.0.1,::1)."
-msgstr ""
+msgstr "白名单 IP 的逗号分隔列表（例如 127.0.0.1,::1）。"
 
 msgid "Comma-separated list of blocked IPs."
-msgstr ""
+msgstr "被阻止的 IP 的逗号分隔列表。"
 
 msgid "Comma-separated list of trusted proxy IPs. Only trust X-Forwarded-For/X-Real-IP from these IPs."
-msgstr ""
+msgstr "受信任代理 IP 的逗号分隔列表。仅信任来自这些 IP 的 X-Forwarded-For/X-Real-IP。"
 
 msgid "Number of requests between cleanup operations to prevent memory leaks."
-msgstr ""
+msgstr "为防止内存泄漏而执行清理操作之间的请求数。"
 
 msgid "Virtual Host: Host:fess.codelibs.org=fess"
-msgstr ""
+msgstr "虚拟主机：Host:fess.codelibs.org=fess"
 
 msgid "Hostname for the HTTP proxy server."
-msgstr ""
+msgstr "HTTP 代理服务器的主机名。"
 
 msgid "Port number for the HTTP proxy server (e.g., 8080)."
-msgstr ""
+msgstr "HTTP 代理服务器的端口号（例如 8080）。"
 
 msgid "Username for HTTP proxy authentication."
-msgstr ""
+msgstr "HTTP 代理认证的用户名。"
 
 msgid "Password for HTTP proxy authentication."
-msgstr ""
+msgstr "HTTP 代理认证的密码。"
 
 msgid "Maximum size (bytes) for HTTP file uploads."
-msgstr ""
+msgstr "HTTP 文件上传的最大大小（字节）。"
 
 msgid "Threshold size (bytes) for HTTP file upload buffering."
-msgstr ""
+msgstr "HTTP 文件上传缓冲的阈值大小（字节）。"
 
 msgid "Maximum number of files allowed per HTTP upload."
-msgstr ""
+msgstr "每次 HTTP 上传允许的最大文件数。"
 
 msgid "Index"
-msgstr ""
+msgstr "索引"
 
 msgid "Crawler Common"
-msgstr ""
+msgstr "爬虫通用"
 
 msgid "Number of threads for HTTP crawling."
-msgstr ""
+msgstr "HTTP 爬取的线程数。"
 
 msgid "Serializer type for crawler data (e.g., kryo)."
-msgstr ""
+msgstr "爬虫数据的序列化器类型（例如 kryo）。"
 
 msgid "Maximum length of site name in documents."
-msgstr ""
+msgstr "文档中站点名称的最大长度。"
 
 msgid "Encoding for site names in documents."
-msgstr ""
+msgstr "文档中站点名称的编码。"
 
 msgid "Hostname to use when unknown in documents."
-msgstr ""
+msgstr "文档中主机名未知时使用的主机名。"
 
 msgid "Whether to use site encoding for English documents."
-msgstr ""
+msgstr "是否对英文文档使用站点编码。"
 
 msgid "Whether to append data to documents."
-msgstr ""
+msgstr "是否向文档追加数据。"
 
 msgid "Whether to append filename to documents."
-msgstr ""
+msgstr "是否向文档追加文件名。"
 
 msgid "Maximum size of alphanumeric terms in documents."
-msgstr ""
+msgstr "文档中英数字单词的最大大小。"
 
 msgid "Maximum size of symbol terms in documents."
-msgstr ""
+msgstr "文档中符号单词的最大大小。"
 
 msgid "Whether to remove duplicate terms in documents."
-msgstr ""
+msgstr "是否删除文档中的重复单词。"
 
 msgid "Unicode space characters for document parsing."
-msgstr ""
+msgstr "用于文档解析的 Unicode 空白字符。"
 
 msgid "Unicode full stop characters for document parsing."
-msgstr ""
+msgstr "用于文档解析的 Unicode 句点字符。"
 
 msgid "Encoding for crawling data."
-msgstr ""
+msgstr "爬取数据的编码。"
 
 msgid "Supported web protocols for crawling."
-msgstr ""
+msgstr "爬取支持的 Web 协议。"
 
 msgid "Supported file protocols for crawling."
-msgstr ""
+msgstr "爬取支持的文件协议。"
 
 msgid "Pattern for environment variable keys in crawling data."
-msgstr ""
+msgstr "爬取数据中环境变量键的模式。"
 
 msgid "Whether to ignore robots.txt during crawling."
-msgstr ""
+msgstr "爬取时是否忽略 robots.txt。"
 
 msgid "Whether to ignore robots meta tags during crawling."
-msgstr ""
+msgstr "爬取时是否忽略 robots meta 标签。"
 
 msgid "Whether to ignore content exceptions during crawling."
-msgstr ""
+msgstr "爬取时是否忽略内容异常。"
 
 msgid "HTTP status codes considered as failure URLs."
-msgstr ""
+msgstr "被视为失败 URL 的 HTTP 状态码。"
 
 msgid "Interval (seconds) for system monitor during crawling."
-msgstr ""
+msgstr "爬取期间系统监控的间隔（秒）。"
 
 msgid "Whether to ignore idle threads in hot thread monitoring."
-msgstr ""
+msgstr "hot thread 监控中是否忽略空闲线程。"
 
 msgid "Interval for hot thread monitoring (e.g., 500ms)."
-msgstr ""
+msgstr "hot thread 监控的间隔（例如 500ms）。"
 
 msgid "Number of snapshots for hot thread monitoring."
-msgstr ""
+msgstr "hot thread 监控的快照数。"
 
 msgid "Number of threads for hot thread monitoring."
-msgstr ""
+msgstr "hot thread 监控的线程数。"
 
 msgid "Timeout for hot thread monitoring (e.g., 30s)."
-msgstr ""
+msgstr "hot thread 监控的超时时间（例如 30s）。"
 
 msgid "Type of hot thread monitoring (e.g., cpu)."
-msgstr ""
+msgstr "hot thread 监控的类型（例如 cpu）。"
 
 msgid "Metadata fields to exclude from document content."
-msgstr ""
+msgstr "要从文档内容中排除的元数据字段。"
 
 msgid "Mapping for document metadata names."
-msgstr ""
+msgstr "文档元数据名称的映射。"
 
 msgid "Crawler HTML"
-msgstr ""
+msgstr "爬虫 HTML"
 
 msgid "XPath to extract main content from HTML documents."
-msgstr ""
+msgstr "用于从 HTML 文档中提取主要内容的 XPath。"
 
 msgid "XPath to extract language attribute from HTML documents."
-msgstr ""
+msgstr "用于从 HTML 文档中提取语言属性的 XPath。"
 
 msgid "XPath to extract digest (description) from HTML documents."
-msgstr ""
+msgstr "用于从 HTML 文档中提取摘要（描述）的 XPath。"
 
 msgid "XPath to extract canonical URL from HTML documents."
-msgstr ""
+msgstr "用于从 HTML 文档中提取规范 URL 的 XPath。"
 
 msgid "HTML tags to prune (remove) during document processing."
-msgstr ""
+msgstr "文档处理时要裁剪（删除）的 HTML 标签。"
 
 msgid "Maximum length of digest extracted from HTML documents."
-msgstr ""
+msgstr "从 HTML 文档中提取的摘要的最大长度。"
 
 msgid "Default language for HTML documents."
-msgstr ""
+msgstr "HTML 文档的默认语言。"
 
 msgid "Patterns to include for HTML index processing."
-msgstr ""
+msgstr "HTML 索引处理中要包含的模式。"
 
 msgid "Patterns to exclude for HTML index processing."
-msgstr ""
+msgstr "HTML 索引处理中要排除的模式。"
 
 msgid "Patterns to include for HTML search processing."
-msgstr ""
+msgstr "HTML 搜索处理中要包含的模式。"
 
 msgid "Patterns to exclude for HTML search processing."
-msgstr ""
+msgstr "HTML 搜索处理中要排除的模式。"
 
 msgid "Crawler File"
-msgstr ""
+msgstr "爬虫文件"
 
 msgid "Encoding for file names in documents."
-msgstr ""
+msgstr "文档中文件名的编码。"
 
 msgid "Label to use when a file has no title."
-msgstr ""
+msgstr "文件没有标题时使用的标签。"
 
 msgid "Whether to ignore files with empty content."
-msgstr ""
+msgstr "是否忽略内容为空的文件。"
 
 msgid "Maximum length of file title in documents."
-msgstr ""
+msgstr "文档中文件标题的最大长度。"
 
 msgid "Maximum length of file digest in documents."
-msgstr ""
+msgstr "文档中文件摘要的最大长度。"
 
 msgid "Whether to append meta content from files."
-msgstr ""
+msgstr "是否追加来自文件的元内容。"
 
 msgid "Whether to append body content from files."
-msgstr ""
+msgstr "是否追加来自文件的正文内容。"
 
 msgid "Default language for file documents."
-msgstr ""
+msgstr "文件文档的默认语言。"
 
 msgid "Patterns to include for file index processing."
-msgstr ""
+msgstr "文件索引处理中要包含的模式。"
 
 msgid "Patterns to exclude for file index processing."
-msgstr ""
+msgstr "文件索引处理中要排除的模式。"
 
 msgid "Patterns to include for file search processing."
-msgstr ""
+msgstr "文件搜索处理中要包含的模式。"
 
 msgid "Patterns to exclude for file search processing."
-msgstr ""
+msgstr "文件搜索处理中要排除的模式。"
 
 msgid "Whether to index the owner of crawled files (SMB, local file system and FTP). The crawl config parameter config.owner.enabled overrides it."
-msgstr ""
+msgstr "是否为已爬取的文件（SMB、本地文件系统和 FTP）的所有者建立索引。爬取配置参数 config.owner.enabled 会覆盖该设置。"
 
 msgid "Whether to index the last modifier of crawled files, read from the document metadata and falling back to the file owner. The crawl config parameter config.last.modifier.enabled overrides it."
-msgstr ""
+msgstr "是否为已爬取的文件的最后修改者建立索引，从文档元数据中读取，读取不到时回退到文件所有者。爬取配置参数 config.last.modifier.enabled 会覆盖该设置。"
 
 msgid "Crawler Cache"
-msgstr ""
+msgstr "爬虫缓存"
 
 msgid "Whether document cache is enabled."
-msgstr ""
+msgstr "是否启用文档缓存。"
 
 msgid "Maximum size (bytes) for document cache."
-msgstr ""
+msgstr "文档缓存的最大大小（字节）。"
 
 msgid "Supported MIME types for document cache."
-msgstr ""
+msgstr "文档缓存支持的 MIME 类型。"
 
 msgid ",text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME types for HTML document cache."
-msgstr ""
+msgstr ",text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation HTML 文档缓存的 MIME 类型。"
 
 msgid "Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type)."
-msgstr ""
+msgstr "用于 MIME 类型检测的扩展名到 MIME 类型的覆盖映射（每行一个：.ext=mime/type）。"
 
 msgid "Whether to extract text from images and scanned PDFs with Tesseract OCR (requires the tesseract command)."
-msgstr ""
+msgstr "是否使用 Tesseract OCR 从图像和扫描版 PDF 中提取文本（需要 tesseract 命令）。"
 
 msgid "Tesseract OCR languages, joined with '+' (e.g. jpn+eng)."
-msgstr ""
+msgstr "Tesseract OCR 的语言，用 '+' 连接（例如 jpn+eng）。"
 
 msgid "Timeout in seconds for one Tesseract OCR run."
-msgstr ""
+msgstr "Tesseract OCR 单次运行的超时时间（秒）。"
 
 msgid "Indexer"
-msgstr ""
+msgstr "索引器"
 
 msgid "Whether to enable thread dump for the indexer."
-msgstr ""
+msgstr "是否为索引器启用线程转储。"
 
 msgid "Maximum number of unprocessed documents for the indexer."
-msgstr ""
+msgstr "索引器的最大未处理文档数。"
 
 msgid "Whether to enable click count tracking in the indexer."
-msgstr ""
+msgstr "是否在索引器中启用点击数跟踪。"
 
 msgid "Whether to enable favorite count tracking in the indexer."
-msgstr ""
+msgstr "是否在索引器中启用收藏数跟踪。"
 
 msgid "Commit margin time (ms) for webfs in the indexer."
-msgstr ""
+msgstr "索引器中 webfs 的提交余量时间（毫秒）。"
 
 msgid "Maximum number of empty lists for webfs in the indexer."
-msgstr ""
+msgstr "索引器中 webfs 的最大空列表数。"
 
 msgid "Update interval (ms) for webfs in the indexer."
-msgstr ""
+msgstr "索引器中 webfs 的更新间隔（毫秒）。"
 
 msgid "Maximum document cache size for webfs in the indexer."
-msgstr ""
+msgstr "索引器中 webfs 的最大文档缓存大小。"
 
 msgid "Maximum document request size (bytes) for webfs in the indexer."
-msgstr ""
+msgstr "索引器中 webfs 的最大文档请求大小（字节）。"
 
 msgid "Maximum document cache size for data in the indexer."
-msgstr ""
+msgstr "索引器中数据的最大文档缓存大小。"
 
 msgid "Maximum document request size (bytes) for data in the indexer."
-msgstr ""
+msgstr "索引器中数据的最大文档请求大小（字节）。"
 
 msgid "Maximum delete cache size for data in the indexer."
-msgstr ""
+msgstr "索引器中数据的最大删除缓存大小。"
 
 msgid "Maximum redirect count for data in the indexer."
-msgstr ""
+msgstr "索引器中数据的最大重定向次数。"
 
 msgid "Fields used for language detection in the indexer."
-msgstr ""
+msgstr "索引器中用于语言检测的字段。"
 
 msgid "Length of text for language detection in the indexer."
-msgstr ""
+msgstr "索引器中用于语言检测的文本长度。"
 
 msgid "Maximum result window size for the indexer."
-msgstr ""
+msgstr "索引器的最大结果窗口大小。"
 
 msgid "Maximum number of search documents for the indexer."
-msgstr ""
+msgstr "索引器的最大搜索文档数。"
 
 msgid "Index Settings"
-msgstr ""
+msgstr "索引设置"
 
 msgid "Codec type for the index."
-msgstr ""
+msgstr "索引的编解码器类型。"
 
 msgid "Number of primary shards for the index."
-msgstr ""
+msgstr "索引的主分片数。"
 
 msgid "Auto expand replicas setting for the index."
-msgstr ""
+msgstr "索引的自动扩展副本设置。"
 
 msgid "Digest algorithm for index IDs."
-msgstr ""
+msgstr "索引 ID 的摘要算法。"
 
 msgid "Initial password for the index user."
-msgstr ""
+msgstr "索引用户的初始密码。"
 
 msgid "Field Names"
-msgstr ""
+msgstr "字段名称"
 
 msgid "Field name for favorite count in the index."
-msgstr ""
+msgstr "索引中收藏数的字段名称。"
 
 msgid "Field name for click count in the index."
-msgstr ""
+msgstr "索引中点击数的字段名称。"
 
 msgid "Field name for config ID in the index."
-msgstr ""
+msgstr "索引中配置 ID 的字段名称。"
 
 msgid "Field name for expiration date in the index."
-msgstr ""
+msgstr "索引中过期日期的字段名称。"
 
 msgid "Field name for URL in the index."
-msgstr ""
+msgstr "索引中 URL 的字段名称。"
 
 msgid "Field name for document ID in the index."
-msgstr ""
+msgstr "索引中文档 ID 的字段名称。"
 
 msgid "Field name for internal ID in the index."
-msgstr ""
+msgstr "索引中内部 ID 的字段名称。"
 
 msgid "Field name for version in the index."
-msgstr ""
+msgstr "索引中版本的字段名称。"
 
 msgid "Field name for sequence number in the index."
-msgstr ""
+msgstr "索引中序列号的字段名称。"
 
 msgid "Field name for primary term in the index."
-msgstr ""
+msgstr "索引中 primary term 的字段名称。"
 
 msgid "Field name for language in the index."
-msgstr ""
+msgstr "索引中语言的字段名称。"
 
 msgid "Field name for cache status in the index."
-msgstr ""
+msgstr "索引中缓存状态的字段名称。"
 
 msgid "Field name for last modified date in the index."
-msgstr ""
+msgstr "索引中最后修改日期的字段名称。"
 
 msgid "Field name for the ETag response header of the crawled document in the index."
-msgstr ""
+msgstr "索引中已爬取文档的 ETag 响应头的字段名称。"
 
 msgid "Field name for the owner of the crawled file in the index."
-msgstr ""
+msgstr "索引中已爬取文件的所有者的字段名称。"
 
 msgid "Field name for the last modifier of the crawled file in the index."
-msgstr ""
+msgstr "索引中已爬取文件的最后修改者的字段名称。"
 
 msgid "Field name for anchor in the index."
-msgstr ""
+msgstr "索引中锚点的字段名称。"
 
 msgid "Field name for segment in the index."
-msgstr ""
+msgstr "索引中段的字段名称。"
 
 msgid "Field name for role in the index."
-msgstr ""
+msgstr "索引中角色的字段名称。"
 
 msgid "Field name for boost value in the index."
-msgstr ""
+msgstr "索引中提升值的字段名称。"
 
 msgid "Field name for creation date in the index."
-msgstr ""
+msgstr "索引中创建日期的字段名称。"
 
 msgid "Field name for timestamp in the index."
-msgstr ""
+msgstr "索引中时间戳的字段名称。"
 
 msgid "Field name for label in the index."
-msgstr ""
+msgstr "索引中标签的字段名称。"
 
 msgid "Field name for the user tags of the document in the index."
-msgstr ""
+msgstr "索引中文档的用户标签的字段名称。"
 
 msgid "Field name for MIME type in the index."
-msgstr ""
+msgstr "索引中 MIME 类型的字段名称。"
 
 msgid "Field name for parent ID in the index."
-msgstr ""
+msgstr "索引中父 ID 的字段名称。"
 
 msgid "Field name for important content in the index."
-msgstr ""
+msgstr "索引中重要内容的字段名称。"
 
 msgid "Field name for content in the index."
-msgstr ""
+msgstr "索引中内容的字段名称。"
 
 msgid "Field name for content minhash bits in the index."
-msgstr ""
+msgstr "索引中内容 minhash 位数的字段名称。"
 
 msgid "Field name for cache in the index."
-msgstr ""
+msgstr "索引中缓存的字段名称。"
 
 msgid "Field name for digest in the index."
-msgstr ""
+msgstr "索引中摘要的字段名称。"
 
 msgid "Field name for title in the index."
-msgstr ""
+msgstr "索引中标题的字段名称。"
 
 msgid "Field name for host in the index."
-msgstr ""
+msgstr "索引中主机的字段名称。"
 
 msgid "Field name for site in the index."
-msgstr ""
+msgstr "索引中站点的字段名称。"
 
 msgid "Field name for content length in the index."
-msgstr ""
+msgstr "索引中内容长度的字段名称。"
 
 msgid "Field name for file type in the index."
-msgstr ""
+msgstr "索引中文件类型的字段名称。"
 
 msgid "Field name for file name in the index."
-msgstr ""
+msgstr "索引中文件名的字段名称。"
 
 msgid "Field name for thumbnail in the index."
-msgstr ""
+msgstr "索引中缩略图的字段名称。"
 
 msgid "Field name for virtual host in the index."
-msgstr ""
+msgstr "索引中虚拟主机的字段名称。"
 
 msgid "Field name for content title in the response."
-msgstr ""
+msgstr "响应中内容标题的字段名称。"
 
 msgid "Field name for content description in the response."
-msgstr ""
+msgstr "响应中内容描述的字段名称。"
 
 msgid "Field name for URL link in the response."
-msgstr ""
+msgstr "响应中 URL 链接的字段名称。"
 
 msgid "Field name for site path in the response."
-msgstr ""
+msgstr "响应中站点路径的字段名称。"
 
 msgid "Maximum length of content title in the response."
-msgstr ""
+msgstr "响应中内容标题的最大长度。"
 
 msgid "Maximum length of site path in the response."
-msgstr ""
+msgstr "响应中站点路径的最大长度。"
 
 msgid "Whether to enable content title highlighting in the response."
-msgstr ""
+msgstr "是否在响应中启用内容标题高亮。"
 
 msgid "Inline MIME types for the response."
-msgstr ""
+msgstr "响应的内联 MIME 类型。"
 
 msgid "HTTP headers for the response. Access-Control-* and Timing-Allow-Origin are ignored (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary here."
-msgstr ""
+msgstr "响应的 HTTP 头信息。Access-Control-* 和 Timing-Allow-Origin 会被忽略（CORS 由 api.cors.* / CorsFilter 控制）。请勿在此处设置 Vary。"
 
 msgid "Document Index"
-msgstr ""
+msgstr "文档索引"
 
 msgid "Index name for search documents."
-msgstr ""
+msgstr "搜索文档的索引名称。"
 
 msgid "Index name for update documents."
-msgstr ""
+msgstr "更新文档的索引名称。"
 
 msgid "Index name for suggest documents."
-msgstr ""
+msgstr "建议文档的索引名称。"
 
 msgid "Index name for crawler documents."
-msgstr ""
+msgstr "爬虫文档的索引名称。"
 
 msgid "Number of primary shards for crawler queue index."
-msgstr ""
+msgstr "爬虫队列索引的主分片数。"
 
 msgid "Number of primary shards for crawler data index."
-msgstr ""
+msgstr "爬虫数据索引的主分片数。"
 
 msgid "Number of primary shards for crawler filter index."
-msgstr ""
+msgstr "爬虫过滤器索引的主分片数。"
 
 msgid "Number of replicas for crawler queue index."
-msgstr ""
+msgstr "爬虫队列索引的副本数。"
 
 msgid "Number of replicas for crawler data index."
-msgstr ""
+msgstr "爬虫数据索引的副本数。"
 
 msgid "Number of replicas for crawler filter index."
-msgstr ""
+msgstr "爬虫过滤器索引的副本数。"
 
 msgid "Index name for configuration data."
-msgstr ""
+msgstr "配置数据的索引名称。"
 
 msgid "Index name for user data."
-msgstr ""
+msgstr "用户数据的索引名称。"
 
 msgid "Index name for log data."
-msgstr ""
+msgstr "日志数据的索引名称。"
 
 msgid "Prefix for dictionary index names."
-msgstr ""
+msgstr "字典索引名称的前缀。"
 
 msgid "Document Management"
-msgstr ""
+msgstr "文档管理"
 
 msgid "Array-type fields for admin in the index."
-msgstr ""
+msgstr "索引中管理用的数组类型字段。"
 
 msgid "Date-type fields for admin in the index."
-msgstr ""
+msgstr "索引中管理用的日期类型字段。"
 
 msgid "Integer-type fields for admin in the index."
-msgstr ""
+msgstr "索引中管理用的整数类型字段。"
 
 msgid "Long-type fields for admin in the index."
-msgstr ""
+msgstr "索引中管理用的长整数类型字段。"
 
 msgid "Float-type fields for admin in the index."
-msgstr ""
+msgstr "索引中管理用的浮点类型字段。"
 
 msgid "Double-type fields for admin in the index."
-msgstr ""
+msgstr "索引中管理用的双精度浮点类型字段。"
 
 msgid "Required fields for admin in the index."
-msgstr ""
+msgstr "索引中管理用的必填字段。"
 
 msgid "Timeouts"
-msgstr ""
+msgstr "超时"
 
 msgid "Timeout for index search operations."
-msgstr ""
+msgstr "索引搜索操作的超时时间。"
 
 msgid "Timeout for scroll search operations."
-msgstr ""
+msgstr "滚动搜索操作的超时时间。"
 
 msgid "Timeout for index operations."
-msgstr ""
+msgstr "索引操作的超时时间。"
 
 msgid "Timeout for bulk index operations."
-msgstr ""
+msgstr "批量索引操作的超时时间。"
 
 msgid "Timeout for delete operations in the index."
-msgstr ""
+msgstr "索引中删除操作的超时时间。"
 
 msgid "Timeout for index health checks."
-msgstr ""
+msgstr "索引健康检查的超时时间。"
 
 msgid "Timeout for index indices operations."
-msgstr ""
+msgstr "索引 indices 操作的超时时间。"
 
 msgid "File Types"
-msgstr ""
+msgstr "文件类型"
 
 msgid "Mapping of MIME types to filetype labels for indexing."
-msgstr ""
+msgstr "用于索引的 MIME 类型到文件类型标签的映射。"
 
 msgid "Number of documents to process per reindex operation."
-msgstr ""
+msgstr "每次重新索引操作处理的文档数。"
 
 msgid "Request body template for reindex operations."
-msgstr ""
+msgstr "重新索引操作的请求体模板。"
 
 msgid "Requests per second for reindex operations (\"adaptive\" for auto)."
-msgstr ""
+msgstr "重新索引操作的每秒请求数（\"adaptive\" 表示自动）。"
 
 msgid "Whether to refresh the index after reindexing."
-msgstr ""
+msgstr "重新索引后是否刷新索引。"
 
 msgid "Timeout for reindex operations."
-msgstr ""
+msgstr "重新索引操作的超时时间。"
 
 msgid "Scroll timeout for reindex operations."
-msgstr ""
+msgstr "重新索引操作的滚动超时时间。"
 
 msgid "Maximum number of documents for reindex operations."
-msgstr ""
+msgstr "重新索引操作的最大文档数。"
 
 msgid "Query"
-msgstr ""
+msgstr "查询"
 
 msgid "Maximum length of search queries."
-msgstr ""
+msgstr "搜索查询的最大长度。"
 
 msgid "Timeout (ms) for search queries."
-msgstr ""
+msgstr "搜索查询的超时时间（毫秒）。"
 
 msgid "Whether to log searches whose results are incomplete because the query timed out or a shard failed."
-msgstr ""
+msgstr "是否记录因查询超时或分片失败而结果不完整的搜索。"
 
 msgid "Maximum number of total hits to track in queries. Only a positive number or true is supported: false leaves the response without a hit count, and a search that asks for it, here or as a search parameter, is refused."
-msgstr ""
+msgstr "查询中要跟踪的总命中数的最大值。仅支持正数或 true；false 会使响应中不含命中数，而要求使用 false 的搜索（无论是在此处还是作为搜索参数）会被拒绝。"
 
 msgid "Fields used for geo search queries."
-msgstr ""
+msgstr "位置信息搜索查询使用的字段。"
 
 msgid "Parameter name for browser language in queries."
-msgstr ""
+msgstr "查询中浏览器语言的参数名称。"
 
 msgid "Whether to replace term with prefix query."
-msgstr ""
+msgstr "是否将单词替换为前缀查询。"
 
 msgid "Minimum hit count for OR search queries."
-msgstr ""
+msgstr "OR 搜索查询的最小命中数。"
 
 msgid "Unicode terminal characters for query highlighting."
-msgstr ""
+msgstr "查询高亮的 Unicode 终止字符。"
 
 msgid "Fragment size for query highlighting."
-msgstr ""
+msgstr "查询高亮的片段大小。"
 
 msgid "Number of fragments for query highlighting."
-msgstr ""
+msgstr "查询高亮的片段数。"
 
 msgid "Type of query highlighting."
-msgstr ""
+msgstr "查询高亮的类型。"
 
 msgid "Tag to use before highlighted text."
-msgstr ""
+msgstr "高亮文本之前使用的标签。"
 
 msgid "Tag to use after highlighted text."
-msgstr ""
+msgstr "高亮文本之后使用的标签。"
 
 msgid "Boundary characters for query highlighting."
-msgstr ""
+msgstr "查询高亮的边界字符。"
 
 msgid "Maximum scan for query highlight boundaries."
-msgstr ""
+msgstr "查询高亮边界的最大扫描量。"
 
 msgid "Scanner type for query highlight boundaries."
-msgstr ""
+msgstr "查询高亮边界的扫描器类型。"
 
 msgid "Encoder type for query highlighting."
-msgstr ""
+msgstr "查询高亮的编码器类型。"
 
 msgid "Whether to force source for query highlighting."
-msgstr ""
+msgstr "查询高亮是否强制使用 source。"
 
 msgid "Fragmenter type for query highlighting."
-msgstr ""
+msgstr "查询高亮的分段器类型。"
 
 msgid "Offset for query highlight fragments."
-msgstr ""
+msgstr "查询高亮片段的偏移量。"
 
 msgid "Size for no-match query highlight."
-msgstr ""
+msgstr "查询高亮无匹配时的大小。"
 
 msgid "Order for query highlight fragments."
-msgstr ""
+msgstr "查询高亮片段的顺序。"
 
 msgid "Phrase limit for query highlighting."
-msgstr ""
+msgstr "查询高亮的短语限制。"
 
 msgid "Fields for content description in query highlighting."
-msgstr ""
+msgstr "查询高亮中用于内容描述的字段。"
 
 msgid "Whether to detect boundary position in query highlighting."
-msgstr ""
+msgstr "查询高亮中是否检测边界位置。"
 
 msgid "Type for text fragment in query highlighting."
-msgstr ""
+msgstr "查询高亮中文本片段的类型。"
 
 msgid "Size for text fragment in query highlighting."
-msgstr ""
+msgstr "查询高亮中文本片段的大小。"
 
 msgid "Prefix length for text fragment in query highlighting."
-msgstr ""
+msgstr "查询高亮中文本片段的前缀长度。"
 
 msgid "Suffix length for text fragment in query highlighting."
-msgstr ""
+msgstr "查询高亮中文本片段的后缀长度。"
 
 msgid "Maximum search result offset for queries."
-msgstr ""
+msgstr "查询的最大搜索结果偏移量。"
 
 msgid "Additional default fields for queries."
-msgstr ""
+msgstr "查询的附加默认字段。"
 
 msgid "Additional fields fetched from the index for search results. The search API returns a field added here only if it is also listed in query.additional.api.response.fields."
-msgstr ""
+msgstr "为搜索结果从索引中获取的附加字段。只有同时列在 query.additional.api.response.fields 中时，搜索 API 才会返回在此处添加的字段。"
 
 msgid "Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only); it does not fetch them. A field must also be fetched: add it to query.additional.response.fields for the search API, or to query.additional.scroll.response.fields for the scroll API. Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response."
-msgstr ""
+msgstr "查询的附加 API 响应字段。此键仅向 v2 API 响应允许列表追加字段（只增不减）；它不会获取这些字段。字段还必须被获取：对于搜索 API，请将其添加到 query.additional.response.fields；对于滚动 API，请将其添加到 query.additional.scroll.response.fields。请勿添加 ACL 或内部字段（例如 role、virtual_host）；添加它们会在搜索 API 响应中暴露访问控制信息。"
 
 msgid "Additional fields fetched from the index for scroll search results. The scroll API returns a field added here only if it is also listed in query.additional.api.response.fields."
-msgstr ""
+msgstr "为滚动搜索结果从索引中获取的附加字段。只有同时列在 query.additional.api.response.fields 中时，滚动 API 才会返回在此处添加的字段。"
 
 msgid "Additional cache response fields for queries."
-msgstr ""
+msgstr "查询的附加缓存响应字段。"
 
 msgid "Additional highlighted fields for queries."
-msgstr ""
+msgstr "查询的附加高亮字段。"
 
 msgid "Additional search fields for queries."
-msgstr ""
+msgstr "查询的附加搜索字段。"
 
 msgid "Additional facet fields for queries."
-msgstr ""
+msgstr "查询的附加分面字段。"
 
 msgid "Additional sort fields for queries."
-msgstr ""
+msgstr "查询的附加排序字段。"
 
 msgid "Additional analyzed fields for queries."
-msgstr ""
+msgstr "查询的附加已分析字段。"
 
 msgid "Additional not-analyzed fields for queries."
-msgstr ""
+msgstr "查询的附加未分析字段。"
 
 msgid "Fields for GSA response in queries."
-msgstr ""
+msgstr "查询中 GSA 响应的字段。"
 
 msgid "Default language for GSA queries."
-msgstr ""
+msgstr "GSA 查询的默认语言。"
 
 msgid "Default sort for GSA queries."
-msgstr ""
+msgstr "GSA 查询的默认排序。"
 
 msgid "Meta prefix for GSA queries."
-msgstr ""
+msgstr "GSA 查询的 meta 前缀。"
 
 msgid "Charset field for GSA index queries."
-msgstr ""
+msgstr "GSA 索引查询的字符集字段。"
 
 msgid "Content type field for GSA index queries."
-msgstr ""
+msgstr "GSA 索引查询的内容类型字段。"
 
 msgid "Maximum concurrent group results for collapse queries."
-msgstr ""
+msgstr "折叠查询的最大并发分组结果数。"
 
 msgid "Inner hits name for collapse queries."
-msgstr ""
+msgstr "折叠查询的 inner hits 名称。"
 
 msgid "Inner hits size for collapse queries."
-msgstr ""
+msgstr "折叠查询的 inner hits 大小。"
 
 msgid "Sorts for inner hits in collapse queries."
-msgstr ""
+msgstr "折叠查询中 inner hits 的排序。"
 
 msgid "Default languages for queries."
-msgstr ""
+msgstr "查询的默认语言。"
 
 msgid "Default preference for JSON queries."
-msgstr ""
+msgstr "JSON 查询的默认 preference。"
 
 msgid "Default preference for GSA queries."
-msgstr ""
+msgstr "GSA 查询的默认 preference。"
 
 msgid "Language mapping for queries."
-msgstr ""
+msgstr "查询的语言映射。"
 
 msgid "Boost"
-msgstr ""
+msgstr "提升"
 
 msgid "Boost value for title field in queries."
-msgstr ""
+msgstr "查询中标题字段的提升值。"
 
 msgid "Boost value for title field with language in queries."
-msgstr ""
+msgstr "查询中带语言的标题字段的提升值。"
 
 msgid "Boost value for content field in queries."
-msgstr ""
+msgstr "查询中内容字段的提升值。"
 
 msgid "Boost value for content field with language in queries."
-msgstr ""
+msgstr "查询中带语言的内容字段的提升值。"
 
 msgid "Boost value for important content field in queries."
-msgstr ""
+msgstr "查询中重要内容字段的提升值。"
 
 msgid "Boost value for important content field with language in queries."
-msgstr ""
+msgstr "查询中带语言的重要内容字段的提升值。"
 
 msgid "Minimum length for fuzzy boosting in queries."
-msgstr ""
+msgstr "查询中模糊提升的最小长度。"
 
 msgid "Boost value for fuzzy title queries."
-msgstr ""
+msgstr "模糊标题查询的提升值。"
 
 msgid "Fuzziness for fuzzy title queries."
-msgstr ""
+msgstr "模糊标题查询的模糊度。"
 
 msgid "Number of expansions for fuzzy title queries."
-msgstr ""
+msgstr "模糊标题查询的扩展数。"
 
 msgid "Prefix length for fuzzy title queries."
-msgstr ""
+msgstr "模糊标题查询的前缀长度。"
 
 msgid "Whether to allow transpositions in fuzzy title queries."
-msgstr ""
+msgstr "模糊标题查询中是否允许换位。"
 
 msgid "Boost value for fuzzy content queries."
-msgstr ""
+msgstr "模糊内容查询的提升值。"
 
 msgid "Fuzziness for fuzzy content queries."
-msgstr ""
+msgstr "模糊内容查询的模糊度。"
 
 msgid "Number of expansions for fuzzy content queries."
-msgstr ""
+msgstr "模糊内容查询的扩展数。"
 
 msgid "Prefix length for fuzzy content queries."
-msgstr ""
+msgstr "模糊内容查询的前缀长度。"
 
 msgid "Whether to allow transpositions in fuzzy content queries."
-msgstr ""
+msgstr "模糊内容查询中是否允许换位。"
 
 msgid "Default query type."
-msgstr ""
+msgstr "默认查询类型。"
 
 msgid "Tie breaker value for dismax queries."
-msgstr ""
+msgstr "dismax 查询的 tie breaker 值。"
 
 msgid "Minimum should match value for boolean queries."
-msgstr ""
+msgstr "布尔查询的 minimum should match 值。"
 
 msgid "Number of expansions for prefix queries."
-msgstr ""
+msgstr "前缀查询的扩展数。"
 
 msgid "Slop value for prefix queries."
-msgstr ""
+msgstr "前缀查询的 slop 值。"
 
 msgid "Prefix length for fuzzy queries."
-msgstr ""
+msgstr "模糊查询的前缀长度。"
 
 msgid "Number of expansions for fuzzy queries."
-msgstr ""
+msgstr "模糊查询的扩展数。"
 
 msgid "Whether to allow transpositions in fuzzy queries."
-msgstr ""
+msgstr "模糊查询中是否允许换位。"
 
 msgid "Facet"
-msgstr ""
+msgstr "分面"
 
 msgid "Fields for facet queries."
-msgstr ""
+msgstr "分面查询的字段。"
 
 msgid "Size of facet fields."
-msgstr ""
+msgstr "分面字段的大小。"
 
 msgid "Upper clamp for facet.size (applied at the search chokepoint)."
-msgstr ""
+msgstr "facet.size 的上限（在搜索的统一入口处应用）。"
 
 msgid "Minimum document count for facet fields."
-msgstr ""
+msgstr "分面字段的最小文档数。"
 
 msgid "Upper clamp for facet.minDocCount (applied at the search chokepoint)."
-msgstr ""
+msgstr "facet.minDocCount 的上限（在搜索的统一入口处应用）。"
 
 msgid "Sort order for facet fields."
-msgstr ""
+msgstr "分面字段的排序顺序。"
 
 msgid "Value for missing facet fields."
-msgstr ""
+msgstr "缺失分面字段的值。"
 
 msgid "Facet queries definition."
-msgstr ""
+msgstr "分面查询定义。"
 
 msgid "Ranking"
-msgstr ""
+msgstr "排名"
 
 msgid "Window size for rank fusion."
-msgstr ""
+msgstr "Rank Fusion 的窗口大小。"
 
 msgid "Rank constant for rank fusion."
-msgstr ""
+msgstr "Rank Fusion 的排名常数。"
 
 msgid "Number of threads for rank fusion."
-msgstr ""
+msgstr "Rank Fusion 的线程数。"
 
 msgid "Maximum time (milliseconds) to wait for the searchers other than the main one when Fess fuses their results itself (rank.fusion.engine.enabled=false). A searcher that has not answered by then is left out of that search, and the results are flagged as partial and timed out. The main searcher is always waited for. 0 or less waits without a limit."
-msgstr ""
+msgstr "当 Fess 自行融合各搜索器的结果（rank.fusion.engine.enabled=false）时，等待主搜索器以外的搜索器的最长时间（毫秒）。到那时仍未应答的搜索器将被排除在该次搜索之外，并且结果会被标记为部分结果和已超时。始终会等待主搜索器。0 或更小的值表示无限期等待。"
 
 msgid "Score field for rank fusion."
-msgstr ""
+msgstr "Rank Fusion 的分数字段。"
 
 msgid "Whether the search engine performs rank fusion. When true, the searchers that can take part contribute their queries to a single request, so facets and total hits describe the fused result set. When false, Fess fuses the searchers' results itself."
-msgstr ""
+msgstr "是否由搜索引擎执行 Rank Fusion。为 true 时，能够参与的搜索器会把各自的查询合并到同一个请求中，因此分面和总命中数描述的是融合后的结果集。为 false 时，由 Fess 自行融合各搜索器的结果。"
 
 msgid "How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean."
-msgstr ""
+msgstr "搜索引擎组合融合分数的方式：rrf、arithmetic_mean、geometric_mean 或 harmonic_mean。"
 
 msgid "How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf. z_score can only be combined with arithmetic_mean; any other mean is refused and Fess fuses the results itself."
-msgstr ""
+msgstr "分数在组合之前的归一化方式：min_max、l2 或 z_score。rrf 会忽略该设置。z_score 只能与 arithmetic_mean 组合；任何其他平均方式都会被拒绝，并由 Fess 自行融合结果。"
 
 msgid "Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally."
-msgstr ""
+msgstr "引擎端融合中每个搜索器的权重，格式为 name:weight 对，例如 default:0.7,semantic_chunk:0.3。权重之和必须为 1.0，并且必须列出每个参与的搜索器。为空时各搜索器权重相等。"
 
 msgid "How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks: a fused search pages through this many results, and never more than indexer.max.result.window.size."
-msgstr ""
+msgstr "每个搜索器针对每个分片向引擎端融合贡献的结果数。这既限制了客户端可以翻页的深度，也限制了引擎参与排名的文档集合：融合搜索最多可翻阅这么多条结果，并且绝不会超过 indexer.max.result.window.size。"
 
 msgid "ACL"
-msgstr ""
+msgstr "ACL"
 
 msgid "Whether to get SMB roles from a file."
-msgstr ""
+msgstr "是否从文件获取 SMB 角色。"
 
 msgid "Available SID types for SMB."
-msgstr ""
+msgstr "SMB 可用的 SID 类型。"
 
 msgid "Whether to get file roles from a file."
-msgstr ""
+msgstr "是否从文件获取文件角色。"
 
 msgid "Whether to get FTP roles from a file."
-msgstr ""
+msgstr "是否从文件获取 FTP 角色。"
 
 msgid "Backup"
-msgstr ""
+msgstr "备份"
 
 msgid "Target files for index backup."
-msgstr ""
+msgstr "索引备份的目标文件。"
 
 msgid "Target log files for index backup."
-msgstr ""
+msgstr "索引备份的目标日志文件。"
 
 msgid "Timeout for loading index backup logs."
-msgstr ""
+msgstr "加载索引备份日志的超时时间。"
 
 msgid "Logging"
-msgstr ""
+msgstr "日志"
 
 msgid "Application packages for logging."
-msgstr ""
+msgstr "日志记录的应用程序包。"
 
 msgid "Whether to enable search docs logging."
-msgstr ""
+msgstr "是否启用搜索文档日志记录。"
 
 msgid "Fields to log for search docs."
-msgstr ""
+msgstr "搜索文档要记录的字段。"
 
 msgid "Whether to use a log file for search logging."
-msgstr ""
+msgstr "搜索日志记录是否使用日志文件。"
 
 msgid "Maximum queue size for search logging."
-msgstr ""
+msgstr "搜索日志记录的最大队列大小。"
 
 msgid "Maximum queue size for click logging."
-msgstr ""
+msgstr "点击日志记录的最大队列大小。"
 
 msgid "Maximum queue size for chat usage logging."
-msgstr ""
+msgstr "聊天使用情况日志记录的最大队列大小。"
 
 msgid "Whether to record the search conditions of logged-in users for the search history."
-msgstr ""
+msgstr "是否为搜索历史记录已登录用户的搜索条件。"
 
 msgid "Maximum number of search history entries returned per user."
-msgstr ""
+msgstr "每个用户返回的搜索历史条目的最大数量。"
 
 msgid "Whether logged-in users can tag documents. Each tag belongs to the user who created it."
-msgstr ""
+msgstr "已登录用户是否可以为文档添加用户标签。每个用户标签属于创建它的用户。"
 
 msgid "Maximum length of a tag name, in code points."
-msgstr ""
+msgstr "用户标签名称的最大长度（以码点计）。"
 
 msgid "Maximum number of tags one user can own."
-msgstr ""
+msgstr "一个用户可拥有的用户标签的最大数量。"
 
 msgid "Maximum number of URLs one tag can be put on."
-msgstr ""
+msgstr "一个用户标签可以添加到的 URL 的最大数量。"
 
 msgid "Maximum number of pending tag changes held in memory until they are applied to the documents."
-msgstr ""
+msgstr "在应用到文档之前保存在内存中的待处理用户标签变更的最大数量。"
 
 msgid "Number of URLs updated per bulk request when tag changes are applied to the documents."
-msgstr ""
+msgstr "将用户标签变更应用到文档时，每个批量请求更新的 URL 数。"
 
 msgid "Maximum number of tags visible to one user in a search."
-msgstr ""
+msgstr "一次搜索中一个用户可见的用户标签的最大数量。"
 
 msgid "Web"
-msgstr ""
+msgstr "Web"
 
 msgid "Maximum input size for admin forms."
-msgstr ""
+msgstr "管理表单的最大输入大小。"
 
 msgid "Whether to enable label in admin config forms."
-msgstr ""
+msgstr "管理配置表单中是否启用标签。"
 
 msgid "Default template name for admin forms."
-msgstr ""
+msgstr "管理表单的默认模板名称。"
 
 msgid "Whether to enable OSDD link (OpenSearch Description Document)."
-msgstr ""
+msgstr "是否启用 OSDD 链接（OpenSearch Description Document）。"
 
 msgid "Whether to enable the clipboard copy icon."
-msgstr ""
+msgstr "是否启用剪贴板复制图标。"
 
 msgid "Admin user names for authentication."
-msgstr ""
+msgstr "用于认证的管理员用户名。"
 
 msgid "Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set."
-msgstr ""
+msgstr "是否不区分大小写地匹配 authentication.admin.users：auto、true 或 false。设置了 ldap.provider.url 时，auto 会忽略大小写。"
 
 msgid "Admin role names for authentication."
-msgstr ""
+msgstr "用于认证的管理员角色名称。"
 
 msgid "Default permissions for search roles."
-msgstr ""
+msgstr "搜索角色的默认权限。"
 
 msgid "Default display permissions for search roles."
-msgstr ""
+msgstr "搜索角色的默认显示权限。"
 
 msgid "Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles."
-msgstr ""
+msgstr "请保持 role.search.guest.permissions 非空。它用于初始化 guest 角色，使匿名搜索角色集合保持非空；如果解析出的角色集合为空，则会跳过角色过滤器（fail-open），这可能会禁用基于角色的访问控制，并将文档暴露给匿名用户。搜索角色的访客权限。"
 
 msgid "Prefix for user roles in search."
-msgstr ""
+msgstr "搜索中用户角色的前缀。"
 
 msgid "Prefix for group roles in search."
-msgstr ""
+msgstr "搜索中组角色的前缀。"
 
 msgid "Prefix for role roles in search."
-msgstr ""
+msgstr "搜索中 role 角色的前缀。"
 
 msgid "Prefix for denied roles in search."
-msgstr ""
+msgstr "搜索中被拒绝角色的前缀。"
 
 msgid "The default path of cookie (basically '/' if no context path)"
-msgstr ""
+msgstr "Cookie 的默认路径（没有上下文路径时基本上为 '/'）"
 
 msgid "The default expire of cookie in seconds e.g. 31556926: one year, 86400: one day"
-msgstr ""
+msgstr "Cookie 的默认过期时间（秒），例如 31556926：一年，86400：一天"
 
 msgid "Session tracking modes"
-msgstr ""
+msgstr "会话跟踪模式"
 
 msgid "Whether to add the Secure attribute to the session cookie (JSESSIONID) at startup. When blank (default), Tomcat's automatic behavior is used (Secure is added only for HTTPS requests). Set to true for production HTTPS deployments, especially when TLS is terminated at a reverse proxy. When true, the cookie is not sent over HTTP, so sessions will not be established for plain HTTP; keep it blank for localhost development. The Secure attribute is also required when SameSite=none is used. Changing this value requires a restart."
-msgstr ""
+msgstr "是否在启动时为会话 Cookie（JSESSIONID）添加 Secure 属性。留空（默认）时使用 Tomcat 的自动行为（仅对 HTTPS 请求添加 Secure）。生产环境的 HTTPS 部署请设置为 true，尤其是在反向代理处终止 TLS 时。为 true 时，Cookie 不会通过 HTTP 发送，因此纯 HTTP 下无法建立会话；本地主机开发时请保持留空。使用 SameSite=none 时也需要 Secure 属性。更改此值需要重启。"
 
 msgid "Comma-separated list of request parameter keys to store in cookies before SSO login."
-msgstr ""
+msgstr "SSO 登录前要存储到 Cookie 中的请求参数键的逗号分隔列表。"
 
 msgid "Comma-separated list of required parameter keys that must be present to store in cookies."
-msgstr ""
+msgstr "必须存在才能存储到 Cookie 中的必需参数键的逗号分隔列表。"
 
 msgid "Maximum length of the encoded search parameters stored in cookies."
-msgstr ""
+msgstr "存储在 Cookie 中的已编码搜索参数的最大长度。"
 
 msgid "Maximum size in bytes the stored search parameters may decompress to. The bound above applies to the gzipped cookie, which is no bound on what it expands to, and the cookie comes from the client."
-msgstr ""
+msgstr "已存储的搜索参数解压后允许的最大字节数。上面的限制适用于经 gzip 压缩的 Cookie，而这并不能限制其展开后的大小，且 Cookie 来自客户端。"
 
 msgid "Maximum length of the query string built when restoring the stored search parameters after login. Restoring them is a convenience and the login is not, so a longer one is dropped rather than written to a Location header the container would refuse. Percent-encoding multiplies a CJK query by nine, so this is far smaller than the query itself may be. Raise it together with tomcat.maxHttpHeaderSize in tomcat_config.properties, which bounds the response headers."
-msgstr ""
+msgstr "登录后恢复已存储的搜索参数时所构建的查询字符串的最大长度。恢复它们只是一种便利，而登录则不是，因此过长的查询字符串会被丢弃，而不是写入容器会拒绝的 Location 头。百分号编码会使 CJK 查询膨胀到九倍，因此该值远小于查询本身可能达到的长度。请与 tomcat_config.properties 中的 tomcat.maxHttpHeaderSize 一起调高，后者限制响应头的大小。"
 
 msgid "Cookie name used to store encoded search parameters before SSO login."
-msgstr ""
+msgstr "SSO 登录前用于存储已编码搜索参数的 Cookie 名称。"
 
 msgid "Whether to set HttpOnly attribute to the search parameter cookie."
-msgstr ""
+msgstr "是否为搜索参数 Cookie 设置 HttpOnly 属性。"
 
 msgid "Whether to set Secure attribute to the search parameter cookie. Should be true in production environments using HTTPS."
-msgstr ""
+msgstr "是否为搜索参数 Cookie 设置 Secure 属性。在使用 HTTPS 的生产环境中应为 true。"
 
 msgid "Max-Age (in seconds) for the search parameter cookie. Use -1 for session-only cookies."
-msgstr ""
+msgstr "搜索参数 Cookie 的 Max-Age（秒）。仅会话 Cookie 请使用 -1。"
 
 msgid "Domain attribute for the search parameter cookie. Set to the domain scope you want the cookie to be available on (e.g., example.com)."
-msgstr ""
+msgstr "搜索参数 Cookie 的 Domain 属性。设置为希望该 Cookie 生效的域范围（例如 example.com）。"
 
 msgid "Path attribute for the search parameter cookie. Typically set to \"/\" or the context path of the app."
-msgstr ""
+msgstr "搜索参数 Cookie 的 Path 属性。通常设置为 \"/\" 或应用的上下文路径。"
 
 msgid "SameSite attribute for the search parameter cookie. Valid values: Lax, Strict, None"
-msgstr ""
+msgstr "搜索参数 Cookie 的 SameSite 属性。有效值：Lax、Strict、None"
 
 msgid "The size of one page for paging"
-msgstr ""
+msgstr "分页时每页的大小"
 
 msgid "The size of page range for paging"
-msgstr ""
+msgstr "分页时页面范围的大小"
 
 msgid "The option 'fillLimit' of page range for paging"
-msgstr ""
+msgstr "分页时页面范围的选项 'fillLimit'"
 
 msgid "Fetch Page Size"
-msgstr ""
+msgstr "每页获取数量"
 
 msgid "Maximum number of docboost records to fetch per page."
-msgstr ""
+msgstr "每页获取的文档提升记录的最大数量。"
 
 msgid "Maximum number of keymatch records to fetch per page."
-msgstr ""
+msgstr "每页获取的关键词匹配记录的最大数量。"
 
 msgid "Maximum number of labeltype records to fetch per page."
-msgstr ""
+msgstr "每页获取的标签类型记录的最大数量。"
 
 msgid "Maximum number of tagtype records to fetch per page."
-msgstr ""
+msgstr "每页获取的用户标签记录的最大数量。"
 
 msgid "Maximum number of roletype records to fetch per page."
-msgstr ""
+msgstr "每页获取的角色类型记录的最大数量。"
 
 msgid "Maximum number of user records to fetch per page."
-msgstr ""
+msgstr "每页获取的用户记录的最大数量。"
 
 msgid "Maximum number of role records to fetch per page."
-msgstr ""
+msgstr "每页获取的角色记录的最大数量。"
 
 msgid "Maximum number of group records to fetch per page."
-msgstr ""
+msgstr "每页获取的组记录的最大数量。"
 
 msgid "Maximum number of crawling info parameters to fetch per page."
-msgstr ""
+msgstr "每页获取的爬网信息参数的最大数量。"
 
 msgid "Maximum number of crawling info records to fetch per page."
-msgstr ""
+msgstr "每页获取的爬网信息记录的最大数量。"
 
 msgid "Maximum number of data config records to fetch per page."
-msgstr ""
+msgstr "每页获取的数据存储配置记录的最大数量。"
 
 msgid "Maximum number of web config records to fetch per page."
-msgstr ""
+msgstr "每页获取的 Web 配置记录的最大数量。"
 
 msgid "Maximum number of file config records to fetch per page."
-msgstr ""
+msgstr "每页获取的文件配置记录的最大数量。"
 
 msgid "Maximum number of duplicate host records to fetch per page."
-msgstr ""
+msgstr "每页获取的重复主机记录的最大数量。"
 
 msgid "Maximum number of failure URL records to fetch per page."
-msgstr ""
+msgstr "每页获取的失败 URL 记录的最大数量。"
 
 msgid "Maximum number of favorite log records to fetch per page."
-msgstr ""
+msgstr "每页获取的收藏日志记录的最大数量。"
 
 msgid "Maximum number of file auth records to fetch per page."
-msgstr ""
+msgstr "每页获取的文件认证记录的最大数量。"
 
 msgid "Maximum number of web auth records to fetch per page."
-msgstr ""
+msgstr "每页获取的 Web 认证记录的最大数量。"
 
 msgid "Maximum number of path mapping records to fetch per page."
-msgstr ""
+msgstr "每页获取的路径映射记录的最大数量。"
 
 msgid "Maximum number of request header records to fetch per page."
-msgstr ""
+msgstr "每页获取的请求头记录的最大数量。"
 
 msgid "Maximum number of scheduled job records to fetch per page."
-msgstr ""
+msgstr "每页获取的计划任务记录的最大数量。"
 
 msgid "Maximum number of elevate word records to fetch per page."
-msgstr ""
+msgstr "每页获取的提升词记录的最大数量。"
 
 msgid "Maximum number of bad word records to fetch per page."
-msgstr ""
+msgstr "每页获取的屏蔽词记录的最大数量。"
 
 msgid "Maximum number of dictionary records to fetch per page."
-msgstr ""
+msgstr "每页获取的字典记录的最大数量。"
 
 msgid "Maximum number of related content records to fetch per page."
-msgstr ""
+msgstr "每页获取的相关内容记录的最大数量。"
 
 msgid "Maximum number of related query records to fetch per page."
-msgstr ""
+msgstr "每页获取的相关查询记录的最大数量。"
 
 msgid "Maximum number of thumbnail queue records to fetch per page."
-msgstr ""
+msgstr "每页获取的缩略图队列记录的最大数量。"
 
 msgid "Maximum number of thumbnail purge records to fetch per page."
-msgstr ""
+msgstr "每页获取的缩略图清除记录的最大数量。"
 
 msgid "Maximum number of score booster records to fetch per page."
-msgstr ""
+msgstr "每页获取的评分提升器记录的最大数量。"
 
 msgid "Maximum number of search log records to fetch per page."
-msgstr ""
+msgstr "每页获取的搜索日志记录的最大数量。"
 
 msgid "Whether to track total hits in search list page."
-msgstr ""
+msgstr "搜索列表页面中是否跟踪总命中数。"
 
 msgid "Maximum content length (in characters) rendered on the search list edit page."
-msgstr ""
+msgstr "搜索列表编辑页面上渲染的内容的最大长度（字符数）。"
 
 msgid "Search Page"
-msgstr ""
+msgstr "搜索页面"
 
 msgid "Default start page for search results."
-msgstr ""
+msgstr "搜索结果的默认起始页。"
 
 msgid "Default size of search results per page."
-msgstr ""
+msgstr "每页搜索结果的默认大小。"
 
 msgid "Maximum size of search results per page."
-msgstr ""
+msgstr "每页搜索结果的最大大小。"
 
 msgid "Maximum length of a v2 API string query parameter (q, sort, sdh). OWASP API4:2023."
-msgstr ""
+msgstr "v2 API 字符串查询参数（q、sort、sdh）的最大长度。OWASP API4:2023。"
 
 msgid "Maximum number of values for a v2 API repeatable query parameter."
-msgstr ""
+msgstr "v2 API 可重复查询参数的最大值个数。"
 
 msgid "Maximum click-log timestamp (rt, epoch ms) accepted by the v2 click API. OWASP API4:2023."
-msgstr ""
+msgstr "v2 点击 API 接受的点击日志时间戳（rt，epoch 毫秒）的最大值。OWASP API4:2023。"
 
 msgid "searchlog"
-msgstr ""
+msgstr "搜索日志"
 
 msgid "Request headers to include in search log."
-msgstr ""
+msgstr "要包含在搜索日志中的请求头。"
 
 msgid "Batch size for search log processing."
-msgstr ""
+msgstr "搜索日志处理的批处理大小。"
 
 msgid "Number of days of search logs read when generating related queries from search logs."
-msgstr ""
+msgstr "从搜索日志生成相关查询时读取的搜索日志天数。"
 
 msgid "Maximum number of terms generated per virtual host."
-msgstr ""
+msgstr "每个虚拟主机生成的单词的最大数量。"
 
 msgid "Maximum number of related queries generated per term."
-msgstr ""
+msgstr "每个单词生成的相关查询的最大数量。"
 
 msgid "Minimum number of distinct user sessions required for a term and for each of its related queries."
-msgstr ""
+msgstr "单词及其每个相关查询所需的最少不同用户会话数。"
 
 msgid "Interval (minutes) after a search within which a follow-up search of the same session counts as a refinement."
-msgstr ""
+msgstr "一次搜索之后的间隔（分钟），在该间隔内同一会话的后续搜索算作细化。"
 
 msgid "Maximum number of search logs of a term read to find the sessions that searched it."
-msgstr ""
+msgstr "为找出搜索过某个单词的会话而读取的该单词的搜索日志的最大数量。"
 
 msgid "Maximum number of sessions per term whose follow-up searches are read."
-msgstr ""
+msgstr "每个单词读取其后续搜索的会话的最大数量。"
 
 msgid "Maximum number of follow-up search logs read per term."
-msgstr ""
+msgstr "每个单词读取的后续搜索日志的最大数量。"
 
 msgid "Minimum length (in characters) of a generated term or related query."
-msgstr ""
+msgstr "生成的单词或相关查询的最小长度（字符数）。"
 
 msgid "Maximum length (in characters) of a generated term or related query."
-msgstr ""
+msgstr "生成的单词或相关查询的最大长度（字符数）。"
 
 msgid "docreport Maximum number of duplicate groups the document report screen shows, largest first."
-msgstr ""
+msgstr "docreport 文档报告页面显示的重复组的最大数量，按从大到小排列。"
 
 msgid "Maximum number of documents the document report screen lists for each duplicate group."
-msgstr ""
+msgstr "文档报告页面为每个重复组列出的文档的最大数量。"
 
 msgid "Number of content signatures read per request when the duplicate report is downloaded as CSV."
-msgstr ""
+msgstr "将重复报告下载为 CSV 时，每个请求读取的内容签名数。"
 
 msgid "Default number of days since the last modification after which a document counts as dormant."
-msgstr ""
+msgstr "文档自最后一次修改起经过多少天后被视为休眠的默认天数。"
 
 msgid "Minimum width for HTML images in thumbnails."
-msgstr ""
+msgstr "缩略图中 HTML 图像的最小宽度。"
 
 msgid "Minimum height for HTML images in thumbnails."
-msgstr ""
+msgstr "缩略图中 HTML 图像的最小高度。"
 
 msgid "Maximum aspect ratio for HTML images in thumbnails."
-msgstr ""
+msgstr "缩略图中 HTML 图像的最大纵横比。"
 
 msgid "Width of generated thumbnail images."
-msgstr ""
+msgstr "生成的缩略图图像的宽度。"
 
 msgid "Height of generated thumbnail images."
-msgstr ""
+msgstr "生成的缩略图图像的高度。"
 
 msgid "Format of generated thumbnail images."
-msgstr ""
+msgstr "生成的缩略图图像的格式。"
 
 msgid "XPath to select images for thumbnails."
-msgstr ""
+msgstr "用于为缩略图选择图像的 XPath。"
 
 msgid "File extensions to exclude from thumbnail generation."
-msgstr ""
+msgstr "要从缩略图生成中排除的文件扩展名。"
 
 msgid "Interval for thumbnail generator."
-msgstr ""
+msgstr "缩略图生成器的间隔。"
 
 msgid "Targets for thumbnail generator (e.g., all)."
-msgstr ""
+msgstr "缩略图生成器的目标（例如 all）。"
 
 msgid "Whether the thumbnail crawler is enabled."
-msgstr ""
+msgstr "是否启用缩略图爬虫。"
 
 msgid "Interval for system monitor in thumbnail processing."
-msgstr ""
+msgstr "缩略图处理中系统监控的间隔。"
 
 msgid "User"
-msgstr ""
+msgstr "用户"
 
 msgid "User code settings"
-msgstr ""
+msgstr "用户代码设置"
 
 msgid "User code minimum length."
-msgstr ""
+msgstr "用户代码的最小长度。"
 
 msgid "User code maximum length."
-msgstr ""
+msgstr "用户代码的最大长度。"
 
 msgid "User code pattern for validation."
-msgstr ""
+msgstr "用于验证的用户代码模式。"
 
 msgid "Name to display in the From field of emails."
-msgstr ""
+msgstr "在电子邮件的 From 字段中显示的名称。"
 
 msgid "Email address to use in the From field."
-msgstr ""
+msgstr "在 From 字段中使用的电子邮件地址。"
 
 msgid "Hostname for the mail server."
-msgstr ""
+msgstr "邮件服务器的主机名。"
 
 msgid "Target name for the scheduler."
-msgstr ""
+msgstr "调度器的目标名称。"
 
 msgid "Job class for the scheduler."
-msgstr ""
+msgstr "调度器的作业类。"
 
 msgid "Mode for concurrent execution in the scheduler."
-msgstr ""
+msgstr "调度器中并发执行的模式。"
 
 msgid "Interval for scheduler monitoring."
-msgstr ""
+msgstr "调度器监控的间隔。"
 
 msgid "Interval (seconds) for polling heartbeats and events."
-msgstr ""
+msgstr "轮询心跳和事件的间隔（秒）。"
 
 msgid "Time-to-live (ms) for instance heartbeat documents."
-msgstr ""
+msgstr "实例心跳文档的存活时间（毫秒）。"
 
 msgid "Time-to-live (ms) for operation lock documents."
-msgstr ""
+msgstr "操作锁文档的存活时间（毫秒）。"
 
 msgid "Maximum number of retries for acquiring an operation lock."
-msgstr ""
+msgstr "获取操作锁的最大重试次数。"
 
 msgid "Time-to-live (ms) for event notification documents."
-msgstr ""
+msgstr "事件通知文档的存活时间（毫秒）。"
 
 msgid "Base link for online help."
-msgstr ""
+msgstr "在线帮助的基础链接。"
 
 msgid "Installation guide link for online help."
-msgstr ""
+msgstr "在线帮助的安装指南链接。"
 
 msgid "End-of-life information link for online help."
-msgstr ""
+msgstr "在线帮助的生命周期结束信息链接。"
 
 msgid "Online help key for failure URL."
-msgstr ""
+msgstr "失败 URL 的在线帮助键。"
 
 msgid "Online help key for elevate word."
-msgstr ""
+msgstr "提升词的在线帮助键。"
 
 msgid "Online help key for request header."
-msgstr ""
+msgstr "请求头的在线帮助键。"
 
 msgid "Online help key for synonym dictionary."
-msgstr ""
+msgstr "同义词词典的在线帮助键。"
 
 msgid "Online help key for dictionary."
-msgstr ""
+msgstr "字典的在线帮助键。"
 
 msgid "Online help key for Kuromoji dictionary."
-msgstr ""
+msgstr "Kuromoji 词典的在线帮助键。"
 
 msgid "Online help key for protected words dictionary."
-msgstr ""
+msgstr "Protwords 词典的在线帮助键。"
 
 msgid "Online help key for stopwords dictionary."
-msgstr ""
+msgstr "停用词词典的在线帮助键。"
 
 msgid "Online help key for stemmer override dictionary."
-msgstr ""
+msgstr "Stemmer 覆盖词典的在线帮助键。"
 
 msgid "Online help key for mapping dictionary."
-msgstr ""
+msgstr "映射词典的在线帮助键。"
 
 msgid "Online help key for web config."
-msgstr ""
+msgstr "Web 配置的在线帮助键。"
 
 msgid "Online help key for search list."
-msgstr ""
+msgstr "搜索列表的在线帮助键。"
 
 msgid "Online help key for log."
-msgstr ""
+msgstr "日志的在线帮助键。"
 
 msgid "Online help key for general settings."
-msgstr ""
+msgstr "常规设置的在线帮助键。"
 
 msgid "Online help key for role."
-msgstr ""
+msgstr "角色的在线帮助键。"
 
 msgid "Online help key for job log."
-msgstr ""
+msgstr "作业日志的在线帮助键。"
 
 msgid "Online help key for keymatch."
-msgstr ""
+msgstr "关键词匹配的在线帮助键。"
 
 msgid "Online help key for related query."
-msgstr ""
+msgstr "相关查询的在线帮助键。"
 
 msgid "Online help key for related content."
-msgstr ""
+msgstr "相关内容的在线帮助键。"
 
 msgid "Online help key for wizard."
-msgstr ""
+msgstr "向导的在线帮助键。"
 
 msgid "Online help key for bad word."
-msgstr ""
+msgstr "屏蔽词的在线帮助键。"
 
 msgid "Online help key for path mapping."
-msgstr ""
+msgstr "路径映射的在线帮助键。"
 
 msgid "Online help key for boost document."
-msgstr ""
+msgstr "文档提升的在线帮助键。"
 
 msgid "Online help key for data config."
-msgstr ""
+msgstr "数据存储配置的在线帮助键。"
 
 msgid "Online help key for system info."
-msgstr ""
+msgstr "系统信息的在线帮助键。"
 
 msgid "Online help key for user."
-msgstr ""
+msgstr "用户的在线帮助键。"
 
 msgid "Online help key for group."
-msgstr ""
+msgstr "组的在线帮助键。"
 
 msgid "Online help key for dashboard."
-msgstr ""
+msgstr "仪表板的在线帮助键。"
 
 msgid "Online help key for web authentication."
-msgstr ""
+msgstr "Web 认证的在线帮助键。"
 
 msgid "Online help key for file config."
-msgstr ""
+msgstr "文件配置的在线帮助键。"
 
 msgid "Online help key for file authentication."
-msgstr ""
+msgstr "文件认证的在线帮助键。"
 
 msgid "Online help key for label type."
-msgstr ""
+msgstr "标签类型的在线帮助键。"
 
 msgid "Online help key for tag type."
-msgstr ""
+msgstr "用户标签的在线帮助键。"
 
 msgid "Online help key for duplicate host."
-msgstr ""
+msgstr "重复主机的在线帮助键。"
 
 msgid "Online help key for scheduler."
-msgstr ""
+msgstr "调度器的在线帮助键。"
 
 msgid "Online help key for crawling info."
-msgstr ""
+msgstr "爬网信息的在线帮助键。"
 
 msgid "Online help key for backup."
-msgstr ""
+msgstr "备份的在线帮助键。"
 
 msgid "Online help key for upgrade."
-msgstr ""
+msgstr "升级的在线帮助键。"
 
 msgid "Online help key for search request."
-msgstr ""
+msgstr "搜索请求的在线帮助键。"
 
 msgid "Online help key for access token."
-msgstr ""
+msgstr "访问令牌的在线帮助键。"
 
 msgid "Online help key for suggest."
-msgstr ""
+msgstr "建议的在线帮助键。"
 
 msgid "Online help key for search log."
-msgstr ""
+msgstr "搜索日志的在线帮助键。"
 
 msgid "Online help key for maintenance."
-msgstr ""
+msgstr "维护的在线帮助键。"
 
 msgid "Online help key for plugin."
-msgstr ""
+msgstr "插件的在线帮助键。"
 
 msgid "Online help key for storage."
-msgstr ""
+msgstr "存储的在线帮助键。"
 
 msgid "Supported languages for online help."
-msgstr ""
+msgstr "在线帮助支持的语言。"
 
 msgid "Forum link for user support."
-msgstr ""
+msgstr "用户支持的论坛链接。"
 
 msgid "Supported languages for the forum."
-msgstr ""
+msgstr "论坛支持的语言。"
 
 msgid "Seed value for popular word suggestion."
-msgstr ""
+msgstr "热门词建议的种子值。"
 
 msgid "Tags for popular word suggestion."
-msgstr ""
+msgstr "热门词建议的标签。"
 
 msgid "Fields for popular word suggestion."
-msgstr ""
+msgstr "热门词建议的字段。"
 
 msgid "Excluded words for popular word suggestion."
-msgstr ""
+msgstr "热门词建议的排除词。"
 
 msgid "Number of popular words to suggest."
-msgstr ""
+msgstr "要建议的热门词数量。"
 
 msgid "Window size for popular word suggestion."
-msgstr ""
+msgstr "热门词建议的窗口大小。"
 
 msgid "Query frequency for popular word suggestion."
-msgstr ""
+msgstr "热门词建议的查询频率。"
 
 msgid "Minimum hit count for suggestion."
-msgstr ""
+msgstr "建议的最小命中数。"
 
 msgid "Field for suggestion contents."
-msgstr ""
+msgstr "建议内容的字段。"
 
 msgid "Field for suggestion tags."
-msgstr ""
+msgstr "建议标签的字段。"
 
 msgid "Field for suggestion roles."
-msgstr ""
+msgstr "建议角色的字段。"
 
 msgid "Index contents for suggestion."
-msgstr ""
+msgstr "建议的索引内容。"
 
 msgid "Interval for suggestion update requests."
-msgstr ""
+msgstr "建议更新请求的间隔。"
 
 msgid "Number of documents per suggestion update request."
-msgstr ""
+msgstr "每个建议更新请求的文档数。"
 
 msgid "Percentage limit for suggestion update contents."
-msgstr ""
+msgstr "建议更新内容的百分比限制。"
 
 msgid "Maximum number of suggestion update contents."
-msgstr ""
+msgstr "建议更新内容的最大数量。"
 
 msgid "Maximum document size for suggestion update."
-msgstr ""
+msgstr "建议更新的最大文档大小。"
 
 msgid "Scroll size for suggestion source reader."
-msgstr ""
+msgstr "建议源读取器的滚动大小。"
 
 msgid "Cache size for popular word suggestion."
-msgstr ""
+msgstr "热门词建议的缓存大小。"
 
 msgid "Cache expiration (seconds) for popular word suggestion."
-msgstr ""
+msgstr "热门词建议的缓存过期时间（秒）。"
 
 msgid "Permissions for suggestion search log."
-msgstr ""
+msgstr "建议搜索日志的权限。"
 
 msgid "Interval for system monitor in suggestion."
-msgstr ""
+msgstr "建议中系统监控的间隔。"
 
 msgid "Whether LDAP admin is enabled."
-msgstr ""
+msgstr "是否启用 LDAP 管理。"
 
 msgid "User filter for LDAP admin."
-msgstr ""
+msgstr "LDAP 管理的用户过滤器。"
 
 msgid "Base DN for LDAP admin user."
-msgstr ""
+msgstr "LDAP 管理用户的基础 DN。"
 
 msgid "Object classes for LDAP admin user."
-msgstr ""
+msgstr "LDAP 管理用户的对象类。"
 
 msgid "Role filter for LDAP admin."
-msgstr ""
+msgstr "LDAP 管理的角色过滤器。"
 
 msgid "Base DN for LDAP admin role."
-msgstr ""
+msgstr "LDAP 管理角色的基础 DN。"
 
 msgid "Object classes for LDAP admin role."
-msgstr ""
+msgstr "LDAP 管理角色的对象类。"
 
 msgid "Group filter for LDAP admin."
-msgstr ""
+msgstr "LDAP 管理的组过滤器。"
 
 msgid "Base DN for LDAP admin group."
-msgstr ""
+msgstr "LDAP 管理组的基础 DN。"
 
 msgid "Object classes for LDAP admin group."
-msgstr ""
+msgstr "LDAP 管理组的对象类。"
 
 msgid "Whether to sync password for LDAP admin."
-msgstr ""
+msgstr "是否为 LDAP 管理同步密码。"
 
 msgid "Whether to validate LDAP authentication."
-msgstr ""
+msgstr "是否验证 LDAP 认证。"
 
 msgid "Timeout (milliseconds) to establish an LDAP connection. This also bounds the TLS handshake and the initial bind response. 0 or less leaves it to the JDK/OS default."
-msgstr ""
+msgstr "建立 LDAP 连接的超时时间（毫秒）。这同时也限制 TLS 握手和初始绑定响应。0 或更小的值表示交由 JDK/OS 的默认值处理。"
 
 msgid "Timeout (milliseconds) to wait for an LDAP response after the connection is bound. 0 or less waits indefinitely."
-msgstr ""
+msgstr "连接绑定之后等待 LDAP 响应的超时时间（毫秒）。0 或更小的值表示无限期等待。"
 
 msgid "Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit."
-msgstr ""
+msgstr "LDAP 搜索的服务器端时间限制（毫秒）。0 或更小的值表示无限制。"
 
 msgid "Maximum username length for LDAP."
-msgstr ""
+msgstr "LDAP 的最大用户名长度。"
 
 msgid "Whether to ignore NetBIOS name in LDAP."
-msgstr ""
+msgstr "LDAP 中是否忽略 NetBIOS 名称。"
 
 msgid "Whether to allow underscores in LDAP group names."
-msgstr ""
+msgstr "LDAP 组名中是否允许下划线。"
 
 msgid "Whether to use lowercase for LDAP permission names."
-msgstr ""
+msgstr "LDAP 权限名称是否使用小写。"
 
 msgid "Whether to allow empty permissions in LDAP."
-msgstr ""
+msgstr "LDAP 中是否允许空权限。"
 
 msgid "Whether to use samAccountName for LDAP group."
-msgstr ""
+msgstr "LDAP 组是否使用 samAccountName。"
 
 msgid "Whether LDAP role search for user is enabled."
-msgstr ""
+msgstr "是否启用针对用户的 LDAP 角色搜索。"
 
 msgid "Whether LDAP role search for group is enabled."
-msgstr ""
+msgstr "是否启用针对组的 LDAP 角色搜索。"
 
 msgid "Whether LDAP role search for role is enabled."
-msgstr ""
+msgstr "是否启用针对角色的 LDAP 角色搜索。"
 
 msgid "LDAP attribute for surname."
-msgstr ""
+msgstr "姓氏的 LDAP 属性。"
 
 msgid "LDAP attribute for given name."
-msgstr ""
+msgstr "名字的 LDAP 属性。"
 
 msgid "LDAP attribute for employee number."
-msgstr ""
+msgstr "员工编号的 LDAP 属性。"
 
 msgid "LDAP attribute for mail."
-msgstr ""
+msgstr "邮件的 LDAP 属性。"
 
 msgid "LDAP attribute for telephone number."
-msgstr ""
+msgstr "电话号码的 LDAP 属性。"
 
 msgid "LDAP attribute for home phone."
-msgstr ""
+msgstr "家庭电话的 LDAP 属性。"
 
 msgid "LDAP attribute for home postal address."
-msgstr ""
+msgstr "家庭邮寄地址的 LDAP 属性。"
 
 msgid "LDAP attribute for labeled URI."
-msgstr ""
+msgstr "带标签的 URI 的 LDAP 属性。"
 
 msgid "LDAP attribute for room number."
-msgstr ""
+msgstr "房间号的 LDAP 属性。"
 
 msgid "LDAP attribute for description."
-msgstr ""
+msgstr "描述的 LDAP 属性。"
 
 msgid "LDAP attribute for title."
-msgstr ""
+msgstr "职位的 LDAP 属性。"
 
 msgid "LDAP attribute for pager."
-msgstr ""
+msgstr "寻呼机的 LDAP 属性。"
 
 msgid "LDAP attribute for street."
-msgstr ""
+msgstr "街道的 LDAP 属性。"
 
 msgid "LDAP attribute for postal code."
-msgstr ""
+msgstr "邮政编码的 LDAP 属性。"
 
 msgid "LDAP attribute for physical delivery office name."
-msgstr ""
+msgstr "物理投递办公室名称的 LDAP 属性。"
 
 msgid "LDAP attribute for destination indicator."
-msgstr ""
+msgstr "目的地指示符的 LDAP 属性。"
 
 msgid "LDAP attribute for international ISDN number."
-msgstr ""
+msgstr "国际 ISDN 号码的 LDAP 属性。"
 
 msgid "LDAP attribute for state."
-msgstr ""
+msgstr "州/省的 LDAP 属性。"
 
 msgid "LDAP attribute for employee type."
-msgstr ""
+msgstr "员工类型的 LDAP 属性。"
 
 msgid "LDAP attribute for facsimile telephone number."
-msgstr ""
+msgstr "传真电话号码的 LDAP 属性。"
 
 msgid "LDAP attribute for post office box."
-msgstr ""
+msgstr "邮政信箱的 LDAP 属性。"
 
 msgid "LDAP attribute for initials."
-msgstr ""
+msgstr "姓名首字母的 LDAP 属性。"
 
 msgid "LDAP attribute for car license."
-msgstr ""
+msgstr "车牌的 LDAP 属性。"
 
 msgid "LDAP attribute for mobile."
-msgstr ""
+msgstr "手机的 LDAP 属性。"
 
 msgid "LDAP attribute for postal address."
-msgstr ""
+msgstr "邮寄地址的 LDAP 属性。"
 
 msgid "LDAP attribute for city."
-msgstr ""
+msgstr "城市的 LDAP 属性。"
 
 msgid "LDAP attribute for teletex terminal identifier."
-msgstr ""
+msgstr "Teletex 终端标识符的 LDAP 属性。"
 
 msgid "LDAP attribute for X.121 address."
-msgstr ""
+msgstr "X.121 地址的 LDAP 属性。"
 
 msgid "LDAP attribute for business category."
-msgstr ""
+msgstr "业务类别的 LDAP 属性。"
 
 msgid "LDAP attribute for registered address."
-msgstr ""
+msgstr "注册地址的 LDAP 属性。"
 
 msgid "LDAP attribute for display name."
-msgstr ""
+msgstr "显示名称的 LDAP 属性。"
 
 msgid "LDAP attribute for preferred language."
-msgstr ""
+msgstr "首选语言的 LDAP 属性。"
 
 msgid "LDAP attribute for department number."
-msgstr ""
+msgstr "部门编号的 LDAP 属性。"
 
 msgid "LDAP attribute for UID number."
-msgstr ""
+msgstr "UID 编号的 LDAP 属性。"
 
 msgid "LDAP attribute for GID number."
-msgstr ""
+msgstr "GID 编号的 LDAP 属性。"
 
 msgid "LDAP attribute for home directory."
-msgstr ""
+msgstr "主目录的 LDAP 属性。"
 
 msgid "Plugin repository URLs."
-msgstr ""
+msgstr "插件仓库的 URL。"
 
 msgid "Version filter for plugins."
-msgstr ""
+msgstr "插件的版本过滤器。"
 
 msgid "Maximum number of items per page in storage."
-msgstr ""
+msgstr "存储中每页的最大项目数。"
 
 msgid "List of invalid admin passwords."
-msgstr ""
+msgstr "无效管理员密码的列表。"
 
 msgid "Minimum password length (0 to disable)."
-msgstr ""
+msgstr "最小密码长度（0 表示禁用）。"
 
 msgid "Maximum length of a password field."
-msgstr ""
+msgstr "密码字段的最大长度。"
 
 msgid "Require uppercase letters in password."
-msgstr ""
+msgstr "密码中要求包含大写字母。"
 
 msgid "Require lowercase letters in password."
-msgstr ""
+msgstr "密码中要求包含小写字母。"
 
 msgid "Require digits in password."
-msgstr ""
+msgstr "密码中要求包含数字。"
 
 msgid "Require special characters in password."
-msgstr ""
+msgstr "密码中要求包含特殊字符。"
 
 msgid "Whether RAG chat feature is enabled."
-msgstr ""
+msgstr "是否启用 RAG 聊天功能。"
 
 msgid "Whether to record the usage of each RAG chat request (user, time, LLM calls and tokens) in the chat log. The question and the answer are never recorded."
-msgstr ""
+msgstr "是否在聊天日志中记录每个 RAG 聊天请求的使用情况（用户、时间、LLM 调用次数和 token 数）。绝不会记录问题和答案。"
 
 msgid "Chat generation settings."
-msgstr ""
+msgstr "聊天生成设置。"
 
 msgid "Maximum number of times one chat request regenerates its search query and searches again when the search finds no documents or, in the streaming chat, none of the hits is judged relevant. Each regeneration makes one LLM call, plus one relevance evaluation call when the new search has hits (0 disables)."
-msgstr ""
+msgstr "当搜索未找到任何文档，或在流式聊天中没有任何命中结果被判定为相关时，一个聊天请求重新生成其搜索查询并再次搜索的最大次数。每次重新生成会产生一次 LLM 调用，如果新的搜索有命中结果，还会额外产生一次相关性评估调用（0 表示禁用）。"
 
 msgid "Session settings."
-msgstr ""
+msgstr "会话设置。"
 
 msgid "Maximum cached chat sessions; least recently accessed are evicted above it (0 or less means 100)."
-msgstr ""
+msgstr "缓存的聊天会话的最大数量；超过该数量时，最近最少访问的会话会被逐出（0 或更小的值表示 100）。"
 
 msgid "Maximum messages kept in one chat session; older turns are trimmed on each new message."
-msgstr ""
+msgstr "一个聊天会话中保留的最大消息数；每收到新消息时，较早的轮次会被裁剪。"
 
 msgid "Enhanced RAG flow settings. Fields to retrieve for full document content."
-msgstr ""
+msgstr "增强 RAG 流程设置。用于检索完整文档内容的字段。"
 
 msgid "Highlight settings for RAG search."
-msgstr ""
+msgstr "RAG 搜索的高亮设置。"
 
 msgid "Number of highlight fragments per document in the RAG chat context search."
-msgstr ""
+msgstr "RAG 聊天上下文搜索中每个文档的高亮片段数。"
 
 msgid "Large-document handling for answer generation. Documents whose content_length exceeds this value use highlighted passages instead of full content in the answer context."
-msgstr ""
+msgstr "回答生成时对大型文档的处理。content_length 超过该值的文档，在回答上下文中使用高亮段落而不是完整内容。"
 
 msgid "Highlight settings used when extracting passages from large documents for the answer context."
-msgstr ""
+msgstr "从大型文档中提取段落作为回答上下文时使用的高亮设置。"
 
 msgid "Number of highlight fragments taken from each oversized document for the answer context."
-msgstr ""
+msgstr "从每个超大文档中获取并用于回答上下文的高亮片段数。"
 
 msgid "History content mode for assistant messages. smart_summary           - drop assistant body, keep only past search query + referenced titles per turn (default, recommended) full                    - send the whole assistant response source_titles           - body + referenced titles suffix source_titles_and_urls  - \"[References: title (url), ...]\" only truncated               - truncate assistant response at history.assistant.max.chars none                    - drop assistant turns from history"
-msgstr ""
+msgstr "助手消息的历史内容模式。smart_summary - 丢弃助手正文，每轮仅保留过去的搜索查询和参照标题（默认，推荐） full - 发送完整的助手响应 source_titles - 正文加参照标题后缀 source_titles_and_urls - 仅 \"[References: title (url), ...]\" truncated - 在 history.assistant.max.chars 处截断助手响应 none - 从历史中丢弃助手轮次"
 
 msgid "Maximum number of referenced document titles included per turn in smart_summary history mode."
-msgstr ""
+msgstr "smart_summary 历史模式下每轮包含的参照文档标题的最大数量。"
 
 msgid "Maximum number of parts a document is split into when chatting about a single document longer than the LLM context budget. Each part is summarized separately and the summaries are combined into the answer; parts beyond this number are not used. A request about such a document makes up to this many LLM calls plus one for the answer, on every turn."
-msgstr ""
+msgstr "针对长于 LLM 上下文预算的单个文档进行聊天时，将该文档拆分成的最大部分数。每个部分会分别生成摘要，这些摘要会被合并为回答；超出该数量的部分不会被使用。针对此类文档的请求，每一轮最多产生这么多次 LLM 调用，外加一次用于生成回答的调用。"
 
 msgid "Language the LLM is asked to answer in. browser  - the language of the user's browser or UI locale; no instruction for English (default) none     - no language instruction; the LLM usually answers in the language of the question en, ja.. - always answer in this language"
-msgstr ""
+msgstr "要求 LLM 使用的回答语言。browser - 用户浏览器或 UI 区域设置的语言；英语时不添加指示（默认） none - 不添加语言指示；LLM 通常使用问题所用的语言回答 en, ja.. - 始终使用该语言回答"
 
 msgid "Index Export"
-msgstr ""
+msgstr "索引导出"
 
 msgid "Comma-separated document fields omitted from files written by the index export job."
-msgstr ""
+msgstr "索引导出作业写入的文件中省略的文档字段（逗号分隔）。"
 
 msgid "Number of documents fetched per scroll request by the index export job."
-msgstr ""
+msgstr "索引导出作业每次滚动请求获取的文档数。"
 
 msgid "Output format for exported documents; only html and json are accepted, anything else fails the job."
-msgstr ""
+msgstr "导出文档的输出格式；仅接受 html 和 json，其他任何值都会导致作业失败。"
 
 msgid "Log Notification Interval (seconds) for flushing log notification buffer to search engine."
-msgstr ""
+msgstr "日志通知 将日志通知缓冲区刷新到搜索引擎的间隔（秒）。"
 
 msgid "Maximum length of notification details text."
-msgstr ""
+msgstr "通知详情文本的最大长度。"
 
 msgid "Maximum number of events to display in notification."
-msgstr ""
+msgstr "通知中显示的事件的最大数量。"
 
 msgid "Maximum length of each log message in notification."
-msgstr ""
+msgstr "通知中每条日志消息的最大长度。"
 
 msgid "Maximum number of events to fetch from search engine per notification job."
-msgstr ""
+msgstr "每个通知作业从搜索引擎获取的事件的最大数量。"
 
 msgid "Maximum number of events to buffer in memory."
-msgstr ""
+msgstr "内存中缓冲的事件的最大数量。"
 
 msgid "Interval (seconds) for the notification job cycle, used in notification messages."
-msgstr ""
+msgstr "通知作业周期的间隔（秒），用于通知消息中。"
 
 msgid "Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
-msgstr ""
+msgstr "静态主题系统（参见 docs/superpowers/specs/2026-05-21-fess-static-theme-design.md）"
 
 msgid "Maximum size (bytes) of an uploaded theme archive."
-msgstr ""
+msgstr "上传的主题归档文件的最大大小（字节）。"
 
 msgid "Maximum total extracted size (bytes); extraction aborts once it is exceeded."
-msgstr ""
+msgstr "解压后的最大总大小（字节）；一旦超出，解压即中止。"
 
 msgid "Maximum number of entries allowed in an uploaded theme archive."
-msgstr ""
+msgstr "上传的主题归档文件中允许的最大条目数。"
 
 msgid "Maximum uncompressed/compressed ratio for a single theme archive entry."
-msgstr ""
+msgstr "单个主题归档条目的最大解压/压缩比。"
 
 msgid "Maximum cumulative uncompressed/compressed ratio for the whole archive (zip-bomb guard)."
-msgstr ""
+msgstr "整个归档的最大累计解压/压缩比（zip 炸弹防护）。"
 
 msgid "Compressed bytes read before the cumulative zip ratio check applies; smaller archives skip it."
-msgstr ""
+msgstr "应用累计 zip 压缩比检查之前读取的压缩字节数；更小的归档会跳过该检查。"
 
 msgid "Retention (days) for a replaced theme directory before the cleanup sweep removes it."
-msgstr ""
+msgstr "被替换的主题目录在清理扫描将其删除之前的保留时间（天）。"
 
 msgid "Repository URLs (comma separated) that static themes are downloaded from."
-msgstr ""
+msgstr "下载静态主题的仓库 URL（逗号分隔）。"
 
 msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
-msgstr ""
+msgstr "静态主题的 HTML 页面的 Content-Security-Policy 中 frame-ancestors 指令的值：允许将这些页面嵌入框架的来源。默认值 'none' 表示任何页面都不能嵌入它们。WebKit（Safari）会将 frame-ancestors 应用于主题的文件预览和缓存视图所使用的 blob: 框架，因此当该值为 'none' 时，它会将这些框架显示为空白。将该值留空可去掉该指令；无论哪种情况都会发送 X-Frame-Options: DENY，并使这些页面在所有浏览器中都无法出现在框架内（遵循 frame-ancestors 的浏览器会忽略该头）。"
 
 msgid "Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-* headers, then from the servlet request."
-msgstr ""
+msgstr "可选：此 Fess 实例的规范外部来源（逗号/换行分隔），例如 https://fess.example.com。设置后，这些来源在 v2 CSRF Origin 检查中被视为同源，且不会信任转发头。建议用于未列在 rate.limit.trusted.proxies 中的反向代理之后。为空时，目标来源将先根据受信任代理的 X-Forwarded-* 头重建，然后再根据 Servlet 请求重建。"
 
 msgid "Login attempts allowed per client IP each minute; 0 or less disables the gate."
-msgstr ""
+msgstr "每个客户端 IP 每分钟允许的登录尝试次数；0 或更小的值表示禁用该限制。"
 
 msgid "Login attempts allowed per client IP and user name each minute; also gates password change."
-msgstr ""
+msgstr "每个客户端 IP 和用户名组合每分钟允许的登录尝试次数；同时也限制密码修改。"
 
 msgid "Lockout (seconds) applied once a login rate limit is exceeded; 0 or less disables the lockout."
-msgstr ""
+msgstr "超过登录速率限制后实施的锁定时间（秒）；0 或更小的值表示禁用锁定。"
 
 msgid "Maximum login rate-limit buckets held in memory; idle buckets are evicted at the cap."
-msgstr ""
+msgstr "内存中保留的登录速率限制桶的最大数量；达到上限时，空闲的桶会被逐出。"
 
 msgid "Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (\": keepalive\\n\\n\") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds."
-msgstr ""
+msgstr "/api/v2/chat/stream 发出的 SSE keep-alive ping 的间隔。该 ping 是仅含注释的一行（\": keepalive\\n\\n\"），不会影响事件流，但能够规避在长时间的 LLM 阶段断开空闲连接的中间设备（nginx 默认的 proxy_read_timeout 为 60s）。设置为 <=0 表示禁用。单位：毫秒。"

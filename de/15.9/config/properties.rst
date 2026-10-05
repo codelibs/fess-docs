@@ -15,7 +15,7 @@ one, fill in ``properties.po`` beside this file.
 .. fess repository; translations come from properties.po beside this file.
 .. Regenerate with tools/update_properties_doc.sh.
 
-Core
+Kern
 ----
 
 .. list-table::
@@ -25,71 +25,71 @@ Core
     - Description
     - Default
   * - domain.title
-    - The title of the domain for logging and display.
+    - Der Titel der Domain für Protokollierung und Anzeige.
     - ``Fess``
 
-.. list-table:: Search Engine
+.. list-table:: Suchmaschine
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - search_engine.type
-    - The type of search engine backend (e.g., default, opensearch).
+    - Der Typ des Suchmaschinen-Backends (z. B. default, opensearch).
     - ``default``
   * - search_engine.http.url
-    - The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)
+    - Die URL des HTTP-Endpunkts der Suchmaschine. Verwenden Sie in IPv6-Umgebungen eckige Klammern um die IPv6-Adresse (z. B. http://[::1]:9200)
     - ``http://localhost:9200``
   * - search_engine.http.ssl.certificate_authorities
-    - Path to SSL certificate authorities for secure HTTP connections.
+    - Pfad zu den SSL-Zertifizierungsstellen für sichere HTTP-Verbindungen.
     - (empty)
   * - search_engine.username
-    - Username for authenticating to the search engine.
+    - Benutzername für die Authentifizierung bei der Suchmaschine.
     - (empty)
   * - search_engine.password
-    - Password for authenticating to the search engine.
+    - Passwort für die Authentifizierung bei der Suchmaschine.
     - (empty)
   * - search_engine.heartbeat_interval
-    - Interval (ms) for heartbeat checks to the search engine.
+    - Intervall (ms) für Heartbeat-Prüfungen der Suchmaschine.
     - ``10000``
   * - app.cipher.algorithm
-    - Cipher algorithm used for encryption.
+    - Für die Verschlüsselung verwendeter Cipher-Algorithmus.
     - ``aes``
   * - app.cipher.key
-    - Secret key for encryption (change this value for production).
+    - Geheimer Schlüssel für die Verschlüsselung (ändern Sie diesen Wert für den Produktionsbetrieb).
     - ``___change__me___``
   * - app.digest.algorithm
-    - Algorithm for digest calculation.
+    - Algorithmus für die Digest-Berechnung.
     - ``sha256``
   * - app.password.algorithm
-    - Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)
+    - Passwort-Hashing (neuer Mechanismus, kompatibel mit Spring Security v5.8) Unterstützt: bcrypt (derzeit nur dieser)
     - ``bcrypt``
   * - app.password.bcrypt.cost
-    - BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31.
+    - BCrypt-Kostenfaktor (Log-Runden). 10 entspricht dem Standardwert von Spring Security v5.8. Bereich: 4-31.
     - ``10``
   * - app.password.upgrade.enabled
-    - Lazy re-hashing on successful login for legacy hashes.
+    - Verzögertes erneutes Hashing bei erfolgreicher Anmeldung für Legacy-Hashes.
     - ``true``
   * - app.encrypt.property.pattern
-    - NOTE: app.digest.algorithm is kept for LEGACY password verification only (pre-upgrade hashes that have no {id} prefix). Do not use for new passwords. Regex pattern for properties to encrypt.
+    - HINWEIS: app.digest.algorithm bleibt nur für die Überprüfung von LEGACY-Passwörtern erhalten (Hashes von vor dem Upgrade, die kein {id}-Präfix haben). Nicht für neue Passwörter verwenden. Regex-Muster für zu verschlüsselnde Eigenschaften.
     - ``.*password|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
-    - Regex pattern for sensitive values to mask in debug logs (case-insensitive match against property/env keys).
+    - Regex-Muster für sensible Werte, die in Debug-Protokollen maskiert werden (Abgleich ohne Beachtung der Groß-/Kleinschreibung mit den Schlüsseln von Eigenschaften/Umgebungsvariablen).
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
   * - app.extension.names
-    - Extension names for application customization.
+    - Erweiterungsnamen für die Anwendungsanpassung.
     - (empty)
   * - app.audit.log.format
-    - Audit log format.
+    - Format des Audit-Protokolls.
     - (empty)
   * - script.audit.log.enabled
-    - Script audit log settings.
+    - Einstellungen für das Skript-Audit-Protokoll.
     - ``true``
   * - script.audit.log.max.length
-    - Maximum characters of script text kept in a script audit log entry; longer text is truncated.
+    - Maximale Zeichenanzahl des Skripttexts, die in einem Skript-Audit-Protokolleintrag erhalten bleibt; längerer Text wird abgeschnitten.
     - ``100``
   * - jvm.crawler.options
-    - JVM options for the crawler process.
+    - JVM-Optionen für den Crawler-Prozess.
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -127,7 +127,7 @@ Core
       | ``-Dsun.java2d.cmm=sun.java2d.cmm.kcms.KcmsServiceProvider``
       | ``-Dorg.apache.pdfbox.rendering.UsePureJavaCMYKConversion=true``
   * - jvm.suggest.options
-    - JVM options (newline-separated) passed to the suggest creator child process.
+    - JVM-Optionen (durch Zeilenumbrüche getrennt), die an den Suggest-Creator-Kindprozess übergeben werden.
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -157,7 +157,7 @@ Core
       | ``-Dlog4j2.formatMsgNoLookups=true``
       | ``-Dlog4j.skipJansi=true``
   * - jvm.chunk.options
-    - JVM options for the chunk vector indexer process. Heap budget. This child JVM is only started while the "Content Chunk Vector Indexer" job runs, so a generous -Xmx costs nothing when content chunking is off. The live set is dominated by the in-flight batches, each of which retains, per document, the full _source, the document's chunk strings, and the document's embedding vectors: content_chunker.job.bulk_size          (default   20) x content_chunker.max_chunks_per_document (default 1000) x content_chunker.embedding.dimension  (default  768) x 4 bytes per float x content_chunker.job.concurrency      (default    2) = ~117 MB of vectors alone, before chunk strings and document sources. With the shipped defaults the worst case is roughly 190-250 MB live (and ~235 MB of vectors alone at dimension=1536), which does not fit a 256 MB heap with any GC headroom. Raise -Xmx further if you raise bulk_size, max_chunks_per_document, concurrency, or the embedding dimension.
+    - JVM-Optionen für den Chunk-Vektor-Indexer-Prozess. Heap-Budget. Diese Kind-JVM wird nur gestartet, solange der Job "Content Chunk Vector Indexer" läuft, sodass ein großzügiges -Xmx nichts kostet, wenn das Content-Chunking deaktiviert ist. Der Live-Bestand wird von den laufenden Batches dominiert, von denen jeder pro Dokument das vollständige _source, die Chunk-Strings des Dokuments und die Embedding-Vektoren des Dokuments behält: content_chunker.job.bulk_size          (Standard   20) x content_chunker.max_chunks_per_document (Standard 1000) x content_chunker.embedding.dimension  (Standard  768) x 4 Byte pro Float x content_chunker.job.concurrency      (Standard    2) = ~117 MB allein für Vektoren, vor Chunk-Strings und Dokumentquellen. Mit den mitgelieferten Standardwerten beträgt der ungünstigste Fall etwa 190-250 MB im Live-Bestand (und ~235 MB allein für Vektoren bei dimension=1536), was nicht in einen 256-MB-Heap mit nennenswertem GC-Spielraum passt. Erhöhen Sie -Xmx weiter, wenn Sie bulk_size, max_chunks_per_document, concurrency oder die Embedding-Dimension erhöhen.
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -187,7 +187,7 @@ Core
       | ``-Dlog4j2.formatMsgNoLookups=true``
       | ``-Dlog4j.skipJansi=true``
   * - jvm.thumbnail.options
-    - JVM options for the thumbnail process.
+    - JVM-Optionen für den Thumbnail-Prozess.
     - | ``-Djava.awt.headless=true``
       | ``-Dfile.encoding=UTF-8``
       | ``-Djna.nosys=true``
@@ -231,127 +231,127 @@ Core
     - Description
     - Default
   * - job.system.job.ids
-    - System job IDs for scheduled jobs.
+    - System-Job-IDs für geplante Jobs.
     - ``default_crawler``
   * - job.template.title.web
-    - Template for web crawler job title.
+    - Vorlage für den Titel des Web-Crawler-Jobs.
     - ``Web Crawler - {0}``
   * - job.template.title.file
-    - Template for file crawler job title.
+    - Vorlage für den Titel des Datei-Crawler-Jobs.
     - ``File Crawler - {0}``
   * - job.template.title.data
-    - Template for data crawler job title.
+    - Vorlage für den Titel des Datenspeicher-Crawler-Jobs.
     - ``Data Crawler - {0}``
   * - job.template.script
-    - Script template for job execution.
+    - Skriptvorlage für die Job-Ausführung.
     - ``return container.getComponent("crawlJob").logLevel("info").webConfigIds([{0}]).fileConfigIds([{1}]).dataConfigIds([{2}]).jobExecutor(executor).execute();``
   * - job.max.crawler.processes
-    - Maximum number of crawler processes.
+    - Maximale Anzahl von Crawler-Prozessen.
     - ``0``
   * - job.default.script
-    - Default script language for jobs.
+    - Standard-Skriptsprache für Jobs.
     - ``javascript``
   * - job.system.property.filter.pattern
-    - Pattern to filter system properties for jobs.
+    - Muster zum Filtern von Systemeigenschaften für Jobs.
     - (empty)
   * - processors
-    - Number of processors to use.
+    - Anzahl der zu verwendenden Prozessoren.
     - ``0``
   * - java.command.path
-    - Path to Java command.
+    - Pfad zum Java-Befehl.
     - ``java``
   * - python.command.path
-    - Path to Python command.
+    - Pfad zum Python-Befehl.
     - ``python``
   * - path.encoding
-    - Encoding for file paths.
+    - Kodierung für Dateipfade.
     - ``UTF-8``
   * - use.own.tmp.dir
-    - Whether to use a dedicated temporary directory.
+    - Gibt an, ob ein eigenes temporäres Verzeichnis verwendet werden soll.
     - ``true``
   * - max.log.output.length
-    - Maximum length of log output.
+    - Maximale Länge der Protokollausgabe.
     - ``4000``
   * - adaptive.load.control
-    - Adaptive load control value.
+    - Wert für die adaptive Laststeuerung.
     - ``50``
   * - web.load.control
-    - CPU threshold (%) for web request load control. Returns 429 when CPU >= this value. (100: disabled)
+    - CPU-Schwellenwert (%) für die Laststeuerung von Web-Anfragen. Gibt 429 zurück, wenn CPU >= diesem Wert. (100: deaktiviert)
     - ``100``
   * - api.load.control
-    - CPU threshold (%) for API request load control. Returns 429 when CPU >= this value. (100: disabled)
+    - CPU-Schwellenwert (%) für die Laststeuerung von API-Anfragen. Gibt 429 zurück, wenn CPU >= diesem Wert. (100: deaktiviert)
     - ``100``
   * - load.control.monitor.interval
-    - Interval (seconds) for monitoring OpenSearch CPU load.
+    - Intervall (Sekunden) für die Überwachung der OpenSearch-CPU-Last.
     - ``1``
   * - supported.languages
-    - Supported languages.
+    - Unterstützte Sprachen.
     - ``ar,bg,bn,ca,ckb_IQ,cs,da,de,el,en_IE,en,es,et,eu,fa,fi,fr,gl,gu,he,hi,hr,hu,hy,id,it,ja,ko,lt,lv,mk,ml,nl,no,pa,pl,pt_BR,pt,ro,ru,si,sq,sv,ta,te,th,tl,tr,uk,ur,vi,zh_CN,zh_TW,zh``
   * - api.access.token.length
-    - Length of API access token.
+    - Länge des API-Zugriffstokens.
     - ``60``
   * - api.access.token.request.parameter
-    - API access token request parameter.
+    - Anfrageparameter für das API-Zugriffstoken.
     - (empty)
   * - api.admin.access.permissions
-    - Permissions for API admin access.
+    - Berechtigungen für den API-Administratorzugriff.
     - ``Radmin-api``
   * - api.search.accept.referers
-    - Accepted referers for API search.
+    - Zulässige Referer für die API-Suche.
     - (empty)
   * - api.search.scroll
-    - Whether to enable scroll for API search.
+    - Gibt an, ob Scroll für die API-Suche aktiviert werden soll.
     - ``false``
   * - api.search.export
-    - Whether to enable the end-user export of search results (CSV/JSON) at /api/v2/documents/export.
+    - Gibt an, ob der Export von Suchergebnissen (CSV/JSON) durch Endbenutzer unter /api/v2/documents/export aktiviert werden soll.
     - ``false``
   * - api.search.export.max.size
-    - Maximum number of documents written by one search result export.
+    - Maximale Anzahl von Dokumenten, die ein Suchergebnis-Export schreibt.
     - ``1000``
   * - api.search.export.fields
-    - Fields written by the search result export (comma-separated). A field that is not an API response field is ignored.
+    - Vom Suchergebnis-Export geschriebene Felder (kommagetrennt). Ein Feld, das kein API-Antwortfeld ist, wird ignoriert.
     - ``title,url_link,last_modified,content_length,filetype``
   * - api.search.export.rate.limit.per.minute
-    - Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit.
+    - Maximale Anzahl von Suchergebnis-Exporten pro Minute für jeden Benutzer (für einen Gast pro Client-IP). 0 oder weniger deaktiviert das Limit.
     - ``10``
   * - api.json.response.headers
-    - Headers for API JSON response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - Header für die API-JSON-Antwort. Access-Control-\* und Timing-Allow-Origin werden hier ignoriert (CORS wird über api.cors.\* / CorsFilter gesteuert). Setzen Sie Vary nicht.
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.json.response.exception.included
-    - Whether to include exceptions in API JSON response.
+    - Gibt an, ob Ausnahmen in die API-JSON-Antwort aufgenommen werden sollen.
     - ``false``
   * - api.gsa.response.headers
-    - Headers for API GSA response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - Header für die API-GSA-Antwort. Access-Control-\* und Timing-Allow-Origin werden hier ignoriert (CORS wird über api.cors.\* / CorsFilter gesteuert). Setzen Sie Vary nicht.
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.gsa.response.exception.included
-    - Whether to include exceptions in API GSA response.
+    - Gibt an, ob Ausnahmen in die API-GSA-Antwort aufgenommen werden sollen.
     - ``false``
   * - api.dashboard.response.headers
-    - Headers for API dashboard response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
+    - Header für die API-Dashboard-Antwort. Access-Control-\* und Timing-Allow-Origin werden hier ignoriert (CORS wird über api.cors.\* / CorsFilter gesteuert). Setzen Sie Vary nicht.
     - ``Referrer-Policy:strict-origin-when-cross-origin``
   * - api.cors.allow.origin
-    - Allowed origins for CORS. "\*" returns a literal "\*" (the request Origin is NOT reflected) and disables credentials. Set explicit origins (newline- or comma-separated) to allow credentialed cross-origin access.
+    - Zulässige Origins für CORS. "\*" gibt ein literales "\*" zurück (der Origin der Anfrage wird NICHT gespiegelt) und deaktiviert Anmeldedaten. Legen Sie explizite Origins (durch Zeilenumbruch oder Komma getrennt) fest, um Cross-Origin-Zugriff mit Anmeldedaten zu erlauben.
     - ``*``
   * - api.cors.allow.methods
-    - Allowed HTTP methods for CORS.
+    - Zulässige HTTP-Methoden für CORS.
     - ``GET, POST, OPTIONS, DELETE, PUT``
   * - api.cors.max.age
-    - Max age for CORS preflight requests.
+    - Max-Age für CORS-Preflight-Anfragen.
     - ``3600``
   * - api.cors.allow.headers
-    - Allowed request headers for CORS preflight. A static list is returned (Access-Control-Request-Headers is not reflected). Includes X-Fess-CSRF-Token for cross-origin SPAs sending the CSRF token.
+    - Zulässige Anfrage-Header für den CORS-Preflight. Es wird eine statische Liste zurückgegeben (Access-Control-Request-Headers wird nicht gespiegelt). Enthält X-Fess-CSRF-Token für Cross-Origin-SPAs, die das CSRF-Token senden.
     - ``Origin, Content-Type, Accept, Authorization, X-Requested-With, X-Fess-CSRF-Token``
   * - api.cors.allow.credentials
-    - Whether to allow credentials for CORS. Honored only for an exact match of an explicit Origin; ignored when api.cors.allow.origin is "\*".
+    - Gibt an, ob Anmeldedaten für CORS zugelassen werden sollen. Wird nur bei exakter Übereinstimmung mit einem expliziten Origin berücksichtigt; wird ignoriert, wenn api.cors.allow.origin "\*" ist.
     - ``true``
   * - api.jsonp.enabled
-    - Whether to enable JSONP for API.
+    - Gibt an, ob JSONP für die API aktiviert werden soll.
     - ``false``
   * - api.ping.search_engine.fields
-    - Fields for API ping to search engine.
+    - Felder für den API-Ping an die Suchmaschine.
     - ``status,timed_out``
 
-Rate Limiting
+Rate-Limiting
 -------------
 
 .. list-table::
@@ -361,278 +361,278 @@ Rate Limiting
     - Description
     - Default
   * - rate.limit.enabled
-    - Whether rate limiting is enabled.
+    - Gibt an, ob Rate-Limiting aktiviert ist.
     - ``false``
   * - rate.limit.requests.per.window
-    - Maximum number of requests allowed per window.
+    - Maximal zulässige Anzahl von Anfragen pro Fenster.
     - ``100``
   * - rate.limit.window.ms
-    - Window size in milliseconds.
+    - Fenstergröße in Millisekunden.
     - ``60000``
   * - rate.limit.block.duration.ms
-    - Duration in milliseconds to block IP when limit exceeded.
+    - Dauer in Millisekunden, für die die IP bei Überschreitung des Limits blockiert wird.
     - ``300000``
   * - rate.limit.retry.after.seconds
-    - Retry-After header value in seconds.
+    - Wert des Retry-After-Headers in Sekunden.
     - ``60``
   * - rate.limit.whitelist.ips
-    - Comma-separated list of whitelisted IPs (e.g., 127.0.0.1,::1).
+    - Kommagetrennte Liste von IPs auf der Whitelist (z. B. 127.0.0.1,::1).
     - ``127.0.0.1,::1``
   * - rate.limit.blocked.ips
-    - Comma-separated list of blocked IPs.
+    - Kommagetrennte Liste blockierter IPs.
     - (empty)
   * - rate.limit.trusted.proxies
-    - Comma-separated list of trusted proxy IPs. Only trust X-Forwarded-For/X-Real-IP from these IPs.
+    - Kommagetrennte Liste vertrauenswürdiger Proxy-IPs. Vertrauen Sie X-Forwarded-For/X-Real-IP nur von diesen IPs.
     - ``127.0.0.1,::1``
   * - rate.limit.cleanup.interval
-    - Number of requests between cleanup operations to prevent memory leaks.
+    - Anzahl der Anfragen zwischen Bereinigungsvorgängen zur Vermeidung von Speicherlecks.
     - ``1000``
   * - virtual.host.headers
-    - Virtual Host: Host:fess.codelibs.org=fess
+    - Virtueller Host: Host:fess.codelibs.org=fess
     - (empty)
   * - http.proxy.host
-    - Hostname for the HTTP proxy server.
+    - Hostname des HTTP-Proxy-Servers.
     - (empty)
   * - http.proxy.port
-    - Port number for the HTTP proxy server (e.g., 8080).
+    - Portnummer des HTTP-Proxy-Servers (z. B. 8080).
     - ``8080``
   * - http.proxy.username
-    - Username for HTTP proxy authentication.
+    - Benutzername für die HTTP-Proxy-Authentifizierung.
     - (empty)
   * - http.proxy.password
-    - Password for HTTP proxy authentication.
+    - Passwort für die HTTP-Proxy-Authentifizierung.
     - (empty)
   * - http.fileupload.max.size
-    - Maximum size (bytes) for HTTP file uploads.
+    - Maximale Größe (Bytes) für HTTP-Datei-Uploads.
     - ``262144000``
   * - http.fileupload.threshold.size
-    - Threshold size (bytes) for HTTP file upload buffering.
+    - Schwellenwert (Bytes) für die Pufferung von HTTP-Datei-Uploads.
     - ``262144``
   * - http.fileupload.max.file.count
-    - Maximum number of files allowed per HTTP upload.
+    - Maximal zulässige Anzahl von Dateien pro HTTP-Upload.
     - ``10``
 
 Index
 -----
 
-.. list-table:: Crawler Common
+.. list-table:: Crawler: Allgemein
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.http.thread_pool.size
-    - Number of threads for HTTP crawling.
+    - Anzahl der Threads für das HTTP-Crawling.
     - ``0``
   * - crawler.data.serializer
-    - Serializer type for crawler data (e.g., kryo).
+    - Serializer-Typ für Crawler-Daten (z. B. kryo).
     - ``kryo``
   * - crawler.document.max.site.length
-    - Maximum length of site name in documents.
+    - Maximale Länge des Site-Namens in Dokumenten.
     - ``100``
   * - crawler.document.site.encoding
-    - Encoding for site names in documents.
+    - Kodierung für Site-Namen in Dokumenten.
     - ``UTF-8``
   * - crawler.document.unknown.hostname
-    - Hostname to use when unknown in documents.
+    - Hostname, der in Dokumenten verwendet wird, wenn er unbekannt ist.
     - ``unknown``
   * - crawler.document.use.site.encoding.on.english
-    - Whether to use site encoding for English documents.
+    - Gibt an, ob die Site-Kodierung für englische Dokumente verwendet werden soll.
     - ``false``
   * - crawler.document.append.data
-    - Whether to append data to documents.
+    - Gibt an, ob Daten an Dokumente angehängt werden sollen.
     - ``true``
   * - crawler.document.append.filename
-    - Whether to append filename to documents.
+    - Gibt an, ob der Dateiname an Dokumente angehängt werden soll.
     - ``false``
   * - crawler.document.max.alphanum.term.size
-    - Maximum size of alphanumeric terms in documents.
+    - Maximale Größe alphanumerischer Begriffe in Dokumenten.
     - ``20``
   * - crawler.document.max.symbol.term.size
-    - Maximum size of symbol terms in documents.
+    - Maximale Größe von Symbolbegriffen in Dokumenten.
     - ``10``
   * - crawler.document.duplicate.term.removed
-    - Whether to remove duplicate terms in documents.
+    - Gibt an, ob doppelte Begriffe in Dokumenten entfernt werden sollen.
     - ``false``
   * - crawler.document.space.chars
-    - Unicode space characters for document parsing.
+    - Unicode-Leerzeichen für das Parsen von Dokumenten.
     - ``u0009u000Au000Bu000Cu000Du001Cu001Du001Eu001Fu0020u00A0u1680u180Eu2000u2001u2002u2003u2004u2005u2006u2007u2008u2009u200Au200Bu200Cu202Fu205Fu3000uFEFFuFFFDu00B6``
   * - crawler.document.fullstop.chars
-    - Unicode full stop characters for document parsing.
+    - Unicode-Punktzeichen für das Parsen von Dokumenten.
     - ``u002eu06d4u2e3cu3002``
   * - crawler.crawling.data.encoding
-    - Encoding for crawling data.
+    - Kodierung für Crawling-Daten.
     - ``UTF-8``
   * - crawler.web.protocols
-    - Supported web protocols for crawling.
+    - Unterstützte Web-Protokolle für das Crawling.
     - ``http,https``
   * - crawler.file.protocols
-    - Supported file protocols for crawling.
+    - Unterstützte Dateiprotokolle für das Crawling.
     - ``file,smb,smb1,ftp``
   * - crawler.data.env.param.key.pattern
-    - Pattern for environment variable keys in crawling data.
+    - Muster für Schlüssel von Umgebungsvariablen in Crawling-Daten.
     - ``^FESS_ENV_.*``
   * - crawler.ignore.robots.txt
-    - Whether to ignore robots.txt during crawling.
+    - Gibt an, ob robots.txt beim Crawling ignoriert werden soll.
     - ``false``
   * - crawler.ignore.robots.tags
-    - Whether to ignore robots meta tags during crawling.
+    - Gibt an, ob Robots-Meta-Tags beim Crawling ignoriert werden sollen.
     - ``false``
   * - crawler.ignore.content.exception
-    - Whether to ignore content exceptions during crawling.
+    - Gibt an, ob Inhaltsausnahmen beim Crawling ignoriert werden sollen.
     - ``true``
   * - crawler.failure.url.status.codes
-    - HTTP status codes considered as failure URLs.
+    - HTTP-Statuscodes, die als Fehler-URLs gelten.
     - ``404,403,410``
   * - crawler.system.monitor.interval
-    - Interval (seconds) for system monitor during crawling.
+    - Intervall (Sekunden) für die Systemüberwachung während des Crawlings.
     - ``60``
   * - crawler.hotthread.ignore_idle_threads
-    - Whether to ignore idle threads in hot thread monitoring.
+    - Gibt an, ob Leerlauf-Threads bei der Hot-Thread-Überwachung ignoriert werden sollen.
     - ``true``
   * - crawler.hotthread.interval
-    - Interval for hot thread monitoring (e.g., 500ms).
+    - Intervall für die Hot-Thread-Überwachung (z. B. 500ms).
     - ``500ms``
   * - crawler.hotthread.snapshots
-    - Number of snapshots for hot thread monitoring.
+    - Anzahl der Snapshots für die Hot-Thread-Überwachung.
     - ``10``
   * - crawler.hotthread.threads
-    - Number of threads for hot thread monitoring.
+    - Anzahl der Threads für die Hot-Thread-Überwachung.
     - ``3``
   * - crawler.hotthread.timeout
-    - Timeout for hot thread monitoring (e.g., 30s).
+    - Timeout für die Hot-Thread-Überwachung (z. B. 30s).
     - ``30s``
   * - crawler.hotthread.type
-    - Type of hot thread monitoring (e.g., cpu).
+    - Typ der Hot-Thread-Überwachung (z. B. cpu).
     - ``cpu``
   * - crawler.metadata.content.excludes
-    - Metadata fields to exclude from document content.
+    - Metadatenfelder, die vom Dokumentinhalt ausgeschlossen werden.
     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
   * - crawler.metadata.name.mapping
-    - Mapping for document metadata names.
+    - Zuordnung für Dokument-Metadatennamen.
     - | ``title=title:string``
       | ``Title=title:string``
       | ``dc:title=title:string``
       | ``frontmatter.title=title:string``
 
-.. list-table:: Crawler HTML
+.. list-table:: Crawler: HTML
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.html.content.xpath
-    - XPath to extract main content from HTML documents.
+    - XPath zum Extrahieren des Hauptinhalts aus HTML-Dokumenten.
     - ``//BODY``
   * - crawler.document.html.lang.xpath
-    - XPath to extract language attribute from HTML documents.
+    - XPath zum Extrahieren des Sprachattributs aus HTML-Dokumenten.
     - ``//HTML/@lang``
   * - crawler.document.html.digest.xpath
-    - XPath to extract digest (description) from HTML documents.
+    - XPath zum Extrahieren des Digest (Beschreibung) aus HTML-Dokumenten.
     - ``//META[@name='description']/@content``
   * - crawler.document.html.canonical.xpath
-    - XPath to extract canonical URL from HTML documents.
+    - XPath zum Extrahieren der kanonischen URL aus HTML-Dokumenten.
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
-    - HTML tags to prune (remove) during document processing.
+    - HTML-Tags, die bei der Dokumentverarbeitung beschnitten (entfernt) werden.
     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
-    - Maximum length of digest extracted from HTML documents.
+    - Maximale Länge des aus HTML-Dokumenten extrahierten Digest.
     - ``120``
   * - crawler.document.html.default.lang
-    - Default language for HTML documents.
+    - Standardsprache für HTML-Dokumente.
     - (empty)
   * - crawler.document.html.default.include.index.patterns
-    - Patterns to include for HTML index processing.
+    - Muster, die bei der HTML-Indexverarbeitung eingeschlossen werden.
     - (empty)
   * - crawler.document.html.default.exclude.index.patterns
-    - Patterns to exclude for HTML index processing.
+    - Muster, die bei der HTML-Indexverarbeitung ausgeschlossen werden.
     - ``(?i).*(css|js|jpeg|jpg|gif|png|bmp|wmv|xml|ico|exe)``
   * - crawler.document.html.default.include.search.patterns
-    - Patterns to include for HTML search processing.
+    - Muster, die bei der HTML-Suchverarbeitung eingeschlossen werden.
     - (empty)
   * - crawler.document.html.default.exclude.search.patterns
-    - Patterns to exclude for HTML search processing.
+    - Muster, die bei der HTML-Suchverarbeitung ausgeschlossen werden.
     - (empty)
 
-.. list-table:: Crawler File
+.. list-table:: Crawler: Datei
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.file.name.encoding
-    - Encoding for file names in documents.
+    - Kodierung für Dateinamen in Dokumenten.
     - (empty)
   * - crawler.document.file.no.title.label
-    - Label to use when a file has no title.
+    - Label, das verwendet wird, wenn eine Datei keinen Titel hat.
     - ``No title.``
   * - crawler.document.file.ignore.empty.content
-    - Whether to ignore files with empty content.
+    - Gibt an, ob Dateien mit leerem Inhalt ignoriert werden sollen.
     - ``false``
   * - crawler.document.file.max.title.length
-    - Maximum length of file title in documents.
+    - Maximale Länge des Dateititels in Dokumenten.
     - ``100``
   * - crawler.document.file.max.digest.length
-    - Maximum length of file digest in documents.
+    - Maximale Länge des Datei-Digest in Dokumenten.
     - ``200``
   * - crawler.document.file.append.meta.content
-    - Whether to append meta content from files.
+    - Gibt an, ob Meta-Inhalte aus Dateien angehängt werden sollen.
     - ``true``
   * - crawler.document.file.append.body.content
-    - Whether to append body content from files.
+    - Gibt an, ob Body-Inhalte aus Dateien angehängt werden sollen.
     - ``true``
   * - crawler.document.file.default.lang
-    - Default language for file documents.
+    - Standardsprache für Dateidokumente.
     - (empty)
   * - crawler.document.file.default.include.index.patterns
-    - Patterns to include for file index processing.
+    - Muster, die bei der Dateiindexverarbeitung eingeschlossen werden.
     - (empty)
   * - crawler.document.file.default.exclude.index.patterns
-    - Patterns to exclude for file index processing.
+    - Muster, die bei der Dateiindexverarbeitung ausgeschlossen werden.
     - (empty)
   * - crawler.document.file.default.include.search.patterns
-    - Patterns to include for file search processing.
+    - Muster, die bei der Dateisuchverarbeitung eingeschlossen werden.
     - (empty)
   * - crawler.document.file.default.exclude.search.patterns
-    - Patterns to exclude for file search processing.
+    - Muster, die bei der Dateisuchverarbeitung ausgeschlossen werden.
     - (empty)
   * - crawler.document.file.owner.enabled
-    - Whether to index the owner of crawled files (SMB, local file system and FTP). The crawl config parameter config.owner.enabled overrides it.
+    - Gibt an, ob der Eigentümer gecrawlter Dateien (SMB, lokales Dateisystem und FTP) indiziert werden soll. Der Crawl-Konfigurationsparameter config.owner.enabled überschreibt dies.
     - ``true``
   * - crawler.document.file.last.modifier.enabled
-    - Whether to index the last modifier of crawled files, read from the document metadata and falling back to the file owner. The crawl config parameter config.last.modifier.enabled overrides it.
+    - Gibt an, ob der letzte Bearbeiter gecrawlter Dateien indiziert werden soll; er wird aus den Dokumentmetadaten gelesen und fällt auf den Dateieigentümer zurück. Der Crawl-Konfigurationsparameter config.last.modifier.enabled überschreibt dies.
     - ``true``
 
-.. list-table:: Crawler Cache
+.. list-table:: Crawler: Cache
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - crawler.document.cache.enabled
-    - Whether document cache is enabled.
+    - Gibt an, ob der Dokument-Cache aktiviert ist.
     - ``true``
   * - crawler.document.cache.max.size
-    - Maximum size (bytes) for document cache.
+    - Maximale Größe (Bytes) für den Dokument-Cache.
     - ``2621440``
   * - crawler.document.cache.supported.mimetypes
-    - Supported MIME types for document cache.
+    - Unterstützte MIME-Typen für den Dokument-Cache.
     - ``text/html``
   * - crawler.document.cache.html.mimetypes
-    - ,text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME types for HTML document cache.
+    - ,text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME-Typen für den HTML-Dokument-Cache.
     - ``text/html``
   * - crawler.document.mimetype.extension.overrides
-    - Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type).
+    - Überschreibende Zuordnungen von Erweiterung zu MIME-Typ für die MIME-Typ-Erkennung (eine pro Zeile: .ext=mime/type).
     - (empty)
   * - crawler.document.ocr.enabled
-    - Whether to extract text from images and scanned PDFs with Tesseract OCR (requires the tesseract command).
+    - Gibt an, ob Text aus Bildern und gescannten PDFs mit Tesseract OCR extrahiert werden soll (erfordert den Befehl tesseract).
     - ``false``
   * - crawler.document.ocr.language
-    - Tesseract OCR languages, joined with '+' (e.g. jpn+eng).
+    - Sprachen für Tesseract OCR, verbunden mit '+' (z. B. jpn+eng).
     - ``eng``
   * - crawler.document.ocr.timeout
-    - Timeout in seconds for one Tesseract OCR run.
+    - Timeout in Sekunden für einen Tesseract-OCR-Lauf.
     - ``120``
 
 .. list-table:: Indexer
@@ -642,307 +642,307 @@ Index
     - Description
     - Default
   * - indexer.thread.dump.enabled
-    - Whether to enable thread dump for the indexer.
+    - Gibt an, ob der Thread-Dump für den Indexer aktiviert werden soll.
     - ``true``
   * - indexer.unprocessed.document.size
-    - Maximum number of unprocessed documents for the indexer.
+    - Maximale Anzahl unverarbeiteter Dokumente für den Indexer.
     - ``1000``
   * - indexer.click.count.enabled
-    - Whether to enable click count tracking in the indexer.
+    - Gibt an, ob die Nachverfolgung der Klickanzahl im Indexer aktiviert werden soll.
     - ``true``
   * - indexer.favorite.count.enabled
-    - Whether to enable favorite count tracking in the indexer.
+    - Gibt an, ob die Nachverfolgung der Favoritenanzahl im Indexer aktiviert werden soll.
     - ``true``
   * - indexer.webfs.commit.margin.time
-    - Commit margin time (ms) for webfs in the indexer.
+    - Commit-Pufferzeit (ms) für webfs im Indexer.
     - ``5000``
   * - indexer.webfs.max.empty.list.count
-    - Maximum number of empty lists for webfs in the indexer.
+    - Maximale Anzahl leerer Listen für webfs im Indexer.
     - ``3600``
   * - indexer.webfs.update.interval
-    - Update interval (ms) for webfs in the indexer.
+    - Aktualisierungsintervall (ms) für webfs im Indexer.
     - ``10000``
   * - indexer.webfs.max.document.cache.size
-    - Maximum document cache size for webfs in the indexer.
+    - Maximale Dokument-Cache-Größe für webfs im Indexer.
     - ``10``
   * - indexer.webfs.max.document.request.size
-    - Maximum document request size (bytes) for webfs in the indexer.
+    - Maximale Größe von Dokumentanfragen (Bytes) für webfs im Indexer.
     - ``1048576``
   * - indexer.data.max.document.cache.size
-    - Maximum document cache size for data in the indexer.
+    - Maximale Dokument-Cache-Größe für Daten im Indexer.
     - ``10000``
   * - indexer.data.max.document.request.size
-    - Maximum document request size (bytes) for data in the indexer.
+    - Maximale Größe von Dokumentanfragen (Bytes) für Daten im Indexer.
     - ``1048576``
   * - indexer.data.max.delete.cache.size
-    - Maximum delete cache size for data in the indexer.
+    - Maximale Lösch-Cache-Größe für Daten im Indexer.
     - ``100``
   * - indexer.data.max.redirect.count
-    - Maximum redirect count for data in the indexer.
+    - Maximale Anzahl von Weiterleitungen für Daten im Indexer.
     - ``10``
   * - indexer.language.fields
-    - Fields used for language detection in the indexer.
+    - Felder, die für die Spracherkennung im Indexer verwendet werden.
     - ``content,important_content,title``
   * - indexer.language.detect.length
-    - Length of text for language detection in the indexer.
+    - Textlänge für die Spracherkennung im Indexer.
     - ``1000``
   * - indexer.max.result.window.size
-    - Maximum result window size for the indexer.
+    - Maximale Ergebnisfenstergröße für den Indexer.
     - ``10000``
   * - indexer.max.search.doc.size
-    - Maximum number of search documents for the indexer.
+    - Maximale Anzahl von Suchdokumenten für den Indexer.
     - ``50000``
 
-.. list-table:: Index Settings
+.. list-table:: Index-Einstellungen
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.codec
-    - Codec type for the index.
+    - Codec-Typ für den Index.
     - ``default``
   * - index.number_of_shards
-    - Number of primary shards for the index.
+    - Anzahl der Primär-Shards für den Index.
     - ``5``
   * - index.auto_expand_replicas
-    - Auto expand replicas setting for the index.
+    - Einstellung zur automatischen Erweiterung der Replikate für den Index.
     - ``0-1``
   * - index.id.digest.algorithm
-    - Digest algorithm for index IDs.
+    - Digest-Algorithmus für Index-IDs.
     - ``SHA-512``
   * - index.user.initial_password
-    - Initial password for the index user.
+    - Initiales Passwort für den Index-Benutzer.
     - ``admin``
 
-.. list-table:: Field Names
+.. list-table:: Feldnamen
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.field.favorite_count
-    - Field name for favorite count in the index.
+    - Feldname für die Favoritenanzahl im Index.
     - ``favorite_count``
   * - index.field.click_count
-    - Field name for click count in the index.
+    - Feldname für die Klickanzahl im Index.
     - ``click_count``
   * - index.field.config_id
-    - Field name for config ID in the index.
+    - Feldname für die Konfigurations-ID im Index.
     - ``config_id``
   * - index.field.expires
-    - Field name for expiration date in the index.
+    - Feldname für das Ablaufdatum im Index.
     - ``expires``
   * - index.field.url
-    - Field name for URL in the index.
+    - Feldname für die URL im Index.
     - ``url``
   * - index.field.doc_id
-    - Field name for document ID in the index.
+    - Feldname für die Dokument-ID im Index.
     - ``doc_id``
   * - index.field.id
-    - Field name for internal ID in the index.
+    - Feldname für die interne ID im Index.
     - ``_id``
   * - index.field.version
-    - Field name for version in the index.
+    - Feldname für die Version im Index.
     - ``_version``
   * - index.field.seq_no
-    - Field name for sequence number in the index.
+    - Feldname für die Sequenznummer im Index.
     - ``_seq_no``
   * - index.field.primary_term
-    - Field name for primary term in the index.
+    - Feldname für den Primary Term im Index.
     - ``_primary_term``
   * - index.field.lang
-    - Field name for language in the index.
+    - Feldname für die Sprache im Index.
     - ``lang``
   * - index.field.has_cache
-    - Field name for cache status in the index.
+    - Feldname für den Cache-Status im Index.
     - ``has_cache``
   * - index.field.last_modified
-    - Field name for last modified date in the index.
+    - Feldname für das Datum der letzten Änderung im Index.
     - ``last_modified``
   * - index.field.etag
-    - Field name for the ETag response header of the crawled document in the index.
+    - Feldname für den ETag-Antwort-Header des gecrawlten Dokuments im Index.
     - ``etag``
   * - index.field.owner
-    - Field name for the owner of the crawled file in the index.
+    - Feldname für den Eigentümer der gecrawlten Datei im Index.
     - ``owner``
   * - index.field.last_modifier
-    - Field name for the last modifier of the crawled file in the index.
+    - Feldname für den letzten Bearbeiter der gecrawlten Datei im Index.
     - ``last_modifier``
   * - index.field.anchor
-    - Field name for anchor in the index.
+    - Feldname für den Anker im Index.
     - ``anchor``
   * - index.field.segment
-    - Field name for segment in the index.
+    - Feldname für das Segment im Index.
     - ``segment``
   * - index.field.role
-    - Field name for role in the index.
+    - Feldname für die Rolle im Index.
     - ``role``
   * - index.field.boost
-    - Field name for boost value in the index.
+    - Feldname für den Boost-Wert im Index.
     - ``boost``
   * - index.field.created
-    - Field name for creation date in the index.
+    - Feldname für das Erstellungsdatum im Index.
     - ``created``
   * - index.field.timestamp
-    - Field name for timestamp in the index.
+    - Feldname für den Zeitstempel im Index.
     - ``timestamp``
   * - index.field.label
-    - Field name for label in the index.
+    - Feldname für das Label im Index.
     - ``label``
   * - index.field.tag
-    - Field name for the user tags of the document in the index.
+    - Feldname für die Benutzer-Tags des Dokuments im Index.
     - ``tag``
   * - index.field.mimetype
-    - Field name for MIME type in the index.
+    - Feldname für den MIME-Typ im Index.
     - ``mimetype``
   * - index.field.parent_id
-    - Field name for parent ID in the index.
+    - Feldname für die übergeordnete ID im Index.
     - ``parent_id``
   * - index.field.important_content
-    - Field name for important content in the index.
+    - Feldname für den wichtigen Inhalt im Index.
     - ``important_content``
   * - index.field.content
-    - Field name for content in the index.
+    - Feldname für den Inhalt im Index.
     - ``content``
   * - index.field.content_minhash_bits
-    - Field name for content minhash bits in the index.
+    - Feldname für die Inhalts-Minhash-Bits im Index.
     - ``content_minhash_bits``
   * - index.field.cache
-    - Field name for cache in the index.
+    - Feldname für den Cache im Index.
     - ``cache``
   * - index.field.digest
-    - Field name for digest in the index.
+    - Feldname für den Digest im Index.
     - ``digest``
   * - index.field.title
-    - Field name for title in the index.
+    - Feldname für den Titel im Index.
     - ``title``
   * - index.field.host
-    - Field name for host in the index.
+    - Feldname für den Host im Index.
     - ``host``
   * - index.field.site
-    - Field name for site in the index.
+    - Feldname für die Site im Index.
     - ``site``
   * - index.field.content_length
-    - Field name for content length in the index.
+    - Feldname für die Inhaltslänge im Index.
     - ``content_length``
   * - index.field.filetype
-    - Field name for file type in the index.
+    - Feldname für den Dateityp im Index.
     - ``filetype``
   * - index.field.filename
-    - Field name for file name in the index.
+    - Feldname für den Dateinamen im Index.
     - ``filename``
   * - index.field.thumbnail
-    - Field name for thumbnail in the index.
+    - Feldname für das Thumbnail im Index.
     - ``thumbnail``
   * - index.field.virtual_host
-    - Field name for virtual host in the index.
+    - Feldname für den virtuellen Host im Index.
     - ``virtual_host``
   * - response.field.content_title
-    - Field name for content title in the response.
+    - Feldname für den Inhaltstitel in der Antwort.
     - ``content_title``
   * - response.field.content_description
-    - Field name for content description in the response.
+    - Feldname für die Inhaltsbeschreibung in der Antwort.
     - ``content_description``
   * - response.field.url_link
-    - Field name for URL link in the response.
+    - Feldname für den URL-Link in der Antwort.
     - ``url_link``
   * - response.field.site_path
-    - Field name for site path in the response.
+    - Feldname für den Site-Pfad in der Antwort.
     - ``site_path``
   * - response.max.title.length
-    - Maximum length of content title in the response.
+    - Maximale Länge des Inhaltstitels in der Antwort.
     - ``50``
   * - response.max.site.path.length
-    - Maximum length of site path in the response.
+    - Maximale Länge des Site-Pfads in der Antwort.
     - ``100``
   * - response.highlight.content_title.enabled
-    - Whether to enable content title highlighting in the response.
+    - Gibt an, ob die Hervorhebung des Inhaltstitels in der Antwort aktiviert werden soll.
     - ``true``
   * - response.inline.mimetypes
-    - Inline MIME types for the response.
+    - Inline-MIME-Typen für die Antwort.
     - ``application/pdf,text/plain``
   * - response.headers
-    - HTTP headers for the response. Access-Control-\* and Timing-Allow-Origin are ignored (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary here.
+    - HTTP-Header für die Antwort. Access-Control-\* und Timing-Allow-Origin werden ignoriert (CORS wird über api.cors.\* / CorsFilter gesteuert). Setzen Sie Vary hier nicht.
     - | ``text/html=X-XSS-Protection: 1; mode=block``
       | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
-.. list-table:: Document Index
+.. list-table:: Dokumentindex
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.document.search.index
-    - Index name for search documents.
+    - Indexname für Suchdokumente.
     - ``fess.search``
   * - index.document.update.index
-    - Index name for update documents.
+    - Indexname für Aktualisierungsdokumente.
     - ``fess.update``
   * - index.document.suggest.index
-    - Index name for suggest documents.
+    - Indexname für Vorschlagsdokumente.
     - ``fess``
   * - index.document.crawler.index
-    - Index name for crawler documents.
+    - Indexname für Crawler-Dokumente.
     - ``fess_crawler``
   * - index.document.crawler.queue.number_of_shards
-    - Number of primary shards for crawler queue index.
+    - Anzahl der Primär-Shards für den Crawler-Warteschlangen-Index.
     - ``10``
   * - index.document.crawler.data.number_of_shards
-    - Number of primary shards for crawler data index.
+    - Anzahl der Primär-Shards für den Crawler-Daten-Index.
     - ``10``
   * - index.document.crawler.filter.number_of_shards
-    - Number of primary shards for crawler filter index.
+    - Anzahl der Primär-Shards für den Crawler-Filter-Index.
     - ``10``
   * - index.document.crawler.queue.number_of_replicas
-    - Number of replicas for crawler queue index.
+    - Anzahl der Replikate für den Crawler-Warteschlangen-Index.
     - ``1``
   * - index.document.crawler.data.number_of_replicas
-    - Number of replicas for crawler data index.
+    - Anzahl der Replikate für den Crawler-Daten-Index.
     - ``1``
   * - index.document.crawler.filter.number_of_replicas
-    - Number of replicas for crawler filter index.
+    - Anzahl der Replikate für den Crawler-Filter-Index.
     - ``1``
   * - index.config.index
-    - Index name for configuration data.
+    - Indexname für Konfigurationsdaten.
     - ``fess_config``
   * - index.user.index
-    - Index name for user data.
+    - Indexname für Benutzerdaten.
     - ``fess_user``
   * - index.log.index
-    - Index name for log data.
+    - Indexname für Protokolldaten.
     - ``fess_log``
   * - index.dictionary.prefix
-    - Prefix for dictionary index names.
+    - Präfix für Wörterbuch-Indexnamen.
     - (empty)
 
-.. list-table:: Document Management
+.. list-table:: Dokumentenverwaltung
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.admin.array.fields
-    - Array-type fields for admin in the index.
+    - Felder vom Typ Array für die Administration im Index.
     - ``lang,role,label,anchor,virtual_host``
   * - index.admin.date.fields
-    - Date-type fields for admin in the index.
+    - Felder vom Typ Datum für die Administration im Index.
     - ``expires,created,timestamp,last_modified``
   * - index.admin.integer.fields
-    - Integer-type fields for admin in the index.
+    - Felder vom Typ Integer für die Administration im Index.
     - (empty)
   * - index.admin.long.fields
-    - Long-type fields for admin in the index.
+    - Felder vom Typ Long für die Administration im Index.
     - ``content_length,favorite_count,click_count``
   * - index.admin.float.fields
-    - Float-type fields for admin in the index.
+    - Felder vom Typ Float für die Administration im Index.
     - ``boost``
   * - index.admin.double.fields
-    - Double-type fields for admin in the index.
+    - Felder vom Typ Double für die Administration im Index.
     - (empty)
   * - index.admin.required.fields
-    - Required fields for admin in the index.
+    - Pflichtfelder für die Administration im Index.
     - ``url,title,role,boost``
 
 .. list-table:: Timeouts
@@ -952,35 +952,35 @@ Index
     - Description
     - Default
   * - index.search.timeout
-    - Timeout for index search operations.
+    - Timeout für Index-Suchvorgänge.
     - ``3m``
   * - index.scroll.search.timeout
-    - Timeout for scroll search operations.
+    - Timeout für Scroll-Suchvorgänge.
     - ``3m``
   * - index.index.timeout
-    - Timeout for index operations.
+    - Timeout für Index-Vorgänge.
     - ``3m``
   * - index.bulk.timeout
-    - Timeout for bulk index operations.
+    - Timeout für Bulk-Index-Vorgänge.
     - ``3m``
   * - index.delete.timeout
-    - Timeout for delete operations in the index.
+    - Timeout für Löschvorgänge im Index.
     - ``3m``
   * - index.health.timeout
-    - Timeout for index health checks.
+    - Timeout für Index-Integritätsprüfungen.
     - ``10m``
   * - index.indices.timeout
-    - Timeout for index indices operations.
+    - Timeout für Index-Indices-Vorgänge.
     - ``1m``
 
-.. list-table:: File Types
+.. list-table:: Dateitypen
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.filetype
-    - Mapping of MIME types to filetype labels for indexing.
+    - Zuordnung von MIME-Typen zu Dateityp-Labels für die Indexierung.
     - | ``text/html=html``
       | ``application/msword=word``
       | ``application/vnd.openxmlformats-officedocument.wordprocessingml.document=word``
@@ -1033,200 +1033,200 @@ Index
       | ``image/tiff=tiff``
       | ``image/jpeg=jpg``
   * - index.reindex.size
-    - Number of documents to process per reindex operation.
+    - Anzahl der Dokumente, die pro Neuindizierungsvorgang verarbeitet werden.
     - ``100``
   * - index.reindex.body
-    - Request body template for reindex operations.
+    - Request-Body-Vorlage für Neuindizierungsvorgänge.
     - ``{"source":{"index":"__SOURCE_INDEX__","size":__SIZE__},"dest":{"index":"__DEST_INDEX__"},"script":{"source":"__SCRIPT_SOURCE__"}}``
   * - index.reindex.requests_per_second
-    - Requests per second for reindex operations ("adaptive" for auto).
+    - Anfragen pro Sekunde für Neuindizierungsvorgänge ("adaptive" für automatisch).
     - ``adaptive``
   * - index.reindex.refresh
-    - Whether to refresh the index after reindexing.
+    - Gibt an, ob der Index nach der Neuindizierung aktualisiert werden soll.
     - ``false``
   * - index.reindex.timeout
-    - Timeout for reindex operations.
+    - Timeout für Neuindizierungsvorgänge.
     - ``1m``
   * - index.reindex.scroll
-    - Scroll timeout for reindex operations.
+    - Scroll-Timeout für Neuindizierungsvorgänge.
     - ``5m``
   * - index.reindex.max_docs
-    - Maximum number of documents for reindex operations.
+    - Maximale Anzahl von Dokumenten für Neuindizierungsvorgänge.
     - (empty)
 
-.. list-table:: Query
+.. list-table:: Abfrage
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - query.max.length
-    - Maximum length of search queries.
+    - Maximale Länge von Suchanfragen.
     - ``1000``
   * - query.timeout
-    - Timeout (ms) for search queries.
+    - Timeout (ms) für Suchanfragen.
     - ``10000``
   * - query.timeout.logging
-    - Whether to log searches whose results are incomplete because the query timed out or a shard failed.
+    - Gibt an, ob Suchen protokolliert werden sollen, deren Ergebnisse unvollständig sind, weil für die Abfrage ein Timeout eingetreten ist oder ein Shard ausgefallen ist.
     - ``true``
   * - query.track.total.hits
-    - Maximum number of total hits to track in queries. Only a positive number or true is supported: false leaves the response without a hit count, and a search that asks for it, here or as a search parameter, is refused.
+    - Maximale Anzahl von Gesamttreffern, die in Abfragen verfolgt werden. Unterstützt werden nur eine positive Zahl oder true: false lässt die Antwort ohne Trefferanzahl, und eine Suche, die dies anfordert, hier oder als Suchparameter, wird abgelehnt.
     - ``10000``
   * - query.geo.fields
-    - Fields used for geo search queries.
+    - Felder, die für Geosuch-Abfragen verwendet werden.
     - ``location``
   * - query.browser.lang.parameter.name
-    - Parameter name for browser language in queries.
+    - Parametername für die Browsersprache in Abfragen.
     - ``browser_lang``
   * - query.replace.term.with.prefix.query
-    - Whether to replace term with prefix query.
+    - Gibt an, ob ein Begriff durch eine Präfix-Abfrage ersetzt werden soll.
     - ``true``
   * - query.orsearch.min.hit.count
-    - Minimum hit count for OR search queries.
+    - Minimale Trefferanzahl für OR-Suchabfragen.
     - ``-1``
   * - query.highlight.terminal.chars
-    - Unicode terminal characters for query highlighting.
+    - Unicode-Abschlusszeichen für die Such-Hervorhebung.
     - ``u0021u002Cu002Eu003Fu0589u061Fu06D4u0700u0701u0702u0964u104Au104Bu1362u1367u1368u166Eu1803u1809u203Cu203Du2047u2048u2049u3002uFE52uFE57uFF01uFF0EuFF1FuFF61``
   * - query.highlight.fragment.size
-    - Fragment size for query highlighting.
+    - Fragmentgröße für die Such-Hervorhebung.
     - ``60``
   * - query.highlight.number.of.fragments
-    - Number of fragments for query highlighting.
+    - Anzahl der Fragmente für die Such-Hervorhebung.
     - ``2``
   * - query.highlight.type
-    - Type of query highlighting.
+    - Typ der Such-Hervorhebung.
     - ``fvh``
   * - query.highlight.tag.pre
-    - Tag to use before highlighted text.
+    - Tag, das vor hervorgehobenem Text verwendet wird.
     - ``<strong>``
   * - query.highlight.tag.post
-    - Tag to use after highlighted text.
+    - Tag, das nach hervorgehobenem Text verwendet wird.
     - ``</strong>``
   * - query.highlight.boundary.chars
-    - Boundary characters for query highlighting.
+    - Begrenzungszeichen für die Such-Hervorhebung.
     - ``u0009u000Au0013u0020``
   * - query.highlight.boundary.max.scan
-    - Maximum scan for query highlight boundaries.
+    - Maximaler Scan für die Grenzen der Such-Hervorhebung.
     - ``20``
   * - query.highlight.boundary.scanner
-    - Scanner type for query highlight boundaries.
+    - Scanner-Typ für die Grenzen der Such-Hervorhebung.
     - ``chars``
   * - query.highlight.encoder
-    - Encoder type for query highlighting.
+    - Encoder-Typ für die Such-Hervorhebung.
     - ``default``
   * - query.highlight.force.source
-    - Whether to force source for query highlighting.
+    - Gibt an, ob die Quelle für die Such-Hervorhebung erzwungen werden soll.
     - ``false``
   * - query.highlight.fragmenter
-    - Fragmenter type for query highlighting.
+    - Fragmenter-Typ für die Such-Hervorhebung.
     - ``span``
   * - query.highlight.fragment.offset
-    - Offset for query highlight fragments.
+    - Offset für Fragmente der Such-Hervorhebung.
     - ``-1``
   * - query.highlight.no.match.size
-    - Size for no-match query highlight.
+    - Größe für die Such-Hervorhebung ohne Treffer.
     - ``0``
   * - query.highlight.order
-    - Order for query highlight fragments.
+    - Reihenfolge für Fragmente der Such-Hervorhebung.
     - ``score``
   * - query.highlight.phrase.limit
-    - Phrase limit for query highlighting.
+    - Phrasenlimit für die Such-Hervorhebung.
     - ``256``
   * - query.highlight.content.description.fields
-    - Fields for content description in query highlighting.
+    - Felder für die Inhaltsbeschreibung in der Such-Hervorhebung.
     - ``hl_content,digest``
   * - query.highlight.boundary.position.detect
-    - Whether to detect boundary position in query highlighting.
+    - Gibt an, ob die Grenzposition in der Such-Hervorhebung erkannt werden soll.
     - ``true``
   * - query.highlight.text.fragment.type
-    - Type for text fragment in query highlighting.
+    - Typ für das Textfragment in der Such-Hervorhebung.
     - ``query``
   * - query.highlight.text.fragment.size
-    - Size for text fragment in query highlighting.
+    - Größe für das Textfragment in der Such-Hervorhebung.
     - ``3``
   * - query.highlight.text.fragment.prefix.length
-    - Prefix length for text fragment in query highlighting.
+    - Präfixlänge für das Textfragment in der Such-Hervorhebung.
     - ``5``
   * - query.highlight.text.fragment.suffix.length
-    - Suffix length for text fragment in query highlighting.
+    - Suffixlänge für das Textfragment in der Such-Hervorhebung.
     - ``5``
   * - query.max.search.result.offset
-    - Maximum search result offset for queries.
+    - Maximaler Offset der Suchergebnisse für Abfragen.
     - ``100000``
   * - query.additional.default.fields
-    - Additional default fields for queries.
+    - Zusätzliche Standardfelder für Abfragen.
     - (empty)
   * - query.additional.response.fields
-    - Additional fields fetched from the index for search results. The search API returns a field added here only if it is also listed in query.additional.api.response.fields.
+    - Zusätzliche Felder, die für Suchergebnisse aus dem Index abgerufen werden. Die Such-API gibt ein hier hinzugefügtes Feld nur zurück, wenn es auch in query.additional.api.response.fields aufgeführt ist.
     - (empty)
   * - query.additional.api.response.fields
-    - Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only); it does not fetch them. A field must also be fetched: add it to query.additional.response.fields for the search API, or to query.additional.scroll.response.fields for the scroll API. Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response.
+    - Zusätzliche API-Antwortfelder für Abfragen. Dieser Schlüssel hängt Felder nur an die Zulassungsliste der v2-API-Antwort an (nur Hinzufügen); er ruft sie nicht ab. Ein Feld muss zusätzlich abgerufen werden: Fügen Sie es für die Such-API zu query.additional.response.fields oder für die Scroll-API zu query.additional.scroll.response.fields hinzu. Fügen Sie keine ACL- oder internen Felder hinzu (zum Beispiel role, virtual_host); ihr Hinzufügen würde Zugriffskontrollinformationen in der Antwort der Such-API offenlegen.
     - (empty)
   * - query.additional.scroll.response.fields
-    - Additional fields fetched from the index for scroll search results. The scroll API returns a field added here only if it is also listed in query.additional.api.response.fields.
+    - Zusätzliche Felder, die für Scroll-Suchergebnisse aus dem Index abgerufen werden. Die Scroll-API gibt ein hier hinzugefügtes Feld nur zurück, wenn es auch in query.additional.api.response.fields aufgeführt ist.
     - (empty)
   * - query.additional.cache.response.fields
-    - Additional cache response fields for queries.
+    - Zusätzliche Cache-Antwortfelder für Abfragen.
     - (empty)
   * - query.additional.highlighted.fields
-    - Additional highlighted fields for queries.
+    - Zusätzliche hervorgehobene Felder für Abfragen.
     - (empty)
   * - query.additional.search.fields
-    - Additional search fields for queries.
+    - Zusätzliche Suchfelder für Abfragen.
     - (empty)
   * - query.additional.facet.fields
-    - Additional facet fields for queries.
+    - Zusätzliche Facettenfelder für Abfragen.
     - (empty)
   * - query.additional.sort.fields
-    - Additional sort fields for queries.
+    - Zusätzliche Sortierfelder für Abfragen.
     - (empty)
   * - query.additional.analyzed.fields
-    - Additional analyzed fields for queries.
+    - Zusätzliche analysierte Felder für Abfragen.
     - (empty)
   * - query.additional.not.analyzed.fields
-    - Additional not-analyzed fields for queries.
+    - Zusätzliche nicht analysierte Felder für Abfragen.
     - (empty)
   * - query.gsa.response.fields
-    - Fields for GSA response in queries.
+    - Felder für die GSA-Antwort in Abfragen.
     - ``UE,U,T,RK,S,LANG``
   * - query.gsa.default.lang
-    - Default language for GSA queries.
+    - Standardsprache für GSA-Abfragen.
     - ``en``
   * - query.gsa.default.sort
-    - Default sort for GSA queries.
+    - Standardsortierung für GSA-Abfragen.
     - (empty)
   * - query.gsa.meta.prefix
-    - Meta prefix for GSA queries.
+    - Meta-Präfix für GSA-Abfragen.
     - ``MT_``
   * - query.gsa.index.field.charset
-    - Charset field for GSA index queries.
+    - Zeichensatzfeld für GSA-Indexabfragen.
     - ``charset``
   * - query.gsa.index.field.content_type.
-    - Content type field for GSA index queries.
+    - Content-Type-Feld für GSA-Indexabfragen.
     - ``content_type``
   * - query.collapse.max.concurrent.group.results
-    - Maximum concurrent group results for collapse queries.
+    - Maximale Anzahl gleichzeitiger Gruppenergebnisse für Collapse-Abfragen.
     - ``4``
   * - query.collapse.inner.hits.name
-    - Inner hits name for collapse queries.
+    - Inner-Hits-Name für Collapse-Abfragen.
     - ``similar_docs``
   * - query.collapse.inner.hits.size
-    - Inner hits size for collapse queries.
+    - Inner-Hits-Größe für Collapse-Abfragen.
     - ``0``
   * - query.collapse.inner.hits.sorts
-    - Sorts for inner hits in collapse queries.
+    - Sortierungen für Inner Hits in Collapse-Abfragen.
     - (empty)
   * - query.default.languages
-    - Default languages for queries.
+    - Standardsprachen für Abfragen.
     - (empty)
   * - query.json.default.preference
-    - Default preference for JSON queries.
+    - Standardpräferenz für JSON-Abfragen.
     - ``_query``
   * - query.gsa.default.preference
-    - Default preference for GSA queries.
+    - Standardpräferenz für GSA-Abfragen.
     - ``_query``
   * - query.language.mapping
-    - Language mapping for queries.
+    - Sprachzuordnung für Abfragen.
     - | ``ar=ar``
       | ``bg=bg``
       | ``bn=bn``
@@ -1294,110 +1294,110 @@ Index
     - Description
     - Default
   * - query.boost.title
-    - Boost value for title field in queries.
+    - Boost-Wert für das Titelfeld in Abfragen.
     - ``0.5``
   * - query.boost.title.lang
-    - Boost value for title field with language in queries.
+    - Boost-Wert für das Titelfeld mit Sprache in Abfragen.
     - ``1.0``
   * - query.boost.content
-    - Boost value for content field in queries.
+    - Boost-Wert für das Inhaltsfeld in Abfragen.
     - ``0.05``
   * - query.boost.content.lang
-    - Boost value for content field with language in queries.
+    - Boost-Wert für das Inhaltsfeld mit Sprache in Abfragen.
     - ``0.1``
   * - query.boost.important_content
-    - Boost value for important content field in queries.
+    - Boost-Wert für das Feld für wichtigen Inhalt in Abfragen.
     - ``-1.0``
   * - query.boost.important_content.lang
-    - Boost value for important content field with language in queries.
+    - Boost-Wert für das Feld für wichtigen Inhalt mit Sprache in Abfragen.
     - ``-1.0``
   * - query.boost.fuzzy.min.length
-    - Minimum length for fuzzy boosting in queries.
+    - Mindestlänge für das Fuzzy-Boosting in Abfragen.
     - ``4``
   * - query.boost.fuzzy.title
-    - Boost value for fuzzy title queries.
+    - Boost-Wert für Fuzzy-Titelabfragen.
     - ``0.01``
   * - query.boost.fuzzy.title.fuzziness
-    - Fuzziness for fuzzy title queries.
+    - Fuzziness für Fuzzy-Titelabfragen.
     - ``AUTO``
   * - query.boost.fuzzy.title.expansions
-    - Number of expansions for fuzzy title queries.
+    - Anzahl der Expansionen für Fuzzy-Titelabfragen.
     - ``10``
   * - query.boost.fuzzy.title.prefix_length
-    - Prefix length for fuzzy title queries.
+    - Präfixlänge für Fuzzy-Titelabfragen.
     - ``0``
   * - query.boost.fuzzy.title.transpositions
-    - Whether to allow transpositions in fuzzy title queries.
+    - Gibt an, ob Transpositionen in Fuzzy-Titelabfragen zugelassen werden sollen.
     - ``true``
   * - query.boost.fuzzy.content
-    - Boost value for fuzzy content queries.
+    - Boost-Wert für Fuzzy-Inhaltsabfragen.
     - ``0.005``
   * - query.boost.fuzzy.content.fuzziness
-    - Fuzziness for fuzzy content queries.
+    - Fuzziness für Fuzzy-Inhaltsabfragen.
     - ``AUTO``
   * - query.boost.fuzzy.content.expansions
-    - Number of expansions for fuzzy content queries.
+    - Anzahl der Expansionen für Fuzzy-Inhaltsabfragen.
     - ``10``
   * - query.boost.fuzzy.content.prefix_length
-    - Prefix length for fuzzy content queries.
+    - Präfixlänge für Fuzzy-Inhaltsabfragen.
     - ``0``
   * - query.boost.fuzzy.content.transpositions
-    - Whether to allow transpositions in fuzzy content queries.
+    - Gibt an, ob Transpositionen in Fuzzy-Inhaltsabfragen zugelassen werden sollen.
     - ``true``
   * - query.default.query_type
-    - Default query type.
+    - Standard-Abfragetyp.
     - ``bool``
   * - query.dismax.tie_breaker
-    - Tie breaker value for dismax queries.
+    - Tie-Breaker-Wert für Dismax-Abfragen.
     - ``0.1``
   * - query.bool.minimum_should_match
-    - Minimum should match value for boolean queries.
+    - Minimum-should-match-Wert für boolesche Abfragen.
     - (empty)
   * - query.prefix.expansions
-    - Number of expansions for prefix queries.
+    - Anzahl der Expansionen für Präfix-Abfragen.
     - ``50``
   * - query.prefix.slop
-    - Slop value for prefix queries.
+    - Slop-Wert für Präfix-Abfragen.
     - ``0``
   * - query.fuzzy.prefix_length
-    - Prefix length for fuzzy queries.
+    - Präfixlänge für Fuzzy-Abfragen.
     - ``0``
   * - query.fuzzy.expansions
-    - Number of expansions for fuzzy queries.
+    - Anzahl der Expansionen für Fuzzy-Abfragen.
     - ``50``
   * - query.fuzzy.transpositions
-    - Whether to allow transpositions in fuzzy queries.
+    - Gibt an, ob Transpositionen in Fuzzy-Abfragen zugelassen werden sollen.
     - ``true``
 
-.. list-table:: Facet
+.. list-table:: Facette
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - query.facet.fields
-    - Fields for facet queries.
+    - Felder für Facettenabfragen.
     - ``label``
   * - query.facet.fields.size
-    - Size of facet fields.
+    - Größe der Facettenfelder.
     - ``100``
   * - query.facet.fields.size.max
-    - Upper clamp for facet.size (applied at the search chokepoint).
+    - Obere Begrenzung für facet.size (wird am zentralen Durchlaufpunkt der Suche angewendet).
     - ``1000``
   * - query.facet.fields.min_doc_count
-    - Minimum document count for facet fields.
+    - Mindestanzahl von Dokumenten für Facettenfelder.
     - ``1``
   * - query.facet.fields.min_doc_count.max
-    - Upper clamp for facet.minDocCount (applied at the search chokepoint).
+    - Obere Begrenzung für facet.minDocCount (wird am zentralen Durchlaufpunkt der Suche angewendet).
     - ``2147483647``
   * - query.facet.fields.sort
-    - Sort order for facet fields.
+    - Sortierreihenfolge für Facettenfelder.
     - ``count.desc``
   * - query.facet.fields.missing
-    - Value for missing facet fields.
+    - Wert für fehlende Facettenfelder.
     - (empty)
   * - query.facet.queries
-    - Facet queries definition.
+    - Definition der Facettenabfragen.
     - | ``labels.facet_timestamp_title:labels.facet_timestamp_1day=timestamp:[now/d-1d TO *]	labels.facet_timestamp_1week=timestamp:[now/d-7d TO *]	labels.facet_timestamp_1month=timestamp:[now/d-1M TO *]	labels.facet_timestamp_1year=timestamp:[now/d-1y TO *]``
       | ``labels.facet_contentLength_title:labels.facet_contentLength_10k=content_length:[0 TO 9999]	labels.facet_contentLength_10kto100k=content_length:[10000 TO 99999]	labels.facet_contentLength_100kto500k=content_length:[100000 TO 499999]	labels.facet_contentLength_500kto1m=content_length:[500000 TO 999999]	labels.facet_contentLength_1m=content_length:[1000000 TO *]``
       | ``labels.facet_filetype_title:labels.facet_filetype_html=filetype:html	labels.facet_filetype_word=filetype:word	labels.facet_filetype_excel=filetype:excel	labels.facet_filetype_powerpoint=filetype:powerpoint	labels.facet_filetype_odt=filetype:odt	labels.facet_filetype_ods=filetype:ods	labels.facet_filetype_odp=filetype:odp	labels.facet_filetype_pdf=filetype:pdf	labels.facet_filetype_txt=filetype:txt	labels.facet_filetype_others=filetype:others``
@@ -1409,34 +1409,34 @@ Index
     - Description
     - Default
   * - rank.fusion.window_size
-    - Window size for rank fusion.
+    - Fenstergröße für Rank Fusion.
     - ``200``
   * - rank.fusion.rank_constant
-    - Rank constant for rank fusion.
+    - Rang-Konstante für Rank Fusion.
     - ``20``
   * - rank.fusion.threads
-    - Number of threads for rank fusion.
+    - Anzahl der Threads für Rank Fusion.
     - ``-1``
   * - rank.fusion.timeout
-    - Maximum time (milliseconds) to wait for the searchers other than the main one when Fess fuses their results itself (rank.fusion.engine.enabled=false). A searcher that has not answered by then is left out of that search, and the results are flagged as partial and timed out. The main searcher is always waited for. 0 or less waits without a limit.
+    - Maximale Zeit (Millisekunden), die auf die Searcher außer dem Haupt-Searcher gewartet wird, wenn Fess deren Ergebnisse selbst fusioniert (rank.fusion.engine.enabled=false). Ein Searcher, der bis dahin nicht geantwortet hat, wird aus dieser Suche ausgelassen, und die Ergebnisse werden als partiell und mit Timeout gekennzeichnet. Auf den Haupt-Searcher wird immer gewartet. 0 oder weniger wartet ohne Limit.
     - ``10000``
   * - rank.fusion.score_field
-    - Score field for rank fusion.
+    - Score-Feld für Rank Fusion.
     - ``rf_score``
   * - rank.fusion.engine.enabled
-    - Whether the search engine performs rank fusion. When true, the searchers that can take part contribute their queries to a single request, so facets and total hits describe the fused result set. When false, Fess fuses the searchers' results itself.
+    - Gibt an, ob die Suchmaschine Rank Fusion durchführt. Bei true steuern die Searcher, die teilnehmen können, ihre Abfragen zu einer einzigen Anfrage bei, sodass Facetten und Gesamttreffer die fusionierte Ergebnismenge beschreiben. Bei false fusioniert Fess die Ergebnisse der Searcher selbst.
     - ``false``
   * - rank.fusion.combination.technique
-    - How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean.
+    - Wie die Suchmaschine die fusionierten Scores kombiniert: rrf, arithmetic_mean, geometric_mean oder harmonic_mean.
     - ``rrf``
   * - rank.fusion.normalization.technique
-    - How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf. z_score can only be combined with arithmetic_mean; any other mean is refused and Fess fuses the results itself.
+    - Wie Scores vor ihrer Kombination normalisiert werden: min_max, l2 oder z_score. Wird von rrf ignoriert. z_score kann nur mit arithmetic_mean kombiniert werden; jeder andere Mittelwert wird abgelehnt, und Fess fusioniert die Ergebnisse selbst.
     - ``min_max``
   * - rank.fusion.combination.weights
-    - Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally.
+    - Gewicht pro Searcher für die Fusion auf Suchmaschinenseite als name:weight-Paare, z. B. default:0.7,semantic_chunk:0.3. Die Gewichte müssen in der Summe 1.0 ergeben und jeden teilnehmenden Searcher benennen. Leer gewichtet sie gleich.
     - (empty)
   * - rank.fusion.pagination_depth
-    - How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks: a fused search pages through this many results, and never more than indexer.max.result.window.size.
+    - Wie viele Ergebnisse jeder Searcher pro Shard zur Fusion auf Suchmaschinenseite beisteuert. Dies begrenzt sowohl, wie tief ein Client blättern kann, als auch die Menge der Dokumente, die die Suchmaschine in ein Ranking bringt: Eine fusionierte Suche blättert durch so viele Ergebnisse, jedoch nie durch mehr als indexer.max.result.window.size.
     - ``1000``
 
 .. list-table:: ACL
@@ -1446,87 +1446,87 @@ Index
     - Description
     - Default
   * - smb.role.from.file
-    - Whether to get SMB roles from a file.
+    - Gibt an, ob SMB-Rollen aus einer Datei bezogen werden sollen.
     - ``true``
   * - smb.available.sid.types
-    - Available SID types for SMB.
+    - Verfügbare SID-Typen für SMB.
     - ``1,2,4:2,5:1``
   * - file.role.from.file
-    - Whether to get file roles from a file.
+    - Gibt an, ob Datei-Rollen aus einer Datei bezogen werden sollen.
     - ``true``
   * - ftp.role.from.file
-    - Whether to get FTP roles from a file.
+    - Gibt an, ob FTP-Rollen aus einer Datei bezogen werden sollen.
     - ``true``
 
-.. list-table:: Backup
+.. list-table:: Sicherung
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - index.backup.targets
-    - Target files for index backup.
+    - Zieldateien für die Index-Sicherung.
     - ``fess_basic_config.bulk,fess_config.bulk,fess_user.bulk,system.properties,fess.json,doc.json``
   * - index.backup.log.targets
-    - Target log files for index backup.
+    - Ziel-Protokolldateien für die Index-Sicherung.
     - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
   * - index.backup.log.load.timeout
-    - Timeout for loading index backup logs.
+    - Timeout für das Laden von Index-Sicherungsprotokollen.
     - ``60000``
 
-.. list-table:: Logging
+.. list-table:: Protokollierung
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - logging.app.packages
-    - Application packages for logging.
+    - Anwendungspakete für die Protokollierung.
     - ``org.codelibs,org.dbflute,org.lastaflute``
   * - logging.search.docs.enabled
-    - Whether to enable search docs logging.
+    - Gibt an, ob die Protokollierung von Suchdokumenten aktiviert werden soll.
     - ``true``
   * - logging.search.docs.fields
-    - Fields to log for search docs.
+    - Felder, die für Suchdokumente protokolliert werden.
     - ``filetype,created,click_count,title,doc_id,url,score,site,filename,host,digest,boost,mimetype,favorite_count,_id,lang,last_modified,content_length,timestamp``
   * - logging.search.use.logfile
-    - Whether to use a log file for search logging.
+    - Gibt an, ob für die Suchprotokollierung eine Protokolldatei verwendet werden soll.
     - ``true``
   * - logging.search.max.queue.size
-    - Maximum queue size for search logging.
+    - Maximale Warteschlangengröße für die Suchprotokollierung.
     - ``10000``
   * - logging.click.max.queue.size
-    - Maximum queue size for click logging.
+    - Maximale Warteschlangengröße für die Klickprotokollierung.
     - ``10000``
   * - logging.chat.max.queue.size
-    - Maximum queue size for chat usage logging.
+    - Maximale Warteschlangengröße für die Chat-Nutzungsprotokollierung.
     - ``10000``
   * - search.history.enabled
-    - Whether to record the search conditions of logged-in users for the search history.
+    - Gibt an, ob die Suchbedingungen angemeldeter Benutzer für den Suchverlauf aufgezeichnet werden sollen.
     - ``true``
   * - search.history.size
-    - Maximum number of search history entries returned per user.
+    - Maximale Anzahl von Suchverlaufseinträgen, die pro Benutzer zurückgegeben werden.
     - ``10``
   * - user.tag.enabled
-    - Whether logged-in users can tag documents. Each tag belongs to the user who created it.
+    - Gibt an, ob angemeldete Benutzer Dokumente taggen können. Jedes Tag gehört dem Benutzer, der es erstellt hat.
     - ``false``
   * - user.tag.name.max.length
-    - Maximum length of a tag name, in code points.
+    - Maximale Länge eines Tag-Namens in Codepoints.
     - ``50``
   * - user.tag.max.tags
-    - Maximum number of tags one user can own.
+    - Maximale Anzahl von Tags, die ein Benutzer besitzen kann.
     - ``1000``
   * - user.tag.max.paths
-    - Maximum number of URLs one tag can be put on.
+    - Maximale Anzahl von URLs, an denen ein Tag angebracht werden kann.
     - ``10000``
   * - user.tag.queue.max.size
-    - Maximum number of pending tag changes held in memory until they are applied to the documents.
+    - Maximale Anzahl ausstehender Tag-Änderungen, die im Speicher gehalten werden, bis sie auf die Dokumente angewendet werden.
     - ``10000``
   * - user.tag.process.batch.size
-    - Number of URLs updated per bulk request when tag changes are applied to the documents.
+    - Anzahl der pro Bulk-Anfrage aktualisierten URLs, wenn Tag-Änderungen auf die Dokumente angewendet werden.
     - ``100``
   * - user.tag.visible.max.size
-    - Maximum number of tags visible to one user in a search.
+    - Maximale Anzahl von Tags, die für einen Benutzer in einer Suche sichtbar sind.
     - ``1000``
 
 Web
@@ -1539,936 +1539,936 @@ Web
     - Description
     - Default
   * - form.admin.max.input.size
-    - Maximum input size for admin forms.
+    - Maximale Eingabegröße für Admin-Formulare.
     - ``10000``
   * - form.admin.label.in.config.enabled
-    - Whether to enable label in admin config forms.
+    - Gibt an, ob Label in Admin-Konfigurationsformularen aktiviert werden soll.
     - ``false``
   * - form.admin.default.template.name
-    - Default template name for admin forms.
+    - Standard-Vorlagenname für Admin-Formulare.
     - ``__TEMPLATE__``
   * - osdd.link.enabled
-    - Whether to enable OSDD link (OpenSearch Description Document).
+    - Gibt an, ob der OSDD-Link (OpenSearch Description Document) aktiviert werden soll.
     - ``auto``
   * - clipboard.copy.icon.enabled
-    - Whether to enable the clipboard copy icon.
+    - Gibt an, ob das Symbol zum Kopieren in die Zwischenablage aktiviert werden soll.
     - ``true``
   * - authentication.admin.users
-    - Admin user names for authentication.
+    - Administrator-Benutzernamen für die Authentifizierung.
     - ``admin``
   * - authentication.admin.users.ignore.case
-    - Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set.
+    - Gibt an, ob authentication.admin.users ohne Beachtung der Groß-/Kleinschreibung abgeglichen wird: auto, true oder false. auto ignoriert die Groß-/Kleinschreibung, wenn ldap.provider.url gesetzt ist.
     - ``auto``
   * - authentication.admin.roles
-    - Admin role names for authentication.
+    - Administrator-Rollennamen für die Authentifizierung.
     - ``admin``
   * - role.search.default.permissions
-    - Default permissions for search roles.
+    - Standardberechtigungen für Suchrollen.
     - (empty)
   * - role.search.default.display.permissions
-    - Default display permissions for search roles.
+    - Standard-Anzeigeberechtigungen für Suchrollen.
     - ``{role}guest``
   * - role.search.guest.permissions
-    - Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles.
+    - Halten Sie role.search.guest.permissions nicht leer. Es initialisiert die Gastrolle, die den anonymen Suchrollensatz nicht leer hält; ist der aufgelöste Rollensatz leer, wird der Rollenfilter übersprungen (Fail-Open), was die rollenbasierte Zugriffskontrolle deaktivieren und Dokumente für anonyme Benutzer offenlegen kann. Gastberechtigungen für Suchrollen.
     - ``{role}guest``
   * - role.search.user.prefix
-    - Prefix for user roles in search.
+    - Präfix für Benutzerrollen in der Suche.
     - ``1``
   * - role.search.group.prefix
-    - Prefix for group roles in search.
+    - Präfix für Gruppenrollen in der Suche.
     - ``2``
   * - role.search.role.prefix
-    - Prefix for role roles in search.
+    - Präfix für Rollen-Rollen in der Suche.
     - ``R``
   * - role.search.denied.prefix
-    - Prefix for denied roles in search.
+    - Präfix für verweigerte Rollen in der Suche.
     - ``D``
   * - cookie.default.path
-    - The default path of cookie (basically '/' if no context path)
+    - Der Standardpfad des Cookies (grundsätzlich '/', wenn kein Kontextpfad vorhanden ist)
     - ``/``
   * - cookie.default.expire
-    - The default expire of cookie in seconds e.g. 31556926: one year, 86400: one day
+    - Die Standard-Ablaufzeit des Cookies in Sekunden z. B. 31556926: ein Jahr, 86400: ein Tag
     - ``3600``
   * - session.tracking.modes
-    - Session tracking modes
+    - Sitzungsverfolgungsmodi
     - ``cookie``
   * - session.cookie.secure
-    - Whether to add the Secure attribute to the session cookie (JSESSIONID) at startup. When blank (default), Tomcat's automatic behavior is used (Secure is added only for HTTPS requests). Set to true for production HTTPS deployments, especially when TLS is terminated at a reverse proxy. When true, the cookie is not sent over HTTP, so sessions will not be established for plain HTTP; keep it blank for localhost development. The Secure attribute is also required when SameSite=none is used. Changing this value requires a restart.
+    - Gibt an, ob dem Sitzungs-Cookie (JSESSIONID) beim Start das Attribut Secure hinzugefügt wird. Bei leerem Wert (Standard) wird das automatische Verhalten von Tomcat verwendet (Secure wird nur bei HTTPS-Anfragen hinzugefügt). Setzen Sie ihn für HTTPS-Produktivumgebungen auf true, insbesondere wenn TLS an einem Reverse Proxy terminiert wird. Bei true wird das Cookie nicht über HTTP gesendet, sodass für reines HTTP keine Sitzungen aufgebaut werden; lassen Sie ihn für die Localhost-Entwicklung leer. Das Attribut Secure ist auch erforderlich, wenn SameSite=none verwendet wird. Eine Änderung dieses Werts erfordert einen Neustart.
     - (empty)
   * - cookie.search.parameter.keys
-    - Comma-separated list of request parameter keys to store in cookies before SSO login.
+    - Kommagetrennte Liste von Anfrageparameter-Schlüsseln, die vor dem SSO-Login in Cookies gespeichert werden.
     - ``q,num,sort``
   * - cookie.search.parameter.required_keys
-    - Comma-separated list of required parameter keys that must be present to store in cookies.
+    - Kommagetrennte Liste erforderlicher Parameter-Schlüssel, die vorhanden sein müssen, um in Cookies gespeichert zu werden.
     - ``q``
   * - cookie.search.parameter.max.length
-    - Maximum length of the encoded search parameters stored in cookies.
+    - Maximale Länge der kodierten Suchparameter, die in Cookies gespeichert werden.
     - ``1000``
   * - cookie.search.parameter.max.decompressed.length
-    - Maximum size in bytes the stored search parameters may decompress to. The bound above applies to the gzipped cookie, which is no bound on what it expands to, and the cookie comes from the client.
+    - Maximale Größe in Bytes, auf die die gespeicherten Suchparameter dekomprimiert werden dürfen. Die obige Grenze gilt für das gzip-komprimierte Cookie, was keine Grenze für dessen entpackte Größe darstellt, und das Cookie stammt vom Client.
     - ``65536``
   * - cookie.search.parameter.max.restored.length
-    - Maximum length of the query string built when restoring the stored search parameters after login. Restoring them is a convenience and the login is not, so a longer one is dropped rather than written to a Location header the container would refuse. Percent-encoding multiplies a CJK query by nine, so this is far smaller than the query itself may be. Raise it together with tomcat.maxHttpHeaderSize in tomcat_config.properties, which bounds the response headers.
+    - Maximale Länge des Query-Strings, der beim Wiederherstellen der gespeicherten Suchparameter nach der Anmeldung aufgebaut wird. Das Wiederherstellen ist eine Komfortfunktion, die Anmeldung dagegen nicht, daher wird ein längerer Query-String verworfen, anstatt in einen Location-Header geschrieben zu werden, den der Container ablehnen würde. Die Prozentkodierung vervielfacht eine CJK-Abfrage um das Neunfache, sodass dieser Wert weit kleiner ist, als die Abfrage selbst sein darf. Erhöhen Sie ihn zusammen mit tomcat.maxHttpHeaderSize in tomcat_config.properties, was die Antwort-Header begrenzt.
     - ``4096``
   * - cookie.search.parameter.name
-    - Cookie name used to store encoded search parameters before SSO login.
+    - Cookie-Name, der zum Speichern kodierter Suchparameter vor dem SSO-Login verwendet wird.
     - ``fsrp``
   * - cookie.search.parameter.http_only
-    - Whether to set HttpOnly attribute to the search parameter cookie.
+    - Gibt an, ob das Attribut HttpOnly für das Suchparameter-Cookie gesetzt werden soll.
     - ``true``
   * - cookie.search.parameter.secure
-    - Whether to set Secure attribute to the search parameter cookie. Should be true in production environments using HTTPS.
+    - Gibt an, ob das Attribut Secure für das Suchparameter-Cookie gesetzt werden soll. Sollte in Produktionsumgebungen mit HTTPS true sein.
     - (empty)
   * - cookie.search.parameter.max_age
-    - Max-Age (in seconds) for the search parameter cookie. Use -1 for session-only cookies.
+    - Max-Age (in Sekunden) für das Suchparameter-Cookie. Verwenden Sie -1 für reine Sitzungs-Cookies.
     - ``60``
   * - cookie.search.parameter.domain
-    - Domain attribute for the search parameter cookie. Set to the domain scope you want the cookie to be available on (e.g., example.com).
+    - Domain-Attribut für das Suchparameter-Cookie. Legen Sie den Domain-Bereich fest, in dem das Cookie verfügbar sein soll (z. B. example.com).
     - (empty)
   * - cookie.search.parameter.path
-    - Path attribute for the search parameter cookie. Typically set to "/" or the context path of the app.
+    - Path-Attribut für das Suchparameter-Cookie. Wird typischerweise auf "/" oder den Kontextpfad der Anwendung gesetzt.
     - ``/``
   * - cookie.search.parameter.same_site
-    - SameSite attribute for the search parameter cookie. Valid values: Lax, Strict, None
+    - SameSite-Attribut für das Suchparameter-Cookie. Gültige Werte: Lax, Strict, None
     - ``Lax``
   * - paging.page.size
-    - The size of one page for paging
+    - Die Größe einer Seite für die Paginierung
     - ``25``
   * - paging.page.range.size
-    - The size of page range for paging
+    - Die Größe des Seitenbereichs für die Paginierung
     - ``5``
   * - paging.page.range.fill.limit
-    - The option 'fillLimit' of page range for paging
+    - Die Option 'fillLimit' des Seitenbereichs für die Paginierung
     - ``true``
 
-.. list-table:: Fetch Page Size
+.. list-table:: Abrufgröße pro Seite
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - page.docboost.max.fetch.size
-    - Maximum number of docboost records to fetch per page.
+    - Maximale Anzahl von docboost-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.keymatch.max.fetch.size
-    - Maximum number of keymatch records to fetch per page.
+    - Maximale Anzahl von keymatch-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.labeltype.max.fetch.size
-    - Maximum number of labeltype records to fetch per page.
+    - Maximale Anzahl von labeltype-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.tagtype.max.fetch.size
-    - Maximum number of tagtype records to fetch per page.
+    - Maximale Anzahl von tagtype-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.roletype.max.fetch.size
-    - Maximum number of roletype records to fetch per page.
+    - Maximale Anzahl von roletype-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.user.max.fetch.size
-    - Maximum number of user records to fetch per page.
+    - Maximale Anzahl von Benutzer-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.role.max.fetch.size
-    - Maximum number of role records to fetch per page.
+    - Maximale Anzahl von Rollen-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.group.max.fetch.size
-    - Maximum number of group records to fetch per page.
+    - Maximale Anzahl von Gruppen-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.crawling.info.param.max.fetch.size
-    - Maximum number of crawling info parameters to fetch per page.
+    - Maximale Anzahl von Crawl-Info-Parametern, die pro Seite abgerufen werden.
     - ``100``
   * - page.crawling.info.max.fetch.size
-    - Maximum number of crawling info records to fetch per page.
+    - Maximale Anzahl von Crawl-Info-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.data.config.max.fetch.size
-    - Maximum number of data config records to fetch per page.
+    - Maximale Anzahl von Datenkonfigurations-Datensätzen, die pro Seite abgerufen werden.
     - ``100``
   * - page.web.config.max.fetch.size
-    - Maximum number of web config records to fetch per page.
+    - Maximale Anzahl von Web-Konfigurations-Datensätzen, die pro Seite abgerufen werden.
     - ``100``
   * - page.file.config.max.fetch.size
-    - Maximum number of file config records to fetch per page.
+    - Maximale Anzahl von Dateikonfigurations-Datensätzen, die pro Seite abgerufen werden.
     - ``100``
   * - page.duplicate.host.max.fetch.size
-    - Maximum number of duplicate host records to fetch per page.
+    - Maximale Anzahl von Duplikat-Host-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.failure.url.max.fetch.size
-    - Maximum number of failure URL records to fetch per page.
+    - Maximale Anzahl von Fehler-URL-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.favorite.log.max.fetch.size
-    - Maximum number of favorite log records to fetch per page.
+    - Maximale Anzahl von Favoritenprotokoll-Datensätzen, die pro Seite abgerufen werden.
     - ``100``
   * - page.file.auth.max.fetch.size
-    - Maximum number of file auth records to fetch per page.
+    - Maximale Anzahl von Datei-Authentifizierungs-Datensätzen, die pro Seite abgerufen werden.
     - ``100``
   * - page.web.auth.max.fetch.size
-    - Maximum number of web auth records to fetch per page.
+    - Maximale Anzahl von Web-Authentifizierungs-Datensätzen, die pro Seite abgerufen werden.
     - ``100``
   * - page.path.mapping.max.fetch.size
-    - Maximum number of path mapping records to fetch per page.
+    - Maximale Anzahl von Pfad-Mapping-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.request.header.max.fetch.size
-    - Maximum number of request header records to fetch per page.
+    - Maximale Anzahl von Anfrage-Header-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.scheduled.job.max.fetch.size
-    - Maximum number of scheduled job records to fetch per page.
+    - Maximale Anzahl von Datensätzen geplanter Jobs, die pro Seite abgerufen werden.
     - ``100``
   * - page.elevate.word.max.fetch.size
-    - Maximum number of elevate word records to fetch per page.
+    - Maximale Anzahl von Datensätzen für zusätzliche Wörter, die pro Seite abgerufen werden.
     - ``1000``
   * - page.bad.word.max.fetch.size
-    - Maximum number of bad word records to fetch per page.
+    - Maximale Anzahl von Datensätzen für Ausschlusswörter, die pro Seite abgerufen werden.
     - ``1000``
   * - page.dictionary.max.fetch.size
-    - Maximum number of dictionary records to fetch per page.
+    - Maximale Anzahl von Wörterbuch-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.relatedcontent.max.fetch.size
-    - Maximum number of related content records to fetch per page.
+    - Maximale Anzahl von Datensätzen für verwandte Inhalte, die pro Seite abgerufen werden.
     - ``5000``
   * - page.relatedquery.max.fetch.size
-    - Maximum number of related query records to fetch per page.
+    - Maximale Anzahl von Datensätzen für verwandte Abfragen, die pro Seite abgerufen werden.
     - ``5000``
   * - page.thumbnail.queue.max.fetch.size
-    - Maximum number of thumbnail queue records to fetch per page.
+    - Maximale Anzahl von Thumbnail-Warteschlangen-Datensätzen, die pro Seite abgerufen werden.
     - ``100``
   * - page.thumbnail.purge.max.fetch.size
-    - Maximum number of thumbnail purge records to fetch per page.
+    - Maximale Anzahl von Thumbnail-Bereinigungs-Datensätzen, die pro Seite abgerufen werden.
     - ``100``
   * - page.score.booster.max.fetch.size
-    - Maximum number of score booster records to fetch per page.
+    - Maximale Anzahl von Score-Booster-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.searchlog.max.fetch.size
-    - Maximum number of search log records to fetch per page.
+    - Maximale Anzahl von Suchprotokoll-Datensätzen, die pro Seite abgerufen werden.
     - ``10000``
   * - page.searchlist.track.total.hits
-    - Whether to track total hits in search list page.
+    - Gibt an, ob die Gesamttreffer auf der Suchlistenseite verfolgt werden sollen.
     - ``true``
   * - page.searchlist.content.max.length
-    - Maximum content length (in characters) rendered on the search list edit page.
+    - Maximale Inhaltslänge (in Zeichen), die auf der Bearbeitungsseite der Suchliste dargestellt wird.
     - ``100000``
 
-.. list-table:: Search Page
+.. list-table:: Suchseite
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - paging.search.page.start
-    - Default start page for search results.
+    - Standard-Startseite für Suchergebnisse.
     - ``0``
   * - paging.search.page.size
-    - Default size of search results per page.
+    - Standardgröße der Suchergebnisse pro Seite.
     - ``10``
   * - paging.search.page.max.size
-    - Maximum size of search results per page.
+    - Maximale Größe der Suchergebnisse pro Seite.
     - ``100``
   * - api.param.max.length
-    - Maximum length of a v2 API string query parameter (q, sort, sdh). OWASP API4:2023.
+    - Maximale Länge eines String-Abfrageparameters der v2-API (q, sort, sdh). OWASP API4:2023.
     - ``1000``
   * - api.param.max.array.size
-    - Maximum number of values for a v2 API repeatable query parameter.
+    - Maximale Anzahl von Werten für einen wiederholbaren Abfrageparameter der v2-API.
     - ``100``
   * - api.click.max.timestamp
-    - Maximum click-log timestamp (rt, epoch ms) accepted by the v2 click API. OWASP API4:2023.
+    - Maximaler Klickprotokoll-Zeitstempel (rt, Epoch ms), der von der v2-Klick-API akzeptiert wird. OWASP API4:2023.
     - ``9999999999999``
   * - searchlog.agg.shard.size
     - searchlog
     - ``-1``
   * - searchlog.request.headers
-    - Request headers to include in search log.
+    - Anfrage-Header, die in das Suchprotokoll aufgenommen werden.
     - (empty)
   * - searchlog.process.batch_size
-    - Batch size for search log processing.
+    - Batchgröße für die Suchprotokollverarbeitung.
     - ``100``
   * - related_query.generate.days
-    - Number of days of search logs read when generating related queries from search logs.
+    - Anzahl der Tage an Suchprotokollen, die beim Generieren verwandter Abfragen aus Suchprotokollen gelesen werden.
     - ``30``
   * - related_query.generate.term.size
-    - Maximum number of terms generated per virtual host.
+    - Maximale Anzahl von Begriffen, die pro virtuellem Host generiert werden.
     - ``100``
   * - related_query.generate.query.size
-    - Maximum number of related queries generated per term.
+    - Maximale Anzahl verwandter Abfragen, die pro Begriff generiert werden.
     - ``5``
   * - related_query.generate.min.sessions
-    - Minimum number of distinct user sessions required for a term and for each of its related queries.
+    - Mindestanzahl unterschiedlicher Benutzersitzungen, die für einen Begriff und für jede seiner verwandten Abfragen erforderlich ist.
     - ``3``
   * - related_query.generate.session.interval
-    - Interval (minutes) after a search within which a follow-up search of the same session counts as a refinement.
+    - Intervall (Minuten) nach einer Suche, innerhalb dessen eine Folgesuche derselben Sitzung als Verfeinerung zählt.
     - ``10``
   * - related_query.generate.seed.log.size
-    - Maximum number of search logs of a term read to find the sessions that searched it.
+    - Maximale Anzahl von Suchprotokollen eines Begriffs, die gelesen werden, um die Sitzungen zu finden, die danach gesucht haben.
     - ``1000``
   * - related_query.generate.seed.session.size
-    - Maximum number of sessions per term whose follow-up searches are read.
+    - Maximale Anzahl von Sitzungen pro Begriff, deren Folgesuchen gelesen werden.
     - ``200``
   * - related_query.generate.log.fetch.size
-    - Maximum number of follow-up search logs read per term.
+    - Maximale Anzahl von Folgesuch-Protokollen, die pro Begriff gelesen werden.
     - ``2000``
   * - related_query.generate.query.min.length
-    - Minimum length (in characters) of a generated term or related query.
+    - Mindestlänge (in Zeichen) eines generierten Begriffs oder einer verwandten Abfrage.
     - ``2``
   * - related_query.generate.query.max.length
-    - Maximum length (in characters) of a generated term or related query.
+    - Maximale Länge (in Zeichen) eines generierten Begriffs oder einer verwandten Abfrage.
     - ``50``
   * - docreport.duplicate.group.size
-    - docreport Maximum number of duplicate groups the document report screen shows, largest first.
+    - docreport Maximale Anzahl von Duplikatgruppen, die die Dokumentbericht-Seite anzeigt, die größten zuerst.
     - ``100``
   * - docreport.duplicate.docs.size
-    - Maximum number of documents the document report screen lists for each duplicate group.
+    - Maximale Anzahl von Dokumenten, die die Dokumentbericht-Seite für jede Duplikatgruppe auflistet.
     - ``10``
   * - docreport.duplicate.export.page.size
-    - Number of content signatures read per request when the duplicate report is downloaded as CSV.
+    - Anzahl der Inhaltssignaturen, die pro Anfrage gelesen werden, wenn der Duplikatbericht als CSV heruntergeladen wird.
     - ``10000``
   * - docreport.dormant.days
-    - Default number of days since the last modification after which a document counts as dormant.
+    - Standardanzahl von Tagen seit der letzten Änderung, nach denen ein Dokument als inaktiv gilt.
     - ``365``
   * - thumbnail.html.image.min.width
-    - Minimum width for HTML images in thumbnails.
+    - Mindestbreite für HTML-Bilder in Thumbnails.
     - ``100``
   * - thumbnail.html.image.min.height
-    - Minimum height for HTML images in thumbnails.
+    - Mindesthöhe für HTML-Bilder in Thumbnails.
     - ``100``
   * - thumbnail.html.image.max.aspect.ratio
-    - Maximum aspect ratio for HTML images in thumbnails.
+    - Maximales Seitenverhältnis für HTML-Bilder in Thumbnails.
     - ``3.0``
   * - thumbnail.html.image.thumbnail.width
-    - Width of generated thumbnail images.
+    - Breite generierter Thumbnail-Bilder.
     - ``100``
   * - thumbnail.html.image.thumbnail.height
-    - Height of generated thumbnail images.
+    - Höhe generierter Thumbnail-Bilder.
     - ``100``
   * - thumbnail.html.image.format
-    - Format of generated thumbnail images.
+    - Format generierter Thumbnail-Bilder.
     - ``png``
   * - thumbnail.html.image.xpath
-    - XPath to select images for thumbnails.
+    - XPath zur Auswahl von Bildern für Thumbnails.
     - ``//IMG``
   * - thumbnail.html.image.exclude.extensions
-    - File extensions to exclude from thumbnail generation.
+    - Dateierweiterungen, die von der Thumbnail-Generierung ausgeschlossen werden.
     - ``svg,html,css,js``
   * - thumbnail.generator.interval
-    - Interval for thumbnail generator.
+    - Intervall für den Thumbnail-Generator.
     - ``0``
   * - thumbnail.generator.targets
-    - Targets for thumbnail generator (e.g., all).
+    - Ziele für den Thumbnail-Generator (z. B. all).
     - ``all``
   * - thumbnail.crawler.enabled
-    - Whether the thumbnail crawler is enabled.
+    - Gibt an, ob der Thumbnail-Crawler aktiviert ist.
     - ``true``
   * - thumbnail.system.monitor.interval
-    - Interval for system monitor in thumbnail processing.
+    - Intervall für die Systemüberwachung bei der Thumbnail-Verarbeitung.
     - ``60``
 
-.. list-table:: User
+.. list-table:: Benutzer
   :header-rows: 1
 
   * - Name
     - Description
     - Default
   * - user.code.request.parameter
-    - User code settings
+    - Benutzercode-Einstellungen
     - ``userCode``
   * - user.code.min.length
-    - User code minimum length.
+    - Mindestlänge des Benutzercodes.
     - ``20``
   * - user.code.max.length
-    - User code maximum length.
+    - Maximale Länge des Benutzercodes.
     - ``100``
   * - user.code.pattern
-    - User code pattern for validation.
+    - Muster des Benutzercodes für die Validierung.
     - ``[a-zA-Z0-9_]+``
   * - mail.from.name
-    - Name to display in the From field of emails.
+    - Name, der im Feld From von E-Mails angezeigt wird.
     - ``Administrator``
   * - mail.from.address
-    - Email address to use in the From field.
+    - E-Mail-Adresse, die im Feld From verwendet wird.
     - ``root@localhost``
   * - mail.hostname
-    - Hostname for the mail server.
+    - Hostname des Mailservers.
     - (empty)
   * - scheduler.target.name
-    - Target name for the scheduler.
+    - Zielname für den Scheduler.
     - (empty)
   * - scheduler.job.class
-    - Job class for the scheduler.
+    - Job-Klasse für den Scheduler.
     - ``org.codelibs.fess.app.job.ScriptExecutorJob``
   * - scheduler.concurrent.exec.mode
-    - Mode for concurrent execution in the scheduler.
+    - Modus für die gleichzeitige Ausführung im Scheduler.
     - ``QUIT``
   * - scheduler.monitor.interval
-    - Interval for scheduler monitoring.
+    - Intervall für die Scheduler-Überwachung.
     - ``30``
   * - coordinator.poll.interval
-    - Interval (seconds) for polling heartbeats and events.
+    - Intervall (Sekunden) für das Abfragen von Heartbeats und Ereignissen.
     - ``60``
   * - coordinator.heartbeat.ttl
-    - Time-to-live (ms) for instance heartbeat documents.
+    - Time-to-live (ms) für Instanz-Heartbeat-Dokumente.
     - ``180000``
   * - coordinator.operation.ttl
-    - Time-to-live (ms) for operation lock documents.
+    - Time-to-live (ms) für Vorgangssperr-Dokumente.
     - ``7200000``
   * - coordinator.operation.retry
-    - Maximum number of retries for acquiring an operation lock.
+    - Maximale Anzahl von Wiederholungen beim Erwerb einer Vorgangssperre.
     - ``3``
   * - coordinator.event.ttl
-    - Time-to-live (ms) for event notification documents.
+    - Time-to-live (ms) für Ereignisbenachrichtigungs-Dokumente.
     - ``600000``
   * - online.help.base.link
-    - Base link for online help.
+    - Basis-Link für die Online-Hilfe.
     - ``https://fess.codelibs.org/{lang}/{version}/admin/``
   * - online.help.installation
-    - Installation guide link for online help.
+    - Link zur Installationsanleitung für die Online-Hilfe.
     - ``https://fess.codelibs.org/{lang}/{version}/install/install.html``
   * - online.help.eol
-    - End-of-life information link for online help.
+    - Link zu den End-of-Life-Informationen für die Online-Hilfe.
     - ``https://fess.codelibs.org/{lang}/eol.html``
   * - online.help.name.failureurl
-    - Online help key for failure URL.
+    - Online-Hilfe-Schlüssel für Fehler-URL.
     - ``failureurl``
   * - online.help.name.elevateword
-    - Online help key for elevate word.
+    - Online-Hilfe-Schlüssel für Zusätzliches Wort.
     - ``elevateword``
   * - online.help.name.reqheader
-    - Online help key for request header.
+    - Online-Hilfe-Schlüssel für Anfrage-Header.
     - ``reqheader``
   * - online.help.name.dict.synonym
-    - Online help key for synonym dictionary.
+    - Online-Hilfe-Schlüssel für Synonym-Wörterbuch.
     - ``synonym``
   * - online.help.name.dict
-    - Online help key for dictionary.
+    - Online-Hilfe-Schlüssel für Wörterbuch.
     - ``dict``
   * - online.help.name.dict.kuromoji
-    - Online help key for Kuromoji dictionary.
+    - Online-Hilfe-Schlüssel für Kuromoji-Wörterbuch.
     - ``kuromoji``
   * - online.help.name.dict.protwords
-    - Online help key for protected words dictionary.
+    - Online-Hilfe-Schlüssel für Protwords-Wörterbuch.
     - ``protwords``
   * - online.help.name.dict.stopwords
-    - Online help key for stopwords dictionary.
+    - Online-Hilfe-Schlüssel für Stoppwort-Wörterbuch.
     - ``stopwords``
   * - online.help.name.dict.stemmeroverride
-    - Online help key for stemmer override dictionary.
+    - Online-Hilfe-Schlüssel für Stemmer-Überschreibungs-Wörterbuch.
     - ``stemmeroverride``
   * - online.help.name.dict.mapping
-    - Online help key for mapping dictionary.
+    - Online-Hilfe-Schlüssel für Mapping-Wörterbuch.
     - ``mapping``
   * - online.help.name.webconfig
-    - Online help key for web config.
+    - Online-Hilfe-Schlüssel für Web-Konfiguration.
     - ``webconfig``
   * - online.help.name.searchlist
-    - Online help key for search list.
+    - Online-Hilfe-Schlüssel für Suchliste.
     - ``searchlist``
   * - online.help.name.log
-    - Online help key for log.
+    - Online-Hilfe-Schlüssel für Protokolldatei.
     - ``log``
   * - online.help.name.general
-    - Online help key for general settings.
+    - Online-Hilfe-Schlüssel für Allgemeine Einstellungen.
     - ``general``
   * - online.help.name.role
-    - Online help key for role.
+    - Online-Hilfe-Schlüssel für Rolle.
     - ``role``
   * - online.help.name.joblog
-    - Online help key for job log.
+    - Online-Hilfe-Schlüssel für Jobprotokoll.
     - ``joblog``
   * - online.help.name.keymatch
-    - Online help key for keymatch.
+    - Online-Hilfe-Schlüssel für Schlüsselübereinstimmung.
     - ``keymatch``
   * - online.help.name.relatedquery
-    - Online help key for related query.
+    - Online-Hilfe-Schlüssel für Verwandte Abfrage.
     - ``relatedquery``
   * - online.help.name.relatedcontent
-    - Online help key for related content.
+    - Online-Hilfe-Schlüssel für Verwandter Inhalt.
     - ``relatedcontent``
   * - online.help.name.wizard
-    - Online help key for wizard.
+    - Online-Hilfe-Schlüssel für Konfigurations-Assistent.
     - ``wizard``
   * - online.help.name.badword
-    - Online help key for bad word.
+    - Online-Hilfe-Schlüssel für Ausschlusswort.
     - ``badword``
   * - online.help.name.pathmap
-    - Online help key for path mapping.
+    - Online-Hilfe-Schlüssel für Pfad-Mapping.
     - ``pathmap``
   * - online.help.name.boostdoc
-    - Online help key for boost document.
+    - Online-Hilfe-Schlüssel für Dokument-Boosting.
     - ``boostdoc``
   * - online.help.name.dataconfig
-    - Online help key for data config.
+    - Online-Hilfe-Schlüssel für Datenkonfiguration.
     - ``dataconfig``
   * - online.help.name.systeminfo
-    - Online help key for system info.
+    - Online-Hilfe-Schlüssel für Systeminformationen.
     - ``systeminfo``
   * - online.help.name.user
-    - Online help key for user.
+    - Online-Hilfe-Schlüssel für Benutzer.
     - ``user``
   * - online.help.name.group
-    - Online help key for group.
+    - Online-Hilfe-Schlüssel für Gruppe.
     - ``group``
   * - online.help.name.dashboard
-    - Online help key for dashboard.
+    - Online-Hilfe-Schlüssel für Dashboard.
     - ``dashboard``
   * - online.help.name.webauth
-    - Online help key for web authentication.
+    - Online-Hilfe-Schlüssel für Web-Authentifizierung.
     - ``webauth``
   * - online.help.name.fileconfig
-    - Online help key for file config.
+    - Online-Hilfe-Schlüssel für Dateikonfiguration.
     - ``fileconfig``
   * - online.help.name.fileauth
-    - Online help key for file authentication.
+    - Online-Hilfe-Schlüssel für Datei-Authentifizierung.
     - ``fileauth``
   * - online.help.name.labeltype
-    - Online help key for label type.
+    - Online-Hilfe-Schlüssel für Labeltyp.
     - ``labeltype``
   * - online.help.name.tagtype
-    - Online help key for tag type.
+    - Online-Hilfe-Schlüssel für Tag-Typ.
     - ``tagtype``
   * - online.help.name.duplicatehost
-    - Online help key for duplicate host.
+    - Online-Hilfe-Schlüssel für Duplikat-Host.
     - ``duplicatehost``
   * - online.help.name.scheduler
-    - Online help key for scheduler.
+    - Online-Hilfe-Schlüssel für Scheduler.
     - ``scheduler``
   * - online.help.name.crawlinginfo
-    - Online help key for crawling info.
+    - Online-Hilfe-Schlüssel für Crawl-Informationen.
     - ``crawlinginfo``
   * - online.help.name.backup
-    - Online help key for backup.
+    - Online-Hilfe-Schlüssel für Sicherung.
     - ``backup``
   * - online.help.name.upgrade
-    - Online help key for upgrade.
+    - Online-Hilfe-Schlüssel für Aktualisierung.
     - ``upgrade``
   * - online.help.name.sereq
-    - Online help key for search request.
+    - Online-Hilfe-Schlüssel für Abfrageanforderung.
     - ``sereq``
   * - online.help.name.accesstoken
-    - Online help key for access token.
+    - Online-Hilfe-Schlüssel für Zugriffstoken.
     - ``accesstoken``
   * - online.help.name.suggest
-    - Online help key for suggest.
+    - Online-Hilfe-Schlüssel für Vorschlag.
     - ``suggest``
   * - online.help.name.searchlog
-    - Online help key for search log.
+    - Online-Hilfe-Schlüssel für Suchprotokoll.
     - ``searchlog``
   * - online.help.name.maintenance
-    - Online help key for maintenance.
+    - Online-Hilfe-Schlüssel für Wartung.
     - ``maintenance``
   * - online.help.name.plugin
-    - Online help key for plugin.
+    - Online-Hilfe-Schlüssel für Plugin.
     - ``plugin``
   * - online.help.name.storage
-    - Online help key for storage.
+    - Online-Hilfe-Schlüssel für Speicher.
     - ``storage``
   * - online.help.supported.langs
-    - Supported languages for online help.
+    - Unterstützte Sprachen für die Online-Hilfe.
     - ``de,es,fr,ja,ko,zh-cn``
   * - forum.link
-    - Forum link for user support.
+    - Forum-Link für den Benutzersupport.
     - ``https://discuss.codelibs.org/c/Fess{lang}/``
   * - forum.supported.langs
-    - Supported languages for the forum.
+    - Unterstützte Sprachen für das Forum.
     - ``en,ja``
   * - suggest.popular.word.seed
-    - Seed value for popular word suggestion.
+    - Seed-Wert für Vorschläge beliebter Wörter.
     - ``0``
   * - suggest.popular.word.tags
-    - Tags for popular word suggestion.
+    - Tags für Vorschläge beliebter Wörter.
     - (empty)
   * - suggest.popular.word.fields
-    - Fields for popular word suggestion.
+    - Felder für Vorschläge beliebter Wörter.
     - (empty)
   * - suggest.popular.word.excludes
-    - Excluded words for popular word suggestion.
+    - Ausgeschlossene Wörter für Vorschläge beliebter Wörter.
     - (empty)
   * - suggest.popular.word.size
-    - Number of popular words to suggest.
+    - Anzahl der vorzuschlagenden beliebten Wörter.
     - ``10``
   * - suggest.popular.word.window.size
-    - Window size for popular word suggestion.
+    - Fenstergröße für Vorschläge beliebter Wörter.
     - ``30``
   * - suggest.popular.word.query.freq
-    - Query frequency for popular word suggestion.
+    - Abfragehäufigkeit für Vorschläge beliebter Wörter.
     - ``10``
   * - suggest.min.hit.count
-    - Minimum hit count for suggestion.
+    - Minimale Trefferanzahl für Vorschläge.
     - ``1``
   * - suggest.field.contents
-    - Field for suggestion contents.
+    - Feld für Vorschlagsinhalte.
     - ``_default``
   * - suggest.field.tags
-    - Field for suggestion tags.
+    - Feld für Vorschlags-Tags.
     - ``label``
   * - suggest.field.roles
-    - Field for suggestion roles.
+    - Feld für Vorschlagsrollen.
     - ``role``
   * - suggest.field.index.contents
-    - Index contents for suggestion.
+    - Indexinhalte für Vorschläge.
     - ``content,title``
   * - suggest.update.request.interval
-    - Interval for suggestion update requests.
+    - Intervall für Vorschlags-Aktualisierungsanfragen.
     - ``0``
   * - suggest.update.doc.per.request
-    - Number of documents per suggestion update request.
+    - Anzahl der Dokumente pro Vorschlags-Aktualisierungsanfrage.
     - ``2``
   * - suggest.update.contents.limit.num.percentage
-    - Percentage limit for suggestion update contents.
+    - Prozentuale Obergrenze für Vorschlags-Aktualisierungsinhalte.
     - ``50%``
   * - suggest.update.contents.limit.num
-    - Maximum number of suggestion update contents.
+    - Maximale Anzahl von Vorschlags-Aktualisierungsinhalten.
     - ``10000``
   * - suggest.update.contents.limit.doc.size
-    - Maximum document size for suggestion update.
+    - Maximale Dokumentgröße für die Vorschlagsaktualisierung.
     - ``50000``
   * - suggest.source.reader.scroll.size
-    - Scroll size for suggestion source reader.
+    - Scroll-Größe für den Vorschlags-Quellleser.
     - ``1``
   * - suggest.popular.word.cache.size
-    - Cache size for popular word suggestion.
+    - Cache-Größe für Vorschläge beliebter Wörter.
     - ``1000``
   * - suggest.popular.word.cache.expire
-    - Cache expiration (seconds) for popular word suggestion.
+    - Cache-Ablauf (Sekunden) für Vorschläge beliebter Wörter.
     - ``60``
   * - suggest.search.log.permissions
-    - Permissions for suggestion search log.
+    - Berechtigungen für das Vorschlags-Suchprotokoll.
     - ``{user}guest,{role}guest``
   * - suggest.system.monitor.interval
-    - Interval for system monitor in suggestion.
+    - Intervall für die Systemüberwachung bei Vorschlägen.
     - ``60``
   * - ldap.admin.enabled
-    - Whether LDAP admin is enabled.
+    - Gibt an, ob die LDAP-Administration aktiviert ist.
     - ``false``
   * - ldap.admin.user.filter
-    - User filter for LDAP admin.
+    - Benutzerfilter für die LDAP-Administration.
     - ``uid=%s``
   * - ldap.admin.user.base.dn
-    - Base DN for LDAP admin user.
+    - Base DN für den LDAP-Administrationsbenutzer.
     - ``ou=People,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.user.object.classes
-    - Object classes for LDAP admin user.
+    - Objektklassen für den LDAP-Administrationsbenutzer.
     - ``organizationalPerson,top,person,inetOrgPerson``
   * - ldap.admin.role.filter
-    - Role filter for LDAP admin.
+    - Rollenfilter für die LDAP-Administration.
     - ``cn=%s``
   * - ldap.admin.role.base.dn
-    - Base DN for LDAP admin role.
+    - Base DN für die LDAP-Administrationsrolle.
     - ``ou=Role,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.role.object.classes
-    - Object classes for LDAP admin role.
+    - Objektklassen für die LDAP-Administrationsrolle.
     - ``groupOfNames``
   * - ldap.admin.group.filter
-    - Group filter for LDAP admin.
+    - Gruppenfilter für die LDAP-Administration.
     - ``cn=%s``
   * - ldap.admin.group.base.dn
-    - Base DN for LDAP admin group.
+    - Base DN für die LDAP-Administrationsgruppe.
     - ``ou=Group,dc=fess,dc=codelibs,dc=org``
   * - ldap.admin.group.object.classes
-    - Object classes for LDAP admin group.
+    - Objektklassen für die LDAP-Administrationsgruppe.
     - ``groupOfNames``
   * - ldap.admin.sync.password
-    - Whether to sync password for LDAP admin.
+    - Gibt an, ob das Passwort für die LDAP-Administration synchronisiert werden soll.
     - ``true``
   * - ldap.auth.validation
-    - Whether to validate LDAP authentication.
+    - Gibt an, ob die LDAP-Authentifizierung validiert werden soll.
     - ``true``
   * - ldap.connect.timeout
-    - Timeout (milliseconds) to establish an LDAP connection. This also bounds the TLS handshake and the initial bind response. 0 or less leaves it to the JDK/OS default.
+    - Timeout (Millisekunden) für den Aufbau einer LDAP-Verbindung. Dies begrenzt auch den TLS-Handshake und die erste Bind-Antwort. 0 oder weniger überlässt es dem Standard des JDK/OS.
     - ``10000``
   * - ldap.read.timeout
-    - Timeout (milliseconds) to wait for an LDAP response after the connection is bound. 0 or less waits indefinitely.
+    - Timeout (Millisekunden) für das Warten auf eine LDAP-Antwort, nachdem die Verbindung gebunden wurde. 0 oder weniger wartet unbegrenzt.
     - ``30000``
   * - ldap.search.time.limit
-    - Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit.
+    - Serverseitiges Zeitlimit (Millisekunden) für eine LDAP-Suche. 0 oder weniger bedeutet kein Limit.
     - ``60000``
   * - ldap.max.username.length
-    - Maximum username length for LDAP.
+    - Maximale Benutzernamenlänge für LDAP.
     - ``-1``
   * - ldap.ignore.netbios.name
-    - Whether to ignore NetBIOS name in LDAP.
+    - Gibt an, ob der NetBIOS-Name in LDAP ignoriert werden soll.
     - ``true``
   * - ldap.group.name.with.underscores
-    - Whether to allow underscores in LDAP group names.
+    - Gibt an, ob Unterstriche in LDAP-Gruppennamen zugelassen werden sollen.
     - ``false``
   * - ldap.lowercase.permission.name
-    - Whether to use lowercase for LDAP permission names.
+    - Gibt an, ob für LDAP-Berechtigungsnamen Kleinbuchstaben verwendet werden sollen.
     - ``false``
   * - ldap.allow.empty.permission
-    - Whether to allow empty permissions in LDAP.
+    - Gibt an, ob leere Berechtigungen in LDAP zugelassen werden sollen.
     - ``true``
   * - ldap.samaccountname.group
-    - Whether to use samAccountName for LDAP group.
+    - Gibt an, ob samAccountName für die LDAP-Gruppe verwendet werden soll.
     - ``false``
   * - ldap.role.search.user.enabled
-    - Whether LDAP role search for user is enabled.
+    - Gibt an, ob die LDAP-Rollensuche für Benutzer aktiviert ist.
     - ``true``
   * - ldap.role.search.group.enabled
-    - Whether LDAP role search for group is enabled.
+    - Gibt an, ob die LDAP-Rollensuche für Gruppen aktiviert ist.
     - ``true``
   * - ldap.role.search.role.enabled
-    - Whether LDAP role search for role is enabled.
+    - Gibt an, ob die LDAP-Rollensuche für Rollen aktiviert ist.
     - ``true``
   * - ldap.attr.surname
-    - LDAP attribute for surname.
+    - LDAP-Attribut für Nachname.
     - ``sn``
   * - ldap.attr.givenName
-    - LDAP attribute for given name.
+    - LDAP-Attribut für Vorname.
     - ``givenName``
   * - ldap.attr.employeeNumber
-    - LDAP attribute for employee number.
+    - LDAP-Attribut für Mitarbeiternummer.
     - ``employeeNumber``
   * - ldap.attr.mail
-    - LDAP attribute for mail.
+    - LDAP-Attribut für E-Mail.
     - ``mail``
   * - ldap.attr.telephoneNumber
-    - LDAP attribute for telephone number.
+    - LDAP-Attribut für Telefonnummer.
     - ``telephoneNumber``
   * - ldap.attr.homePhone
-    - LDAP attribute for home phone.
+    - LDAP-Attribut für Privattelefon.
     - ``homePhone``
   * - ldap.attr.homePostalAddress
-    - LDAP attribute for home postal address.
+    - LDAP-Attribut für private Postanschrift.
     - ``homePostalAddress``
   * - ldap.attr.labeledURI
-    - LDAP attribute for labeled URI.
+    - LDAP-Attribut für Labeled URI.
     - ``labeledURI``
   * - ldap.attr.roomNumber
-    - LDAP attribute for room number.
+    - LDAP-Attribut für Raumnummer.
     - ``roomNumber``
   * - ldap.attr.description
-    - LDAP attribute for description.
+    - LDAP-Attribut für Beschreibung.
     - ``description``
   * - ldap.attr.title
-    - LDAP attribute for title.
+    - LDAP-Attribut für Titel.
     - ``title``
   * - ldap.attr.pager
-    - LDAP attribute for pager.
+    - LDAP-Attribut für Pager.
     - ``pager``
   * - ldap.attr.street
-    - LDAP attribute for street.
+    - LDAP-Attribut für Straße.
     - ``street``
   * - ldap.attr.postalCode
-    - LDAP attribute for postal code.
+    - LDAP-Attribut für Postleitzahl.
     - ``postalCode``
   * - ldap.attr.physicalDeliveryOfficeName
-    - LDAP attribute for physical delivery office name.
+    - LDAP-Attribut für Name des physischen Zustellungsbüros.
     - ``physicalDeliveryOfficeName``
   * - ldap.attr.destinationIndicator
-    - LDAP attribute for destination indicator.
+    - LDAP-Attribut für Zielindikator.
     - ``destinationIndicator``
   * - ldap.attr.internationaliSDNNumber
-    - LDAP attribute for international ISDN number.
+    - LDAP-Attribut für internationale ISDN-Nummer.
     - ``internationaliSDNNumber``
   * - ldap.attr.state
-    - LDAP attribute for state.
+    - LDAP-Attribut für Bundesland.
     - ``st``
   * - ldap.attr.employeeType
-    - LDAP attribute for employee type.
+    - LDAP-Attribut für Mitarbeitertyp.
     - ``employeeType``
   * - ldap.attr.facsimileTelephoneNumber
-    - LDAP attribute for facsimile telephone number.
+    - LDAP-Attribut für Faxnummer.
     - ``facsimileTelephoneNumber``
   * - ldap.attr.postOfficeBox
-    - LDAP attribute for post office box.
+    - LDAP-Attribut für Postfach.
     - ``postOfficeBox``
   * - ldap.attr.initials
-    - LDAP attribute for initials.
+    - LDAP-Attribut für Initialen.
     - ``initials``
   * - ldap.attr.carLicense
-    - LDAP attribute for car license.
+    - LDAP-Attribut für Kfz-Kennzeichen.
     - ``carLicense``
   * - ldap.attr.mobile
-    - LDAP attribute for mobile.
+    - LDAP-Attribut für Mobiltelefon.
     - ``mobile``
   * - ldap.attr.postalAddress
-    - LDAP attribute for postal address.
+    - LDAP-Attribut für Postanschrift.
     - ``postalAddress``
   * - ldap.attr.city
-    - LDAP attribute for city.
+    - LDAP-Attribut für Stadt.
     - ``l``
   * - ldap.attr.teletexTerminalIdentifier
-    - LDAP attribute for teletex terminal identifier.
+    - LDAP-Attribut für Teletex-Terminalkennung.
     - ``teletexTerminalIdentifier``
   * - ldap.attr.x121Address
-    - LDAP attribute for X.121 address.
+    - LDAP-Attribut für X.121-Adresse.
     - ``x121Address``
   * - ldap.attr.businessCategory
-    - LDAP attribute for business category.
+    - LDAP-Attribut für Geschäftskategorie.
     - ``businessCategory``
   * - ldap.attr.registeredAddress
-    - LDAP attribute for registered address.
+    - LDAP-Attribut für registrierte Adresse.
     - ``registeredAddress``
   * - ldap.attr.displayName
-    - LDAP attribute for display name.
+    - LDAP-Attribut für Anzeigename.
     - ``displayName``
   * - ldap.attr.preferredLanguage
-    - LDAP attribute for preferred language.
+    - LDAP-Attribut für bevorzugte Sprache.
     - ``preferredLanguage``
   * - ldap.attr.departmentNumber
-    - LDAP attribute for department number.
+    - LDAP-Attribut für Abteilungsnummer.
     - ``departmentNumber``
   * - ldap.attr.uidNumber
-    - LDAP attribute for UID number.
+    - LDAP-Attribut für UID-Nummer.
     - ``uidNumber``
   * - ldap.attr.gidNumber
-    - LDAP attribute for GID number.
+    - LDAP-Attribut für GID-Nummer.
     - ``gidNumber``
   * - ldap.attr.homeDirectory
-    - LDAP attribute for home directory.
+    - LDAP-Attribut für Home-Verzeichnis.
     - ``homeDirectory``
   * - plugin.repositories
-    - Plugin repository URLs.
+    - Plugin-Repository-URLs.
     - ``https://maven.codelibs.org/release/org/codelibs/fess/,https://repo.maven.apache.org/maven2/org/codelibs/fess/,https://fess.codelibs.org/plugin/artifacts.yaml``
   * - plugin.version.filter
-    - Version filter for plugins.
+    - Versionsfilter für Plugins.
     - (empty)
   * - storage.max.items.in.page
-    - Maximum number of items per page in storage.
+    - Maximale Anzahl von Elementen pro Seite im Speicher.
     - ``1000``
   * - password.invalid.admin.passwords
-    - List of invalid admin passwords.
+    - Liste ungültiger Administratorpasswörter.
     - ``admin``
   * - password.min.length
-    - Minimum password length (0 to disable).
+    - Minimale Passwortlänge (0 zum Deaktivieren).
     - ``8``
   * - password.max.length
-    - Maximum length of a password field.
+    - Maximale Länge eines Passwortfelds.
     - ``100``
   * - password.require.uppercase
-    - Require uppercase letters in password.
+    - Großbuchstaben im Passwort verlangen.
     - ``false``
   * - password.require.lowercase
-    - Require lowercase letters in password.
+    - Kleinbuchstaben im Passwort verlangen.
     - ``false``
   * - password.require.digit
-    - Require digits in password.
+    - Ziffern im Passwort verlangen.
     - ``false``
   * - password.require.special.char
-    - Require special characters in password.
+    - Sonderzeichen im Passwort verlangen.
     - ``false``
   * - rag.chat.enabled
-    - Whether RAG chat feature is enabled.
+    - Gibt an, ob die RAG-Chat-Funktion aktiviert ist.
     - ``false``
   * - rag.chat.log.enabled
-    - Whether to record the usage of each RAG chat request (user, time, LLM calls and tokens) in the chat log. The question and the answer are never recorded.
+    - Gibt an, ob die Nutzung jeder RAG-Chat-Anfrage (Benutzer, Zeit, LLM-Aufrufe und Tokens) im Chat-Protokoll aufgezeichnet werden soll. Die Frage und die Antwort werden nie aufgezeichnet.
     - ``true``
   * - rag.chat.context.max.documents
-    - Chat generation settings.
+    - Einstellungen zur Chat-Generierung.
     - ``5``
   * - rag.chat.query.regeneration.max.count
-    - Maximum number of times one chat request regenerates its search query and searches again when the search finds no documents or, in the streaming chat, none of the hits is judged relevant. Each regeneration makes one LLM call, plus one relevance evaluation call when the new search has hits (0 disables).
+    - Maximale Anzahl, wie oft eine Chat-Anfrage ihre Suchabfrage neu generiert und erneut sucht, wenn die Suche keine Dokumente findet oder im Streaming-Chat keiner der Treffer als relevant beurteilt wird. Jede Neugenerierung führt einen LLM-Aufruf aus, plus einen Aufruf zur Relevanzbewertung, wenn die neue Suche Treffer hat (0 deaktiviert).
     - ``2``
   * - rag.chat.session.timeout.minutes
-    - Session settings.
+    - Sitzungseinstellungen.
     - ``30``
   * - rag.chat.session.max.size
-    - Maximum cached chat sessions; least recently accessed are evicted above it (0 or less means 100).
+    - Maximale Anzahl zwischengespeicherter Chat-Sitzungen; darüber hinaus werden die am längsten nicht abgerufenen verdrängt (0 oder weniger bedeutet 100).
     - ``10000``
   * - rag.chat.history.max.messages
-    - Maximum messages kept in one chat session; older turns are trimmed on each new message.
+    - Maximale Anzahl von Nachrichten, die in einer Chat-Sitzung gehalten werden; ältere Gesprächsrunden werden bei jeder neuen Nachricht gekürzt.
     - ``30``
   * - rag.chat.content.fields
-    - Enhanced RAG flow settings. Fields to retrieve for full document content.
+    - Einstellungen für den erweiterten RAG-Ablauf. Felder, die für den vollständigen Dokumentinhalt abgerufen werden.
     - ``title,url,content,doc_id,content_title,content_description``
   * - rag.chat.highlight.fragment.size
-    - Highlight settings for RAG search.
+    - Hervorhebungseinstellungen für die RAG-Suche.
     - ``500``
   * - rag.chat.highlight.number.of.fragments
-    - Number of highlight fragments per document in the RAG chat context search.
+    - Anzahl der Hervorhebungsfragmente pro Dokument in der Kontextsuche des RAG-Chats.
     - ``3``
   * - rag.chat.content.fulltext.max.length
-    - Large-document handling for answer generation. Documents whose content_length exceeds this value use highlighted passages instead of full content in the answer context.
+    - Behandlung großer Dokumente bei der Antwortgenerierung. Dokumente, deren content_length diesen Wert überschreitet, verwenden im Antwortkontext hervorgehobene Passagen anstelle des vollständigen Inhalts.
     - ``3000``
   * - rag.chat.answer.highlight.fragment.size
-    - Highlight settings used when extracting passages from large documents for the answer context.
+    - Hervorhebungseinstellungen, die beim Extrahieren von Passagen aus großen Dokumenten für den Antwortkontext verwendet werden.
     - ``1000``
   * - rag.chat.answer.highlight.number.of.fragments
-    - Number of highlight fragments taken from each oversized document for the answer context.
+    - Anzahl der Hervorhebungsfragmente, die aus jedem übergroßen Dokument für den Antwortkontext entnommen werden.
     - ``5``
   * - rag.chat.history.assistant.content
-    - History content mode for assistant messages. smart_summary           - drop assistant body, keep only past search query + referenced titles per turn (default, recommended) full                    - send the whole assistant response source_titles           - body + referenced titles suffix source_titles_and_urls  - "[References: title (url), ...]" only truncated               - truncate assistant response at history.assistant.max.chars none                    - drop assistant turns from history
+    - Verlaufsinhaltsmodus für Assistenten-Nachrichten. smart_summary           - Assistenten-Text verwerfen, pro Gesprächsrunde nur vergangene Suchabfrage + referenzierte Titel behalten (Standard, empfohlen) full                    - gesamte Assistenten-Antwort senden source_titles           - Text + Suffix aus referenzierten Titeln source_titles_and_urls  - nur "[References: title (url), ...]" truncated               - Assistenten-Antwort bei history.assistant.max.chars abschneiden none                    - Assistenten-Gesprächsrunden aus dem Verlauf verwerfen
     - ``smart_summary``
   * - rag.chat.history.titles.max.count
-    - Maximum number of referenced document titles included per turn in smart_summary history mode.
+    - Maximale Anzahl referenzierter Dokumenttitel, die pro Gesprächsrunde im Verlaufsmodus smart_summary enthalten sind.
     - ``5``
   * - rag.chat.document.max.parts
-    - Maximum number of parts a document is split into when chatting about a single document longer than the LLM context budget. Each part is summarized separately and the summaries are combined into the answer; parts beyond this number are not used. A request about such a document makes up to this many LLM calls plus one for the answer, on every turn.
+    - Maximale Anzahl von Teilen, in die ein Dokument aufgeteilt wird, wenn über ein einzelnes Dokument gechattet wird, das länger als das LLM-Kontextbudget ist. Jeder Teil wird separat zusammengefasst, und die Zusammenfassungen werden zur Antwort kombiniert; Teile über dieser Anzahl werden nicht verwendet. Eine Anfrage zu einem solchen Dokument führt in jeder Gesprächsrunde bis zu so viele LLM-Aufrufe plus einen für die Antwort aus.
     - ``10``
   * - rag.chat.response.language
-    - Language the LLM is asked to answer in. browser  - the language of the user's browser or UI locale; no instruction for English (default) none     - no language instruction; the LLM usually answers in the language of the question en, ja.. - always answer in this language
+    - Sprache, in der das LLM antworten soll. browser  - die Sprache des Browsers oder der UI-Locale des Benutzers; keine Anweisung für Englisch (Standard) none     - keine Sprachanweisung; das LLM antwortet normalerweise in der Sprache der Frage en, ja.. - immer in dieser Sprache antworten
     - ``browser``
   * - index.export.path
-    - Index Export
+    - Index-Export
     - ``/var/lib/fess/export``
   * - index.export.exclude.fields
-    - Comma-separated document fields omitted from files written by the index export job.
+    - Kommagetrennte Dokumentfelder, die in den vom Index-Export-Job geschriebenen Dateien weggelassen werden.
     - ``cache,tag``
   * - index.export.scroll.size
-    - Number of documents fetched per scroll request by the index export job.
+    - Anzahl der Dokumente, die der Index-Export-Job pro Scroll-Anfrage abruft.
     - ``100``
   * - index.export.format
-    - Output format for exported documents; only html and json are accepted, anything else fails the job.
+    - Ausgabeformat für exportierte Dokumente; nur html und json werden akzeptiert, alles andere lässt den Job fehlschlagen.
     - ``html``
   * - log.notification.flush.interval
-    - Log Notification Interval (seconds) for flushing log notification buffer to search engine.
+    - Protokollbenachrichtigung Intervall (Sekunden) zum Leeren des Protokollbenachrichtigungspuffers in die Suchmaschine.
     - ``30``
   * - log.notification.max.details.length
-    - Maximum length of notification details text.
+    - Maximale Länge des Benachrichtigungs-Detailtexts.
     - ``3000``
   * - log.notification.max.display.events
-    - Maximum number of events to display in notification.
+    - Maximale Anzahl von Ereignissen, die in der Benachrichtigung angezeigt werden.
     - ``50``
   * - log.notification.max.message.length
-    - Maximum length of each log message in notification.
+    - Maximale Länge jeder Protokollmeldung in der Benachrichtigung.
     - ``200``
   * - log.notification.search.size
-    - Maximum number of events to fetch from search engine per notification job.
+    - Maximale Anzahl von Ereignissen, die pro Benachrichtigungs-Job von der Suchmaschine abgerufen werden.
     - ``1000``
   * - log.notification.buffer.size
-    - Maximum number of events to buffer in memory.
+    - Maximale Anzahl von Ereignissen, die im Speicher gepuffert werden.
     - ``1000``
   * - log.notification.interval
-    - Interval (seconds) for the notification job cycle, used in notification messages.
+    - Intervall (Sekunden) für den Zyklus des Benachrichtigungs-Jobs, das in Benachrichtigungsmeldungen verwendet wird.
     - ``300``
   * - theme.directory.path
-    - Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)
+    - Statisches Theme-System (siehe docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)
     - ``themes``
   * - theme.upload.max.size
-    - Maximum size (bytes) of an uploaded theme archive.
+    - Maximale Größe (Bytes) eines hochgeladenen Theme-Archivs.
     - ``52428800``
   * - theme.upload.max.extracted.size
-    - Maximum total extracted size (bytes); extraction aborts once it is exceeded.
+    - Maximale entpackte Gesamtgröße (Bytes); das Entpacken wird abgebrochen, sobald sie überschritten wird.
     - ``209715200``
   * - theme.upload.max.entries
-    - Maximum number of entries allowed in an uploaded theme archive.
+    - Maximal zulässige Anzahl von Einträgen in einem hochgeladenen Theme-Archiv.
     - ``1000``
   * - theme.upload.max.compression.ratio
-    - Maximum uncompressed/compressed ratio for a single theme archive entry.
+    - Maximales Verhältnis unkomprimiert/komprimiert für einen einzelnen Theme-Archiv-Eintrag.
     - ``100``
   * - theme.upload.zip.ratio.max
-    - Maximum cumulative uncompressed/compressed ratio for the whole archive (zip-bomb guard).
+    - Maximales kumuliertes Verhältnis unkomprimiert/komprimiert für das gesamte Archiv (Zip-Bomb-Schutz).
     - ``50``
   * - theme.upload.zip.ratio.check.threshold.bytes
-    - Compressed bytes read before the cumulative zip ratio check applies; smaller archives skip it.
+    - Gelesene komprimierte Bytes, bevor die Prüfung des kumulierten ZIP-Verhältnisses greift; kleinere Archive überspringen sie.
     - ``65536``
   * - theme.upload.attic.retention.days
-    - Retention (days) for a replaced theme directory before the cleanup sweep removes it.
+    - Aufbewahrung (Tage) für ein ersetztes Theme-Verzeichnis, bevor der Bereinigungslauf es entfernt.
     - ``7``
   * - theme.repositories
-    - Repository URLs (comma separated) that static themes are downloaded from.
+    - Repository-URLs (kommagetrennt), von denen statische Themes heruntergeladen werden.
     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
   * - theme.index.frame.ancestors
-    - Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header).
+    - Wert der Direktive frame-ancestors in der Content-Security-Policy der HTML-Seiten des statischen Themes: die Origins, die sie in einem Frame einbetten dürfen. Der Standardwert 'none' erlaubt keiner Seite, sie einzubetten. WebKit (Safari) wendet frame-ancestors auf die blob:-Frames an, die die Dateivorschau und die Cache-Ansicht eines Themes verwenden, und zeigt sie daher leer an, solange der Wert 'none' ist. Lassen Sie den Wert leer, um die Direktive wegzulassen; X-Frame-Options: DENY wird in jedem Fall gesendet und hält die Seiten dann in jedem Browser aus Frames fern (ein Browser, der frame-ancestors berücksichtigt, ignoriert diesen Header).
     - ``'none'``
   * - theme.api.csrf.server.origins
-    - Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-\* headers, then from the servlet request.
+    - Optional: kanonische externe(r) Origin(s) dieser Fess-Instanz (durch Komma/Zeilenumbruch getrennt), z. B. https://fess.example.com. Wenn gesetzt, werden diese für die v2-CSRF-Origin-Prüfung als Same-Origin behandelt, OHNE weitergeleiteten Headern zu vertrauen. Empfohlen hinter Reverse Proxies, die nicht in rate.limit.trusted.proxies aufgeführt sind. Wenn leer, wird der Ziel-Origin aus den X-Forwarded-\*-Headern vertrauenswürdiger Proxies rekonstruiert, dann aus der Servlet-Anfrage.
     - (empty)
   * - theme.api.login.rate.limit.per.ip.per.minute
-    - Login attempts allowed per client IP each minute; 0 or less disables the gate.
+    - Zulässige Anmeldeversuche pro Client-IP und Minute; 0 oder weniger deaktiviert die Begrenzung.
     - ``10``
   * - theme.api.login.rate.limit.per.user.per.minute
-    - Login attempts allowed per client IP and user name each minute; also gates password change.
+    - Zulässige Anmeldeversuche pro Client-IP und Benutzername und Minute; begrenzt auch die Passwortänderung.
     - ``5``
   * - theme.api.login.lockout.seconds
-    - Lockout (seconds) applied once a login rate limit is exceeded; 0 or less disables the lockout.
+    - Sperrzeit (Sekunden), die angewendet wird, sobald ein Login-Rate-Limit überschritten wird; 0 oder weniger deaktiviert die Sperre.
     - ``900``
   * - theme.api.login.rate.limit.max.entries
-    - Maximum login rate-limit buckets held in memory; idle buckets are evicted at the cap.
+    - Maximale Anzahl von Login-Rate-Limit-Buckets im Speicher; inaktive Buckets werden bei Erreichen der Obergrenze verdrängt.
     - ``100000``
   * - api.chat.stream.keepalive.interval.ms
-    - Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (": keepalive\\n\\n") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds.
+    - Intervall zwischen den SSE-Keep-alive-Pings, die von /api/v2/chat/stream ausgegeben werden. Der Ping ist eine reine Kommentarzeile (": keepalive\\n\\n"), die den Event-Stream nicht beeinflusst, aber Zwischeninstanzen umgeht (der nginx-Standardwert für proxy_read_timeout ist 60s), die inaktive Verbindungen während langer LLM-Phasen trennen. Setzen Sie <=0 zum Deaktivieren. Einheit: Millisekunden.
     - ``15000``
 .. GENERATED-END: properties

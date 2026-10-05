@@ -10,2107 +10,2107 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Core"
-msgstr ""
+msgstr "Kern"
 
 msgid "The title of the domain for logging and display."
-msgstr ""
+msgstr "Der Titel der Domain für Protokollierung und Anzeige."
 
 msgid "Search Engine"
-msgstr ""
+msgstr "Suchmaschine"
 
 msgid "The type of search engine backend (e.g., default, opensearch)."
-msgstr ""
+msgstr "Der Typ des Suchmaschinen-Backends (z. B. default, opensearch)."
 
 msgid "The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)"
-msgstr ""
+msgstr "Die URL des HTTP-Endpunkts der Suchmaschine. Verwenden Sie in IPv6-Umgebungen eckige Klammern um die IPv6-Adresse (z. B. http://[::1]:9200)"
 
 msgid "Path to SSL certificate authorities for secure HTTP connections."
-msgstr ""
+msgstr "Pfad zu den SSL-Zertifizierungsstellen für sichere HTTP-Verbindungen."
 
 msgid "Username for authenticating to the search engine."
-msgstr ""
+msgstr "Benutzername für die Authentifizierung bei der Suchmaschine."
 
 msgid "Password for authenticating to the search engine."
-msgstr ""
+msgstr "Passwort für die Authentifizierung bei der Suchmaschine."
 
 msgid "Interval (ms) for heartbeat checks to the search engine."
-msgstr ""
+msgstr "Intervall (ms) für Heartbeat-Prüfungen der Suchmaschine."
 
 msgid "Cipher algorithm used for encryption."
-msgstr ""
+msgstr "Für die Verschlüsselung verwendeter Cipher-Algorithmus."
 
 msgid "Secret key for encryption (change this value for production)."
-msgstr ""
+msgstr "Geheimer Schlüssel für die Verschlüsselung (ändern Sie diesen Wert für den Produktionsbetrieb)."
 
 msgid "Algorithm for digest calculation."
-msgstr ""
+msgstr "Algorithmus für die Digest-Berechnung."
 
 msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
-msgstr ""
+msgstr "Passwort-Hashing (neuer Mechanismus, kompatibel mit Spring Security v5.8) Unterstützt: bcrypt (derzeit nur dieser)"
 
 msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
-msgstr ""
+msgstr "BCrypt-Kostenfaktor (Log-Runden). 10 entspricht dem Standardwert von Spring Security v5.8. Bereich: 4-31."
 
 msgid "Lazy re-hashing on successful login for legacy hashes."
-msgstr ""
+msgstr "Verzögertes erneutes Hashing bei erfolgreicher Anmeldung für Legacy-Hashes."
 
 msgid "NOTE: app.digest.algorithm is kept for LEGACY password verification only (pre-upgrade hashes that have no {id} prefix). Do not use for new passwords. Regex pattern for properties to encrypt."
-msgstr ""
+msgstr "HINWEIS: app.digest.algorithm bleibt nur für die Überprüfung von LEGACY-Passwörtern erhalten (Hashes von vor dem Upgrade, die kein {id}-Präfix haben). Nicht für neue Passwörter verwenden. Regex-Muster für zu verschlüsselnde Eigenschaften."
 
 msgid "Regex pattern for sensitive values to mask in debug logs (case-insensitive match against property/env keys)."
-msgstr ""
+msgstr "Regex-Muster für sensible Werte, die in Debug-Protokollen maskiert werden (Abgleich ohne Beachtung der Groß-/Kleinschreibung mit den Schlüsseln von Eigenschaften/Umgebungsvariablen)."
 
 msgid "Extension names for application customization."
-msgstr ""
+msgstr "Erweiterungsnamen für die Anwendungsanpassung."
 
 msgid "Audit log format."
-msgstr ""
+msgstr "Format des Audit-Protokolls."
 
 msgid "Script audit log settings."
-msgstr ""
+msgstr "Einstellungen für das Skript-Audit-Protokoll."
 
 msgid "Maximum characters of script text kept in a script audit log entry; longer text is truncated."
-msgstr ""
+msgstr "Maximale Zeichenanzahl des Skripttexts, die in einem Skript-Audit-Protokolleintrag erhalten bleibt; längerer Text wird abgeschnitten."
 
 msgid "JVM options for the crawler process."
-msgstr ""
+msgstr "JVM-Optionen für den Crawler-Prozess."
 
 msgid "JVM options (newline-separated) passed to the suggest creator child process."
-msgstr ""
+msgstr "JVM-Optionen (durch Zeilenumbrüche getrennt), die an den Suggest-Creator-Kindprozess übergeben werden."
 
 msgid "JVM options for the chunk vector indexer process. Heap budget. This child JVM is only started while the \"Content Chunk Vector Indexer\" job runs, so a generous -Xmx costs nothing when content chunking is off. The live set is dominated by the in-flight batches, each of which retains, per document, the full _source, the document's chunk strings, and the document's embedding vectors: content_chunker.job.bulk_size          (default   20) x content_chunker.max_chunks_per_document (default 1000) x content_chunker.embedding.dimension  (default  768) x 4 bytes per float x content_chunker.job.concurrency      (default    2) = ~117 MB of vectors alone, before chunk strings and document sources. With the shipped defaults the worst case is roughly 190-250 MB live (and ~235 MB of vectors alone at dimension=1536), which does not fit a 256 MB heap with any GC headroom. Raise -Xmx further if you raise bulk_size, max_chunks_per_document, concurrency, or the embedding dimension."
-msgstr ""
+msgstr "JVM-Optionen für den Chunk-Vektor-Indexer-Prozess. Heap-Budget. Diese Kind-JVM wird nur gestartet, solange der Job \"Content Chunk Vector Indexer\" läuft, sodass ein großzügiges -Xmx nichts kostet, wenn das Content-Chunking deaktiviert ist. Der Live-Bestand wird von den laufenden Batches dominiert, von denen jeder pro Dokument das vollständige _source, die Chunk-Strings des Dokuments und die Embedding-Vektoren des Dokuments behält: content_chunker.job.bulk_size          (Standard   20) x content_chunker.max_chunks_per_document (Standard 1000) x content_chunker.embedding.dimension  (Standard  768) x 4 Byte pro Float x content_chunker.job.concurrency      (Standard    2) = ~117 MB allein für Vektoren, vor Chunk-Strings und Dokumentquellen. Mit den mitgelieferten Standardwerten beträgt der ungünstigste Fall etwa 190-250 MB im Live-Bestand (und ~235 MB allein für Vektoren bei dimension=1536), was nicht in einen 256-MB-Heap mit nennenswertem GC-Spielraum passt. Erhöhen Sie -Xmx weiter, wenn Sie bulk_size, max_chunks_per_document, concurrency oder die Embedding-Dimension erhöhen."
 
 msgid "JVM options for the thumbnail process."
-msgstr ""
+msgstr "JVM-Optionen für den Thumbnail-Prozess."
 
 msgid "Job"
-msgstr ""
+msgstr "Job"
 
 msgid "System job IDs for scheduled jobs."
-msgstr ""
+msgstr "System-Job-IDs für geplante Jobs."
 
 msgid "Template for web crawler job title."
-msgstr ""
+msgstr "Vorlage für den Titel des Web-Crawler-Jobs."
 
 msgid "Template for file crawler job title."
-msgstr ""
+msgstr "Vorlage für den Titel des Datei-Crawler-Jobs."
 
 msgid "Template for data crawler job title."
-msgstr ""
+msgstr "Vorlage für den Titel des Datenspeicher-Crawler-Jobs."
 
 msgid "Script template for job execution."
-msgstr ""
+msgstr "Skriptvorlage für die Job-Ausführung."
 
 msgid "Maximum number of crawler processes."
-msgstr ""
+msgstr "Maximale Anzahl von Crawler-Prozessen."
 
 msgid "Default script language for jobs."
-msgstr ""
+msgstr "Standard-Skriptsprache für Jobs."
 
 msgid "Pattern to filter system properties for jobs."
-msgstr ""
+msgstr "Muster zum Filtern von Systemeigenschaften für Jobs."
 
 msgid "Number of processors to use."
-msgstr ""
+msgstr "Anzahl der zu verwendenden Prozessoren."
 
 msgid "Path to Java command."
-msgstr ""
+msgstr "Pfad zum Java-Befehl."
 
 msgid "Path to Python command."
-msgstr ""
+msgstr "Pfad zum Python-Befehl."
 
 msgid "Encoding for file paths."
-msgstr ""
+msgstr "Kodierung für Dateipfade."
 
 msgid "Whether to use a dedicated temporary directory."
-msgstr ""
+msgstr "Gibt an, ob ein eigenes temporäres Verzeichnis verwendet werden soll."
 
 msgid "Maximum length of log output."
-msgstr ""
+msgstr "Maximale Länge der Protokollausgabe."
 
 msgid "Adaptive load control value."
-msgstr ""
+msgstr "Wert für die adaptive Laststeuerung."
 
 msgid "CPU threshold (%) for web request load control. Returns 429 when CPU >= this value. (100: disabled)"
-msgstr ""
+msgstr "CPU-Schwellenwert (%) für die Laststeuerung von Web-Anfragen. Gibt 429 zurück, wenn CPU >= diesem Wert. (100: deaktiviert)"
 
 msgid "CPU threshold (%) for API request load control. Returns 429 when CPU >= this value. (100: disabled)"
-msgstr ""
+msgstr "CPU-Schwellenwert (%) für die Laststeuerung von API-Anfragen. Gibt 429 zurück, wenn CPU >= diesem Wert. (100: deaktiviert)"
 
 msgid "Interval (seconds) for monitoring OpenSearch CPU load."
-msgstr ""
+msgstr "Intervall (Sekunden) für die Überwachung der OpenSearch-CPU-Last."
 
 msgid "Supported languages."
-msgstr ""
+msgstr "Unterstützte Sprachen."
 
 msgid "Length of API access token."
-msgstr ""
+msgstr "Länge des API-Zugriffstokens."
 
 msgid "API access token request parameter."
-msgstr ""
+msgstr "Anfrageparameter für das API-Zugriffstoken."
 
 msgid "Permissions for API admin access."
-msgstr ""
+msgstr "Berechtigungen für den API-Administratorzugriff."
 
 msgid "Accepted referers for API search."
-msgstr ""
+msgstr "Zulässige Referer für die API-Suche."
 
 msgid "Whether to enable scroll for API search."
-msgstr ""
+msgstr "Gibt an, ob Scroll für die API-Suche aktiviert werden soll."
 
 msgid "Whether to enable the end-user export of search results (CSV/JSON) at /api/v2/documents/export."
-msgstr ""
+msgstr "Gibt an, ob der Export von Suchergebnissen (CSV/JSON) durch Endbenutzer unter /api/v2/documents/export aktiviert werden soll."
 
 msgid "Maximum number of documents written by one search result export."
-msgstr ""
+msgstr "Maximale Anzahl von Dokumenten, die ein Suchergebnis-Export schreibt."
 
 msgid "Fields written by the search result export (comma-separated). A field that is not an API response field is ignored."
-msgstr ""
+msgstr "Vom Suchergebnis-Export geschriebene Felder (kommagetrennt). Ein Feld, das kein API-Antwortfeld ist, wird ignoriert."
 
 msgid "Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit."
-msgstr ""
+msgstr "Maximale Anzahl von Suchergebnis-Exporten pro Minute für jeden Benutzer (für einen Gast pro Client-IP). 0 oder weniger deaktiviert das Limit."
 
 msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "Header für die API-JSON-Antwort. Access-Control-* und Timing-Allow-Origin werden hier ignoriert (CORS wird über api.cors.* / CorsFilter gesteuert). Setzen Sie Vary nicht."
 
 msgid "Whether to include exceptions in API JSON response."
-msgstr ""
+msgstr "Gibt an, ob Ausnahmen in die API-JSON-Antwort aufgenommen werden sollen."
 
 msgid "Headers for API GSA response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "Header für die API-GSA-Antwort. Access-Control-* und Timing-Allow-Origin werden hier ignoriert (CORS wird über api.cors.* / CorsFilter gesteuert). Setzen Sie Vary nicht."
 
 msgid "Whether to include exceptions in API GSA response."
-msgstr ""
+msgstr "Gibt an, ob Ausnahmen in die API-GSA-Antwort aufgenommen werden sollen."
 
 msgid "Headers for API dashboard response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
-msgstr ""
+msgstr "Header für die API-Dashboard-Antwort. Access-Control-* und Timing-Allow-Origin werden hier ignoriert (CORS wird über api.cors.* / CorsFilter gesteuert). Setzen Sie Vary nicht."
 
 msgid "Allowed origins for CORS. \"*\" returns a literal \"*\" (the request Origin is NOT reflected) and disables credentials. Set explicit origins (newline- or comma-separated) to allow credentialed cross-origin access."
-msgstr ""
+msgstr "Zulässige Origins für CORS. \"*\" gibt ein literales \"*\" zurück (der Origin der Anfrage wird NICHT gespiegelt) und deaktiviert Anmeldedaten. Legen Sie explizite Origins (durch Zeilenumbruch oder Komma getrennt) fest, um Cross-Origin-Zugriff mit Anmeldedaten zu erlauben."
 
 msgid "Allowed HTTP methods for CORS."
-msgstr ""
+msgstr "Zulässige HTTP-Methoden für CORS."
 
 msgid "Max age for CORS preflight requests."
-msgstr ""
+msgstr "Max-Age für CORS-Preflight-Anfragen."
 
 msgid "Allowed request headers for CORS preflight. A static list is returned (Access-Control-Request-Headers is not reflected). Includes X-Fess-CSRF-Token for cross-origin SPAs sending the CSRF token."
-msgstr ""
+msgstr "Zulässige Anfrage-Header für den CORS-Preflight. Es wird eine statische Liste zurückgegeben (Access-Control-Request-Headers wird nicht gespiegelt). Enthält X-Fess-CSRF-Token für Cross-Origin-SPAs, die das CSRF-Token senden."
 
 msgid "Whether to allow credentials for CORS. Honored only for an exact match of an explicit Origin; ignored when api.cors.allow.origin is \"*\"."
-msgstr ""
+msgstr "Gibt an, ob Anmeldedaten für CORS zugelassen werden sollen. Wird nur bei exakter Übereinstimmung mit einem expliziten Origin berücksichtigt; wird ignoriert, wenn api.cors.allow.origin \"*\" ist."
 
 msgid "Whether to enable JSONP for API."
-msgstr ""
+msgstr "Gibt an, ob JSONP für die API aktiviert werden soll."
 
 msgid "Fields for API ping to search engine."
-msgstr ""
+msgstr "Felder für den API-Ping an die Suchmaschine."
 
 msgid "Rate Limiting"
-msgstr ""
+msgstr "Rate-Limiting"
 
 msgid "Whether rate limiting is enabled."
-msgstr ""
+msgstr "Gibt an, ob Rate-Limiting aktiviert ist."
 
 msgid "Maximum number of requests allowed per window."
-msgstr ""
+msgstr "Maximal zulässige Anzahl von Anfragen pro Fenster."
 
 msgid "Window size in milliseconds."
-msgstr ""
+msgstr "Fenstergröße in Millisekunden."
 
 msgid "Duration in milliseconds to block IP when limit exceeded."
-msgstr ""
+msgstr "Dauer in Millisekunden, für die die IP bei Überschreitung des Limits blockiert wird."
 
 msgid "Retry-After header value in seconds."
-msgstr ""
+msgstr "Wert des Retry-After-Headers in Sekunden."
 
 msgid "Comma-separated list of whitelisted IPs (e.g., 127.0.0.1,::1)."
-msgstr ""
+msgstr "Kommagetrennte Liste von IPs auf der Whitelist (z. B. 127.0.0.1,::1)."
 
 msgid "Comma-separated list of blocked IPs."
-msgstr ""
+msgstr "Kommagetrennte Liste blockierter IPs."
 
 msgid "Comma-separated list of trusted proxy IPs. Only trust X-Forwarded-For/X-Real-IP from these IPs."
-msgstr ""
+msgstr "Kommagetrennte Liste vertrauenswürdiger Proxy-IPs. Vertrauen Sie X-Forwarded-For/X-Real-IP nur von diesen IPs."
 
 msgid "Number of requests between cleanup operations to prevent memory leaks."
-msgstr ""
+msgstr "Anzahl der Anfragen zwischen Bereinigungsvorgängen zur Vermeidung von Speicherlecks."
 
 msgid "Virtual Host: Host:fess.codelibs.org=fess"
-msgstr ""
+msgstr "Virtueller Host: Host:fess.codelibs.org=fess"
 
 msgid "Hostname for the HTTP proxy server."
-msgstr ""
+msgstr "Hostname des HTTP-Proxy-Servers."
 
 msgid "Port number for the HTTP proxy server (e.g., 8080)."
-msgstr ""
+msgstr "Portnummer des HTTP-Proxy-Servers (z. B. 8080)."
 
 msgid "Username for HTTP proxy authentication."
-msgstr ""
+msgstr "Benutzername für die HTTP-Proxy-Authentifizierung."
 
 msgid "Password for HTTP proxy authentication."
-msgstr ""
+msgstr "Passwort für die HTTP-Proxy-Authentifizierung."
 
 msgid "Maximum size (bytes) for HTTP file uploads."
-msgstr ""
+msgstr "Maximale Größe (Bytes) für HTTP-Datei-Uploads."
 
 msgid "Threshold size (bytes) for HTTP file upload buffering."
-msgstr ""
+msgstr "Schwellenwert (Bytes) für die Pufferung von HTTP-Datei-Uploads."
 
 msgid "Maximum number of files allowed per HTTP upload."
-msgstr ""
+msgstr "Maximal zulässige Anzahl von Dateien pro HTTP-Upload."
 
 msgid "Index"
-msgstr ""
+msgstr "Index"
 
 msgid "Crawler Common"
-msgstr ""
+msgstr "Crawler: Allgemein"
 
 msgid "Number of threads for HTTP crawling."
-msgstr ""
+msgstr "Anzahl der Threads für das HTTP-Crawling."
 
 msgid "Serializer type for crawler data (e.g., kryo)."
-msgstr ""
+msgstr "Serializer-Typ für Crawler-Daten (z. B. kryo)."
 
 msgid "Maximum length of site name in documents."
-msgstr ""
+msgstr "Maximale Länge des Site-Namens in Dokumenten."
 
 msgid "Encoding for site names in documents."
-msgstr ""
+msgstr "Kodierung für Site-Namen in Dokumenten."
 
 msgid "Hostname to use when unknown in documents."
-msgstr ""
+msgstr "Hostname, der in Dokumenten verwendet wird, wenn er unbekannt ist."
 
 msgid "Whether to use site encoding for English documents."
-msgstr ""
+msgstr "Gibt an, ob die Site-Kodierung für englische Dokumente verwendet werden soll."
 
 msgid "Whether to append data to documents."
-msgstr ""
+msgstr "Gibt an, ob Daten an Dokumente angehängt werden sollen."
 
 msgid "Whether to append filename to documents."
-msgstr ""
+msgstr "Gibt an, ob der Dateiname an Dokumente angehängt werden soll."
 
 msgid "Maximum size of alphanumeric terms in documents."
-msgstr ""
+msgstr "Maximale Größe alphanumerischer Begriffe in Dokumenten."
 
 msgid "Maximum size of symbol terms in documents."
-msgstr ""
+msgstr "Maximale Größe von Symbolbegriffen in Dokumenten."
 
 msgid "Whether to remove duplicate terms in documents."
-msgstr ""
+msgstr "Gibt an, ob doppelte Begriffe in Dokumenten entfernt werden sollen."
 
 msgid "Unicode space characters for document parsing."
-msgstr ""
+msgstr "Unicode-Leerzeichen für das Parsen von Dokumenten."
 
 msgid "Unicode full stop characters for document parsing."
-msgstr ""
+msgstr "Unicode-Punktzeichen für das Parsen von Dokumenten."
 
 msgid "Encoding for crawling data."
-msgstr ""
+msgstr "Kodierung für Crawling-Daten."
 
 msgid "Supported web protocols for crawling."
-msgstr ""
+msgstr "Unterstützte Web-Protokolle für das Crawling."
 
 msgid "Supported file protocols for crawling."
-msgstr ""
+msgstr "Unterstützte Dateiprotokolle für das Crawling."
 
 msgid "Pattern for environment variable keys in crawling data."
-msgstr ""
+msgstr "Muster für Schlüssel von Umgebungsvariablen in Crawling-Daten."
 
 msgid "Whether to ignore robots.txt during crawling."
-msgstr ""
+msgstr "Gibt an, ob robots.txt beim Crawling ignoriert werden soll."
 
 msgid "Whether to ignore robots meta tags during crawling."
-msgstr ""
+msgstr "Gibt an, ob Robots-Meta-Tags beim Crawling ignoriert werden sollen."
 
 msgid "Whether to ignore content exceptions during crawling."
-msgstr ""
+msgstr "Gibt an, ob Inhaltsausnahmen beim Crawling ignoriert werden sollen."
 
 msgid "HTTP status codes considered as failure URLs."
-msgstr ""
+msgstr "HTTP-Statuscodes, die als Fehler-URLs gelten."
 
 msgid "Interval (seconds) for system monitor during crawling."
-msgstr ""
+msgstr "Intervall (Sekunden) für die Systemüberwachung während des Crawlings."
 
 msgid "Whether to ignore idle threads in hot thread monitoring."
-msgstr ""
+msgstr "Gibt an, ob Leerlauf-Threads bei der Hot-Thread-Überwachung ignoriert werden sollen."
 
 msgid "Interval for hot thread monitoring (e.g., 500ms)."
-msgstr ""
+msgstr "Intervall für die Hot-Thread-Überwachung (z. B. 500ms)."
 
 msgid "Number of snapshots for hot thread monitoring."
-msgstr ""
+msgstr "Anzahl der Snapshots für die Hot-Thread-Überwachung."
 
 msgid "Number of threads for hot thread monitoring."
-msgstr ""
+msgstr "Anzahl der Threads für die Hot-Thread-Überwachung."
 
 msgid "Timeout for hot thread monitoring (e.g., 30s)."
-msgstr ""
+msgstr "Timeout für die Hot-Thread-Überwachung (z. B. 30s)."
 
 msgid "Type of hot thread monitoring (e.g., cpu)."
-msgstr ""
+msgstr "Typ der Hot-Thread-Überwachung (z. B. cpu)."
 
 msgid "Metadata fields to exclude from document content."
-msgstr ""
+msgstr "Metadatenfelder, die vom Dokumentinhalt ausgeschlossen werden."
 
 msgid "Mapping for document metadata names."
-msgstr ""
+msgstr "Zuordnung für Dokument-Metadatennamen."
 
 msgid "Crawler HTML"
-msgstr ""
+msgstr "Crawler: HTML"
 
 msgid "XPath to extract main content from HTML documents."
-msgstr ""
+msgstr "XPath zum Extrahieren des Hauptinhalts aus HTML-Dokumenten."
 
 msgid "XPath to extract language attribute from HTML documents."
-msgstr ""
+msgstr "XPath zum Extrahieren des Sprachattributs aus HTML-Dokumenten."
 
 msgid "XPath to extract digest (description) from HTML documents."
-msgstr ""
+msgstr "XPath zum Extrahieren des Digest (Beschreibung) aus HTML-Dokumenten."
 
 msgid "XPath to extract canonical URL from HTML documents."
-msgstr ""
+msgstr "XPath zum Extrahieren der kanonischen URL aus HTML-Dokumenten."
 
 msgid "HTML tags to prune (remove) during document processing."
-msgstr ""
+msgstr "HTML-Tags, die bei der Dokumentverarbeitung beschnitten (entfernt) werden."
 
 msgid "Maximum length of digest extracted from HTML documents."
-msgstr ""
+msgstr "Maximale Länge des aus HTML-Dokumenten extrahierten Digest."
 
 msgid "Default language for HTML documents."
-msgstr ""
+msgstr "Standardsprache für HTML-Dokumente."
 
 msgid "Patterns to include for HTML index processing."
-msgstr ""
+msgstr "Muster, die bei der HTML-Indexverarbeitung eingeschlossen werden."
 
 msgid "Patterns to exclude for HTML index processing."
-msgstr ""
+msgstr "Muster, die bei der HTML-Indexverarbeitung ausgeschlossen werden."
 
 msgid "Patterns to include for HTML search processing."
-msgstr ""
+msgstr "Muster, die bei der HTML-Suchverarbeitung eingeschlossen werden."
 
 msgid "Patterns to exclude for HTML search processing."
-msgstr ""
+msgstr "Muster, die bei der HTML-Suchverarbeitung ausgeschlossen werden."
 
 msgid "Crawler File"
-msgstr ""
+msgstr "Crawler: Datei"
 
 msgid "Encoding for file names in documents."
-msgstr ""
+msgstr "Kodierung für Dateinamen in Dokumenten."
 
 msgid "Label to use when a file has no title."
-msgstr ""
+msgstr "Label, das verwendet wird, wenn eine Datei keinen Titel hat."
 
 msgid "Whether to ignore files with empty content."
-msgstr ""
+msgstr "Gibt an, ob Dateien mit leerem Inhalt ignoriert werden sollen."
 
 msgid "Maximum length of file title in documents."
-msgstr ""
+msgstr "Maximale Länge des Dateititels in Dokumenten."
 
 msgid "Maximum length of file digest in documents."
-msgstr ""
+msgstr "Maximale Länge des Datei-Digest in Dokumenten."
 
 msgid "Whether to append meta content from files."
-msgstr ""
+msgstr "Gibt an, ob Meta-Inhalte aus Dateien angehängt werden sollen."
 
 msgid "Whether to append body content from files."
-msgstr ""
+msgstr "Gibt an, ob Body-Inhalte aus Dateien angehängt werden sollen."
 
 msgid "Default language for file documents."
-msgstr ""
+msgstr "Standardsprache für Dateidokumente."
 
 msgid "Patterns to include for file index processing."
-msgstr ""
+msgstr "Muster, die bei der Dateiindexverarbeitung eingeschlossen werden."
 
 msgid "Patterns to exclude for file index processing."
-msgstr ""
+msgstr "Muster, die bei der Dateiindexverarbeitung ausgeschlossen werden."
 
 msgid "Patterns to include for file search processing."
-msgstr ""
+msgstr "Muster, die bei der Dateisuchverarbeitung eingeschlossen werden."
 
 msgid "Patterns to exclude for file search processing."
-msgstr ""
+msgstr "Muster, die bei der Dateisuchverarbeitung ausgeschlossen werden."
 
 msgid "Whether to index the owner of crawled files (SMB, local file system and FTP). The crawl config parameter config.owner.enabled overrides it."
-msgstr ""
+msgstr "Gibt an, ob der Eigentümer gecrawlter Dateien (SMB, lokales Dateisystem und FTP) indiziert werden soll. Der Crawl-Konfigurationsparameter config.owner.enabled überschreibt dies."
 
 msgid "Whether to index the last modifier of crawled files, read from the document metadata and falling back to the file owner. The crawl config parameter config.last.modifier.enabled overrides it."
-msgstr ""
+msgstr "Gibt an, ob der letzte Bearbeiter gecrawlter Dateien indiziert werden soll; er wird aus den Dokumentmetadaten gelesen und fällt auf den Dateieigentümer zurück. Der Crawl-Konfigurationsparameter config.last.modifier.enabled überschreibt dies."
 
 msgid "Crawler Cache"
-msgstr ""
+msgstr "Crawler: Cache"
 
 msgid "Whether document cache is enabled."
-msgstr ""
+msgstr "Gibt an, ob der Dokument-Cache aktiviert ist."
 
 msgid "Maximum size (bytes) for document cache."
-msgstr ""
+msgstr "Maximale Größe (Bytes) für den Dokument-Cache."
 
 msgid "Supported MIME types for document cache."
-msgstr ""
+msgstr "Unterstützte MIME-Typen für den Dokument-Cache."
 
 msgid ",text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME types for HTML document cache."
-msgstr ""
+msgstr ",text/plain,application/xml,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation MIME-Typen für den HTML-Dokument-Cache."
 
 msgid "Extension-to-MIME-type override mappings for MIME type detection (one per line: .ext=mime/type)."
-msgstr ""
+msgstr "Überschreibende Zuordnungen von Erweiterung zu MIME-Typ für die MIME-Typ-Erkennung (eine pro Zeile: .ext=mime/type)."
 
 msgid "Whether to extract text from images and scanned PDFs with Tesseract OCR (requires the tesseract command)."
-msgstr ""
+msgstr "Gibt an, ob Text aus Bildern und gescannten PDFs mit Tesseract OCR extrahiert werden soll (erfordert den Befehl tesseract)."
 
 msgid "Tesseract OCR languages, joined with '+' (e.g. jpn+eng)."
-msgstr ""
+msgstr "Sprachen für Tesseract OCR, verbunden mit '+' (z. B. jpn+eng)."
 
 msgid "Timeout in seconds for one Tesseract OCR run."
-msgstr ""
+msgstr "Timeout in Sekunden für einen Tesseract-OCR-Lauf."
 
 msgid "Indexer"
-msgstr ""
+msgstr "Indexer"
 
 msgid "Whether to enable thread dump for the indexer."
-msgstr ""
+msgstr "Gibt an, ob der Thread-Dump für den Indexer aktiviert werden soll."
 
 msgid "Maximum number of unprocessed documents for the indexer."
-msgstr ""
+msgstr "Maximale Anzahl unverarbeiteter Dokumente für den Indexer."
 
 msgid "Whether to enable click count tracking in the indexer."
-msgstr ""
+msgstr "Gibt an, ob die Nachverfolgung der Klickanzahl im Indexer aktiviert werden soll."
 
 msgid "Whether to enable favorite count tracking in the indexer."
-msgstr ""
+msgstr "Gibt an, ob die Nachverfolgung der Favoritenanzahl im Indexer aktiviert werden soll."
 
 msgid "Commit margin time (ms) for webfs in the indexer."
-msgstr ""
+msgstr "Commit-Pufferzeit (ms) für webfs im Indexer."
 
 msgid "Maximum number of empty lists for webfs in the indexer."
-msgstr ""
+msgstr "Maximale Anzahl leerer Listen für webfs im Indexer."
 
 msgid "Update interval (ms) for webfs in the indexer."
-msgstr ""
+msgstr "Aktualisierungsintervall (ms) für webfs im Indexer."
 
 msgid "Maximum document cache size for webfs in the indexer."
-msgstr ""
+msgstr "Maximale Dokument-Cache-Größe für webfs im Indexer."
 
 msgid "Maximum document request size (bytes) for webfs in the indexer."
-msgstr ""
+msgstr "Maximale Größe von Dokumentanfragen (Bytes) für webfs im Indexer."
 
 msgid "Maximum document cache size for data in the indexer."
-msgstr ""
+msgstr "Maximale Dokument-Cache-Größe für Daten im Indexer."
 
 msgid "Maximum document request size (bytes) for data in the indexer."
-msgstr ""
+msgstr "Maximale Größe von Dokumentanfragen (Bytes) für Daten im Indexer."
 
 msgid "Maximum delete cache size for data in the indexer."
-msgstr ""
+msgstr "Maximale Lösch-Cache-Größe für Daten im Indexer."
 
 msgid "Maximum redirect count for data in the indexer."
-msgstr ""
+msgstr "Maximale Anzahl von Weiterleitungen für Daten im Indexer."
 
 msgid "Fields used for language detection in the indexer."
-msgstr ""
+msgstr "Felder, die für die Spracherkennung im Indexer verwendet werden."
 
 msgid "Length of text for language detection in the indexer."
-msgstr ""
+msgstr "Textlänge für die Spracherkennung im Indexer."
 
 msgid "Maximum result window size for the indexer."
-msgstr ""
+msgstr "Maximale Ergebnisfenstergröße für den Indexer."
 
 msgid "Maximum number of search documents for the indexer."
-msgstr ""
+msgstr "Maximale Anzahl von Suchdokumenten für den Indexer."
 
 msgid "Index Settings"
-msgstr ""
+msgstr "Index-Einstellungen"
 
 msgid "Codec type for the index."
-msgstr ""
+msgstr "Codec-Typ für den Index."
 
 msgid "Number of primary shards for the index."
-msgstr ""
+msgstr "Anzahl der Primär-Shards für den Index."
 
 msgid "Auto expand replicas setting for the index."
-msgstr ""
+msgstr "Einstellung zur automatischen Erweiterung der Replikate für den Index."
 
 msgid "Digest algorithm for index IDs."
-msgstr ""
+msgstr "Digest-Algorithmus für Index-IDs."
 
 msgid "Initial password for the index user."
-msgstr ""
+msgstr "Initiales Passwort für den Index-Benutzer."
 
 msgid "Field Names"
-msgstr ""
+msgstr "Feldnamen"
 
 msgid "Field name for favorite count in the index."
-msgstr ""
+msgstr "Feldname für die Favoritenanzahl im Index."
 
 msgid "Field name for click count in the index."
-msgstr ""
+msgstr "Feldname für die Klickanzahl im Index."
 
 msgid "Field name for config ID in the index."
-msgstr ""
+msgstr "Feldname für die Konfigurations-ID im Index."
 
 msgid "Field name for expiration date in the index."
-msgstr ""
+msgstr "Feldname für das Ablaufdatum im Index."
 
 msgid "Field name for URL in the index."
-msgstr ""
+msgstr "Feldname für die URL im Index."
 
 msgid "Field name for document ID in the index."
-msgstr ""
+msgstr "Feldname für die Dokument-ID im Index."
 
 msgid "Field name for internal ID in the index."
-msgstr ""
+msgstr "Feldname für die interne ID im Index."
 
 msgid "Field name for version in the index."
-msgstr ""
+msgstr "Feldname für die Version im Index."
 
 msgid "Field name for sequence number in the index."
-msgstr ""
+msgstr "Feldname für die Sequenznummer im Index."
 
 msgid "Field name for primary term in the index."
-msgstr ""
+msgstr "Feldname für den Primary Term im Index."
 
 msgid "Field name for language in the index."
-msgstr ""
+msgstr "Feldname für die Sprache im Index."
 
 msgid "Field name for cache status in the index."
-msgstr ""
+msgstr "Feldname für den Cache-Status im Index."
 
 msgid "Field name for last modified date in the index."
-msgstr ""
+msgstr "Feldname für das Datum der letzten Änderung im Index."
 
 msgid "Field name for the ETag response header of the crawled document in the index."
-msgstr ""
+msgstr "Feldname für den ETag-Antwort-Header des gecrawlten Dokuments im Index."
 
 msgid "Field name for the owner of the crawled file in the index."
-msgstr ""
+msgstr "Feldname für den Eigentümer der gecrawlten Datei im Index."
 
 msgid "Field name for the last modifier of the crawled file in the index."
-msgstr ""
+msgstr "Feldname für den letzten Bearbeiter der gecrawlten Datei im Index."
 
 msgid "Field name for anchor in the index."
-msgstr ""
+msgstr "Feldname für den Anker im Index."
 
 msgid "Field name for segment in the index."
-msgstr ""
+msgstr "Feldname für das Segment im Index."
 
 msgid "Field name for role in the index."
-msgstr ""
+msgstr "Feldname für die Rolle im Index."
 
 msgid "Field name for boost value in the index."
-msgstr ""
+msgstr "Feldname für den Boost-Wert im Index."
 
 msgid "Field name for creation date in the index."
-msgstr ""
+msgstr "Feldname für das Erstellungsdatum im Index."
 
 msgid "Field name for timestamp in the index."
-msgstr ""
+msgstr "Feldname für den Zeitstempel im Index."
 
 msgid "Field name for label in the index."
-msgstr ""
+msgstr "Feldname für das Label im Index."
 
 msgid "Field name for the user tags of the document in the index."
-msgstr ""
+msgstr "Feldname für die Benutzer-Tags des Dokuments im Index."
 
 msgid "Field name for MIME type in the index."
-msgstr ""
+msgstr "Feldname für den MIME-Typ im Index."
 
 msgid "Field name for parent ID in the index."
-msgstr ""
+msgstr "Feldname für die übergeordnete ID im Index."
 
 msgid "Field name for important content in the index."
-msgstr ""
+msgstr "Feldname für den wichtigen Inhalt im Index."
 
 msgid "Field name for content in the index."
-msgstr ""
+msgstr "Feldname für den Inhalt im Index."
 
 msgid "Field name for content minhash bits in the index."
-msgstr ""
+msgstr "Feldname für die Inhalts-Minhash-Bits im Index."
 
 msgid "Field name for cache in the index."
-msgstr ""
+msgstr "Feldname für den Cache im Index."
 
 msgid "Field name for digest in the index."
-msgstr ""
+msgstr "Feldname für den Digest im Index."
 
 msgid "Field name for title in the index."
-msgstr ""
+msgstr "Feldname für den Titel im Index."
 
 msgid "Field name for host in the index."
-msgstr ""
+msgstr "Feldname für den Host im Index."
 
 msgid "Field name for site in the index."
-msgstr ""
+msgstr "Feldname für die Site im Index."
 
 msgid "Field name for content length in the index."
-msgstr ""
+msgstr "Feldname für die Inhaltslänge im Index."
 
 msgid "Field name for file type in the index."
-msgstr ""
+msgstr "Feldname für den Dateityp im Index."
 
 msgid "Field name for file name in the index."
-msgstr ""
+msgstr "Feldname für den Dateinamen im Index."
 
 msgid "Field name for thumbnail in the index."
-msgstr ""
+msgstr "Feldname für das Thumbnail im Index."
 
 msgid "Field name for virtual host in the index."
-msgstr ""
+msgstr "Feldname für den virtuellen Host im Index."
 
 msgid "Field name for content title in the response."
-msgstr ""
+msgstr "Feldname für den Inhaltstitel in der Antwort."
 
 msgid "Field name for content description in the response."
-msgstr ""
+msgstr "Feldname für die Inhaltsbeschreibung in der Antwort."
 
 msgid "Field name for URL link in the response."
-msgstr ""
+msgstr "Feldname für den URL-Link in der Antwort."
 
 msgid "Field name for site path in the response."
-msgstr ""
+msgstr "Feldname für den Site-Pfad in der Antwort."
 
 msgid "Maximum length of content title in the response."
-msgstr ""
+msgstr "Maximale Länge des Inhaltstitels in der Antwort."
 
 msgid "Maximum length of site path in the response."
-msgstr ""
+msgstr "Maximale Länge des Site-Pfads in der Antwort."
 
 msgid "Whether to enable content title highlighting in the response."
-msgstr ""
+msgstr "Gibt an, ob die Hervorhebung des Inhaltstitels in der Antwort aktiviert werden soll."
 
 msgid "Inline MIME types for the response."
-msgstr ""
+msgstr "Inline-MIME-Typen für die Antwort."
 
 msgid "HTTP headers for the response. Access-Control-* and Timing-Allow-Origin are ignored (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary here."
-msgstr ""
+msgstr "HTTP-Header für die Antwort. Access-Control-* und Timing-Allow-Origin werden ignoriert (CORS wird über api.cors.* / CorsFilter gesteuert). Setzen Sie Vary hier nicht."
 
 msgid "Document Index"
-msgstr ""
+msgstr "Dokumentindex"
 
 msgid "Index name for search documents."
-msgstr ""
+msgstr "Indexname für Suchdokumente."
 
 msgid "Index name for update documents."
-msgstr ""
+msgstr "Indexname für Aktualisierungsdokumente."
 
 msgid "Index name for suggest documents."
-msgstr ""
+msgstr "Indexname für Vorschlagsdokumente."
 
 msgid "Index name for crawler documents."
-msgstr ""
+msgstr "Indexname für Crawler-Dokumente."
 
 msgid "Number of primary shards for crawler queue index."
-msgstr ""
+msgstr "Anzahl der Primär-Shards für den Crawler-Warteschlangen-Index."
 
 msgid "Number of primary shards for crawler data index."
-msgstr ""
+msgstr "Anzahl der Primär-Shards für den Crawler-Daten-Index."
 
 msgid "Number of primary shards for crawler filter index."
-msgstr ""
+msgstr "Anzahl der Primär-Shards für den Crawler-Filter-Index."
 
 msgid "Number of replicas for crawler queue index."
-msgstr ""
+msgstr "Anzahl der Replikate für den Crawler-Warteschlangen-Index."
 
 msgid "Number of replicas for crawler data index."
-msgstr ""
+msgstr "Anzahl der Replikate für den Crawler-Daten-Index."
 
 msgid "Number of replicas for crawler filter index."
-msgstr ""
+msgstr "Anzahl der Replikate für den Crawler-Filter-Index."
 
 msgid "Index name for configuration data."
-msgstr ""
+msgstr "Indexname für Konfigurationsdaten."
 
 msgid "Index name for user data."
-msgstr ""
+msgstr "Indexname für Benutzerdaten."
 
 msgid "Index name for log data."
-msgstr ""
+msgstr "Indexname für Protokolldaten."
 
 msgid "Prefix for dictionary index names."
-msgstr ""
+msgstr "Präfix für Wörterbuch-Indexnamen."
 
 msgid "Document Management"
-msgstr ""
+msgstr "Dokumentenverwaltung"
 
 msgid "Array-type fields for admin in the index."
-msgstr ""
+msgstr "Felder vom Typ Array für die Administration im Index."
 
 msgid "Date-type fields for admin in the index."
-msgstr ""
+msgstr "Felder vom Typ Datum für die Administration im Index."
 
 msgid "Integer-type fields for admin in the index."
-msgstr ""
+msgstr "Felder vom Typ Integer für die Administration im Index."
 
 msgid "Long-type fields for admin in the index."
-msgstr ""
+msgstr "Felder vom Typ Long für die Administration im Index."
 
 msgid "Float-type fields for admin in the index."
-msgstr ""
+msgstr "Felder vom Typ Float für die Administration im Index."
 
 msgid "Double-type fields for admin in the index."
-msgstr ""
+msgstr "Felder vom Typ Double für die Administration im Index."
 
 msgid "Required fields for admin in the index."
-msgstr ""
+msgstr "Pflichtfelder für die Administration im Index."
 
 msgid "Timeouts"
-msgstr ""
+msgstr "Timeouts"
 
 msgid "Timeout for index search operations."
-msgstr ""
+msgstr "Timeout für Index-Suchvorgänge."
 
 msgid "Timeout for scroll search operations."
-msgstr ""
+msgstr "Timeout für Scroll-Suchvorgänge."
 
 msgid "Timeout for index operations."
-msgstr ""
+msgstr "Timeout für Index-Vorgänge."
 
 msgid "Timeout for bulk index operations."
-msgstr ""
+msgstr "Timeout für Bulk-Index-Vorgänge."
 
 msgid "Timeout for delete operations in the index."
-msgstr ""
+msgstr "Timeout für Löschvorgänge im Index."
 
 msgid "Timeout for index health checks."
-msgstr ""
+msgstr "Timeout für Index-Integritätsprüfungen."
 
 msgid "Timeout for index indices operations."
-msgstr ""
+msgstr "Timeout für Index-Indices-Vorgänge."
 
 msgid "File Types"
-msgstr ""
+msgstr "Dateitypen"
 
 msgid "Mapping of MIME types to filetype labels for indexing."
-msgstr ""
+msgstr "Zuordnung von MIME-Typen zu Dateityp-Labels für die Indexierung."
 
 msgid "Number of documents to process per reindex operation."
-msgstr ""
+msgstr "Anzahl der Dokumente, die pro Neuindizierungsvorgang verarbeitet werden."
 
 msgid "Request body template for reindex operations."
-msgstr ""
+msgstr "Request-Body-Vorlage für Neuindizierungsvorgänge."
 
 msgid "Requests per second for reindex operations (\"adaptive\" for auto)."
-msgstr ""
+msgstr "Anfragen pro Sekunde für Neuindizierungsvorgänge (\"adaptive\" für automatisch)."
 
 msgid "Whether to refresh the index after reindexing."
-msgstr ""
+msgstr "Gibt an, ob der Index nach der Neuindizierung aktualisiert werden soll."
 
 msgid "Timeout for reindex operations."
-msgstr ""
+msgstr "Timeout für Neuindizierungsvorgänge."
 
 msgid "Scroll timeout for reindex operations."
-msgstr ""
+msgstr "Scroll-Timeout für Neuindizierungsvorgänge."
 
 msgid "Maximum number of documents for reindex operations."
-msgstr ""
+msgstr "Maximale Anzahl von Dokumenten für Neuindizierungsvorgänge."
 
 msgid "Query"
-msgstr ""
+msgstr "Abfrage"
 
 msgid "Maximum length of search queries."
-msgstr ""
+msgstr "Maximale Länge von Suchanfragen."
 
 msgid "Timeout (ms) for search queries."
-msgstr ""
+msgstr "Timeout (ms) für Suchanfragen."
 
 msgid "Whether to log searches whose results are incomplete because the query timed out or a shard failed."
-msgstr ""
+msgstr "Gibt an, ob Suchen protokolliert werden sollen, deren Ergebnisse unvollständig sind, weil für die Abfrage ein Timeout eingetreten ist oder ein Shard ausgefallen ist."
 
 msgid "Maximum number of total hits to track in queries. Only a positive number or true is supported: false leaves the response without a hit count, and a search that asks for it, here or as a search parameter, is refused."
-msgstr ""
+msgstr "Maximale Anzahl von Gesamttreffern, die in Abfragen verfolgt werden. Unterstützt werden nur eine positive Zahl oder true: false lässt die Antwort ohne Trefferanzahl, und eine Suche, die dies anfordert, hier oder als Suchparameter, wird abgelehnt."
 
 msgid "Fields used for geo search queries."
-msgstr ""
+msgstr "Felder, die für Geosuch-Abfragen verwendet werden."
 
 msgid "Parameter name for browser language in queries."
-msgstr ""
+msgstr "Parametername für die Browsersprache in Abfragen."
 
 msgid "Whether to replace term with prefix query."
-msgstr ""
+msgstr "Gibt an, ob ein Begriff durch eine Präfix-Abfrage ersetzt werden soll."
 
 msgid "Minimum hit count for OR search queries."
-msgstr ""
+msgstr "Minimale Trefferanzahl für OR-Suchabfragen."
 
 msgid "Unicode terminal characters for query highlighting."
-msgstr ""
+msgstr "Unicode-Abschlusszeichen für die Such-Hervorhebung."
 
 msgid "Fragment size for query highlighting."
-msgstr ""
+msgstr "Fragmentgröße für die Such-Hervorhebung."
 
 msgid "Number of fragments for query highlighting."
-msgstr ""
+msgstr "Anzahl der Fragmente für die Such-Hervorhebung."
 
 msgid "Type of query highlighting."
-msgstr ""
+msgstr "Typ der Such-Hervorhebung."
 
 msgid "Tag to use before highlighted text."
-msgstr ""
+msgstr "Tag, das vor hervorgehobenem Text verwendet wird."
 
 msgid "Tag to use after highlighted text."
-msgstr ""
+msgstr "Tag, das nach hervorgehobenem Text verwendet wird."
 
 msgid "Boundary characters for query highlighting."
-msgstr ""
+msgstr "Begrenzungszeichen für die Such-Hervorhebung."
 
 msgid "Maximum scan for query highlight boundaries."
-msgstr ""
+msgstr "Maximaler Scan für die Grenzen der Such-Hervorhebung."
 
 msgid "Scanner type for query highlight boundaries."
-msgstr ""
+msgstr "Scanner-Typ für die Grenzen der Such-Hervorhebung."
 
 msgid "Encoder type for query highlighting."
-msgstr ""
+msgstr "Encoder-Typ für die Such-Hervorhebung."
 
 msgid "Whether to force source for query highlighting."
-msgstr ""
+msgstr "Gibt an, ob die Quelle für die Such-Hervorhebung erzwungen werden soll."
 
 msgid "Fragmenter type for query highlighting."
-msgstr ""
+msgstr "Fragmenter-Typ für die Such-Hervorhebung."
 
 msgid "Offset for query highlight fragments."
-msgstr ""
+msgstr "Offset für Fragmente der Such-Hervorhebung."
 
 msgid "Size for no-match query highlight."
-msgstr ""
+msgstr "Größe für die Such-Hervorhebung ohne Treffer."
 
 msgid "Order for query highlight fragments."
-msgstr ""
+msgstr "Reihenfolge für Fragmente der Such-Hervorhebung."
 
 msgid "Phrase limit for query highlighting."
-msgstr ""
+msgstr "Phrasenlimit für die Such-Hervorhebung."
 
 msgid "Fields for content description in query highlighting."
-msgstr ""
+msgstr "Felder für die Inhaltsbeschreibung in der Such-Hervorhebung."
 
 msgid "Whether to detect boundary position in query highlighting."
-msgstr ""
+msgstr "Gibt an, ob die Grenzposition in der Such-Hervorhebung erkannt werden soll."
 
 msgid "Type for text fragment in query highlighting."
-msgstr ""
+msgstr "Typ für das Textfragment in der Such-Hervorhebung."
 
 msgid "Size for text fragment in query highlighting."
-msgstr ""
+msgstr "Größe für das Textfragment in der Such-Hervorhebung."
 
 msgid "Prefix length for text fragment in query highlighting."
-msgstr ""
+msgstr "Präfixlänge für das Textfragment in der Such-Hervorhebung."
 
 msgid "Suffix length for text fragment in query highlighting."
-msgstr ""
+msgstr "Suffixlänge für das Textfragment in der Such-Hervorhebung."
 
 msgid "Maximum search result offset for queries."
-msgstr ""
+msgstr "Maximaler Offset der Suchergebnisse für Abfragen."
 
 msgid "Additional default fields for queries."
-msgstr ""
+msgstr "Zusätzliche Standardfelder für Abfragen."
 
 msgid "Additional fields fetched from the index for search results. The search API returns a field added here only if it is also listed in query.additional.api.response.fields."
-msgstr ""
+msgstr "Zusätzliche Felder, die für Suchergebnisse aus dem Index abgerufen werden. Die Such-API gibt ein hier hinzugefügtes Feld nur zurück, wenn es auch in query.additional.api.response.fields aufgeführt ist."
 
 msgid "Additional API response fields for queries. This key only appends fields to the v2 API response allow-list (add-only); it does not fetch them. A field must also be fetched: add it to query.additional.response.fields for the search API, or to query.additional.scroll.response.fields for the scroll API. Do not add ACL or internal fields (for example role, virtual_host); adding them would expose access-control information in the search API response."
-msgstr ""
+msgstr "Zusätzliche API-Antwortfelder für Abfragen. Dieser Schlüssel hängt Felder nur an die Zulassungsliste der v2-API-Antwort an (nur Hinzufügen); er ruft sie nicht ab. Ein Feld muss zusätzlich abgerufen werden: Fügen Sie es für die Such-API zu query.additional.response.fields oder für die Scroll-API zu query.additional.scroll.response.fields hinzu. Fügen Sie keine ACL- oder internen Felder hinzu (zum Beispiel role, virtual_host); ihr Hinzufügen würde Zugriffskontrollinformationen in der Antwort der Such-API offenlegen."
 
 msgid "Additional fields fetched from the index for scroll search results. The scroll API returns a field added here only if it is also listed in query.additional.api.response.fields."
-msgstr ""
+msgstr "Zusätzliche Felder, die für Scroll-Suchergebnisse aus dem Index abgerufen werden. Die Scroll-API gibt ein hier hinzugefügtes Feld nur zurück, wenn es auch in query.additional.api.response.fields aufgeführt ist."
 
 msgid "Additional cache response fields for queries."
-msgstr ""
+msgstr "Zusätzliche Cache-Antwortfelder für Abfragen."
 
 msgid "Additional highlighted fields for queries."
-msgstr ""
+msgstr "Zusätzliche hervorgehobene Felder für Abfragen."
 
 msgid "Additional search fields for queries."
-msgstr ""
+msgstr "Zusätzliche Suchfelder für Abfragen."
 
 msgid "Additional facet fields for queries."
-msgstr ""
+msgstr "Zusätzliche Facettenfelder für Abfragen."
 
 msgid "Additional sort fields for queries."
-msgstr ""
+msgstr "Zusätzliche Sortierfelder für Abfragen."
 
 msgid "Additional analyzed fields for queries."
-msgstr ""
+msgstr "Zusätzliche analysierte Felder für Abfragen."
 
 msgid "Additional not-analyzed fields for queries."
-msgstr ""
+msgstr "Zusätzliche nicht analysierte Felder für Abfragen."
 
 msgid "Fields for GSA response in queries."
-msgstr ""
+msgstr "Felder für die GSA-Antwort in Abfragen."
 
 msgid "Default language for GSA queries."
-msgstr ""
+msgstr "Standardsprache für GSA-Abfragen."
 
 msgid "Default sort for GSA queries."
-msgstr ""
+msgstr "Standardsortierung für GSA-Abfragen."
 
 msgid "Meta prefix for GSA queries."
-msgstr ""
+msgstr "Meta-Präfix für GSA-Abfragen."
 
 msgid "Charset field for GSA index queries."
-msgstr ""
+msgstr "Zeichensatzfeld für GSA-Indexabfragen."
 
 msgid "Content type field for GSA index queries."
-msgstr ""
+msgstr "Content-Type-Feld für GSA-Indexabfragen."
 
 msgid "Maximum concurrent group results for collapse queries."
-msgstr ""
+msgstr "Maximale Anzahl gleichzeitiger Gruppenergebnisse für Collapse-Abfragen."
 
 msgid "Inner hits name for collapse queries."
-msgstr ""
+msgstr "Inner-Hits-Name für Collapse-Abfragen."
 
 msgid "Inner hits size for collapse queries."
-msgstr ""
+msgstr "Inner-Hits-Größe für Collapse-Abfragen."
 
 msgid "Sorts for inner hits in collapse queries."
-msgstr ""
+msgstr "Sortierungen für Inner Hits in Collapse-Abfragen."
 
 msgid "Default languages for queries."
-msgstr ""
+msgstr "Standardsprachen für Abfragen."
 
 msgid "Default preference for JSON queries."
-msgstr ""
+msgstr "Standardpräferenz für JSON-Abfragen."
 
 msgid "Default preference for GSA queries."
-msgstr ""
+msgstr "Standardpräferenz für GSA-Abfragen."
 
 msgid "Language mapping for queries."
-msgstr ""
+msgstr "Sprachzuordnung für Abfragen."
 
 msgid "Boost"
-msgstr ""
+msgstr "Boost"
 
 msgid "Boost value for title field in queries."
-msgstr ""
+msgstr "Boost-Wert für das Titelfeld in Abfragen."
 
 msgid "Boost value for title field with language in queries."
-msgstr ""
+msgstr "Boost-Wert für das Titelfeld mit Sprache in Abfragen."
 
 msgid "Boost value for content field in queries."
-msgstr ""
+msgstr "Boost-Wert für das Inhaltsfeld in Abfragen."
 
 msgid "Boost value for content field with language in queries."
-msgstr ""
+msgstr "Boost-Wert für das Inhaltsfeld mit Sprache in Abfragen."
 
 msgid "Boost value for important content field in queries."
-msgstr ""
+msgstr "Boost-Wert für das Feld für wichtigen Inhalt in Abfragen."
 
 msgid "Boost value for important content field with language in queries."
-msgstr ""
+msgstr "Boost-Wert für das Feld für wichtigen Inhalt mit Sprache in Abfragen."
 
 msgid "Minimum length for fuzzy boosting in queries."
-msgstr ""
+msgstr "Mindestlänge für das Fuzzy-Boosting in Abfragen."
 
 msgid "Boost value for fuzzy title queries."
-msgstr ""
+msgstr "Boost-Wert für Fuzzy-Titelabfragen."
 
 msgid "Fuzziness for fuzzy title queries."
-msgstr ""
+msgstr "Fuzziness für Fuzzy-Titelabfragen."
 
 msgid "Number of expansions for fuzzy title queries."
-msgstr ""
+msgstr "Anzahl der Expansionen für Fuzzy-Titelabfragen."
 
 msgid "Prefix length for fuzzy title queries."
-msgstr ""
+msgstr "Präfixlänge für Fuzzy-Titelabfragen."
 
 msgid "Whether to allow transpositions in fuzzy title queries."
-msgstr ""
+msgstr "Gibt an, ob Transpositionen in Fuzzy-Titelabfragen zugelassen werden sollen."
 
 msgid "Boost value for fuzzy content queries."
-msgstr ""
+msgstr "Boost-Wert für Fuzzy-Inhaltsabfragen."
 
 msgid "Fuzziness for fuzzy content queries."
-msgstr ""
+msgstr "Fuzziness für Fuzzy-Inhaltsabfragen."
 
 msgid "Number of expansions for fuzzy content queries."
-msgstr ""
+msgstr "Anzahl der Expansionen für Fuzzy-Inhaltsabfragen."
 
 msgid "Prefix length for fuzzy content queries."
-msgstr ""
+msgstr "Präfixlänge für Fuzzy-Inhaltsabfragen."
 
 msgid "Whether to allow transpositions in fuzzy content queries."
-msgstr ""
+msgstr "Gibt an, ob Transpositionen in Fuzzy-Inhaltsabfragen zugelassen werden sollen."
 
 msgid "Default query type."
-msgstr ""
+msgstr "Standard-Abfragetyp."
 
 msgid "Tie breaker value for dismax queries."
-msgstr ""
+msgstr "Tie-Breaker-Wert für Dismax-Abfragen."
 
 msgid "Minimum should match value for boolean queries."
-msgstr ""
+msgstr "Minimum-should-match-Wert für boolesche Abfragen."
 
 msgid "Number of expansions for prefix queries."
-msgstr ""
+msgstr "Anzahl der Expansionen für Präfix-Abfragen."
 
 msgid "Slop value for prefix queries."
-msgstr ""
+msgstr "Slop-Wert für Präfix-Abfragen."
 
 msgid "Prefix length for fuzzy queries."
-msgstr ""
+msgstr "Präfixlänge für Fuzzy-Abfragen."
 
 msgid "Number of expansions for fuzzy queries."
-msgstr ""
+msgstr "Anzahl der Expansionen für Fuzzy-Abfragen."
 
 msgid "Whether to allow transpositions in fuzzy queries."
-msgstr ""
+msgstr "Gibt an, ob Transpositionen in Fuzzy-Abfragen zugelassen werden sollen."
 
 msgid "Facet"
-msgstr ""
+msgstr "Facette"
 
 msgid "Fields for facet queries."
-msgstr ""
+msgstr "Felder für Facettenabfragen."
 
 msgid "Size of facet fields."
-msgstr ""
+msgstr "Größe der Facettenfelder."
 
 msgid "Upper clamp for facet.size (applied at the search chokepoint)."
-msgstr ""
+msgstr "Obere Begrenzung für facet.size (wird am zentralen Durchlaufpunkt der Suche angewendet)."
 
 msgid "Minimum document count for facet fields."
-msgstr ""
+msgstr "Mindestanzahl von Dokumenten für Facettenfelder."
 
 msgid "Upper clamp for facet.minDocCount (applied at the search chokepoint)."
-msgstr ""
+msgstr "Obere Begrenzung für facet.minDocCount (wird am zentralen Durchlaufpunkt der Suche angewendet)."
 
 msgid "Sort order for facet fields."
-msgstr ""
+msgstr "Sortierreihenfolge für Facettenfelder."
 
 msgid "Value for missing facet fields."
-msgstr ""
+msgstr "Wert für fehlende Facettenfelder."
 
 msgid "Facet queries definition."
-msgstr ""
+msgstr "Definition der Facettenabfragen."
 
 msgid "Ranking"
-msgstr ""
+msgstr "Ranking"
 
 msgid "Window size for rank fusion."
-msgstr ""
+msgstr "Fenstergröße für Rank Fusion."
 
 msgid "Rank constant for rank fusion."
-msgstr ""
+msgstr "Rang-Konstante für Rank Fusion."
 
 msgid "Number of threads for rank fusion."
-msgstr ""
+msgstr "Anzahl der Threads für Rank Fusion."
 
 msgid "Maximum time (milliseconds) to wait for the searchers other than the main one when Fess fuses their results itself (rank.fusion.engine.enabled=false). A searcher that has not answered by then is left out of that search, and the results are flagged as partial and timed out. The main searcher is always waited for. 0 or less waits without a limit."
-msgstr ""
+msgstr "Maximale Zeit (Millisekunden), die auf die Searcher außer dem Haupt-Searcher gewartet wird, wenn Fess deren Ergebnisse selbst fusioniert (rank.fusion.engine.enabled=false). Ein Searcher, der bis dahin nicht geantwortet hat, wird aus dieser Suche ausgelassen, und die Ergebnisse werden als partiell und mit Timeout gekennzeichnet. Auf den Haupt-Searcher wird immer gewartet. 0 oder weniger wartet ohne Limit."
 
 msgid "Score field for rank fusion."
-msgstr ""
+msgstr "Score-Feld für Rank Fusion."
 
 msgid "Whether the search engine performs rank fusion. When true, the searchers that can take part contribute their queries to a single request, so facets and total hits describe the fused result set. When false, Fess fuses the searchers' results itself."
-msgstr ""
+msgstr "Gibt an, ob die Suchmaschine Rank Fusion durchführt. Bei true steuern die Searcher, die teilnehmen können, ihre Abfragen zu einer einzigen Anfrage bei, sodass Facetten und Gesamttreffer die fusionierte Ergebnismenge beschreiben. Bei false fusioniert Fess die Ergebnisse der Searcher selbst."
 
 msgid "How the search engine combines the fused scores: rrf, arithmetic_mean, geometric_mean or harmonic_mean."
-msgstr ""
+msgstr "Wie die Suchmaschine die fusionierten Scores kombiniert: rrf, arithmetic_mean, geometric_mean oder harmonic_mean."
 
 msgid "How scores are normalized before they are combined: min_max, l2 or z_score. Ignored by rrf. z_score can only be combined with arithmetic_mean; any other mean is refused and Fess fuses the results itself."
-msgstr ""
+msgstr "Wie Scores vor ihrer Kombination normalisiert werden: min_max, l2 oder z_score. Wird von rrf ignoriert. z_score kann nur mit arithmetic_mean kombiniert werden; jeder andere Mittelwert wird abgelehnt, und Fess fusioniert die Ergebnisse selbst."
 
 msgid "Weight per searcher for engine-side fusion, as name:weight pairs, e.g. default:0.7,semantic_chunk:0.3. The weights must sum to 1.0 and must name every searcher taking part. Empty weights them equally."
-msgstr ""
+msgstr "Gewicht pro Searcher für die Fusion auf Suchmaschinenseite als name:weight-Paare, z. B. default:0.7,semantic_chunk:0.3. Die Gewichte müssen in der Summe 1.0 ergeben und jeden teilnehmenden Searcher benennen. Leer gewichtet sie gleich."
 
 msgid "How many results each searcher contributes per shard to engine-side fusion. This bounds both how deep a client can page and the set of documents the engine ranks: a fused search pages through this many results, and never more than indexer.max.result.window.size."
-msgstr ""
+msgstr "Wie viele Ergebnisse jeder Searcher pro Shard zur Fusion auf Suchmaschinenseite beisteuert. Dies begrenzt sowohl, wie tief ein Client blättern kann, als auch die Menge der Dokumente, die die Suchmaschine in ein Ranking bringt: Eine fusionierte Suche blättert durch so viele Ergebnisse, jedoch nie durch mehr als indexer.max.result.window.size."
 
 msgid "ACL"
-msgstr ""
+msgstr "ACL"
 
 msgid "Whether to get SMB roles from a file."
-msgstr ""
+msgstr "Gibt an, ob SMB-Rollen aus einer Datei bezogen werden sollen."
 
 msgid "Available SID types for SMB."
-msgstr ""
+msgstr "Verfügbare SID-Typen für SMB."
 
 msgid "Whether to get file roles from a file."
-msgstr ""
+msgstr "Gibt an, ob Datei-Rollen aus einer Datei bezogen werden sollen."
 
 msgid "Whether to get FTP roles from a file."
-msgstr ""
+msgstr "Gibt an, ob FTP-Rollen aus einer Datei bezogen werden sollen."
 
 msgid "Backup"
-msgstr ""
+msgstr "Sicherung"
 
 msgid "Target files for index backup."
-msgstr ""
+msgstr "Zieldateien für die Index-Sicherung."
 
 msgid "Target log files for index backup."
-msgstr ""
+msgstr "Ziel-Protokolldateien für die Index-Sicherung."
 
 msgid "Timeout for loading index backup logs."
-msgstr ""
+msgstr "Timeout für das Laden von Index-Sicherungsprotokollen."
 
 msgid "Logging"
-msgstr ""
+msgstr "Protokollierung"
 
 msgid "Application packages for logging."
-msgstr ""
+msgstr "Anwendungspakete für die Protokollierung."
 
 msgid "Whether to enable search docs logging."
-msgstr ""
+msgstr "Gibt an, ob die Protokollierung von Suchdokumenten aktiviert werden soll."
 
 msgid "Fields to log for search docs."
-msgstr ""
+msgstr "Felder, die für Suchdokumente protokolliert werden."
 
 msgid "Whether to use a log file for search logging."
-msgstr ""
+msgstr "Gibt an, ob für die Suchprotokollierung eine Protokolldatei verwendet werden soll."
 
 msgid "Maximum queue size for search logging."
-msgstr ""
+msgstr "Maximale Warteschlangengröße für die Suchprotokollierung."
 
 msgid "Maximum queue size for click logging."
-msgstr ""
+msgstr "Maximale Warteschlangengröße für die Klickprotokollierung."
 
 msgid "Maximum queue size for chat usage logging."
-msgstr ""
+msgstr "Maximale Warteschlangengröße für die Chat-Nutzungsprotokollierung."
 
 msgid "Whether to record the search conditions of logged-in users for the search history."
-msgstr ""
+msgstr "Gibt an, ob die Suchbedingungen angemeldeter Benutzer für den Suchverlauf aufgezeichnet werden sollen."
 
 msgid "Maximum number of search history entries returned per user."
-msgstr ""
+msgstr "Maximale Anzahl von Suchverlaufseinträgen, die pro Benutzer zurückgegeben werden."
 
 msgid "Whether logged-in users can tag documents. Each tag belongs to the user who created it."
-msgstr ""
+msgstr "Gibt an, ob angemeldete Benutzer Dokumente taggen können. Jedes Tag gehört dem Benutzer, der es erstellt hat."
 
 msgid "Maximum length of a tag name, in code points."
-msgstr ""
+msgstr "Maximale Länge eines Tag-Namens in Codepoints."
 
 msgid "Maximum number of tags one user can own."
-msgstr ""
+msgstr "Maximale Anzahl von Tags, die ein Benutzer besitzen kann."
 
 msgid "Maximum number of URLs one tag can be put on."
-msgstr ""
+msgstr "Maximale Anzahl von URLs, an denen ein Tag angebracht werden kann."
 
 msgid "Maximum number of pending tag changes held in memory until they are applied to the documents."
-msgstr ""
+msgstr "Maximale Anzahl ausstehender Tag-Änderungen, die im Speicher gehalten werden, bis sie auf die Dokumente angewendet werden."
 
 msgid "Number of URLs updated per bulk request when tag changes are applied to the documents."
-msgstr ""
+msgstr "Anzahl der pro Bulk-Anfrage aktualisierten URLs, wenn Tag-Änderungen auf die Dokumente angewendet werden."
 
 msgid "Maximum number of tags visible to one user in a search."
-msgstr ""
+msgstr "Maximale Anzahl von Tags, die für einen Benutzer in einer Suche sichtbar sind."
 
 msgid "Web"
-msgstr ""
+msgstr "Web"
 
 msgid "Maximum input size for admin forms."
-msgstr ""
+msgstr "Maximale Eingabegröße für Admin-Formulare."
 
 msgid "Whether to enable label in admin config forms."
-msgstr ""
+msgstr "Gibt an, ob Label in Admin-Konfigurationsformularen aktiviert werden soll."
 
 msgid "Default template name for admin forms."
-msgstr ""
+msgstr "Standard-Vorlagenname für Admin-Formulare."
 
 msgid "Whether to enable OSDD link (OpenSearch Description Document)."
-msgstr ""
+msgstr "Gibt an, ob der OSDD-Link (OpenSearch Description Document) aktiviert werden soll."
 
 msgid "Whether to enable the clipboard copy icon."
-msgstr ""
+msgstr "Gibt an, ob das Symbol zum Kopieren in die Zwischenablage aktiviert werden soll."
 
 msgid "Admin user names for authentication."
-msgstr ""
+msgstr "Administrator-Benutzernamen für die Authentifizierung."
 
 msgid "Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set."
-msgstr ""
+msgstr "Gibt an, ob authentication.admin.users ohne Beachtung der Groß-/Kleinschreibung abgeglichen wird: auto, true oder false. auto ignoriert die Groß-/Kleinschreibung, wenn ldap.provider.url gesetzt ist."
 
 msgid "Admin role names for authentication."
-msgstr ""
+msgstr "Administrator-Rollennamen für die Authentifizierung."
 
 msgid "Default permissions for search roles."
-msgstr ""
+msgstr "Standardberechtigungen für Suchrollen."
 
 msgid "Default display permissions for search roles."
-msgstr ""
+msgstr "Standard-Anzeigeberechtigungen für Suchrollen."
 
 msgid "Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles."
-msgstr ""
+msgstr "Halten Sie role.search.guest.permissions nicht leer. Es initialisiert die Gastrolle, die den anonymen Suchrollensatz nicht leer hält; ist der aufgelöste Rollensatz leer, wird der Rollenfilter übersprungen (Fail-Open), was die rollenbasierte Zugriffskontrolle deaktivieren und Dokumente für anonyme Benutzer offenlegen kann. Gastberechtigungen für Suchrollen."
 
 msgid "Prefix for user roles in search."
-msgstr ""
+msgstr "Präfix für Benutzerrollen in der Suche."
 
 msgid "Prefix for group roles in search."
-msgstr ""
+msgstr "Präfix für Gruppenrollen in der Suche."
 
 msgid "Prefix for role roles in search."
-msgstr ""
+msgstr "Präfix für Rollen-Rollen in der Suche."
 
 msgid "Prefix for denied roles in search."
-msgstr ""
+msgstr "Präfix für verweigerte Rollen in der Suche."
 
 msgid "The default path of cookie (basically '/' if no context path)"
-msgstr ""
+msgstr "Der Standardpfad des Cookies (grundsätzlich '/', wenn kein Kontextpfad vorhanden ist)"
 
 msgid "The default expire of cookie in seconds e.g. 31556926: one year, 86400: one day"
-msgstr ""
+msgstr "Die Standard-Ablaufzeit des Cookies in Sekunden z. B. 31556926: ein Jahr, 86400: ein Tag"
 
 msgid "Session tracking modes"
-msgstr ""
+msgstr "Sitzungsverfolgungsmodi"
 
 msgid "Whether to add the Secure attribute to the session cookie (JSESSIONID) at startup. When blank (default), Tomcat's automatic behavior is used (Secure is added only for HTTPS requests). Set to true for production HTTPS deployments, especially when TLS is terminated at a reverse proxy. When true, the cookie is not sent over HTTP, so sessions will not be established for plain HTTP; keep it blank for localhost development. The Secure attribute is also required when SameSite=none is used. Changing this value requires a restart."
-msgstr ""
+msgstr "Gibt an, ob dem Sitzungs-Cookie (JSESSIONID) beim Start das Attribut Secure hinzugefügt wird. Bei leerem Wert (Standard) wird das automatische Verhalten von Tomcat verwendet (Secure wird nur bei HTTPS-Anfragen hinzugefügt). Setzen Sie ihn für HTTPS-Produktivumgebungen auf true, insbesondere wenn TLS an einem Reverse Proxy terminiert wird. Bei true wird das Cookie nicht über HTTP gesendet, sodass für reines HTTP keine Sitzungen aufgebaut werden; lassen Sie ihn für die Localhost-Entwicklung leer. Das Attribut Secure ist auch erforderlich, wenn SameSite=none verwendet wird. Eine Änderung dieses Werts erfordert einen Neustart."
 
 msgid "Comma-separated list of request parameter keys to store in cookies before SSO login."
-msgstr ""
+msgstr "Kommagetrennte Liste von Anfrageparameter-Schlüsseln, die vor dem SSO-Login in Cookies gespeichert werden."
 
 msgid "Comma-separated list of required parameter keys that must be present to store in cookies."
-msgstr ""
+msgstr "Kommagetrennte Liste erforderlicher Parameter-Schlüssel, die vorhanden sein müssen, um in Cookies gespeichert zu werden."
 
 msgid "Maximum length of the encoded search parameters stored in cookies."
-msgstr ""
+msgstr "Maximale Länge der kodierten Suchparameter, die in Cookies gespeichert werden."
 
 msgid "Maximum size in bytes the stored search parameters may decompress to. The bound above applies to the gzipped cookie, which is no bound on what it expands to, and the cookie comes from the client."
-msgstr ""
+msgstr "Maximale Größe in Bytes, auf die die gespeicherten Suchparameter dekomprimiert werden dürfen. Die obige Grenze gilt für das gzip-komprimierte Cookie, was keine Grenze für dessen entpackte Größe darstellt, und das Cookie stammt vom Client."
 
 msgid "Maximum length of the query string built when restoring the stored search parameters after login. Restoring them is a convenience and the login is not, so a longer one is dropped rather than written to a Location header the container would refuse. Percent-encoding multiplies a CJK query by nine, so this is far smaller than the query itself may be. Raise it together with tomcat.maxHttpHeaderSize in tomcat_config.properties, which bounds the response headers."
-msgstr ""
+msgstr "Maximale Länge des Query-Strings, der beim Wiederherstellen der gespeicherten Suchparameter nach der Anmeldung aufgebaut wird. Das Wiederherstellen ist eine Komfortfunktion, die Anmeldung dagegen nicht, daher wird ein längerer Query-String verworfen, anstatt in einen Location-Header geschrieben zu werden, den der Container ablehnen würde. Die Prozentkodierung vervielfacht eine CJK-Abfrage um das Neunfache, sodass dieser Wert weit kleiner ist, als die Abfrage selbst sein darf. Erhöhen Sie ihn zusammen mit tomcat.maxHttpHeaderSize in tomcat_config.properties, was die Antwort-Header begrenzt."
 
 msgid "Cookie name used to store encoded search parameters before SSO login."
-msgstr ""
+msgstr "Cookie-Name, der zum Speichern kodierter Suchparameter vor dem SSO-Login verwendet wird."
 
 msgid "Whether to set HttpOnly attribute to the search parameter cookie."
-msgstr ""
+msgstr "Gibt an, ob das Attribut HttpOnly für das Suchparameter-Cookie gesetzt werden soll."
 
 msgid "Whether to set Secure attribute to the search parameter cookie. Should be true in production environments using HTTPS."
-msgstr ""
+msgstr "Gibt an, ob das Attribut Secure für das Suchparameter-Cookie gesetzt werden soll. Sollte in Produktionsumgebungen mit HTTPS true sein."
 
 msgid "Max-Age (in seconds) for the search parameter cookie. Use -1 for session-only cookies."
-msgstr ""
+msgstr "Max-Age (in Sekunden) für das Suchparameter-Cookie. Verwenden Sie -1 für reine Sitzungs-Cookies."
 
 msgid "Domain attribute for the search parameter cookie. Set to the domain scope you want the cookie to be available on (e.g., example.com)."
-msgstr ""
+msgstr "Domain-Attribut für das Suchparameter-Cookie. Legen Sie den Domain-Bereich fest, in dem das Cookie verfügbar sein soll (z. B. example.com)."
 
 msgid "Path attribute for the search parameter cookie. Typically set to \"/\" or the context path of the app."
-msgstr ""
+msgstr "Path-Attribut für das Suchparameter-Cookie. Wird typischerweise auf \"/\" oder den Kontextpfad der Anwendung gesetzt."
 
 msgid "SameSite attribute for the search parameter cookie. Valid values: Lax, Strict, None"
-msgstr ""
+msgstr "SameSite-Attribut für das Suchparameter-Cookie. Gültige Werte: Lax, Strict, None"
 
 msgid "The size of one page for paging"
-msgstr ""
+msgstr "Die Größe einer Seite für die Paginierung"
 
 msgid "The size of page range for paging"
-msgstr ""
+msgstr "Die Größe des Seitenbereichs für die Paginierung"
 
 msgid "The option 'fillLimit' of page range for paging"
-msgstr ""
+msgstr "Die Option 'fillLimit' des Seitenbereichs für die Paginierung"
 
 msgid "Fetch Page Size"
-msgstr ""
+msgstr "Abrufgröße pro Seite"
 
 msgid "Maximum number of docboost records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von docboost-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of keymatch records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von keymatch-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of labeltype records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von labeltype-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of tagtype records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von tagtype-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of roletype records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von roletype-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of user records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Benutzer-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of role records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Rollen-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of group records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Gruppen-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of crawling info parameters to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Crawl-Info-Parametern, die pro Seite abgerufen werden."
 
 msgid "Maximum number of crawling info records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Crawl-Info-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of data config records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Datenkonfigurations-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of web config records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Web-Konfigurations-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of file config records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Dateikonfigurations-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of duplicate host records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Duplikat-Host-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of failure URL records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Fehler-URL-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of favorite log records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Favoritenprotokoll-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of file auth records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Datei-Authentifizierungs-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of web auth records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Web-Authentifizierungs-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of path mapping records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Pfad-Mapping-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of request header records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Anfrage-Header-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of scheduled job records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Datensätzen geplanter Jobs, die pro Seite abgerufen werden."
 
 msgid "Maximum number of elevate word records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Datensätzen für zusätzliche Wörter, die pro Seite abgerufen werden."
 
 msgid "Maximum number of bad word records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Datensätzen für Ausschlusswörter, die pro Seite abgerufen werden."
 
 msgid "Maximum number of dictionary records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Wörterbuch-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of related content records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Datensätzen für verwandte Inhalte, die pro Seite abgerufen werden."
 
 msgid "Maximum number of related query records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Datensätzen für verwandte Abfragen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of thumbnail queue records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Thumbnail-Warteschlangen-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of thumbnail purge records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Thumbnail-Bereinigungs-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of score booster records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Score-Booster-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Maximum number of search log records to fetch per page."
-msgstr ""
+msgstr "Maximale Anzahl von Suchprotokoll-Datensätzen, die pro Seite abgerufen werden."
 
 msgid "Whether to track total hits in search list page."
-msgstr ""
+msgstr "Gibt an, ob die Gesamttreffer auf der Suchlistenseite verfolgt werden sollen."
 
 msgid "Maximum content length (in characters) rendered on the search list edit page."
-msgstr ""
+msgstr "Maximale Inhaltslänge (in Zeichen), die auf der Bearbeitungsseite der Suchliste dargestellt wird."
 
 msgid "Search Page"
-msgstr ""
+msgstr "Suchseite"
 
 msgid "Default start page for search results."
-msgstr ""
+msgstr "Standard-Startseite für Suchergebnisse."
 
 msgid "Default size of search results per page."
-msgstr ""
+msgstr "Standardgröße der Suchergebnisse pro Seite."
 
 msgid "Maximum size of search results per page."
-msgstr ""
+msgstr "Maximale Größe der Suchergebnisse pro Seite."
 
 msgid "Maximum length of a v2 API string query parameter (q, sort, sdh). OWASP API4:2023."
-msgstr ""
+msgstr "Maximale Länge eines String-Abfrageparameters der v2-API (q, sort, sdh). OWASP API4:2023."
 
 msgid "Maximum number of values for a v2 API repeatable query parameter."
-msgstr ""
+msgstr "Maximale Anzahl von Werten für einen wiederholbaren Abfrageparameter der v2-API."
 
 msgid "Maximum click-log timestamp (rt, epoch ms) accepted by the v2 click API. OWASP API4:2023."
-msgstr ""
+msgstr "Maximaler Klickprotokoll-Zeitstempel (rt, Epoch ms), der von der v2-Klick-API akzeptiert wird. OWASP API4:2023."
 
 msgid "searchlog"
-msgstr ""
+msgstr "searchlog"
 
 msgid "Request headers to include in search log."
-msgstr ""
+msgstr "Anfrage-Header, die in das Suchprotokoll aufgenommen werden."
 
 msgid "Batch size for search log processing."
-msgstr ""
+msgstr "Batchgröße für die Suchprotokollverarbeitung."
 
 msgid "Number of days of search logs read when generating related queries from search logs."
-msgstr ""
+msgstr "Anzahl der Tage an Suchprotokollen, die beim Generieren verwandter Abfragen aus Suchprotokollen gelesen werden."
 
 msgid "Maximum number of terms generated per virtual host."
-msgstr ""
+msgstr "Maximale Anzahl von Begriffen, die pro virtuellem Host generiert werden."
 
 msgid "Maximum number of related queries generated per term."
-msgstr ""
+msgstr "Maximale Anzahl verwandter Abfragen, die pro Begriff generiert werden."
 
 msgid "Minimum number of distinct user sessions required for a term and for each of its related queries."
-msgstr ""
+msgstr "Mindestanzahl unterschiedlicher Benutzersitzungen, die für einen Begriff und für jede seiner verwandten Abfragen erforderlich ist."
 
 msgid "Interval (minutes) after a search within which a follow-up search of the same session counts as a refinement."
-msgstr ""
+msgstr "Intervall (Minuten) nach einer Suche, innerhalb dessen eine Folgesuche derselben Sitzung als Verfeinerung zählt."
 
 msgid "Maximum number of search logs of a term read to find the sessions that searched it."
-msgstr ""
+msgstr "Maximale Anzahl von Suchprotokollen eines Begriffs, die gelesen werden, um die Sitzungen zu finden, die danach gesucht haben."
 
 msgid "Maximum number of sessions per term whose follow-up searches are read."
-msgstr ""
+msgstr "Maximale Anzahl von Sitzungen pro Begriff, deren Folgesuchen gelesen werden."
 
 msgid "Maximum number of follow-up search logs read per term."
-msgstr ""
+msgstr "Maximale Anzahl von Folgesuch-Protokollen, die pro Begriff gelesen werden."
 
 msgid "Minimum length (in characters) of a generated term or related query."
-msgstr ""
+msgstr "Mindestlänge (in Zeichen) eines generierten Begriffs oder einer verwandten Abfrage."
 
 msgid "Maximum length (in characters) of a generated term or related query."
-msgstr ""
+msgstr "Maximale Länge (in Zeichen) eines generierten Begriffs oder einer verwandten Abfrage."
 
 msgid "docreport Maximum number of duplicate groups the document report screen shows, largest first."
-msgstr ""
+msgstr "docreport Maximale Anzahl von Duplikatgruppen, die die Dokumentbericht-Seite anzeigt, die größten zuerst."
 
 msgid "Maximum number of documents the document report screen lists for each duplicate group."
-msgstr ""
+msgstr "Maximale Anzahl von Dokumenten, die die Dokumentbericht-Seite für jede Duplikatgruppe auflistet."
 
 msgid "Number of content signatures read per request when the duplicate report is downloaded as CSV."
-msgstr ""
+msgstr "Anzahl der Inhaltssignaturen, die pro Anfrage gelesen werden, wenn der Duplikatbericht als CSV heruntergeladen wird."
 
 msgid "Default number of days since the last modification after which a document counts as dormant."
-msgstr ""
+msgstr "Standardanzahl von Tagen seit der letzten Änderung, nach denen ein Dokument als inaktiv gilt."
 
 msgid "Minimum width for HTML images in thumbnails."
-msgstr ""
+msgstr "Mindestbreite für HTML-Bilder in Thumbnails."
 
 msgid "Minimum height for HTML images in thumbnails."
-msgstr ""
+msgstr "Mindesthöhe für HTML-Bilder in Thumbnails."
 
 msgid "Maximum aspect ratio for HTML images in thumbnails."
-msgstr ""
+msgstr "Maximales Seitenverhältnis für HTML-Bilder in Thumbnails."
 
 msgid "Width of generated thumbnail images."
-msgstr ""
+msgstr "Breite generierter Thumbnail-Bilder."
 
 msgid "Height of generated thumbnail images."
-msgstr ""
+msgstr "Höhe generierter Thumbnail-Bilder."
 
 msgid "Format of generated thumbnail images."
-msgstr ""
+msgstr "Format generierter Thumbnail-Bilder."
 
 msgid "XPath to select images for thumbnails."
-msgstr ""
+msgstr "XPath zur Auswahl von Bildern für Thumbnails."
 
 msgid "File extensions to exclude from thumbnail generation."
-msgstr ""
+msgstr "Dateierweiterungen, die von der Thumbnail-Generierung ausgeschlossen werden."
 
 msgid "Interval for thumbnail generator."
-msgstr ""
+msgstr "Intervall für den Thumbnail-Generator."
 
 msgid "Targets for thumbnail generator (e.g., all)."
-msgstr ""
+msgstr "Ziele für den Thumbnail-Generator (z. B. all)."
 
 msgid "Whether the thumbnail crawler is enabled."
-msgstr ""
+msgstr "Gibt an, ob der Thumbnail-Crawler aktiviert ist."
 
 msgid "Interval for system monitor in thumbnail processing."
-msgstr ""
+msgstr "Intervall für die Systemüberwachung bei der Thumbnail-Verarbeitung."
 
 msgid "User"
-msgstr ""
+msgstr "Benutzer"
 
 msgid "User code settings"
-msgstr ""
+msgstr "Benutzercode-Einstellungen"
 
 msgid "User code minimum length."
-msgstr ""
+msgstr "Mindestlänge des Benutzercodes."
 
 msgid "User code maximum length."
-msgstr ""
+msgstr "Maximale Länge des Benutzercodes."
 
 msgid "User code pattern for validation."
-msgstr ""
+msgstr "Muster des Benutzercodes für die Validierung."
 
 msgid "Name to display in the From field of emails."
-msgstr ""
+msgstr "Name, der im Feld From von E-Mails angezeigt wird."
 
 msgid "Email address to use in the From field."
-msgstr ""
+msgstr "E-Mail-Adresse, die im Feld From verwendet wird."
 
 msgid "Hostname for the mail server."
-msgstr ""
+msgstr "Hostname des Mailservers."
 
 msgid "Target name for the scheduler."
-msgstr ""
+msgstr "Zielname für den Scheduler."
 
 msgid "Job class for the scheduler."
-msgstr ""
+msgstr "Job-Klasse für den Scheduler."
 
 msgid "Mode for concurrent execution in the scheduler."
-msgstr ""
+msgstr "Modus für die gleichzeitige Ausführung im Scheduler."
 
 msgid "Interval for scheduler monitoring."
-msgstr ""
+msgstr "Intervall für die Scheduler-Überwachung."
 
 msgid "Interval (seconds) for polling heartbeats and events."
-msgstr ""
+msgstr "Intervall (Sekunden) für das Abfragen von Heartbeats und Ereignissen."
 
 msgid "Time-to-live (ms) for instance heartbeat documents."
-msgstr ""
+msgstr "Time-to-live (ms) für Instanz-Heartbeat-Dokumente."
 
 msgid "Time-to-live (ms) for operation lock documents."
-msgstr ""
+msgstr "Time-to-live (ms) für Vorgangssperr-Dokumente."
 
 msgid "Maximum number of retries for acquiring an operation lock."
-msgstr ""
+msgstr "Maximale Anzahl von Wiederholungen beim Erwerb einer Vorgangssperre."
 
 msgid "Time-to-live (ms) for event notification documents."
-msgstr ""
+msgstr "Time-to-live (ms) für Ereignisbenachrichtigungs-Dokumente."
 
 msgid "Base link for online help."
-msgstr ""
+msgstr "Basis-Link für die Online-Hilfe."
 
 msgid "Installation guide link for online help."
-msgstr ""
+msgstr "Link zur Installationsanleitung für die Online-Hilfe."
 
 msgid "End-of-life information link for online help."
-msgstr ""
+msgstr "Link zu den End-of-Life-Informationen für die Online-Hilfe."
 
 msgid "Online help key for failure URL."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Fehler-URL."
 
 msgid "Online help key for elevate word."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Zusätzliches Wort."
 
 msgid "Online help key for request header."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Anfrage-Header."
 
 msgid "Online help key for synonym dictionary."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Synonym-Wörterbuch."
 
 msgid "Online help key for dictionary."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Wörterbuch."
 
 msgid "Online help key for Kuromoji dictionary."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Kuromoji-Wörterbuch."
 
 msgid "Online help key for protected words dictionary."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Protwords-Wörterbuch."
 
 msgid "Online help key for stopwords dictionary."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Stoppwort-Wörterbuch."
 
 msgid "Online help key for stemmer override dictionary."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Stemmer-Überschreibungs-Wörterbuch."
 
 msgid "Online help key for mapping dictionary."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Mapping-Wörterbuch."
 
 msgid "Online help key for web config."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Web-Konfiguration."
 
 msgid "Online help key for search list."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Suchliste."
 
 msgid "Online help key for log."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Protokolldatei."
 
 msgid "Online help key for general settings."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Allgemeine Einstellungen."
 
 msgid "Online help key for role."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Rolle."
 
 msgid "Online help key for job log."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Jobprotokoll."
 
 msgid "Online help key for keymatch."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Schlüsselübereinstimmung."
 
 msgid "Online help key for related query."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Verwandte Abfrage."
 
 msgid "Online help key for related content."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Verwandter Inhalt."
 
 msgid "Online help key for wizard."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Konfigurations-Assistent."
 
 msgid "Online help key for bad word."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Ausschlusswort."
 
 msgid "Online help key for path mapping."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Pfad-Mapping."
 
 msgid "Online help key for boost document."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Dokument-Boosting."
 
 msgid "Online help key for data config."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Datenkonfiguration."
 
 msgid "Online help key for system info."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Systeminformationen."
 
 msgid "Online help key for user."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Benutzer."
 
 msgid "Online help key for group."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Gruppe."
 
 msgid "Online help key for dashboard."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Dashboard."
 
 msgid "Online help key for web authentication."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Web-Authentifizierung."
 
 msgid "Online help key for file config."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Dateikonfiguration."
 
 msgid "Online help key for file authentication."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Datei-Authentifizierung."
 
 msgid "Online help key for label type."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Labeltyp."
 
 msgid "Online help key for tag type."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Tag-Typ."
 
 msgid "Online help key for duplicate host."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Duplikat-Host."
 
 msgid "Online help key for scheduler."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Scheduler."
 
 msgid "Online help key for crawling info."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Crawl-Informationen."
 
 msgid "Online help key for backup."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Sicherung."
 
 msgid "Online help key for upgrade."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Aktualisierung."
 
 msgid "Online help key for search request."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Abfrageanforderung."
 
 msgid "Online help key for access token."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Zugriffstoken."
 
 msgid "Online help key for suggest."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Vorschlag."
 
 msgid "Online help key for search log."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Suchprotokoll."
 
 msgid "Online help key for maintenance."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Wartung."
 
 msgid "Online help key for plugin."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Plugin."
 
 msgid "Online help key for storage."
-msgstr ""
+msgstr "Online-Hilfe-Schlüssel für Speicher."
 
 msgid "Supported languages for online help."
-msgstr ""
+msgstr "Unterstützte Sprachen für die Online-Hilfe."
 
 msgid "Forum link for user support."
-msgstr ""
+msgstr "Forum-Link für den Benutzersupport."
 
 msgid "Supported languages for the forum."
-msgstr ""
+msgstr "Unterstützte Sprachen für das Forum."
 
 msgid "Seed value for popular word suggestion."
-msgstr ""
+msgstr "Seed-Wert für Vorschläge beliebter Wörter."
 
 msgid "Tags for popular word suggestion."
-msgstr ""
+msgstr "Tags für Vorschläge beliebter Wörter."
 
 msgid "Fields for popular word suggestion."
-msgstr ""
+msgstr "Felder für Vorschläge beliebter Wörter."
 
 msgid "Excluded words for popular word suggestion."
-msgstr ""
+msgstr "Ausgeschlossene Wörter für Vorschläge beliebter Wörter."
 
 msgid "Number of popular words to suggest."
-msgstr ""
+msgstr "Anzahl der vorzuschlagenden beliebten Wörter."
 
 msgid "Window size for popular word suggestion."
-msgstr ""
+msgstr "Fenstergröße für Vorschläge beliebter Wörter."
 
 msgid "Query frequency for popular word suggestion."
-msgstr ""
+msgstr "Abfragehäufigkeit für Vorschläge beliebter Wörter."
 
 msgid "Minimum hit count for suggestion."
-msgstr ""
+msgstr "Minimale Trefferanzahl für Vorschläge."
 
 msgid "Field for suggestion contents."
-msgstr ""
+msgstr "Feld für Vorschlagsinhalte."
 
 msgid "Field for suggestion tags."
-msgstr ""
+msgstr "Feld für Vorschlags-Tags."
 
 msgid "Field for suggestion roles."
-msgstr ""
+msgstr "Feld für Vorschlagsrollen."
 
 msgid "Index contents for suggestion."
-msgstr ""
+msgstr "Indexinhalte für Vorschläge."
 
 msgid "Interval for suggestion update requests."
-msgstr ""
+msgstr "Intervall für Vorschlags-Aktualisierungsanfragen."
 
 msgid "Number of documents per suggestion update request."
-msgstr ""
+msgstr "Anzahl der Dokumente pro Vorschlags-Aktualisierungsanfrage."
 
 msgid "Percentage limit for suggestion update contents."
-msgstr ""
+msgstr "Prozentuale Obergrenze für Vorschlags-Aktualisierungsinhalte."
 
 msgid "Maximum number of suggestion update contents."
-msgstr ""
+msgstr "Maximale Anzahl von Vorschlags-Aktualisierungsinhalten."
 
 msgid "Maximum document size for suggestion update."
-msgstr ""
+msgstr "Maximale Dokumentgröße für die Vorschlagsaktualisierung."
 
 msgid "Scroll size for suggestion source reader."
-msgstr ""
+msgstr "Scroll-Größe für den Vorschlags-Quellleser."
 
 msgid "Cache size for popular word suggestion."
-msgstr ""
+msgstr "Cache-Größe für Vorschläge beliebter Wörter."
 
 msgid "Cache expiration (seconds) for popular word suggestion."
-msgstr ""
+msgstr "Cache-Ablauf (Sekunden) für Vorschläge beliebter Wörter."
 
 msgid "Permissions for suggestion search log."
-msgstr ""
+msgstr "Berechtigungen für das Vorschlags-Suchprotokoll."
 
 msgid "Interval for system monitor in suggestion."
-msgstr ""
+msgstr "Intervall für die Systemüberwachung bei Vorschlägen."
 
 msgid "Whether LDAP admin is enabled."
-msgstr ""
+msgstr "Gibt an, ob die LDAP-Administration aktiviert ist."
 
 msgid "User filter for LDAP admin."
-msgstr ""
+msgstr "Benutzerfilter für die LDAP-Administration."
 
 msgid "Base DN for LDAP admin user."
-msgstr ""
+msgstr "Base DN für den LDAP-Administrationsbenutzer."
 
 msgid "Object classes for LDAP admin user."
-msgstr ""
+msgstr "Objektklassen für den LDAP-Administrationsbenutzer."
 
 msgid "Role filter for LDAP admin."
-msgstr ""
+msgstr "Rollenfilter für die LDAP-Administration."
 
 msgid "Base DN for LDAP admin role."
-msgstr ""
+msgstr "Base DN für die LDAP-Administrationsrolle."
 
 msgid "Object classes for LDAP admin role."
-msgstr ""
+msgstr "Objektklassen für die LDAP-Administrationsrolle."
 
 msgid "Group filter for LDAP admin."
-msgstr ""
+msgstr "Gruppenfilter für die LDAP-Administration."
 
 msgid "Base DN for LDAP admin group."
-msgstr ""
+msgstr "Base DN für die LDAP-Administrationsgruppe."
 
 msgid "Object classes for LDAP admin group."
-msgstr ""
+msgstr "Objektklassen für die LDAP-Administrationsgruppe."
 
 msgid "Whether to sync password for LDAP admin."
-msgstr ""
+msgstr "Gibt an, ob das Passwort für die LDAP-Administration synchronisiert werden soll."
 
 msgid "Whether to validate LDAP authentication."
-msgstr ""
+msgstr "Gibt an, ob die LDAP-Authentifizierung validiert werden soll."
 
 msgid "Timeout (milliseconds) to establish an LDAP connection. This also bounds the TLS handshake and the initial bind response. 0 or less leaves it to the JDK/OS default."
-msgstr ""
+msgstr "Timeout (Millisekunden) für den Aufbau einer LDAP-Verbindung. Dies begrenzt auch den TLS-Handshake und die erste Bind-Antwort. 0 oder weniger überlässt es dem Standard des JDK/OS."
 
 msgid "Timeout (milliseconds) to wait for an LDAP response after the connection is bound. 0 or less waits indefinitely."
-msgstr ""
+msgstr "Timeout (Millisekunden) für das Warten auf eine LDAP-Antwort, nachdem die Verbindung gebunden wurde. 0 oder weniger wartet unbegrenzt."
 
 msgid "Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit."
-msgstr ""
+msgstr "Serverseitiges Zeitlimit (Millisekunden) für eine LDAP-Suche. 0 oder weniger bedeutet kein Limit."
 
 msgid "Maximum username length for LDAP."
-msgstr ""
+msgstr "Maximale Benutzernamenlänge für LDAP."
 
 msgid "Whether to ignore NetBIOS name in LDAP."
-msgstr ""
+msgstr "Gibt an, ob der NetBIOS-Name in LDAP ignoriert werden soll."
 
 msgid "Whether to allow underscores in LDAP group names."
-msgstr ""
+msgstr "Gibt an, ob Unterstriche in LDAP-Gruppennamen zugelassen werden sollen."
 
 msgid "Whether to use lowercase for LDAP permission names."
-msgstr ""
+msgstr "Gibt an, ob für LDAP-Berechtigungsnamen Kleinbuchstaben verwendet werden sollen."
 
 msgid "Whether to allow empty permissions in LDAP."
-msgstr ""
+msgstr "Gibt an, ob leere Berechtigungen in LDAP zugelassen werden sollen."
 
 msgid "Whether to use samAccountName for LDAP group."
-msgstr ""
+msgstr "Gibt an, ob samAccountName für die LDAP-Gruppe verwendet werden soll."
 
 msgid "Whether LDAP role search for user is enabled."
-msgstr ""
+msgstr "Gibt an, ob die LDAP-Rollensuche für Benutzer aktiviert ist."
 
 msgid "Whether LDAP role search for group is enabled."
-msgstr ""
+msgstr "Gibt an, ob die LDAP-Rollensuche für Gruppen aktiviert ist."
 
 msgid "Whether LDAP role search for role is enabled."
-msgstr ""
+msgstr "Gibt an, ob die LDAP-Rollensuche für Rollen aktiviert ist."
 
 msgid "LDAP attribute for surname."
-msgstr ""
+msgstr "LDAP-Attribut für Nachname."
 
 msgid "LDAP attribute for given name."
-msgstr ""
+msgstr "LDAP-Attribut für Vorname."
 
 msgid "LDAP attribute for employee number."
-msgstr ""
+msgstr "LDAP-Attribut für Mitarbeiternummer."
 
 msgid "LDAP attribute for mail."
-msgstr ""
+msgstr "LDAP-Attribut für E-Mail."
 
 msgid "LDAP attribute for telephone number."
-msgstr ""
+msgstr "LDAP-Attribut für Telefonnummer."
 
 msgid "LDAP attribute for home phone."
-msgstr ""
+msgstr "LDAP-Attribut für Privattelefon."
 
 msgid "LDAP attribute for home postal address."
-msgstr ""
+msgstr "LDAP-Attribut für private Postanschrift."
 
 msgid "LDAP attribute for labeled URI."
-msgstr ""
+msgstr "LDAP-Attribut für Labeled URI."
 
 msgid "LDAP attribute for room number."
-msgstr ""
+msgstr "LDAP-Attribut für Raumnummer."
 
 msgid "LDAP attribute for description."
-msgstr ""
+msgstr "LDAP-Attribut für Beschreibung."
 
 msgid "LDAP attribute for title."
-msgstr ""
+msgstr "LDAP-Attribut für Titel."
 
 msgid "LDAP attribute for pager."
-msgstr ""
+msgstr "LDAP-Attribut für Pager."
 
 msgid "LDAP attribute for street."
-msgstr ""
+msgstr "LDAP-Attribut für Straße."
 
 msgid "LDAP attribute for postal code."
-msgstr ""
+msgstr "LDAP-Attribut für Postleitzahl."
 
 msgid "LDAP attribute for physical delivery office name."
-msgstr ""
+msgstr "LDAP-Attribut für Name des physischen Zustellungsbüros."
 
 msgid "LDAP attribute for destination indicator."
-msgstr ""
+msgstr "LDAP-Attribut für Zielindikator."
 
 msgid "LDAP attribute for international ISDN number."
-msgstr ""
+msgstr "LDAP-Attribut für internationale ISDN-Nummer."
 
 msgid "LDAP attribute for state."
-msgstr ""
+msgstr "LDAP-Attribut für Bundesland."
 
 msgid "LDAP attribute for employee type."
-msgstr ""
+msgstr "LDAP-Attribut für Mitarbeitertyp."
 
 msgid "LDAP attribute for facsimile telephone number."
-msgstr ""
+msgstr "LDAP-Attribut für Faxnummer."
 
 msgid "LDAP attribute for post office box."
-msgstr ""
+msgstr "LDAP-Attribut für Postfach."
 
 msgid "LDAP attribute for initials."
-msgstr ""
+msgstr "LDAP-Attribut für Initialen."
 
 msgid "LDAP attribute for car license."
-msgstr ""
+msgstr "LDAP-Attribut für Kfz-Kennzeichen."
 
 msgid "LDAP attribute for mobile."
-msgstr ""
+msgstr "LDAP-Attribut für Mobiltelefon."
 
 msgid "LDAP attribute for postal address."
-msgstr ""
+msgstr "LDAP-Attribut für Postanschrift."
 
 msgid "LDAP attribute for city."
-msgstr ""
+msgstr "LDAP-Attribut für Stadt."
 
 msgid "LDAP attribute for teletex terminal identifier."
-msgstr ""
+msgstr "LDAP-Attribut für Teletex-Terminalkennung."
 
 msgid "LDAP attribute for X.121 address."
-msgstr ""
+msgstr "LDAP-Attribut für X.121-Adresse."
 
 msgid "LDAP attribute for business category."
-msgstr ""
+msgstr "LDAP-Attribut für Geschäftskategorie."
 
 msgid "LDAP attribute for registered address."
-msgstr ""
+msgstr "LDAP-Attribut für registrierte Adresse."
 
 msgid "LDAP attribute for display name."
-msgstr ""
+msgstr "LDAP-Attribut für Anzeigename."
 
 msgid "LDAP attribute for preferred language."
-msgstr ""
+msgstr "LDAP-Attribut für bevorzugte Sprache."
 
 msgid "LDAP attribute for department number."
-msgstr ""
+msgstr "LDAP-Attribut für Abteilungsnummer."
 
 msgid "LDAP attribute for UID number."
-msgstr ""
+msgstr "LDAP-Attribut für UID-Nummer."
 
 msgid "LDAP attribute for GID number."
-msgstr ""
+msgstr "LDAP-Attribut für GID-Nummer."
 
 msgid "LDAP attribute for home directory."
-msgstr ""
+msgstr "LDAP-Attribut für Home-Verzeichnis."
 
 msgid "Plugin repository URLs."
-msgstr ""
+msgstr "Plugin-Repository-URLs."
 
 msgid "Version filter for plugins."
-msgstr ""
+msgstr "Versionsfilter für Plugins."
 
 msgid "Maximum number of items per page in storage."
-msgstr ""
+msgstr "Maximale Anzahl von Elementen pro Seite im Speicher."
 
 msgid "List of invalid admin passwords."
-msgstr ""
+msgstr "Liste ungültiger Administratorpasswörter."
 
 msgid "Minimum password length (0 to disable)."
-msgstr ""
+msgstr "Minimale Passwortlänge (0 zum Deaktivieren)."
 
 msgid "Maximum length of a password field."
-msgstr ""
+msgstr "Maximale Länge eines Passwortfelds."
 
 msgid "Require uppercase letters in password."
-msgstr ""
+msgstr "Großbuchstaben im Passwort verlangen."
 
 msgid "Require lowercase letters in password."
-msgstr ""
+msgstr "Kleinbuchstaben im Passwort verlangen."
 
 msgid "Require digits in password."
-msgstr ""
+msgstr "Ziffern im Passwort verlangen."
 
 msgid "Require special characters in password."
-msgstr ""
+msgstr "Sonderzeichen im Passwort verlangen."
 
 msgid "Whether RAG chat feature is enabled."
-msgstr ""
+msgstr "Gibt an, ob die RAG-Chat-Funktion aktiviert ist."
 
 msgid "Whether to record the usage of each RAG chat request (user, time, LLM calls and tokens) in the chat log. The question and the answer are never recorded."
-msgstr ""
+msgstr "Gibt an, ob die Nutzung jeder RAG-Chat-Anfrage (Benutzer, Zeit, LLM-Aufrufe und Tokens) im Chat-Protokoll aufgezeichnet werden soll. Die Frage und die Antwort werden nie aufgezeichnet."
 
 msgid "Chat generation settings."
-msgstr ""
+msgstr "Einstellungen zur Chat-Generierung."
 
 msgid "Maximum number of times one chat request regenerates its search query and searches again when the search finds no documents or, in the streaming chat, none of the hits is judged relevant. Each regeneration makes one LLM call, plus one relevance evaluation call when the new search has hits (0 disables)."
-msgstr ""
+msgstr "Maximale Anzahl, wie oft eine Chat-Anfrage ihre Suchabfrage neu generiert und erneut sucht, wenn die Suche keine Dokumente findet oder im Streaming-Chat keiner der Treffer als relevant beurteilt wird. Jede Neugenerierung führt einen LLM-Aufruf aus, plus einen Aufruf zur Relevanzbewertung, wenn die neue Suche Treffer hat (0 deaktiviert)."
 
 msgid "Session settings."
-msgstr ""
+msgstr "Sitzungseinstellungen."
 
 msgid "Maximum cached chat sessions; least recently accessed are evicted above it (0 or less means 100)."
-msgstr ""
+msgstr "Maximale Anzahl zwischengespeicherter Chat-Sitzungen; darüber hinaus werden die am längsten nicht abgerufenen verdrängt (0 oder weniger bedeutet 100)."
 
 msgid "Maximum messages kept in one chat session; older turns are trimmed on each new message."
-msgstr ""
+msgstr "Maximale Anzahl von Nachrichten, die in einer Chat-Sitzung gehalten werden; ältere Gesprächsrunden werden bei jeder neuen Nachricht gekürzt."
 
 msgid "Enhanced RAG flow settings. Fields to retrieve for full document content."
-msgstr ""
+msgstr "Einstellungen für den erweiterten RAG-Ablauf. Felder, die für den vollständigen Dokumentinhalt abgerufen werden."
 
 msgid "Highlight settings for RAG search."
-msgstr ""
+msgstr "Hervorhebungseinstellungen für die RAG-Suche."
 
 msgid "Number of highlight fragments per document in the RAG chat context search."
-msgstr ""
+msgstr "Anzahl der Hervorhebungsfragmente pro Dokument in der Kontextsuche des RAG-Chats."
 
 msgid "Large-document handling for answer generation. Documents whose content_length exceeds this value use highlighted passages instead of full content in the answer context."
-msgstr ""
+msgstr "Behandlung großer Dokumente bei der Antwortgenerierung. Dokumente, deren content_length diesen Wert überschreitet, verwenden im Antwortkontext hervorgehobene Passagen anstelle des vollständigen Inhalts."
 
 msgid "Highlight settings used when extracting passages from large documents for the answer context."
-msgstr ""
+msgstr "Hervorhebungseinstellungen, die beim Extrahieren von Passagen aus großen Dokumenten für den Antwortkontext verwendet werden."
 
 msgid "Number of highlight fragments taken from each oversized document for the answer context."
-msgstr ""
+msgstr "Anzahl der Hervorhebungsfragmente, die aus jedem übergroßen Dokument für den Antwortkontext entnommen werden."
 
 msgid "History content mode for assistant messages. smart_summary           - drop assistant body, keep only past search query + referenced titles per turn (default, recommended) full                    - send the whole assistant response source_titles           - body + referenced titles suffix source_titles_and_urls  - \"[References: title (url), ...]\" only truncated               - truncate assistant response at history.assistant.max.chars none                    - drop assistant turns from history"
-msgstr ""
+msgstr "Verlaufsinhaltsmodus für Assistenten-Nachrichten. smart_summary           - Assistenten-Text verwerfen, pro Gesprächsrunde nur vergangene Suchabfrage + referenzierte Titel behalten (Standard, empfohlen) full                    - gesamte Assistenten-Antwort senden source_titles           - Text + Suffix aus referenzierten Titeln source_titles_and_urls  - nur \"[References: title (url), ...]\" truncated               - Assistenten-Antwort bei history.assistant.max.chars abschneiden none                    - Assistenten-Gesprächsrunden aus dem Verlauf verwerfen"
 
 msgid "Maximum number of referenced document titles included per turn in smart_summary history mode."
-msgstr ""
+msgstr "Maximale Anzahl referenzierter Dokumenttitel, die pro Gesprächsrunde im Verlaufsmodus smart_summary enthalten sind."
 
 msgid "Maximum number of parts a document is split into when chatting about a single document longer than the LLM context budget. Each part is summarized separately and the summaries are combined into the answer; parts beyond this number are not used. A request about such a document makes up to this many LLM calls plus one for the answer, on every turn."
-msgstr ""
+msgstr "Maximale Anzahl von Teilen, in die ein Dokument aufgeteilt wird, wenn über ein einzelnes Dokument gechattet wird, das länger als das LLM-Kontextbudget ist. Jeder Teil wird separat zusammengefasst, und die Zusammenfassungen werden zur Antwort kombiniert; Teile über dieser Anzahl werden nicht verwendet. Eine Anfrage zu einem solchen Dokument führt in jeder Gesprächsrunde bis zu so viele LLM-Aufrufe plus einen für die Antwort aus."
 
 msgid "Language the LLM is asked to answer in. browser  - the language of the user's browser or UI locale; no instruction for English (default) none     - no language instruction; the LLM usually answers in the language of the question en, ja.. - always answer in this language"
-msgstr ""
+msgstr "Sprache, in der das LLM antworten soll. browser  - die Sprache des Browsers oder der UI-Locale des Benutzers; keine Anweisung für Englisch (Standard) none     - keine Sprachanweisung; das LLM antwortet normalerweise in der Sprache der Frage en, ja.. - immer in dieser Sprache antworten"
 
 msgid "Index Export"
-msgstr ""
+msgstr "Index-Export"
 
 msgid "Comma-separated document fields omitted from files written by the index export job."
-msgstr ""
+msgstr "Kommagetrennte Dokumentfelder, die in den vom Index-Export-Job geschriebenen Dateien weggelassen werden."
 
 msgid "Number of documents fetched per scroll request by the index export job."
-msgstr ""
+msgstr "Anzahl der Dokumente, die der Index-Export-Job pro Scroll-Anfrage abruft."
 
 msgid "Output format for exported documents; only html and json are accepted, anything else fails the job."
-msgstr ""
+msgstr "Ausgabeformat für exportierte Dokumente; nur html und json werden akzeptiert, alles andere lässt den Job fehlschlagen."
 
 msgid "Log Notification Interval (seconds) for flushing log notification buffer to search engine."
-msgstr ""
+msgstr "Protokollbenachrichtigung Intervall (Sekunden) zum Leeren des Protokollbenachrichtigungspuffers in die Suchmaschine."
 
 msgid "Maximum length of notification details text."
-msgstr ""
+msgstr "Maximale Länge des Benachrichtigungs-Detailtexts."
 
 msgid "Maximum number of events to display in notification."
-msgstr ""
+msgstr "Maximale Anzahl von Ereignissen, die in der Benachrichtigung angezeigt werden."
 
 msgid "Maximum length of each log message in notification."
-msgstr ""
+msgstr "Maximale Länge jeder Protokollmeldung in der Benachrichtigung."
 
 msgid "Maximum number of events to fetch from search engine per notification job."
-msgstr ""
+msgstr "Maximale Anzahl von Ereignissen, die pro Benachrichtigungs-Job von der Suchmaschine abgerufen werden."
 
 msgid "Maximum number of events to buffer in memory."
-msgstr ""
+msgstr "Maximale Anzahl von Ereignissen, die im Speicher gepuffert werden."
 
 msgid "Interval (seconds) for the notification job cycle, used in notification messages."
-msgstr ""
+msgstr "Intervall (Sekunden) für den Zyklus des Benachrichtigungs-Jobs, das in Benachrichtigungsmeldungen verwendet wird."
 
 msgid "Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
-msgstr ""
+msgstr "Statisches Theme-System (siehe docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
 
 msgid "Maximum size (bytes) of an uploaded theme archive."
-msgstr ""
+msgstr "Maximale Größe (Bytes) eines hochgeladenen Theme-Archivs."
 
 msgid "Maximum total extracted size (bytes); extraction aborts once it is exceeded."
-msgstr ""
+msgstr "Maximale entpackte Gesamtgröße (Bytes); das Entpacken wird abgebrochen, sobald sie überschritten wird."
 
 msgid "Maximum number of entries allowed in an uploaded theme archive."
-msgstr ""
+msgstr "Maximal zulässige Anzahl von Einträgen in einem hochgeladenen Theme-Archiv."
 
 msgid "Maximum uncompressed/compressed ratio for a single theme archive entry."
-msgstr ""
+msgstr "Maximales Verhältnis unkomprimiert/komprimiert für einen einzelnen Theme-Archiv-Eintrag."
 
 msgid "Maximum cumulative uncompressed/compressed ratio for the whole archive (zip-bomb guard)."
-msgstr ""
+msgstr "Maximales kumuliertes Verhältnis unkomprimiert/komprimiert für das gesamte Archiv (Zip-Bomb-Schutz)."
 
 msgid "Compressed bytes read before the cumulative zip ratio check applies; smaller archives skip it."
-msgstr ""
+msgstr "Gelesene komprimierte Bytes, bevor die Prüfung des kumulierten ZIP-Verhältnisses greift; kleinere Archive überspringen sie."
 
 msgid "Retention (days) for a replaced theme directory before the cleanup sweep removes it."
-msgstr ""
+msgstr "Aufbewahrung (Tage) für ein ersetztes Theme-Verzeichnis, bevor der Bereinigungslauf es entfernt."
 
 msgid "Repository URLs (comma separated) that static themes are downloaded from."
-msgstr ""
+msgstr "Repository-URLs (kommagetrennt), von denen statische Themes heruntergeladen werden."
 
 msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
-msgstr ""
+msgstr "Wert der Direktive frame-ancestors in der Content-Security-Policy der HTML-Seiten des statischen Themes: die Origins, die sie in einem Frame einbetten dürfen. Der Standardwert 'none' erlaubt keiner Seite, sie einzubetten. WebKit (Safari) wendet frame-ancestors auf die blob:-Frames an, die die Dateivorschau und die Cache-Ansicht eines Themes verwenden, und zeigt sie daher leer an, solange der Wert 'none' ist. Lassen Sie den Wert leer, um die Direktive wegzulassen; X-Frame-Options: DENY wird in jedem Fall gesendet und hält die Seiten dann in jedem Browser aus Frames fern (ein Browser, der frame-ancestors berücksichtigt, ignoriert diesen Header)."
 
 msgid "Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-* headers, then from the servlet request."
-msgstr ""
+msgstr "Optional: kanonische externe(r) Origin(s) dieser Fess-Instanz (durch Komma/Zeilenumbruch getrennt), z. B. https://fess.example.com. Wenn gesetzt, werden diese für die v2-CSRF-Origin-Prüfung als Same-Origin behandelt, OHNE weitergeleiteten Headern zu vertrauen. Empfohlen hinter Reverse Proxies, die nicht in rate.limit.trusted.proxies aufgeführt sind. Wenn leer, wird der Ziel-Origin aus den X-Forwarded-*-Headern vertrauenswürdiger Proxies rekonstruiert, dann aus der Servlet-Anfrage."
 
 msgid "Login attempts allowed per client IP each minute; 0 or less disables the gate."
-msgstr ""
+msgstr "Zulässige Anmeldeversuche pro Client-IP und Minute; 0 oder weniger deaktiviert die Begrenzung."
 
 msgid "Login attempts allowed per client IP and user name each minute; also gates password change."
-msgstr ""
+msgstr "Zulässige Anmeldeversuche pro Client-IP und Benutzername und Minute; begrenzt auch die Passwortänderung."
 
 msgid "Lockout (seconds) applied once a login rate limit is exceeded; 0 or less disables the lockout."
-msgstr ""
+msgstr "Sperrzeit (Sekunden), die angewendet wird, sobald ein Login-Rate-Limit überschritten wird; 0 oder weniger deaktiviert die Sperre."
 
 msgid "Maximum login rate-limit buckets held in memory; idle buckets are evicted at the cap."
-msgstr ""
+msgstr "Maximale Anzahl von Login-Rate-Limit-Buckets im Speicher; inaktive Buckets werden bei Erreichen der Obergrenze verdrängt."
 
 msgid "Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (\": keepalive\\n\\n\") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds."
-msgstr ""
+msgstr "Intervall zwischen den SSE-Keep-alive-Pings, die von /api/v2/chat/stream ausgegeben werden. Der Ping ist eine reine Kommentarzeile (\": keepalive\\n\\n\"), die den Event-Stream nicht beeinflusst, aber Zwischeninstanzen umgeht (der nginx-Standardwert für proxy_read_timeout ist 60s), die inaktive Verbindungen während langer LLM-Phasen trennen. Setzen Sie <=0 zum Deaktivieren. Einheit: Millisekunden."
