@@ -789,6 +789,13 @@ the following keys.
      - ``-Djcifs.smb.client.*``, ``-Djcifs.smb1.smb.client.*``
      - ``-Djcifs.client.*``
      - The SMB timeouts stay at the jcifs defaults; see :ref:`upgrade-159-jcifs`.
+   * - ``response.headers``
+     - Includes the row ``text/html=Content-Security-Policy: reflected-xss block``
+     - Row removed
+     - The login page, the admin console and the other pages |Fess| renders itself are sent with a
+       ``Content-Security-Policy: reflected-xss block`` header that no browser recognizes, and the
+       browser console logs ``Unrecognized Content-Security-Policy directive 'reflected-xss'``. The
+       header restricts nothing. Remove the row, as described below.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
        ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
@@ -797,6 +804,20 @@ the following keys.
      - Present
      - Removed
      - No effect; remove them.
+
+The shipped ``response.headers`` of 15.0 through 15.8 contains the row
+``text/html=Content-Security-Policy: reflected-xss block``. ``reflected-xss`` was a directive of an
+early draft of Content-Security-Policy that browsers no longer recognize, so the header restricts
+nothing and only adds the console error. 15.9 no longer ships the row (the ``X-XSS-Protection`` and
+``X-Frame-Options`` rows are unchanged), but a ``response.headers`` carried over from 15.8 keeps it.
+Remove only this row from ``response.headers`` in ``fess_config.properties``. The ``\n\`` at the end
+of each row continues the value on the next line, so deleting the whole line leaves the others
+intact::
+
+    text/html=Content-Security-Policy: reflected-xss block\n\
+
+If you set ``response.headers`` with ``-Dfess.config.response.headers`` instead, remove the same
+entry from that value.
 
 A ``bin/fess.in.sh`` copied from 15.8 also lacks two things that the 15.9 file has. It leaves
 ``SEARCH_ENGINE_HTTP_URL`` unset unless you set it yourself, where 15.9 sets

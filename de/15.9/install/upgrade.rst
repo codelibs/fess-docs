@@ -819,6 +819,14 @@ mindestens die folgenden Schlüssel.
      - ``-Djcifs.smb.client.*``, ``-Djcifs.smb1.smb.client.*``
      - ``-Djcifs.client.*``
      - Die SMB-Timeouts bleiben auf den Standardwerten von jcifs; siehe :ref:`upgrade-159-jcifs`.
+   * - ``response.headers``
+     - Enthält die Zeile ``text/html=Content-Security-Policy: reflected-xss block``
+     - Zeile entfernt
+     - Die Anmeldeseite, die Administrationsoberfläche und die übrigen von |Fess| selbst gerenderten
+       Seiten werden mit einem Header ``Content-Security-Policy: reflected-xss block`` ausgeliefert,
+       den kein Browser kennt, und die Browser-Konsole meldet
+       ``Unrecognized Content-Security-Policy directive 'reflected-xss'``. Der Header schränkt nichts
+       ein. Entfernen Sie die Zeile, wie unten beschrieben.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
        ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
@@ -827,6 +835,20 @@ mindestens die folgenden Schlüssel.
      - Vorhanden
      - Entfernt
      - Keine Wirkung; entfernen Sie sie.
+
+Der mitgelieferte Wert von ``response.headers`` enthält in 15.0 bis 15.8 die Zeile
+``text/html=Content-Security-Policy: reflected-xss block``. ``reflected-xss`` war eine Direktive eines
+frühen Entwurfs von Content-Security-Policy, die Browser nicht mehr kennen; der Header schränkt daher
+nichts ein und erzeugt nur den Fehler in der Konsole. 15.9 liefert die Zeile nicht mehr mit (die Zeilen
+``X-XSS-Protection`` und ``X-Frame-Options`` bleiben unverändert), aber ein aus 15.8 übernommenes
+``response.headers`` behält sie. Entfernen Sie in ``fess_config.properties`` nur diese Zeile aus
+``response.headers``. Das ``\n\`` am Ende jeder Zeile setzt den Wert in der nächsten Zeile fort; wenn
+Sie die ganze Zeile löschen, bleiben die übrigen unverändert::
+
+    text/html=Content-Security-Policy: reflected-xss block\n\
+
+Setzen Sie ``response.headers`` stattdessen mit ``-Dfess.config.response.headers``, entfernen Sie
+denselben Eintrag aus diesem Wert.
 
 Einer aus 15.8 kopierten ``bin/fess.in.sh`` fehlen außerdem zwei Dinge, die die Datei von 15.9
 enthält. Sie lässt ``SEARCH_ENGINE_HTTP_URL`` ungesetzt, sofern Sie es nicht selbst gesetzt haben,

@@ -783,6 +783,13 @@ Index Exporter ジョブが削除されたパッケージを参照
      - ``-Djcifs.client.*``
      - SMB のタイムアウトが jcifs の既定値のままになります。 :ref:`upgrade-159-jcifs` を
        参照してください。
+   * - ``response.headers``
+     - ``text/html=Content-Security-Policy: reflected-xss block`` の行を含む
+     - その行なし
+     - ログイン画面や管理画面など、\ |Fess| 自身が描画するページのレスポンスに、ブラウザーが認識しない
+       ``Content-Security-Policy: reflected-xss block`` ヘッダーが付き、ブラウザーのコンソールに
+       ``Unrecognized Content-Security-Policy directive 'reflected-xss'`` が出ます。このヘッダーは
+       何も制限しません。次の段落のとおり、その行を削除してください。
    * - ``crawler.default.script``\ 、\ ``theme.allowed.archive.extensions``\ 、
        ``theme.assets.cache.max.age``\ 、\ ``theme.assets.precompressed``\ 、
        ``rag.chat.message.max.length``\ 、\ ``supported.uploaded.js.extentions``\ 、
@@ -791,6 +798,18 @@ Index Exporter ジョブが削除されたパッケージを参照
      - あり
      - 削除
      - 効果はありません。削除してください。
+
+``response.headers`` の同梱の値には、15.0 から 15.8 まで ``text/html=Content-Security-Policy: reflected-xss block``
+の行があります。 ``reflected-xss`` は Content-Security-Policy の初期の草案にあったディレクティブで、現在の
+ブラウザーは認識しないため、このヘッダーは何も制限せず、コンソールにエラーを出すだけです。15.9 は同梱の値から
+この行を削除しました。 ``X-XSS-Protection`` と ``X-Frame-Options`` の行は変わりません。15.8 から引き継いだ
+``response.headers`` にはこの行が残るため、 ``fess_config.properties`` の ``response.headers`` から、次の行だけを
+削除してください。各行の末尾の ``\n\`` は値が次の行に続くことを表すため、行ごと削除すれば、ほかの行はそのまま
+使えます::
+
+    text/html=Content-Security-Policy: reflected-xss block\n\
+
+``response.headers`` を ``-Dfess.config.response.headers`` で指定している場合は、その値から同じ項目を削除してください。
 
 15.8 からコピーした ``bin/fess.in.sh`` には、15.9 のファイルにある次の 2 点もありません。
 15.9 は ``SEARCH_ENGINE_HTTP_URL`` に ``http://localhost:9200`` を設定しますが、15.8 のファイルは

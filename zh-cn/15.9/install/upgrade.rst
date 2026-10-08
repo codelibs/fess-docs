@@ -751,6 +751,13 @@ Index Exporter 作业引用了已删除的包
      - ``-Djcifs.smb.client.*``\ 、\ ``-Djcifs.smb1.smb.client.*``
      - ``-Djcifs.client.*``
      - SMB 超时保持为 jcifs 的默认值。请参阅 :ref:`upgrade-159-jcifs` 。
+   * - ``response.headers``
+     - 包含 ``text/html=Content-Security-Policy: reflected-xss block`` 这一行
+     - 已删除该行
+     - 登录页面、管理界面等由 |Fess| 自身渲染的页面，其响应会带有浏览器无法识别的
+       ``Content-Security-Policy: reflected-xss block`` 头，浏览器控制台会输出
+       ``Unrecognized Content-Security-Policy directive 'reflected-xss'`` 。该头不起任何限制作用。
+       请按下文说明删除该行。
    * - ``crawler.default.script``\ 、\ ``theme.allowed.archive.extensions``\ 、
        ``theme.assets.cache.max.age``\ 、\ ``theme.assets.precompressed``\ 、
        ``rag.chat.message.max.length``\ 、\ ``supported.uploaded.js.extentions``\ 、
@@ -759,6 +766,18 @@ Index Exporter 作业引用了已删除的包
      - 存在
      - 已删除
      - 不起作用，请删除。
+
+15.0 至 15.8 随附的 ``response.headers`` 中包含
+``text/html=Content-Security-Policy: reflected-xss block`` 这一行。 ``reflected-xss`` 是
+Content-Security-Policy 早期草案中的指令，现在的浏览器已不再识别，因此该头不起任何限制作用，只会在
+控制台中产生错误。15.9 的随附值已删除这一行（ ``X-XSS-Protection`` 与 ``X-Frame-Options`` 两行保持不变），
+但从 15.8 沿用的 ``response.headers`` 仍会保留它。请仅从 ``fess_config.properties`` 的
+``response.headers`` 中删除下面这一行。每行末尾的 ``\n\`` 表示值在下一行继续，因此删除整行后，其余各行
+可以原样使用::
+
+    text/html=Content-Security-Policy: reflected-xss block\n\
+
+如果是通过 ``-Dfess.config.response.headers`` 指定 ``response.headers`` ，请从该值中删除相同的项。
 
 从 15.8 复制的 ``bin/fess.in.sh`` 还缺少 15.9 文件中的以下两点。15.9 会将
 ``SEARCH_ENGINE_HTTP_URL`` 设置为 ``http://localhost:9200`` ，而 15.8 的文件除非自行设置，否则
