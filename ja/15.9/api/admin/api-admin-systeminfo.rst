@@ -93,9 +93,9 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
    * - ``status``
      - 処理結果を示すコード。\ ``0`` は正常終了を表します。
    * - ``env_props``
-     - 環境変数の一覧（``label`` / ``value`` の配列）。\ ``System.getenv()`` で取得される値がそのまま返されます。
+     - 環境変数の一覧（``label`` / ``value`` の配列）。\ ``System.getenv()`` で取得される値が返されます。機密性の高い項目はマスクされます（下記の注記を参照）。
    * - ``system_props``
-     - Javaのシステムプロパティの一覧（``label`` / ``value`` の配列）。\ ``System.getProperties()`` で取得される値がそのまま返されます。
+     - Javaのシステムプロパティの一覧（``label`` / ``value`` の配列）。\ ``System.getProperties()`` で取得される値が返されます。機密性の高い項目はマスクされます（下記の注記を参照）。
    * - ``fess_props``
      - |Fess| の設定プロパティの一覧（``label`` / ``value`` の配列）。\ ``fess_config.properties`` の設定値と、管理画面で設定されるシステムプロパティが含まれます。機密性の高い項目はマスクされます（下記の注記を参照）。
    * - ``bug_report_props``
@@ -103,15 +103,21 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
 
 .. note::
 
-   ``fess_props`` では、以下の機密性の高い設定値はマスクされ、``XXXXXXXX`` として返されます:
-   ``http.proxy.password``、``ldap.admin.security.credentials``、``spnego.preauth.password``、
-   ``app.cipher.key``、``oic.client.id``、``oic.client.secret``\ 。
+   ``fess_props``、``env_props``、``system_props`` では、以下の機密性の高い項目の値はマスクされ、``XXXXXXXX`` として返されます:
+   ``http.proxy.password``、``search_engine.password``、``index.user.initial_password``、
+   ``ldap.admin.security.credentials``、``spnego.preauth.password``、``app.cipher.key``、
+   ``content_chunker.embedding.opensearch.password``、
+   および、キーが ``.client.id``、``.client.secret``、``.privatekey``、``.key.password`` で終わる項目、
+   ``content_chunker.embedding.*.api.key``、``rag.llm.*.api.key`` に一致する項目です。
+   ``fess.system.<キー>`` または ``fess.config.<キー>`` という名前のシステムプロパティ（設定値を ``-D`` オプションで渡す形式）は、
+   ``<キー>`` と同じ規則でマスクされます。
+   ``env_props`` と ``system_props`` では、``FESS_JAVA_OPTS`` や ``JAVA_TOOL_OPTIONS`` のような長い文字列の中にある
+   ``-Dキー=値`` オプションのうち機密性の高いキーの値もマスクされ、文字列の残りはそのまま返されます。
 
 .. warning::
 
-   ``env_props``\ （環境変数）と ``system_props``\ （Javaシステムプロパティ）はマスクされず、
-   設定されている値がそのまま返されます。環境変数やシステムプロパティに認証情報などの
-   機密情報を含めている場合、それらがレスポンスに含まれる点に注意してください。
+   マスクされるのは上記のキーだけです。環境変数やJavaシステムプロパティに別の名前（例: ``DB_PASSWORD``）で
+   認証情報などの機密情報を設定している場合、それらはマスクされず、設定されている値がそのままレスポンスに含まれます。
 
 使用例
 ======

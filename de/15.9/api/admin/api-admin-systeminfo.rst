@@ -93,9 +93,9 @@ Response-Felder
    * - ``status``
      - Ergebniscode der Verarbeitung. ``0`` steht für erfolgreiche Ausführung.
    * - ``env_props``
-     - Liste der Umgebungsvariablen (Array aus ``label`` / ``value``). Die Werte werden unverändert über ``System.getenv()`` zurückgegeben.
+     - Liste der Umgebungsvariablen (Array aus ``label`` / ``value``). Zurückgegeben werden die über ``System.getenv()`` ermittelten Werte; vertrauliche Einträge werden maskiert (siehe den Hinweis unten).
    * - ``system_props``
-     - Liste der Java-Systemeigenschaften (Array aus ``label`` / ``value``). Die Werte werden unverändert über ``System.getProperties()`` zurückgegeben.
+     - Liste der Java-Systemeigenschaften (Array aus ``label`` / ``value``). Zurückgegeben werden die über ``System.getProperties()`` ermittelten Werte; vertrauliche Einträge werden maskiert (siehe den Hinweis unten).
    * - ``fess_props``
      - Liste der |Fess|-Konfigurationseigenschaften (Array aus ``label`` / ``value``). Enthält die Einstellungen aus ``fess_config.properties`` sowie die über die Administrationsoberfläche gesetzten Systemeigenschaften. Vertrauliche Einträge werden maskiert (siehe Hinweis unten).
    * - ``bug_report_props``
@@ -103,15 +103,22 @@ Response-Felder
 
 .. note::
 
-   In ``fess_props`` werden die folgenden vertraulichen Konfigurationswerte maskiert und als ``XXXXXXXX`` zurückgegeben:
-   ``http.proxy.password``, ``ldap.admin.security.credentials``, ``spnego.preauth.password``,
-   ``app.cipher.key``, ``oic.client.id``, ``oic.client.secret``.
+   In ``fess_props``, ``env_props`` und ``system_props`` werden die Werte der folgenden vertraulichen Einträge maskiert und als ``XXXXXXXX`` zurückgegeben:
+   ``http.proxy.password``, ``search_engine.password``, ``index.user.initial_password``,
+   ``ldap.admin.security.credentials``, ``spnego.preauth.password``, ``app.cipher.key``,
+   ``content_chunker.embedding.opensearch.password``,
+   sowie jeder Eintrag, dessen Schlüssel auf ``.client.id``, ``.client.secret``, ``.privatekey`` oder ``.key.password`` endet
+   oder zu ``content_chunker.embedding.*.api.key`` bzw. ``rag.llm.*.api.key`` passt.
+   Eine Systemeigenschaft mit dem Namen ``fess.system.<Schlüssel>`` oder ``fess.config.<Schlüssel>`` (die Form, in der eine Einstellung als ``-D``-Option übergeben wird)
+   wird nach derselben Regel maskiert wie ``<Schlüssel>``.
+   In ``env_props`` und ``system_props`` wird außerdem der Wert einer solchen vertraulichen ``-DSchlüssel=Wert``-Option innerhalb einer längeren Zeichenfolge
+   (z. B. ``FESS_JAVA_OPTS`` oder ``JAVA_TOOL_OPTIONS``) maskiert; der Rest der Zeichenfolge bleibt lesbar.
 
 .. warning::
 
-   ``env_props`` (Umgebungsvariablen) und ``system_props`` (Java-Systemeigenschaften) werden nicht maskiert —
-   die gesetzten Werte werden unverändert zurückgegeben. Wenn Umgebungsvariablen oder Systemeigenschaften
-   Zugangsdaten oder andere vertrauliche Informationen enthalten, erscheinen diese im Response.
+   Maskiert werden nur die oben genannten Schlüssel. Wenn Sie ein Geheimnis unter einem anderen Namen
+   (z. B. ``DB_PASSWORD``) in einer Umgebungsvariablen oder einer Java-Systemeigenschaft ablegen, wird es NICHT maskiert:
+   Der Wert wird unverändert zurückgegeben und erscheint im Response.
 
 Verwendungsbeispiele
 ====================

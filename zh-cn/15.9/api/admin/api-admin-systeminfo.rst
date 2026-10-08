@@ -93,9 +93,9 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
    * - ``status``
      - 表示处理结果的状态码。\ ``0`` 表示正常结束。
    * - ``env_props``
-     - 环境变量列表（``label`` / ``value`` 的对象数组）。返回通过 ``System.getenv()`` 获取的值，不做任何修改。
+     - 环境变量列表（``label`` / ``value`` 的对象数组）。返回通过 ``System.getenv()`` 获取的值，敏感项会被屏蔽（参见下方说明）。
    * - ``system_props``
-     - Java系统属性列表（``label`` / ``value`` 的对象数组）。返回通过 ``System.getProperties()`` 获取的值，不做任何修改。
+     - Java系统属性列表（``label`` / ``value`` 的对象数组）。返回通过 ``System.getProperties()`` 获取的值，敏感项会被屏蔽（参见下方说明）。
    * - ``fess_props``
      - |Fess| 配置属性列表（``label`` / ``value`` 的对象数组）。包含 ``fess_config.properties`` 中的配置值以及通过管理界面设置的系统属性。敏感项目将被屏蔽（参见下方注意事项）。
    * - ``bug_report_props``
@@ -103,15 +103,21 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
 
 .. note::
 
-   ``fess_props`` 中，以下敏感配置值将被屏蔽，以 ``XXXXXXXX`` 返回：
-   ``http.proxy.password``、``ldap.admin.security.credentials``、``spnego.preauth.password``、
-   ``app.cipher.key``、``oic.client.id``、``oic.client.secret``\ 。
+   在 ``fess_props``、``env_props`` 和 ``system_props`` 中，以下敏感项的值将被屏蔽，以 ``XXXXXXXX`` 返回：
+   ``http.proxy.password``、``search_engine.password``、``index.user.initial_password``、
+   ``ldap.admin.security.credentials``、``spnego.preauth.password``、``app.cipher.key``、
+   ``content_chunker.embedding.opensearch.password``，
+   以及键以 ``.client.id``、``.client.secret``、``.privatekey``、``.key.password`` 结尾，
+   或匹配 ``content_chunker.embedding.*.api.key``、``rag.llm.*.api.key`` 的所有项。
+   名为 ``fess.system.<键>`` 或 ``fess.config.<键>`` 的系统属性（以 ``-D`` 选项传递设置值的形式）
+   按与 ``<键>`` 相同的规则屏蔽。
+   在 ``env_props`` 和 ``system_props`` 中，``FESS_JAVA_OPTS`` 或 ``JAVA_TOOL_OPTIONS`` 等较长字符串内的
+   敏感 ``-D键=值`` 选项的值也会被屏蔽，字符串的其余部分保持可读。
 
 .. warning::
 
-   ``env_props``\ （环境变量）和 ``system_props``\ （Java系统属性）不会被屏蔽，
-   其值将原样返回。如果环境变量或系统属性中包含认证信息等敏感数据，
-   这些信息将出现在响应中，请注意。
+   仅屏蔽上述键。如果将认证信息等敏感数据以其他名称（例如 ``DB_PASSWORD``）存放在环境变量或Java系统属性中，
+   则不会被屏蔽，其值将原样返回并出现在响应中，请注意。
 
 使用示例
 ========

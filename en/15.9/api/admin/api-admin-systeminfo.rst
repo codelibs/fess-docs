@@ -93,9 +93,9 @@ Response Fields
    * - ``status``
      - Result code indicating the processing outcome. ``0`` means success.
    * - ``env_props``
-     - List of OS environment variables (array of ``label`` / ``value``). Values are returned verbatim via ``System.getenv()``.
+     - List of OS environment variables (array of ``label`` / ``value``). The values obtained via ``System.getenv()`` are returned; sensitive items are masked (see the note below).
    * - ``system_props``
-     - List of Java system properties (array of ``label`` / ``value``). Values are returned verbatim via ``System.getProperties()``.
+     - List of Java system properties (array of ``label`` / ``value``). The values obtained via ``System.getProperties()`` are returned; sensitive items are masked (see the note below).
    * - ``fess_props``
      - List of |Fess| configuration properties (array of ``label`` / ``value``). Includes values from ``fess_config.properties`` and system properties set via the admin UI. Sensitive items are masked (see note below).
    * - ``bug_report_props``
@@ -103,15 +103,21 @@ Response Fields
 
 .. note::
 
-   In ``fess_props``, the following sensitive configuration values are masked and returned as ``XXXXXXXX``:
-   ``http.proxy.password``, ``ldap.admin.security.credentials``, ``spnego.preauth.password``,
-   ``app.cipher.key``, ``oic.client.id``, ``oic.client.secret``.
+   In ``fess_props``, ``env_props`` and ``system_props``, the values of the following sensitive items are masked and returned as ``XXXXXXXX``:
+   ``http.proxy.password``, ``search_engine.password``, ``index.user.initial_password``,
+   ``ldap.admin.security.credentials``, ``spnego.preauth.password``, ``app.cipher.key``,
+   ``content_chunker.embedding.opensearch.password``,
+   and every item whose key ends with ``.client.id``, ``.client.secret``, ``.privatekey`` or ``.key.password``,
+   or matches ``content_chunker.embedding.*.api.key`` or ``rag.llm.*.api.key``.
+   A system property named ``fess.system.<key>`` or ``fess.config.<key>`` (the form used to pass a setting as a ``-D`` option)
+   is masked under the same rule as ``<key>``.
+   In ``env_props`` and ``system_props``, the value of such a sensitive ``-Dkey=value`` option inside a longer string
+   (for example ``FESS_JAVA_OPTS`` or ``JAVA_TOOL_OPTIONS``) is masked as well, and the rest of the string stays readable.
 
 .. warning::
 
-   ``env_props`` (environment variables) and ``system_props`` (Java system properties) are NOT masked —
-   values are returned as-is. If secrets such as credentials are stored in environment variables
-   or system properties, they will appear in the response.
+   Only the keys above are masked. If you store a secret in an environment variable or a Java system property
+   under any other name (for example ``DB_PASSWORD``), it is NOT masked: the value is returned as-is and appears in the response.
 
 Usage Examples
 ==============

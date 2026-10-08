@@ -91,9 +91,9 @@ Campos de Respuesta
    * - ``status``
      - Código que indica el resultado del procesamiento. ``0`` significa finalización exitosa.
    * - ``env_props``
-     - Lista de variables de entorno (arreglo de ``label`` / ``value``). Se devuelven los valores obtenidos mediante ``System.getenv()`` tal como están.
+     - Lista de variables de entorno (arreglo de ``label`` / ``value``). Se devuelven los valores obtenidos mediante ``System.getenv()``; los elementos sensibles se enmascaran (consulte la nota siguiente).
    * - ``system_props``
-     - Lista de propiedades del sistema de Java (arreglo de ``label`` / ``value``). Se devuelven los valores obtenidos mediante ``System.getProperties()`` tal como están.
+     - Lista de propiedades del sistema de Java (arreglo de ``label`` / ``value``). Se devuelven los valores obtenidos mediante ``System.getProperties()``; los elementos sensibles se enmascaran (consulte la nota siguiente).
    * - ``fess_props``
      - Lista de propiedades de configuración de |Fess| (arreglo de ``label`` / ``value``). Incluye los valores de configuración de ``fess_config.properties`` y las propiedades del sistema establecidas desde la pantalla de administración. Los elementos sensibles son enmascarados (véase la nota a continuación).
    * - ``bug_report_props``
@@ -101,15 +101,21 @@ Campos de Respuesta
 
 .. note::
 
-   En ``fess_props``, los siguientes valores de configuración sensibles son enmascarados y se devuelven como ``XXXXXXXX``:
-   ``http.proxy.password``, ``ldap.admin.security.credentials``, ``spnego.preauth.password``,
-   ``app.cipher.key``, ``oic.client.id``, ``oic.client.secret``.
+   En ``fess_props``, ``env_props`` y ``system_props``, los valores de los siguientes elementos sensibles son enmascarados y se devuelven como ``XXXXXXXX``:
+   ``http.proxy.password``, ``search_engine.password``, ``index.user.initial_password``,
+   ``ldap.admin.security.credentials``, ``spnego.preauth.password``, ``app.cipher.key``,
+   ``content_chunker.embedding.opensearch.password``,
+   y todo elemento cuya clave termine en ``.client.id``, ``.client.secret``, ``.privatekey`` o ``.key.password``,
+   o coincida con ``content_chunker.embedding.*.api.key`` o ``rag.llm.*.api.key``.
+   Una propiedad del sistema llamada ``fess.system.<clave>`` o ``fess.config.<clave>`` (la forma en que se pasa un ajuste como opción ``-D``)
+   se enmascara con la misma regla que ``<clave>``.
+   En ``env_props`` y ``system_props``, el valor de una opción ``-Dclave=valor`` sensible dentro de una cadena más larga
+   (por ejemplo ``FESS_JAVA_OPTS`` o ``JAVA_TOOL_OPTIONS``) también se enmascara, y el resto de la cadena sigue siendo legible.
 
 .. warning::
 
-   ``env_props`` (variables de entorno) y ``system_props`` (propiedades del sistema de Java) no son enmascarados:
-   los valores configurados se devuelven tal como están. Si las variables de entorno o las propiedades del sistema
-   contienen información confidencial como credenciales, esos valores aparecerán en la respuesta.
+   Solo se enmascaran las claves indicadas arriba. Si guarda un secreto en una variable de entorno o en una propiedad del sistema de Java
+   con otro nombre (por ejemplo ``DB_PASSWORD``), NO se enmascara: el valor se devuelve tal cual y aparece en la respuesta.
 
 Ejemplos de Uso
 ===============
