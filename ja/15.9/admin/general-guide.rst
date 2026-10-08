@@ -36,6 +36,8 @@ JSON APIを有効にするかを指定します。
 
 重複結果を折り畳みを有効にするかを設定します。
 
+``search_engine.type`` が ``vanilla`` または ``aws`` の場合、この項目は表示されず、折り畳みは常に無効になります（ :doc:`../config/search-engine-type` を参照）。
+
 サムネイル表示
 :::::::::::
 

@@ -42,7 +42,7 @@ Analyzer は専用の管理画面を持たず、設定ファイルを直接編�
 Analyzer そのものの定義（Tokenizer や TokenFilter の組み合わせ）は ``fess.json`` で行い、どのフィールドにどの Analyzer を適用するかは ``fess/doc.json`` で指定します。
 
 .. note::
-   Amazon OpenSearch Service などのマネージドサービスを利用する場合は、``fess_indices/_aws/fess.json`` や ``fess_indices/_cloud/fess.json`` のように、検索エンジンの種別に対応した設定ファイルが優先して使用されます。
+   ``search_engine.type`` の値に対応する ``fess_indices/_<種別>/`` 配下のファイルがある場合は、 ``fess_indices/`` 直下の同名のファイルよりも優先して使用されます。CodeLibs のプラグインを含まない OpenSearch 用の種別（ ``vanilla`` 、 ``aws`` 、非推奨の ``cloud`` ）では、 ``fess_indices/_vanilla/fess.json`` と ``fess_indices/_vanilla/fess/doc.json`` が使用されます。詳しくは :doc:`search-engine-type` を参照してください。
 
 Analyzerの登録
 ==============
@@ -67,6 +67,9 @@ Analyzer が参照する辞書は、管理画面から編集できます。
 * :doc:`../admin/stopwords-guide` - ストップワード
 * :doc:`../admin/protwords-guide` - 保護語
 * :doc:`../admin/stemmeroverride-guide` - ステミングの上書き
+
+.. note::
+   CodeLibs のプラグインを含まない OpenSearch 用の種別（ ``vanilla`` 、 ``aws`` ）では、辞書の管理は使えず、アナライザーは辞書ファイルを参照しません。詳しくは :doc:`search-engine-type` を参照してください。
 
 Analyzer の構成方法は OpenSearch の Analyzer のドキュメントを参照してください。
 

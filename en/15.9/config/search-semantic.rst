@@ -63,8 +63,8 @@ Prerequisites
   Configuration Reference below for the other ANN settings' accepted values.
 
 - **OpenSearch version for an external cluster**: the shipped ``fess.search`` index settings always
-  send ``index.knn`` and ``knn.derived_source.enabled`` (in ``fess_indices/fess.json`` and its
-  AWS/cloud variants). The latter is a relatively recent k-NN plugin setting, and an older
+  send ``index.knn`` and ``knn.derived_source.enabled`` (in ``fess_indices/fess.json`` and in
+  ``fess_indices/_vanilla/fess.json``, which ``vanilla``, ``aws`` and the deprecated ``cloud`` use). The latter is a relatively recent k-NN plugin setting, and an older
   OpenSearch that does not recognize it fails to create the index regardless of whether the k-NN
   plugin itself is installed. See :doc:`../install/prerequisites` for the OpenSearch versions
   |Fess| 15.9 supports.

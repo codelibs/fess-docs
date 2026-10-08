@@ -917,6 +917,15 @@ API 请求。由于搜索界面现在通过 ``/api/v2/search`` 进行搜索，�
 如需禁止匿名用户搜索，请设置 ``login.required=true`` 。访问令牌的行为不变：带有已注册访问令牌的请求
 会获得该令牌的权限，带有未注册或已过期令牌的请求会被拒绝。
 
+``search_engine.type`` 的 ``cloud`` 已弃用
+------------------------------------------
+
+15.9 为 ``search_engine.type`` 新增了 ``vanilla`` 值，用于不含 CodeLibs 插件的原生 OpenSearch（请参阅 :doc:`../config/search-engine-type` ）。 ``cloud`` 成为 ``vanilla`` 的已弃用别名，仍可继续使用，但启动时会在日志中输出警告。在 15.9 上运行后，请改为 ``vanilla`` 。 ``aws`` 的行为与之前相同。
+
+* ``vanilla`` 需要 15.9 及更高版本。\ |Fess| 15.8 及更早版本无法识别该值，因此在仍有可能回退到 15.8 期间，请保持 ``cloud`` 不变。
+* ``aws`` 和 ``cloud`` 的索引定义现在从 ``fess_indices/_vanilla/`` 读取。随附的 ``fess_indices/_aws/`` 和 ``fess_indices/_cloud/`` 已不存在，自行添加的 ``fess_indices/_aws/`` 或 ``fess_indices/_cloud/`` 也不再被读取，请将修改内容移到 ``fess_indices/_vanilla/`` 。已存在的索引不会改变。
+* 15.8 保存在搜索引擎中的建议（suggest）设置会自动迁移，无需任何操作。
+
 .. _upgrade-reindex-new-fields:
 
 将新字段和假名规范化应用到现有文档索引

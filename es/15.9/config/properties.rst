@@ -35,7 +35,7 @@ Núcleo
     - Description
     - Default
   * - search_engine.type
-    - Tipo de backend del motor de búsqueda (p. ej., default, opensearch).
+    - Tipo de backend del motor de búsqueda. Valores válidos: default (OpenSearch con los plugins de CodeLibs), vanilla (OpenSearch sin los plugins de CodeLibs), aws (vanilla con tratamiento específico para AWS). cloud es un alias obsoleto de vanilla.
     - ``default``
   * - search_engine.http.url
     - URL del endpoint HTTP del motor de búsqueda. En entornos IPv6, use corchetes alrededor de la dirección IPv6 (p. ej., http://[::1]:9200)
@@ -865,7 +865,6 @@ Límite de tasa
   * - response.headers
     - Encabezados HTTP de la respuesta. Access-Control-\* y Timing-Allow-Origin se ignoran (CORS se controla mediante api.cors.\* / CorsFilter). No establezca Vary aquí.
     - | ``text/html=X-XSS-Protection: 1; mode=block``
-      | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
 .. list-table:: Índice de documentos
@@ -2054,6 +2053,9 @@ Web
   * - online.help.name.storage
     - Clave de ayuda en línea para el almacenamiento.
     - ``storage``
+  * - online.help.name.docreport
+    - Clave de ayuda en línea para el informe de documentos.
+    - ``docreport``
   * - online.help.supported.langs
     - Idiomas admitidos para la ayuda en línea.
     - ``de,es,fr,ja,ko,zh-cn``

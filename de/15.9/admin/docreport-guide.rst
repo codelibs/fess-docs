@@ -30,8 +30,7 @@ Gruppen. Die CSV-Datei liest auch bei einem großen Index alle Gruppen, mit den 
 
 .. note::
 
-   Bei einem Index, der die Inhaltssignatur nicht speichert (die Mappings ``cloud`` und ``aws``), ist
-   der Duplikatbericht nicht verfügbar.
+   Der Duplikatbericht benötigt die Inhaltssignatur, die die Indexdefinitionen für ein OpenSearch ohne die CodeLibs-Plugins (``search_engine.type`` mit ``vanilla``, ``aws`` oder dem veralteten ``cloud``) nicht berechnen. Bei diesen Typen wird die Registerkarte „Duplikate“ ausgeblendet, und nur der Bericht über inaktive Dokumente ist verfügbar. Siehe :doc:`../config/search-engine-type`.
 
 Inaktive Dokumente
 ==================

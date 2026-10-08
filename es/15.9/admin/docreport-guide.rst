@@ -30,8 +30,7 @@ obtener todos los grupos. El CSV lee todos los grupos, incluso en un índice gra
 
 .. note::
 
-   En un índice que no guarda la firma de contenido (las asignaciones ``cloud`` y ``aws``), el
-   informe de duplicados no está disponible.
+   El informe de duplicados necesita la firma de contenido, que las definiciones de índice para un OpenSearch sin los plugins de CodeLibs (``search_engine.type`` con ``vanilla``, ``aws`` o el obsoleto ``cloud``) no calculan. Con estos tipos se oculta la pestaña «Duplicados» y solo está disponible el informe de documentos inactivos. Consulte :doc:`../config/search-engine-type`.
 
 Documentos inactivos
 ====================

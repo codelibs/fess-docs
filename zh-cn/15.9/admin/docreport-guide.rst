@@ -20,7 +20,7 @@
 
 .. note::
 
-   在不保存内容签名的索引（ ``cloud``\ 、\ ``aws`` 用的映射）中，无法使用重复文档报告。
+   重复文档报告需要内容签名，而面向不含 CodeLibs 插件的 OpenSearch 的索引定义（ ``search_engine.type`` 为 ``vanilla`` 、 ``aws`` 或已弃用的 ``cloud`` ）不会计算内容签名。在这些类型下，“重复文档”选项卡不会显示，只能使用“休眠文档”。详情请参阅 :doc:`../config/search-engine-type` 。
 
 休眠文档
 ========

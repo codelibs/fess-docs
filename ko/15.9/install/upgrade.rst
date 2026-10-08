@@ -965,6 +965,15 @@ API 가 호출될 때 로그에 기록됩니다. JavaScript 를 실행하지 않
 동작은 변경되지 않았습니다. 등록된 액세스 토큰이 있는 요청에는 해당 토큰의 권한이 부여되고, 등록되지
 않았거나 만료된 토큰이 있는 요청은 거부됩니다.
 
+``search_engine.type`` 의 ``cloud`` 는 사용 중단 예정
+-----------------------------------------------------
+
+15.9 에서는 CodeLibs 플러그인이 없는 순정 OpenSearch 용으로 ``search_engine.type`` 의 값 ``vanilla`` 가 추가되었습니다( :doc:`../config/search-engine-type` 참조). ``cloud`` 는 ``vanilla`` 의 사용 중단 예정 별칭이 되었습니다. 계속 동작하지만 시작할 때 경고를 로그에 출력합니다. 15.9 로 운영하게 되면 ``vanilla`` 로 변경하십시오. ``aws`` 는 이전과 같이 동작합니다.
+
+* ``vanilla`` 는 15.9 이상에서 사용할 수 있습니다. 15.8 이전의 |Fess| 는 이 값을 인식하지 못합니다. 15.8 로 되돌릴 가능성이 있는 동안에는 ``cloud`` 를 그대로 두십시오.
+* ``aws`` 와 ``cloud`` 의 인덱스 정의는 ``fess_indices/_vanilla/`` 에서 읽어 들입니다. 동봉되어 있던 ``fess_indices/_aws/`` 와 ``fess_indices/_cloud/`` 는 없어졌으며, 직접 추가한 ``fess_indices/_aws/`` 또는 ``fess_indices/_cloud/`` 는 더 이상 읽지 않으므로 변경 내용을 ``fess_indices/_vanilla/`` 로 옮기십시오. 이미 만들어진 인덱스는 변경되지 않습니다.
+* 15.8 이 검색 엔진에 저장한 추천 단어(Suggest) 설정은 자동으로 마이그레이션됩니다. 별도의 조치는 필요하지 않습니다.
+
 .. _upgrade-reindex-new-fields:
 
 기존 문서 인덱스에 새 필드와 가나 정규화 반영

@@ -35,7 +35,7 @@ Kern
     - Description
     - Default
   * - search_engine.type
-    - Der Typ des Suchmaschinen-Backends (z. B. default, opensearch).
+    - Typ des Suchmaschinen-Backends. Zulässige Werte: default (OpenSearch mit den CodeLibs-Plugins), vanilla (OpenSearch ohne die CodeLibs-Plugins), aws (vanilla mit AWS-spezifischer Behandlung). cloud ist ein veralteter Alias für vanilla.
     - ``default``
   * - search_engine.http.url
     - Die URL des HTTP-Endpunkts der Suchmaschine. Verwenden Sie in IPv6-Umgebungen eckige Klammern um die IPv6-Adresse (z. B. http://[::1]:9200)
@@ -865,7 +865,6 @@ Index
   * - response.headers
     - HTTP-Header für die Antwort. Access-Control-\* und Timing-Allow-Origin werden ignoriert (CORS wird über api.cors.\* / CorsFilter gesteuert). Setzen Sie Vary hier nicht.
     - | ``text/html=X-XSS-Protection: 1; mode=block``
-      | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
 .. list-table:: Dokumentindex
@@ -2054,6 +2053,9 @@ Web
   * - online.help.name.storage
     - Online-Hilfe-Schlüssel für Speicher.
     - ``storage``
+  * - online.help.name.docreport
+    - Online-Hilfe-Schlüssel für den Dokumentbericht.
+    - ``docreport``
   * - online.help.supported.langs
     - Unterstützte Sprachen für die Online-Hilfe.
     - ``de,es,fr,ja,ko,zh-cn``

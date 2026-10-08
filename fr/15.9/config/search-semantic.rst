@@ -68,7 +68,7 @@ Prérequis
 
 - **Version d'OpenSearch pour un cluster externe** : les réglages d'index ``fess.search``
   fournis envoient toujours ``index.knn`` et ``knn.derived_source.enabled`` (dans
-  ``fess_indices/fess.json`` et ses variantes AWS/cloud). Ce dernier est un réglage relativement
+  ``fess_indices/fess.json`` et dans ``fess_indices/_vanilla/fess.json``, utilisé par ``vanilla``, ``aws`` et l'ancien ``cloud``). Ce dernier est un réglage relativement
   récent du plugin k-NN : un OpenSearch plus ancien qui ne le reconnaît pas fait échouer la
   création de l'index, que le plugin k-NN lui-même soit installé ou non. Pour connaître les
   versions d'OpenSearch prises en charge par |Fess| 15.9, consultez

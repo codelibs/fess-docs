@@ -172,6 +172,10 @@ OpenSearch
 
 ``bin/fess-setup install opensearch`` 会在 Linux 和 Windows 上连同这些插件一起准备 OpenSearch。详情请参阅 :doc:`install-linux`\ （其中也包括必须用其他方式安装 OpenSearch 的 macOS），所有命令请参阅 :doc:`fess-setup`\ 。
 
+.. note::
+
+   如果使用的 OpenSearch 无法安装这些插件（例如托管服务），请将 ``search_engine.type`` 指定为 ``vanilla`` （\ |Fess| 15.9 及更高版本）。此时词典管理等部分功能不可用。详情请参阅 :doc:`../config/search-engine-type` 。
+
 Java (Docker 版除外)
 -------------------
 

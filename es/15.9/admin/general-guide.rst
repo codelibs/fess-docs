@@ -36,6 +36,8 @@ Contraer resultados duplicados
 
 Configure si desea habilitar la contracción de resultados duplicados.
 
+Si ``search_engine.type`` es ``vanilla`` o ``aws``, este elemento no se muestra y la contracción queda siempre desactivada (consulte :doc:`../config/search-engine-type`).
+
 Mostrar miniatura
 ::::::::::::::::::
 

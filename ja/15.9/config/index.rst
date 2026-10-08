@@ -98,4 +98,5 @@
    admin-index-backup
    admin-index-export
    admin-analyzer
+   search-engine-type
    admin-opensearch-dashboards

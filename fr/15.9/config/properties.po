@@ -18,8 +18,8 @@ msgstr "Titre du domaine pour la journalisation et l'affichage."
 msgid "Search Engine"
 msgstr "Moteur de recherche"
 
-msgid "The type of search engine backend (e.g., default, opensearch)."
-msgstr "Type de backend du moteur de recherche (par exemple, default, opensearch)."
+msgid "The type of search engine backend. Valid values: default (OpenSearch with the CodeLibs plugins), vanilla (OpenSearch without the CodeLibs plugins), aws (vanilla with AWS-specific handling). cloud is a deprecated alias of vanilla."
+msgstr "Type de backend du moteur de recherche. Valeurs valides : default (OpenSearch avec les plugins CodeLibs), vanilla (OpenSearch sans les plugins CodeLibs), aws (vanilla avec un traitement propre à AWS). cloud est un alias obsolète de vanilla."
 
 msgid "The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)"
 msgstr "URL du point de terminaison HTTP du moteur de recherche. Pour les environnements IPv6, utilisez des crochets autour de l'adresse IPv6 (par exemple, http://[::1]:9200)"
@@ -1697,6 +1697,9 @@ msgstr "Clé de l'aide en ligne pour le plugin."
 
 msgid "Online help key for storage."
 msgstr "Clé de l'aide en ligne pour le stockage."
+
+msgid "Online help key for document report."
+msgstr "Clé de l'aide en ligne pour le rapport de documents."
 
 msgid "Supported languages for online help."
 msgstr "Langues prises en charge pour l'aide en ligne."

@@ -10,6 +10,10 @@ Cette section explique les paramètres de configuration concernant les dictionna
 Les modifications du dictionnaire doivent être effectuées avec une compréhension des spécifications de chaque dictionnaire.
 Un échec lors de la modification du dictionnaire peut rendre l'index inaccessible.
 
+.. note::
+
+   Si ``search_engine.type`` vaut ``vanilla`` ou ``aws`` (c'est-à-dire si OpenSearch n'a pas les plugins CodeLibs), la gestion des dictionnaires n'est pas disponible. Voir :doc:`../config/search-engine-type`.
+
 Liste
 =====
 

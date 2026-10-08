@@ -42,7 +42,7 @@ Analyzer 没有专用的管理界面,需要直接编辑配置文件进行修改�
 Analyzer 本身的定义(Tokenizer 和 TokenFilter 的组合)在 ``fess.json`` 中进行,而哪个字段使用哪个 Analyzer 则在 ``fess/doc.json`` 中指定。
 
 .. note::
-   使用 Amazon OpenSearch Service 等托管服务时,会优先使用与搜索引擎类型对应的配置文件,例如 ``fess_indices/_aws/fess.json`` 或 ``fess_indices/_cloud/fess.json`` 。
+   如果 ``fess_indices/_<类型>/`` 下存在与 ``search_engine.type`` 的值对应的同名文件，则其优先于 ``fess_indices/`` 正下方的文件。对于面向不含 CodeLibs 插件的 OpenSearch 的类型（ ``vanilla`` 、 ``aws`` 以及已弃用的 ``cloud`` ），会使用 ``fess_indices/_vanilla/fess.json`` 和 ``fess_indices/_vanilla/fess/doc.json`` 。详情请参阅 :doc:`search-engine-type` 。
 
 Analyzer 的注册
 ================
@@ -67,6 +67,9 @@ Analyzer 所引用的词典可以通过管理界面进行编辑。
 * :doc:`../admin/stopwords-guide` - 停用词
 * :doc:`../admin/protwords-guide` - 保护词
 * :doc:`../admin/stemmeroverride-guide` - 词干提取覆盖
+
+.. note::
+   对于面向不含 CodeLibs 插件的 OpenSearch 的类型（ ``vanilla`` 、 ``aws`` ），无法使用词典管理，Analyzer 也不会读取词典文件。详情请参阅 :doc:`search-engine-type` 。
 
 Analyzer 的构成方法请参考 OpenSearch 的 Analyzer 文档。
 

@@ -301,6 +301,8 @@ Docker コンテナの停止
      - 起動時に自動インストールするプラグイン（スペース区切りの ``name:version`` 形式。例: ``fess-ds-wikipedia:15.9.0``）
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch の HTTP エンドポイント（``compose.yaml`` の既定値: ``http://search01:9200``）
+   * - ``SEARCH_ENGINE_TYPE``
+     - 検索エンジンの種別（ ``default`` 、 ``vanilla`` 、 ``aws`` ）。 ``vanilla`` は Fess 15.9 以降のイメージで指定できます。それより前のイメージでは ``cloud`` を指定します（ :doc:`../config/search-engine-type` を参照）
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - 認証が有効な OpenSearch に接続する際の資格情報
    * - ``FESS_DICTIONARY_PATH``
@@ -420,7 +422,7 @@ Docker 環境で設定を反映させるには、以下の方法があります�
    * - ``compose-minio.yaml``
      - MinIO（オブジェクトストレージ）を追加し、Fess のストレージ機能の保存先として利用
    * - ``vanilla/``
-     - Fess 用プラグインを含まない素の OpenSearch と組み合わせる構成（辞書管理などの一部機能は利用不可）
+     - CodeLibs のプラグインを含まない素の OpenSearch と組み合わせる構成（ ``SEARCH_ENGINE_TYPE=vanilla`` 。Fess 15.9 以降のイメージで指定でき、それより前のイメージでは ``cloud`` を指定します）。辞書管理などの一部機能は利用できません（ :doc:`../config/search-engine-type` を参照）
    * - ``snapshot/``
      - 開発版（snapshot）イメージを使用する構成（クラスター構成や Elasticsearch 8 との組み合わせを含む）
    * - ``multi-instance/``

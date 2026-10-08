@@ -10,6 +10,10 @@ This page explains the configuration settings related to dictionaries.
 Make changes to dictionaries only after understanding the specifications of each dictionary.
 Incorrect dictionary changes may make the index inaccessible.
 
+.. note::
+
+   Dictionary management is not available when ``search_engine.type`` is ``vanilla`` or ``aws``, that is, when OpenSearch has no CodeLibs plugins. See :doc:`../config/search-engine-type`.
+
 List
 ====
 

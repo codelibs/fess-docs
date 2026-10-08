@@ -32,8 +32,7 @@ colonnes
 
 .. note::
 
-   Sur un index qui ne conserve pas la signature de contenu (les mappings ``cloud`` et ``aws``), le
-   rapport de doublons n'est pas disponible.
+   Le rapport de doublons a besoin de la signature de contenu, que les définitions d'index pour un OpenSearch sans les plugins CodeLibs (``search_engine.type`` valant ``vanilla``, ``aws`` ou l'ancien ``cloud``) ne calculent pas. Avec ces types, l'onglet « Doublons » est masqué et seul le rapport des documents inactifs est disponible. Voir :doc:`../config/search-engine-type`.
 
 Documents inactifs
 ==================

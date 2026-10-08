@@ -301,6 +301,8 @@ Fess 本体（``fess01``）的容器本身不保存状态，也没有专用的�
      - 启动时自动安装的插件（以空格分隔的 ``name:version`` 格式。例：``fess-ds-wikipedia:15.9.0``）
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch 的 HTTP 端点（``compose.yaml`` 的默认值：``http://search01:9200``）
+   * - ``SEARCH_ENGINE_TYPE``
+     - 搜索引擎的类型（ ``default`` 、 ``vanilla`` 、 ``aws`` ）。 ``vanilla`` 需要 Fess 15.9 及更高版本的镜像，更早的镜像请使用 ``cloud`` （请参阅 :doc:`../config/search-engine-type` ）
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - 连接到已启用认证的 OpenSearch 时使用的凭据
    * - ``FESS_DICTIONARY_PATH``
@@ -420,7 +422,7 @@ Fess 本体（``fess01``）的容器本身不保存状态，也没有专用的�
    * - ``compose-minio.yaml``
      - 添加 MinIO（对象存储），并将其用作 Fess 存储功能的保存位置
    * - ``vanilla/``
-     - 与不含 Fess 专用插件的原生 OpenSearch 组合使用的构成（词典管理等部分功能不可用）
+     - 与不含 CodeLibs 插件的原生 OpenSearch 组合使用的构成（ ``SEARCH_ENGINE_TYPE=vanilla`` ，需要 Fess 15.9 及更高版本的镜像，更早的镜像请使用 ``cloud`` ）。词典管理等部分功能不可用（请参阅 :doc:`../config/search-engine-type` ）
    * - ``snapshot/``
      - 使用开发版（snapshot）镜像的构成（包括集群构成以及与 Elasticsearch 8 的组合）
    * - ``multi-instance/``

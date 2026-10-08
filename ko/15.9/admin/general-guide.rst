@@ -36,6 +36,8 @@ JSON API를 활성화할지 여부를 지정합니다.
 
 중복 결과 접기를 활성화할지 여부를 설정합니다.
 
+``search_engine.type`` 이 ``vanilla`` 또는 ``aws`` 이면 이 항목은 표시되지 않으며 접기는 항상 비활성 상태가 됩니다( :doc:`../config/search-engine-type` 참조).
+
 썸네일 표시
 :::::::::::
 

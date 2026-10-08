@@ -98,4 +98,5 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
    admin-index-backup
    admin-index-export
    admin-analyzer
+   search-engine-type
    admin-opensearch-dashboards

@@ -35,7 +35,7 @@ Core
     - Description
     - Default
   * - search_engine.type
-    - The type of search engine backend (e.g., default, opensearch).
+    - The type of search engine backend. Valid values: default (OpenSearch with the CodeLibs plugins), vanilla (OpenSearch without the CodeLibs plugins), aws (vanilla with AWS-specific handling). cloud is a deprecated alias of vanilla.
     - ``default``
   * - search_engine.http.url
     - The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)
@@ -865,7 +865,6 @@ Index
   * - response.headers
     - HTTP headers for the response. Access-Control-\* and Timing-Allow-Origin are ignored (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary here.
     - | ``text/html=X-XSS-Protection: 1; mode=block``
-      | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
 .. list-table:: Document Index
@@ -2054,6 +2053,9 @@ Web
   * - online.help.name.storage
     - Online help key for storage.
     - ``storage``
+  * - online.help.name.docreport
+    - Online help key for document report.
+    - ``docreport``
   * - online.help.supported.langs
     - Supported languages for online help.
     - ``de,es,fr,ja,ko,zh-cn``
