@@ -93,9 +93,9 @@ SystemInfo API는 |Fess| 의 시스템 정보를 조회하기 위한 API입니�
    * - ``status``
      - 처리 결과를 나타내는 코드. ``0`` 은 정상 종료를 의미합니다.
    * - ``env_props``
-     - 환경 변수 목록 (``label`` / ``value`` 의 배열). ``System.getenv()`` 로 취득한 값이 그대로 반환됩니다.
+     - 환경 변수 목록 (``label`` / ``value`` 의 배열). ``System.getenv()`` 로 취득한 값이 반환되며, 민감한 항목은 마스킹됩니다(아래 주석 참조).
    * - ``system_props``
-     - Java의 시스템 프로퍼티 목록 (``label`` / ``value`` 의 배열). ``System.getProperties()`` 로 취득한 값이 그대로 반환됩니다.
+     - Java의 시스템 프로퍼티 목록 (``label`` / ``value`` 의 배열). ``System.getProperties()`` 로 취득한 값이 반환되며, 민감한 항목은 마스킹됩니다(아래 주석 참조).
    * - ``fess_props``
      - |Fess| 의 설정 프로퍼티 목록 (``label`` / ``value`` 의 배열). ``fess_config.properties`` 의 설정값과 관리 화면에서 설정된 시스템 프로퍼티가 포함됩니다. 민감한 항목은 마스킹됩니다 (아래 주의 사항 참조).
    * - ``bug_report_props``
@@ -103,15 +103,21 @@ SystemInfo API는 |Fess| 의 시스템 정보를 조회하기 위한 API입니�
 
 .. note::
 
-   ``fess_props`` 에서는 다음 민감한 설정값이 마스킹되어 ``XXXXXXXX`` 로 반환됩니다:
-   ``http.proxy.password``, ``ldap.admin.security.credentials``, ``spnego.preauth.password``,
-   ``app.cipher.key``, ``oic.client.id``, ``oic.client.secret``.
+   ``fess_props``, ``env_props``, ``system_props`` 에서는 다음 민감한 항목의 값이 마스킹되어 ``XXXXXXXX`` 로 반환됩니다:
+   ``http.proxy.password``, ``search_engine.password``, ``index.user.initial_password``,
+   ``ldap.admin.security.credentials``, ``spnego.preauth.password``, ``app.cipher.key``,
+   ``content_chunker.embedding.opensearch.password``,
+   그리고 키가 ``.client.id``, ``.client.secret``, ``.privatekey``, ``.key.password`` 로 끝나거나
+   ``content_chunker.embedding.*.api.key``, ``rag.llm.*.api.key`` 에 해당하는 모든 항목.
+   ``fess.system.<키>`` 또는 ``fess.config.<키>`` 라는 이름의 시스템 프로퍼티(설정값을 ``-D`` 옵션으로 전달하는 형식)는
+   ``<키>`` 와 같은 규칙으로 마스킹됩니다.
+   ``env_props`` 와 ``system_props`` 에서는 ``FESS_JAVA_OPTS`` 나 ``JAVA_TOOL_OPTIONS`` 처럼 긴 문자열 안에 있는
+   민감한 ``-D키=값`` 옵션의 값도 마스킹되며, 문자열의 나머지는 그대로 반환됩니다.
 
 .. warning::
 
-   ``env_props`` (환경 변수) 와 ``system_props`` (Java 시스템 프로퍼티) 는 마스킹되지 않으며,
-   설정된 값이 그대로 반환됩니다. 환경 변수나 시스템 프로퍼티에 인증 정보 등의
-   민감한 정보가 포함된 경우, 해당 값들이 응답에 포함되는 점에 주의하십시오.
+   마스킹되는 것은 위의 키뿐입니다. 환경 변수나 Java 시스템 프로퍼티에 다른 이름(예: ``DB_PASSWORD``)으로
+   인증 정보 등의 민감한 정보를 설정한 경우 마스킹되지 않고, 설정된 값이 그대로 응답에 포함됩니다.
 
 사용 예
 =======
