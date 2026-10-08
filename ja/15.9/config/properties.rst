@@ -35,7 +35,7 @@ one, fill in ``properties.po`` beside this file.
     - Description
     - Default
   * - search_engine.type
-    - 検索エンジンバックエンドの種類（例: default、opensearch）。
+    - 検索エンジンバックエンドの種類。指定できる値: default（CodeLibs プラグインを導入した OpenSearch）、vanilla（CodeLibs プラグインを導入していない OpenSearch）、aws（AWS 向けの扱いを加えた vanilla）。cloud は vanilla の非推奨の別名です。
     - ``default``
   * - search_engine.http.url
     - 検索エンジンのHTTPエンドポイントのURL。IPv6環境では、IPv6アドレスを角括弧で囲みます（例: http://[::1]:9200）。
@@ -865,7 +865,6 @@ one, fill in ``properties.po`` beside this file.
   * - response.headers
     - レスポンスのHTTPヘッダー。Access-Control-\*とTiming-Allow-Originは無視されます（CORSはapi.cors.\* / CorsFilterで制御されます）。ここでVaryは設定しないでください。
     - | ``text/html=X-XSS-Protection: 1; mode=block``
-      | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
 .. list-table:: ドキュメントインデックス
@@ -2054,6 +2053,9 @@ Web
   * - online.help.name.storage
     - ストレージのオンラインヘルプキー。
     - ``storage``
+  * - online.help.name.docreport
+    - ドキュメントレポートのオンラインヘルプキー。
+    - ``docreport``
   * - online.help.supported.langs
     - オンラインヘルプでサポートする言語。
     - ``de,es,fr,ja,ko,zh-cn``

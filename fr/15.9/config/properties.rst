@@ -35,7 +35,7 @@ Cœur
     - Description
     - Default
   * - search_engine.type
-    - Type de backend du moteur de recherche (par exemple, default, opensearch).
+    - Type de backend du moteur de recherche. Valeurs valides : default (OpenSearch avec les plugins CodeLibs), vanilla (OpenSearch sans les plugins CodeLibs), aws (vanilla avec un traitement propre à AWS). cloud est un alias obsolète de vanilla.
     - ``default``
   * - search_engine.http.url
     - URL du point de terminaison HTTP du moteur de recherche. Pour les environnements IPv6, utilisez des crochets autour de l'adresse IPv6 (par exemple, http://[::1]:9200)
@@ -865,7 +865,6 @@ Index
   * - response.headers
     - En-têtes HTTP de la réponse. Access-Control-\* et Timing-Allow-Origin sont ignorés (CORS est contrôlé par api.cors.\* / CorsFilter). Ne définissez pas Vary ici.
     - | ``text/html=X-XSS-Protection: 1; mode=block``
-      | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
 .. list-table:: Index des documents
@@ -2054,6 +2053,9 @@ Web
   * - online.help.name.storage
     - Clé de l'aide en ligne pour le stockage.
     - ``storage``
+  * - online.help.name.docreport
+    - Clé de l'aide en ligne pour le rapport de documents.
+    - ``docreport``
   * - online.help.supported.langs
     - Langues prises en charge pour l'aide en ligne.
     - ``de,es,fr,ja,ko,zh-cn``

@@ -18,8 +18,8 @@ msgstr "用于日志记录和显示的域标题。"
 msgid "Search Engine"
 msgstr "搜索引擎"
 
-msgid "The type of search engine backend (e.g., default, opensearch)."
-msgstr "搜索引擎后端的类型（例如 default、opensearch）。"
+msgid "The type of search engine backend. Valid values: default (OpenSearch with the CodeLibs plugins), vanilla (OpenSearch without the CodeLibs plugins), aws (vanilla with AWS-specific handling). cloud is a deprecated alias of vanilla."
+msgstr "搜索引擎后端的类型。可选值：default（安装了 CodeLibs 插件的 OpenSearch）、vanilla（未安装 CodeLibs 插件的 OpenSearch）、aws（带有 AWS 专用处理的 vanilla）。cloud 是 vanilla 的已弃用别名。"
 
 msgid "The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)"
 msgstr "搜索引擎 HTTP 端点的 URL。在 IPv6 环境中，请用方括号括住 IPv6 地址（例如 http://[::1]:9200）"
@@ -1697,6 +1697,9 @@ msgstr "插件的在线帮助键。"
 
 msgid "Online help key for storage."
 msgstr "存储的在线帮助键。"
+
+msgid "Online help key for document report."
+msgstr "文档报告的在线帮助键。"
 
 msgid "Supported languages for online help."
 msgstr "在线帮助支持的语言。"

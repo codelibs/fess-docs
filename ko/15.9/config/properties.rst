@@ -35,7 +35,7 @@ one, fill in ``properties.po`` beside this file.
     - Description
     - Default
   * - search_engine.type
-    - 검색 엔진 백엔드의 타입(예: default, opensearch).
+    - 검색 엔진 백엔드의 유형입니다. 사용 가능한 값: default(CodeLibs 플러그인이 있는 OpenSearch), vanilla(CodeLibs 플러그인이 없는 OpenSearch), aws(AWS 전용 처리를 더한 vanilla). cloud는 vanilla의 지원 중단 예정 별칭입니다.
     - ``default``
   * - search_engine.http.url
     - 검색 엔진 HTTP 엔드포인트의 URL입니다. IPv6 환경에서는 IPv6 주소를 대괄호로 감싸십시오(예: http://[::1]:9200)
@@ -865,7 +865,6 @@ one, fill in ``properties.po`` beside this file.
   * - response.headers
     - 응답용 HTTP 헤더입니다. Access-Control-\* 및 Timing-Allow-Origin 은 무시됩니다(CORS는 api.cors.\* / CorsFilter 로 제어됩니다). 여기서는 Vary를 설정하지 마십시오.
     - | ``text/html=X-XSS-Protection: 1; mode=block``
-      | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
 .. list-table:: 문서 인덱스
@@ -2054,6 +2053,9 @@ one, fill in ``properties.po`` beside this file.
   * - online.help.name.storage
     - 스토리지의 온라인 도움말 키.
     - ``storage``
+  * - online.help.name.docreport
+    - 문서 리포트의 온라인 도움말 키.
+    - ``docreport``
   * - online.help.supported.langs
     - 온라인 도움말에서 지원하는 언어.
     - ``de,es,fr,ja,ko,zh-cn``

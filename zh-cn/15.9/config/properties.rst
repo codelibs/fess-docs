@@ -35,7 +35,7 @@ one, fill in ``properties.po`` beside this file.
     - Description
     - Default
   * - search_engine.type
-    - 搜索引擎后端的类型（例如 default、opensearch）。
+    - 搜索引擎后端的类型。可选值：default（安装了 CodeLibs 插件的 OpenSearch）、vanilla（未安装 CodeLibs 插件的 OpenSearch）、aws（带有 AWS 专用处理的 vanilla）。cloud 是 vanilla 的已弃用别名。
     - ``default``
   * - search_engine.http.url
     - 搜索引擎 HTTP 端点的 URL。在 IPv6 环境中，请用方括号括住 IPv6 地址（例如 http://[::1]:9200）
@@ -865,7 +865,6 @@ one, fill in ``properties.po`` beside this file.
   * - response.headers
     - 响应的 HTTP 头信息。Access-Control-\* 和 Timing-Allow-Origin 会被忽略（CORS 由 api.cors.\* / CorsFilter 控制）。请勿在此处设置 Vary。
     - | ``text/html=X-XSS-Protection: 1; mode=block``
-      | ``text/html=Content-Security-Policy: reflected-xss block``
       | ``text/html=X-Frame-Options: SAMEORIGIN``
 
 .. list-table:: 文档索引
@@ -2054,6 +2053,9 @@ Web
   * - online.help.name.storage
     - 存储的在线帮助键。
     - ``storage``
+  * - online.help.name.docreport
+    - 文档报告的在线帮助键。
+    - ``docreport``
   * - online.help.supported.langs
     - 在线帮助支持的语言。
     - ``de,es,fr,ja,ko,zh-cn``

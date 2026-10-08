@@ -18,8 +18,8 @@ msgstr "ログと表示に使用するドメインのタイトル。"
 msgid "Search Engine"
 msgstr "検索エンジン"
 
-msgid "The type of search engine backend (e.g., default, opensearch)."
-msgstr "検索エンジンバックエンドの種類（例: default、opensearch）。"
+msgid "The type of search engine backend. Valid values: default (OpenSearch with the CodeLibs plugins), vanilla (OpenSearch without the CodeLibs plugins), aws (vanilla with AWS-specific handling). cloud is a deprecated alias of vanilla."
+msgstr "検索エンジンバックエンドの種類。指定できる値: default（CodeLibs プラグインを導入した OpenSearch）、vanilla（CodeLibs プラグインを導入していない OpenSearch）、aws（AWS 向けの扱いを加えた vanilla）。cloud は vanilla の非推奨の別名です。"
 
 msgid "The URL of the search engine HTTP endpoint. For IPv6 environments, use brackets around the IPv6 address (e.g., http://[::1]:9200)"
 msgstr "検索エンジンのHTTPエンドポイントのURL。IPv6環境では、IPv6アドレスを角括弧で囲みます（例: http://[::1]:9200）。"
@@ -1697,6 +1697,9 @@ msgstr "プラグインのオンラインヘルプキー。"
 
 msgid "Online help key for storage."
 msgstr "ストレージのオンラインヘルプキー。"
+
+msgid "Online help key for document report."
+msgstr "ドキュメントレポートのオンラインヘルプキー。"
 
 msgid "Supported languages for online help."
 msgstr "オンラインヘルプでサポートする言語。"
