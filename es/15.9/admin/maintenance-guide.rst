@@ -33,6 +33,8 @@ Inicializar diccionarios
 
 Al habilitarlo, puede inicializar la configuración de los diccionarios.
 
+Si ``search_engine.type`` es ``vanilla`` o ``aws``, este elemento no se muestra.
+
 
 Número de fragmentos
 :::::::::::::::::::::
@@ -70,6 +72,8 @@ También es la forma de aplicar a las búsquedas los cambios de diccionario: los
 guardados se escriben en sus archivos de OpenSearch y, a continuación, se cierra y se abre el
 índice al que apunta el alias ``fess.update``. Mientras el índice está cerrado no se puede buscar
 en él. Consulte :ref:`dict-apply-changes`.
+
+Si ``search_engine.type`` es ``vanilla`` o ``aws``, esta función no se muestra.
 
 
 Índice de Rastreador

@@ -67,7 +67,7 @@ Requisitos previos
 
 - **Versión de OpenSearch de un clúster externo**: la configuración del índice ``fess.search``
   incluida siempre envía ``index.knn`` y ``knn.derived_source.enabled`` (en
-  ``fess_indices/fess.json`` y sus variantes de AWS/nube). Este último es un ajuste
+  ``fess_indices/fess.json`` y en ``fess_indices/_vanilla/fess.json``, que usan ``vanilla``, ``aws`` y el obsoleto ``cloud``). Este último es un ajuste
   relativamente reciente del plugin k-NN, y en un OpenSearch antiguo que no lo reconoce la
   creación del índice falla, esté o no instalado el plugin k-NN. Consulte
   :doc:`../install/prerequisites` para conocer las versiones de OpenSearch compatibles con

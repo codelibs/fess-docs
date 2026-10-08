@@ -36,6 +36,8 @@ Réduire les résultats en double
 
 Configure l'activation de la réduction des résultats en double.
 
+Si ``search_engine.type`` vaut ``vanilla`` ou ``aws``, cet élément n'est pas affiché et la réduction reste toujours désactivée (voir :doc:`../config/search-engine-type`).
+
 Afficher la miniature
 :::::::::::::::::::::
 

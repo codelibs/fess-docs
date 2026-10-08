@@ -33,6 +33,8 @@
 
 활성화하면 사전 설정을 초기화할 수 있습니다.
 
+``search_engine.type`` 이 ``vanilla`` 또는 ``aws`` 이면 이 항목은 표시되지 않습니다.
+
 
 샤드 수
 ::::::::
@@ -72,6 +74,8 @@ OpenSearch의 최대 복제본 수(index.auto_expand_replicas)를 지정할 수 
 사전 변경을 검색에 반영할 때도 사용합니다. 저장된 사전을 OpenSearch 의 파일에 기록한 다음
 ``fess.update`` 별칭이 가리키는 인덱스를 close 하고 open 합니다. close 하는 동안에는 그 인덱스를
 검색할 수 없습니다. 자세한 내용은 :ref:`dict-apply-changes` 를 참조하십시오.
+
+``search_engine.type`` 이 ``vanilla`` 또는 ``aws`` 이면 이 기능은 표시되지 않습니다.
 
 
 Crawler 인덱스

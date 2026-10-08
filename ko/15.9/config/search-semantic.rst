@@ -59,7 +59,7 @@
   설정값은 아래 「설정 레퍼런스」를 참조하세요.
 
 - **외부 클러스터의 OpenSearch 버전**: 동봉된 ``fess.search`` 인덱스 설정은
-  ``fess_indices/fess.json``\ (및 AWS/cloud 버전)에서 ``index.knn`` 과
+  ``fess_indices/fess.json``\ (및 ``vanilla``, ``aws``, 사용 중단 예정인 ``cloud`` 가 사용하는 ``fess_indices/_vanilla/fess.json``)에서 ``index.knn`` 과
   ``knn.derived_source.enabled`` 를 항상 전송합니다. 후자는 k-NN 플러그인의 비교적 새로운
   설정이며, 이를 인식하지 못하는 오래된 OpenSearch에서는 k-NN 플러그인 유무와 관계없이 인덱스
   생성에 실패합니다. |Fess| 15.9\ 이 지원하는 OpenSearch 버전은

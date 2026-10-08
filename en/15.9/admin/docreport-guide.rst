@@ -30,8 +30,7 @@ group. The CSV reads all groups, even on a large index, with the columns
 
 .. note::
 
-   On an index that does not keep the content signature (the ``cloud`` and ``aws`` mappings), the
-   duplicate report is not available.
+   The duplicate report needs the content signature, which the index definitions for an OpenSearch without the CodeLibs plugins (``search_engine.type`` of ``vanilla``, ``aws`` or the deprecated ``cloud``) do not compute. With these types the "Duplicates" tab is hidden and only the dormant documents report is available. See :doc:`../config/search-engine-type`.
 
 Dormant Documents
 =================

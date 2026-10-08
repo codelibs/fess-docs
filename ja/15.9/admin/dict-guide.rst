@@ -10,6 +10,10 @@
 辞書の変更は各辞書に関する仕様を理解した上で実施してください。
 辞書の変更に失敗するとインデックスにアクセスできなくなる場合があります。
 
+.. note::
+
+   ``search_engine.type`` が ``vanilla`` または ``aws`` の場合（OpenSearch に CodeLibs のプラグインがない場合）、辞書の管理は使えません。詳しくは :doc:`../config/search-engine-type` を参照してください。
+
 一覧
 ====
 

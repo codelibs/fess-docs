@@ -972,6 +972,15 @@ guest roles, as it does the search screen. To keep anonymous users from searchin
 ``login.required=true``. Access tokens work as before: a request with a registered access token is
 given the token's permissions, and a request with an unregistered or expired token is refused.
 
+``search_engine.type=cloud`` is deprecated
+------------------------------------------
+
+15.9 adds the value ``vanilla`` to ``search_engine.type`` for a plain OpenSearch without the CodeLibs plugins (see :doc:`../config/search-engine-type`). ``cloud`` is now a deprecated alias of ``vanilla``: it keeps working, but |Fess| logs a warning at startup. Change it to ``vanilla`` once the installation runs 15.9. ``aws`` keeps working as before.
+
+* ``vanilla`` requires 15.9. |Fess| 15.8 and earlier do not know the value, so keep ``cloud`` as long as you may still roll back to 15.8.
+* The index definitions of ``aws`` and ``cloud`` now come from ``fess_indices/_vanilla/``. The bundled ``fess_indices/_aws/`` and ``fess_indices/_cloud/`` directories no longer exist, and a ``fess_indices/_aws/`` or ``fess_indices/_cloud/`` directory that you added yourself is no longer read. Move your changes to ``fess_indices/_vanilla/``. Indices that already exist are not changed.
+* The suggest settings that 15.8 stored in the search engine are migrated automatically; you do not have to do anything.
+
 .. _upgrade-reindex-new-fields:
 
 Applying New Fields and Kana Normalization to an Existing Document Index

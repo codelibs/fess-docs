@@ -36,6 +36,8 @@ Result Collapse
 
 Specifies whether to enable collapsing of duplicate results.
 
+This item is not shown, and collapsing stays disabled, when ``search_engine.type`` is ``vanilla`` or ``aws`` (see :doc:`../config/search-engine-type`).
+
 Thumbnail View
 ::::::::::::::
 

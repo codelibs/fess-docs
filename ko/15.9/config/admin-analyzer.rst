@@ -42,7 +42,7 @@ Analyzer는 전용 관리 화면을 갖지 않으며, 설정 파일을 직접 �
 Analyzer 자체의 정의(Tokenizer나 TokenFilter의 조합)는 ``fess.json`` 에서 수행하고, 어떤 필드에 어떤 Analyzer를 적용할지는 ``fess/doc.json`` 에서 지정합니다.
 
 .. note::
-   Amazon OpenSearch Service 등의 매니지드 서비스를 이용하는 경우, ``fess_indices/_aws/fess.json`` 이나 ``fess_indices/_cloud/fess.json`` 과 같이 검색 엔진 종류에 대응하는 설정 파일이 우선적으로 사용됩니다.
+   ``search_engine.type`` 의 값에 대응하는 ``fess_indices/_<종류>/`` 아래의 파일이 있으면, ``fess_indices/`` 바로 아래의 같은 이름의 파일보다 우선적으로 사용됩니다. CodeLibs 플러그인이 없는 OpenSearch 용 종류(``vanilla``, ``aws``, 사용 중단 예정인 ``cloud``)에서는 ``fess_indices/_vanilla/fess.json`` 과 ``fess_indices/_vanilla/fess/doc.json`` 이 사용됩니다. 자세한 내용은 :doc:`search-engine-type` 을 참조하십시오.
 
 Analyzer 등록
 =============
@@ -67,6 +67,9 @@ Analyzer가 참조하는 사전은 관리 화면에서 편집할 수 있습니�
 * :doc:`../admin/stopwords-guide` - 불용어
 * :doc:`../admin/protwords-guide` - 보호어
 * :doc:`../admin/stemmeroverride-guide` - 스테밍 재정의
+
+.. note::
+   CodeLibs 플러그인이 없는 OpenSearch 용 종류(``vanilla``, ``aws``)에서는 사전 관리를 사용할 수 없으며, 애널라이저는 사전 파일을 참조하지 않습니다. 자세한 내용은 :doc:`search-engine-type` 을 참조하십시오.
 
 Analyzer의 구성 방법은 OpenSearch의 Analyzer 문서를 참조하십시오.
 

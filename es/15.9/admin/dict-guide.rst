@@ -10,6 +10,10 @@ Aquí se explica la configuración relacionada con los diccionarios.
 Realice cambios en los diccionarios después de comprender las especificaciones de cada diccionario.
 Si la modificación del diccionario falla, es posible que no se pueda acceder al índice.
 
+.. note::
+
+   Si ``search_engine.type`` es ``vanilla`` o ``aws`` (es decir, si OpenSearch no tiene los plugins de CodeLibs), la gestión de diccionarios no está disponible. Consulte :doc:`../config/search-engine-type`.
+
 Lista
 =====
 

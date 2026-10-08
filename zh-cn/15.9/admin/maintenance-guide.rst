@@ -33,6 +33,8 @@
 
 启用后,可以重置字典配置。
 
+当 ``search_engine.type`` 为 ``vanilla`` 或 ``aws`` 时，不显示此项。
+
 
 分片数
 ::::::::
@@ -72,6 +74,8 @@
 使词典的更改在搜索中生效时也使用此功能：先将已保存的词典写入 OpenSearch 中的文件，然后关闭并重新打开
 ``fess.update`` 别名所指向的索引。索引关闭期间无法搜索该索引。详情请参见
 :ref:`dict-apply-changes`\ 。
+
+当 ``search_engine.type`` 为 ``vanilla`` 或 ``aws`` 时，不显示此功能。
 
 
 爬虫索引

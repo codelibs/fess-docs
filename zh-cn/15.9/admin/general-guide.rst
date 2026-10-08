@@ -36,6 +36,8 @@ JSON响应
 
 设置是否启用重复结果折叠。
 
+当 ``search_engine.type`` 为 ``vanilla`` 或 ``aws`` 时，不显示此项，折叠始终处于禁用状态（请参阅 :doc:`../config/search-engine-type` ）。
+
 显示缩略图
 :::::::::::
 

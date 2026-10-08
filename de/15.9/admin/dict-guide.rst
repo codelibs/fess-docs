@@ -10,6 +10,10 @@ Hier wird die Konfiguration von Wörterbüchern erläutert.
 Nehmen Sie Wörterbuchänderungen nur vor, wenn Sie die Spezifikationen der jeweiligen Wörterbücher verstehen.
 Fehlerhafte Wörterbuchänderungen können dazu führen, dass auf den Index nicht mehr zugegriffen werden kann.
 
+.. note::
+
+   Ist ``search_engine.type`` auf ``vanilla`` oder ``aws`` gesetzt (das OpenSearch hat also keine CodeLibs-Plugins), steht die Wörterbuchverwaltung nicht zur Verfügung. Siehe :doc:`../config/search-engine-type`.
+
 Übersicht
 =========
 

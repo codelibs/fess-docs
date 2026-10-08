@@ -54,7 +54,7 @@
   ``lucene`` 并记录一条警告；其他 ANN 相关设置的可接受取值请参阅下方的配置参考。
 
 - **外部集群的 OpenSearch 版本**：内置的 ``fess.search`` 索引设置会在
-  ``fess_indices/fess.json``\ （及其 AWS/cloud 变体）中始终发送 ``index.knn`` 和
+  ``fess_indices/fess.json``\ （以及 ``vanilla`` 、 ``aws`` 和已弃用的 ``cloud`` 所使用的 ``fess_indices/_vanilla/fess.json`` ）中始终发送 ``index.knn`` 和
   ``knn.derived_source.enabled``\ 。后者是 k-NN 插件中较新的设置，无法识别该设置的旧版
   OpenSearch 无论是否安装 k-NN 插件，创建索引都会失败。关于 |Fess| 15.9 支持的 OpenSearch
   版本，请参阅 :doc:`../install/prerequisites`\ 。

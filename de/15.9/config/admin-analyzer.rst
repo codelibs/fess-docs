@@ -42,7 +42,7 @@ Die zugehörigen Dateien befinden sich unter ``app/WEB-INF/classes/fess_indices/
 Die Definition des Analyzers selbst (Kombination aus Tokenizer und TokenFilter) erfolgt in ``fess.json``; welcher Analyzer auf welches Feld angewendet wird, wird in ``fess/doc.json`` festgelegt.
 
 .. note::
-   Bei Verwendung eines verwalteten Dienstes wie Amazon OpenSearch Service wird vorrangig die zur Suchmaschinenvariante passende Konfigurationsdatei verwendet, z. B. ``fess_indices/_aws/fess.json`` oder ``fess_indices/_cloud/fess.json``.
+   Gibt es unter ``fess_indices/_<Typ>/`` für den Wert von ``search_engine.type`` eine gleichnamige Datei, hat sie Vorrang vor der Datei direkt unter ``fess_indices/``. Für die Typen für ein OpenSearch ohne die CodeLibs-Plugins (``vanilla``, ``aws`` und das veraltete ``cloud``) werden ``fess_indices/_vanilla/fess.json`` und ``fess_indices/_vanilla/fess/doc.json`` verwendet. Siehe :doc:`search-engine-type`.
 
 Registrierung von Analyzern
 ============================
@@ -67,6 +67,9 @@ Die vom Analyzer verwendeten Wörterbücher können über die Administrationsobe
 * :doc:`../admin/stopwords-guide` - Stoppwörter
 * :doc:`../admin/protwords-guide` - Geschützte Wörter
 * :doc:`../admin/stemmeroverride-guide` - Überschreibung des Stemmings
+
+.. note::
+   Bei den Typen für ein OpenSearch ohne die CodeLibs-Plugins (``vanilla``, ``aws``) steht die Wörterbuchverwaltung nicht zur Verfügung, und die Analyzer lesen keine Wörterbuchdateien. Siehe :doc:`search-engine-type`.
 
 Zur Zusammensetzungsmethode des Analyzers siehe die OpenSearch-Analyzer-Dokumentation.
 

@@ -1021,6 +1021,15 @@ anonymes de rechercher, définissez ``login.required=true``. Les jetons d'accès
 avant : une requête munie d'un jeton d'accès enregistré reçoit les permissions de ce jeton, et une
 requête munie d'un jeton non enregistré ou expiré est refusée.
 
+``search_engine.type=cloud`` est obsolète
+-----------------------------------------
+
+La version 15.9 ajoute la valeur ``vanilla`` à ``search_engine.type`` pour un OpenSearch standard sans les plugins CodeLibs (voir :doc:`../config/search-engine-type`). ``cloud`` devient un alias obsolète de ``vanilla`` : il continue de fonctionner, mais |Fess| consigne un avertissement au démarrage. Remplacez-le par ``vanilla`` dès que l'installation fonctionne en 15.9. ``aws`` continue de fonctionner comme avant.
+
+* ``vanilla`` nécessite la 15.9. |Fess| 15.8 et les versions antérieures ne connaissent pas cette valeur ; conservez donc ``cloud`` tant que vous pouvez encore revenir à la 15.8.
+* Les définitions d'index de ``aws`` et de ``cloud`` sont désormais lues dans ``fess_indices/_vanilla/``. Les répertoires ``fess_indices/_aws/`` et ``fess_indices/_cloud/`` fournis n'existent plus, et un répertoire ``fess_indices/_aws/`` ou ``fess_indices/_cloud/`` que vous avez ajouté n'est plus lu. Reportez vos modifications dans ``fess_indices/_vanilla/``. Les index déjà existants ne sont pas modifiés.
+* Les paramètres de suggestion que la 15.8 a enregistrés dans le moteur de recherche sont migrés automatiquement ; vous n'avez rien à faire.
+
 .. _upgrade-reindex-new-fields:
 
 Appliquer les nouveaux champs et la normalisation des kana à un index de documents existant

@@ -10,6 +10,10 @@
 사전 변경은 각 사전에 관한 사양을 이해한 후 실시하십시오.
 사전 변경에 실패하면 인덱스에 액세스할 수 없게 될 수 있습니다.
 
+.. note::
+
+   ``search_engine.type`` 이 ``vanilla`` 또는 ``aws`` 인 경우(OpenSearch 에 CodeLibs 플러그인이 없는 경우) 사전 관리를 사용할 수 없습니다. 자세한 내용은 :doc:`../config/search-engine-type` 을 참조하십시오.
+
 목록
 ====
 

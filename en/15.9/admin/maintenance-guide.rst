@@ -30,6 +30,8 @@ Reset Dictionaries
 
 Select Enabled if using factory default dictionaries.
 
+This item is not shown when ``search_engine.type`` is ``vanilla`` or ``aws``.
+
 The number of shards
 ::::::::::::::::::::
 
@@ -63,6 +65,8 @@ Reload(Close/Open) fess index to apply index settings.
 This is also how dictionary changes are applied to searches: the saved dictionaries are written
 to their files in OpenSearch, then the index that the ``fess.update`` alias points to is closed
 and opened. The index cannot be searched while it is closed. See :ref:`dict-apply-changes`.
+
+This section is not shown when ``search_engine.type`` is ``vanilla`` or ``aws``.
 
 Crawler Indices
 ---------------

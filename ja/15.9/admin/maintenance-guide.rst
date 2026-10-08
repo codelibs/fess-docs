@@ -33,6 +33,8 @@
 
 有効にすることで、辞書の設定を初期化することができます。
 
+``search_engine.type`` が ``vanilla`` または ``aws`` の場合、この項目は表示されません。
+
 
 シャード数
 ::::::::
@@ -72,6 +74,8 @@ OpenSearchの最大レプリカ数(index.auto_expand_replicas)を指定するこ
 辞書の変更を検索に反映するときにも使います。保存済みの辞書を OpenSearch のファイルへ書き出してから、
 ``fess.update`` エイリアスが指すインデックスを close して open します。close している間は
 そのインデックスを検索できません。詳しくは :ref:`dict-apply-changes` を参照してください。
+
+``search_engine.type`` が ``vanilla`` または ``aws`` の場合、この機能は表示されません。
 
 
 Crawlerインデックス

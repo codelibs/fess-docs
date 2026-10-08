@@ -172,6 +172,10 @@ OpenSearch is used as the search engine.
 
 ``bin/fess-setup install opensearch`` sets up OpenSearch with these plugins on Linux and Windows. See :doc:`install-linux` for details, including macOS, where OpenSearch has to be installed another way, and :doc:`fess-setup` for all commands.
 
+.. note::
+
+   If you use an OpenSearch to which you cannot add these plugins, such as a managed service, set ``search_engine.type`` to ``vanilla`` (|Fess| 15.9 and later). Some features, such as dictionary management, are then unavailable. See :doc:`../config/search-engine-type`.
+
 Java (Non-Docker Versions)
 ---------------------------
 

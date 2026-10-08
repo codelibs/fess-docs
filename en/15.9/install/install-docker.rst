@@ -301,6 +301,8 @@ Main environment variables:
      - Plugins to automatically install at startup (space-separated ``name:version`` format; e.g., ``fess-ds-wikipedia:15.9.0``)
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch HTTP endpoint (default in ``compose.yaml``: ``http://search01:9200``)
+   * - ``SEARCH_ENGINE_TYPE``
+     - The type of search engine (``default``, ``vanilla`` or ``aws``). ``vanilla`` requires a Fess 15.9 or later image; use ``cloud`` with older images (see :doc:`../config/search-engine-type`)
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - Credentials for connecting to an OpenSearch instance with authentication enabled
    * - ``FESS_DICTIONARY_PATH``
@@ -420,7 +422,7 @@ The ``docker-fess`` repository also includes Compose files and directories for o
    * - ``compose-minio.yaml``
      - Adds MinIO (object storage) and uses it as the storage destination for Fess's storage feature
    * - ``vanilla/``
-     - A configuration that combines Fess with a plain OpenSearch that does not include the Fess plugin (some features, such as dictionary management, are unavailable)
+     - A configuration that combines Fess with a plain OpenSearch that does not include the CodeLibs plugins (``SEARCH_ENGINE_TYPE=vanilla``, which requires a Fess 15.9 or later image; use ``cloud`` with older images). Some features, such as dictionary management, are unavailable (see :doc:`../config/search-engine-type`)
    * - ``snapshot/``
      - A configuration that uses development (snapshot) images (including cluster configurations and combinations with Elasticsearch 8)
    * - ``multi-instance/``

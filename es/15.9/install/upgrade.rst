@@ -1011,6 +1011,15 @@ usuarios anónimos busquen, establezca ``login.required=true``. Los tokens de ac
 antes: una solicitud con un token de acceso registrado recibe los permisos de ese token, y una
 solicitud con un token no registrado o caducado se rechaza.
 
+``search_engine.type=cloud`` está obsoleto
+------------------------------------------
+
+La versión 15.9 añade el valor ``vanilla`` a ``search_engine.type`` para un OpenSearch puro sin los plugins de CodeLibs (consulte :doc:`../config/search-engine-type`). ``cloud`` pasa a ser un alias obsoleto de ``vanilla``: sigue funcionando, pero |Fess| registra una advertencia al iniciarse. Cámbielo a ``vanilla`` cuando la instalación ya se ejecute con la 15.9. ``aws`` sigue funcionando como antes.
+
+* ``vanilla`` requiere la 15.9. |Fess| 15.8 y anteriores no reconocen el valor, así que mantenga ``cloud`` mientras todavía pueda volver a la 15.8.
+* Las definiciones de índice de ``aws`` y ``cloud`` se leen ahora de ``fess_indices/_vanilla/``. Los directorios ``fess_indices/_aws/`` y ``fess_indices/_cloud/`` incluidos ya no existen, y un directorio ``fess_indices/_aws/`` o ``fess_indices/_cloud/`` que usted haya añadido ya no se lee. Traslade sus cambios a ``fess_indices/_vanilla/``. Los índices ya existentes no se modifican.
+* La configuración de sugerencias que la 15.8 guardó en el motor de búsqueda se migra automáticamente; no tiene que hacer nada.
+
 .. _upgrade-reindex-new-fields:
 
 Aplicar los nuevos campos y la normalización de kana a un índice de documentos existente

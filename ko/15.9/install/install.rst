@@ -172,6 +172,10 @@ OpenSearch
 
 ``bin/fess-setup install opensearch`` 는 Linux 와 Windows 에서 이러한 플러그인을 포함하여 OpenSearch 를 준비합니다. 자세한 내용은 OpenSearch 를 다른 방법으로 설치해야 하는 macOS 의 경우를 포함하여 :doc:`install-linux` 를, 모든 명령에 대해서는 :doc:`fess-setup` 을 참조하십시오.
 
+.. note::
+
+   매니지드 서비스 등 이러한 플러그인을 설치할 수 없는 OpenSearch 를 사용하는 경우에는 ``search_engine.type`` 에 ``vanilla`` 를 지정합니다(|Fess| 15.9 이상). 이 경우 사전 관리 등 일부 기능은 사용할 수 없습니다. 자세한 내용은 :doc:`../config/search-engine-type` 을 참조하십시오.
+
 Java (Docker 버전 제외)
 -----------------------
 

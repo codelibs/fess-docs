@@ -36,6 +36,8 @@ Doppelte Ergebnisse ausblenden
 
 Konfiguriert, ob das Ausblenden doppelter Ergebnisse aktiviert werden soll.
 
+Ist ``search_engine.type`` auf ``vanilla`` oder ``aws`` gesetzt, wird dieser Eintrag nicht angezeigt, und das Ausblenden bleibt ausgeschaltet (siehe :doc:`../config/search-engine-type`).
+
 Miniaturansicht anzeigen
 ::::::::::::::::::::::::
 

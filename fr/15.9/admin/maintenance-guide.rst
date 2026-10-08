@@ -33,6 +33,8 @@ Initialisation du dictionnaire
 
 En l'activant, vous pouvez initialiser la configuration du dictionnaire.
 
+Si ``search_engine.type`` vaut ``vanilla`` ou ``aws``, cet élément n'est pas affiché.
+
 
 Nombre de shards
 ::::::::::::::::
@@ -70,6 +72,8 @@ C'est aussi ainsi que les modifications de dictionnaire sont appliquées aux rec
 dictionnaires enregistrés sont écrits dans leurs fichiers dans OpenSearch, puis l'index vers lequel
 pointe l'alias ``fess.update`` est fermé et rouvert. Tant que l'index est fermé, il ne peut pas être
 interrogé. Voir :ref:`dict-apply-changes`.
+
+Si ``search_engine.type`` vaut ``vanilla`` ou ``aws``, cette fonction n'est pas affichée.
 
 
 Index Crawler

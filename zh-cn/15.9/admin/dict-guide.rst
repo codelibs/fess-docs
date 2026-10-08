@@ -10,6 +10,10 @@
 请在理解各字典相关规范后再进行字典更改。
 如果字典更改失败,可能无法访问索引。
 
+.. note::
+
+   当 ``search_engine.type`` 为 ``vanilla`` 或 ``aws`` 时（即 OpenSearch 中没有 CodeLibs 插件时），无法使用字典管理。详情请参阅 :doc:`../config/search-engine-type` 。
+
 列表
 ====
 

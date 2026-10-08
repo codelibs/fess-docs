@@ -33,6 +33,8 @@ Wörterbuch initialisieren
 
 Durch Aktivierung können Sie die Wörterbuchkonfiguration initialisieren.
 
+Ist ``search_engine.type`` auf ``vanilla`` oder ``aws`` gesetzt, wird dieser Eintrag nicht angezeigt.
+
 
 Shard-Anzahl
 ::::::::::::
@@ -70,6 +72,8 @@ Auf diesem Weg werden auch Wörterbuchänderungen für die Suche übernommen: Di
 Wörterbücher werden in ihre Dateien in OpenSearch geschrieben, dann wird der Index, auf den der
 Alias ``fess.update`` zeigt, geschlossen und geöffnet. Solange der Index geschlossen ist, kann er
 nicht durchsucht werden. Siehe :ref:`dict-apply-changes`.
+
+Ist ``search_engine.type`` auf ``vanilla`` oder ``aws`` gesetzt, wird diese Funktion nicht angezeigt.
 
 
 Crawler-Index
