@@ -27,12 +27,12 @@ OpenID Connect認証では、|Fess| がRelying Party（RP）として動作し�
 3. ユーザーがOPで認証を実行
 4. OPが認可コードを |Fess| にリダイレクト
 5. |Fess| が認可コードを使用してトークンエンドポイントからID Tokenを取得
-6. |Fess| がID Token（JWT）からユーザー情報を取得し、ユーザーをログイン
+6. |Fess| がID Token（JWT）のクレームを検証したうえでユーザー情報を取得し、ユーザーをログイン
 
 .. note::
    |Fess| は認可コードフロー（Authorization Code Flow）を使用します。ID Tokenは、ブラウザを経由せず、|Fess| とOPの間のバックチャネル（サーバー間通信）でトークンエンドポイントから直接取得されます。
-   |Fess| はID Tokenをデコードしてクレーム（``email`` や ``groups`` など）を取り出してユーザー情報を構成しますが、JWT署名の暗号的な検証は行いません。\ ``iss``\ （発行者）、\ ``aud``\ （対象クライアント）、\ ``exp``\ （有効期限）の各クレームも検証しません。
-   このため、トークンエンドポイントとの通信は必ずHTTPSで行い、|Fess| とOPの間の通信経路が信頼できることを確認してください。
+   |Fess| はID Tokenをデコードしてクレーム（``email`` や ``groups`` など）を取り出してユーザー情報を構成しますが、JWT署名の暗号的な検証は行いません。トークンはトークンエンドポイントからTLS経由で直接受け取るため、OpenID Connect Coreはこれを認めています。そのため、トークンエンドポイントのURL（``oic.token.server.url``）はHTTPSである必要があります（``http`` が使えるのは ``localhost``、``127.x.x.x``、``::1`` のみです）。
+   クレームは次のように検証します。``aud`` に ``oic.client.id`` が含まれていること（``azp`` がある場合は ``oic.client.id`` と一致すること）、``exp`` があり期限切れでないこと（300秒までの時刻のずれは許容します）、``oic.issuer`` を設定した場合は ``iss`` がそれと一致すること。``oic.issuer`` を設定しない場合は ``iss`` を検証せず、起動後の最初のログインで警告をログに出力します。``nonce`` とPKCEは使用しません。
 
 ロールベース検索との連携については、:doc:`security-role` を参照してください。
 
@@ -68,8 +68,9 @@ OpenID Connect認証を有効にするには、``app/WEB-INF/conf/system.propert
     sso.type=oic
 
 .. note::
-   ``sso.type`` および以降で説明する ``oic.*`` の各設定は、管理画面の「システム > 全般」ページからも設定・変更できます。
+   ``sso.type`` および以降で説明する ``oic.*`` の各設定（``oic.issuer`` を除く）は、管理画面の「システム > 全般」ページからも設定・変更できます。
    管理画面で変更した設定は ``system.properties`` に保存され、再起動後も保持されます。
+   ``oic.issuer`` は ``system.properties`` でのみ設定できます。
 
 プロバイダー設定
 ----------------
@@ -89,9 +90,13 @@ OPから取得した情報を設定します。
    * - ``oic.token.server.url``
      - トークンエンドポイントURL
      - ``https://accounts.google.com/o/oauth2/token``
+   * - ``oic.issuer``
+     - 発行者（issuer）の識別子（省略可）。設定すると、ID Tokenの ``iss`` クレームがこの値と完全に一致する必要があります（末尾のスラッシュも区別されます）
+     - （空文字：``iss`` を検証しない）
 
 .. note::
-   これらのURLは、OPのDiscoveryエンドポイント（``/.well-known/openid-configuration``）から取得できます。
+   これらのURLと発行者は、OPのDiscoveryエンドポイント（``/.well-known/openid-configuration``）から取得できます。発行者は、その ``issuer`` の値です。
+   トークンエンドポイントのURLはHTTPSである必要があります。
 
 クライアント設定
 ----------------
@@ -203,6 +208,7 @@ OPの設定画面またはDiscoveryエンドポイントから以下の情報を
 
 - **認可エンドポイント（Authorization Endpoint）**: ユーザー認証を開始するURL
 - **トークンエンドポイント（Token Endpoint）**: トークンを取得するURL
+- **発行者（Issuer）**: 省略可。Discoveryドキュメントの ``issuer`` の値で、``oic.issuer`` に使用します
 - **クライアントID**: OPで発行されたクライアント識別子
 - **クライアントシークレット**: クライアント認証に使用する秘密鍵
 
@@ -249,6 +255,9 @@ OPの設定画面またはDiscoveryエンドポイントから以下の情報を
     oic.auth.server.url=https://op.example.com/authorize
     oic.token.server.url=https://op.example.com/token
 
+    # 発行者（Discoveryドキュメントの "issuer" の値）
+    oic.issuer=https://op.example.com
+
     # クライアント設定
     oic.client.id=your-client-id
     oic.client.secret=your-client-secret
@@ -276,6 +285,11 @@ OPの設定画面またはDiscoveryエンドポイントから以下の情報を
 - クライアントIDとクライアントシークレットが正しく設定されているか確認してください
 - スコープに ``openid`` が含まれているか確認してください
 - 認可エンドポイントURLとトークンエンドポイントURLが正しいか確認してください
+- ログインに失敗すると、``fess.log`` に ``Failed to process the OpenID Connect callback:`` で始まる警告が、続けて理由とともに出力されます
+- ``The ID token was not issued for this client``: ID Tokenの ``aud`` が ``oic.client.id`` ではありません。クライアントIDを確認してください
+- ``The ID token has expired``: |Fess| のホストとOPの時計が300秒を超えてずれています。時刻を同期（NTP）してください
+- ``The ID token was not issued by the configured issuer``: ``oic.issuer`` がメッセージに表示された ``iss`` と異なります。Discoveryドキュメントの ``issuer`` の値を正確にコピーしてください
+- ``oic.token.server.url must be https``: HTTPSのトークンエンドポイントURLを指定してください（``http`` が使えるのは ``localhost``、``127.x.x.x``、``::1`` のみです）
 
 ユーザー情報が取得できない
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -671,6 +671,11 @@ connexion, qui signale l'échec de la connexion SSO, et personne ne peut se conn
 SSO. La 15.9 journalise dans ``fess.log`` un avertissement nommant le composant recherché et le
 plugin qui le fournit, là où jusqu'à la 15.8 rien n'était journalisé à aucun niveau.
 
+Le plugin ``oic`` est plus strict que l'authentificateur de la 15.8. ``oic.token.server.url`` doit
+être en HTTPS (``http`` uniquement pour ``localhost``, ``127.x.x.x`` et ``::1``), les claims
+``aud`` et ``exp`` de l'ID Token sont vérifiés, et ``iss`` est vérifié lorsque la nouvelle clé
+``oic.issuer`` est définie. Pour plus de détails, consultez :doc:`../config/sso-oidc`.
+
 Rien à faire si vous n'utilisez pas le SSO, c'est-à-dire si ``sso.type`` vaut ``none`` ou n'est
 pas défini.
 

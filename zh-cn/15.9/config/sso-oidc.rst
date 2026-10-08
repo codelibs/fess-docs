@@ -25,12 +25,12 @@ OpenID Connect认证的工作原理
 3. 用户在OP进行认证
 4. OP将授权码重定向到 |Fess|
 5. |Fess| 使用授权码从令牌端点获取ID Token
-6. |Fess| 从ID Token（JWT）中获取用户信息并登录用户
+6. |Fess| 校验ID Token（JWT）中的声明，获取用户信息并登录用户
 
 .. note::
    |Fess| 使用授权码流程（Authorization Code Flow）。ID Token不经过浏览器，而是通过 |Fess| 与OP之间的后端通道（服务器间通信）直接从令牌端点获取。
-   |Fess| 通过解码ID Token来提取声明（如 ``email`` 和 ``groups``）以构建用户信息，但不对JWT签名进行密码学验证。也不会校验 ``iss``\ （颁发者）、\ ``aud``\ （受众）和 ``exp``\ （过期时间）声明。
-   因此，与令牌端点的通信必须使用HTTPS，并请确认 |Fess| 与OP之间的通信路径是可信的。
+   |Fess| 通过解码ID Token来提取声明（如 ``email`` 和 ``groups``）以构建用户信息，但不对JWT签名进行密码学验证。由于令牌是通过TLS直接从令牌端点接收的，OpenID Connect Core允许这样做，因此令牌端点URL（``oic.token.server.url``）必须为HTTPS。只有 ``localhost``、``127.x.x.x`` 和 ``::1`` 可以使用 ``http``。
+   |Fess| 会校验声明：``aud`` 必须包含 ``oic.client.id``\ （``azp`` 存在时也必须与其一致），``exp`` 必须存在且尚未过期（允许最多300秒的时钟偏差），设置了 ``oic.issuer`` 时 ``iss`` 必须与其一致。未设置 ``oic.issuer`` 时不校验 ``iss``，并会在每次启动后的首次登录时记录一条警告。不使用 ``nonce`` 和PKCE。
 
 有关基于角色的搜索集成，请参阅 :doc:`security-role`。
 
@@ -66,8 +66,9 @@ OpenID Connect认证的工作原理
     sso.type=oic
 
 .. note::
-   ``sso.type`` 以及后文说明的各项 ``oic.*`` 设置，也可以通过管理画面的"系统 > 全局"页面进行设置和修改。
+   ``sso.type`` 以及后文说明的各项 ``oic.*`` 设置（``oic.issuer`` 除外），也可以通过管理画面的"系统 > 全局"页面进行设置和修改。
    在管理画面中修改的设置将保存到 ``system.properties``，重启后仍会保留。
+   ``oic.issuer`` 只能在 ``system.properties`` 中设置。
 
 提供者配置
 ----------
@@ -87,9 +88,13 @@ OpenID Connect认证的工作原理
    * - ``oic.token.server.url``
      - 令牌端点URL
      - ``https://accounts.google.com/o/oauth2/token``
+   * - ``oic.issuer``
+     - 颁发者标识符（可选）。设置后，ID Token的 ``iss`` 声明必须与其完全一致（末尾的斜杠也会区分）
+     - (空字符串：不校验 ``iss``)
 
 .. note::
-   这些URL可以从OP的Discovery端点（``/.well-known/openid-configuration``）获取。
+   这些URL和颁发者可以从OP的Discovery端点（``/.well-known/openid-configuration``）获取，颁发者即其中的 ``issuer`` 值。
+   令牌端点URL必须为HTTPS。
 
 客户端配置
 ----------
@@ -200,6 +205,7 @@ OP侧配置
 
 - **授权端点（Authorization Endpoint）**：启动用户认证的URL
 - **令牌端点（Token Endpoint）**：获取令牌的URL
+- **颁发者（Issuer）**：可选。Discovery文档中的 ``issuer`` 值，用于 ``oic.issuer``
 - **客户端ID**：OP颁发的客户端标识符
 - **客户端密钥**：用于客户端认证的密钥
 
@@ -246,6 +252,9 @@ OP侧配置
     oic.auth.server.url=https://op.example.com/authorize
     oic.token.server.url=https://op.example.com/token
 
+    # 颁发者（Discovery文档中的"issuer"值）
+    oic.issuer=https://op.example.com
+
     # 客户端配置
     oic.client.id=your-client-id
     oic.client.secret=your-client-secret
@@ -273,6 +282,11 @@ OP侧配置
 - 请确认客户端ID和客户端密钥是否正确配置
 - 请确认范围中是否包含 ``openid``
 - 请确认授权端点URL和令牌端点URL是否正确
+- 如果登录失败，``fess.log`` 中会记录以 ``Failed to process the OpenID Connect callback:`` 开头的警告，后面跟着原因
+- ``The ID token was not issued for this client``：ID Token的 ``aud`` 不是 ``oic.client.id``，请确认客户端ID
+- ``The ID token has expired``：|Fess| 主机与OP的时钟相差超过300秒，请同步时间（NTP）
+- ``The ID token was not issued by the configured issuer``：``oic.issuer`` 与消息中显示的 ``iss`` 不同，请原样复制Discovery文档中的 ``issuer`` 值
+- ``oic.token.server.url must be https``：请使用HTTPS的令牌端点URL（只有 ``localhost``、``127.x.x.x`` 和 ``::1`` 可以使用 ``http``）
 
 无法获取用户信息
 ~~~~~~~~~~~~~~~~

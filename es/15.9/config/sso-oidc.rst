@@ -27,12 +27,12 @@ En la autenticación OpenID Connect, |Fess| opera como Relying Party (RP) y cola
 3. El usuario se autentica en el OP
 4. El OP redirige el código de autorización a |Fess|
 5. |Fess| utiliza el código de autorización para obtener un ID Token del endpoint de token
-6. |Fess| obtiene la información del usuario del ID Token (JWT) e inicia sesión del usuario
+6. |Fess| comprueba los claims del ID Token (JWT), obtiene la información del usuario e inicia sesión del usuario
 
 .. note::
    |Fess| utiliza el flujo de código de autorización (Authorization Code Flow). El ID Token se obtiene directamente desde el endpoint de token a través de un canal de retaguardia (comunicación servidor a servidor) entre |Fess| y el OP, sin pasar por el navegador.
-   |Fess| decodifica el ID Token y extrae los claims (como ``email`` y ``groups``) para construir la información del usuario, pero no realiza la verificación criptográfica de la firma JWT. Tampoco valida los claims ``iss`` (emisor), ``aud`` (audiencia) ni ``exp`` (expiración).
-   Por este motivo, la comunicación con el endpoint de token debe realizarse siempre mediante HTTPS, y asegúrese de que la ruta de comunicación entre |Fess| y el OP sea de confianza.
+   |Fess| decodifica el ID Token y extrae los claims (como ``email`` y ``groups``) para construir la información del usuario, pero no realiza la verificación criptográfica de la firma JWT. OpenID Connect Core lo permite porque el token se recibe directamente del endpoint de token a través de TLS, por lo que la URL del endpoint de token (``oic.token.server.url``) debe ser HTTPS. ``http`` solo se acepta para ``localhost``, ``127.x.x.x`` y ``::1``.
+   |Fess| sí comprueba los claims: ``aud`` debe contener ``oic.client.id`` (y ``azp``, si está presente, debe ser igual a este valor), ``exp`` debe estar presente y no haber expirado (se tolera un desfase horario de hasta 300 segundos), y el claim ``iss`` debe ser igual a ``oic.issuer`` cuando esa clave está definida. Sin ``oic.issuer``, ``iss`` no se comprueba y se registra una advertencia en el primer inicio de sesión tras cada arranque. ``nonce`` y PKCE no se utilizan.
 
 Para la integración con búsqueda basada en roles, consulte :doc:`security-role`.
 
@@ -68,8 +68,9 @@ Para habilitar la autenticación OpenID Connect, agregue la siguiente configurac
     sso.type=oic
 
 .. note::
-   Los ajustes de ``sso.type`` y los de ``oic.*`` descritos a continuación también pueden configurarse y modificarse desde la página "Sistema > General" de la pantalla de administración.
+   Los ajustes de ``sso.type`` y los de ``oic.*`` descritos a continuación, excepto ``oic.issuer``, también pueden configurarse y modificarse desde la página "Sistema > General" de la pantalla de administración.
    Los cambios realizados en la pantalla de administración se guardan en ``system.properties`` y se conservan tras el reinicio.
+   ``oic.issuer`` solo puede definirse en ``system.properties``.
 
 Configuración del proveedor
 ---------------------------
@@ -89,9 +90,12 @@ Configure la información obtenida de su OP.
    * - ``oic.token.server.url``
      - URL del endpoint de token
      - ``https://accounts.google.com/o/oauth2/token``
+   * - ``oic.issuer``
+     - Identificador del emisor (opcional). Si se define, el claim ``iss`` del ID Token debe ser exactamente igual a este valor (una barra final cuenta)
+     - (vacío: no se comprueba ``iss``)
 
 .. note::
-   Estas URLs se pueden obtener del endpoint Discovery del OP (``/.well-known/openid-configuration``).
+   Estas URLs y el emisor se pueden obtener del endpoint Discovery del OP (``/.well-known/openid-configuration``); el emisor es su valor ``issuer``. La URL del endpoint de token debe ser HTTPS.
 
 Configuración del cliente
 -------------------------
@@ -204,6 +208,7 @@ Obtenga la siguiente información de la pantalla de configuración o endpoint Di
 
 - **Endpoint de autorización (Authorization Endpoint)**: URL para iniciar la autenticación del usuario
 - **Endpoint de token (Token Endpoint)**: URL para obtener tokens
+- **Issuer** (opcional): valor ``issuer`` del documento Discovery, utilizado para ``oic.issuer``
 - **ID de cliente**: Identificador de cliente emitido por el OP
 - **Secreto del cliente**: Clave secreta utilizada para la autenticación del cliente
 
@@ -250,6 +255,9 @@ El siguiente es un ejemplo de configuración recomendada para entornos de produc
     oic.auth.server.url=https://op.example.com/authorize
     oic.token.server.url=https://op.example.com/token
 
+    # Issuer (el valor "issuer" del documento Discovery)
+    oic.issuer=https://op.example.com
+
     # Configuración del cliente
     oic.client.id=your-client-id
     oic.client.secret=your-client-secret
@@ -277,6 +285,11 @@ Ocurren errores de autenticación
 - Verifique que el ID de cliente y el secreto del cliente estén configurados correctamente
 - Asegúrese de que el scope incluya ``openid``
 - Verifique que la URL del endpoint de autorización y la URL del endpoint de token sean correctas
+- Si el inicio de sesión falla, ``fess.log`` contiene una advertencia ``Failed to process the OpenID Connect callback:`` seguida del motivo
+- ``The ID token was not issued for this client``: el claim ``aud`` del ID Token no es ``oic.client.id``; verifique el ID de cliente
+- ``The ID token has expired``: los relojes del host de |Fess| y del OP difieren en más de 300 segundos; sincronice la hora (NTP)
+- ``The ID token was not issued by the configured issuer``: ``oic.issuer`` difiere del ``iss`` que muestra el mensaje; copie exactamente el valor ``issuer`` del documento Discovery
+- ``oic.token.server.url must be https``: utilice una URL de endpoint de token HTTPS (``http`` solo funciona con ``localhost``, ``127.x.x.x`` y ``::1``)
 
 No se puede recuperar información del usuario
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

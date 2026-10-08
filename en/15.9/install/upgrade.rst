@@ -644,6 +644,11 @@ which reports that the SSO login failed, and no one can log in through SSO. 15.9
 warning in ``fess.log`` naming the component it looked for and the plugin that provides it,
 where up to 15.8 nothing was logged at any level.
 
+The ``oic`` plugin is stricter than the 15.8 authenticator. ``oic.token.server.url`` must be
+HTTPS (``http`` only for ``localhost``, ``127.x.x.x`` and ``::1``), the ``aud`` and ``exp`` claims
+of the ID Token are checked, and ``iss`` is checked when the new ``oic.issuer`` key is set. See
+:doc:`../config/sso-oidc`.
+
 Nothing is needed if you do not use SSO, that is if ``sso.type`` is ``none`` or unset.
 
 The Built-in Script Engine Changed from Groovy to JavaScript

@@ -665,6 +665,11 @@ sesión mediante SSO. 15.9 registra en ``fess.log`` una advertencia con el nombr
 que ha buscado y el del plugin que lo proporciona, donde hasta 15.8 no se registraba nada en
 ningún nivel.
 
+El plugin ``oic`` es más estricto que el autenticador de 15.8. ``oic.token.server.url`` debe ser
+HTTPS (``http`` solo para ``localhost``, ``127.x.x.x`` y ``::1``), se comprueban los claims
+``aud`` y ``exp`` del ID Token, y ``iss`` se comprueba cuando se define la nueva clave
+``oic.issuer``. Para más detalles, consulte :doc:`../config/sso-oidc`.
+
 Si no utiliza SSO, es decir, si ``sso.type`` es ``none`` o no está definido, no hay nada que
 hacer.
 
