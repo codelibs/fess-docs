@@ -523,6 +523,10 @@ Notice
 
    The notices accept HTML. When a search theme displays a notice, only an allowlist of tags and attributes is kept: ``<script>`` and ``<style>`` elements, ``<iframe>``, event-handler attributes such as ``onclick`` and ``javascript:`` links are removed, and any other tag outside the list, such as ``<form>``, loses its markup but keeps its text. Because the HTML is shown to every visitor of the page, allow only trusted administrators to edit these fields.
 
+.. note::
+
+   The notice of the login page is shown as entered, without this filtering. Allow only trusted administrators to edit that field as well.
+
 Login Page
 ::::::::::
 

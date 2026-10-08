@@ -65,6 +65,8 @@ value of a tag that the caller can see. The value of a tag the caller cannot see
 prefix, fuzzy and range conditions, match nothing. A caller without a login gets no tags and no tag
 facet, and a tag condition matches nothing.
 
+The value of a tag contains ``:``, so quote it in a query: ``q=tag:"<value>"`` works. Without the quotes, ``q=tag:<value>`` matches nothing and ``ex_q=tag:<value>`` is refused with HTTP 400.
+
 One user sees at most ``user.tag.visible.max.size`` (default: ``1000``) tags, the user's own tags
 first. Tags beyond that do not appear in ``tags`` of the hits or in the facet, but can still be
 filtered on.

@@ -71,6 +71,8 @@ Wert eines Tags, das der Aufrufer sehen kann. Der Wert eines für ihn unsichtbar
 Platzhalter-, Präfix-, unscharfe und Bereichsbedingungen treffen nichts. Ein Aufrufer ohne Anmeldung
 erhält weder Tags noch eine Tag-Facette, und eine Tag-Bedingung trifft nichts.
 
+Der Wert eines Tags enthält ``:``; setzen Sie ihn in einer Abfrage daher in Anführungszeichen: ``q=tag:"<value>"`` funktioniert. Ohne Anführungszeichen findet ``q=tag:<value>`` nichts, und ``ex_q=tag:<value>`` wird mit HTTP 400 abgelehnt.
+
 Ein Benutzer sieht höchstens ``user.tag.visible.max.size`` (Standard: ``1000``) Tags, die eigenen
 zuerst. Weitere Tags erscheinen weder in ``tags`` der Treffer noch in der Facette, lassen sich aber
 weiterhin zum Filtern verwenden.

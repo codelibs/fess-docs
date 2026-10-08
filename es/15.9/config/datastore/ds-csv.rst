@@ -609,6 +609,10 @@ que su contenido se acumule, especifique lo siguiente.
 
     delete_old_docs=false
 
+.. note::
+
+   Con la configuración predeterminada, los documentos de un almacén de datos llevan una fecha de expiración (el ajuste «Eliminar documentos anteriores» de General) y ``keep_expires_docs`` (predeterminado: true) conserva los documentos que la tienen. Por tanto, ``delete_old_docs`` no elimina nada de forma predeterminada, y un documento cuya fila se quitó del archivo CSV permanece en el índice hasta que vence su expiración y el Doc Purger lo elimina. El síntoma descrito arriba aparece cuando se especifica ``keep_expires_docs=false`` o cuando «Eliminar documentos anteriores» está desactivado.
+
 Archivo CSV grande
 ------------------
 

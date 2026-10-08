@@ -523,6 +523,10 @@ Aviso
 
    Los avisos aceptan HTML. Cuando un tema de búsqueda muestra un aviso, solo se conservan las etiquetas y los atributos de una lista de permitidos: se eliminan los elementos ``<script>`` y ``<style>``, ``<iframe>``, los atributos de controladores de eventos como ``onclick`` y los enlaces ``javascript:``, y cualquier otra etiqueta fuera de la lista, como ``<form>``, pierde su marcado pero conserva su texto. Dado que el HTML se muestra a todos los visitantes de la página, permita editar estos campos únicamente a administradores de confianza.
 
+.. note::
+
+   El aviso de la página de inicio de sesión se muestra tal como se introdujo, sin este filtrado. Permita que solo administradores de confianza editen también ese campo.
+
 Página de inicio de sesión
 :::::::::::::::::::::::::::
 

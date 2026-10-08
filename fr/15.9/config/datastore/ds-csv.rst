@@ -612,6 +612,10 @@ différents et souhaitez que leur contenu s'accumule, spécifiez ce qui suit.
 
     delete_old_docs=false
 
+.. note::
+
+   Avec les paramètres par défaut, les documents d'un data store portent une date d'expiration (le paramètre « Supprimer les anciens documents » de Général), et ``keep_expires_docs`` (par défaut : true) conserve les documents qui en ont une. ``delete_old_docs`` ne supprime donc rien par défaut, et un document dont la ligne a été retirée du fichier CSV reste dans l'index jusqu'à ce que son expiration soit passée et que le Doc Purger le supprime. Le symptôme décrit ci-dessus apparaît lorsque ``keep_expires_docs=false`` est spécifié ou que « Supprimer les anciens documents » est désactivé.
+
 Fichiers CSV volumineux
 ------------------------
 
