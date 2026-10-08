@@ -41,6 +41,10 @@ Configure la permission du jeton d'accès.
 Décrivez au format « {user\ |group|\ role}nom ».
 Par exemple, pour qu'un utilisateur appartenant au groupe developer affiche les résultats de recherche, configurez la permission « {group}developer ».
 
+.. warning::
+
+   Un jeton d'accès disposant de la permission ``{role}admin-api`` (stockée sous la forme ``Radmin-api``) peut utiliser tous les points de terminaison de l'API Admin ; voir :doc:`../api/admin/api-admin-overview`. Un utilisateur disposant du rôle ``admin-accesstoken`` peut émettre un tel jeton, et un utilisateur disposant de ``admin-accesstoken-view`` peut afficher les valeurs des jetons ; traitez donc ces deux rôles comme équivalents au rôle administrateur et accordez-les uniquement à des opérateurs de confiance.
+
 Nom du paramètre
 ::::::::::::::::
 

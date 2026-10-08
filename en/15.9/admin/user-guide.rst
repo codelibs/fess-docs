@@ -39,6 +39,10 @@ Roles
 
 Specify the roles to which the user belongs.
 
+.. note::
+
+   A user with the ``admin-user`` role can give any existing role, including the administrator role, to any user. Treat the ``admin-*`` roles as equivalent to the administrator role; see :doc:`../install/security`.
+
 Groups
 ::::::
 

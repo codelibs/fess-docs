@@ -172,7 +172,11 @@ Rôles et contrôle d'accès
 - ``admin`` : Rôle administrateur pouvant effectuer toutes les opérations, y compris sur l'écran d'administration.
 - ``guest`` : Rôle attribué aux utilisateurs non authentifiés (anonymes).
 
-Tous les autres rôles peuvent être librement créés depuis l'écran d'administration. Dans |Fess|, un rôle est une étiquette ne comportant qu'un nom, principalement utilisée pour le contrôle d'accès aux résultats de recherche (quels documents un utilisateur peut consulter). Un rôle en lui-même n'est pas lié à des permissions administratives spécifiques telles que « gérer les configurations d'exploration » ou « modifier les résultats de recherche ».
+Tous les autres rôles peuvent être librement créés depuis l'écran d'administration. Dans |Fess|, un rôle est une étiquette ne comportant qu'un nom, principalement utilisée pour le contrôle d'accès aux résultats de recherche (quels documents un utilisateur peut consulter). L'exception est un rôle nommé ``admin-`` suivi du nom d'un écran d'administration, tel que ``admin-user`` ou ``admin-scheduler`` : il permet à un utilisateur d'ouvrir cet écran, et la forme ``-view``, telle que ``admin-user-view``, donne un accès en lecture seule.
+
+.. warning::
+
+   Les rôles ``admin-*`` permettent de répartir les écrans d'administration courants entre plusieurs opérateurs, mais ils ne constituent pas une frontière de privilèges. Un utilisateur disposant de ``admin-user`` peut attribuer n'importe quel rôle existant, y compris le rôle administrateur, à n'importe quel utilisateur ; ``admin-accesstoken`` peut émettre un jeton d'accès avec la permission ``Radmin-api``, qui donne accès à l'ensemble de l'API Admin ; ``admin-scheduler`` peut exécuter des tâches de script sur le serveur, et ``admin-plugin`` peut installer des plugins. Traitez chaque rôle ``admin-*`` comme équivalent au rôle administrateur (``authentication.admin.roles``, valeur par défaut ``admin``) et accordez-le uniquement à des opérateurs de confiance.
 
 Conformément au principe du moindre privilège, accordez le rôle administrateur (``admin``) uniquement aux utilisateurs effectuant des tâches d'administration, et ne l'accordez pas aux utilisateurs de recherche généraux.
 

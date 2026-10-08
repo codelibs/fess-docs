@@ -39,6 +39,10 @@ Rol
 
 Especifique los roles a los que pertenece el usuario.
 
+.. note::
+
+   Un usuario con el rol ``admin-user`` puede asignar cualquier rol existente, incluido el rol de administrador, a cualquier usuario. Trate los roles ``admin-*`` como equivalentes al rol de administrador; consulte :doc:`../install/security`.
+
 Grupo
 :::::
 

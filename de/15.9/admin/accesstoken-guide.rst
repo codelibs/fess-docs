@@ -41,6 +41,10 @@ Legen Sie die Berechtigung für das Zugriffstoken fest.
 Geben Sie diese im Format „{user\ |group|\ role}name" an.
 Um beispielsweise Suchergebnisse für Benutzer anzuzeigen, die zur Gruppe „developer" gehören, legen Sie die Berechtigung auf „{group}developer" fest.
 
+.. warning::
+
+   Ein Zugriffstoken mit der Berechtigung ``{role}admin-api`` (gespeichert als ``Radmin-api``) kann jeden Endpunkt der Admin API nutzen; siehe :doc:`../api/admin/api-admin-overview`. Ein Benutzer mit der Rolle ``admin-accesstoken`` kann ein solches Zugriffstoken ausstellen, und ein Benutzer mit ``admin-accesstoken-view`` kann die Werte der Zugriffstoken anzeigen. Behandeln Sie daher beide Rollen wie die Administratorrolle und gewähren Sie sie nur vertrauenswürdigen Betreibern.
+
 Parametername
 :::::::::::::
 

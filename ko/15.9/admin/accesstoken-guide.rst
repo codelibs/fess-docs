@@ -41,6 +41,10 @@
 "{user\ |group|\ role}name" 형식으로 기술합니다.
 예를 들어 developer 그룹에 속한 사용자가 검색 결과를 표시하려면 권한을 "{group}developer"로 설정합니다.
 
+.. warning::
+
+   권한을 ``{role}admin-api`` 로 지정한 액세스 토큰(내부적으로는 ``Radmin-api`` 로 저장됩니다)은 Admin API의 모든 엔드포인트를 사용할 수 있습니다. 자세한 내용은 :doc:`../api/admin/api-admin-overview` 를 참조하십시오. ``admin-accesstoken`` 역할을 가진 사용자는 이 토큰을 발급할 수 있고, ``admin-accesstoken-view`` 역할을 가진 사용자는 토큰 값을 표시할 수 있으므로, 이 두 역할은 관리자 역할과 동등하게 취급하고 신뢰할 수 있는 운영 담당자에게만 부여하십시오.
+
 매개변수명
 :::::::::::
 

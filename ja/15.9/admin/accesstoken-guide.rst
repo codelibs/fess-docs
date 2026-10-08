@@ -41,6 +41,10 @@
 「{user\ |group|\ role}name」形式で記述します。
 たとえば、developerグループに属するユーザーが検索結果を表示するためには、パーミッションは「{group}developer」を設定します。
 
+.. warning::
+
+   パーミッションに ``{role}admin-api`` を指定したアクセストークン（内部的には ``Radmin-api`` として保存されます）は、Admin API のすべてのエンドポイントを利用できます。詳しくは :doc:`../api/admin/api-admin-overview` を参照してください。``admin-accesstoken`` ロールを持つユーザーはこのトークンを発行でき、``admin-accesstoken-view`` ロールを持つユーザーはトークンの値を表示できるため、この 2 つのロールは管理者ロールと同等として扱い、信頼できる運用担当者にのみ付与してください。
+
 パラメーター名
 :::::::::::
 
