@@ -665,6 +665,11 @@ anmelden. 15.9 protokolliert in ``fess.log`` eine Warnung mit dem Namen der gesu
 Komponente und des Plugins, das sie bereitstellt, wo bis 15.8 auf keiner Log-Ebene etwas
 ausgegeben wurde.
 
+Das ``oic``-Plugin ist strenger als der Authentifikator von 15.8. ``oic.token.server.url`` muss
+HTTPS verwenden (``http`` nur für ``localhost``, ``127.x.x.x`` und ``::1``), die Claims ``aud``
+und ``exp`` des ID-Tokens werden geprüft, und ``iss`` wird geprüft, wenn der neue Schlüssel
+``oic.issuer`` gesetzt ist. Einzelheiten finden Sie unter :doc:`../config/sso-oidc`.
+
 Ohne SSO ist nichts zu tun, also wenn ``sso.type`` den Wert ``none`` hat oder nicht gesetzt ist.
 
 Die eingebaute Skript-Engine wechselt von Groovy zu JavaScript

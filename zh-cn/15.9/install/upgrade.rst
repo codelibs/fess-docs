@@ -615,6 +615,11 @@ SSO 认证移至插件
 通过 SSO 登录。15.9 会将包含所查找的组件名与提供方插件名的警告记录到 ``fess.log``\ ；
 15.8 之前在任何日志级别下都不会输出任何内容。
 
+``oic`` 插件的校验比 15.8 的认证功能更严格。 ``oic.token.server.url`` 必须为 HTTPS（只有
+``localhost``、``127.x.x.x`` 和 ``::1`` 可以使用 ``http``），并会校验 ID Token 的 ``aud`` 与
+``exp`` 声明；设置了新增的 ``oic.issuer`` 键时，还会校验 ``iss``。详情请参阅
+:doc:`../config/sso-oidc`。
+
 如果不使用 SSO，即 ``sso.type`` 为 ``none`` 或未设置，则无需处理。
 
 内置脚本引擎由 Groovy 改为 JavaScript

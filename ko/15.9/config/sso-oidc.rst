@@ -27,12 +27,12 @@ OpenID Connect 인증에서는 |Fess| 가 Relying Party（RP）로 동작하며,
 3. 사용자가 OP에서 인증 수행
 4. OP가 인가 코드를 |Fess| 에 리다이렉트
 5. |Fess| 가 인가 코드를 사용하여 토큰 엔드포인트에서 ID Token 취득
-6. |Fess| 가 ID Token（JWT）에서 사용자 정보를 취득하고 사용자를 로그인
+6. |Fess| 가 ID Token（JWT）의 클레임을 검증한 뒤 사용자 정보를 취득하고 사용자를 로그인
 
 .. note::
    |Fess| 는 인가 코드 플로우（Authorization Code Flow）를 사용합니다. ID Token은 브라우저를 경유하지 않고, |Fess| 와 OP 간의 백채널（서버 간 통신）을 통해 토큰 엔드포인트에서 직접 취득됩니다.
-   |Fess| 는 ID Token을 디코딩하여 클레임（``email`` 이나 ``groups`` 등）을 추출하고 사용자 정보를 구성하지만, JWT 서명의 암호적 검증은 수행하지 않습니다. ``iss``\ (발행자), ``aud``\ (대상 클라이언트), ``exp``\ (만료) 클레임도 검증하지 않습니다.
-   이 때문에 토큰 엔드포인트와의 통신은 반드시 HTTPS로 수행하고, |Fess| 와 OP 간의 통신 경로가 신뢰할 수 있는지 확인하십시오.
+   |Fess| 는 ID Token을 디코딩하여 클레임（``email`` 이나 ``groups`` 등）을 추출하고 사용자 정보를 구성하지만, JWT 서명의 암호적 검증은 수행하지 않습니다. 토큰은 토큰 엔드포인트에서 TLS를 통해 직접 수신하므로 OpenID Connect Core는 이를 허용하며, 따라서 토큰 엔드포인트 URL（``oic.token.server.url``）은 HTTPS여야 합니다. ``http`` 는 ``localhost``, ``127.x.x.x``, ``::1`` 에서만 허용됩니다.
+   |Fess| 는 클레임을 다음과 같이 검증합니다. ``aud`` 에 ``oic.client.id`` 가 포함되어 있어야 하고（``azp`` 가 있으면 ``oic.client.id`` 와 일치해야 합니다）, ``exp`` 가 존재하며 만료되지 않았어야 합니다（최대 300초의 시각 차이는 허용합니다）. ``oic.issuer`` 를 설정한 경우에는 ``iss`` 가 이 값과 일치해야 합니다. ``oic.issuer`` 를 설정하지 않으면 ``iss`` 는 검증하지 않으며, 시작 후 첫 로그인 시 경고를 로그에 출력합니다. ``nonce`` 와 PKCE는 사용하지 않습니다.
 
 역할 기반 검색과의 연동에 대해서는 :doc:`security-role` 을 참조하십시오.
 
@@ -68,8 +68,9 @@ OpenID Connect 인증을 활성화하려면 ``app/WEB-INF/conf/system.properties
     sso.type=oic
 
 .. note::
-   ``sso.type`` 및 이후에 설명하는 ``oic.*`` 의 각 설정은 관리 화면의 「시스템 > 전체」페이지에서도 설정·변경할 수 있습니다.
+   ``sso.type`` 및 이후에 설명하는 ``oic.*`` 의 각 설정（``oic.issuer`` 제외）은 관리 화면의 「시스템 > 전체」페이지에서도 설정·변경할 수 있습니다.
    관리 화면에서 변경한 설정은 ``system.properties`` 에 저장되며, 재시작 후에도 유지됩니다.
+   ``oic.issuer`` 는 ``system.properties`` 에서만 설정할 수 있습니다.
 
 프로바이더 설정
 ---------------
@@ -89,9 +90,13 @@ OP에서 취득한 정보를 설정합니다.
    * - ``oic.token.server.url``
      - 토큰 엔드포인트 URL
      - ``https://accounts.google.com/o/oauth2/token``
+   * - ``oic.issuer``
+     - 발행자（issuer）의 식별자（선택 사항）. 설정하면 ID Token의 ``iss`` 클레임이 이 값과 정확히 일치해야 합니다（끝의 슬래시도 구별됩니다）
+     - (빈 문자열: ``iss`` 는 검증하지 않음)
 
 .. note::
-   이 URL들은 OP의 Discovery 엔드포인트（``/.well-known/openid-configuration``）에서 취득할 수 있습니다.
+   이 URL들과 발행자는 OP의 Discovery 엔드포인트（``/.well-known/openid-configuration``）에서 취득할 수 있으며, 발행자는 그 안의 ``issuer`` 값입니다.
+   토큰 엔드포인트 URL은 HTTPS여야 합니다.
 
 클라이언트 설정
 ---------------
@@ -202,6 +207,7 @@ OP의 설정 화면 또는 Discovery 엔드포인트에서 다음 정보를 취�
 
 - **인가 엔드포인트（Authorization Endpoint）**: 사용자 인증을 시작하는 URL
 - **토큰 엔드포인트（Token Endpoint）**: 토큰을 취득하는 URL
+- **발행자（Issuer）**: 선택 사항. Discovery 문서의 ``issuer`` 값이며 ``oic.issuer`` 에 사용합니다
 - **클라이언트 ID**: OP에서 발급된 클라이언트 식별자
 - **클라이언트 시크릿**: 클라이언트 인증에 사용하는 비밀 키
 
@@ -248,6 +254,9 @@ OP의 설정 화면 또는 Discovery 엔드포인트에서 다음 정보를 취�
     oic.auth.server.url=https://op.example.com/authorize
     oic.token.server.url=https://op.example.com/token
 
+    # 발행자（Discovery 문서의 "issuer" 값）
+    oic.issuer=https://op.example.com
+
     # 클라이언트 설정
     oic.client.id=your-client-id
     oic.client.secret=your-client-secret
@@ -275,6 +284,11 @@ OP의 설정 화면 또는 Discovery 엔드포인트에서 다음 정보를 취�
 - 클라이언트 ID와 클라이언트 시크릿이 올바르게 설정되어 있는지 확인하십시오
 - 스코프에 ``openid`` 가 포함되어 있는지 확인하십시오
 - 인가 엔드포인트 URL과 토큰 엔드포인트 URL이 올바른지 확인하십시오
+- 로그인에 실패하면 ``fess.log`` 에 ``Failed to process the OpenID Connect callback:`` 로 시작하는 경고가 이유와 함께 출력됩니다
+- ``The ID token was not issued for this client``: ID Token의 ``aud`` 가 ``oic.client.id`` 가 아닙니다. 클라이언트 ID를 확인하십시오
+- ``The ID token has expired``: |Fess| 호스트와 OP의 시계가 300초를 넘게 어긋나 있습니다. 시각을 동기화（NTP）하십시오
+- ``The ID token was not issued by the configured issuer``: ``oic.issuer`` 가 메시지에 표시된 ``iss`` 와 다릅니다. Discovery 문서의 ``issuer`` 값을 정확히 복사하십시오
+- ``oic.token.server.url must be https``: HTTPS 토큰 엔드포인트 URL을 사용하십시오（``http`` 는 ``localhost``, ``127.x.x.x``, ``::1`` 에서만 사용할 수 있습니다）
 
 사용자 정보를 취득할 수 없음
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
