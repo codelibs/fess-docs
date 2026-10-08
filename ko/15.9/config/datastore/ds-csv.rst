@@ -594,6 +594,10 @@ TSV 파일(data.tsv):
 
     delete_old_docs=false
 
+.. note::
+
+   기본 설정에서는 데이터 스토어의 문서에 유효 기간(일반 설정의 "이전 문서 삭제")이 지정되며, ``keep_expires_docs`` (기본값: true)는 유효 기간이 있는 문서를 남깁니다. 따라서 ``delete_old_docs`` 는 기본적으로 아무것도 삭제하지 않으며, CSV 파일에서 행을 삭제한 문서도 유효 기간이 지나 Doc Purger 가 삭제할 때까지 인덱스에 남습니다. 위의 현상은 ``keep_expires_docs=false`` 를 지정했거나 "이전 문서 삭제"를 비활성화한 경우에 발생합니다.
+
 대형 CSV 파일
 -------------
 

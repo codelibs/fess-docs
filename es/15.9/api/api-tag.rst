@@ -74,6 +74,8 @@ ver y las condiciones con comodines, de prefijo, difusas y de rango no coinciden
 sin haber iniciado sesión no recibe etiquetas ni faceta de etiquetas, y una condición sobre
 etiquetas no coincide con nada.
 
+El valor de una etiqueta contiene ``:``, por lo que debe ir entre comillas en una consulta: ``q=tag:"<value>"`` funciona. Sin las comillas, ``q=tag:<value>`` no coincide con nada y ``ex_q=tag:<value>`` se rechaza con HTTP 400.
+
 Un usuario ve como máximo ``user.tag.visible.max.size`` (predeterminado: ``1000``) etiquetas, primero
 las suyas. Las que superan ese número no aparecen en ``tags`` de los resultados ni en la faceta, pero
 se pueden seguir usando para filtrar.

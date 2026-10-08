@@ -523,6 +523,10 @@ Avis
 
    Les avis acceptent le HTML. Lorsqu'un thème de recherche affiche un avis, seules les balises et les attributs d'une liste d'autorisation sont conservés : les éléments ``<script>`` et ``<style>``, ``<iframe>``, les attributs de gestionnaire d'événements tels que ``onclick`` et les liens ``javascript:`` sont supprimés, et toute autre balise absente de la liste, telle que ``<form>``, perd son balisage mais conserve son texte. Le HTML étant affiché à tous les visiteurs de la page, n'autorisez que des administrateurs de confiance à modifier ces champs.
 
+.. note::
+
+   L'avis de la page de connexion est affiché tel qu'il a été saisi, sans ce filtrage. Ne laissez que des administrateurs de confiance modifier ce champ également.
+
 Page de connexion
 :::::::::::::::::
 

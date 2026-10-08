@@ -607,6 +607,10 @@ einspeisen und deren Inhalte kumulieren möchten, geben Sie Folgendes an.
 
     delete_old_docs=false
 
+.. note::
+
+   Mit den Standardeinstellungen tragen die Dokumente eines Data Stores ein Ablaufdatum (die Einstellung „Alte Dokumente löschen“ unter „Allgemein“), und ``keep_expires_docs`` (Standard: true) behält die Dokumente, die eines haben. ``delete_old_docs`` löscht daher standardmäßig nichts, und ein Dokument, dessen Zeile aus der CSV-Datei entfernt wurde, bleibt im Index, bis sein Ablaufdatum verstrichen ist und der Doc Purger es entfernt. Das oben beschriebene Symptom tritt auf, wenn ``keep_expires_docs=false`` angegeben ist oder „Alte Dokumente löschen“ deaktiviert wurde.
+
 Große CSV-Dateien
 -----------------
 

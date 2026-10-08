@@ -609,6 +609,10 @@ and want their content to accumulate, specify the following.
 
     delete_old_docs=false
 
+.. note::
+
+   With the default settings, the documents of a data store carry an expiration (the "Delete old documents" setting of General), and ``keep_expires_docs`` (default: true) keeps the documents that have one. ``delete_old_docs`` therefore deletes nothing by default, and a document whose row was removed from the CSV file stays in the index until its expiration has passed and the Doc Purger removes it. The symptom above appears when ``keep_expires_docs=false`` is specified or when "Delete old documents" is disabled.
+
 Large CSV Files
 ---------------
 

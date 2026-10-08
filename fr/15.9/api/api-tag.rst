@@ -72,6 +72,8 @@ que les conditions avec joker, par préfixe, approximatives et par plage, ne cor
 appelant non connecté ne reçoit ni tags ni facette de tags, et une condition sur les tags ne
 correspond à rien.
 
+La valeur d'un tag contient ``:``, il faut donc la placer entre guillemets dans une requête : ``q=tag:"<value>"`` fonctionne. Sans les guillemets, ``q=tag:<value>`` ne correspond à rien et ``ex_q=tag:<value>`` est refusé avec HTTP 400.
+
 Un utilisateur voit au plus ``user.tag.visible.max.size`` (par défaut : ``1000``) tags, les siens en
 premier. Au-delà, les tags n'apparaissent ni dans ``tags`` des résultats ni dans la facette, mais
 peuvent toujours servir au filtrage.

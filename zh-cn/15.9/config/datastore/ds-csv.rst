@@ -592,6 +592,10 @@ TSV文件（data.tsv）:
 
     delete_old_docs=false
 
+.. note::
+
+   在默认设置下，数据存储的文档带有有效期（常规设置中的“删除以前的文档”），而 ``keep_expires_docs``\ （默认: true）会保留带有有效期的文档。因此 ``delete_old_docs`` 默认不会删除任何文档，从CSV文件中删除了行的文档也会一直留在索引中，直到有效期过期并由文档清除器（Doc Purger）将其删除。上述现象会在指定了 ``keep_expires_docs=false`` 或禁用了“删除以前的文档”时出现。
+
 大型CSV文件
 -----------
 
