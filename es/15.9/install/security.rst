@@ -170,7 +170,11 @@ Roles y Control de Acceso
 - ``admin``: Rol de administrador que puede realizar todas las operaciones, incluida la pantalla de administración.
 - ``guest``: Rol asignado a los usuarios no autenticados (anónimos).
 
-Cualquier otro rol se puede crear libremente desde la pantalla de administración. En |Fess|, un rol es una etiqueta que solo tiene un nombre y se utiliza principalmente para el control de acceso a los resultados de búsqueda (qué documentos puede ver un usuario). Un rol en sí no está vinculado a permisos administrativos concretos, como "gestionar configuraciones de rastreo" o "editar resultados de búsqueda".
+Cualquier otro rol se puede crear libremente desde la pantalla de administración. En |Fess|, un rol es una etiqueta que solo tiene un nombre y se utiliza principalmente para el control de acceso a los resultados de búsqueda (qué documentos puede ver un usuario). La excepción es un rol llamado ``admin-`` seguido del nombre de una pantalla de administración, como ``admin-user`` o ``admin-scheduler``: permite a un usuario abrir esa pantalla, y la forma ``-view``, como ``admin-user-view``, permite el acceso de solo lectura.
+
+.. warning::
+
+   Los roles ``admin-*`` permiten repartir las pantallas de administración de uso diario entre varios operadores, pero no constituyen un límite de privilegios. Un usuario con ``admin-user`` puede asignar cualquier rol existente, incluido el rol de administrador, a cualquier usuario; ``admin-accesstoken`` puede emitir un token de acceso con el permiso ``Radmin-api``, que concede acceso a toda la Admin API; ``admin-scheduler`` puede ejecutar trabajos de script en el servidor, y ``admin-plugin`` puede instalar plugins. Trate cada rol ``admin-*`` como equivalente al rol de administrador (``authentication.admin.roles``, valor predeterminado ``admin``) y concédalo únicamente a operadores de confianza.
 
 Siguiendo el principio de mínimo privilegio, otorgue el rol de administrador (``admin``) únicamente a los usuarios que realizan tareas administrativas y no lo otorgue a los usuarios de búsqueda en general.
 

@@ -41,6 +41,10 @@ Configure los permisos del token de acceso.
 Descríbalo en el formato "{user\ |group|\ role}nombre".
 Por ejemplo, para que los usuarios que pertenecen al grupo developer vean los resultados de búsqueda, configure el permiso como "{group}developer".
 
+.. warning::
+
+   Un token de acceso con el permiso ``{role}admin-api`` (almacenado como ``Radmin-api``) puede usar todos los endpoints de la Admin API; consulte :doc:`../api/admin/api-admin-overview`. Un usuario con el rol ``admin-accesstoken`` puede emitir un token de este tipo, y un usuario con ``admin-accesstoken-view`` puede mostrar los valores de los tokens, por lo que debe tratar ambos roles como equivalentes al rol de administrador y concederlos únicamente a operadores de confianza.
+
 Nombre del parámetro
 ::::::::::::::::::::
 

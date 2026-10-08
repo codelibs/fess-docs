@@ -172,7 +172,11 @@ Roles and Access Control
 - ``admin``: Administrator role that can perform all operations, including the admin screen.
 - ``guest``: Role assigned to unauthenticated (anonymous) users.
 
-Any other roles can be freely created from the admin screen. In |Fess|, a role is a tag that has only a name and is used mainly for access control of search results (which documents a user can view). A role itself is not tied to specific administrative permissions such as "manage crawl configurations" or "edit search results".
+Any other roles can be freely created from the admin screen. In |Fess|, a role is a tag that has only a name and is used mainly for access control of search results (which documents a user can view). The exception is a role named ``admin-`` followed by the name of an admin screen, such as ``admin-user`` or ``admin-scheduler``: it allows a user to open that screen, and the ``-view`` form, such as ``admin-user-view``, allows read-only access.
+
+.. warning::
+
+   The ``admin-*`` roles let you split day-to-day admin screens among operators, but they are not a privilege boundary. A user with ``admin-user`` can give any existing role, including the administrator role, to any user; ``admin-accesstoken`` can issue an access token with the ``Radmin-api`` permission, which grants the whole Admin API; ``admin-scheduler`` can run script jobs on the server; and ``admin-plugin`` can install plugins. Treat every ``admin-*`` role as equivalent to the administrator role (``authentication.admin.roles``, default ``admin``) and grant them only to trusted operators.
 
 Following the principle of least privilege, grant the administrator role (``admin``) only to users who perform administrative tasks, and do not grant it to general search users.
 

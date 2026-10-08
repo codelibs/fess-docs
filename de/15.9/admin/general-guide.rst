@@ -519,6 +519,10 @@ Hinweis
 
 |image7|
 
+.. note::
+
+   Die Hinweise akzeptieren HTML. Wenn ein Such-Theme einen Hinweis anzeigt, bleiben nur die Tags und Attribute einer Zulassungsliste erhalten: Die Elemente ``<script>`` und ``<style>``, ``<iframe>``, Ereignis-Handler-Attribute wie ``onclick`` sowie Links mit ``javascript:`` werden entfernt, und jedes andere Tag außerhalb der Liste, etwa ``<form>``, verliert sein Markup, behält aber seinen Text. Da das HTML jedem Besucher der Seite angezeigt wird, sollten nur vertrauenswürdige Administratoren diese Felder bearbeiten dürfen.
+
 Anmeldeseite
 ::::::::::::
 

@@ -41,6 +41,10 @@
 以 ``{user|group|role}name`` 格式描述。
 例如,要让属于 developer 组的用户显示搜索结果,请将权限设置为"{group}developer"。
 
+.. warning::
+
+   将权限指定为 ``{role}admin-api`` 的访问令牌(内部以 ``Radmin-api`` 保存)可以使用 Admin API 的所有端点。详情请参见 :doc:`../api/admin/api-admin-overview`。拥有 ``admin-accesstoken`` 角色的用户可以颁发此类令牌,拥有 ``admin-accesstoken-view`` 角色的用户可以显示令牌的值,因此请将这两个角色视同管理员角色,仅授予受信任的运维人员。
+
 参数名称
 :::::::::::
 

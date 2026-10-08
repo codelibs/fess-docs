@@ -172,7 +172,11 @@ Rollen und Zugriffskontrolle
 - ``admin``: Administratorrolle, die alle Operationen einschließlich der Verwaltungsseite ausführen kann.
 - ``guest``: Rolle, die nicht angemeldeten (anonymen) Benutzern zugewiesen wird.
 
-Alle anderen Rollen können frei über die Verwaltungsseite erstellt werden. In |Fess| ist eine Rolle ein Tag, das nur einen Namen besitzt, und wird hauptsächlich zur Zugriffskontrolle von Suchergebnissen verwendet (welche Dokumente ein Benutzer einsehen darf). Eine Rolle selbst ist nicht an bestimmte administrative Berechtigungen wie ‚Verwaltung von Crawl-Konfigurationen' oder ‚Bearbeitung von Suchergebnissen' gebunden.
+Alle anderen Rollen können frei über die Verwaltungsseite erstellt werden. In |Fess| ist eine Rolle ein Tag, das nur einen Namen besitzt, und wird hauptsächlich zur Zugriffskontrolle von Suchergebnissen verwendet (welche Dokumente ein Benutzer einsehen darf). Eine Ausnahme bildet eine Rolle mit dem Namen ``admin-``, gefolgt vom Namen einer Verwaltungsseite, etwa ``admin-user`` oder ``admin-scheduler``: Sie erlaubt es einem Benutzer, diese Seite zu öffnen, und die ``-view``-Form, etwa ``admin-user-view``, erlaubt reinen Lesezugriff.
+
+.. warning::
+
+   Die ``admin-*``-Rollen ermöglichen es, alltägliche Verwaltungsseiten auf mehrere Betreiber aufzuteilen, sie sind jedoch keine Berechtigungsgrenze. Ein Benutzer mit ``admin-user`` kann jedem Benutzer eine beliebige vorhandene Rolle zuweisen, einschließlich der Administratorrolle; ``admin-accesstoken`` kann ein Zugriffstoken mit der Berechtigung ``Radmin-api`` ausstellen, die die gesamte Admin API freigibt; ``admin-scheduler`` kann Skript-Jobs auf dem Server ausführen, und ``admin-plugin`` kann Plugins installieren. Behandeln Sie jede ``admin-*``-Rolle wie die Administratorrolle (``authentication.admin.roles``, Standardwert ``admin``) und gewähren Sie sie nur vertrauenswürdigen Betreibern.
 
 Befolgen Sie das Prinzip der geringsten Rechte: Gewähren Sie die Administratorrolle (``admin``) nur Benutzern, die administrative Aufgaben durchführen, und nicht allgemeinen Suchbenutzern.
 

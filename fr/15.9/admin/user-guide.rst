@@ -39,6 +39,10 @@ Rôle
 
 Spécifie les rôles auxquels l'utilisateur appartient.
 
+.. note::
+
+   Un utilisateur disposant du rôle ``admin-user`` peut attribuer n'importe quel rôle existant, y compris le rôle administrateur, à n'importe quel utilisateur. Traitez les rôles ``admin-*`` comme équivalents au rôle administrateur ; voir :doc:`../install/security`.
+
 Groupe
 ::::::
 

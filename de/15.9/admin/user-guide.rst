@@ -39,6 +39,10 @@ Rolle
 
 Geben Sie die Rolle an, zu der der Benutzer gehört.
 
+.. note::
+
+   Ein Benutzer mit der Rolle ``admin-user`` kann jedem Benutzer eine beliebige vorhandene Rolle zuweisen, einschließlich der Administratorrolle. Behandeln Sie die ``admin-*``-Rollen wie die Administratorrolle; siehe :doc:`../install/security`.
+
 Gruppe
 ::::::
 
