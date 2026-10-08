@@ -819,6 +819,14 @@ distribuido cambió en 15.9. Revise al menos las claves siguientes.
      - ``-Djcifs.client.*``
      - Los tiempos de espera de SMB siguen con los valores predeterminados de jcifs; consulte
        :ref:`upgrade-159-jcifs`.
+   * - ``response.headers``
+     - Incluye la fila ``text/html=Content-Security-Policy: reflected-xss block``
+     - Fila eliminada
+     - La página de inicio de sesión, la interfaz de administración y las demás páginas que |Fess|
+       genera por sí mismo se envían con una cabecera ``Content-Security-Policy: reflected-xss block``
+       que ningún navegador reconoce, y la consola del navegador registra
+       ``Unrecognized Content-Security-Policy directive 'reflected-xss'``. La cabecera no restringe
+       nada. Elimine la fila, como se describe a continuación.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
        ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
@@ -827,6 +835,20 @@ distribuido cambió en 15.9. Revise al menos las claves siguientes.
      - Presentes
      - Eliminadas
      - Ningún efecto; elimínelas.
+
+El valor distribuido de ``response.headers`` contiene, de 15.0 a 15.8, la fila
+``text/html=Content-Security-Policy: reflected-xss block``. ``reflected-xss`` era una directiva de un
+borrador temprano de Content-Security-Policy que los navegadores ya no reconocen, por lo que la
+cabecera no restringe nada y solo añade el error a la consola. 15.9 ya no distribuye la fila (las
+filas ``X-XSS-Protection`` y ``X-Frame-Options`` no cambian), pero un ``response.headers`` traído de
+15.8 la conserva. Elimine solo esa fila de ``response.headers`` en ``fess_config.properties``. El
+``\n\`` al final de cada fila continúa el valor en la línea siguiente, así que al borrar la línea
+completa las demás quedan intactas::
+
+    text/html=Content-Security-Policy: reflected-xss block\n\
+
+Si define ``response.headers`` con ``-Dfess.config.response.headers``, elimine la misma entrada de ese
+valor.
 
 A un ``bin/fess.in.sh`` copiado de 15.8 también le faltan dos cosas que sí tiene el archivo de
 15.9. Deja ``SEARCH_ENGINE_HTTP_URL`` sin definir salvo que lo haya definido usted, mientras que

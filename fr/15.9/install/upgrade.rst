@@ -828,6 +828,14 @@ suivantes.
      - ``-Djcifs.client.*``
      - Les délais d'attente SMB restent aux valeurs par défaut de jcifs ; voir
        :ref:`upgrade-159-jcifs`.
+   * - ``response.headers``
+     - Contient la ligne ``text/html=Content-Security-Policy: reflected-xss block``
+     - Ligne supprimée
+     - La page de connexion, l'interface d'administration et les autres pages que |Fess| génère
+       lui-même sont envoyées avec un en-tête ``Content-Security-Policy: reflected-xss block``
+       qu'aucun navigateur ne reconnaît, et la console du navigateur consigne
+       ``Unrecognized Content-Security-Policy directive 'reflected-xss'``. L'en-tête ne restreint
+       rien. Supprimez la ligne, comme décrit ci-dessous.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
        ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
@@ -836,6 +844,20 @@ suivantes.
      - Présentes
      - Supprimées
      - Aucun effet ; supprimez-les.
+
+La valeur fournie de ``response.headers`` contient, de la 15.0 à la 15.8, la ligne
+``text/html=Content-Security-Policy: reflected-xss block``. ``reflected-xss`` était une directive d'un
+des premiers brouillons de Content-Security-Policy que les navigateurs ne reconnaissent plus ;
+l'en-tête ne restreint donc rien et n'ajoute qu'une erreur dans la console. La 15.9 ne fournit plus
+cette ligne (les lignes ``X-XSS-Protection`` et ``X-Frame-Options`` ne changent pas), mais un
+``response.headers`` repris de la 15.8 la conserve. Supprimez uniquement cette ligne de
+``response.headers`` dans ``fess_config.properties``. Le ``\n\`` à la fin de chaque ligne poursuit la
+valeur sur la ligne suivante ; si vous supprimez la ligne entière, les autres restent intactes ::
+
+    text/html=Content-Security-Policy: reflected-xss block\n\
+
+Si vous définissez ``response.headers`` avec ``-Dfess.config.response.headers``, supprimez la même
+entrée de cette valeur.
 
 Un ``bin/fess.in.sh`` copié de la 15.8 ne contient pas non plus deux éléments présents dans le
 fichier de la 15.9. Il laisse ``SEARCH_ENGINE_HTTP_URL`` non défini, sauf si vous l'avez défini

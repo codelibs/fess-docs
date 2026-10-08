@@ -785,6 +785,13 @@ Index Exporter 작업이 삭제된 패키지를 참조
      - ``-Djcifs.smb.client.*``, ``-Djcifs.smb1.smb.client.*``
      - ``-Djcifs.client.*``
      - SMB 타임아웃이 jcifs 의 기본값 그대로 남습니다. :ref:`upgrade-159-jcifs` 를 참조하십시오.
+   * - ``response.headers``
+     - ``text/html=Content-Security-Policy: reflected-xss block`` 행이 있음
+     - 해당 행 삭제됨
+     - 로그인 화면, 관리 화면 등 |Fess| 가 직접 렌더링하는 페이지의 응답에 어떤 브라우저도 인식하지
+       못하는 ``Content-Security-Policy: reflected-xss block`` 헤더가 붙고, 브라우저 콘솔에
+       ``Unrecognized Content-Security-Policy directive 'reflected-xss'`` 가 출력됩니다. 이 헤더는
+       아무것도 제한하지 않습니다. 아래 설명대로 해당 행을 제거하십시오.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
        ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
@@ -793,6 +800,20 @@ Index Exporter 작업이 삭제된 패키지를 참조
      - 있음
      - 삭제됨
      - 효과가 없습니다. 제거하십시오.
+
+15.0 부터 15.8 까지 ``response.headers`` 의 기본 제공 값에는
+``text/html=Content-Security-Policy: reflected-xss block`` 행이 있습니다. ``reflected-xss`` 는
+Content-Security-Policy 초기 초안에 있던 디렉티브로 현재 브라우저는 인식하지 않으므로, 이 헤더는
+아무것도 제한하지 않고 콘솔에 오류만 출력합니다. 15.9 는 기본 제공 값에서 이 행을 삭제했습니다
+(``X-XSS-Protection`` 과 ``X-Frame-Options`` 행은 그대로입니다). 15.8 에서 이어받은
+``response.headers`` 에는 이 행이 남으므로, ``fess_config.properties`` 의 ``response.headers`` 에서 다음
+행만 제거하십시오. 각 행 끝의 ``\n\`` 는 값이 다음 줄로 이어짐을 나타내므로, 행 전체를 삭제하면
+나머지 행은 그대로 사용할 수 있습니다::
+
+    text/html=Content-Security-Policy: reflected-xss block\n\
+
+``response.headers`` 를 ``-Dfess.config.response.headers`` 로 지정하고 있다면, 그 값에서 같은 항목을
+제거하십시오.
 
 15.8 에서 복사한 ``bin/fess.in.sh`` 에는 15.9 의 파일에 있는 다음 두 가지도 없습니다. 15.9 는
 ``SEARCH_ENGINE_HTTP_URL`` 에 ``http://localhost:9200`` 을 설정하지만, 15.8 의 파일은 직접
