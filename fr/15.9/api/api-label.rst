@@ -90,6 +90,8 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
 
    * - Code de statut
      - Description
+   * - 401 Unauthorized
+     - Authentification requise (connexion obligatoire activée avec un appelant anonyme, ou requête portant un jeton d'accès non enregistré ou expiré). ``error.code`` vaut ``auth_required``.
    * - 405 Method Not Allowed
      - Une méthode HTTP autre que GET a été spécifiée. ``error.code`` vaut ``method_not_allowed`` et l'en-tête ``Allow: GET`` est ajouté à la réponse.
    * - 500 Internal Server Error

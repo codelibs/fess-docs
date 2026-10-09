@@ -74,6 +74,9 @@ Todos los campos de tipo array son no nulos; cuando no hay valores, se devuelve 
    * - ``admin``
      - boolean
      - ``true`` cuando el usuario tiene alguno de los ``authentication.admin.roles`` configurados. Controla la visualización del elemento "Administration" en la SPA. (Obligatorio)
+   * - ``permission_state``
+     - string
+     - Indica si se han resuelto los permisos de grupo y de rol del usuario (``RESOLVED``, ``PENDING`` o ``FAILED``). ``PENDING`` (todavía se están resolviendo) y ``FAILED`` (han fallado o solo se han resuelto en parte) significan que el usuario tiene menos permisos de los que debería, por lo que una búsqueda puede omitir documentos que el usuario debería poder ver. (Obligatorio)
 
 Obtención del estado de autenticación
 ======================================
@@ -109,7 +112,8 @@ En caso de éxito (HTTP 200), se devuelve una respuesta con el formato de sobre 
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         }
       }
     }
@@ -238,7 +242,8 @@ En caso de éxito (HTTP 200, LoginResponse), se devuelve una respuesta con el fo
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         },
         "csrf_token": "0c1f2e3d4a5b6c7d8e9f",
         "return_to": "/search"

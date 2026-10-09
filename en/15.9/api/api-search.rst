@@ -50,15 +50,15 @@ Request Parameters
    * - ``as.*``
      - Advanced search conditions. Any ``as.<name>`` (e.g., ``as.q``, ``as.filetype``) is passed to the advanced search condition builder. Can be specified multiple times per name.
    * - ``track_total_hits``
-     - Forwarded to the search engine to control accurate hit count (e.g., ``true`` or an integer threshold). Affects whether ``record_count_relation`` is ``EQUAL_TO`` or ``GREATER_THAN_OR_EQUAL_TO``.
+     - Forwarded to the search engine to control accurate hit count (e.g., ``true`` or an integer threshold). Affects whether ``record_count_relation`` is ``EQUAL_TO`` or ``GREATER_THAN_OR_EQUAL_TO``. ``false`` is not accepted and produces ``invalid_request``.
    * - ``facet.field``
      - Facet field. Can be specified multiple times (array).
    * - ``facet.query``
      - Facet query. Can be specified multiple times (array).
    * - ``facet.size``
-     - Maximum number of facet terms to return (integer).
+     - Maximum number of facet terms to return (integer, ``>=1``). When given together with ``facet.field`` or ``facet.query``, a value of ``0`` or less and a value that is not an integer produce ``invalid_request`` (HTTP 400). A value above ``query.facet.fields.size.max`` (default ``1000``) is silently clamped.
    * - ``facet.minDocCount``
-     - Minimum number of documents a facet term must appear in (integer).
+     - Minimum number of documents a facet term must appear in (integer). When given together with ``facet.field`` or ``facet.query``, a value that is not an integer produces ``invalid_request``.
    * - ``facet.sort``
      - Facet sort order.
    * - ``facet.missing``
@@ -121,7 +121,8 @@ On success (200), the following fields are returned directly under ``response`` 
         ],
         "facet_query": [
           { "value": "filetype:html", "count": 30 }
-        ]
+        ],
+        "permission_state": "RESOLVED"
       }
     }
 
@@ -180,8 +181,14 @@ Each field is described below.
      - Array present only when facet fields were requested. Each element is ``{name, result:[{value, count}]}``.
    * - ``facet_query``
      - Array present only when facet queries were requested. Each element is ``{value, count}``.
+   * - ``permission_state``
+     - Whether the group and role permissions of the searching user have been resolved (``RESOLVED``, ``PENDING`` or ``FAILED``). ``PENDING`` (still being resolved) and ``FAILED`` (failed, or only partly resolved) mean that the user holds fewer permissions than they should, so the results may miss documents the user should be able to see. A guest is ``RESOLVED``.
 
 Table: Response Fields
+
+.. note::
+
+   When a plugin sends the search elsewhere instead of running it (for example a DuckDuckGo-style bang such as ``!g``), the success response holds only ``q`` and ``redirect_url``. The client is expected to navigate to ``redirect_url``.
 
 Error Response
 --------------
@@ -194,11 +201,15 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
    * - Status Code
      - Description
    * - 400 Bad Request
-     - The request is invalid.
+     - The request is invalid (for example an invalid query, ``num`` of ``0`` or less, an invalid ``facet.*`` parameter, or ``track_total_hits=false``).
+   * - 401 Unauthorized
+     - Authentication is required (the login-required setting is enabled with an anonymous caller, or the request carries an access token that is not registered or has expired).
    * - 405 Method Not Allowed
      - The HTTP method is not allowed.
    * - 500 Internal Server Error
      - An internal server error occurred.
+   * - 503 Service Unavailable
+     - The search engine refused the search for lack of capacity (it answered 429 or 503). ``error.code`` is ``service_unavailable``, and a ``Retry-After`` header gives the number of seconds to wait (``5``). The query itself is fine, so retry after a short wait.
 
 Table: Error Response
 
@@ -214,7 +225,7 @@ Endpoint            ``/api/v2/documents/all``
 ==================  ====================================================
 
 Streams all documents matching the query as NDJSON (``application/x-ndjson``).
-Each line is a ``{"data":{...}}`` object containing fields permitted by ``QueryFieldConfig#isApiResponseField``.
+Each line is a ``{"data":{...}}`` object containing fields permitted by ``QueryFieldConfig#isApiResponseField``. Unlike ``GET /search``, the search score ``score`` is not included.
 
 If a failure occurs mid-stream, the final line is flushed as follows:
 
@@ -274,6 +285,8 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
      - Description
    * - 400 Bad Request
      - Invalid query, ``num <= 0``, or scroll search disabled with ``api.search.scroll=false``.
+   * - 401 Unauthorized
+     - Authentication is required (the login-required setting is enabled with an anonymous caller, or the request carries an access token that is not registered or has expired).
    * - 405 Method Not Allowed
      - The HTTP method is not allowed.
    * - 500 Internal Server Error

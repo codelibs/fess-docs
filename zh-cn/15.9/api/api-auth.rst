@@ -74,6 +74,9 @@ v2 API 采用基于会话的认证方式。
    * - ``admin``
      - boolean
      - 当用户拥有已配置的 ``authentication.admin.roles`` 中任意一个角色时为 ``true``\ 。控制 SPA 中"Administration"项目的显示。（必填）
+   * - ``permission_state``
+     - string
+     - 用户的组和角色权限是否已解析完毕（ ``RESOLVED`` 、 ``PENDING`` 、 ``FAILED`` ）。 ``PENDING`` （解析中）和 ``FAILED`` （失败，或仅部分解析）表示该用户拥有的权限少于应有的权限，搜索时可能缺少本应可见的文档。（必填）
 
 获取认证状态
 ============
@@ -109,7 +112,8 @@ HTTP 方法            GET
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         }
       }
     }
@@ -238,7 +242,8 @@ Content-Type 为 ``application/json``\ （字符集 UTF-8）。请求体大小�
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         },
         "csrf_token": "0c1f2e3d4a5b6c7d8e9f",
         "return_to": "/search"

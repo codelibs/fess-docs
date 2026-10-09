@@ -78,6 +78,8 @@ HTTP 方法            GET
 
    * - 状态码
      - 说明
+   * - 401 Unauthorized
+     - 需要认证时（登录必需设置有效且调用方为匿名）。 ``error.code`` 为 ``auth_required``\ 。
    * - 405 Method Not Allowed
      - 指定了不支持的 HTTP 方法时。\ ``Allow`` 头中会指示 ``GET``\ 。
    * - 500 Internal Server Error
@@ -150,6 +152,8 @@ HTTP 方法            GET
 
    * - 状态码
      - 说明
+   * - 401 Unauthorized
+     - 需要认证时（登录必需设置有效且调用方为匿名）。 ``error.code`` 为 ``auth_required``\ 。
    * - 405 Method Not Allowed
      - 指定了不支持的 HTTP 方法时。\ ``Allow`` 头中会指示 ``GET``\ 。
    * - 500 Internal Server Error

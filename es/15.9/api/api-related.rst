@@ -78,6 +78,8 @@ Respuesta de error
 
    * - Código de estado
      - Descripción
+   * - 401 Unauthorized
+     - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo). ``error.code`` es ``auth_required``.
    * - 405 Method Not Allowed
      - Cuando se especifica un método HTTP no admitido. La cabecera ``Allow`` indica ``GET``.
    * - 500 Internal Server Error
@@ -150,6 +152,8 @@ Respuesta de error
 
    * - Código de estado
      - Descripción
+   * - 401 Unauthorized
+     - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo). ``error.code`` es ``auth_required``.
    * - 405 Method Not Allowed
      - Cuando se especifica un método HTTP no admitido. La cabecera ``Allow`` indica ``GET``.
    * - 500 Internal Server Error

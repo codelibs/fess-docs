@@ -36,6 +36,9 @@ On success (HTTP 200, UiConfigResponse), the following response is returned in t
         "site_name": "Fess",
         "login_required": false,
         "locales": ["en", "ja"],
+        "ui_locale": "ja",
+        "default_label_values": [],
+        "default_sort": "",
         "theme": {
           "name": "default",
           "display_name": "Default Theme",
@@ -60,6 +63,8 @@ On success (HTTP 200, UiConfigResponse), the following response is returned in t
           "eol_link": "",
           "installation_link": "https://fess.codelibs.org/15.9/install/",
           "login_link": true,
+          "sso_enabled": false,
+          "osdd_link": true,
           "rag_chat_enabled": false
         },
         "page_size_default": 20,
@@ -106,6 +111,15 @@ Each element of ``response`` is as follows. All fields are required.
    * - ``locales``
      - string[]
      - Array of available locales.
+   * - ``ui_locale``
+     - string
+     - The display language of the search screen as a BCP 47 tag (for example ``ja`` or ``pt-BR``). It is determined from the request parameter ``browser_lang`` (remembered in the session once given), then the session, then the ``Accept-Language`` header. Empty when it cannot be determined. Not the same as ``locales``, which lists the search languages.
+   * - ``default_label_values``
+     - string[]
+     - Label values that the search screen pre-selects. For the current user, they are taken from "Default Label Value" on the "General Settings" page of the admin UI, including values set per role or group. An empty array when ``label_options`` is empty. ``/api/v2/search`` does not apply them.
+   * - ``default_sort``
+     - string
+     - Sort value that the search screen pre-selects. For the current user, it is taken from "Default Sort Value" on the same page. Empty when none applies. ``/api/v2/search`` does not apply it.
    * - ``theme``
      - object
      - Active theme descriptor. See the table below for details.
@@ -235,8 +249,14 @@ All fields are required.
      - string
      - Resolved installation guide URL. Empty string when it cannot be resolved.
    * - ``login_link``
+     - boolean or string
+     - Whether to show the login link ("Display Login Link" on the "General Settings" page of the admin UI). When the link is enabled and login goes through SSO (``sso_enabled`` below is ``true``), the string ``"sso/"``, a URL relative to the base URL of the page, is returned instead of a boolean.
+   * - ``sso_enabled``
      - boolean
-     - Whether to display the login link.
+     - ``true`` when ``sso.type`` is set and the ``fess-sso-*`` plugin that serves it is installed.
+   * - ``osdd_link``
+     - boolean
+     - ``true`` when the OpenSearch description document (``osdd``) is served (``osdd.link.enabled``; with ``auto`` it is not served under SSO).
    * - ``rag_chat_enabled``
      - boolean
      - Whether the RAG chat feature is available.

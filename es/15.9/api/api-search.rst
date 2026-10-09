@@ -50,15 +50,15 @@ Parámetros de solicitud
    * - ``as.*``
      - Condiciones de búsqueda avanzada. Cualquier ``as.<name>`` (ejemplo: ``as.q``, ``as.filetype``) se pasa al constructor de condiciones de búsqueda avanzada. Se puede repetir por nombre.
    * - ``track_total_hits``
-     - Se reenvía al motor de búsqueda para controlar el recuento exacto de resultados (ejemplo: ``true`` o un umbral entero). Afecta si ``record_count_relation`` es ``EQUAL_TO`` o ``GREATER_THAN_OR_EQUAL_TO``.
+     - Se reenvía al motor de búsqueda para controlar el recuento exacto de resultados (ejemplo: ``true`` o un umbral entero). Afecta si ``record_count_relation`` es ``EQUAL_TO`` o ``GREATER_THAN_OR_EQUAL_TO``. ``false`` no se acepta y produce ``invalid_request``.
    * - ``facet.field``
      - Campo de faceta. Se puede repetir (array).
    * - ``facet.query``
      - Consulta de faceta. Se puede repetir (array).
    * - ``facet.size``
-     - Número máximo de términos de faceta a devolver (integer).
+     - Número máximo de términos de faceta a devolver (integer, ``>=1``). Cuando se indica junto con ``facet.field`` o ``facet.query``, un valor de ``0`` o menos y un valor que no es un entero producen ``invalid_request`` (HTTP 400). Un valor superior a ``query.facet.fields.size.max`` (por defecto ``1000``) se limita silenciosamente.
    * - ``facet.minDocCount``
-     - Número mínimo de documentos que debe contener un término de faceta (integer).
+     - Número mínimo de documentos que debe contener un término de faceta (integer). Cuando se indica junto con ``facet.field`` o ``facet.query``, un valor que no es un entero produce ``invalid_request``.
    * - ``facet.sort``
      - Ordenación de facetas.
    * - ``facet.missing``
@@ -121,7 +121,8 @@ En caso de éxito (200), se devuelven los siguientes campos directamente bajo ``
         ],
         "facet_query": [
           { "value": "filetype:html", "count": 30 }
-        ]
+        ],
+        "permission_state": "RESOLVED"
       }
     }
 
@@ -180,8 +181,14 @@ Los campos son los siguientes:
      - Array que solo existe cuando se solicitaron campos de faceta. Cada elemento tiene la forma ``{name, result:[{value, count}]}``.
    * - ``facet_query``
      - Array que solo existe cuando se solicitaron consultas de faceta. Cada elemento tiene la forma ``{value, count}``.
+   * - ``permission_state``
+     - Indica si se han resuelto los permisos de grupo y de rol del usuario que busca (``RESOLVED``, ``PENDING`` o ``FAILED``). ``PENDING`` (todavía se están resolviendo) y ``FAILED`` (han fallado o solo se han resuelto en parte) significan que el usuario tiene menos permisos de los que debería, por lo que los resultados pueden omitir documentos que el usuario debería poder ver. Un invitado es ``RESOLVED``.
 
 Tabla: Campos de respuesta
+
+.. note::
+
+   Cuando un plugin envía la búsqueda a otro lugar en vez de ejecutarla (por ejemplo, un bang al estilo de DuckDuckGo como ``!g``), la respuesta correcta contiene solo ``q`` y ``redirect_url``. El cliente debe navegar a ``redirect_url``.
 
 Respuesta de error
 ------------------
@@ -194,11 +201,15 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
    * - Código de estado
      - Descripción
    * - 400 Bad Request
-     - Cuando la solicitud no es válida.
+     - Cuando la solicitud no es válida (por ejemplo, una consulta no válida, ``num`` de ``0`` o menos, un parámetro ``facet.*`` no válido o ``track_total_hits=false``).
+   * - 401 Unauthorized
+     - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo, o la solicitud lleva un token de acceso no registrado o caducado).
    * - 405 Method Not Allowed
      - Cuando el método HTTP no está permitido.
    * - 500 Internal Server Error
      - Cuando se produce un error interno del servidor.
+   * - 503 Service Unavailable
+     - Cuando el motor de búsqueda ha rechazado la búsqueda por falta de capacidad (respondió 429 o 503). ``error.code`` es ``service_unavailable`` y un encabezado ``Retry-After`` indica los segundos que hay que esperar (``5``). La consulta en sí es correcta, así que vuelva a intentarlo tras una breve espera.
 
 Tabla: Respuesta de error
 
@@ -214,7 +225,7 @@ Endpoint            ``/api/v2/documents/all``
 ==================  ====================================================
 
 Transmite en streaming todos los documentos que coincidan con la consulta en formato NDJSON (``application/x-ndjson``).
-Cada línea es un objeto ``{"data":{...}}`` que contiene los campos permitidos por ``QueryFieldConfig#isApiResponseField``.
+Cada línea es un objeto ``{"data":{...}}`` que contiene los campos permitidos por ``QueryFieldConfig#isApiResponseField``. A diferencia de ``GET /search``, no se incluye la puntuación de búsqueda ``score``.
 
 Si se produce un fallo a mitad del stream, se envía y vacía la siguiente línea como línea final:
 
@@ -274,6 +285,8 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
      - Descripción
    * - 400 Bad Request
      - Consulta inválida, ``num <= 0``, o búsqueda por scroll deshabilitada con ``api.search.scroll=false``.
+   * - 401 Unauthorized
+     - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo, o la solicitud lleva un token de acceso no registrado o caducado).
    * - 405 Method Not Allowed
      - Cuando el método HTTP no está permitido.
    * - 500 Internal Server Error

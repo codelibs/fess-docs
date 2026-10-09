@@ -74,6 +74,9 @@ CSRF 토큰 취득 방법 및 교체 메커니즘, 공통 응답 엔벨로프 �
    * - ``admin``
      - boolean
      - 사용자가 설정된 ``authentication.admin.roles`` 중 하나를 가질 때 ``true`` 가 됩니다. SPA 의 "Administration" 항목 표시를 제어합니다. (필수)
+   * - ``permission_state``
+     - string
+     - 사용자의 그룹・롤 권한이 어디까지 확정되었는지 (``RESOLVED``, ``PENDING``, ``FAILED`` 중 하나). ``PENDING`` (확정 중) 과 ``FAILED`` (실패 또는 일부만 확정) 는 사용자가 본래보다 적은 권한만 가지고 있어, 검색에서 본래 보여야 할 문서가 빠질 수 있음을 나타냅니다. (필수)
 
 인증 상태 취득
 ==============
@@ -109,7 +112,8 @@ HTTP 메서드          GET
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         }
       }
     }
@@ -238,7 +242,8 @@ Content-Type 은 ``application/json`` (문자 인코딩 UTF-8) 입니다. 요청
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         },
         "csrf_token": "0c1f2e3d4a5b6c7d8e9f",
         "return_to": "/search"

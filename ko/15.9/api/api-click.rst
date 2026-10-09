@@ -94,6 +94,8 @@ HTTP 메서드          POST
      - 설명
    * - 400 Bad Request
      - 요청 본문이 유효하지 않은 JSON이거나, ``doc_id`` 가 누락되었거나 패턴과 일치하지 않는 경우.
+   * - 401 Unauthorized
+     - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자).
    * - 403 Forbidden
      - CSRF 토큰 누락·만료 등으로 허가되지 않는 경우.
    * - 404 Not Found

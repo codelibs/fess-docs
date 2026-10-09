@@ -94,6 +94,8 @@ HTTP 方法            POST
      - 说明
    * - 400 Bad Request
      - 请求体不是合法的 JSON，或 ``doc_id`` 缺失或不符合格式要求。
+   * - 401 Unauthorized
+     - 需要认证时（登录必需设置有效且调用方为匿名）。
    * - 403 Forbidden
      - 因 CSRF 令牌缺失或过期等原因被拒绝时。
    * - 404 Not Found

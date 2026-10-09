@@ -88,6 +88,8 @@ En cas d'échec de l'API des mots populaires, l'enveloppe d'erreur commune est r
      - Description
    * - 400 Bad Request
      - La requête est incorrecte (y compris lorsque la fonctionnalité est désactivée via ``web.api.popularword=false``). ``error.code`` vaut ``invalid_request``.
+   * - 401 Unauthorized
+     - Authentification requise (connexion obligatoire activée avec un appelant anonyme, ou requête portant un jeton d'accès non enregistré ou expiré). ``error.code`` vaut ``auth_required``.
    * - 405 Method Not Allowed
      - Une méthode HTTP non prise en charge a été spécifiée.
    * - 500 Internal Server Error

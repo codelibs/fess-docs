@@ -50,15 +50,15 @@ HTTPメソッド         GET
    * - ``as.*``
      - 高度な検索条件。任意の ``as.<name>`` （例: ``as.q`` , ``as.filetype`` ）が高度な検索条件ビルダーに渡されます。name ごとに繰り返し指定可能です。
    * - ``track_total_hits``
-     - 検索エンジンに転送され、正確なヒット数カウントを制御します（例: ``true`` または整数しきい値）。 ``record_count_relation`` が ``EQUAL_TO`` か ``GREATER_THAN_OR_EQUAL_TO`` かに影響します。
+     - 検索エンジンに転送され、正確なヒット数カウントを制御します（例: ``true`` または整数しきい値）。 ``record_count_relation`` が ``EQUAL_TO`` か ``GREATER_THAN_OR_EQUAL_TO`` かに影響します。 ``false`` は指定できず、 ``invalid_request`` になります。
    * - ``facet.field``
      - ファセットフィールド。繰り返し指定可能（配列）。
    * - ``facet.query``
      - ファセットクエリ。繰り返し指定可能（配列）。
    * - ``facet.size``
-     - 返すファセット語の最大数（integer）。
+     - 返すファセット語の最大数（integer, ``>=1`` ）。 ``facet.field`` または ``facet.query`` と一緒に指定したとき、 ``0`` 以下の値と整数でない値は ``invalid_request`` （HTTP 400）になります。 ``query.facet.fields.size.max`` （既定値 ``1000`` ）を超える値は無言でクランプされます。
    * - ``facet.minDocCount``
-     - ファセット語が含まれる最小ドキュメント数（integer）。
+     - ファセット語が含まれる最小ドキュメント数（integer）。 ``facet.field`` または ``facet.query`` と一緒に指定したとき、整数でない値は ``invalid_request`` になります。
    * - ``facet.sort``
      - ファセットのソート。
    * - ``facet.missing``
@@ -121,7 +121,8 @@ HTTPメソッド         GET
         ],
         "facet_query": [
           { "value": "filetype:html", "count": 30 }
-        ]
+        ],
+        "permission_state": "RESOLVED"
       }
     }
 
@@ -180,8 +181,14 @@ HTTPメソッド         GET
      - ファセットフィールドが要求された場合のみ存在する配列。各要素は ``{name, result:[{value, count}]}`` 。
    * - ``facet_query``
      - ファセットクエリが要求された場合のみ存在する配列。各要素は ``{value, count}`` 。
+   * - ``permission_state``
+     - 検索したユーザーのグループ・ロールの権限がどこまで解決されているか（ ``RESOLVED`` ・ ``PENDING`` ・ ``FAILED`` ）。 ``PENDING`` （解決中）と ``FAILED`` （失敗、または一部のみ解決）は、ユーザーが本来より少ない権限しか持たず、検索結果に本来見えるはずの文書が含まれない可能性があることを示します。ゲストは ``RESOLVED`` です。
 
 表: レスポンスフィールド
+
+.. note::
+
+   プラグインが検索を別の場所へ振り替えた場合（DuckDuckGo 形式の ``!g`` など）は、検索を実行せず、 ``q`` と ``redirect_url`` だけを含む成功レスポンスが返ります。クライアントは ``redirect_url`` へ遷移してください。
 
 エラーレスポンス
 ------------
@@ -194,11 +201,15 @@ HTTPメソッド         GET
    * - ステータスコード
      - 説明
    * - 400 Bad Request
-     - リクエストが不正な場合。
+     - リクエストが不正な場合（不正なクエリ、 ``num`` が ``0`` 以下、不正な ``facet.*`` パラメーター、 ``track_total_hits=false`` など）。
+   * - 401 Unauthorized
+     - 認証が必要な場合（ログイン必須設定が有効で匿名の呼び出し元、または未登録・期限切れのアクセストークンを付けた場合）。
    * - 405 Method Not Allowed
      - HTTP メソッドが許可されていない場合。
    * - 500 Internal Server Error
      - サーバー内部エラーが発生した場合。
+   * - 503 Service Unavailable
+     - 検索エンジンが処理能力の不足でこの検索を拒否した場合（検索エンジンが 429 または 503 を返したとき）。 ``error.code`` は ``service_unavailable`` で、待つべき秒数（ ``5`` ）を示す ``Retry-After`` ヘッダーが付きます。クエリに問題はないため、しばらく待って再試行してください。
 
 表: エラーレスポンス
 
@@ -214,7 +225,7 @@ HTTPメソッド         GET
 ==================  ====================================================
 
 クエリにマッチするすべてのドキュメントを NDJSON （ ``application/x-ndjson`` ）でストリーム配信します。
-各行は ``{"data":{...}}`` オブジェクトで、 ``QueryFieldConfig#isApiResponseField`` が許可するフィールドを含みます。
+各行は ``{"data":{...}}`` オブジェクトで、 ``QueryFieldConfig#isApiResponseField`` が許可するフィールドを含みます。ただし、 ``GET /search`` と異なり、検索スコア ``score`` は含まれません。
 
 ストリームの途中で失敗した場合は、最終行に次の行を出力してフラッシュします。
 
@@ -274,6 +285,8 @@ HTTPメソッド         GET
      - 説明
    * - 400 Bad Request
      - 不正なクエリ、 ``num <= 0`` 、または ``api.search.scroll=false`` でスクロール検索が無効な場合。
+   * - 401 Unauthorized
+     - 認証が必要な場合（ログイン必須設定が有効で匿名の呼び出し元、または未登録・期限切れのアクセストークンを付けた場合）。
    * - 405 Method Not Allowed
      - HTTP メソッドが許可されていない場合。
    * - 500 Internal Server Error

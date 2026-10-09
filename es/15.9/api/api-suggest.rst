@@ -37,7 +37,7 @@ Los parámetros de solicitud disponibles son los siguientes:
    * - q
      - Término de búsqueda (prefijo) para realizar sugerencias. Si se omite, se devuelven palabras sugeridas sin filtrado por prefijo. (Ejemplo) ``q=fes``
    * - num
-     - Número de palabras sugeridas (entero mayor o igual a 0). Predeterminado ``10``. Si se especifica un valor no numérico, se utiliza el valor predeterminado. (Ejemplo) ``num=20``
+     - Número máximo de palabras sugeridas (entero mayor o igual a 1). Predeterminado ``10``. Un valor de ``0`` o menos produce ``invalid_request`` (HTTP 400). Un valor superior a ``paging.search.page.max.size`` (por defecto ``100``) se limita a ese máximo. Si se especifica un valor no numérico, se utiliza el valor predeterminado. (Ejemplo) ``num=20``
    * - fn
      - Nombre de campo para filtrar el objetivo de sugerencia. Se puede especificar varias veces (array). (Ejemplo) ``fn=content&fn=title``
    * - lang
@@ -83,7 +83,7 @@ Los elementos de ``response`` son los siguientes:
    * - q
      - Término de búsqueda solicitado (cadena de texto). Devuelve una cadena vacía cuando se omite ``q``.
    * - page_size
-     - Número de palabras sugeridas solicitado (el valor de ``num``, entero).
+     - Número de palabras sugeridas que se devolvieron realmente (el número de elementos de ``suggest_words``). No es el valor de ``num`` y puede ser menor.
    * - record_count
      - Número total de palabras sugeridas coincidentes (entero de 64 bits).
    * - query_time
@@ -119,6 +119,10 @@ Si la API de sugerencias falla, se devuelve el sobre de error común. Consulte :
 
    * - Código de estado
      - Descripción
+   * - 400 Bad Request
+     - Cuando ``num`` es ``0`` o menos. ``error.code`` es ``invalid_request``.
+   * - 401 Unauthorized
+     - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo, o la solicitud lleva un token de acceso no registrado o caducado).
    * - 405 Method Not Allowed
      - Cuando se especifica un método HTTP no admitido. La cabecera ``Allow`` indica ``GET``.
    * - 500 Internal Server Error

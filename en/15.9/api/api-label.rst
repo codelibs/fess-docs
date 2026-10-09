@@ -90,6 +90,8 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
 
    * - Status Code
      - Description
+   * - 401 Unauthorized
+     - Authentication is required (the login-required setting is enabled with an anonymous caller, or the request carries an access token that is not registered or has expired). ``error.code`` is ``auth_required``.
    * - 405 Method Not Allowed
      - An HTTP method other than GET was specified. The ``error.code`` is ``method_not_allowed``, and an ``Allow: GET`` header is included in the response.
    * - 500 Internal Server Error

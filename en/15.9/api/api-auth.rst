@@ -74,6 +74,9 @@ All array fields are non-null; an empty array is returned when there are no valu
    * - ``admin``
      - boolean
      - ``true`` when the user has any of the configured ``authentication.admin.roles``. Controls the display of the "Administration" item in the SPA. (Required)
+   * - ``permission_state``
+     - string
+     - Whether the group and role permissions of the user have been resolved (``RESOLVED``, ``PENDING`` or ``FAILED``). ``PENDING`` (still being resolved) and ``FAILED`` (failed, or only partly resolved) mean that the user holds fewer permissions than they should, so a search may miss documents the user should be able to see. (Required)
 
 Fetching Authentication State
 ==============================
@@ -109,7 +112,8 @@ On success (HTTP 200), the following response is returned in the common envelope
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         }
       }
     }
@@ -238,7 +242,8 @@ On success (HTTP 200, LoginResponse), the following response is returned in the 
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         },
         "csrf_token": "0c1f2e3d4a5b6c7d8e9f",
         "return_to": "/search"

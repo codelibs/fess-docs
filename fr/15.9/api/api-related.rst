@@ -78,6 +78,8 @@ Réponse d'erreur
 
    * - Code de statut
      - Description
+   * - 401 Unauthorized
+     - Authentification requise (connexion obligatoire activée avec un appelant anonyme). ``error.code`` vaut ``auth_required``.
    * - 405 Method Not Allowed
      - Une méthode HTTP non prise en charge a été spécifiée. L'en-tête ``Allow`` indique ``GET``.
    * - 500 Internal Server Error
@@ -150,6 +152,8 @@ Réponse d'erreur
 
    * - Code de statut
      - Description
+   * - 401 Unauthorized
+     - Authentification requise (connexion obligatoire activée avec un appelant anonyme). ``error.code`` vaut ``auth_required``.
    * - 405 Method Not Allowed
      - Une méthode HTTP non prise en charge a été spécifiée. L'en-tête ``Allow`` indique ``GET``.
    * - 500 Internal Server Error

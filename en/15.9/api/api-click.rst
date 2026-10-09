@@ -94,6 +94,8 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
      - Description
    * - 400 Bad Request
      - The request body is not valid JSON, or ``doc_id`` is missing or does not match the pattern.
+   * - 401 Unauthorized
+     - Authentication is required (the login-required setting is enabled with an anonymous caller).
    * - 403 Forbidden
      - Not permitted due to missing or expired CSRF token.
    * - 404 Not Found

@@ -90,6 +90,8 @@ curl コマンドでのリクエスト例:
 
    * - ステータスコード
      - 説明
+   * - 401 Unauthorized
+     - 認証が必要な場合（ログイン必須設定が有効で匿名の呼び出し元、または未登録・期限切れのアクセストークンを付けた場合）。 ``error.code`` は ``auth_required`` です。
    * - 405 Method Not Allowed
      - GET 以外の HTTP メソッドが指定された場合。 ``error.code`` は ``method_not_allowed`` で、 ``Allow: GET`` ヘッダーが付与されます。
    * - 500 Internal Server Error

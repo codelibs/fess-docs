@@ -36,6 +36,9 @@ SPA 가 필요로 하는 초기 설정을 반환합니다.
         "site_name": "Fess",
         "login_required": false,
         "locales": ["en", "ja"],
+        "ui_locale": "ja",
+        "default_label_values": [],
+        "default_sort": "",
         "theme": {
           "name": "default",
           "display_name": "Default Theme",
@@ -60,6 +63,8 @@ SPA 가 필요로 하는 초기 설정을 반환합니다.
           "eol_link": "",
           "installation_link": "https://fess.codelibs.org/15.9/install/",
           "login_link": true,
+          "sso_enabled": false,
+          "osdd_link": true,
           "rag_chat_enabled": false
         },
         "page_size_default": 20,
@@ -106,6 +111,15 @@ SPA 가 필요로 하는 초기 설정을 반환합니다.
    * - ``locales``
      - string[]
      - 사용 가능한 로케일 배열.
+   * - ``ui_locale``
+     - string
+     - 검색 화면을 표시하는 언어를 BCP 47 태그 (예: ``ja`` , ``pt-BR`` ) 로 나타낸 값. 요청 파라미터 ``browser_lang`` (지정하면 세션에 기억됨), 세션, ``Accept-Language`` 헤더 순으로 결정됩니다. 결정할 수 없으면 빈 문자열입니다. 검색 언어 목록인 ``locales`` 와는 별개입니다.
+   * - ``default_label_values``
+     - string[]
+     - 검색 화면이 미리 선택하는 라벨 값. 현재 사용자에 대해, 관리 화면 「일반」 페이지의 「기본 라벨 값」에서 롤이나 그룹별 지정을 포함하여 해당하는 값을 반환합니다. ``label_options`` 가 비어 있으면 빈 배열입니다. ``/api/v2/search`` 는 이 값을 적용하지 않습니다.
+   * - ``default_sort``
+     - string
+     - 검색 화면이 미리 선택하는 정렬 값. 현재 사용자에 대해, 같은 페이지의 「기본 정렬 값」에서 해당하는 값을 반환합니다. 해당하는 값이 없으면 빈 문자열입니다. ``/api/v2/search`` 는 이 값을 적용하지 않습니다.
    * - ``theme``
      - object
      - 활성 테마 디스크립터. 자세한 내용은 아래 표를 참조하십시오.
@@ -235,8 +249,14 @@ features
      - string
      - 해결된 설치 가이드 URL. 해결할 수 없을 때는 빈 문자열입니다.
    * - ``login_link``
+     - boolean 또는 string
+     - 로그인 링크를 표시해야 하는지 여부 (관리 화면 「일반」 페이지의 「로그인 링크 표시」). 이 링크가 활성화되어 있고 SSO 로 로그인하는 구성 (아래 ``sso_enabled`` 가 ``true`` ) 이면, boolean 대신 페이지의 기본 URL 에 대한 상대 URL 인 문자열 ``"sso/"`` 가 반환됩니다.
+   * - ``sso_enabled``
      - boolean
-     - 로그인 링크를 표시해야 하는지 여부.
+     - ``sso.type`` 이 설정되어 있고 이를 처리하는 ``fess-sso-*`` 플러그인이 설치되어 있으면 ``true`` 입니다.
+   * - ``osdd_link``
+     - boolean
+     - OpenSearch 설명 문서 ( ``osdd`` ) 를 제공하고 있으면 ``true`` 입니다 ( ``osdd.link.enabled`` . ``auto`` 에서는 SSO 사용 시 제공되지 않습니다).
    * - ``rag_chat_enabled``
      - boolean
      - RAG 채팅 기능이 사용 가능한지 여부.

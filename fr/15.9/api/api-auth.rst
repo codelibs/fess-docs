@@ -74,6 +74,9 @@ Tous les champs de type tableau sont non-nuls ; un tableau vide est retourné s'
    * - ``admin``
      - boolean
      - Vaut ``true`` lorsque l'utilisateur possède l'un des rôles configurés dans ``authentication.admin.roles``. Contrôle l'affichage de l'élément « Administration » dans la SPA. (Obligatoire)
+   * - ``permission_state``
+     - string
+     - Indique si les permissions de groupe et de rôle de l'utilisateur ont été résolues (``RESOLVED``, ``PENDING`` ou ``FAILED``). ``PENDING`` (encore en cours de résolution) et ``FAILED`` (échec, ou résolution partielle seulement) signifient que l'utilisateur a moins de permissions qu'il ne devrait, de sorte qu'une recherche peut omettre des documents qu'il devrait pouvoir voir. (Obligatoire)
 
 Récupération de l'état d'authentification
 ==========================================
@@ -109,7 +112,8 @@ En cas de succès (HTTP 200), une réponse au format d'enveloppe commune est ret
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         }
       }
     }
@@ -238,7 +242,8 @@ En cas de succès (HTTP 200, LoginResponse), une réponse au format d'enveloppe 
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         },
         "csrf_token": "0c1f2e3d4a5b6c7d8e9f",
         "return_to": "/search"

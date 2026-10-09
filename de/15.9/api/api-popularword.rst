@@ -88,6 +88,8 @@ Wenn die Beliebte-Wörter-API fehlschlägt, wird der gemeinsame Fehler-Envelope 
      - Beschreibung
    * - 400 Bad Request
      - Wenn die Anfrage ungültig ist (einschließlich des Falls, dass die Funktion durch ``web.api.popularword=false`` deaktiviert ist). ``error.code`` ist ``invalid_request``.
+   * - 401 Unauthorized
+     - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht aktiviert und anonymer Aufrufer, oder die Anfrage enthält ein nicht registriertes oder abgelaufenes Zugriffstoken). ``error.code`` ist ``auth_required``.
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde.
    * - 500 Internal Server Error

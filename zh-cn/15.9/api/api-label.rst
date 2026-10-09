@@ -90,6 +90,8 @@ HTTP 方法            GET
 
    * - 状态码
      - 说明
+   * - 401 Unauthorized
+     - 需要认证时（登录必需设置有效且调用方为匿名，或请求携带了未注册或已过期的访问令牌）。 ``error.code`` 为 ``auth_required``\ 。
    * - 405 Method Not Allowed
      - 指定了 GET 以外的 HTTP 方法时。\ ``error.code`` 为 ``method_not_allowed``\ ，响应中会附带 ``Allow: GET`` 头。
    * - 500 Internal Server Error

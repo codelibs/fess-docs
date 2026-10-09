@@ -37,7 +37,7 @@ The available request parameters are as follows:
    * - q
      - Search term (prefix) for suggestion. If omitted, suggest words are returned without prefix filtering. (Example) ``q=fes``
    * - num
-     - Number of suggested words (integer, >= 0). Default ``10``. If a non-numeric value is specified, the default is used. (Example) ``num=20``
+     - Maximum number of suggested words (integer, >= 1). Default ``10``. A value of ``0`` or less produces ``invalid_request`` (HTTP 400). A value above ``paging.search.page.max.size`` (default ``100``) is clamped to it. If a non-numeric value is specified, the default is used. (Example) ``num=20``
    * - fn
      - Field name to narrow down suggestion targets. Can be specified multiple times (array). (Example) ``fn=content&fn=title``
    * - lang
@@ -83,7 +83,7 @@ Each element of ``response`` is as follows:
    * - q
      - The requested search term (string). Returns an empty string when ``q`` is omitted.
    * - page_size
-     - Requested number of suggest words (the value of ``num``, integer).
+     - Number of suggested words actually returned (the number of elements in ``suggest_words``). It is not the value of ``num`` and can be smaller.
    * - record_count
      - Total number of matching suggest words (64-bit integer).
    * - query_time
@@ -119,6 +119,10 @@ When the Suggest API fails, a common error envelope is returned. For details on 
 
    * - Status Code
      - Description
+   * - 400 Bad Request
+     - ``num`` is ``0`` or less. ``error.code`` is ``invalid_request``.
+   * - 401 Unauthorized
+     - Authentication is required (the login-required setting is enabled with an anonymous caller, or the request carries an access token that is not registered or has expired).
    * - 405 Method Not Allowed
      - An unsupported HTTP method was specified. The ``Allow`` header indicates ``GET``.
    * - 500 Internal Server Error

@@ -78,6 +78,8 @@ Fehlerantwort
 
    * - Statuscode
      - Beschreibung
+   * - 401 Unauthorized
+     - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht-Einstellung aktiviert und anonymer Aufrufer). ``error.code`` ist ``auth_required``.
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde. Der ``Allow``-Header gibt ``GET`` an.
    * - 500 Internal Server Error
@@ -150,6 +152,8 @@ Fehlerantwort
 
    * - Statuscode
      - Beschreibung
+   * - 401 Unauthorized
+     - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht-Einstellung aktiviert und anonymer Aufrufer). ``error.code`` ist ``auth_required``.
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde. Der ``Allow``-Header gibt ``GET`` an.
    * - 500 Internal Server Error

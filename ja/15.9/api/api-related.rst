@@ -78,6 +78,8 @@ curlコマンドでのリクエスト例:
 
    * - ステータスコード
      - 説明
+   * - 401 Unauthorized
+     - 認証が必要な場合（ログイン必須設定が有効で匿名の呼び出し元）。 ``error.code`` は ``auth_required`` です。
    * - 405 Method Not Allowed
      - サポートされていない HTTP メソッドが指定された場合。 ``Allow`` ヘッダーに ``GET`` が示されます。
    * - 500 Internal Server Error
@@ -150,6 +152,8 @@ curlコマンドでのリクエスト例:
 
    * - ステータスコード
      - 説明
+   * - 401 Unauthorized
+     - 認証が必要な場合（ログイン必須設定が有効で匿名の呼び出し元）。 ``error.code`` は ``auth_required`` です。
    * - 405 Method Not Allowed
      - サポートされていない HTTP メソッドが指定された場合。 ``Allow`` ヘッダーに ``GET`` が示されます。
    * - 500 Internal Server Error

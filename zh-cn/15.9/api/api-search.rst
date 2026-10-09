@@ -50,15 +50,15 @@ HTTP 方法            GET
    * - ``as.*``
      - 高级搜索条件。任意 ``as.<name>``\ （例：\ ``as.q``\ 、\ ``as.filetype``\ ）均会传递给高级搜索条件构建器。每个 name 可重复指定。
    * - ``track_total_hits``
-     - 转发给搜索引擎，用于控制精确命中数统计（例：\ ``true`` 或整数阈值）。影响 ``record_count_relation`` 是 ``EQUAL_TO`` 还是 ``GREATER_THAN_OR_EQUAL_TO``\ 。
+     - 转发给搜索引擎，用于控制精确命中数统计（例：\ ``true`` 或整数阈值）。影响 ``record_count_relation`` 是 ``EQUAL_TO`` 还是 ``GREATER_THAN_OR_EQUAL_TO``\ 。不能指定 ``false`` ，否则会返回 ``invalid_request`` 。
    * - ``facet.field``
      - 分面字段。可重复指定（数组）。
    * - ``facet.query``
      - 分面查询。可重复指定（数组）。
    * - ``facet.size``
-     - 返回的分面词最大数量（integer）。
+     - 返回的分面词最大数量（integer， ``>=1`` ）。与 ``facet.field`` 或 ``facet.query`` 一起指定时，小于等于 ``0`` 的值和不是整数的值会返回 ``invalid_request`` （HTTP 400）。超过 ``query.facet.fields.size.max`` （默认值 ``1000`` ）的值会被静默截断。
    * - ``facet.minDocCount``
-     - 分面词所包含的最小文档数（integer）。
+     - 分面词所包含的最小文档数（integer）。与 ``facet.field`` 或 ``facet.query`` 一起指定时，不是整数的值会返回 ``invalid_request`` 。
    * - ``facet.sort``
      - 分面排序方式。
    * - ``facet.missing``
@@ -121,7 +121,8 @@ HTTP 方法            GET
         ],
         "facet_query": [
           { "value": "filetype:html", "count": 30 }
-        ]
+        ],
+        "permission_state": "RESOLVED"
       }
     }
 
@@ -180,8 +181,14 @@ HTTP 方法            GET
      - 仅在请求了分面字段时存在的数组。每个元素为 ``{name, result:[{value, count}]}``\ 。
    * - ``facet_query``
      - 仅在请求了分面查询时存在的数组。每个元素为 ``{value, count}``\ 。
+   * - ``permission_state``
+     - 执行搜索的用户的组和角色权限是否已解析完毕（ ``RESOLVED`` 、 ``PENDING`` 、 ``FAILED`` ）。 ``PENDING`` （解析中）和 ``FAILED`` （失败，或仅部分解析）表示该用户拥有的权限少于应有的权限，搜索结果中可能缺少本应可见的文档。访客为 ``RESOLVED`` 。
 
 表: 响应字段
+
+.. note::
+
+   当插件将搜索转到别处而不是执行搜索时（例如 DuckDuckGo 风格的 ``!g`` 等 bang），成功响应中只包含 ``q`` 和 ``redirect_url`` 。客户端应跳转到 ``redirect_url`` 。
 
 错误响应
 --------
@@ -194,11 +201,15 @@ HTTP 方法            GET
    * - 状态码
      - 说明
    * - 400 Bad Request
-     - 请求不合法时。
+     - 请求不合法时（例如查询不正确、 ``num`` 小于等于 ``0`` 、 ``facet.*`` 参数不正确、 ``track_total_hits=false`` 等）。
+   * - 401 Unauthorized
+     - 需要认证时（登录必需设置有效且调用方为匿名，或请求携带了未注册或已过期的访问令牌）。
    * - 405 Method Not Allowed
      - 不允许使用该 HTTP 方法时。
    * - 500 Internal Server Error
      - 发生服务器内部错误时。
+   * - 503 Service Unavailable
+     - 搜索引擎因处理能力不足而拒绝了此次搜索时（搜索引擎返回了 429 或 503）。 ``error.code`` 为 ``service_unavailable`` ，并附带指示等待秒数（ ``5`` ）的 ``Retry-After`` 头。查询本身没有问题，请稍等片刻后重试。
 
 表: 错误响应
 
@@ -214,7 +225,7 @@ HTTP 方法            GET
 ==================  ====================================================
 
 以 NDJSON（\ ``application/x-ndjson``\ ）流式传输所有匹配查询的文档。
-每行为 ``{"data":{...}}`` 对象，包含 ``QueryFieldConfig#isApiResponseField`` 允许的字段。
+每行为 ``{"data":{...}}`` 对象，包含 ``QueryFieldConfig#isApiResponseField`` 允许的字段。但与 ``GET /search`` 不同，不包含搜索得分 ``score`` 。
 
 当流中途失败时，最后一行会输出并刷新以下内容：
 
@@ -274,6 +285,8 @@ HTTP 方法            GET
      - 说明
    * - 400 Bad Request
      - 查询不合法、\ ``num <= 0``\ ，或 ``api.search.scroll=false`` 禁用了滚动搜索时。
+   * - 401 Unauthorized
+     - 需要认证时（登录必需设置有效且调用方为匿名，或请求携带了未注册或已过期的访问令牌）。
    * - 405 Method Not Allowed
      - 不允许使用该 HTTP 方法时。
    * - 500 Internal Server Error
