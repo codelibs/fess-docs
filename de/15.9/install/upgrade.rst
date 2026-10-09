@@ -1004,6 +1004,14 @@ Die Suchoberfläche sucht außerdem über ``/api/v2/search``, sodass eine Suche 
 wenn diese API aufgerufen wird, nicht wenn ``/search`` angefordert wird. Ein Client, der kein
 JavaScript ausführt, erhält die Seite ohne Ergebnisse.
 
+Das HTML der Suchoberfläche enthält ``X-Frame-Options: DENY`` und eine ``Content-Security-Policy`` mit
+``frame-ancestors 'none'``, sodass keine andere Seite es in einem Frame anzeigen kann. Die
+JSP-Suchoberfläche von 15.8 sendete ``X-Frame-Options: SAMEORIGIN`` (Standardwert von ``response.headers``)
+und ließ sich in einem ``iframe`` auf einer Seite desselben Origins anzeigen. Wenn Sie die Suchoberfläche in
+einem ``iframe`` desselben Origins eingebettet haben, setzen Sie ``theme.index.frame.ancestors`` in
+``fess_config.properties`` (Standard: ``'none'``) auf ``'self'``. Für die Einbettung von einem anderen
+Origin geben Sie stattdessen diesen Origin an (siehe :doc:`../dev/theme-development`).
+
 Die Seitengestaltung wurde entfernt
 -----------------------------------
 
@@ -1037,6 +1045,54 @@ jetzt wie die Suchoberfläche mit den Gastrollen. Um anonyme Benutzer von der Su
 setzen Sie ``login.required=true``. Zugriffstoken funktionieren wie bisher: Eine Anfrage mit einem
 registrierten Zugriffstoken erhält dessen Berechtigungen, eine Anfrage mit einem nicht registrierten
 oder abgelaufenen Token wird abgelehnt.
+
+.. _upgrade-159-api-requests:
+
+Anfragen, die die API jetzt ablehnt
+-----------------------------------
+
+15.9 lehnt die folgenden Anfragen ab, die 15.8 noch akzeptiert hat. Prüfen Sie die Clients und Skripte, die
+Sie für 15.8 geschrieben haben. Die Admin-API beantwortet eine Ablehnung mit HTTP ``400`` und ``status``
+``1`` im Body.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Anfrage
+     - Bis 15.8
+     - 15.9
+   * - ``/api/v2/search`` mit ``facet.field`` oder ``facet.query`` und einem ``facet.size`` von ``0`` oder weniger oder einem ``facet.size`` bzw. ``facet.minDocCount``, der keine ganze Zahl ist
+     - ``200``, aber ein leeres Ergebnis: ``record_count`` ist ``0`` und ``partial`` ist ``true``
+     - ``400`` (``invalid_request``). ``facet.size`` muss ``1`` oder größer sein
+   * - ``track_total_hits=false``. Ist ``query.track.total.hits`` auf ``false`` gesetzt, ist jede Suche betroffen
+     - ``200``, aber ohne Ergebnisse
+     - Die Suche wird abgelehnt (``/api/v2/search`` antwortet mit ``400`` und ``invalid_request``). ``true`` und positive ganze Zahlen funktionieren wie bisher
+   * - Ein Eintrag im Wörterbuch ``mapping`` oder ``kuromoji``, der einen vorhandenen Eintrag wiederholt und über die Admin-API angelegt oder geändert wird
+     - Wird gespeichert. Das Laden des Wörterbuchs schlägt danach fehl, wodurch die Suche ausfallen kann
+     - ``400``
+   * - Ein Eintrag im Wörterbuch ``kuromoji``, dessen ``token`` ein Leerzeichen enthält oder dessen ``segmentation`` und ``reading`` eine unterschiedliche Anzahl durch Leerzeichen getrennter Teile haben und der über die Admin-API angelegt oder geändert wird
+     - Wird gespeichert. Das Laden des Wörterbuchs schlägt auf dieselbe Weise fehl
+     - ``400``
+   * - ``DELETE /api/admin/searchlist/doc/{doc_id}``, das nichts löscht: eine ``doc_id``, die nicht existiert, oder ein Wert, der keine ``doc_id`` ist, etwa die ``_id`` aus der Dokumentliste
+     - ``200`` (``status`` ``0``); das Dokument wird nicht gelöscht
+     - ``400``
+   * - Ein Rollen- oder Gruppenname in ``roles`` oder ``groups`` eines Benutzers in der Admin-API
+     - Wird gespeichert, aber der Name wirkt nicht als Rolle. Bei manchen Namen schlägt das Lesen des Benutzers fehl
+     - ``400``. Geben Sie die ID der Rolle bzw. Gruppe an (das ``id`` aus ``GET /api/admin/role/settings`` und ``GET /api/admin/group/settings``)
+   * - Ein Benutzer in der Admin-API, dessen Passwort die Passwortrichtlinie verletzt (etwa ``password.min.length``, Standard ``8``); eine Anlage ohne Passwort; ein ``confirm_password``, das von ``password`` abweicht
+     - Wird gespeichert; der Benutzer kann sich mit diesem Passwort anmelden
+     - ``400``
+
+Die Zeilen von ``/api/v2/documents/all`` enthalten kein ``score`` mehr. Bis 15.8 hatte jedes Dokument seinen
+Suchscore; 15.9 durchläuft das gesamte Ergebnis mit einem Point in Time und ``search_after``, wodurch kein
+Score entsteht. ``/json?type=scroll`` und ``/api/v1/documents/all`` der Plugins für die alten APIs verhalten
+sich genauso. Ein Skript, das ``score`` liest, muss damit umgehen können, dass der Wert fehlt.
+
+Datei-Uploads der Admin-API (die sechs Wörterbücher, ``badword``, ``elevateword`` und ``storage``) werden
+per ``POST`` entgegengenommen. Die Dokumentation von 15.8 empfahl ``PUT``, doch ein ``PUT`` mit
+``multipart/form-data`` liefert die Datei nie an, sodass es in 15.8 wie in 15.9 mit dem Validierungsfehler
+fehlschlägt, dass die Datei erforderlich ist. Die ``PUT``-Endpunkte bleiben bestehen; verwenden Sie für
+Uploads ``POST``.
 
 ``search_engine.type=cloud`` ist veraltet
 -----------------------------------------
