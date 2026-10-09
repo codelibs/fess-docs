@@ -90,6 +90,8 @@ curl 명령으로 요청 예:
 
    * - 상태 코드
      - 설명
+   * - 401 Unauthorized
+     - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자이거나, 등록되지 않았거나 만료된 액세스 토큰이 포함된 요청). ``error.code`` 는 ``auth_required`` 입니다.
    * - 405 Method Not Allowed
      - GET 이외의 HTTP 메서드가 지정된 경우. ``error.code`` 는 ``method_not_allowed`` 이며, ``Allow: GET`` 헤더가 부여됩니다.
    * - 500 Internal Server Error

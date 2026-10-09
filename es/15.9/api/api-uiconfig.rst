@@ -36,6 +36,9 @@ En caso de éxito (HTTP 200, UiConfigResponse), se devuelve una respuesta con el
         "site_name": "Fess",
         "login_required": false,
         "locales": ["en", "ja"],
+        "ui_locale": "ja",
+        "default_label_values": [],
+        "default_sort": "",
         "theme": {
           "name": "default",
           "display_name": "Default Theme",
@@ -60,6 +63,8 @@ En caso de éxito (HTTP 200, UiConfigResponse), se devuelve una respuesta con el
           "eol_link": "",
           "installation_link": "https://fess.codelibs.org/15.9/install/",
           "login_link": true,
+          "sso_enabled": false,
+          "osdd_link": true,
           "rag_chat_enabled": false
         },
         "page_size_default": 20,
@@ -106,6 +111,15 @@ Los elementos de ``response`` son los siguientes. Todos los campos son obligator
    * - ``locales``
      - string[]
      - Array de configuraciones regionales disponibles.
+   * - ``ui_locale``
+     - string
+     - El idioma de visualización de la pantalla de búsqueda como etiqueta BCP 47 (por ejemplo, ``ja`` o ``pt-BR``). Se determina a partir del parámetro de solicitud ``browser_lang`` (una vez indicado, se recuerda en la sesión), después de la sesión y después del encabezado ``Accept-Language``. Vacío cuando no se puede determinar. No es lo mismo que ``locales``, que enumera los idiomas de búsqueda.
+   * - ``default_label_values``
+     - string[]
+     - Valores de etiqueta que la pantalla de búsqueda preselecciona. Para el usuario actual se toman de "Valor de etiqueta por defecto" en la página "General" de la pantalla de administración, incluidos los valores definidos por rol o grupo. Un array vacío cuando ``label_options`` está vacío. ``/api/v2/search`` no los aplica.
+   * - ``default_sort``
+     - string
+     - Valor de ordenación que la pantalla de búsqueda preselecciona. Para el usuario actual se toma de "Valor de ordenación por defecto" en la misma página. Vacío cuando no se aplica ninguno. ``/api/v2/search`` no lo aplica.
    * - ``theme``
      - object
      - Descriptor del tema activo. Consulte la tabla siguiente para más detalles.
@@ -235,8 +249,14 @@ Todos los campos son obligatorios.
      - string
      - URL resuelta de la guía de instalación. Cadena vacía si no se puede resolver.
    * - ``login_link``
+     - boolean o string
+     - Indica si se debe mostrar el enlace de inicio de sesión ("Mostrar enlace de inicio de sesión" en la página "General" de la pantalla de administración). Si el enlace está habilitado y el inicio de sesión se hace mediante SSO (``sso_enabled`` más abajo es ``true``), en lugar de un booleano se devuelve la cadena ``"sso/"``, una URL relativa a la URL base de la página.
+   * - ``sso_enabled``
      - boolean
-     - Si se debe mostrar el enlace de inicio de sesión.
+     - ``true`` cuando ``sso.type`` está definido y el plugin ``fess-sso-*`` que lo atiende está instalado.
+   * - ``osdd_link``
+     - boolean
+     - ``true`` cuando se sirve el documento de descripción de OpenSearch (``osdd``) (``osdd.link.enabled``; con ``auto`` no se sirve bajo SSO).
    * - ``rag_chat_enabled``
      - boolean
      - Si la función de chat RAG está disponible.

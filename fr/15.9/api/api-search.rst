@@ -50,15 +50,15 @@ Paramètres de requête
    * - ``as.*``
      - Conditions de recherche avancée. Tout paramètre ``as.<name>`` (ex. : ``as.q``, ``as.filetype``) est transmis au générateur de conditions de recherche avancée. Peut être répété pour chaque nom.
    * - ``track_total_hits``
-     - Transmis au moteur de recherche pour contrôler le comptage précis des résultats (ex. : ``true`` ou un seuil entier). Influence la valeur de ``record_count_relation`` (``EQUAL_TO`` ou ``GREATER_THAN_OR_EQUAL_TO``).
+     - Transmis au moteur de recherche pour contrôler le comptage précis des résultats (ex. : ``true`` ou un seuil entier). Influence la valeur de ``record_count_relation`` (``EQUAL_TO`` ou ``GREATER_THAN_OR_EQUAL_TO``). ``false`` n'est pas accepté et produit ``invalid_request``.
    * - ``facet.field``
      - Champ de facette. Peut être répété (tableau).
    * - ``facet.query``
      - Requête de facette. Peut être répété (tableau).
    * - ``facet.size``
-     - Nombre maximum de termes de facette à retourner (entier).
+     - Nombre maximum de termes de facette à retourner (entier, ``>=1``). Lorsqu'il est indiqué avec ``facet.field`` ou ``facet.query``, une valeur inférieure ou égale à ``0`` et une valeur qui n'est pas un entier produisent ``invalid_request`` (HTTP 400). Une valeur supérieure à ``query.facet.fields.size.max`` (``1000`` par défaut) est silencieusement plafonnée.
    * - ``facet.minDocCount``
-     - Nombre minimum de documents contenant un terme de facette (entier).
+     - Nombre minimum de documents contenant un terme de facette (entier). Lorsqu'il est indiqué avec ``facet.field`` ou ``facet.query``, une valeur qui n'est pas un entier produit ``invalid_request``.
    * - ``facet.sort``
      - Tri des facettes.
    * - ``facet.missing``
@@ -121,7 +121,8 @@ En cas de succès (200), les champs suivants sont retournés directement sous ``
         ],
         "facet_query": [
           { "value": "filetype:html", "count": 30 }
-        ]
+        ],
+        "permission_state": "RESOLVED"
       }
     }
 
@@ -180,8 +181,14 @@ Les détails de chaque champ sont les suivants.
      - Tableau présent uniquement si des facettes de champ ont été demandées. Chaque élément est de la forme ``{name, result:[{value, count}]}``.
    * - ``facet_query``
      - Tableau présent uniquement si des requêtes de facette ont été demandées. Chaque élément est de la forme ``{value, count}``.
+   * - ``permission_state``
+     - Indique si les permissions de groupe et de rôle de l'utilisateur qui recherche ont été résolues (``RESOLVED``, ``PENDING`` ou ``FAILED``). ``PENDING`` (encore en cours de résolution) et ``FAILED`` (échec, ou résolution partielle seulement) signifient que l'utilisateur a moins de permissions qu'il ne devrait, de sorte que les résultats peuvent omettre des documents qu'il devrait pouvoir voir. Un invité est ``RESOLVED``.
 
 Tableau : Champs de réponse
+
+.. note::
+
+   Lorsqu'un plugin envoie la recherche ailleurs au lieu de l'exécuter (par exemple un « bang » à la DuckDuckGo comme ``!g``), la réponse de succès ne contient que ``q`` et ``redirect_url``. Le client doit naviguer vers ``redirect_url``.
 
 Réponse d'erreur
 ~~~~~~~~~~~~~~~~
@@ -194,11 +201,15 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
    * - Code de statut
      - Description
    * - 400 Bad Request
-     - La requête est incorrecte.
+     - La requête est incorrecte (par exemple une requête de recherche invalide, ``num`` inférieur ou égal à ``0``, un paramètre ``facet.*`` invalide ou ``track_total_hits=false``).
+   * - 401 Unauthorized
+     - Authentification requise (connexion obligatoire activée avec un appelant anonyme, ou requête portant un jeton d'accès non enregistré ou expiré).
    * - 405 Method Not Allowed
      - La méthode HTTP n'est pas autorisée.
    * - 500 Internal Server Error
      - Une erreur interne s'est produite sur le serveur.
+   * - 503 Service Unavailable
+     - Le moteur de recherche a refusé la recherche faute de capacité (il a répondu 429 ou 503). ``error.code`` vaut ``service_unavailable`` et un en-tête ``Retry-After`` indique le nombre de secondes à attendre (``5``). La requête elle-même est correcte : réessayez après une courte attente.
 
 Tableau : Réponses d'erreur
 
@@ -214,7 +225,7 @@ Point de terminaison  ``/api/v2/documents/all``
 ====================  ====================================================
 
 Diffuse en continu tous les documents correspondant à la requête au format NDJSON (``application/x-ndjson``).
-Chaque ligne est un objet ``{"data":{...}}`` contenant les champs autorisés par ``QueryFieldConfig#isApiResponseField``.
+Chaque ligne est un objet ``{"data":{...}}`` contenant les champs autorisés par ``QueryFieldConfig#isApiResponseField``. Contrairement à ``GET /search``, le score de recherche ``score`` n'est pas inclus.
 
 En cas d'échec en cours de stream, la ligne finale sera la suivante.
 
@@ -274,6 +285,8 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
      - Description
    * - 400 Bad Request
      - Requête incorrecte, ``num <= 0``, ou recherche par défilement désactivée (``api.search.scroll=false``).
+   * - 401 Unauthorized
+     - Authentification requise (connexion obligatoire activée avec un appelant anonyme, ou requête portant un jeton d'accès non enregistré ou expiré).
    * - 405 Method Not Allowed
      - La méthode HTTP n'est pas autorisée.
    * - 500 Internal Server Error

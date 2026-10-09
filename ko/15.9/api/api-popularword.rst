@@ -88,6 +88,8 @@ curl 명령으로 요청 예:
      - 설명
    * - 400 Bad Request
      - 요청이 잘못된 경우 ( ``web.api.popularword=false`` 로 기능이 비활성화된 경우 포함). ``error.code`` 는 ``invalid_request`` 입니다.
+   * - 401 Unauthorized
+     - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자이거나, 등록되지 않았거나 만료된 액세스 토큰이 포함된 요청). ``error.code`` 는 ``auth_required`` 입니다.
    * - 405 Method Not Allowed
      - 지원되지 않는 HTTP 메서드가 지정된 경우.
    * - 500 Internal Server Error

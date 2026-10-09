@@ -74,6 +74,9 @@ Alle Array-Felder sind nicht-null; bei fehlenden Werten wird ein leeres Array zu
    * - ``admin``
      - boolean
      - Wird ``true``, wenn der Benutzer eine der konfigurierten ``authentication.admin.roles`` besitzt. Steuert die Anzeige des Menüpunkts „Verwaltung" in der SPA. (Pflichtfeld)
+   * - ``permission_state``
+     - string
+     - Ob die Gruppen- und Rollenberechtigungen des Benutzers aufgelöst sind (``RESOLVED``, ``PENDING`` oder ``FAILED``). ``PENDING`` (wird noch aufgelöst) und ``FAILED`` (fehlgeschlagen oder nur teilweise aufgelöst) bedeuten, dass der Benutzer weniger Berechtigungen hat, als er haben sollte, sodass bei einer Suche Dokumente fehlen können, die er sehen dürfte. (Pflichtfeld)
 
 Authentifizierungsstatus abrufen
 ================================
@@ -109,7 +112,8 @@ Bei Erfolg (HTTP 200) wird eine Antwort im gemeinsamen Envelope-Format zurückge
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         }
       }
     }
@@ -238,7 +242,8 @@ Bei Erfolg (HTTP 200, LoginResponse) wird eine Antwort im gemeinsamen Envelope-F
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         },
         "csrf_token": "0c1f2e3d4a5b6c7d8e9f",
         "return_to": "/search"

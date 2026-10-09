@@ -50,15 +50,15 @@ HTTP 메서드          GET
    * - ``as.*``
      - 고급 검색 조건. 임의의 ``as.<name>`` (예: ``as.q`` , ``as.filetype`` ) 이 고급 검색 조건 빌더에 전달됩니다. name 별로 반복 지정 가능합니다.
    * - ``track_total_hits``
-     - 검색 엔진에 전달되어 정확한 히트 수 계산을 제어합니다 (예: ``true`` 또는 정수 임계값). ``record_count_relation`` 이 ``EQUAL_TO`` 인지 ``GREATER_THAN_OR_EQUAL_TO`` 인지에 영향을 줍니다.
+     - 검색 엔진에 전달되어 정확한 히트 수 계산을 제어합니다 (예: ``true`` 또는 정수 임계값). ``record_count_relation`` 이 ``EQUAL_TO`` 인지 ``GREATER_THAN_OR_EQUAL_TO`` 인지에 영향을 줍니다. ``false`` 는 지정할 수 없으며 ``invalid_request`` 가 됩니다.
    * - ``facet.field``
      - 패싯 필드. 반복 지정 가능 (배열).
    * - ``facet.query``
      - 패싯 쿼리. 반복 지정 가능 (배열).
    * - ``facet.size``
-     - 반환할 패싯 단어의 최대 수 (integer).
+     - 반환할 패싯 단어의 최대 수 (integer, ``>=1`` ). ``facet.field`` 또는 ``facet.query`` 와 함께 지정했을 때 ``0`` 이하의 값과 정수가 아닌 값은 ``invalid_request`` (HTTP 400) 가 됩니다. ``query.facet.fields.size.max`` (기본값 ``1000`` ) 를 초과하는 값은 조용히 상한으로 제한됩니다.
    * - ``facet.minDocCount``
-     - 패싯 단어가 포함된 최소 문서 수 (integer).
+     - 패싯 단어가 포함된 최소 문서 수 (integer). ``facet.field`` 또는 ``facet.query`` 와 함께 지정했을 때 정수가 아닌 값은 ``invalid_request`` 가 됩니다.
    * - ``facet.sort``
      - 패싯 정렬.
    * - ``facet.missing``
@@ -121,7 +121,8 @@ HTTP 메서드          GET
         ],
         "facet_query": [
           { "value": "filetype:html", "count": 30 }
-        ]
+        ],
+        "permission_state": "RESOLVED"
       }
     }
 
@@ -180,8 +181,14 @@ HTTP 메서드          GET
      - 패싯 필드가 요청된 경우에만 존재하는 배열. 각 요소는 ``{name, result:[{value, count}]}`` .
    * - ``facet_query``
      - 패싯 쿼리가 요청된 경우에만 존재하는 배열. 각 요소는 ``{value, count}`` .
+   * - ``permission_state``
+     - 검색한 사용자의 그룹・롤 권한이 어디까지 확정되었는지 (``RESOLVED``, ``PENDING``, ``FAILED`` 중 하나). ``PENDING`` (확정 중) 과 ``FAILED`` (실패 또는 일부만 확정) 는 사용자가 본래보다 적은 권한만 가지고 있어, 검색 결과에 본래 보여야 할 문서가 빠질 수 있음을 나타냅니다. 게스트는 ``RESOLVED`` 입니다.
 
 표: 응답 필드
+
+.. note::
+
+   플러그인이 검색을 실행하는 대신 다른 곳으로 보내는 경우 (예: DuckDuckGo 형식의 ``!g`` 같은 뱅), 성공 응답에는 ``q`` 와 ``redirect_url`` 만 포함됩니다. 클라이언트는 ``redirect_url`` 로 이동해야 합니다.
 
 오류 응답
 ---------
@@ -194,11 +201,15 @@ HTTP 메서드          GET
    * - 상태 코드
      - 설명
    * - 400 Bad Request
-     - 요청이 잘못된 경우.
+     - 요청이 잘못된 경우 (잘못된 쿼리, ``0`` 이하의 ``num``, 잘못된 ``facet.*`` 파라미터, ``track_total_hits=false`` 등).
+   * - 401 Unauthorized
+     - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자이거나, 등록되지 않았거나 만료된 액세스 토큰이 포함된 요청).
    * - 405 Method Not Allowed
      - HTTP 메서드가 허용되지 않는 경우.
    * - 500 Internal Server Error
      - 서버 내부 오류가 발생한 경우.
+   * - 503 Service Unavailable
+     - 검색 엔진이 처리 능력 부족으로 검색을 거부한 경우 (검색 엔진이 429 또는 503 을 반환했을 때). ``error.code`` 는 ``service_unavailable`` 이며, 기다려야 할 초 수 (``5`` ) 를 나타내는 ``Retry-After`` 헤더가 붙습니다. 쿼리 자체에는 문제가 없으므로 잠시 후 다시 시도하십시오.
 
 표: 오류 응답
 
@@ -214,7 +225,7 @@ HTTP 메서드          GET
 ==================  ====================================================
 
 쿼리에 일치하는 모든 문서를 NDJSON ( ``application/x-ndjson`` ) 으로 스트림 배신합니다.
-각 행은 ``{"data":{...}}`` 객체로, ``QueryFieldConfig#isApiResponseField`` 가 허용하는 필드를 포함합니다.
+각 행은 ``{"data":{...}}`` 객체로, ``QueryFieldConfig#isApiResponseField`` 가 허용하는 필드를 포함합니다. ``GET /search`` 와 달리 검색 점수 ``score`` 는 포함되지 않습니다.
 
 스트림 도중에 실패한 경우에는 마지막 행에 다음 행을 출력하고 플러시합니다.
 
@@ -274,6 +285,8 @@ HTTP 메서드          GET
      - 설명
    * - 400 Bad Request
      - 잘못된 쿼리, ``num <= 0`` , 또는 ``api.search.scroll=false`` 로 스크롤 검색이 비활성화된 경우.
+   * - 401 Unauthorized
+     - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자이거나, 등록되지 않았거나 만료된 액세스 토큰이 포함된 요청).
    * - 405 Method Not Allowed
      - HTTP 메서드가 허용되지 않는 경우.
    * - 500 Internal Server Error

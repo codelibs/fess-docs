@@ -94,6 +94,8 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
      - Descripción
    * - 400 Bad Request
      - El cuerpo de la solicitud no es JSON válido, o ``doc_id`` está ausente o no coincide con el patrón.
+   * - 401 Unauthorized
+     - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo).
    * - 403 Forbidden
      - Cuando no está permitido por ausencia o expiración del token CSRF, entre otros motivos.
    * - 404 Not Found

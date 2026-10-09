@@ -36,6 +36,9 @@ Bei Erfolg (HTTP 200, UiConfigResponse) wird eine Antwort im gemeinsamen Envelop
         "site_name": "Fess",
         "login_required": false,
         "locales": ["en", "ja"],
+        "ui_locale": "ja",
+        "default_label_values": [],
+        "default_sort": "",
         "theme": {
           "name": "default",
           "display_name": "Default Theme",
@@ -60,6 +63,8 @@ Bei Erfolg (HTTP 200, UiConfigResponse) wird eine Antwort im gemeinsamen Envelop
           "eol_link": "",
           "installation_link": "https://fess.codelibs.org/15.9/install/",
           "login_link": true,
+          "sso_enabled": false,
+          "osdd_link": true,
           "rag_chat_enabled": false
         },
         "page_size_default": 20,
@@ -106,6 +111,15 @@ Die einzelnen Elemente von ``response`` sind wie folgt beschrieben. Alle Felder 
    * - ``locales``
      - string[]
      - Array der verfügbaren Gebietsschemas.
+   * - ``ui_locale``
+     - string
+     - Die Anzeigesprache der Suchoberfläche als BCP-47-Tag (zum Beispiel ``ja`` oder ``pt-BR``). Sie wird aus dem Anfrageparameter ``browser_lang`` (einmal angegeben, wird er in der Sitzung gemerkt), dann aus der Sitzung und dann aus dem Header ``Accept-Language`` bestimmt. Leer, wenn sie sich nicht bestimmen lässt. Nicht zu verwechseln mit ``locales``, das die Suchsprachen auflistet.
+   * - ``default_label_values``
+     - string[]
+     - Labelwerte, die die Suchoberfläche vorauswählt. Für den aktuellen Benutzer stammen sie aus „Standard-Labelwert“ auf der Seite „Allgemein“ der Verwaltungsoberfläche, einschließlich der Werte je Rolle oder Gruppe. Ein leeres Array, wenn ``label_options`` leer ist. ``/api/v2/search`` wendet sie nicht an.
+   * - ``default_sort``
+     - string
+     - Sortierwert, den die Suchoberfläche vorauswählt. Für den aktuellen Benutzer stammt er aus „Standard-Sortierwert“ auf derselben Seite. Leer, wenn keiner zutrifft. ``/api/v2/search`` wendet ihn nicht an.
    * - ``theme``
      - object
      - Aktiver Theme-Deskriptor. Siehe nachfolgende Tabelle.
@@ -235,8 +249,14 @@ Alle Felder sind Pflichtfelder.
      - string
      - Aufgelöste Installationsanleitungs-URL. Leere Zeichenkette, wenn die URL nicht aufgelöst werden konnte.
    * - ``login_link``
+     - boolean oder string
+     - Ob der Anmeldelink angezeigt werden soll („Anmeldelink anzeigen“ auf der Seite „Allgemein“ der Verwaltungsoberfläche). Ist der Link aktiviert und erfolgt die Anmeldung über SSO (``sso_enabled`` unten ist ``true``), wird statt eines booleschen Werts der String ``"sso/"`` zurückgegeben, eine URL relativ zur Basis-URL der Seite.
+   * - ``sso_enabled``
      - boolean
-     - Gibt an, ob der Anmelde-Link angezeigt werden soll.
+     - ``true``, wenn ``sso.type`` gesetzt und das zuständige ``fess-sso-*``-Plugin installiert ist.
+   * - ``osdd_link``
+     - boolean
+     - ``true``, wenn das OpenSearch-Beschreibungsdokument (``osdd``) bereitgestellt wird (``osdd.link.enabled``; bei ``auto`` wird es unter SSO nicht bereitgestellt).
    * - ``rag_chat_enabled``
      - boolean
      - Gibt an, ob die RAG-Chat-Funktion verfügbar ist.

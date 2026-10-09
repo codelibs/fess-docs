@@ -94,6 +94,8 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
      - Beschreibung
    * - 400 Bad Request
      - Der Anfrage-Body ist kein gültiges JSON, oder ``doc_id`` fehlt bzw. entspricht nicht dem Muster.
+   * - 401 Unauthorized
+     - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht-Einstellung aktiviert und anonymer Aufrufer).
    * - 403 Forbidden
      - Wenn die Anfrage aufgrund eines fehlenden oder abgelaufenen CSRF-Tokens nicht erlaubt ist.
    * - 404 Not Found

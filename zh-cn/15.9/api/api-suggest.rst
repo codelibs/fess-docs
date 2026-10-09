@@ -37,7 +37,7 @@ HTTP 方法            GET
    * - q
      - 用于建议的搜索词（前缀）。如果省略，则不进行前缀过滤，直接返回建议词。（例）\ ``q=fes``
    * - num
-     - 建议词的数量（0 以上的整数）。默认值 ``10``\ 。如果指定了非数值，则使用默认值。（例）\ ``num=20``
+     - 建议词的最大数量（1 以上的整数）。默认值 ``10``\ 。小于等于 0 时返回 ``invalid_request``\ （HTTP 400）。超过 ``paging.search.page.max.size``\ （默认值 ``100``\ ）的值会被限制为该值。如果指定了非数值，则使用默认值。（例）\ ``num=20``
    * - fn
      - 限定建议范围的字段名。可重复指定，以数组形式处理。（例）\ ``fn=content&fn=title``
    * - lang
@@ -83,7 +83,7 @@ HTTP 方法            GET
    * - q
      - 请求的搜索词（字符串）。省略 ``q`` 时返回空字符串。
    * - page_size
-     - 请求的建议词数量（\ ``num`` 的值，整数）。
+     - 实际返回的建议词数量（\ ``suggest_words`` 的元素个数）。它不是 ``num`` 的值，可能小于 ``num``\ 。
    * - record_count
      - 建议词的匹配总数（64 位整数）。
    * - query_time
@@ -119,6 +119,10 @@ HTTP 方法            GET
 
    * - 状态码
      - 说明
+   * - 400 Bad Request
+     - ``num`` 小于等于 ``0`` 时。 ``error.code`` 为 ``invalid_request``\ 。
+   * - 401 Unauthorized
+     - 需要认证时（登录必需设置有效且调用方为匿名，或请求携带了未注册或已过期的访问令牌）。
    * - 405 Method Not Allowed
      - 指定了不支持的 HTTP 方法时。\ ``Allow`` 头中会指示 ``GET``\ 。
    * - 500 Internal Server Error

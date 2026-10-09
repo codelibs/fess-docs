@@ -78,6 +78,8 @@ curl 명령으로 요청 예:
 
    * - 상태 코드
      - 설명
+   * - 401 Unauthorized
+     - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자). ``error.code`` 는 ``auth_required`` 입니다.
    * - 405 Method Not Allowed
      - 지원되지 않는 HTTP 메서드가 지정된 경우. ``Allow`` 헤더에 ``GET`` 이 표시됩니다.
    * - 500 Internal Server Error
@@ -150,6 +152,8 @@ curl 명령으로 요청 예:
 
    * - 상태 코드
      - 설명
+   * - 401 Unauthorized
+     - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자). ``error.code`` 는 ``auth_required`` 입니다.
    * - 405 Method Not Allowed
      - 지원되지 않는 HTTP 메서드가 지정된 경우. ``Allow`` 헤더에 ``GET`` 이 표시됩니다.
    * - 500 Internal Server Error

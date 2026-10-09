@@ -90,6 +90,8 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
 
    * - Statuscode
      - Beschreibung
+   * - 401 Unauthorized
+     - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht aktiviert und anonymer Aufrufer, oder die Anfrage enthält ein nicht registriertes oder abgelaufenes Zugriffstoken). ``error.code`` ist ``auth_required``.
    * - 405 Method Not Allowed
      - Wenn eine andere HTTP-Methode als GET angegeben wurde. ``error.code`` ist ``method_not_allowed`` und der ``Allow: GET``-Header wird beigefügt.
    * - 500 Internal Server Error

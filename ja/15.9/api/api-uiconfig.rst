@@ -36,6 +36,9 @@ SPA が必要とする初期設定を返します。
         "site_name": "Fess",
         "login_required": false,
         "locales": ["en", "ja"],
+        "ui_locale": "ja",
+        "default_label_values": [],
+        "default_sort": "",
         "theme": {
           "name": "default",
           "display_name": "Default Theme",
@@ -60,6 +63,8 @@ SPA が必要とする初期設定を返します。
           "eol_link": "",
           "installation_link": "https://fess.codelibs.org/15.9/install/",
           "login_link": true,
+          "sso_enabled": false,
+          "osdd_link": true,
           "rag_chat_enabled": false
         },
         "page_size_default": 20,
@@ -106,6 +111,15 @@ SPA が必要とする初期設定を返します。
    * - ``locales``
      - string[]
      - 利用可能なロケールの配列。
+   * - ``ui_locale``
+     - string
+     - 検索画面を表示する言語を BCP 47 のタグ（例: ``ja`` ・ ``pt-BR`` ）で表したもの。リクエストパラメーター ``browser_lang`` （指定するとセッションに記憶されます）、セッション、 ``Accept-Language`` ヘッダーの順に決まります。決められないときは空文字列です。検索言語の一覧である ``locales`` とは別のものです。
+   * - ``default_label_values``
+     - string[]
+     - 検索画面があらかじめ選択するラベルの値。管理画面「システム」→「全般」の「デフォルトのラベル値」から、ロールやグループごとの指定を含めて、このユーザーに該当する値を返します。 ``label_options`` が空のときは空配列です。 ``/api/v2/search`` はこの値を適用しません。
+   * - ``default_sort``
+     - string
+     - 検索画面があらかじめ選択するソート値。「デフォルトのソート値」から、このユーザーに該当する値を返します。該当するものがないときは空文字列です。 ``/api/v2/search`` はこの値を適用しません。
    * - ``theme``
      - object
      - アクティブなテーマ記述子。詳細は後述の表を参照してください。
@@ -235,8 +249,14 @@ features
      - string
      - 解決済みのインストールガイド URL。解決できないときは空文字列です。
    * - ``login_link``
+     - boolean または string
+     - ログインリンクを表示すべきかどうか（管理画面「システム」→「全般」の「ログインリンク表示」）。このリンクが有効で、SSO でログインする構成（下の ``sso_enabled`` が ``true`` ）のときは、真偽値の代わりに、ページのベース URL からの相対 URL を表す文字列 ``"sso/"`` が返ります。
+   * - ``sso_enabled``
      - boolean
-     - ログインリンクを表示すべきかどうか。
+     - ``sso.type`` が設定され、それを扱う ``fess-sso-*`` プラグインが導入されているとき ``true`` になります。
+   * - ``osdd_link``
+     - boolean
+     - OpenSearch の記述ドキュメント（ ``osdd`` ）を提供しているとき ``true`` になります（ ``osdd.link.enabled`` 。 ``auto`` では SSO 利用時は提供されません）。
    * - ``rag_chat_enabled``
      - boolean
      - RAG チャット機能が利用可能かどうか。

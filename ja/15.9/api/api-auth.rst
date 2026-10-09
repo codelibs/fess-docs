@@ -74,6 +74,9 @@ CSRF トークンの取得方法やローテーションの仕組み、共通の
    * - ``admin``
      - boolean
      - ユーザーが、設定済みの ``authentication.admin.roles`` のいずれかを持つとき ``true`` になります。SPA の「Administration」項目の表示を制御します。（必須）
+   * - ``permission_state``
+     - string
+     - ユーザーのグループ・ロールの権限がどこまで解決されているか（ ``RESOLVED`` ・ ``PENDING`` ・ ``FAILED`` ）。 ``PENDING`` （解決中）と ``FAILED`` （失敗、または一部のみ解決）は、ユーザーが本来より少ない権限しか持たず、検索で本来見えるはずの文書が見えない可能性があることを示します。（必須）
 
 認証状態の取得
 ============
@@ -109,7 +112,8 @@ HTTPメソッド         GET
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         }
       }
     }
@@ -238,7 +242,8 @@ Content-Type は ``application/json`` （文字コードは UTF-8）です。リ
           "groups": [],
           "permissions": ["1taro"],
           "editable": true,
-          "admin": true
+          "admin": true,
+          "permission_state": "RESOLVED"
         },
         "csrf_token": "0c1f2e3d4a5b6c7d8e9f",
         "return_to": "/search"

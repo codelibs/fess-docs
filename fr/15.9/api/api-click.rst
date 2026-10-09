@@ -94,6 +94,8 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
      - Description
    * - 400 Bad Request
      - Le corps de la requête n'est pas un JSON valide, ou ``doc_id`` est absent ou ne correspond pas au motif.
+   * - 401 Unauthorized
+     - Authentification requise (connexion obligatoire activée avec un appelant anonyme).
    * - 403 Forbidden
      - Non autorisé (jeton CSRF manquant ou expiré, etc.).
    * - 404 Not Found

@@ -90,6 +90,8 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
 
    * - Código de estado
      - Descripción
+   * - 401 Unauthorized
+     - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo, o la solicitud lleva un token de acceso no registrado o caducado). ``error.code`` es ``auth_required``.
    * - 405 Method Not Allowed
      - Se especificó un método HTTP distinto de GET. El ``error.code`` es ``method_not_allowed`` y la respuesta incluye la cabecera ``Allow: GET``.
    * - 500 Internal Server Error

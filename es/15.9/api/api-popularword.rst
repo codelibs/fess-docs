@@ -88,6 +88,8 @@ Si la API de palabras populares falla, se devuelve el sobre de error común. Con
      - Descripción
    * - 400 Bad Request
      - Cuando la solicitud no es válida (incluye el caso en que la funcionalidad está deshabilitada con ``web.api.popularword=false``). El ``error.code`` es ``invalid_request``.
+   * - 401 Unauthorized
+     - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo, o la solicitud lleva un token de acceso no registrado o caducado). ``error.code`` es ``auth_required``.
    * - 405 Method Not Allowed
      - Cuando se especifica un método HTTP no admitido.
    * - 500 Internal Server Error

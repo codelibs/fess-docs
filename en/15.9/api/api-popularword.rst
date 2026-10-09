@@ -88,6 +88,8 @@ When the Popular Words API fails, a common error envelope is returned. For detai
      - Description
    * - 400 Bad Request
      - The request is invalid (including when the feature is disabled with ``web.api.popularword=false``). The ``error.code`` is ``invalid_request``.
+   * - 401 Unauthorized
+     - Authentication is required (the login-required setting is enabled with an anonymous caller, or the request carries an access token that is not registered or has expired). ``error.code`` is ``auth_required``.
    * - 405 Method Not Allowed
      - An unsupported HTTP method was specified.
    * - 500 Internal Server Error

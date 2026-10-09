@@ -36,6 +36,9 @@ HTTP 方法            GET
         "site_name": "Fess",
         "login_required": false,
         "locales": ["en", "ja"],
+        "ui_locale": "ja",
+        "default_label_values": [],
+        "default_sort": "",
         "theme": {
           "name": "default",
           "display_name": "Default Theme",
@@ -60,6 +63,8 @@ HTTP 方法            GET
           "eol_link": "",
           "installation_link": "https://fess.codelibs.org/15.9/install/",
           "login_link": true,
+          "sso_enabled": false,
+          "osdd_link": true,
           "rag_chat_enabled": false
         },
         "page_size_default": 20,
@@ -106,6 +111,15 @@ HTTP 方法            GET
    * - ``locales``
      - string[]
      - 可用的语言区域数组。
+   * - ``ui_locale``
+     - string
+     - 以 BCP 47 标签（例如 ``ja`` 、 ``pt-BR`` ）表示的搜索界面显示语言。按请求参数 ``browser_lang`` （指定后会记在会话中）、会话、 ``Accept-Language`` 头的顺序确定。无法确定时为空字符串。它与列出搜索语言的 ``locales`` 不同。
+   * - ``default_label_values``
+     - string[]
+     - 搜索界面预先选中的标签值。针对当前用户，取自管理界面「常规」页面中的「默认标签值」（包含按角色或组指定的值）。 ``label_options`` 为空时为空数组。 ``/api/v2/search`` 不会应用这些值。
+   * - ``default_sort``
+     - string
+     - 搜索界面预先选中的排序值。针对当前用户，取自同一页面中的「默认排序值」。没有适用的值时为空字符串。 ``/api/v2/search`` 不会应用该值。
    * - ``theme``
      - object
      - 当前活动主题描述符。详见下方表格。
@@ -235,8 +249,14 @@ features
      - string
      - 已解析的安装指南 URL。无法解析时为空字符串。
    * - ``login_link``
+     - boolean 或 string
+     - 是否应显示登录链接（管理界面「常规」页面中的「显示登录链接」）。该链接有效且通过 SSO 登录时（下面的 ``sso_enabled`` 为 ``true`` ），返回的不是布尔值，而是字符串 ``"sso/"`` （相对于页面基准 URL 的相对 URL）。
+   * - ``sso_enabled``
      - boolean
-     - 是否应显示登录链接。
+     - 设置了 ``sso.type`` 且已安装处理它的 ``fess-sso-*`` 插件时为 ``true`` 。
+   * - ``osdd_link``
+     - boolean
+     - 提供 OpenSearch 描述文档（ ``osdd`` ）时为 ``true`` （ ``osdd.link.enabled`` ；设为 ``auto`` 时，使用 SSO 则不提供）。
    * - ``rag_chat_enabled``
      - boolean
      - RAG 聊天功能是否可用。

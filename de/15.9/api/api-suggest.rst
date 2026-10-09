@@ -37,7 +37,7 @@ Die verfügbaren Anfrageparameter sind wie folgt:
    * - q
      - Suchbegriff (Präfix) für den Vorschlag. Wenn nicht angegeben, werden Vorschlagswörter ohne Präfixfilterung zurückgegeben. (Beispiel) ``q=fes``
    * - num
-     - Anzahl der vorgeschlagenen Wörter (ganze Zahl >= 0). Standard ``10``. Bei Angabe eines nicht-numerischen Werts wird der Standardwert verwendet. (Beispiel) ``num=20``
+     - Maximale Anzahl der vorgeschlagenen Wörter (ganze Zahl >= 1). Standard ``10``. Ein Wert von ``0`` oder weniger führt zu ``invalid_request`` (HTTP 400). Ein Wert über ``paging.search.page.max.size`` (Standard ``100``) wird darauf begrenzt. Bei Angabe eines nicht-numerischen Werts wird der Standardwert verwendet. (Beispiel) ``num=20``
    * - fn
      - Feldname zur Eingrenzung der Vorschlagsziele. Kann mehrfach angegeben werden (Array). (Beispiel) ``fn=content&fn=title``
    * - lang
@@ -83,7 +83,7 @@ Die einzelnen Elemente von ``response`` sind wie folgt beschrieben:
    * - q
      - Angefragter Suchbegriff (Zeichenkette). Gibt eine leere Zeichenkette zurück, wenn ``q`` nicht angegeben wurde.
    * - page_size
-     - Angefragte Anzahl der Vorschlagswörter (der Wert von ``num``, ganze Zahl).
+     - Anzahl der tatsächlich zurückgegebenen Vorschlagswörter (Anzahl der Elemente in ``suggest_words``). Das ist nicht der Wert von ``num`` und kann kleiner sein.
    * - record_count
      - Gesamtanzahl der übereinstimmenden Vorschlagswörter (64-Bit-Ganzzahl).
    * - query_time
@@ -119,6 +119,10 @@ Wenn die Vorschlags-API fehlschlägt, wird der gemeinsame Fehler-Envelope zurüc
 
    * - Statuscode
      - Beschreibung
+   * - 400 Bad Request
+     - Wenn ``num`` ``0`` oder weniger ist. ``error.code`` ist ``invalid_request``.
+   * - 401 Unauthorized
+     - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht aktiviert und anonymer Aufrufer, oder die Anfrage enthält ein nicht registriertes oder abgelaufenes Zugriffstoken).
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde. Der ``Allow``-Header gibt ``GET`` an.
    * - 500 Internal Server Error

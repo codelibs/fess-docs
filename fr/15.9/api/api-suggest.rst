@@ -37,7 +37,7 @@ Les paramètres de requête disponibles sont les suivants.
    * - q
      - Terme de recherche (préfixe) pour la suggestion. Si omis, les mots suggérés sont retournés sans filtrage par préfixe. (Ex.) ``q=fes``
    * - num
-     - Nombre de mots suggérés (entier >= 0). Valeur par défaut ``10``. Si une valeur non numérique est spécifiée, la valeur par défaut est utilisée. (Ex.) ``num=20``
+     - Nombre maximum de mots suggérés (entier >= 1). Valeur par défaut ``10``. Une valeur inférieure ou égale à ``0`` produit ``invalid_request`` (HTTP 400). Une valeur supérieure à ``paging.search.page.max.size`` (``100`` par défaut) est plafonnée à cette valeur. Si une valeur non numérique est spécifiée, la valeur par défaut est utilisée. (Ex.) ``num=20``
    * - fn
      - Nom de champ pour affiner les cibles de suggestion. Peut être répété pour être traité comme un tableau. (Ex.) ``fn=content&fn=title``
    * - lang
@@ -83,7 +83,7 @@ Les détails de chaque élément de ``response`` sont les suivants.
    * - q
      - Terme de recherche demandé (chaîne de caractères). Retourne une chaîne vide lorsque ``q`` est omis.
    * - page_size
-     - Nombre de mots suggérés demandés (valeur de ``num``, entier).
+     - Nombre de mots suggérés effectivement retournés (nombre d'éléments de ``suggest_words``). Ce n'est pas la valeur de ``num`` et il peut être inférieur.
    * - record_count
      - Nombre total de mots suggérés correspondants (entier 64 bits).
    * - query_time
@@ -119,6 +119,10 @@ En cas d'échec de l'API de suggestions, l'enveloppe d'erreur commune est retour
 
    * - Code de statut
      - Description
+   * - 400 Bad Request
+     - ``num`` est inférieur ou égal à ``0``. ``error.code`` vaut ``invalid_request``.
+   * - 401 Unauthorized
+     - Authentification requise (connexion obligatoire activée avec un appelant anonyme, ou requête portant un jeton d'accès non enregistré ou expiré).
    * - 405 Method Not Allowed
      - Une méthode HTTP non prise en charge a été spécifiée. L'en-tête ``Allow`` indique ``GET``.
    * - 500 Internal Server Error

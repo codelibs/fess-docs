@@ -78,6 +78,8 @@ Error Response
 
    * - Status Code
      - Description
+   * - 401 Unauthorized
+     - Authentication is required (the login-required setting is enabled with an anonymous caller). ``error.code`` is ``auth_required``.
    * - 405 Method Not Allowed
      - An unsupported HTTP method was specified. The ``Allow`` header indicates ``GET``.
    * - 500 Internal Server Error
@@ -150,6 +152,8 @@ Error Response
 
    * - Status Code
      - Description
+   * - 401 Unauthorized
+     - Authentication is required (the login-required setting is enabled with an anonymous caller). ``error.code`` is ``auth_required``.
    * - 405 Method Not Allowed
      - An unsupported HTTP method was specified. The ``Allow`` header indicates ``GET``.
    * - 500 Internal Server Error
