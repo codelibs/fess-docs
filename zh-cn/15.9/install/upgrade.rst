@@ -913,6 +913,8 @@ SMB 爬取一直以 jcifs 的默认值运行。15.9 传递新名称：
 搜索界面也通过 ``/api/v2/search`` 进行搜索，因此搜索日志是在调用该 API 时记录的，而不是在请求
 ``/search`` 时记录。不执行 JavaScript 的客户端会收到没有搜索结果的页面。
 
+搜索界面的 HTML 带有 ``X-Frame-Options: DENY``，以及包含 ``frame-ancestors 'none'`` 的 ``Content-Security-Policy`` ，因此其他页面无法将它放入框架中显示。15.8 的 JSP 搜索界面按 ``response.headers`` 的默认值发送 ``X-Frame-Options: SAMEORIGIN`` ，可以显示在同源页面的 ``iframe`` 中。如果已将搜索界面嵌入同源的 ``iframe`` ，请在 ``fess_config.properties`` 中把 ``theme.index.frame.ancestors`` （默认值 ``'none'`` ）设置为 ``'self'`` 。如需从其他源嵌入，请指定该源（参见 :doc:`../dev/theme-development` ）。
+
 删除了管理界面的「页面设计」
 ----------------------------
 
@@ -940,6 +942,45 @@ API 请求。由于搜索界面现在通过 ``/api/v2/search`` 进行搜索，�
 曾将其设置为 ``true`` 的环境，现在会像对待搜索界面一样，以访客角色响应匿名用户的 API 请求。
 如需禁止匿名用户搜索，请设置 ``login.required=true`` 。访问令牌的行为不变：带有已注册访问令牌的请求
 会获得该令牌的权限，带有未注册或已过期令牌的请求会被拒绝。
+
+.. _upgrade-159-api-requests:
+
+API 现在会拒绝的请求
+--------------------
+
+15.9 会拒绝以下 15.8 曾接受的请求。请检查为 15.8 编写的客户端和脚本是否发送了这些请求。管理 API 以 HTTP ``400`` 拒绝请求，响应正文中的 ``status`` 为 ``1`` 。
+
+.. list-table::
+   :header-rows: 1
+
+   * - 请求
+     - 15.8 及之前
+     - 15.9
+   * - 向 ``/api/v2/search`` 同时指定 ``facet.field`` 或 ``facet.query`` 与小于等于 ``0`` 的 ``facet.size`` ，或者不是整数的 ``facet.size`` 、 ``facet.minDocCount``
+     - ``200`` 。但结果为空： ``record_count`` 为 ``0`` ， ``partial`` 为 ``true``
+     - ``400`` （ ``invalid_request`` ）。 ``facet.size`` 必须大于等于 ``1``
+   * - 指定 ``track_total_hits=false`` 。如果把 ``query.track.total.hits`` 设置为 ``false`` ，所有搜索都会受到影响
+     - ``200`` 。但没有搜索结果
+     - 搜索会被拒绝（ ``/api/v2/search`` 返回 ``400`` 和 ``invalid_request`` ）。 ``true`` 和正整数的行为不变
+   * - 通过管理 API 向 ``mapping`` 或 ``kuromoji`` 字典添加或更新与已有条目重复的条目
+     - 会被保存。之后加载字典时失败，可能导致无法搜索
+     - ``400``
+   * - 通过管理 API 向 ``kuromoji`` 字典添加或更新 ``token`` 含有空格的条目，或 ``segmentation`` 与 ``reading`` 按空格分隔的词数不同的条目
+     - 会被保存。与上面相同，加载字典时失败
+     - ``400``
+   * - 没有删除任何内容的 ``DELETE /api/admin/searchlist/doc/{doc_id}`` （不存在的 ``doc_id`` ，或像文档列表所返回的 ``_id`` 那样不是 ``doc_id`` 的值）
+     - ``200`` （ ``status`` 为 ``0`` ）。文档不会被删除
+     - ``400``
+   * - 在管理 API 的用户的 ``roles`` 、 ``groups`` 中指定角色名、组名
+     - 会被保存，但所指定的名称不会作为角色起作用。对于某些名称，读取该用户会失败
+     - ``400`` 。请指定角色、组的 ID（ ``GET /api/admin/role/settings`` 、 ``GET /api/admin/group/settings`` 所返回的 ``id`` ）
+   * - 为管理 API 的用户设置违反密码策略（例如 ``password.min.length`` ，默认值 ``8`` ）的密码；创建时省略密码；发送与 ``password`` 不一致的 ``confirm_password``
+     - 会被保存，该用户可以用该密码登录
+     - ``400``
+
+``/api/v2/documents/all`` 的每一行不再带有 ``score`` 。15.8 及之前，每个文档都带有搜索得分；15.9 使用 point in time 和 ``search_after`` 获取全部结果，因此不会产生得分。旧 API 插件的 ``/json?type=scroll`` 和 ``/api/v1/documents/all`` 也是如此。读取 ``score`` 的脚本需要能够处理该值不存在的情况。
+
+管理 API 的文件上传（6 种字典、 ``badword`` 、 ``elevateword`` 、 ``storage`` ）通过 ``POST`` 接收。15.8 的文档曾介绍使用 ``PUT`` ，但 ``multipart/form-data`` 的 ``PUT`` 不会传送文件，因此在 15.8 和 15.9 中都会因“需要文件”的验证错误而失败。 ``PUT`` 端点仍然保留，但上传请使用 ``POST`` 。
 
 ``search_engine.type`` 的 ``cloud`` 已弃用
 ------------------------------------------

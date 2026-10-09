@@ -965,6 +965,13 @@ The search screen also searches through ``/api/v2/search``, so a search is logge
 called, not when ``/search`` is requested. A client that does not run JavaScript receives the page
 without results.
 
+The HTML of the search screen carries ``X-Frame-Options: DENY`` and a ``Content-Security-Policy`` with
+``frame-ancestors 'none'``, so no other page can show it in a frame. The JSP search screen of 15.8 sent
+``X-Frame-Options: SAMEORIGIN`` (the default of ``response.headers``) and could be shown in an ``iframe`` on
+a page of the same origin. If you embedded the search screen in an ``iframe`` of the same origin, set
+``theme.index.frame.ancestors`` in ``fess_config.properties`` (default ``'none'``) to ``'self'``. To embed
+it from another origin, name that origin instead (see :doc:`../dev/theme-development`).
+
 The Page Design Editor Was Removed
 ----------------------------------
 
@@ -997,6 +1004,52 @@ An installation that set it to ``true`` now answers API requests from anonymous 
 guest roles, as it does the search screen. To keep anonymous users from searching, set
 ``login.required=true``. Access tokens work as before: a request with a registered access token is
 given the token's permissions, and a request with an unregistered or expired token is refused.
+
+.. _upgrade-159-api-requests:
+
+Requests the API Now Refuses
+----------------------------
+
+15.9 refuses the following requests, which 15.8 accepted. Check the clients and scripts you wrote for 15.8.
+The admin API answers a refusal with HTTP ``400`` and ``status`` ``1`` in the body.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Request
+     - Up to 15.8
+     - 15.9
+   * - ``/api/v2/search`` with ``facet.field`` or ``facet.query``, and a ``facet.size`` of ``0`` or less, or a ``facet.size`` or ``facet.minDocCount`` that is not an integer
+     - ``200``, but an empty result: ``record_count`` is ``0`` and ``partial`` is ``true``
+     - ``400`` (``invalid_request``). ``facet.size`` must be ``1`` or more
+   * - ``track_total_hits=false``. With ``query.track.total.hits`` set to ``false``, every search is affected
+     - ``200``, but with no results
+     - The search is refused (``/api/v2/search`` answers ``400`` with ``invalid_request``). ``true`` and positive integers work as before
+   * - An entry in the ``mapping`` or ``kuromoji`` dictionary that repeats an existing entry, added or updated through the admin API
+     - Saved. Loading the dictionary then fails, which can make search unavailable
+     - ``400``
+   * - An entry in the ``kuromoji`` dictionary whose ``token`` contains a space, or whose ``segmentation`` and ``reading`` have different numbers of space-separated parts, added or updated through the admin API
+     - Saved. Loading the dictionary fails in the same way
+     - ``400``
+   * - ``DELETE /api/admin/searchlist/doc/{doc_id}`` that deletes nothing: a ``doc_id`` that does not exist, or a value that is not a ``doc_id``, such as the ``_id`` shown in the document list
+     - ``200`` (``status`` ``0``); the document is not deleted
+     - ``400``
+   * - A role or group name in ``roles`` or ``groups`` of a user in the admin API
+     - Saved, but the name does not act as a role. For some names, reading the user fails
+     - ``400``. Give the ID of the role or group (the ``id`` returned by ``GET /api/admin/role/settings`` and ``GET /api/admin/group/settings``)
+   * - A user in the admin API whose password breaks the password policy (for example ``password.min.length``, default ``8``); a create request without a password; a ``confirm_password`` that differs from ``password``
+     - Saved; the user can log in with that password
+     - ``400``
+
+Rows of ``/api/v2/documents/all`` no longer carry ``score``. Up to 15.8 every document had its search score;
+15.9 walks the whole result with a point in time and ``search_after``, which gives no score.
+``/json?type=scroll`` and ``/api/v1/documents/all`` of the legacy API plugins behave the same. A script that
+reads ``score`` has to cope with it being absent.
+
+File uploads of the admin API (the six dictionaries, ``badword``, ``elevateword`` and ``storage``) are
+accepted by ``POST``. The 15.8 documentation told you to use ``PUT``, but a ``multipart/form-data`` ``PUT``
+never delivers the file, so in 15.8 as well as in 15.9 it fails with the validation error that the file is
+required. The ``PUT`` endpoints remain; use ``POST`` for uploads.
 
 ``search_engine.type=cloud`` is deprecated
 ------------------------------------------

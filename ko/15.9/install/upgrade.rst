@@ -960,6 +960,12 @@ jcifs 의 기본값으로 동작했습니다. 15.9 는 새 이름을 전달합�
 API 가 호출될 때 로그에 기록됩니다. JavaScript 를 실행하지 않는 클라이언트는 결과가 없는 페이지를
 받습니다.
 
+검색 화면의 HTML 에는 ``X-Frame-Options: DENY`` 와 ``frame-ancestors 'none'`` 을 포함하는 ``Content-Security-Policy`` 가
+붙으므로, 다른 페이지의 프레임에 표시되지 않습니다. 15.8 의 JSP 검색 화면은 ``response.headers`` 의 기본값에 따라
+``X-Frame-Options: SAMEORIGIN`` 을 보냈고, 같은 오리진 페이지의 ``iframe`` 에 표시할 수 있었습니다. 검색 화면을 같은 오리진의 ``iframe`` 에
+포함하고 있었다면 ``fess_config.properties`` 의 ``theme.index.frame.ancestors`` (기본값 ``'none'`` )를 ``'self'`` 로
+설정하십시오. 다른 오리진에서 포함하려면 그 오리진을 지정하십시오 (:doc:`../dev/theme-development` 참조).
+
 관리 화면의 「페이지 디자인」 삭제
 ----------------------------------
 
@@ -990,6 +996,50 @@ API 가 호출될 때 로그에 기록됩니다. JavaScript 를 실행하지 않
 응답합니다. 익명 사용자가 검색하지 못하게 하려면 ``login.required=true`` 를 설정하십시오. 액세스 토큰의
 동작은 변경되지 않았습니다. 등록된 액세스 토큰이 있는 요청에는 해당 토큰의 권한이 부여되고, 등록되지
 않았거나 만료된 토큰이 있는 요청은 거부됩니다.
+
+.. _upgrade-159-api-requests:
+
+API 가 거부하게 된 요청
+-----------------------
+
+15.8 에서는 받아들여졌던 다음 요청을 15.9 는 거부합니다. 15.8 용으로 만든 클라이언트와 스크립트가 이러한 요청을 보내고 있지 않은지 확인하십시오. 관리 API 는 거부를 HTTP
+``400`` 으로 응답하며, 본문의 ``status`` 는 ``1`` 입니다.
+
+.. list-table::
+   :header-rows: 1
+
+   * - 요청
+     - 15.8 까지
+     - 15.9
+   * - ``facet.field`` 또는 ``facet.query`` 와 함께 ``/api/v2/search`` 에 ``0`` 이하의 ``facet.size`` 를 지정하거나, 정수가 아닌 ``facet.size`` 또는 ``facet.minDocCount`` 를 지정
+     - ``200``. 다만 ``record_count`` 가 ``0`` 이고 ``partial`` 이 ``true`` 인 빈 결과
+     - ``400`` (``invalid_request``). ``facet.size`` 는 ``1`` 이상이어야 합니다
+   * - ``track_total_hits=false`` 지정. ``query.track.total.hits`` 를 ``false`` 로 설정한 경우에는 모든 검색이 대상입니다
+     - ``200``. 다만 검색 결과가 0건
+     - 검색이 거부됩니다 (``/api/v2/search`` 는 ``400`` 과 ``invalid_request``). ``true`` 와 양의 정수는 종전과 같습니다
+   * - 관리 API 로 ``mapping`` 또는 ``kuromoji`` 사전에, 이미 있는 항목과 중복되는 항목을 등록하거나 갱신
+     - 저장됩니다. 이후 사전을 읽어 들일 때 실패하여 검색을 할 수 없게 될 수 있습니다
+     - ``400``
+   * - 관리 API 로 ``kuromoji`` 사전에, ``token`` 에 공백이 포함된 항목이나 ``segmentation`` 과 ``reading`` 의 공백으로 구분한 단어 수가 다른 항목을 등록하거나 갱신
+     - 저장됩니다. 위와 마찬가지로 사전을 읽어 들일 때 실패합니다
+     - ``400``
+   * - ``DELETE /api/admin/searchlist/doc/{doc_id}`` 에서 아무것도 삭제되지 않은 경우 (존재하지 않는 ``doc_id`` , 또는 문서 목록이 반환하는 ``_id`` 처럼 ``doc_id`` 가 아닌 값)
+     - ``200`` (``status`` 는 ``0``). 문서는 삭제되지 않습니다
+     - ``400``
+   * - 관리 API 사용자의 ``roles`` 또는 ``groups`` 에 롤 이름이나 그룹 이름을 지정
+     - 저장되지만 지정한 이름은 롤로 동작하지 않습니다. 이름에 따라서는 그 사용자를 읽지 못합니다
+     - ``400``. 롤이나 그룹의 ID (``GET /api/admin/role/settings`` 와 ``GET /api/admin/group/settings`` 의 ``id`` )를 지정하십시오
+   * - 관리 API 로 사용자에게 비밀번호 정책(``password.min.length`` 의 기본값 ``8`` 등)에 어긋나는 비밀번호를 설정, 생성 시 비밀번호를 생략, 또는 ``password`` 와 일치하지 않는 ``confirm_password`` 를 전송
+     - 저장되며, 그 비밀번호로 로그인할 수 있습니다
+     - ``400``
+
+``/api/v2/documents/all`` 의 각 행에서 ``score`` 가 없어졌습니다. 15.8 까지는 각 문서에 검색 점수가 붙었지만, 15.9 는 전체 결과를 point in
+time 과 ``search_after`` 로 가져오므로 점수가 붙지 않습니다. 구 API 플러그인의 ``/json?type=scroll`` 과 ``/api/v1/documents/all`` 도
+마찬가지입니다. ``score`` 를 읽는 스크립트는 값이 없는 경우를 처리할 수 있어야 합니다.
+
+관리 API 의 파일 업로드(사전 6종, ``badword``, ``elevateword``, ``storage``)는 ``POST`` 로 받습니다. 15.8 의 문서는 ``PUT`` 을
+안내했지만, ``multipart/form-data`` 의 ``PUT`` 으로는 파일이 전달되지 않아 15.8 에서도 15.9 에서도 파일이 필요하다는 검증 오류가 됩니다. ``PUT``
+엔드포인트는 남아 있지만, 업로드에는 ``POST`` 를 사용하십시오.
 
 ``search_engine.type`` 의 ``cloud`` 는 사용 중단 예정
 -----------------------------------------------------
