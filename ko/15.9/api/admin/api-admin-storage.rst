@@ -8,6 +8,10 @@ Storage API
 Storage API는 |Fess| 의 오브젝트 스토리지를 관리하기 위한 API입니다.
 스토리지 내 파일·디렉터리 목록 조회, 파일 다운로드·삭제·업로드를 수행할 수 있습니다.
 
+.. note::
+
+   이 API 는 스토리지 클라이언트를 제공하는 플러그인이 설치되어 있어야 사용할 수 있습니다. Amazon S3 와 S3 호환 스토리지는 ``fess-storage-s3`` , Google Cloud Storage 는 ``fess-storage-gcs`` 입니다. 플러그인은 배포본에 포함되어 있지 않습니다. 설치되어 있지 않으면 설정된 ``storage.type`` 에 대응하는 클라이언트가 없어 요청이 실패합니다. 관리 화면의 「시스템 > 플러그인」 페이지 또는 ``bin/fess-setup install plugin fess-storage-s3`` (GCS 의 경우 ``fess-storage-gcs`` )로 설치하십시오.
+
 기본 URL
 ============
 
@@ -95,7 +99,7 @@ Storage API를 포함한 Admin API의 모든 엔드포인트에는 액세스 토
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -161,7 +165,7 @@ Storage API를 포함한 Admin API의 모든 엔드포인트에는 액세스 토
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -204,7 +208,7 @@ Storage API를 포함한 Admin API의 모든 엔드포인트에는 액세스 토
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

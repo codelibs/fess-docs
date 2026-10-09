@@ -84,14 +84,14 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cron_expression": "0 0 0 * * ?",
+            "cron_expression": "0 0 * * *",
             "script_type": "javascript",
             "script_data": "...",
             "job_logging": "true",
@@ -136,7 +136,7 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cron_expression": "0 0 0 * * ?",
+          "cron_expression": "0 0 * * *",
           "script_type": "javascript",
           "script_data": "return container.getComponent(\"crawlJob\").execute();",
           "job_logging": "true",
@@ -168,7 +168,7 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cron_expression": "0 0 2 * * ?",
+      "cron_expression": "0 2 * * *",
       "script_type": "javascript",
       "script_data": "return container.getComponent(\"crawlJob\").execute();",
       "job_logging": "true",
@@ -195,7 +195,7 @@ Scheduler APIは、|Fess| のスケジュールジョブを管理するための
      - 実行対象（最大100文字）。\ ``all`` または特定のターゲット名を指定します
    * - ``cron_expression``
      - いいえ
-     - Cron式（秒 分 時 日 月 曜日）。最大100文字で、Cron式として検証されます。空の場合はスケジュール実行されず、手動でのみ起動できます
+     - Cron式（分 時 日 月 曜日の 5 フィールド。cron4j 形式）。最大100文字で、Cron式として検証されます。Quartz 形式の秒フィールドや ``?`` は使えません（ ``0 0 * * * ?`` は拒否されます）。空の場合はスケジュール実行されず、手動でのみ起動できます
    * - ``script_type``
      - はい
      - スクリプトタイプ（最大100文字）。\ ``javascript``\ （新規ジョブの既定値。\ ``job.default.script`` プロパティで決まります）または ``groovy``\ （\ ``fess-script-groovy`` プラグインが必要）を指定します
@@ -245,13 +245,13 @@ Cron式の例
 
    * - Cron式
      - 説明
-   * - ``0 0 2 * * ?``
+   * - ``0 2 * * *``
      - 毎日午前2時に実行
-   * - ``0 0 0/6 * * ?``
-     - 6時間ごとに実行
-   * - ``0 0 2 * * MON``
-     - 毎週月曜日の午前2時に実行
-   * - ``0 0 2 1 * ?``
+   * - ``0 */6 * * *``
+     - 6時間ごと（0時、6時、12時、18時）に実行
+   * - ``0 2 * * 1``
+     - 毎週月曜日の午前2時に実行（曜日は ``0``\ （日曜）〜 ``6``\ （土曜））
+   * - ``0 2 1 * *``
      - 毎月1日の午前2時に実行
 
 スケジュールジョブ更新
@@ -274,7 +274,7 @@ Cron式の例
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cron_expression": "0 0 3 * * ?",
+      "cron_expression": "0 3 * * *",
       "script_type": "javascript",
       "script_data": "...",
       "job_logging": "true",
@@ -405,7 +405,7 @@ Cron式の例
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cron_expression": "0 0 * * * ?",
+           "cron_expression": "0 * * * *",
            "script_type": "javascript",
            "script_data": "return container.getComponent(\"crawlJob\").execute();",
            "job_logging": "true",

@@ -55,7 +55,7 @@ mit ``label`` und ``value``.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
@@ -89,7 +89,7 @@ Response-Felder
    * - Feld
      - Beschreibung
    * - ``version``
-     - Produktversion von |Fess| (Beispiel: ``15.9.0``).
+     - Produktversion von |Fess| (Beispiel: ``15.9``).
    * - ``status``
      - Ergebniscode der Verarbeitung. ``0`` steht für erfolgreiche Ausführung.
    * - ``env_props``
@@ -139,7 +139,7 @@ Eine bestimmte Systemeigenschaft extrahieren
     # Nur den Wert von java.version extrahieren
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         | jq -r '.response.systemProps[] | select(.label == "java.version") | .value'
+         | jq -r '.response.system_props[] | select(.label == "java.version") | .value'
 
 Umgebungsvariablen auflisten
 ----------------------------
@@ -149,7 +149,7 @@ Umgebungsvariablen auflisten
     # Umgebungsvariablen im Format label=value anzeigen
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         | jq -r '.response.envProps[] | "\(.label)=\(.value)"'
+         | jq -r '.response.env_props[] | "\(.label)=\(.value)"'
 
 Referenzinformationen
 =====================

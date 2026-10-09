@@ -86,7 +86,7 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -134,7 +134,7 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "content_id_1",
@@ -208,7 +208,7 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_content_id",
         "created": true
@@ -276,7 +276,7 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_content_id",
         "created": false
@@ -306,7 +306,7 @@ RelatedContent API는 |Fess| 의 관련 콘텐츠를 관리하기 위한 API입�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

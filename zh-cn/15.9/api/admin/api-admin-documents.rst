@@ -150,7 +150,7 @@ Documents API是用于将文档批量注册到 |Fess| 索引的Admin API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -176,7 +176,7 @@ Documents API是用于将文档批量注册到 |Fess| 索引的Admin API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 9,
         "items": [
           {

@@ -153,7 +153,7 @@ Erfolgreiche Einträge enthalten ``result`` und ``id``, fehlgeschlagene Einträg
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -180,7 +180,7 @@ wie ``CONFLICT`` oder ``BAD_REQUEST``). Erfolgreiche Einträge geben weiterhin i
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 9,
         "items": [
           {

@@ -89,7 +89,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -174,14 +174,14 @@ The fields of each item in the ``settings`` array of the response differ by dict
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": 1,
             "dict_id": "ZjA5...synonym.txt",
-            "inputs": "検索,サーチ",
-            "outputs": "検索,サーチ,リサーチ"
+            "inputs": "検索\nサーチ",
+            "outputs": "検索\nサーチ\nリサーチ"
           }
         ],
         "total": 1
@@ -229,13 +229,13 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": 1,
           "dict_id": "ZjA5...synonym.txt",
-          "inputs": "検索,サーチ",
-          "outputs": "検索,サーチ,リサーチ"
+          "inputs": "検索\nサーチ",
+          "outputs": "検索\nサーチ\nリサーチ"
         }
       }
     }
@@ -259,8 +259,8 @@ Request Body (synonym example)
 .. code-block:: json
 
     {
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ"
     }
 
 Response
@@ -270,7 +270,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": true
@@ -297,8 +297,8 @@ Request Body (synonym example)
 
     {
       "id": 1,
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ,search"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ\nsearch"
     }
 
 Response
@@ -308,7 +308,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -354,7 +354,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -383,7 +383,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -434,6 +434,12 @@ The fields of the request body and response for creating and updating dictionary
      - ``input`` (required), ``output`` (required)
      - ``stemmerOverrideFile``
 
+.. note::
+
+   For ``synonym``, ``inputs`` and ``outputs`` (and ``inputs`` of ``mapping``) take one word per line, separated by a newline (``\n`` in a JSON string).
+   For ``synonym``, a value that contains a comma (``,``) or ``=>`` is rejected, because the dictionary file format uses these as separators.
+   For example, ``"inputs": "検索,サーチ"`` is rejected, while ``"inputs": "検索\nサーチ"`` is accepted.
+
 Usage Examples
 ==============
 
@@ -462,8 +468,8 @@ Add an Item to the Synonym Dictionary
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "inputs": "検索,サーチ",
-           "outputs": "検索,サーチ,リサーチ"
+           "inputs": "検索\nサーチ",
+           "outputs": "検索\nサーチ\nリサーチ"
          }'
 
 Upload a Synonym Dictionary File

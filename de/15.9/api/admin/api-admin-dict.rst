@@ -89,7 +89,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -174,14 +174,14 @@ Die Felder der einzelnen Einträge im Array ``settings`` der Antwort unterscheid
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": 1,
             "dict_id": "ZjA5...synonym.txt",
-            "inputs": "検索,サーチ",
-            "outputs": "検索,サーチ,リサーチ"
+            "inputs": "検索\nサーチ",
+            "outputs": "検索\nサーチ\nリサーチ"
           }
         ],
         "total": 1
@@ -229,13 +229,13 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": 1,
           "dict_id": "ZjA5...synonym.txt",
-          "inputs": "検索,サーチ",
-          "outputs": "検索,サーチ,リサーチ"
+          "inputs": "検索\nサーチ",
+          "outputs": "検索\nサーチ\nリサーチ"
         }
       }
     }
@@ -259,8 +259,8 @@ Request-Body (Synonym-Beispiel)
 .. code-block:: json
 
     {
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ"
     }
 
 Response
@@ -270,7 +270,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": true
@@ -297,8 +297,8 @@ Request-Body (Synonym-Beispiel)
 
     {
       "id": 1,
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ,search"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ\nsearch"
     }
 
 Response
@@ -308,7 +308,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -354,7 +354,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -383,7 +383,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -434,6 +434,12 @@ Die Felder im Request-Body zum Erstellen/Aktualisieren von Wörterbucheinträgen
      - ``input`` (erforderlich), ``output`` (erforderlich)
      - ``stemmerOverrideFile``
 
+.. note::
+
+   Bei ``synonym`` werden ``inputs`` und ``outputs`` (sowie ``inputs`` bei ``mapping``) mit einem Wort pro Zeile angegeben, getrennt durch einen Zeilenumbruch (in einem JSON-String ``\n``).
+   Bei ``synonym`` wird ein Wert, der ein Komma (``,``) oder ``=>`` enthält, abgelehnt, weil das Format der Wörterbuchdatei diese beiden als Trennzeichen verwendet.
+   Zum Beispiel wird ``"inputs": "検索,サーチ"`` abgelehnt, ``"inputs": "検索\nサーチ"`` dagegen akzeptiert.
+
 Verwendungsbeispiele
 ====================
 
@@ -462,8 +468,8 @@ Eintrag zum Synonymwörterbuch hinzufügen
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "inputs": "検索,サーチ",
-           "outputs": "検索,サーチ,リサーチ"
+           "inputs": "検索\nサーチ",
+           "outputs": "検索\nサーチ\nリサーチ"
          }'
 
 Synonymwörterbuchdatei hochladen

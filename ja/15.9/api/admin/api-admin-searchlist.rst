@@ -137,7 +137,7 @@ SearchList APIは、|Fess| のインデックス内のドキュメントを検�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "query_id": "f8b1c2d3e4a5",
         "exec_time": "0.05",
@@ -251,7 +251,7 @@ SearchList APIは、|Fess| のインデックス内のドキュメントを検�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "doc": {
           "doc_id": "abcdef0123456789",
@@ -337,7 +337,7 @@ SearchList APIは、|Fess| のインデックス内のドキュメントを検�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "abcdef0123456789",
         "created": true
@@ -408,7 +408,7 @@ SearchList APIは、|Fess| のインデックス内のドキュメントを検�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "abcdef0123456789",
         "created": false
@@ -461,7 +461,7 @@ SearchList APIは、|Fess| のインデックス内のドキュメントを検�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -505,7 +505,7 @@ SearchList APIは、|Fess| のインデックス内のドキュメントを検�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "count": 150
       }

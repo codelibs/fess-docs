@@ -2,18 +2,6 @@
 Google Search Appliance兼容API
 ================================
 
-|Fess| 提供可返回Google Search Appliance (GSA)兼容XML格式搜索结果的API。
-关于XML格式的详细信息，请参阅\ `GSA官方文档 <https://www.google.com/support/enterprise/static/gsa/docs/admin/74/gsa_doc_set/xml_reference/results_format.html>`__\ 。
+.. warning::
 
-配置
-====
-
-请在system.properties中添加 ``web.api.gsa=true`` 以启用Google Search Appliance兼容API。
-
-请求
-========
-
-向 |Fess| 发送
-``http://localhost:8080/gsa/?q=搜索词``
-形式的请求，可以获取GSA兼容XML格式的搜索结果。
-可以指定的请求参数与\ `JSON响应搜索API <api-search.html>`__\ 相同。
+   Google Search Appliance（GSA）兼容 API（ ``/gsa/`` ）已在 |Fess| 14.8 中删除，并且 |Fess| 15.9 本身以及提供旧 API 的插件（ ``fess-webapp-classic-api`` 和 ``fess-webapp-v1-api`` ）都没有实现 ``/gsa/`` ，因此设置 ``web.api.gsa`` 不会产生任何效果，对 ``/gsa/`` 的请求会返回 ``404`` 。请使用 :doc:`api-search` 中介绍的 ``/api/v2/search`` 进行搜索。

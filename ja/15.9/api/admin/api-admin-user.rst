@@ -92,7 +92,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -103,7 +103,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
               "givenName": "System",
               "mail": "admin@example.com"
             },
-            "roles": ["admin"],
+            "roles": ["YWRtaW4=", "Z3Vlc3Q="],
             "groups": [],
             "version_no": 1
           }
@@ -134,7 +134,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "YWRtaW4=",
@@ -148,7 +148,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
             "gidNumber": "",
             "homeDirectory": ""
           },
-          "roles": ["admin"],
+          "roles": ["YWRtaW4=", "Z3Vlc3Q="],
           "groups": [],
           "version_no": 1
         }
@@ -185,7 +185,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
         "givenName": "User",
         "mail": "testuser@example.com"
       },
-      "roles": ["user"],
+      "roles": ["Z3Vlc3Q="],
       "groups": ["group_id_1"]
     }
 
@@ -203,7 +203,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
      - はい
      - ユーザー名（ログインID）
    * - ``password``
-     - いいえ
+     - はい
      - パスワード
    * - ``confirm_password``
      - いいえ
@@ -220,9 +220,16 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
 
 .. note::
 
-   REST APIでは、パスワードの必須チェック、``password`` と ``confirm_password`` の一致チェック、
-   パスワードポリシー検証は行われません（これらは管理画面でのみ適用されます）。
-   運用上は、一致する有効な ``password`` を指定することを推奨します。
+   ``roles`` ・ ``groups`` には、名前ではなく ID を指定します。存在しない ID（ロール名・グループ名を含む）は ``400`` になります。
+   ID は ``GET /api/admin/role/settings`` ・ ``GET /api/admin/group/settings`` が返す ``id`` で確認できます。\
+   管理画面または API で作成したロール・グループの ID は、名前を Base64 URL エンコードした値です（例: 標準で登録されているロール ``admin`` は ``YWRtaW4=`` 、 ``guest`` は ``Z3Vlc3Q=`` ）。
+
+.. note::
+
+   パスワードには、管理画面と同じ検証が行われます。作成時に ``password`` を省略した場合、
+   ``password`` と一致しない ``confirm_password`` を指定した場合（ ``confirm_password`` は省略できます）、\
+   パスワードポリシー（ ``fess_config.properties`` の ``password.min.length`` （既定値 ``8`` ）・ ``password.max.length`` ・
+   ``password.require.*`` ・ ``password.invalid.admin.passwords`` ）に反する場合は、いずれも ``400`` になります。
 
 ``attributes`` のキーには、ユーザーエンティティの属性名（LDAPスキーマに由来する項目名）を指定します。
 代表的なキーは次のとおりです。
@@ -247,7 +254,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_user_id",
         "created": true
@@ -283,7 +290,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
         "givenName": "User Updated",
         "mail": "testuser.updated@example.com"
       },
-      "roles": ["user", "editor"],
+      "roles": ["Z3Vlc3Q=", "YWRtaW4="],
       "groups": ["group_id_1", "group_id_2"],
       "version_no": 1
     }
@@ -336,7 +343,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_user_id",
         "created": false
@@ -368,7 +375,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "deleted_user_id",
         "created": false
@@ -397,7 +404,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
              "givenName": "John",
              "mail": "john.doe@example.com"
            },
-           "roles": ["user"],
+           "roles": ["Z3Vlc3Q="],
            "groups": []
          }'
 
@@ -412,7 +419,7 @@ User APIは、|Fess| のユーザーアカウントを管理するためのREST 
          -d '{
            "id": "user_id_123",
            "name": "john.doe",
-           "roles": ["user", "editor", "admin"],
+           "roles": ["Z3Vlc3Q=", "YWRtaW4="],
            "version_no": 1
          }'
 

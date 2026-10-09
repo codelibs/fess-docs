@@ -53,7 +53,7 @@ La réponse contient ``version`` indiquant la version du produit, ``status`` ind
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
@@ -87,7 +87,7 @@ Champs de la réponse
    * - Champ
      - Description
    * - ``version``
-     - Version du produit |Fess| (ex. : ``15.9.0``).
+     - Version du produit |Fess| (ex. : ``15.9``).
    * - ``status``
      - Code indiquant le résultat du traitement. ``0`` signifie une terminaison normale.
    * - ``env_props``
@@ -136,7 +136,7 @@ Extraction d'une propriété système spécifique
     # Extraire uniquement la valeur de java.version
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         | jq -r '.response.systemProps[] | select(.label == "java.version") | .value'
+         | jq -r '.response.system_props[] | select(.label == "java.version") | .value'
 
 Affichage de la liste des variables d'environnement
 ---------------------------------------------------
@@ -146,7 +146,7 @@ Affichage de la liste des variables d'environnement
     # Afficher les variables d'environnement au format label=value
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         | jq -r '.response.envProps[] | "\(.label)=\(.value)"'
+         | jq -r '.response.env_props[] | "\(.label)=\(.value)"'
 
 Informations complémentaires
 ============================

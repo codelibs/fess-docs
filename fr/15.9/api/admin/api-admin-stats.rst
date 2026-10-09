@@ -65,7 +65,7 @@ le résultat du traitement, et un objet ``stats`` contenant les métriques syst�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "stats": {
           "jvm": {
@@ -145,7 +145,7 @@ Champs de la réponse (niveau supérieur)
    * - Champ
      - Description
    * - ``version``
-     - La version du produit |Fess| (par exemple ``15.9.0``).
+     - La version du produit |Fess| (par exemple ``15.9``).
    * - ``status``
      - Un code indiquant le résultat du traitement. ``0`` indique un succès.
    * - ``stats``

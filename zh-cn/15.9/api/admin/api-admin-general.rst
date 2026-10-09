@@ -61,7 +61,7 @@ General API是用于管理 |Fess| 常规设置（系统整体配置）的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "incremental_crawling": "true",
@@ -384,7 +384,7 @@ LDAP以及SSO（OpenID Connect、SAML、SPNEGO、Entra ID）相关的设置也�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

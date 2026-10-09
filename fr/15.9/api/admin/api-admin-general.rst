@@ -66,7 +66,7 @@ nombres.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "incremental_crawling": "true",
@@ -409,7 +409,7 @@ En cas de succès de la mise à jour, seuls ``version`` et ``status`` sont retou
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

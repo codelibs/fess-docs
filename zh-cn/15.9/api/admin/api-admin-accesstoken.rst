@@ -91,7 +91,7 @@ HTTP状态码），请参阅 :doc:`api-admin-overview` 。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {

@@ -96,7 +96,7 @@ Plugin API는 |Fess| 의 플러그인(아티팩트)을 관리하기 위한 API�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -134,7 +134,7 @@ Plugin API는 |Fess| 의 플러그인(아티팩트)을 관리하기 위한 API�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -202,7 +202,7 @@ Plugin API는 |Fess| 의 플러그인(아티팩트)을 관리하기 위한 API�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -214,7 +214,7 @@ Plugin API는 |Fess| 의 플러그인(아티팩트)을 관리하기 위한 API�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "invalid name or version"
       }
@@ -277,7 +277,7 @@ Plugin API는 |Fess| 의 플러그인(아티팩트)을 관리하기 위한 API�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

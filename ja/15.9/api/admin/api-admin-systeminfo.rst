@@ -55,7 +55,7 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
@@ -89,7 +89,7 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
    * - フィールド
      - 説明
    * - ``version``
-     - |Fess| の製品バージョン（例: ``15.9.0``）。
+     - |Fess| の製品バージョン（例: ``15.9``）。
    * - ``status``
      - 処理結果を示すコード。\ ``0`` は正常終了を表します。
    * - ``env_props``
@@ -138,7 +138,7 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
     # java.version の値のみを抽出
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         | jq -r '.response.systemProps[] | select(.label == "java.version") | .value'
+         | jq -r '.response.system_props[] | select(.label == "java.version") | .value'
 
 環境変数の一覧表示
 ------------------
@@ -148,7 +148,7 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
     # 環境変数を label=value 形式で表示
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         | jq -r '.response.envProps[] | "\(.label)=\(.value)"'
+         | jq -r '.response.env_props[] | "\(.label)=\(.value)"'
 
 参考情報
 ========

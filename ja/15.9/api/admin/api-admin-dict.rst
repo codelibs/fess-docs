@@ -89,7 +89,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -174,14 +174,14 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": 1,
             "dict_id": "ZjA5...synonym.txt",
-            "inputs": "検索,サーチ",
-            "outputs": "検索,サーチ,リサーチ"
+            "inputs": "検索\nサーチ",
+            "outputs": "検索\nサーチ\nリサーチ"
           }
         ],
         "total": 1
@@ -229,13 +229,13 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": 1,
           "dict_id": "ZjA5...synonym.txt",
-          "inputs": "検索,サーチ",
-          "outputs": "検索,サーチ,リサーチ"
+          "inputs": "検索\nサーチ",
+          "outputs": "検索\nサーチ\nリサーチ"
         }
       }
     }
@@ -259,8 +259,8 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 .. code-block:: json
 
     {
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ"
     }
 
 レスポンス
@@ -270,7 +270,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": true
@@ -297,8 +297,8 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
     {
       "id": 1,
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ,search"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ\nsearch"
     }
 
 レスポンス
@@ -308,7 +308,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -354,7 +354,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -383,7 +383,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -434,6 +434,12 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
      - ``input`` （必須）、 ``output`` （必須）
      - ``stemmerOverrideFile``
 
+.. note::
+
+   ``synonym`` の ``inputs`` ・ ``outputs`` と ``mapping`` の ``inputs`` は、1 行に 1 語を、改行（JSON の文字列では ``\n`` ）で区切って指定します。
+   ``synonym`` では、カンマ（ ``,`` ）または ``=>`` を含む値は拒否されます（辞書ファイルの形式では、この 2 つが区切りに使われるためです）。\
+   たとえば ``"inputs": "検索,サーチ"`` は拒否され、 ``"inputs": "検索\nサーチ"`` は受け付けられます。
+
 使用例
 ======
 
@@ -462,8 +468,8 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "inputs": "検索,サーチ",
-           "outputs": "検索,サーチ,リサーチ"
+           "inputs": "検索\nサーチ",
+           "outputs": "検索\nサーチ\nリサーチ"
          }'
 
 同義語辞書ファイルのアップロード

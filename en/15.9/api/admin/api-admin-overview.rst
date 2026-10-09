@@ -133,7 +133,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [...],
         "total": 100
@@ -142,7 +142,7 @@ Response
 
 .. note::
 
-   The ``response`` object of every response always contains ``version`` (e.g., ``"15.9.0"``)
+   The ``response`` object of every response always contains ``version`` (e.g., ``"15.9"``)
    indicating the product version. It may be omitted in the following examples for brevity.
 
 Single Setting Retrieval (GET /setting/{id})
@@ -307,7 +307,7 @@ Success Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "...": "..."
       }
@@ -325,7 +325,7 @@ message.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "Failed to process the request."
       }

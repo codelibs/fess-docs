@@ -74,7 +74,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "total_words_num": 1500,
@@ -126,7 +126,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -150,7 +150,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -174,7 +174,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -189,7 +189,7 @@ respuesta se establece en ``1`` (BAD_REQUEST), con el campo ``message`` contenie
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "Failed to delete a document."
       }

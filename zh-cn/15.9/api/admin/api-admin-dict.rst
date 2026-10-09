@@ -89,7 +89,7 @@ Dict API是用于管理 |Fess| 词典的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -174,14 +174,14 @@ Dict API是用于管理 |Fess| 词典的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": 1,
             "dict_id": "ZjA5...synonym.txt",
-            "inputs": "検索,サーチ",
-            "outputs": "検索,サーチ,リサーチ"
+            "inputs": "検索\nサーチ",
+            "outputs": "検索\nサーチ\nリサーチ"
           }
         ],
         "total": 1
@@ -229,13 +229,13 @@ Dict API是用于管理 |Fess| 词典的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": 1,
           "dict_id": "ZjA5...synonym.txt",
-          "inputs": "検索,サーチ",
-          "outputs": "検索,サーチ,リサーチ"
+          "inputs": "検索\nサーチ",
+          "outputs": "検索\nサーチ\nリサーチ"
         }
       }
     }
@@ -259,8 +259,8 @@ Dict API是用于管理 |Fess| 词典的API。
 .. code-block:: json
 
     {
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ"
     }
 
 响应
@@ -270,7 +270,7 @@ Dict API是用于管理 |Fess| 词典的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": true
@@ -297,8 +297,8 @@ Dict API是用于管理 |Fess| 词典的API。
 
     {
       "id": 1,
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ,search"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ\nsearch"
     }
 
 响应
@@ -308,7 +308,7 @@ Dict API是用于管理 |Fess| 词典的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -354,7 +354,7 @@ Dict API是用于管理 |Fess| 词典的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -383,7 +383,7 @@ Dict API是用于管理 |Fess| 词典的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -434,6 +434,10 @@ Dict API是用于管理 |Fess| 词典的API。
      - ``input`` （必需）、 ``output`` （必需）
      - ``stemmerOverrideFile``
 
+.. note::
+
+   ``synonym`` 的 ``inputs`` 、 ``outputs`` 以及 ``mapping`` 的 ``inputs`` ，每行指定一个词，用换行（JSON 字符串中为 ``\n`` ）分隔。对于 ``synonym`` ，包含逗号（ ``,`` ）或 ``=>`` 的值会被拒绝（字典文件格式使用这两者作为分隔符）。例如， ``"inputs": "検索,サーチ"`` 会被拒绝，而 ``"inputs": "検索\nサーチ"`` 会被接受。
+
 使用示例
 ========
 
@@ -462,8 +466,8 @@ Dict API是用于管理 |Fess| 词典的API。
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "inputs": "検索,サーチ",
-           "outputs": "検索,サーチ,リサーチ"
+           "inputs": "検索\nサーチ",
+           "outputs": "検索\nサーチ\nリサーチ"
          }'
 
 上传同义词词典文件

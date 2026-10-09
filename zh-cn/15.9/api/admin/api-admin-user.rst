@@ -92,7 +92,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -103,7 +103,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
               "givenName": "System",
               "mail": "admin@example.com"
             },
-            "roles": ["admin"],
+            "roles": ["YWRtaW4=", "Z3Vlc3Q="],
             "groups": [],
             "version_no": 1
           }
@@ -134,7 +134,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "YWRtaW4=",
@@ -148,7 +148,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
             "gidNumber": "",
             "homeDirectory": ""
           },
-          "roles": ["admin"],
+          "roles": ["YWRtaW4=", "Z3Vlc3Q="],
           "groups": [],
           "version_no": 1
         }
@@ -185,7 +185,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
         "givenName": "User",
         "mail": "testuser@example.com"
       },
-      "roles": ["user"],
+      "roles": ["Z3Vlc3Q="],
       "groups": ["group_id_1"]
     }
 
@@ -203,7 +203,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
      - 是
      - 用户名（登录ID）
    * - ``password``
-     - 否
+     - 是
      - 密码
    * - ``confirm_password``
      - 否
@@ -220,8 +220,11 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
 .. note::
 
-   REST API不执行密码必填检查、``password`` 与 ``confirm_password`` 的一致性检查，以及密码策略验证（这些仅在管理界面中应用）。
-   实际使用中，建议指定有效的 ``password`` 且其值与 ``confirm_password`` 一致。
+   ``roles`` 和 ``groups`` 中请指定 ID，而不是名称。不存在的 ID（包括角色名、组名）会被以 ``400`` 拒绝。ID 可通过 ``GET /api/admin/role/settings`` 和 ``GET /api/admin/group/settings`` 返回的 ``id`` 确认。在管理界面或通过 API 创建的角色、组的 ID，是将名称进行 Base64 URL 编码后的值（例如默认存在的角色 ``admin`` 为 ``YWRtaW4=`` ， ``guest`` 为 ``Z3Vlc3Q=`` ）。
+
+.. note::
+
+   密码会进行与管理界面相同的验证。创建时省略 ``password``、指定了与 ``password`` 不一致的 ``confirm_password`` （ ``confirm_password`` 可以省略），或密码违反密码策略（ ``fess_config.properties`` 中的 ``password.min.length`` （默认值 ``8`` ）、 ``password.max.length`` 、 ``password.require.*`` 、 ``password.invalid.admin.passwords`` ）时，都会被以 ``400`` 拒绝。
 
 ``attributes`` 的键为用户实体的属性名（源自LDAP的模式项目名）。
 常用的键如下：
@@ -246,7 +249,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_user_id",
         "created": true
@@ -282,7 +285,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
         "givenName": "User Updated",
         "mail": "testuser.updated@example.com"
       },
-      "roles": ["user", "editor"],
+      "roles": ["Z3Vlc3Q=", "YWRtaW4="],
       "groups": ["group_id_1", "group_id_2"],
       "version_no": 1
     }
@@ -335,7 +338,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_user_id",
         "created": false
@@ -367,7 +370,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "deleted_user_id",
         "created": false
@@ -396,7 +399,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
              "givenName": "John",
              "mail": "john.doe@example.com"
            },
-           "roles": ["user"],
+           "roles": ["Z3Vlc3Q="],
            "groups": []
          }'
 
@@ -411,7 +414,7 @@ User API是用于管理 |Fess| 用户账户的REST API。
          -d '{
            "id": "user_id_123",
            "name": "john.doe",
-           "roles": ["user", "editor", "admin"],
+           "roles": ["Z3Vlc3Q=", "YWRtaW4="],
            "version_no": 1
          }'
 

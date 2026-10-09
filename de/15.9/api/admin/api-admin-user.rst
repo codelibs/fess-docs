@@ -92,7 +92,7 @@ Antwort
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -103,7 +103,7 @@ Antwort
               "givenName": "System",
               "mail": "admin@example.com"
             },
-            "roles": ["admin"],
+            "roles": ["YWRtaW4=", "Z3Vlc3Q="],
             "groups": [],
             "version_no": 1
           }
@@ -134,7 +134,7 @@ Antwort
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "YWRtaW4=",
@@ -148,7 +148,7 @@ Antwort
             "gidNumber": "",
             "homeDirectory": ""
           },
-          "roles": ["admin"],
+          "roles": ["YWRtaW4=", "Z3Vlc3Q="],
           "groups": [],
           "version_no": 1
         }
@@ -185,7 +185,7 @@ Anfrage-Body
         "givenName": "User",
         "mail": "testuser@example.com"
       },
-      "roles": ["user"],
+      "roles": ["Z3Vlc3Q="],
       "groups": ["group_id_1"]
     }
 
@@ -203,7 +203,7 @@ Feldbeschreibungen
      - Ja
      - Benutzername (Login-ID)
    * - ``password``
-     - Nein
+     - Ja
      - Passwort
    * - ``confirm_password``
      - Nein
@@ -220,8 +220,13 @@ Feldbeschreibungen
 
 .. note::
 
-   Die REST API führt keine Pflichtprüfung für das Passwort, keinen Abgleich zwischen ``password`` und ``confirm_password`` und keine Passwortrichtlinienvalidierung durch (diese werden nur in der Admin-Oberfläche angewendet).
-   In der Praxis wird empfohlen, ein gültiges ``password`` anzugeben, dessen Wert mit ``confirm_password`` übereinstimmt.
+   Geben Sie in ``roles`` und ``groups`` die ID der Rolle bzw. Gruppe an, nicht deren Namen. Eine nicht vorhandene ID (auch ein Rollen- oder Gruppenname) wird mit ``400`` abgelehnt.
+   Die IDs finden Sie im ``id`` der Antworten von ``GET /api/admin/role/settings`` und ``GET /api/admin/group/settings``.
+   Die ID einer in der Admin-Oberfläche oder über die API angelegten Rolle oder Gruppe ist ihr Name im Base64-URL-Format (zum Beispiel ``YWRtaW4=`` für die standardmäßig vorhandene Rolle ``admin`` und ``Z3Vlc3Q=`` für ``guest``).
+
+.. note::
+
+   Für das Passwort gelten dieselben Prüfungen wie in der Admin-Oberfläche. Eine Anlage ohne ``password``, ein ``confirm_password``, das von ``password`` abweicht (``confirm_password`` selbst kann entfallen), und ein Passwort, das die Passwortrichtlinie verletzt (``password.min.length`` (Standard ``8``), ``password.max.length``, ``password.require.*`` und ``password.invalid.admin.passwords`` in ``fess_config.properties``), werden jeweils mit ``400`` abgelehnt.
 
 Die Schlüssel von ``attributes`` sind die Attributnamen der Benutzerentität (die aus LDAP abgeleiteten Schemaelementnamen).
 Die häufigsten Schlüssel sind:
@@ -246,7 +251,7 @@ Antwort
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_user_id",
         "created": true
@@ -282,7 +287,7 @@ Anfrage-Body
         "givenName": "User Updated",
         "mail": "testuser.updated@example.com"
       },
-      "roles": ["user", "editor"],
+      "roles": ["Z3Vlc3Q=", "YWRtaW4="],
       "groups": ["group_id_1", "group_id_2"],
       "version_no": 1
     }
@@ -335,7 +340,7 @@ Antwort
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_user_id",
         "created": false
@@ -367,7 +372,7 @@ Antwort
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "deleted_user_id",
         "created": false
@@ -396,7 +401,7 @@ Neuen Benutzer erstellen
              "givenName": "John",
              "mail": "john.doe@example.com"
            },
-           "roles": ["user"],
+           "roles": ["Z3Vlc3Q="],
            "groups": []
          }'
 
@@ -411,7 +416,7 @@ Benutzerrollen ändern
          -d '{
            "id": "user_id_123",
            "name": "john.doe",
-           "roles": ["user", "editor", "admin"],
+           "roles": ["Z3Vlc3Q=", "YWRtaW4="],
            "version_no": 1
          }'
 

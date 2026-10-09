@@ -61,7 +61,7 @@ General APIは、|Fess| の一般設定（システム全般に関わる設定�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "incremental_crawling": "true",
@@ -396,7 +396,7 @@ LDAPおよびSSO（OpenID Connect、SAML、SPNEGO、Entra ID）に関する設�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

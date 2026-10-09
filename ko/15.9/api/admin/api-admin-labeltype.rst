@@ -92,7 +92,7 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -360,7 +360,7 @@ HTTP 상태 코드 등)에 대해서는 :doc:`api-admin-overview` 를 참조하�
 .. code-block:: bash
 
     # 라벨로 필터링
-    curl "http://localhost:8080/json/?q=search&label=tech_docs"
+    curl "http://localhost:8080/api/v2/search?q=search&fields.label=tech_docs"
 
 참고 정보
 ==========

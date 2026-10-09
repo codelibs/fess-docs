@@ -2,18 +2,6 @@
 Google Search Appliance 互換 API
 ================================
 
-|Fess| は、検索結果をGoogle Search Appliance(GSA)互換のXMLフォーマットで返すAPIも提供しています。
-XMLのフォーマットについては、\ `GSAの公式ドキュメント <https://www.google.com/support/enterprise/static/gsa/docs/admin/74/gsa_doc_set/xml_reference/results_format.html>`__\ をご覧ください。
+.. warning::
 
-設定
-====
-
-system.propertiesに ``web.api.gsa=true`` を追加して、Google Search Appliance互換APIを有効にしてください。
-
-リクエスト
-========
-
-|Fess| に
-``http://localhost:8080/gsa/?q=検索語``
-のようなリクエストを送ることで、検索結果を GSA互換XML形式で受け取ることができます。
-リクエストパラメーターとして指定できる値は、\ `JSON 応答の検索API <api-search.html>`__\ と同じです。
+   GSA 互換 API（ ``/gsa/`` ）は、 |Fess| 14.8 で削除されました。15.9 の |Fess| 本体にも、旧 API を提供するプラグイン（ ``fess-webapp-classic-api`` ・ ``fess-webapp-v1-api`` ）にも、 ``/gsa/`` を提供する実装はありません。 ``web.api.gsa`` を設定しても有効にならず、 ``/gsa/`` へのリクエストは ``404`` になります。検索には、 :doc:`api-search` の ``/api/v2/search`` を使用してください。

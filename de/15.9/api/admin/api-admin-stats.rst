@@ -65,7 +65,7 @@ das Objekt ``stats``, das die Systemmetriken speichert.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "stats": {
           "jvm": {
@@ -145,7 +145,7 @@ Response-Felder (oberste Ebene)
    * - Feld
      - Beschreibung
    * - ``version``
-     - Die Produktversion von |Fess| (z. B. ``15.9.0``).
+     - Die Produktversion von |Fess| (z. B. ``15.9``).
    * - ``status``
      - Ein Code, der das Verarbeitungsergebnis angibt. ``0`` bedeutet erfolgreiche Ausführung.
    * - ``stats``

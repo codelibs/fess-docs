@@ -92,7 +92,7 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -360,7 +360,7 @@ HTTPステータスコードなど）については :doc:`api-admin-overview` �
 .. code-block:: bash
 
     # ラベルでフィルタリング
-    curl "http://localhost:8080/json/?q=search&label=tech_docs"
+    curl "http://localhost:8080/api/v2/search?q=search&fields.label=tech_docs"
 
 参考情報
 ========

@@ -91,7 +91,7 @@ HTTP 상태 코드)에 대해서는 :doc:`api-admin-overview` 를 참조하십�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
