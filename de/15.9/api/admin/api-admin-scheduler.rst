@@ -84,14 +84,14 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cron_expression": "0 0 0 * * ?",
+            "cron_expression": "0 0 * * *",
             "script_type": "javascript",
             "script_data": "...",
             "job_logging": "true",
@@ -136,7 +136,7 @@ Response
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cron_expression": "0 0 0 * * ?",
+          "cron_expression": "0 0 * * *",
           "script_type": "javascript",
           "script_data": "return container.getComponent(\"crawlJob\").execute();",
           "job_logging": "true",
@@ -168,7 +168,7 @@ Request-Body
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cron_expression": "0 0 2 * * ?",
+      "cron_expression": "0 2 * * *",
       "script_type": "javascript",
       "script_data": "return container.getComponent(\"crawlJob\").execute();",
       "job_logging": "true",
@@ -195,7 +195,7 @@ Feldbeschreibungen
      - Ausführungsziel (max. 100 Zeichen). ``all`` oder einen bestimmten Zielnamen angeben
    * - ``cron_expression``
      - Nein
-     - Cron-Ausdruck (Sekunde Minute Stunde Tag Monat Wochentag). Max. 100 Zeichen, wird als Cron-Ausdruck validiert. Ist das Feld leer, wird der Job nicht geplant und kann nur manuell gestartet werden
+     - Cron-Ausdruck (fünf Felder: Minute Stunde Tag Monat Wochentag, im cron4j-Format). Max. 100 Zeichen, wird als Cron-Ausdruck validiert. Ein Sekundenfeld im Quartz-Stil und ``?`` sind nicht möglich (``0 0 * * * ?`` wird abgelehnt). Ist das Feld leer, wird der Job nicht geplant und kann nur manuell gestartet werden
    * - ``script_type``
      - Ja
      - Skript-Typ (max. 100 Zeichen). ``javascript`` (Standard für neue Jobs, festgelegt über die Eigenschaft ``job.default.script``) oder ``groovy`` (erfordert das Plugin ``fess-script-groovy``)
@@ -245,13 +245,13 @@ Cron-Ausdrücke Beispiele
 
    * - Cron-Ausdruck
      - Beschreibung
-   * - ``0 0 2 * * ?``
+   * - ``0 2 * * *``
      - Täglich um 2:00 Uhr ausführen
-   * - ``0 0 0/6 * * ?``
+   * - ``0 */6 * * *``
      - Alle 6 Stunden ausführen
-   * - ``0 0 2 * * MON``
-     - Jeden Montag um 2:00 Uhr ausführen
-   * - ``0 0 2 1 * ?``
+   * - ``0 2 * * 1``
+     - Jeden Montag um 2:00 Uhr ausführen (Wochentage: ``0`` für Sonntag bis ``6`` für Samstag)
+   * - ``0 2 1 * *``
      - Am 1. jeden Monats um 2:00 Uhr ausführen
 
 Geplanten Job aktualisieren
@@ -274,7 +274,7 @@ Request-Body
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cron_expression": "0 0 3 * * ?",
+      "cron_expression": "0 3 * * *",
       "script_type": "javascript",
       "script_data": "...",
       "job_logging": "true",
@@ -405,7 +405,7 @@ Crawl-Job erstellen und ausführen
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cron_expression": "0 0 * * * ?",
+           "cron_expression": "0 * * * *",
            "script_type": "javascript",
            "script_data": "return container.getComponent(\"crawlJob\").execute();",
            "job_logging": "true",

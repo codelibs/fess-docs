@@ -84,14 +84,14 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cron_expression": "0 0 0 * * ?",
+            "cron_expression": "0 0 * * *",
             "script_type": "javascript",
             "script_data": "...",
             "job_logging": "true",
@@ -136,7 +136,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cron_expression": "0 0 0 * * ?",
+          "cron_expression": "0 0 * * *",
           "script_type": "javascript",
           "script_data": "return container.getComponent(\"crawlJob\").execute();",
           "job_logging": "true",
@@ -168,7 +168,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cron_expression": "0 0 2 * * ?",
+      "cron_expression": "0 2 * * *",
       "script_type": "javascript",
       "script_data": "return container.getComponent(\"crawlJob\").execute();",
       "job_logging": "true",
@@ -195,7 +195,7 @@ Scheduler API는 |Fess| 의 스케줄 작업을 관리하기 위한 API입니다
      - 실행 대상（최대 100자）。\ ``all`` 또는 특정 대상 이름을 지정합니다
    * - ``cron_expression``
      - 아니오
-     - Cron 표현식（초 분 시 일 월 요일）。최대 100자이며 Cron 표현식으로 검증됩니다. 비어 있으면 스케줄 실행되지 않고 수동으로만 시작할 수 있습니다
+     - Cron 표현식（분 시 일 월 요일의 5개 필드, cron4j 형식）。최대 100자이며 Cron 표현식으로 검증됩니다. Quartz 형식의 초 필드와 ``?`` 는 사용할 수 없습니다（``0 0 * * * ?`` 는 거부됩니다）。비어 있으면 스케줄 실행되지 않고 수동으로만 시작할 수 있습니다
    * - ``script_type``
      - 예
      - 스크립트 타입（최대 100자）。``javascript``（신규 작업의 기본값. ``job.default.script`` 속성으로 결정）또는 ``groovy``（``fess-script-groovy`` 플러그인 필요）를 지정합니다
@@ -245,13 +245,13 @@ Cron 표현식 예시
 
    * - Cron 표현식
      - 설명
-   * - ``0 0 2 * * ?``
+   * - ``0 2 * * *``
      - 매일 오전 2시에 실행
-   * - ``0 0 0/6 * * ?``
+   * - ``0 */6 * * *``
      - 6시간마다 실행
-   * - ``0 0 2 * * MON``
-     - 매주 월요일 오전 2시에 실행
-   * - ``0 0 2 1 * ?``
+   * - ``0 2 * * 1``
+     - 매주 월요일 오전 2시에 실행 (요일은 ``0`` (일요일)부터 ``6`` (토요일)까지)
+   * - ``0 2 1 * *``
      - 매월 1일 오전 2시에 실행
 
 스케줄 작업 업데이트
@@ -274,7 +274,7 @@ Cron 표현식 예시
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cron_expression": "0 0 3 * * ?",
+      "cron_expression": "0 3 * * *",
       "script_type": "javascript",
       "script_data": "...",
       "job_logging": "true",
@@ -405,7 +405,7 @@ Cron 표현식 예시
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cron_expression": "0 0 * * * ?",
+           "cron_expression": "0 * * * *",
            "script_type": "javascript",
            "script_data": "return container.getComponent(\"crawlJob\").execute();",
            "job_logging": "true",

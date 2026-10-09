@@ -151,7 +151,7 @@ Les éléments traités avec succès contiennent ``result`` et ``id`` ; les él�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -177,7 +177,7 @@ l'élément concerné contient un champ ``message`` (``result`` est alors un nom
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 9,
         "items": [
           {

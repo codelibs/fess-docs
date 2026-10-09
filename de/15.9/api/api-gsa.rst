@@ -2,18 +2,6 @@
 Google Search Appliance-kompatible API
 ====================================
 
-|Fess| bietet auch eine API, die Suchergebnisse im Google Search Appliance (GSA)-kompatiblen XML-Format zurückgibt.
-Informationen zum XML-Format finden Sie in der \ `offiziellen GSA-Dokumentation <https://www.google.com/support/enterprise/static/gsa/docs/admin/74/gsa_doc_set/xml_reference/results_format.html>`__\ .
+.. warning::
 
-Konfiguration
-=============
-
-Fügen Sie ``web.api.gsa=true`` zu system.properties hinzu, um die Google Search Appliance-kompatible API zu aktivieren.
-
-Anfrage
-=======
-
-Durch Senden einer Anfrage wie
-``http://localhost:8080/gsa/?q=Suchbegriff``
-an |Fess| können Sie Suchergebnisse im GSA-kompatiblen XML-Format erhalten.
-Die als Anfrageparameter angebbaren Werte sind die gleichen wie bei der \ `Such-API mit JSON-Antwort <api-search.html>`__\ .
+   Die zur Google Search Appliance (GSA) kompatible API (``/gsa/``) wurde in |Fess| 14.8 entfernt. Weder |Fess| 15.9 selbst noch die Plugins für die alten APIs (``fess-webapp-classic-api`` und ``fess-webapp-v1-api``) enthalten eine Implementierung von ``/gsa/``. Die Einstellung ``web.api.gsa`` hat daher keine Wirkung, und eine Anfrage an ``/gsa/`` liefert ``404``. Verwenden Sie zum Suchen ``/api/v2/search`` aus :doc:`api-search`.

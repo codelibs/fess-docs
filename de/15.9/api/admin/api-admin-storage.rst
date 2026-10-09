@@ -8,6 +8,10 @@ Storage API
 Die Storage API dient zur Verwaltung des Objektspeichers in |Fess|.
 Sie können Dateien und Verzeichnisse im Speicher auflisten sowie Dateien herunterladen, löschen und hochladen.
 
+.. note::
+
+   Diese API lässt sich nur verwenden, wenn ein Plugin installiert ist, das den Speicher-Client bereitstellt: ``fess-storage-s3`` für Amazon S3 und S3-kompatiblen Speicher oder ``fess-storage-gcs`` für Google Cloud Storage. Die Plugins sind nicht in der Distribution enthalten. Ohne eines gibt es keinen Client für den konfigurierten ``storage.type``, und die Anfragen schlagen fehl. Installieren Sie das Plugin auf der Seite „System“ > „Plugin“ der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-storage-s3`` (für GCS ``fess-storage-gcs``).
+
 Basis-URL
 =========
 
@@ -95,7 +99,7 @@ Jedes Objekt hat die folgenden Felder.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -161,7 +165,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -204,7 +208,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

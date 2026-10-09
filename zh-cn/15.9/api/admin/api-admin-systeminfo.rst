@@ -55,7 +55,7 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "env_props": [
           {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
@@ -89,7 +89,7 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
    * - 字段
      - 说明
    * - ``version``
-     - |Fess| 的产品版本（例如：``15.9.0``）。
+     - |Fess| 的产品版本（例如：``15.9``）。
    * - ``status``
      - 表示处理结果的状态码。\ ``0`` 表示正常结束。
    * - ``env_props``
@@ -138,7 +138,7 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
     # 仅提取 java.version 的值
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         | jq -r '.response.systemProps[] | select(.label == "java.version") | .value'
+         | jq -r '.response.system_props[] | select(.label == "java.version") | .value'
 
 列出环境变量
 ------------
@@ -148,7 +148,7 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
     # 以 label=value 格式显示环境变量
     curl -X GET "http://localhost:8080/api/admin/systeminfo" \
          -H "Authorization: Bearer YOUR_TOKEN" \
-         | jq -r '.response.envProps[] | "\(.label)=\(.value)"'
+         | jq -r '.response.env_props[] | "\(.label)=\(.value)"'
 
 参考信息
 ========

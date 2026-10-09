@@ -96,7 +96,7 @@ Plugin APIは、|Fess| のプラグイン（アーティファクト）を管理
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -134,7 +134,7 @@ Plugin APIは、|Fess| のプラグイン（アーティファクト）を管理
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -203,7 +203,7 @@ Plugin APIは、|Fess| のプラグイン（アーティファクト）を管理
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -215,7 +215,7 @@ Plugin APIは、|Fess| のプラグイン（アーティファクト）を管理
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "invalid name or version"
       }
@@ -278,7 +278,7 @@ Plugin APIは、|Fess| のプラグイン（アーティファクト）を管理
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

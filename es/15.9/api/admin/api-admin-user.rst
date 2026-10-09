@@ -92,7 +92,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -103,7 +103,7 @@ Respuesta
               "givenName": "System",
               "mail": "admin@example.com"
             },
-            "roles": ["admin"],
+            "roles": ["YWRtaW4=", "Z3Vlc3Q="],
             "groups": [],
             "version_no": 1
           }
@@ -134,7 +134,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "YWRtaW4=",
@@ -148,7 +148,7 @@ Respuesta
             "gidNumber": "",
             "homeDirectory": ""
           },
-          "roles": ["admin"],
+          "roles": ["YWRtaW4=", "Z3Vlc3Q="],
           "groups": [],
           "version_no": 1
         }
@@ -185,7 +185,7 @@ Cuerpo de la Solicitud
         "givenName": "User",
         "mail": "testuser@example.com"
       },
-      "roles": ["user"],
+      "roles": ["Z3Vlc3Q="],
       "groups": ["group_id_1"]
     }
 
@@ -203,7 +203,7 @@ Descripción de Campos
      - Sí
      - Nombre de usuario (ID de inicio de sesión)
    * - ``password``
-     - No
+     - Sí
      - Contraseña
    * - ``confirm_password``
      - No
@@ -220,8 +220,13 @@ Descripción de Campos
 
 .. note::
 
-   La API REST no realiza la verificación de contraseña obligatoria, la verificación de coincidencia entre ``password`` y ``confirm_password``, ni la validación de política de contraseñas (éstas se aplican únicamente en la interfaz de administración).
-   En la práctica, se recomienda especificar una ``password`` válida cuyo valor coincida con ``confirm_password``.
+   En ``roles`` y ``groups`` indique el ID del rol o del grupo, no su nombre. Un ID que no existe (incluido el nombre de un rol o de un grupo) se rechaza con ``400``.
+   Los ID se pueden consultar en el ``id`` que devuelven ``GET /api/admin/role/settings`` y ``GET /api/admin/group/settings``.
+   El ID de un rol o grupo creado en la interfaz de administración o mediante la API es su nombre codificado en Base64 URL (por ejemplo, ``YWRtaW4=`` para el rol ``admin`` y ``Z3Vlc3Q=`` para ``guest``, que existen por defecto).
+
+.. note::
+
+   Se aplican las mismas verificaciones de contraseña que en la interfaz de administración. Se rechazan con ``400`` una creación sin ``password``, un ``confirm_password`` que no coincide con ``password`` (``confirm_password`` puede omitirse) y una contraseña que incumple la política de contraseñas (``password.min.length`` (por defecto ``8``), ``password.max.length``, ``password.require.*`` y ``password.invalid.admin.passwords`` de ``fess_config.properties``).
 
 Las claves de ``attributes`` son los nombres de atributos de la entidad de usuario (los nombres de elementos derivados del esquema LDAP).
 Las claves más comunes son:
@@ -246,7 +251,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_user_id",
         "created": true
@@ -282,7 +287,7 @@ Cuerpo de la Solicitud
         "givenName": "User Updated",
         "mail": "testuser.updated@example.com"
       },
-      "roles": ["user", "editor"],
+      "roles": ["Z3Vlc3Q=", "YWRtaW4="],
       "groups": ["group_id_1", "group_id_2"],
       "version_no": 1
     }
@@ -335,7 +340,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_user_id",
         "created": false
@@ -367,7 +372,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "deleted_user_id",
         "created": false
@@ -396,7 +401,7 @@ Crear Nuevo Usuario
              "givenName": "John",
              "mail": "john.doe@example.com"
            },
-           "roles": ["user"],
+           "roles": ["Z3Vlc3Q="],
            "groups": []
          }'
 
@@ -411,7 +416,7 @@ Cambiar Roles de Usuario
          -d '{
            "id": "user_id_123",
            "name": "john.doe",
-           "roles": ["user", "editor", "admin"],
+           "roles": ["Z3Vlc3Q=", "YWRtaW4="],
            "version_no": 1
          }'
 

@@ -84,14 +84,14 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cron_expression": "0 0 0 * * ?",
+            "cron_expression": "0 0 * * *",
             "script_type": "javascript",
             "script_data": "...",
             "job_logging": "true",
@@ -136,7 +136,7 @@ Response
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cron_expression": "0 0 0 * * ?",
+          "cron_expression": "0 0 * * *",
           "script_type": "javascript",
           "script_data": "return container.getComponent(\"crawlJob\").execute();",
           "job_logging": "true",
@@ -168,7 +168,7 @@ Request Body
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cron_expression": "0 0 2 * * ?",
+      "cron_expression": "0 2 * * *",
       "script_type": "javascript",
       "script_data": "return container.getComponent(\"crawlJob\").execute();",
       "job_logging": "true",
@@ -195,7 +195,7 @@ Field Description
      - Execution target (max 100 characters). Specify ``all`` or a specific target name
    * - ``cron_expression``
      - No
-     - Cron expression (second minute hour day month day-of-week). Max 100 characters, validated as a cron expression. If empty, the job is not scheduled and can only be started manually
+     - Cron expression (five fields: minute hour day month day-of-week, in cron4j format). Max 100 characters, validated as a cron expression. A Quartz-style seconds field and ``?`` cannot be used (``0 0 * * * ?`` is rejected). If empty, the job is not scheduled and can only be started manually
    * - ``script_type``
      - Yes
      - Script type (max 100 characters). Either ``javascript`` (the default for new jobs, determined by the ``job.default.script`` property) or ``groovy`` (requires the ``fess-script-groovy`` plugin)
@@ -245,13 +245,13 @@ Cron Expression Examples
 
    * - Cron Expression
      - Description
-   * - ``0 0 2 * * ?``
+   * - ``0 2 * * *``
      - Execute daily at 2 AM
-   * - ``0 0 0/6 * * ?``
+   * - ``0 */6 * * *``
      - Execute every 6 hours
-   * - ``0 0 2 * * MON``
-     - Execute every Monday at 2 AM
-   * - ``0 0 2 1 * ?``
+   * - ``0 2 * * 1``
+     - Execute every Monday at 2 AM (days of the week are ``0`` for Sunday to ``6`` for Saturday)
+   * - ``0 2 1 * *``
      - Execute on the 1st of every month at 2 AM
 
 Update Scheduled Job
@@ -274,7 +274,7 @@ Request Body
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cron_expression": "0 0 3 * * ?",
+      "cron_expression": "0 3 * * *",
       "script_type": "javascript",
       "script_data": "...",
       "job_logging": "true",
@@ -405,7 +405,7 @@ Create and Run a Crawl Job
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cron_expression": "0 0 * * * ?",
+           "cron_expression": "0 * * * *",
            "script_type": "javascript",
            "script_data": "return container.getComponent(\"crawlJob\").execute();",
            "job_logging": "true",

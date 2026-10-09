@@ -133,7 +133,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [...],
         "total": 100
@@ -143,7 +143,7 @@ Respuesta
 .. note::
 
    El objeto ``response`` de todas las respuestas incluye siempre ``version``,
-   que indica la versión del producto (por ejemplo, ``"15.9.0"``). En los ejemplos siguientes
+   que indica la versión del producto (por ejemplo, ``"15.9"``). En los ejemplos siguientes
    puede omitirse por brevedad.
 
 Obtener Configuración Individual (GET /setting/{id})
@@ -307,7 +307,7 @@ Respuesta Exitosa
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "...": "..."
       }
@@ -325,7 +325,7 @@ contiene el mensaje de error.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "Failed to process the request."
       }

@@ -89,7 +89,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -174,14 +174,14 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": 1,
             "dict_id": "ZjA5...synonym.txt",
-            "inputs": "検索,サーチ",
-            "outputs": "検索,サーチ,リサーチ"
+            "inputs": "検索\nサーチ",
+            "outputs": "検索\nサーチ\nリサーチ"
           }
         ],
         "total": 1
@@ -229,13 +229,13 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": 1,
           "dict_id": "ZjA5...synonym.txt",
-          "inputs": "検索,サーチ",
-          "outputs": "検索,サーチ,リサーチ"
+          "inputs": "検索\nサーチ",
+          "outputs": "検索\nサーチ\nリサーチ"
         }
       }
     }
@@ -259,8 +259,8 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 .. code-block:: json
 
     {
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ"
     }
 
 응답
@@ -270,7 +270,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": true
@@ -297,8 +297,8 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
     {
       "id": 1,
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ,search"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ\nsearch"
     }
 
 응답
@@ -308,7 +308,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -354,7 +354,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -383,7 +383,7 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -434,6 +434,12 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
      - ``input`` (필수)、 ``output`` (필수)
      - ``stemmerOverrideFile``
 
+.. note::
+
+   ``synonym`` 의 ``inputs`` 와 ``outputs`` , 그리고 ``mapping`` 의 ``inputs`` 는 한 줄에 한 단어씩 줄바꿈 (JSON 문자열에서는 ``\n`` )으로 구분하여 지정합니다.
+   ``synonym`` 에서는 쉼표 ( ``,`` ) 또는 ``=>`` 를 포함하는 값이 거부됩니다 (사전 파일 형식에서 이 둘이 구분자로 사용되기 때문입니다).
+   예를 들어 ``"inputs": "検索,サーチ"`` 는 거부되고, ``"inputs": "検索\nサーチ"`` 는 받아들여집니다.
+
 사용 예
 ======
 
@@ -462,8 +468,8 @@ Dict API는 |Fess| 의 사전을 관리하기 위한 API입니다.
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "inputs": "検索,サーチ",
-           "outputs": "検索,サーチ,リサーチ"
+           "inputs": "検索\nサーチ",
+           "outputs": "検索\nサーチ\nリサーチ"
          }'
 
 동의어 사전 파일 업로드

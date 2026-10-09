@@ -152,7 +152,7 @@ Documents API는 |Fess| 인덱스에 문서를 일괄 등록하기 위한 Admin 
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -178,7 +178,7 @@ Documents API는 |Fess| 인덱스에 문서를 일괄 등록하기 위한 Admin 
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 9,
         "items": [
           {

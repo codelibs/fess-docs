@@ -82,7 +82,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -119,7 +119,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "query_id_1",
@@ -184,7 +184,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_query_id",
         "created": true
@@ -248,7 +248,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_query_id",
         "created": false
@@ -272,7 +272,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -288,7 +288,7 @@ RelatedQuery API是用于管理 |Fess| 相关查询的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "..."
       }

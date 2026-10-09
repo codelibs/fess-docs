@@ -80,7 +80,7 @@ Log API는 |Fess| 의 로그 파일을 참조·다운로드하기 위한 API입�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "files": [
           {

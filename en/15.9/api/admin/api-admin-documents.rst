@@ -151,7 +151,7 @@ Successful items include ``result`` and ``id``, while failed items include ``res
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -177,7 +177,7 @@ Successfully registered items still return their ``id``.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 9,
         "items": [
           {

@@ -84,14 +84,14 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cron_expression": "0 0 0 * * ?",
+            "cron_expression": "0 0 * * *",
             "script_type": "javascript",
             "script_data": "...",
             "job_logging": "true",
@@ -136,7 +136,7 @@ Respuesta
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cron_expression": "0 0 0 * * ?",
+          "cron_expression": "0 0 * * *",
           "script_type": "javascript",
           "script_data": "return container.getComponent(\"crawlJob\").execute();",
           "job_logging": "true",
@@ -168,7 +168,7 @@ Cuerpo de la Solicitud
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cron_expression": "0 0 2 * * ?",
+      "cron_expression": "0 2 * * *",
       "script_type": "javascript",
       "script_data": "return container.getComponent(\"crawlJob\").execute();",
       "job_logging": "true",
@@ -195,7 +195,7 @@ Descripción de Campos
      - Objetivo de ejecución (max. 100 caracteres). Especifique ``all`` o un nombre de objetivo específico
    * - ``cron_expression``
      - No
-     - Expresión Cron (segundo minuto hora día mes día-semana). Max. 100 caracteres, validada como expresión cron. Si está vacía, el trabajo no se ejecuta de forma programada y solo puede iniciarse manualmente
+     - Expresión Cron (cinco campos: minuto hora día mes día-semana, en formato cron4j). Max. 100 caracteres, validada como expresión cron. No se puede usar un campo de segundos al estilo Quartz ni ``?`` (``0 0 * * * ?`` se rechaza). Si está vacía, el trabajo no se ejecuta de forma programada y solo puede iniciarse manualmente
    * - ``script_type``
      - Sí
      - Tipo de script (max. 100 caracteres). ``javascript`` (valor predeterminado para trabajos nuevos, determinado por la propiedad ``job.default.script``) o ``groovy`` (requiere el plugin ``fess-script-groovy``)
@@ -245,13 +245,13 @@ Ejemplos de Expresiones Cron
 
    * - Expresión Cron
      - Descripción
-   * - ``0 0 2 * * ?``
+   * - ``0 2 * * *``
      - Ejecutar diariamente a las 2 AM
-   * - ``0 0 0/6 * * ?``
+   * - ``0 */6 * * *``
      - Ejecutar cada 6 horas
-   * - ``0 0 2 * * MON``
-     - Ejecutar cada lunes a las 2 AM
-   * - ``0 0 2 1 * ?``
+   * - ``0 2 * * 1``
+     - Ejecutar cada lunes a las 2 AM (los días de la semana van de ``0`` para domingo a ``6`` para sábado)
+   * - ``0 2 1 * *``
      - Ejecutar el día 1 de cada mes a las 2 AM
 
 Actualizar Trabajo Programado
@@ -274,7 +274,7 @@ Cuerpo de la Solicitud
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cron_expression": "0 0 3 * * ?",
+      "cron_expression": "0 3 * * *",
       "script_type": "javascript",
       "script_data": "...",
       "job_logging": "true",
@@ -405,7 +405,7 @@ Crear y Ejecutar Trabajo de Rastreo
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cron_expression": "0 0 * * * ?",
+           "cron_expression": "0 * * * *",
            "script_type": "javascript",
            "script_data": "return container.getComponent(\"crawlJob\").execute();",
            "job_logging": "true",

@@ -66,7 +66,7 @@ Zahlen ausgedrückt werden.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "incremental_crawling": "true",
@@ -413,7 +413,7 @@ zurückgegeben (``id`` und ``created`` sind nicht enthalten).
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

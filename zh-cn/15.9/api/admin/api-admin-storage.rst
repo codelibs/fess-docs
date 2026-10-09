@@ -8,6 +8,10 @@ Storage API
 Storage API是用于管理 |Fess| 对象存储的API。
 您可以获取存储中文件和目录的列表，并执行文件的下载、删除和上传操作。
 
+.. note::
+
+   使用此API需要安装提供存储客户端的插件：Amazon S3 及 S3 兼容存储使用 ``fess-storage-s3`` ，Google Cloud Storage 使用 ``fess-storage-gcs`` 。插件未随发行包提供。未安装时，没有与所配置的 ``storage.type`` 对应的客户端，请求会失败。请在管理界面的「系统 > 插件」页面，或使用 ``bin/fess-setup install plugin fess-storage-s3`` （GCS 为 ``fess-storage-gcs`` ）进行安装。
+
 基础URL
 ==========
 
@@ -95,7 +99,7 @@ Storage API所属的Admin API全部端点均需要通过访问令牌进行认证
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -161,7 +165,7 @@ Storage API所属的Admin API全部端点均需要通过访问令牌进行认证
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -204,7 +208,7 @@ Storage API所属的Admin API全部端点均需要通过访问令牌进行认证
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

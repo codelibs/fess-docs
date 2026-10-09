@@ -63,7 +63,7 @@ values such as retention days and thread counts are expressed as numbers.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "incremental_crawling": "true",
@@ -400,7 +400,7 @@ On a successful update, only ``version`` and ``status`` are returned (``id`` and
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

@@ -70,7 +70,7 @@ Backup API는 |Fess| 의 백업 대상 데이터를 참조 및 다운로드하�
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "files": [
           { "id": "fess_basic_config.bulk", "name": "fess_basic_config.bulk" },

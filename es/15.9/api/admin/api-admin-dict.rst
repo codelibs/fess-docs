@@ -88,7 +88,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -173,14 +173,14 @@ Los campos de cada elemento del arreglo ``settings`` de la respuesta varían seg
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": 1,
             "dict_id": "ZjA5...synonym.txt",
-            "inputs": "busqueda,buscar",
-            "outputs": "busqueda,buscar,investigar"
+            "inputs": "búsqueda\nbuscar",
+            "outputs": "búsqueda\nbuscar\ninvestigar"
           }
         ],
         "total": 1
@@ -228,13 +228,13 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": 1,
           "dict_id": "ZjA5...synonym.txt",
-          "inputs": "busqueda,buscar",
-          "outputs": "busqueda,buscar,investigar"
+          "inputs": "búsqueda\nbuscar",
+          "outputs": "búsqueda\nbuscar\ninvestigar"
         }
       }
     }
@@ -258,8 +258,8 @@ Cuerpo de la Solicitud (ejemplo de synonym)
 .. code-block:: json
 
     {
-      "inputs": "busqueda,buscar",
-      "outputs": "busqueda,buscar,investigar"
+      "inputs": "búsqueda\nbuscar",
+      "outputs": "búsqueda\nbuscar\ninvestigar"
     }
 
 Respuesta
@@ -269,7 +269,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": true
@@ -296,8 +296,8 @@ Cuerpo de la Solicitud (ejemplo de synonym)
 
     {
       "id": 1,
-      "inputs": "busqueda,buscar",
-      "outputs": "busqueda,buscar,investigar,search"
+      "inputs": "búsqueda\nbuscar",
+      "outputs": "búsqueda\nbuscar\ninvestigar\nsearch"
     }
 
 Respuesta
@@ -307,7 +307,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -353,7 +353,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -382,7 +382,7 @@ Respuesta
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -433,6 +433,12 @@ Los campos del cuerpo de la solicitud de creación y actualización de elementos
      - ``input`` (requerido), ``output`` (requerido)
      - ``stemmerOverrideFile``
 
+.. note::
+
+   En ``synonym``, ``inputs`` y ``outputs`` (y ``inputs`` de ``mapping``) llevan una palabra por línea, separadas por un salto de línea (``\n`` en una cadena JSON).
+   En ``synonym`` se rechaza un valor que contenga una coma (``,``) o ``=>``, porque el formato del archivo de diccionario usa ambos como separadores.
+   Por ejemplo, ``"inputs": "búsqueda,buscar"`` se rechaza, mientras que ``"inputs": "búsqueda\nbuscar"`` se acepta.
+
 Ejemplos de Uso
 ===============
 
@@ -461,8 +467,8 @@ Agregar Elemento al Diccionario de Sinónimos
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "inputs": "busqueda,buscar",
-           "outputs": "busqueda,buscar,investigar"
+           "inputs": "búsqueda\nbuscar",
+           "outputs": "búsqueda\nbuscar\ninvestigar"
          }'
 
 Cargar Archivo del Diccionario de Sinónimos

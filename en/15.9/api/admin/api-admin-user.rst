@@ -92,7 +92,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -103,7 +103,7 @@ Response
               "givenName": "System",
               "mail": "admin@example.com"
             },
-            "roles": ["admin"],
+            "roles": ["YWRtaW4=", "Z3Vlc3Q="],
             "groups": [],
             "version_no": 1
           }
@@ -134,7 +134,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "YWRtaW4=",
@@ -148,7 +148,7 @@ Response
             "gidNumber": "",
             "homeDirectory": ""
           },
-          "roles": ["admin"],
+          "roles": ["YWRtaW4=", "Z3Vlc3Q="],
           "groups": [],
           "version_no": 1
         }
@@ -185,7 +185,7 @@ Request Body
         "givenName": "User",
         "mail": "testuser@example.com"
       },
-      "roles": ["user"],
+      "roles": ["Z3Vlc3Q="],
       "groups": ["group_id_1"]
     }
 
@@ -203,7 +203,7 @@ Field Description
      - Yes
      - Username (login ID)
    * - ``password``
-     - No
+     - Yes
      - Password
    * - ``confirm_password``
      - No
@@ -220,8 +220,13 @@ Field Description
 
 .. note::
 
-   The REST API does not perform a password-required check, a match check between ``password`` and ``confirm_password``, or password policy validation (these are applied only in the admin UI).
-   In practice, it is recommended to specify a valid ``password`` whose value matches ``confirm_password``.
+   Give the ID of a role or group in ``roles`` and ``groups``, not its name. An ID that does not exist (including a role or group name) is rejected with ``400``.
+   You can find the IDs in the ``id`` returned by ``GET /api/admin/role/settings`` and ``GET /api/admin/group/settings``.
+   The ID of a role or group created in the admin UI or through the API is its name encoded as Base64 URL (for example, ``YWRtaW4=`` for the built-in role ``admin`` and ``Z3Vlc3Q=`` for ``guest``).
+
+.. note::
+
+   The same password checks as in the admin UI apply. A create request without ``password``, a ``confirm_password`` that differs from ``password`` (``confirm_password`` itself may be omitted), and a password that breaks the password policy (``password.min.length`` (default ``8``), ``password.max.length``, ``password.require.*`` and ``password.invalid.admin.passwords`` in ``fess_config.properties``) are all rejected with ``400``.
 
 The keys of ``attributes`` are the user entity attribute names (the schema item names derived from LDAP).
 The most common keys are:
@@ -246,7 +251,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_user_id",
         "created": true
@@ -282,7 +287,7 @@ Request Body
         "givenName": "User Updated",
         "mail": "testuser.updated@example.com"
       },
-      "roles": ["user", "editor"],
+      "roles": ["Z3Vlc3Q=", "YWRtaW4="],
       "groups": ["group_id_1", "group_id_2"],
       "version_no": 1
     }
@@ -335,7 +340,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_user_id",
         "created": false
@@ -367,7 +372,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "deleted_user_id",
         "created": false
@@ -396,7 +401,7 @@ Create New User
              "givenName": "John",
              "mail": "john.doe@example.com"
            },
-           "roles": ["user"],
+           "roles": ["Z3Vlc3Q="],
            "groups": []
          }'
 
@@ -411,7 +416,7 @@ Change User Roles
          -d '{
            "id": "user_id_123",
            "name": "john.doe",
-           "roles": ["user", "editor", "admin"],
+           "roles": ["Z3Vlc3Q=", "YWRtaW4="],
            "version_no": 1
          }'
 

@@ -70,7 +70,7 @@ Voici un exemple avec la configuration par défaut (valeurs par défaut de ``ind
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "files": [
           { "id": "fess_basic_config.bulk", "name": "fess_basic_config.bulk" },

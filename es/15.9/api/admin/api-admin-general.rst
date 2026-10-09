@@ -67,7 +67,7 @@ hilos se expresan como números.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "incremental_crawling": "true",
@@ -411,7 +411,7 @@ En caso de actualización exitosa, solo se devuelven ``version`` y ``status``
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

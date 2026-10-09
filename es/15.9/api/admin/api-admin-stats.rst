@@ -65,7 +65,7 @@ el resultado del procesamiento, y un objeto ``stats`` que almacena las métricas
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "stats": {
           "jvm": {
@@ -145,7 +145,7 @@ Campos de Respuesta (Nivel Superior)
    * - Campo
      - Descripción
    * - ``version``
-     - La versión del producto de |Fess| (por ejemplo, ``15.9.0``).
+     - La versión del producto de |Fess| (por ejemplo, ``15.9``).
    * - ``status``
      - Código que indica el resultado del procesamiento. ``0`` indica que se completó correctamente.
    * - ``stats``

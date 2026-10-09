@@ -96,7 +96,7 @@ Plugin API是用于管理 |Fess| 插件（构件）的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -134,7 +134,7 @@ Plugin API是用于管理 |Fess| 插件（构件）的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -202,7 +202,7 @@ Plugin API是用于管理 |Fess| 插件（构件）的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -214,7 +214,7 @@ Plugin API是用于管理 |Fess| 插件（构件）的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "invalid name or version"
       }
@@ -276,7 +276,7 @@ Plugin API是用于管理 |Fess| 插件（构件）的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

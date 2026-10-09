@@ -74,7 +74,7 @@ Suggest API는 |Fess| 의 서제스트 기능에서 사용되는 서제스트 �
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "total_words_num": 1500,
@@ -126,7 +126,7 @@ Suggest API는 |Fess| 의 서제스트 기능에서 사용되는 서제스트 �
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -150,7 +150,7 @@ Suggest API는 |Fess| 의 서제스트 기능에서 사용되는 서제스트 �
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -174,7 +174,7 @@ Suggest API는 |Fess| 의 서제스트 기능에서 사용되는 서제스트 �
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -189,7 +189,7 @@ Suggest API는 |Fess| 의 서제스트 기능에서 사용되는 서제스트 �
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "Failed to delete a document."
       }

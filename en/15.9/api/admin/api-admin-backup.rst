@@ -70,7 +70,7 @@ The following is an example under the default settings (when ``index.backup.targ
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "files": [
           { "id": "fess_basic_config.bulk", "name": "fess_basic_config.bulk" },

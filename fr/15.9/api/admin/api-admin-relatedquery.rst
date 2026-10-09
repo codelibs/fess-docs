@@ -83,7 +83,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -121,7 +121,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "query_id_1",
@@ -186,7 +186,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_query_id",
         "created": true
@@ -250,7 +250,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_query_id",
         "created": false
@@ -274,7 +274,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -291,7 +291,7 @@ de statut, consultez :doc:`api-admin-overview`.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "..."
       }

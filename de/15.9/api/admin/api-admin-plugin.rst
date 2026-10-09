@@ -95,7 +95,7 @@ Bei installierten Plugins wird ``url`` nicht ausgegeben.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -133,7 +133,7 @@ Bei installierbaren Plugins ist die Download-Quelle ``url`` enthalten.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -202,7 +202,7 @@ Wenn die Anfrage akzeptiert wird, wird eine Antwort mit ``status`` ``0`` (OK) zu
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -214,7 +214,7 @@ Wenn kein Artefakt zu ``name`` oder ``version`` gefunden wird, wird ``status`` a
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "invalid name or version"
       }
@@ -278,7 +278,7 @@ Wenn die Anfrage akzeptiert wird, wird eine Antwort mit ``status`` ``0`` (OK) zu
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

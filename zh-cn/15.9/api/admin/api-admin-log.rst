@@ -80,7 +80,7 @@ Log API是用于参阅和下载 |Fess| 日志文件的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "files": [
           {

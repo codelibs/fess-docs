@@ -80,7 +80,7 @@ Each object has the following fields.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "files": [
           {

@@ -125,7 +125,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [...],
         "total": 100
@@ -135,7 +135,7 @@ Réponse
 .. note::
 
    L'objet ``response`` de toutes les réponses contient toujours ``version``
-   (par exemple ``"15.9.0"``), indiquant la version du produit. Dans les exemples
+   (par exemple ``"15.9"``), indiquant la version du produit. Dans les exemples
    suivants, il peut être omis par souci de concision.
 
 Obtention d'un paramètre unique (GET /setting/{id})
@@ -302,7 +302,7 @@ Réponse de succès
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "...": "..."
       }
@@ -320,7 +320,7 @@ En cas d'erreur, ``status`` est défini sur une valeur différente de 0 et
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "Failed to process the request."
       }

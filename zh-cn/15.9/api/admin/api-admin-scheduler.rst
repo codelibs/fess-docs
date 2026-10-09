@@ -84,14 +84,14 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": "job_id_1",
             "name": "Default Crawler",
             "target": "all",
-            "cron_expression": "0 0 0 * * ?",
+            "cron_expression": "0 0 * * *",
             "script_type": "javascript",
             "script_data": "...",
             "job_logging": "true",
@@ -136,7 +136,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
           "id": "job_id_1",
           "name": "Default Crawler",
           "target": "all",
-          "cron_expression": "0 0 0 * * ?",
+          "cron_expression": "0 0 * * *",
           "script_type": "javascript",
           "script_data": "return container.getComponent(\"crawlJob\").execute();",
           "job_logging": "true",
@@ -168,7 +168,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
     {
       "name": "Daily Crawler",
       "target": "all",
-      "cron_expression": "0 0 2 * * ?",
+      "cron_expression": "0 2 * * *",
       "script_type": "javascript",
       "script_data": "return container.getComponent(\"crawlJob\").execute();",
       "job_logging": "true",
@@ -195,7 +195,7 @@ Scheduler API是用于管理 |Fess| 计划任务的API。
      - 执行目标（最大100字符）。指定 ``all`` 或特定目标名称
    * - ``cron_expression``
      - 否
-     - Cron表达式（秒 分 时 日 月 星期）。最大100字符，将作为Cron表达式进行验证。若为空，则不进行定时执行，只能手动启动
+     - Cron表达式（分 时 日 月 星期，共5个字段，cron4j格式）。最大100字符，将作为Cron表达式进行验证。不能使用Quartz风格的秒字段和 ``?`` （ ``0 0 * * * ?`` 会被拒绝）。若为空，则不进行定时执行，只能手动启动
    * - ``script_type``
      - 是
      - 脚本类型（最大100字符）。可指定 ``javascript`` （新建作业的默认值，由 ``job.default.script`` 属性决定）或 ``groovy`` （需要 ``fess-script-groovy`` 插件）
@@ -245,13 +245,13 @@ Cron表达式示例
 
    * - Cron表达式
      - 说明
-   * - ``0 0 2 * * ?``
+   * - ``0 2 * * *``
      - 每天凌晨2点执行
-   * - ``0 0 0/6 * * ?``
+   * - ``0 */6 * * *``
      - 每6小时执行一次
-   * - ``0 0 2 * * MON``
-     - 每周一凌晨2点执行
-   * - ``0 0 2 1 * ?``
+   * - ``0 2 * * 1``
+     - 每周一凌晨2点执行（星期用 ``0`` （星期日）到 ``6`` （星期六）表示）
+   * - ``0 2 1 * *``
      - 每月1日凌晨2点执行
 
 更新计划任务
@@ -274,7 +274,7 @@ Cron表达式示例
       "id": "existing_job_id",
       "name": "Updated Crawler",
       "target": "all",
-      "cron_expression": "0 0 3 * * ?",
+      "cron_expression": "0 3 * * *",
       "script_type": "javascript",
       "script_data": "...",
       "job_logging": "true",
@@ -405,7 +405,7 @@ Cron表达式示例
          -d '{
            "name": "Hourly Crawler",
            "target": "all",
-           "cron_expression": "0 0 * * * ?",
+           "cron_expression": "0 * * * *",
            "script_type": "javascript",
            "script_data": "return container.getComponent(\"crawlJob\").execute();",
            "job_logging": "true",

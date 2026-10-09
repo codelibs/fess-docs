@@ -88,7 +88,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -173,14 +173,14 @@ Les champs de chaque élément du tableau ``settings`` de la réponse varient se
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
             "id": 1,
             "dict_id": "ZjA5...synonym.txt",
-            "inputs": "検索,サーチ",
-            "outputs": "検索,サーチ,リサーチ"
+            "inputs": "検索\nサーチ",
+            "outputs": "検索\nサーチ\nリサーチ"
           }
         ],
         "total": 1
@@ -228,13 +228,13 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": 1,
           "dict_id": "ZjA5...synonym.txt",
-          "inputs": "検索,サーチ",
-          "outputs": "検索,サーチ,リサーチ"
+          "inputs": "検索\nサーチ",
+          "outputs": "検索\nサーチ\nリサーチ"
         }
       }
     }
@@ -258,8 +258,8 @@ Corps de la requête (exemple synonym)
 .. code-block:: json
 
     {
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ"
     }
 
 Réponse
@@ -269,7 +269,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": true
@@ -296,8 +296,8 @@ Corps de la requête (exemple synonym)
 
     {
       "id": 1,
-      "inputs": "検索,サーチ",
-      "outputs": "検索,サーチ,リサーチ,search"
+      "inputs": "検索\nサーチ",
+      "outputs": "検索\nサーチ\nリサーチ\nsearch"
     }
 
 Réponse
@@ -307,7 +307,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -353,7 +353,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "1",
         "created": false
@@ -382,7 +382,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -433,6 +433,12 @@ Les champs du corps de requête de création/mise à jour d'une entrée de dicti
      - ``input`` (requis), ``output`` (requis)
      - ``stemmerOverrideFile``
 
+.. note::
+
+   Pour ``synonym``, ``inputs`` et ``outputs`` (ainsi que ``inputs`` de ``mapping``) prennent un mot par ligne, séparés par un saut de ligne (``\n`` dans une chaîne JSON).
+   Pour ``synonym``, une valeur contenant une virgule (``,``) ou ``=>`` est refusée, car le format du fichier de dictionnaire utilise ces deux éléments comme séparateurs.
+   Par exemple, ``"inputs": "検索,サーチ"`` est refusé, alors que ``"inputs": "検索\nサーチ"`` est accepté.
+
 Exemples d'utilisation
 ======================
 
@@ -461,8 +467,8 @@ Ajout d'une entrée au dictionnaire de synonymes
          -H "Authorization: Bearer YOUR_TOKEN" \
          -H "Content-Type: application/json" \
          -d '{
-           "inputs": "検索,サーチ",
-           "outputs": "検索,サーチ,リサーチ"
+           "inputs": "検索\nサーチ",
+           "outputs": "検索\nサーチ\nリサーチ"
          }'
 
 Téléversement du fichier de dictionnaire de synonymes

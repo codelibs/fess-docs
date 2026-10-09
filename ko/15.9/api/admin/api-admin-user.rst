@@ -92,7 +92,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [
           {
@@ -103,7 +103,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
               "givenName": "System",
               "mail": "admin@example.com"
             },
-            "roles": ["admin"],
+            "roles": ["YWRtaW4=", "Z3Vlc3Q="],
             "groups": [],
             "version_no": 1
           }
@@ -134,7 +134,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "id": "YWRtaW4=",
@@ -148,7 +148,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
             "gidNumber": "",
             "homeDirectory": ""
           },
-          "roles": ["admin"],
+          "roles": ["YWRtaW4=", "Z3Vlc3Q="],
           "groups": [],
           "version_no": 1
         }
@@ -185,7 +185,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
         "givenName": "User",
         "mail": "testuser@example.com"
       },
-      "roles": ["user"],
+      "roles": ["Z3Vlc3Q="],
       "groups": ["group_id_1"]
     }
 
@@ -203,7 +203,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
      - 예
      - 사용자명 (로그인 ID)
    * - ``password``
-     - 아니오
+     - 예
      - 비밀번호
    * - ``confirm_password``
      - 아니오
@@ -220,9 +220,13 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
 
 .. note::
 
-   REST API에서는 비밀번호 필수 확인, ``password`` 와 ``confirm_password`` 의 일치 확인,
-   비밀번호 정책 검증을 수행하지 않습니다 (이것들은 관리 UI에서만 적용됩니다).
-   실제 운용 시, ``password`` 의 값이 ``confirm_password`` 와 일치하는 유효한 값을 지정하는 것을 권장합니다.
+   ``roles`` 와 ``groups`` 에는 이름이 아니라 ID 를 지정합니다. 존재하지 않는 ID (롤 이름・그룹 이름 포함)는 ``400`` 이 됩니다.
+   ID 는 ``GET /api/admin/role/settings`` 와 ``GET /api/admin/group/settings`` 가 반환하는 ``id`` 로 확인할 수 있습니다.
+   관리 UI 또는 API 로 만든 롤・그룹의 ID 는 이름을 Base64 URL 로 인코딩한 값입니다 (예: 기본으로 존재하는 롤 ``admin`` 은 ``YWRtaW4=`` , ``guest`` 는 ``Z3Vlc3Q=`` ).
+
+.. note::
+
+   비밀번호에는 관리 UI 와 같은 검증이 적용됩니다. 생성 시 ``password`` 를 생략한 경우, ``password`` 와 일치하지 않는 ``confirm_password`` 를 지정한 경우 (``confirm_password`` 는 생략할 수 있습니다), 비밀번호 정책 (``fess_config.properties`` 의 ``password.min.length`` (기본값 ``8`` ), ``password.max.length`` , ``password.require.*`` , ``password.invalid.admin.passwords`` )에 어긋나는 경우는 모두 ``400`` 이 됩니다.
 
 ``attributes`` 의 키에는 사용자 엔티티의 속성명 (LDAP 스키마에서 유래한 항목명)을 지정합니다.
 대표적인 키는 다음과 같습니다.
@@ -247,7 +251,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "new_user_id",
         "created": true
@@ -283,7 +287,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
         "givenName": "User Updated",
         "mail": "testuser.updated@example.com"
       },
-      "roles": ["user", "editor"],
+      "roles": ["Z3Vlc3Q=", "YWRtaW4="],
       "groups": ["group_id_1", "group_id_2"],
       "version_no": 1
     }
@@ -336,7 +340,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "existing_user_id",
         "created": false
@@ -368,7 +372,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "id": "deleted_user_id",
         "created": false
@@ -397,7 +401,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
              "givenName": "John",
              "mail": "john.doe@example.com"
            },
-           "roles": ["user"],
+           "roles": ["Z3Vlc3Q="],
            "groups": []
          }'
 
@@ -412,7 +416,7 @@ User API는 |Fess| 의 사용자 계정을 관리하기 위한 REST API입니다
          -d '{
            "id": "user_id_123",
            "name": "john.doe",
-           "roles": ["user", "editor", "admin"],
+           "roles": ["Z3Vlc3Q=", "YWRtaW4="],
            "version_no": 1
          }'
 

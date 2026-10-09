@@ -96,7 +96,7 @@ See `Plugin Information Fields`_ for the fields of each object.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -134,7 +134,7 @@ For installable plugins, the download source ``url`` is included.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "plugins": [
           {
@@ -202,7 +202,7 @@ When the request is accepted, a response with ``status`` ``0`` (OK) is returned.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -214,7 +214,7 @@ If no artifact matching the specified ``name`` or ``version`` exists, ``status``
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "invalid name or version"
       }
@@ -277,7 +277,7 @@ When the request is accepted, a response with ``status`` ``0`` (OK) is returned.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

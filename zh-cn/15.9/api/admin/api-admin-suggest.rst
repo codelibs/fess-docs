@@ -72,7 +72,7 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "setting": {
           "total_words_num": 1500,
@@ -123,7 +123,7 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -147,7 +147,7 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -171,7 +171,7 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -186,7 +186,7 @@ Suggest API是用于管理 |Fess| 建议功能所使用的建议词的API。
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "Failed to delete a document."
       }

@@ -133,7 +133,7 @@ Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "settings": [...],
         "total": 100
@@ -143,7 +143,7 @@ Response
 .. note::
 
    Das ``response``-Objekt aller Antworten enthält stets ``version``, das die Produktversion angibt
-   (Beispiel: ``"15.9.0"``). In den folgenden Beispielen wird es der Übersichtlichkeit halber teilweise weggelassen.
+   (Beispiel: ``"15.9"``). In den folgenden Beispielen wird es der Übersichtlichkeit halber teilweise weggelassen.
 
 Einzelne Einstellung abrufen (GET /setting/{id})
 ------------------------------------------------
@@ -306,7 +306,7 @@ Erfolgreiche Response
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "...": "..."
       }
@@ -324,7 +324,7 @@ eine Fehlermeldung enthalten.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 1,
         "message": "Failed to process the request."
       }

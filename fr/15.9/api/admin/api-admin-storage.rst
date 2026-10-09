@@ -8,6 +8,10 @@ Vue d'ensemble
 L'API Storage est une API permettant de gérer le stockage d'objets de |Fess|.
 Elle permet de lister les fichiers et répertoires dans le stockage, ainsi que de télécharger, supprimer et envoyer des fichiers.
 
+.. note::
+
+   Cette API n'est utilisable que si un plugin fournissant le client de stockage est installé : ``fess-storage-s3`` pour Amazon S3 et les stockages compatibles S3, ou ``fess-storage-gcs`` pour Google Cloud Storage. Les plugins ne sont pas inclus dans la distribution. Sans l'un d'eux, il n'existe aucun client pour le ``storage.type`` configuré et les requêtes échouent. Installez le plugin depuis la page « Système » > « Plugin » de l'écran d'administration ou avec ``bin/fess-setup install plugin fess-storage-s3`` (``fess-storage-gcs`` pour GCS).
+
 URL de base
 ===========
 
@@ -94,7 +98,7 @@ Chaque objet possède les champs suivants.
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -160,7 +164,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }
@@ -203,7 +207,7 @@ Réponse
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0
       }
     }

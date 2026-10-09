@@ -152,7 +152,7 @@ Los elementos exitosos incluyen ``result`` e ``id``, y los elementos fallidos in
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 0,
         "items": [
           {
@@ -178,7 +178,7 @@ el nombre del estado de error, como ``CONFLICT`` o ``BAD_REQUEST``). Los element
 
     {
       "response": {
-        "version": "15.9.0",
+        "version": "15.9",
         "status": 9,
         "items": [
           {
