@@ -366,8 +366,10 @@ Utilisez à la place le répertoire de substitution ``/opt/fess``, qui est ajout
    ``/opt/fess`` étant ajouté en tête du classpath, le fichier ``fess_config.properties`` placé ici est prioritaire
    par rapport à celui fourni avec l'image, ``/etc/fess/fess_config.properties``.
    Les fichiers de propriétés sont chargés fichier par fichier et ne sont pas fusionnés élément par élément.
-   Il est donc nécessaire de placer un **fichier complet contenant tous les paramètres de configuration**, et pas seulement ceux que vous souhaitez remplacer.
+   Un élément absent de votre fichier n'empêche pas |Fess| de démarrer : la valeur par défaut fournie avec sa version est utilisée et un avertissement par élément est consigné dans les logs.
+   Un fichier ne contenant que les éléments à modifier fonctionne donc aussi. Pour éviter ces avertissements, partez du fichier complet, comme à l'étape 2.
    Si vous souhaitez ne modifier que certains éléments, utilisez la « Méthode 2 » ci-dessous.
+   Si un élément est défini à la fois dans ce fichier et avec ``-Dfess.config.`` (Méthode 2), la valeur définie avec ``-D`` est utilisée.
 
 Méthode 2 : Configuration via propriétés système
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

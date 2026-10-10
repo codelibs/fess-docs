@@ -378,9 +378,10 @@ En su lugar, se utiliza el directorio de anulación ``/opt/fess``, que se añade
    ``/opt/fess`` se añade al principio del classpath, por lo que el archivo ``fess_config.properties``
    colocado aquí tiene prioridad sobre el ``/etc/fess/fess_config.properties`` incluido en la imagen.
    Los archivos de propiedades se cargan como un todo y no se combinan elemento por elemento.
-   Por lo tanto, es necesario colocar no solo los elementos que se desean sobrescribir, sino **un archivo
-   completo que contenga todos los elementos de configuración**.
+   Un elemento que falta en su archivo no impide el inicio de |Fess|: se utiliza el valor predeterminado incluido en su versión y se registra una advertencia por cada elemento.
+   Por lo tanto, también funciona un archivo que contenga solo los elementos que desea cambiar. Para evitar las advertencias, parta del archivo completo, como en el paso 2.
    Si solo desea cambiar algunos elementos, utilice el "Método 2" a continuación.
+   Si un elemento se define tanto en este archivo como con ``-Dfess.config.`` (Método 2), se utiliza el valor definido con ``-D``.
 
 Método 2: Configuración mediante Propiedades del Sistema
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

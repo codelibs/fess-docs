@@ -365,8 +365,10 @@ Instead, use the override directory ``/opt/fess``, which is added to the front o
    Since ``/opt/fess`` is added to the front of the classpath, the ``fess_config.properties`` placed here
    takes precedence over the ``/etc/fess/fess_config.properties`` bundled with the image.
    Property files are loaded as whole files and are not merged item by item.
-   Therefore, you must place a **complete file containing all configuration items**, not just the items you want to override.
+   An item that is missing from your file does not stop |Fess|: it uses the default shipped with its version, and one warning per item is logged.
+   A file that holds only the items you want to change therefore works. To avoid the warnings, start from the complete file, as in step 2.
    If you only want to change some items, use "Method 2" below instead.
+   When an item is set both in this file and with ``-Dfess.config.`` (Method 2), the value set with ``-D`` is used.
 
 Method 2: Configuration via System Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -365,8 +365,10 @@ Verwenden Sie stattdessen das Override-Verzeichnis ``/opt/fess``, das an den Anf
    Da ``/opt/fess`` an den Anfang des Klassenpfads angehängt wird, hat die hier abgelegte ``fess_config.properties``
    Vorrang vor der im Image enthaltenen ``/etc/fess/fess_config.properties``.
    Property-Dateien werden dateiweise geladen und nicht Eintrag für Eintrag zusammengeführt.
-   Daher müssen Sie nicht nur die zu überschreibenden Einträge, sondern eine **vollständige Datei mit allen Konfigurationseinträgen** bereitstellen.
+   Ein Eintrag, der in Ihrer Datei fehlt, führt nicht zu einem Fehler: |Fess| verwendet den mit seiner Version ausgelieferten Standardwert und schreibt pro Eintrag eine Warnung ins Protokoll.
+   Eine Datei, die nur die zu ändernden Einträge enthält, funktioniert daher. Um die Warnungen zu vermeiden, gehen Sie wie in Schritt 2 von der vollständigen Datei aus.
    Wenn Sie nur einzelne Einträge ändern möchten, verwenden Sie die im Folgenden beschriebene „Methode 2".
+   Ist ein Eintrag sowohl in dieser Datei als auch mit ``-Dfess.config.`` (Methode 2) gesetzt, gilt der mit ``-D`` gesetzte Wert.
 
 Methode 2: Konfiguration über Systemeigenschaften
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
