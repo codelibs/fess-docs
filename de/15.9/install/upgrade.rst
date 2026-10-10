@@ -588,7 +588,12 @@ endet dennoch erfolgreich, und es wird keine fehlgeschlagene URL erfasst. Bei je
 protokolliert ``fess-crawler.log`` pro Crawl-Konfiguration eine Warnung, die das Plugin und die
 beiden obigen Befehle nennt.
 
-Ohne den Playwright-Crawler ist nichts zu tun.
+Das Plugin ``fess-thumbnail-playwright``, das mit Playwright Thumbnails von HTML-Seiten erzeugt,
+läuft ebenfalls auf Node.js. Wenn Sie es verwenden, installieren Sie Node.js mit
+``bin/fess-setup install nodejs``; dieselbe Installation dient beiden Plugins.
+
+Wenn Sie weder den Playwright-Crawler noch das Plugin ``fess-thumbnail-playwright`` verwenden, ist
+nichts zu tun.
 
 Google Cloud Storage wird als Plugin ausgeliefert
 -------------------------------------------------
@@ -853,7 +858,7 @@ denselben Eintrag aus diesem Wert.
 Einer aus 15.8 kopierten ``bin/fess.in.sh`` fehlen außerdem zwei Dinge, die die Datei von 15.9
 enthält. Sie lässt ``SEARCH_ENGINE_HTTP_URL`` ungesetzt, sofern Sie es nicht selbst gesetzt haben,
 während 15.9 ``http://localhost:9200`` setzt, und sie sucht nicht nach dem mit
-``bin/fess-setup install nodejs`` installierten Node.js. Der Playwright-Crawler findet Node.js dann
+``bin/fess-setup install nodejs`` installierten Node.js. Die Playwright-Plugins finden Node.js dann
 nur, wenn Sie ``PLAYWRIGHT_NODEJS_PATH`` selbst setzen.
 
 Kopieren Sie keine der beiden Dateien vollständig, sondern gehen Sie von der mit 15.9

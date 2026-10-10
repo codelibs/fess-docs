@@ -4,7 +4,7 @@ fess-setup Command
 
 ``bin/fess-setup`` (``bin\fess-setup.bat`` on Windows) is included with the |Fess| ZIP package.
 It installs what |Fess| needs but does not bundle: OpenSearch with the plugins |Fess| requires,
-Node.js for the Playwright crawler, |Fess| plugins, and static themes. It also reports on an
+Node.js for the Playwright plugins, |Fess| plugins, and static themes. It also reports on an
 installation.
 
 Run it from the |Fess| directory. Without arguments, it prints the list of commands.
@@ -112,7 +112,8 @@ install nodejs
 
     $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
 
-Downloads Node.js, which the Playwright crawler needs, into ``nodejs/`` in the |Fess| directory.
+Downloads Node.js, which the Playwright plugins need (``fess-crawler-playwright`` for the Playwright
+crawler and ``fess-thumbnail-playwright`` for thumbnails), into ``nodejs/`` in the |Fess| directory.
 ``bin/fess.in.sh`` (``bin\fess.in.bat`` on Windows) finds it there and sets
 ``PLAYWRIGHT_NODEJS_PATH``. With ``--dest`` outside the |Fess| directory, the command prints the
 ``PLAYWRIGHT_NODEJS_PATH`` line to add to ``bin/fess.in.sh`` instead. ``--version`` selects another

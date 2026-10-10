@@ -563,7 +563,11 @@ Playwright クライアントを指定している場合は、プラグインと
 正常に終了し、障害 URL も記録されません。クロールのたびに、 ``fess-crawler.log`` にはクロール設定
 ごとに 1 件、プラグイン名と上記の 2 つのコマンドを示す警告が記録されます。
 
-Playwright クローラを使用していない場合、対応は不要です。
+Playwright で HTML ページのサムネイルを生成する ``fess-thumbnail-playwright`` プラグインも
+Node.js で動作します。このプラグインを使用している場合も、 ``bin/fess-setup install nodejs``
+で Node.js を導入してください。導入した Node.js は 2 つのプラグインで共用されます。
+
+Playwright クローラも ``fess-thumbnail-playwright`` プラグインも使用していない場合、対応は不要です。
 
 Google Cloud Storage をプラグインへ移動
 ---------------------------------------
@@ -815,7 +819,7 @@ Index Exporter ジョブが削除されたパッケージを参照
 15.9 は ``SEARCH_ENGINE_HTTP_URL`` に ``http://localhost:9200`` を設定しますが、15.8 のファイルは
 自分で設定しない限り未設定のままです。また、 ``bin/fess-setup install nodejs`` で導入した
 Node.js を検出しないため、 ``PLAYWRIGHT_NODEJS_PATH`` を自分で設定しない限り、Playwright
-クローラは Node.js を見つけられません。
+系のプラグインは Node.js を見つけられません。
 
 どちらのファイルも丸ごとコピーするのではなく、15.9 に同梱のファイルを元にして、変更した値を
 再適用してください。変更した値は ``diff`` で確認できます::

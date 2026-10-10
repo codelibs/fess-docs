@@ -2,7 +2,7 @@
 fess-setup コマンド
 ====================
 
-``bin/fess-setup`` （Windows では ``bin\fess-setup.bat`` ）は、 |Fess| の ZIP パッケージに同梱されているコマンドです。 |Fess| に必要でありながら配布物に含まれていないもの、つまり |Fess| が必要とするプラグインを入れた OpenSearch、Playwright クローラが使う Node.js、 |Fess| のプラグイン、静的テーマを導入します。インストール状態の診断もできます。
+``bin/fess-setup`` （Windows では ``bin\fess-setup.bat`` ）は、 |Fess| の ZIP パッケージに同梱されているコマンドです。 |Fess| に必要でありながら配布物に含まれていないもの、つまり |Fess| が必要とするプラグインを入れた OpenSearch、Playwright 系プラグインが使う Node.js、 |Fess| のプラグイン、静的テーマを導入します。インストール状態の診断もできます。
 
 |Fess| のディレクトリで実行します。引数を付けずに実行すると、コマンドの一覧を表示します。
 
@@ -85,7 +85,7 @@ install nodejs
 
     $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
 
-Playwright クローラが必要とする Node.js を、 |Fess| のディレクトリの ``nodejs/`` にダウンロードします。 ``bin/fess.in.sh`` （Windows では ``bin\fess.in.bat`` ）がこれを見つけて ``PLAYWRIGHT_NODEJS_PATH`` を設定します。 ``--dest`` で |Fess| のディレクトリの外に展開した場合は、代わりに ``bin/fess.in.sh`` に追加する ``PLAYWRIGHT_NODEJS_PATH`` の行を表示します。 ``--version`` で別のバージョンの Node.js を指定できます。Playwright クローラについては :doc:`../config/crawler-advanced` を参照してください。
+Playwright 系のプラグイン（Playwright クローラの ``fess-crawler-playwright`` とサムネイル生成の ``fess-thumbnail-playwright`` ）が必要とする Node.js を、 |Fess| のディレクトリの ``nodejs/`` にダウンロードします。 ``bin/fess.in.sh`` （Windows では ``bin\fess.in.bat`` ）がこれを見つけて ``PLAYWRIGHT_NODEJS_PATH`` を設定します。 ``--dest`` で |Fess| のディレクトリの外に展開した場合は、代わりに ``bin/fess.in.sh`` に追加する ``PLAYWRIGHT_NODEJS_PATH`` の行を表示します。 ``--version`` で別のバージョンの Node.js を指定できます。Playwright クローラについては :doc:`../config/crawler-advanced` を参照してください。
 
 プラグインの管理
 ================

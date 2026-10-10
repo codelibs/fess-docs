@@ -574,7 +574,12 @@ text that only JavaScript produces is not indexed. The crawl job still ends succ
 failure URL is recorded. For each crawl, ``fess-crawler.log`` records one warning per crawling
 configuration that names the plugin and the two commands above.
 
-Nothing is needed if you do not use the Playwright crawler.
+The ``fess-thumbnail-playwright`` plugin, which generates thumbnails of HTML pages with
+Playwright, runs on Node.js as well. If you use it, install Node.js with
+``bin/fess-setup install nodejs``; the same installation serves both plugins.
+
+Nothing is needed if you use neither the Playwright crawler nor the ``fess-thumbnail-playwright``
+plugin.
 
 Google Cloud Storage Moved to a Plugin
 --------------------------------------
@@ -822,7 +827,7 @@ entry from that value.
 A ``bin/fess.in.sh`` copied from 15.8 also lacks two things that the 15.9 file has. It leaves
 ``SEARCH_ENGINE_HTTP_URL`` unset unless you set it yourself, where 15.9 sets
 ``http://localhost:9200``, and it does not look for the Node.js installed by
-``bin/fess-setup install nodejs``, so the Playwright crawler cannot find Node.js unless you set
+``bin/fess-setup install nodejs``, so the Playwright plugins cannot find Node.js unless you set
 ``PLAYWRIGHT_NODEJS_PATH``.
 
 Rather than copying either file whole, start from the file shipped with 15.9 and reapply the values

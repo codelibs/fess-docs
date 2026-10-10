@@ -593,7 +593,11 @@ malgré tout avec succès et aucune URL en échec n'est enregistrée. À chaque 
 ``fess-crawler.log`` consigne un avertissement par configuration d'exploration, qui nomme le plugin
 et les deux commandes ci-dessus.
 
-Rien à faire si vous n'utilisez pas le robot Playwright.
+Le plugin ``fess-thumbnail-playwright``, qui génère avec Playwright les vignettes des pages HTML,
+s'exécute lui aussi sur Node.js. Si vous l'utilisez, installez Node.js avec
+``bin/fess-setup install nodejs`` ; la même installation sert aux deux plugins.
+
+Rien à faire si vous n'utilisez ni le robot Playwright ni le plugin ``fess-thumbnail-playwright``.
 
 Google Cloud Storage passe dans un plugin
 -----------------------------------------
@@ -862,7 +866,7 @@ entrée de cette valeur.
 Un ``bin/fess.in.sh`` copié de la 15.8 ne contient pas non plus deux éléments présents dans le
 fichier de la 15.9. Il laisse ``SEARCH_ENGINE_HTTP_URL`` non défini, sauf si vous l'avez défini
 vous-même, alors que la 15.9 définit ``http://localhost:9200``, et il ne recherche pas le Node.js
-installé par ``bin/fess-setup install nodejs`` : le robot Playwright ne trouve donc Node.js que si
+installé par ``bin/fess-setup install nodejs`` : les plugins Playwright ne trouvent donc Node.js que si
 vous définissez ``PLAYWRIGHT_NODEJS_PATH``.
 
 Plutôt que de copier l'un ou l'autre fichier en entier, partez du fichier fourni avec la 15.9 et
