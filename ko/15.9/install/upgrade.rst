@@ -566,7 +566,12 @@ Playwright 클라이언트를 지정한 경우에는 플러그인과 Node.js 를
 않습니다. 크롤링할 때마다 ``fess-crawler.log`` 에는 크롤링 설정마다 1건씩, 플러그인 이름과 위의
 두 명령을 알려 주는 경고가 기록됩니다.
 
-Playwright 크롤러를 사용하지 않는 경우에는 대응이 필요 없습니다.
+Playwright 로 HTML 페이지의 썸네일을 생성하는 ``fess-thumbnail-playwright`` 플러그인도 Node.js
+에서 동작합니다. 이 플러그인을 사용하는 경우에도 ``bin/fess-setup install nodejs`` 로 Node.js 를
+설치하십시오. 설치한 Node.js 는 두 플러그인이 함께 사용합니다.
+
+Playwright 크롤러도 ``fess-thumbnail-playwright`` 플러그인도 사용하지 않는 경우에는 대응이 필요
+없습니다.
 
 Google Cloud Storage 를 플러그인으로 이동
 -----------------------------------------
@@ -819,7 +824,7 @@ Content-Security-Policy 초기 초안에 있던 디렉티브로 현재 브라우
 ``SEARCH_ENGINE_HTTP_URL`` 에 ``http://localhost:9200`` 을 설정하지만, 15.8 의 파일은 직접
 설정하지 않는 한 설정되지 않은 상태로 둡니다. 또한 ``bin/fess-setup install nodejs`` 로 설치한
 Node.js 를 찾지 않으므로, ``PLAYWRIGHT_NODEJS_PATH`` 를 직접 설정하지 않는 한 Playwright
-크롤러는 Node.js 를 찾을 수 없습니다.
+플러그인은 Node.js 를 찾을 수 없습니다.
 
 어느 파일이든 통째로 복사하지 말고, 15.9 에 포함된 파일을 바탕으로 변경한 값을 다시
 적용하십시오. 변경한 값은 ``diff`` 로 확인할 수 있습니다::

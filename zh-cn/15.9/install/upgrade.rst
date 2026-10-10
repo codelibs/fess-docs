@@ -551,7 +551,10 @@ Playwright 爬虫及其使用的 Node.js 可执行文件不再包含在发行包
 文本不会被索引。爬取作业仍会正常结束，也不会记录失败 URL。每次爬取时， ``fess-crawler.log``
 会按每个爬取配置记录一条警告，其中给出插件名称和上面的两条命令。
 
-如果不使用 Playwright 爬虫，则无需处理。
+使用 Playwright 为 HTML 页面生成缩略图的 ``fess-thumbnail-playwright`` 插件同样依赖 Node.js 运行。
+如果使用该插件，请同样通过 ``bin/fess-setup install nodejs`` 安装 Node.js，同一份安装由两个插件共用。
+
+如果既不使用 Playwright 爬虫，也不使用 ``fess-thumbnail-playwright`` 插件，则无需处理。
 
 Google Cloud Storage 移至插件
 -----------------------------
@@ -782,7 +785,7 @@ Content-Security-Policy 早期草案中的指令，现在的浏览器已不再�
 从 15.8 复制的 ``bin/fess.in.sh`` 还缺少 15.9 文件中的以下两点。15.9 会将
 ``SEARCH_ENGINE_HTTP_URL`` 设置为 ``http://localhost:9200`` ，而 15.8 的文件除非自行设置，否则
 保持未设置状态。此外，它不会查找通过 ``bin/fess-setup install nodejs`` 安装的 Node.js，因此除非
-自行设置 ``PLAYWRIGHT_NODEJS_PATH`` ，否则 Playwright 爬虫找不到 Node.js。
+自行设置 ``PLAYWRIGHT_NODEJS_PATH`` ，否则 Playwright 插件找不到 Node.js。
 
 请不要整体复制这两个文件，而是以 15.9 随附的文件为基础，重新应用自己修改过的值。可以用
 ``diff`` 查看这些值::

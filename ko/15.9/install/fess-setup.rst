@@ -2,7 +2,7 @@
 fess-setup 명령
 ====================
 
-``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 크롤러가 사용하는 Node.js, |Fess| 플러그인, 정적 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다.
+``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 플러그인이 사용하는 Node.js, |Fess| 플러그인, 정적 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다.
 
 |Fess| 디렉터리에서 실행합니다. 인수 없이 실행하면 명령 목록을 표시합니다.
 
@@ -85,7 +85,7 @@ install nodejs
 
     $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
 
-Playwright 크롤러가 필요로 하는 Node.js 를 |Fess| 디렉터리의 ``nodejs/`` 에 다운로드합니다. ``bin/fess.in.sh`` (Windows 에서는 ``bin\fess.in.bat`` )가 이를 찾아 ``PLAYWRIGHT_NODEJS_PATH`` 를 설정합니다. ``--dest`` 로 |Fess| 디렉터리 밖에 압축 해제한 경우에는 대신 ``bin/fess.in.sh`` 에 추가할 ``PLAYWRIGHT_NODEJS_PATH`` 줄을 표시합니다. ``--version`` 으로 다른 버전의 Node.js 를 지정할 수 있습니다. Playwright 크롤러에 대해서는 :doc:`../config/crawler-advanced` 를 참조하십시오.
+Playwright 플러그인(Playwright 크롤러용 ``fess-crawler-playwright`` 와 썸네일용 ``fess-thumbnail-playwright`` )이 필요로 하는 Node.js 를 |Fess| 디렉터리의 ``nodejs/`` 에 다운로드합니다. ``bin/fess.in.sh`` (Windows 에서는 ``bin\fess.in.bat`` )가 이를 찾아 ``PLAYWRIGHT_NODEJS_PATH`` 를 설정합니다. ``--dest`` 로 |Fess| 디렉터리 밖에 압축 해제한 경우에는 대신 ``bin/fess.in.sh`` 에 추가할 ``PLAYWRIGHT_NODEJS_PATH`` 줄을 표시합니다. ``--version`` 으로 다른 버전의 Node.js 를 지정할 수 있습니다. Playwright 크롤러에 대해서는 :doc:`../config/crawler-advanced` 를 참조하십시오.
 
 플러그인 관리
 ================

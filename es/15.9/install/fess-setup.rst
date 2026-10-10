@@ -4,7 +4,7 @@ Comando fess-setup
 
 ``bin/fess-setup`` (``bin\fess-setup.bat`` en Windows) se incluye con el paquete ZIP de |Fess|.
 Instala lo que |Fess| necesita pero no incluye: OpenSearch con los plugins que requiere |Fess|,
-Node.js para el rastreador de Playwright, los plugins de |Fess| y los temas estáticos. También informa sobre el estado
+Node.js para los plugins de Playwright, los plugins de |Fess| y los temas estáticos. También informa sobre el estado
 de una instalación.
 
 Ejecútelo desde el directorio de |Fess|. Sin argumentos, muestra la lista de comandos.
@@ -114,8 +114,9 @@ install nodejs
 
     $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
 
-Descarga Node.js, que necesita el rastreador de Playwright, en ``nodejs/`` dentro del directorio
-de |Fess|. ``bin/fess.in.sh`` (``bin\fess.in.bat`` en Windows) lo encuentra allí y establece
+Descarga Node.js, que necesitan los plugins de Playwright (``fess-crawler-playwright`` para el
+rastreador de Playwright y ``fess-thumbnail-playwright`` para las miniaturas), en ``nodejs/`` dentro
+del directorio de |Fess|. ``bin/fess.in.sh`` (``bin\fess.in.bat`` en Windows) lo encuentra allí y establece
 ``PLAYWRIGHT_NODEJS_PATH``. Con ``--dest`` fuera del directorio de |Fess|, el comando muestra en su
 lugar la línea ``PLAYWRIGHT_NODEJS_PATH`` que debe añadir a ``bin/fess.in.sh``. ``--version``
 selecciona otra versión de Node.js. Consulte :doc:`../config/crawler-advanced` para el rastreador de

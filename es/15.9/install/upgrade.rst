@@ -587,7 +587,12 @@ con éxito y no se registra ninguna URL con errores. En cada rastreo, ``fess-cra
 una advertencia por cada configuración de rastreo, con el nombre del plugin y las dos órdenes
 anteriores.
 
-Si no utiliza el rastreador de Playwright, no hay nada que hacer.
+El plugin ``fess-thumbnail-playwright``, que genera miniaturas de páginas HTML con Playwright,
+también se ejecuta sobre Node.js. Si lo utiliza, instale Node.js con
+``bin/fess-setup install nodejs``; la misma instalación sirve a ambos plugins.
+
+Si no utiliza ni el rastreador de Playwright ni el plugin ``fess-thumbnail-playwright``, no hay
+nada que hacer.
 
 Google Cloud Storage pasa a un plugin
 -------------------------------------
@@ -853,7 +858,7 @@ valor.
 A un ``bin/fess.in.sh`` copiado de 15.8 también le faltan dos cosas que sí tiene el archivo de
 15.9. Deja ``SEARCH_ENGINE_HTTP_URL`` sin definir salvo que lo haya definido usted, mientras que
 15.9 define ``http://localhost:9200``, y no busca el Node.js instalado con
-``bin/fess-setup install nodejs``, por lo que el rastreador de Playwright no encuentra Node.js a
+``bin/fess-setup install nodejs``, por lo que los plugins de Playwright no encuentran Node.js a
 menos que defina ``PLAYWRIGHT_NODEJS_PATH``.
 
 En lugar de copiar cualquiera de los dos archivos entero, parta del archivo distribuido con 15.9 y

@@ -2,7 +2,7 @@
 fess-setup 命令
 ====================
 
-``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 爬虫所需的 Node.js、 |Fess| 插件以及静态主题。它还可以检查安装状态。
+``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 插件所需的 Node.js、 |Fess| 插件以及静态主题。它还可以检查安装状态。
 
 请在 |Fess| 目录中运行。不带参数运行时，会显示命令列表。
 
@@ -85,7 +85,7 @@ install nodejs
 
     $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
 
-将 Playwright 爬虫所需的 Node.js 下载到 |Fess| 目录下的 ``nodejs/`` 中。\ ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会在该位置找到它并设置 ``PLAYWRIGHT_NODEJS_PATH``\ 。使用 ``--dest`` 解压到 |Fess| 目录之外时，命令会改为显示需要添加到 ``bin/fess.in.sh`` 中的 ``PLAYWRIGHT_NODEJS_PATH`` 行。\ ``--version`` 用于选择其他版本的 Node.js。关于 Playwright 爬虫，请参阅 :doc:`../config/crawler-advanced`\ 。
+将 Playwright 插件（用于 Playwright 爬虫的 ``fess-crawler-playwright`` 和用于缩略图的 ``fess-thumbnail-playwright``\ ）所需的 Node.js 下载到 |Fess| 目录下的 ``nodejs/`` 中。\ ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会在该位置找到它并设置 ``PLAYWRIGHT_NODEJS_PATH``\ 。使用 ``--dest`` 解压到 |Fess| 目录之外时，命令会改为显示需要添加到 ``bin/fess.in.sh`` 中的 ``PLAYWRIGHT_NODEJS_PATH`` 行。\ ``--version`` 用于选择其他版本的 Node.js。关于 Playwright 爬虫，请参阅 :doc:`../config/crawler-advanced`\ 。
 
 管理插件
 ========
