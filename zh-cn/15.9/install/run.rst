@@ -54,7 +54,8 @@ ZIP 版的情况
 .. note::
 
    启动可能需要几分钟。
-   可以在日志文件（``logs/fess.log``）中确认启动状态。
+   可以在 ``logs/`` 目录的日志文件中确认启动状态。``fess.log`` 记录 |Fess| 本身的消息，
+   ``server_0.log`` 记录内嵌 Tomcat 的消息（包括启动完成消息）。
 
 ZIP 版的情况（Windows）
 ---------------------
@@ -180,9 +181,10 @@ Docker 版::
 
 .. tip::
 
-   启动成功完成后，控制台及日志中会显示如下启动完成消息::
+   启动成功完成后，如下启动完成消息会写入日志目录（ZIP 版为 ``logs/``，RPM/DEB 版为 ``/var/log/fess/``）中的
+   ``server_0.log``\ 。控制台和 ``fess.log`` 中都不会输出该消息::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 
@@ -316,11 +318,27 @@ ZIP 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``�
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| 的日志级别。
+   * - ``FESS_HEAP_NEWSIZE``
+     - （未设置）
+     - JVM 堆新生代的大小（``-Xmn``），例如 ``256m``。未设置时由 JVM 决定。
+   * - ``FESS_TEMP_PATH``
+     - |Fess| 目录下的 ``temp``\ （RPM/DEB 版为 ``/var/tmp/fess``）
+     - 存放临时文件的目录，包括内嵌 Tomcat 的工作目录。运行 |Fess| 的用户必须对其有写入权限。
+   * - ``FESS_CONF_PATH``
+     - （未设置）\ （RPM/DEB 版为 ``/etc/fess``）
+     - 存放配置文件的目录。它会被添加到类路径开头，因此其中的 ``fess_config.properties`` 优先于 ``app/WEB-INF/classes`` 中的同名文件。
+   * - ``FESS_USE_IPV4``
+     - （未设置）
+     - 设置任意非空值后，JVM 仅使用 IPv4 协议栈（``-Djava.net.preferIPv4Stack=true``）。
+   * - ``FESS_USE_GC_LOGGING``
+     - （未设置）
+     - 设置任意非空值后，JVM 会将 GC 日志写入日志目录下的 ``gc-fess.log``\ （最多 5 个文件，每个 64 MB）。
 
 .. note::
 
-   Windows ZIP 版的 ``bin\fess.in.bat`` 不读取这些环境变量（与代理相关的变量除外）。
-   各项值直接写在文件中，如需更改请直接编辑 ``bin\fess.in.bat``\ 。
+   Windows ZIP 版的 ``bin\fess.in.bat`` 只读取这些环境变量中的 ``FESS_HEAP_SIZE``、``FESS_HEAP_NEWSIZE``、
+   ``FESS_USE_IPV4`` 和 ``FESS_USE_GC_LOGGING``\ （以及与代理相关的变量）。
+   其余各项值直接写在文件中，如需更改请直接编辑 ``bin\fess.in.bat``\ 。
 
 邮件服务器设置
 ------------------
@@ -453,7 +471,9 @@ Docker 版的情况
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   已安装 net-tools 的环境中，也可以使用 ``sudo netstat -tuln | grep 8080`` 获得相同的信息。
 
    如果端口 8080 已被使用，请更改端口号。
 

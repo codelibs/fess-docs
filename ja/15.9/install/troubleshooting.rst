@@ -40,6 +40,8 @@ Java がインストールされていない、またはPATH環境変数が正�
        # RHEL/CentOS
        $ sudo yum install java-21-openjdk
 
+   Debian 12 の標準リポジトリには ``openjdk-21-jdk`` パッケージがありません。Debian 12 では、代わりに Eclipse Temurin 21 を、`Adoptium の Linux 向けインストール手順 <https://adoptium.net/installation/linux/>`__ の Debian 向けの手順に従ってインストールしてください。
+
 3. JAVA_HOME 環境変数を設定::
 
        $ export JAVA_HOME=/path/to/java
@@ -107,7 +109,7 @@ Fess の起動コマンドを実行してもエラーが発生する、または
 
 2. **ポート番号の競合を確認**::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
 
    ポート 8080 が既に使用されている場合は、設定ファイルでポート番号を変更してください。
 
@@ -214,7 +216,7 @@ OpenSearch 3.8.0 以降は、辞書ファイルが OpenSearch の設定ディレ
 
 1. 使用中のポートを確認::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
        $ sudo lsof -i :8080
 
 2. 使用中のプロセスを停止、または Fess のポート番号を変更
@@ -287,7 +289,7 @@ Fess が OpenSearch に接続できない
 
    Fess がローカルホスト以外でリッスンしているか確認::
 
-       $ netstat -tuln | grep 8080
+       $ ss -tuln | grep 8080
 
    ``127.0.0.1:8080`` の場合は、``0.0.0.0:8080`` または特定の IP アドレスでリッスンするように設定を変更します。
 

@@ -134,6 +134,8 @@ Paso 1: Instalación de OpenSearch
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.9.0-linux-arm64.tar.gz``).
+
    .. note::
 
       En este ejemplo se utiliza OpenSearch 3.9.0.
@@ -215,6 +217,10 @@ Paso 2: Instalación de Fess
        $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
+   .. note::
+
+      Seleccione un directorio que no contenga espacios en la ruta (también en macOS). Si la ruta contiene un espacio, ``bin/fess`` no se inicia y muestra ``Could not find or load main class``.
+
 2. Configuración de Fess
 
    La información de conexión a OpenSearch está en ``bin/fess.in.sh``. Con un OpenSearch que
@@ -293,6 +299,8 @@ Paso 1: Instalación de OpenSearch
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
+
+   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.9.0-linux-arm64.rpm``).
 
    Alternativamente, también puede agregar un repositorio para instalarlo.
    Para más detalles, consulte `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__.
@@ -403,6 +411,8 @@ Paso 1: Instalación de OpenSearch
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.9.0-linux-arm64.deb``).
 
    Alternativamente, también puede agregar un repositorio para instalarlo.
    Para más detalles, consulte `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__.

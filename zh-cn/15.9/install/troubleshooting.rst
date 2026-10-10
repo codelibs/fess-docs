@@ -40,6 +40,8 @@ Java 未安装，或 PATH 环境变量未正确设置。
        # RHEL/CentOS
        $ sudo yum install java-21-openjdk
 
+   Debian 12 的标准软件源中没有 ``openjdk-21-jdk`` 软件包。在 Debian 12 上，请改为按照 `Adoptium 的 Linux 安装说明 <https://adoptium.net/installation/linux/>`__ 中适用于 Debian 的步骤安装 Eclipse Temurin 21。
+
 3. 设置 JAVA_HOME 环境变量::
 
        $ export JAVA_HOME=/path/to/java
@@ -107,7 +109,7 @@ Fess 无法启动
 
 2. **确认端口号冲突**::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
 
    如果端口 8080 已被使用，请在配置文件中更改端口号。
 
@@ -214,7 +216,7 @@ OpenSearch 无法启动
 
 1. 确认使用中的端口::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
        $ sudo lsof -i :8080
 
 2. 停止使用中的进程，或更改 Fess 的端口号
@@ -287,7 +289,7 @@ Fess 无法连接到 OpenSearch
 
    确认 Fess 是否在本地主机以外监听::
 
-       $ netstat -tuln | grep 8080
+       $ ss -tuln | grep 8080
 
    如果是 ``127.0.0.1:8080``，请更改配置为 ``0.0.0.0:8080`` 或特定 IP 地址监听。
 

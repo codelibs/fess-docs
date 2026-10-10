@@ -207,7 +207,7 @@ Nginx でのアクセス制限例::
 1. セキュリティ情報を定期的に確認
 
    - `Fess リリース情報 <https://github.com/codelibs/fess/releases>`__
-   - `OpenSearch セキュリティアドバイザリ <https://opensearch.org/security.html>`__
+   - `OpenSearch セキュリティアドバイザリ <https://github.com/opensearch-project/OpenSearch/security/advisories>`__
 
 2. テスト環境でアップデートを検証
 3. 本番環境にアップデートを適用

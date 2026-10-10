@@ -207,7 +207,7 @@ Nginx에서 액세스 제한 예::
 1. 보안 정보를 정기적으로 확인
 
    - `Fess 릴리스 정보 <https://github.com/codelibs/fess/releases>`__
-   - `OpenSearch 보안 권고 <https://opensearch.org/security.html>`__
+   - `OpenSearch 보안 권고 <https://github.com/opensearch-project/OpenSearch/security/advisories>`__
 
 2. 테스트 환경에서 업데이트 검증
 3. 운영 환경에 업데이트 적용

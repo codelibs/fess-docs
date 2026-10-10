@@ -118,6 +118,8 @@ ZIP 버전 설치
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   arm64(aarch64) 머신에서는 위 파일명의 ``linux-x64`` 를 ``linux-arm64`` 로 바꾸십시오(예: ``opensearch-3.9.0-linux-arm64.tar.gz``).
+
    .. note::
 
       이 예제에서는 OpenSearch 3.9.0을 사용하고 있습니다.
@@ -197,6 +199,10 @@ ZIP 버전 설치
        $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
+   .. note::
+
+      경로에 공백 문자가 포함되지 않은 디렉터리를 선택하십시오(macOS에서도 마찬가지입니다). 경로에 공백 문자가 포함되어 있으면 ``bin/fess`` 가 시작되지 않고 ``Could not find or load main class`` 가 출력됩니다.
+
 2. Fess 설정
 
    OpenSearch 연결 정보는 ``bin/fess.in.sh`` 에 있습니다. ``bin/fess-setup install opensearch`` 로 |Fess| 디렉터리의 ``opensearch/`` 에 설치하고 같은 호스트에서 실행하는 OpenSearch 라면 이 파일을 변경할 필요가 없습니다. ``SEARCH_ENGINE_HTTP_URL`` 의 기본값은 ``http://localhost:9200`` 이며, ``FESS_DICTIONARY_PATH`` 에는 해당 OpenSearch 의 ``config/dictionary`` 디렉터리가 설정됩니다.
@@ -264,6 +270,8 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
+
+   arm64(aarch64) 머신에서는 위 파일명의 ``linux-x64`` 를 ``linux-arm64`` 로 바꾸십시오(예: ``opensearch-3.9.0-linux-arm64.rpm``).
 
    또는 리포지토리를 추가하여 설치할 수도 있습니다.
    자세한 내용은 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__ 를 참조하십시오.
@@ -374,6 +382,8 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   arm64(aarch64) 머신에서는 위 파일명의 ``linux-x64`` 를 ``linux-arm64`` 로 바꾸십시오(예: ``opensearch-3.9.0-linux-arm64.deb``).
 
    또는 리포지토리를 추가하여 설치할 수도 있습니다.
    자세한 내용은 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__ 를 참조하십시오.

@@ -40,6 +40,8 @@ Java ist nicht installiert oder die PATH-Umgebungsvariable ist nicht korrekt ges
        # RHEL/CentOS
        $ sudo yum install java-21-openjdk
 
+   Die Standard-Repositories von Debian 12 enthalten kein Paket ``openjdk-21-jdk``. Installieren Sie unter Debian 12 stattdessen Eclipse Temurin 21 gemäß der Debian-Anleitung in der `Adoptium-Installationsanleitung für Linux <https://adoptium.net/installation/linux/>`__.
+
 3. Setzen Sie die JAVA_HOME-Umgebungsvariable::
 
        $ export JAVA_HOME=/path/to/java
@@ -110,7 +112,7 @@ Beim Ausführen des Fess-Startbefehls tritt ein Fehler auf oder es endet sofort.
 
 2. **Überprüfen Sie Portnummer-Konflikte**::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
 
    Falls Port 8080 bereits verwendet wird, ändern Sie die Portnummer in der Konfigurationsdatei.
 
@@ -217,7 +219,7 @@ Portnummer-Konflikt
 
 1. Überprüfen Sie verwendete Ports::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
        $ sudo lsof -i :8080
 
 2. Stoppen Sie den verwendenden Prozess oder ändern Sie die Fess-Portnummer
@@ -290,7 +292,7 @@ Kein Zugriff auf http://localhost:8080/ über den Browser möglich.
 
    Überprüfen Sie, ob Fess auf mehr als nur Localhost lauscht::
 
-       $ netstat -tuln | grep 8080
+       $ ss -tuln | grep 8080
 
    Falls ``127.0.0.1:8080``, ändern Sie die Konfiguration, um auf ``0.0.0.0:8080`` oder einer bestimmten IP-Adresse zu lauschen.
 

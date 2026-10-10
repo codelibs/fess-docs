@@ -54,7 +54,8 @@ Fess 시작
 .. note::
 
    시작에는 몇 분 정도 소요될 수 있습니다.
-   로그 파일(``logs/fess.log``)에서 시작 상태를 확인할 수 있습니다.
+   ``logs/`` 디렉터리의 로그 파일에서 시작 상태를 확인할 수 있습니다. ``fess.log`` 에는 |Fess| 자체의 메시지가,
+   ``server_0.log`` 에는 내장 Tomcat의 메시지(시작 완료 메시지 포함)가 출력됩니다.
 
 ZIP 버전의 경우(Windows)
 ------------------------
@@ -180,9 +181,11 @@ Docker 버전::
 
 .. tip::
 
-   시작이 정상적으로 완료되면 콘솔 및 로그에 다음과 같은 시작 완료 메시지가 표시됩니다::
+   시작이 정상적으로 완료되면 다음과 같은 시작 완료 메시지가 로그 디렉터리(ZIP 버전은 ``logs/``,
+   RPM/DEB 버전은 ``/var/log/fess/``)의 ``server_0.log`` 에 출력됩니다. 콘솔에도 ``fess.log`` 에도
+   출력되지 않습니다::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 
@@ -317,11 +320,27 @@ ZIP 버전은 ``bin/fess.in.sh``, RPM 버전은 ``/etc/sysconfig/fess``, DEB 버
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| 의 로그 레벨입니다.
+   * - ``FESS_HEAP_NEWSIZE``
+     - (미설정)
+     - JVM 힙의 Young 영역 크기(``-Xmn``)입니다. ``256m`` 과 같이 지정합니다. 미설정 시 JVM이 결정합니다.
+   * - ``FESS_TEMP_PATH``
+     - |Fess| 디렉터리 안의 ``temp`` (RPM/DEB 버전은 ``/var/tmp/fess``)
+     - 임시 파일을 저장하는 디렉터리입니다(내장 Tomcat의 작업 디렉터리 포함). |Fess| 를 실행하는 사용자가 쓸 수 있어야 합니다.
+   * - ``FESS_CONF_PATH``
+     - (미설정) (RPM/DEB 버전은 ``/etc/fess``)
+     - 설정 파일을 두는 디렉터리입니다. 클래스패스 맨 앞에 추가되므로, 이 디렉터리의 ``fess_config.properties`` 가 ``app/WEB-INF/classes`` 의 것보다 우선합니다.
+   * - ``FESS_USE_IPV4``
+     - (미설정)
+     - 비어 있지 않은 값을 설정하면 JVM이 IPv4 스택만 사용합니다(``-Djava.net.preferIPv4Stack=true``).
+   * - ``FESS_USE_GC_LOGGING``
+     - (미설정)
+     - 비어 있지 않은 값을 설정하면 JVM이 GC 로그를 로그 디렉터리의 ``gc-fess.log`` 에 기록합니다(64MB 파일 최대 5개).
 
 .. note::
 
-   Windows ZIP 버전의 ``bin\fess.in.bat`` 은 프록시 관련 항목을 제외하고 이러한 환경 변수를 읽지 않습니다.
-   값은 파일 안에 직접 기술되어 있으므로, 변경하려면 ``bin\fess.in.bat`` 을 직접 편집하십시오.
+   Windows ZIP 버전의 ``bin\fess.in.bat`` 은 이러한 환경 변수 중 ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``,
+   ``FESS_USE_IPV4``, ``FESS_USE_GC_LOGGING`` 과 프록시 관련 항목만 읽습니다.
+   나머지 값은 파일 안에 직접 기술되어 있으므로, 변경하려면 ``bin\fess.in.bat`` 을 직접 편집하십시오.
 
 메일 서버 설정
 ------------------
@@ -454,7 +473,9 @@ Docker 버전의 경우
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   net-tools 가 설치되어 있는 환경에서는 ``sudo netstat -tuln | grep 8080`` 으로도 같은 내용을 확인할 수 있습니다.
 
    포트 8080이 이미 사용되고 있는 경우 포트 번호를 변경하십시오.
 

@@ -59,7 +59,9 @@ To start in the background::
 .. note::
 
    Startup may take several minutes.
-   You can check the startup status in the log file (``logs/fess.log``).
+   You can check the startup status in the log files in ``logs/``: ``fess.log`` holds the
+   messages of |Fess| itself, and ``server_0.log`` those of the embedded Tomcat, including the
+   startup-completion message.
 
 ZIP Version (Windows)
 ---------------------
@@ -187,9 +189,11 @@ Docker version::
 .. tip::
 
    When startup completes successfully, a startup-completion message like the
-   following is shown on the console and in the log::
+   following is written to ``server_0.log`` in the log directory (``logs/`` of the ZIP version,
+   ``/var/log/fess/`` of the RPM/DEB version). It is not shown on the console and is not written
+   to ``fess.log``::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 
@@ -327,12 +331,28 @@ making changes.
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Log level of |Fess|.
+   * - ``FESS_HEAP_NEWSIZE``
+     - (unset)
+     - Size of the young generation of the JVM heap (``-Xmn``), such as ``256m``. When unset, the JVM decides.
+   * - ``FESS_TEMP_PATH``
+     - ``temp`` in the |Fess| directory (RPM/DEB edition: ``/var/tmp/fess``)
+     - Directory for temporary files, including the working directory of the embedded Tomcat. The user that runs |Fess| must be able to write to it.
+   * - ``FESS_CONF_PATH``
+     - (unset) (RPM/DEB edition: ``/etc/fess``)
+     - Directory that holds the configuration files. It is placed at the front of the class path, so a ``fess_config.properties`` in it is used instead of the one in ``app/WEB-INF/classes``.
+   * - ``FESS_USE_IPV4``
+     - (unset)
+     - With any non-empty value, the JVM uses the IPv4 stack only (``-Djava.net.preferIPv4Stack=true``).
+   * - ``FESS_USE_GC_LOGGING``
+     - (unset)
+     - With any non-empty value, the JVM writes its garbage collection log to ``gc-fess.log`` in the log directory (up to 5 files of 64 MB).
 
 .. note::
 
-   The Windows ZIP edition's ``bin\fess.in.bat`` does not read these environment
-   variables (except the proxy-related ones). The values are written directly in
-   the file, so edit ``bin\fess.in.bat`` directly to change them.
+   Of these environment variables, the Windows ZIP edition's ``bin\fess.in.bat`` reads
+   only ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` and
+   ``FESS_USE_GC_LOGGING`` (and the proxy-related ones). The other values are
+   written directly in the file, so edit ``bin\fess.in.bat`` directly to change them.
 
 Configure Mail Server
 ---------------------
@@ -477,7 +497,9 @@ Won't Start
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   Where net-tools is installed, ``sudo netstat -tuln | grep 8080`` shows the same information.
 
    If port 8080 is already in use, change the port number.
 

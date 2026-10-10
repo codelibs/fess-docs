@@ -174,7 +174,7 @@ Paso 2: Instalación de Fess
 Descarga de Fess
 -----------------
 
-1. Descargue el paquete ZIP para Windows desde el `sitio de descargas <https://fess.codelibs.org/ja/downloads.html>`__.
+1. Descargue el paquete ZIP para Windows desde el `sitio de descargas <https://fess.codelibs.org/es/downloads.html>`__.
 
 2. Extraiga el archivo ZIP descargado en cualquier directorio.
 

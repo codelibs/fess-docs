@@ -118,6 +118,8 @@
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.tar.gz``）。
+
    .. note::
 
       此示例使用 OpenSearch 3.9.0。
@@ -197,6 +199,10 @@
        $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
+   .. note::
+
+      请选择路径中不包含空格的目录（macOS 上同样如此）。路径中包含空格时，``bin/fess`` 无法启动，并输出 ``Could not find or load main class``\ 。
+
 2. 配置 Fess
 
    到 OpenSearch 的连接信息位于 ``bin/fess.in.sh`` 中。对于通过 ``bin/fess-setup install opensearch`` 安装到 |Fess| 目录下的 ``opensearch/`` 中、并在同一主机上运行的 OpenSearch，无需修改此文件：\ ``SEARCH_ENGINE_HTTP_URL`` 默认为 ``http://localhost:9200``\ ，\ ``FESS_DICTIONARY_PATH`` 会被设置为该 OpenSearch 的 ``config/dictionary`` 目录。
@@ -264,6 +270,8 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
+
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.rpm``）。
 
    或者，也可以添加仓库后进行安装。
    详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__\ 。
@@ -374,6 +382,8 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.deb``）。
 
    或者，也可以添加仓库后进行安装。
    详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__\ 。

@@ -59,7 +59,9 @@ Para iniciar en segundo plano::
 .. note::
 
    El inicio puede tardar varios minutos.
-   Puede verificar el estado de inicio en el archivo de registro (``logs/fess.log``).
+   Puede verificar el estado de inicio en los archivos de registro del directorio ``logs/``: ``fess.log``
+   contiene los mensajes de |Fess| y ``server_0.log`` los del Tomcat integrado (incluido el mensaje de
+   finalización del inicio).
 
 En Caso de Versión ZIP (Windows)
 ---------------------------------
@@ -183,9 +185,9 @@ Para versión Docker::
 
 .. tip::
 
-   Cuando el inicio se completa correctamente, aparece un mensaje de finalización de inicio como el siguiente en la consola y en el registro::
+   Cuando el inicio se completa correctamente, se escribe un mensaje de finalización de inicio como el siguiente en ``server_0.log``, dentro del directorio de registros (``logs/`` en la versión ZIP, ``/var/log/fess/`` en la versión RPM/DEB). No aparece en la consola ni en ``fess.log``::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 
@@ -316,10 +318,25 @@ La configuración del número de puerto, el tamaño del montón JVM y la URL de 
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Nivel de registro de |Fess|.
+   * - ``FESS_HEAP_NEWSIZE``
+     - (sin definir)
+     - Tamaño de la generación joven del montón JVM (``-Xmn``), por ejemplo ``256m``. Si no está definido, la JVM lo decide.
+   * - ``FESS_TEMP_PATH``
+     - ``temp`` en el directorio de |Fess| (edición RPM/DEB: ``/var/tmp/fess``)
+     - Directorio de archivos temporales, incluido el directorio de trabajo del Tomcat integrado. El usuario que ejecuta |Fess| debe poder escribir en él.
+   * - ``FESS_CONF_PATH``
+     - (sin definir) (edición RPM/DEB: ``/etc/fess``)
+     - Directorio que contiene los archivos de configuración. Se coloca al principio del classpath, por lo que un ``fess_config.properties`` en él se utiliza en lugar del de ``app/WEB-INF/classes``.
+   * - ``FESS_USE_IPV4``
+     - (sin definir)
+     - Con cualquier valor no vacío, la JVM utiliza solo la pila IPv4 (``-Djava.net.preferIPv4Stack=true``).
+   * - ``FESS_USE_GC_LOGGING``
+     - (sin definir)
+     - Con cualquier valor no vacío, la JVM escribe su registro del recolector de basura en ``gc-fess.log`` dentro del directorio de registros (hasta 5 archivos de 64 MB).
 
 .. note::
 
-   El archivo ``bin\fess.in.bat`` de la edición ZIP para Windows no lee estas variables de entorno (excepto las relacionadas con el proxy). Los valores se escriben directamente en el archivo, por lo que para modificarlos edite ``bin\fess.in.bat`` directamente.
+   De estas variables de entorno, el archivo ``bin\fess.in.bat`` de la edición ZIP para Windows solo lee ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` y ``FESS_USE_GC_LOGGING`` (además de las relacionadas con el proxy). Los demás valores se escriben directamente en el archivo, por lo que para modificarlos edite ``bin\fess.in.bat`` directamente.
 
 Configuración del Servidor de Correo
 -------------------------------------
@@ -449,7 +466,9 @@ Si no Inicia
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   Si net-tools está instalado, ``sudo netstat -tuln | grep 8080`` muestra la misma información.
 
    Si el puerto 8080 ya está en uso, cambie el número de puerto:
 

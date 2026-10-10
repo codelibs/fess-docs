@@ -207,7 +207,7 @@ Nginx 访问限制示例::
 1. 定期确认安全信息
 
    - `Fess 发布信息 <https://github.com/codelibs/fess/releases>`__
-   - `OpenSearch 安全公告 <https://opensearch.org/security.html>`__
+   - `OpenSearch 安全公告 <https://github.com/opensearch-project/OpenSearch/security/advisories>`__
 
 2. 在测试环境验证更新
 3. 将更新应用到生产环境

@@ -118,6 +118,8 @@ ZIP 版でのインストール
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.tar.gz``）。
+
    .. note::
 
       この例では OpenSearch 3.9.0 を使用しています。
@@ -197,6 +199,10 @@ ZIP 版でのインストール
        $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
+   .. note::
+
+      パスに空白文字が含まれないディレクトリを選択してください（macOS でも同様です）。パスに空白文字が含まれると、``bin/fess`` は起動せず ``Could not find or load main class`` と表示されます。
+
 2. Fess の設定
 
    OpenSearch への接続情報は ``bin/fess.in.sh`` にあります。 ``bin/fess-setup install opensearch`` で |Fess| のディレクトリの ``opensearch/`` に導入し、同じホストで動かしている OpenSearch であれば、このファイルを変更する必要はありません。 ``SEARCH_ENGINE_HTTP_URL`` の既定値は ``http://localhost:9200`` で、 ``FESS_DICTIONARY_PATH`` にはその OpenSearch の ``config/dictionary`` ディレクトリが設定されます。
@@ -264,6 +270,8 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
+
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.rpm``）。
 
    または、リポジトリを追加してインストールすることもできます。
    詳細は `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__ を参照してください。
@@ -374,6 +382,8 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.deb``）。
 
    または、リポジトリを追加してインストールすることもできます。
    詳細は `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__ を参照してください。
