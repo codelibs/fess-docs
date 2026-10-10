@@ -318,12 +318,28 @@ ZIP 版は ``bin/fess.in.sh``、RPM 版は ``/etc/sysconfig/fess``、DEB 版は
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| のログレベル。
+   * - ``FESS_HEAP_NEWSIZE``
+     - （未設定）
+     - JVM ヒープの新世代領域のサイズ（``-Xmn``）。``256m`` のように指定します。未設定時は JVM が決定します。
+   * - ``FESS_TEMP_PATH``
+     - |Fess| ディレクトリ内の ``temp``\ （RPM/DEB 版は ``/var/tmp/fess``）
+     - 一時ファイルを保存するディレクトリ（組み込み Tomcat の作業ディレクトリを含む）。|Fess| を実行するユーザーが書き込める必要があります。
+   * - ``FESS_CONF_PATH``
+     - （未設定）\ （RPM/DEB 版は ``/etc/fess``）
+     - 設定ファイルを置くディレクトリ。クラスパスの先頭に追加されるため、このディレクトリの ``fess_config.properties`` が ``app/WEB-INF/classes`` のものより優先されます。
+   * - ``FESS_USE_IPV4``
+     - （未設定）
+     - 空でない値を設定すると、JVM は IPv4 スタックだけを使用します（``-Djava.net.preferIPv4Stack=true``）。
+   * - ``FESS_USE_GC_LOGGING``
+     - （未設定）
+     - 空でない値を設定すると、JVM は GC ログをログディレクトリの ``gc-fess.log`` に出力します（64 MB のファイルを最大 5 つ）。
 
 .. note::
 
-   ZIP 版（Windows）の ``bin\fess.in.bat`` は、これらの環境変数を参照しません
-   （プロキシ関連を除く）。値がファイル内に直接記述されているため、変更する場合は
-   ``bin\fess.in.bat`` を直接編集してください。
+   ZIP 版（Windows）の ``bin\fess.in.bat`` が参照するのは、これらの環境変数のうち
+   ``FESS_HEAP_SIZE``、``FESS_HEAP_NEWSIZE``、``FESS_USE_IPV4``、``FESS_USE_GC_LOGGING``
+   だけです（プロキシ関連の環境変数も参照します）。それ以外の値はファイル内に直接記述されているため、
+   変更する場合は ``bin\fess.in.bat`` を直接編集してください。
 
 メールサーバーの設定
 ------------------

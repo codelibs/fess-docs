@@ -319,10 +319,25 @@ Einstellungen wie Portnummer, JVM-Heap-Größe und die OpenSearch-Verbindungs-UR
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Protokollniveau von |Fess|.
+   * - ``FESS_HEAP_NEWSIZE``
+     - (nicht gesetzt)
+     - Größe der Young Generation des JVM-Heaps (``-Xmn``), z. B. ``256m``. Wenn nicht gesetzt, entscheidet die JVM.
+   * - ``FESS_TEMP_PATH``
+     - ``temp`` im |Fess|-Verzeichnis (RPM/DEB-Version: ``/var/tmp/fess``)
+     - Verzeichnis für temporäre Dateien, einschließlich des Arbeitsverzeichnisses des eingebetteten Tomcat. Der Benutzer, unter dem |Fess| läuft, muss darin schreiben können.
+   * - ``FESS_CONF_PATH``
+     - (nicht gesetzt) (RPM/DEB-Version: ``/etc/fess``)
+     - Verzeichnis mit den Konfigurationsdateien. Es wird an den Anfang des Klassenpfads gestellt, sodass eine darin liegende ``fess_config.properties`` Vorrang vor der Datei in ``app/WEB-INF/classes`` hat.
+   * - ``FESS_USE_IPV4``
+     - (nicht gesetzt)
+     - Mit einem beliebigen nicht leeren Wert verwendet die JVM nur den IPv4-Stack (``-Djava.net.preferIPv4Stack=true``).
+   * - ``FESS_USE_GC_LOGGING``
+     - (nicht gesetzt)
+     - Mit einem beliebigen nicht leeren Wert schreibt die JVM ihr GC-Protokoll nach ``gc-fess.log`` im Protokollverzeichnis (bis zu 5 Dateien mit je 64 MB).
 
 .. note::
 
-   Die Datei ``bin\fess.in.bat`` der Windows-ZIP-Version liest diese Umgebungsvariablen nicht (außer den Proxy-bezogenen). Die Werte werden direkt in der Datei eingetragen; bearbeiten Sie daher ``bin\fess.in.bat`` direkt, um sie zu ändern.
+   Von diesen Umgebungsvariablen liest die Datei ``bin\fess.in.bat`` der Windows-ZIP-Version nur ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` und ``FESS_USE_GC_LOGGING`` (dazu die Proxy-bezogenen). Die übrigen Werte werden direkt in der Datei eingetragen; bearbeiten Sie daher ``bin\fess.in.bat`` direkt, um sie zu ändern.
 
 Konfiguration des Mail-Servers
 -------------------------------

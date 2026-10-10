@@ -317,11 +317,27 @@ ZIP 버전은 ``bin/fess.in.sh``, RPM 버전은 ``/etc/sysconfig/fess``, DEB 버
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - |Fess| 의 로그 레벨입니다.
+   * - ``FESS_HEAP_NEWSIZE``
+     - (미설정)
+     - JVM 힙의 Young 영역 크기(``-Xmn``)입니다. ``256m`` 과 같이 지정합니다. 미설정 시 JVM이 결정합니다.
+   * - ``FESS_TEMP_PATH``
+     - |Fess| 디렉터리 안의 ``temp`` (RPM/DEB 버전은 ``/var/tmp/fess``)
+     - 임시 파일을 저장하는 디렉터리입니다(내장 Tomcat의 작업 디렉터리 포함). |Fess| 를 실행하는 사용자가 쓸 수 있어야 합니다.
+   * - ``FESS_CONF_PATH``
+     - (미설정) (RPM/DEB 버전은 ``/etc/fess``)
+     - 설정 파일을 두는 디렉터리입니다. 클래스패스 맨 앞에 추가되므로, 이 디렉터리의 ``fess_config.properties`` 가 ``app/WEB-INF/classes`` 의 것보다 우선합니다.
+   * - ``FESS_USE_IPV4``
+     - (미설정)
+     - 비어 있지 않은 값을 설정하면 JVM이 IPv4 스택만 사용합니다(``-Djava.net.preferIPv4Stack=true``).
+   * - ``FESS_USE_GC_LOGGING``
+     - (미설정)
+     - 비어 있지 않은 값을 설정하면 JVM이 GC 로그를 로그 디렉터리의 ``gc-fess.log`` 에 기록합니다(64MB 파일 최대 5개).
 
 .. note::
 
-   Windows ZIP 버전의 ``bin\fess.in.bat`` 은 프록시 관련 항목을 제외하고 이러한 환경 변수를 읽지 않습니다.
-   값은 파일 안에 직접 기술되어 있으므로, 변경하려면 ``bin\fess.in.bat`` 을 직접 편집하십시오.
+   Windows ZIP 버전의 ``bin\fess.in.bat`` 은 이러한 환경 변수 중 ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``,
+   ``FESS_USE_IPV4``, ``FESS_USE_GC_LOGGING`` 과 프록시 관련 항목만 읽습니다.
+   나머지 값은 파일 안에 직접 기술되어 있으므로, 변경하려면 ``bin\fess.in.bat`` 을 직접 편집하십시오.
 
 메일 서버 설정
 ------------------

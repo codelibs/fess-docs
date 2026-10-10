@@ -316,10 +316,25 @@ La configuración del número de puerto, el tamaño del montón JVM y la URL de 
    * - ``FESS_LOG_LEVEL``
      - ``warn``
      - Nivel de registro de |Fess|.
+   * - ``FESS_HEAP_NEWSIZE``
+     - (sin definir)
+     - Tamaño de la generación joven del montón JVM (``-Xmn``), por ejemplo ``256m``. Si no está definido, la JVM lo decide.
+   * - ``FESS_TEMP_PATH``
+     - ``temp`` en el directorio de |Fess| (edición RPM/DEB: ``/var/tmp/fess``)
+     - Directorio de archivos temporales, incluido el directorio de trabajo del Tomcat integrado. El usuario que ejecuta |Fess| debe poder escribir en él.
+   * - ``FESS_CONF_PATH``
+     - (sin definir) (edición RPM/DEB: ``/etc/fess``)
+     - Directorio que contiene los archivos de configuración. Se coloca al principio del classpath, por lo que un ``fess_config.properties`` en él se utiliza en lugar del de ``app/WEB-INF/classes``.
+   * - ``FESS_USE_IPV4``
+     - (sin definir)
+     - Con cualquier valor no vacío, la JVM utiliza solo la pila IPv4 (``-Djava.net.preferIPv4Stack=true``).
+   * - ``FESS_USE_GC_LOGGING``
+     - (sin definir)
+     - Con cualquier valor no vacío, la JVM escribe su registro del recolector de basura en ``gc-fess.log`` dentro del directorio de registros (hasta 5 archivos de 64 MB).
 
 .. note::
 
-   El archivo ``bin\fess.in.bat`` de la edición ZIP para Windows no lee estas variables de entorno (excepto las relacionadas con el proxy). Los valores se escriben directamente en el archivo, por lo que para modificarlos edite ``bin\fess.in.bat`` directamente.
+   De estas variables de entorno, el archivo ``bin\fess.in.bat`` de la edición ZIP para Windows solo lee ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` y ``FESS_USE_GC_LOGGING`` (además de las relacionadas con el proxy). Los demás valores se escriben directamente en el archivo, por lo que para modificarlos edite ``bin\fess.in.bat`` directamente.
 
 Configuración del Servidor de Correo
 -------------------------------------
