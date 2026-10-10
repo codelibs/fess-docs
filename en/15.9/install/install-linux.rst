@@ -130,6 +130,8 @@ Step 1: Install OpenSearch
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   On an arm64 (aarch64) machine, replace ``linux-x64`` with ``linux-arm64`` in the file names above (for example, ``opensearch-3.9.0-linux-arm64.tar.gz``).
+
    .. note::
 
       This example uses OpenSearch 3.9.0.
@@ -289,6 +291,8 @@ Step 1: Install OpenSearch
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
 
+   On an arm64 (aarch64) machine, replace ``linux-x64`` with ``linux-arm64`` in the file names above (for example, ``opensearch-3.9.0-linux-arm64.rpm``).
+
    Alternatively, you can add a repository and install from it.
    For details, refer to `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__.
 
@@ -398,6 +402,8 @@ Step 1: Install OpenSearch
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   On an arm64 (aarch64) machine, replace ``linux-x64`` with ``linux-arm64`` in the file names above (for example, ``opensearch-3.9.0-linux-arm64.deb``).
 
    Alternatively, you can add a repository and install from it.
    For details, refer to `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__.

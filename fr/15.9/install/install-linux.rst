@@ -133,6 +133,8 @@ Installation avec la version ZIP
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   Sur une machine arm64 (aarch64), remplacez ``linux-x64`` par ``linux-arm64`` dans les noms de fichier ci-dessus (par exemple, ``opensearch-3.9.0-linux-arm64.tar.gz``).
+
    .. note::
 
       Cet exemple utilise OpenSearch 3.9.0.
@@ -282,6 +284,8 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
 
+   Sur une machine arm64 (aarch64), remplacez ``linux-x64`` par ``linux-arm64`` dans les noms de fichier ci-dessus (par exemple, ``opensearch-3.9.0-linux-arm64.rpm``).
+
    Vous pouvez également ajouter un dépôt pour l'installation.
    Pour plus de détails, consultez `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__.
 
@@ -391,6 +395,8 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   Sur une machine arm64 (aarch64), remplacez ``linux-x64`` par ``linux-arm64`` dans les noms de fichier ci-dessus (par exemple, ``opensearch-3.9.0-linux-arm64.deb``).
 
    Vous pouvez également ajouter un dépôt pour l'installation.
    Pour plus de détails, consultez `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__.

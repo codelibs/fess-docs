@@ -118,6 +118,8 @@ ZIP 版でのインストール
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.tar.gz``）。
+
    .. note::
 
       この例では OpenSearch 3.9.0 を使用しています。
@@ -265,6 +267,8 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
 
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.rpm``）。
+
    または、リポジトリを追加してインストールすることもできます。
    詳細は `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__ を参照してください。
 
@@ -374,6 +378,8 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.deb``）。
 
    または、リポジトリを追加してインストールすることもできます。
    詳細は `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__ を参照してください。

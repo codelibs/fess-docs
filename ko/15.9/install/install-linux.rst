@@ -118,6 +118,8 @@ ZIP 버전 설치
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   arm64(aarch64) 머신에서는 위 파일명의 ``linux-x64`` 를 ``linux-arm64`` 로 바꾸십시오(예: ``opensearch-3.9.0-linux-arm64.tar.gz``).
+
    .. note::
 
       이 예제에서는 OpenSearch 3.9.0을 사용하고 있습니다.
@@ -265,6 +267,8 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
 
+   arm64(aarch64) 머신에서는 위 파일명의 ``linux-x64`` 를 ``linux-arm64`` 로 바꾸십시오(예: ``opensearch-3.9.0-linux-arm64.rpm``).
+
    또는 리포지토리를 추가하여 설치할 수도 있습니다.
    자세한 내용은 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__ 를 참조하십시오.
 
@@ -374,6 +378,8 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   arm64(aarch64) 머신에서는 위 파일명의 ``linux-x64`` 를 ``linux-arm64`` 로 바꾸십시오(예: ``opensearch-3.9.0-linux-arm64.deb``).
 
    또는 리포지토리를 추가하여 설치할 수도 있습니다.
    자세한 내용은 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__ 를 참조하십시오.

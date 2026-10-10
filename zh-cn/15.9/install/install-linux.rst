@@ -118,6 +118,8 @@
        $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
        $ cd opensearch-3.9.0
 
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.tar.gz``）。
+
    .. note::
 
       此示例使用 OpenSearch 3.9.0。
@@ -265,6 +267,8 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
        $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
 
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.rpm``）。
+
    或者，也可以添加仓库后进行安装。
    详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__\ 。
 
@@ -374,6 +378,8 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
        $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.deb``）。
 
    或者，也可以添加仓库后进行安装。
    详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__\ 。
