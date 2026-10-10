@@ -199,6 +199,10 @@ ZIP 버전 설치
        $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
+   .. note::
+
+      경로에 공백 문자가 포함되지 않은 디렉터리를 선택하십시오(macOS에서도 마찬가지입니다). 경로에 공백 문자가 포함되어 있으면 ``bin/fess`` 가 시작되지 않고 ``Could not find or load main class`` 가 출력됩니다.
+
 2. Fess 설정
 
    OpenSearch 연결 정보는 ``bin/fess.in.sh`` 에 있습니다. ``bin/fess-setup install opensearch`` 로 |Fess| 디렉터리의 ``opensearch/`` 에 설치하고 같은 호스트에서 실행하는 OpenSearch 라면 이 파일을 변경할 필요가 없습니다. ``SEARCH_ENGINE_HTTP_URL`` 의 기본값은 ``http://localhost:9200`` 이며, ``FESS_DICTIONARY_PATH`` 에는 해당 OpenSearch 의 ``config/dictionary`` 디렉터리가 설정됩니다.

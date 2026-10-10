@@ -216,6 +216,10 @@ Schritt 2: Installation von Fess
        $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
+   .. note::
+
+      Wählen Sie ein Verzeichnis ohne Leerzeichen im Pfad (auch unter macOS). Enthält der Pfad ein Leerzeichen, startet ``bin/fess`` nicht und gibt ``Could not find or load main class`` aus.
+
 2. Konfiguration von Fess
 
    Die Verbindungsinformationen zu OpenSearch stehen in ``bin/fess.in.sh``. Bei einem OpenSearch, das

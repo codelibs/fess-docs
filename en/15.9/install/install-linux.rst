@@ -213,6 +213,10 @@ Step 2: Install Fess
        $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
+   .. note::
+
+      Select a directory that does not contain spaces in the path, on macOS as well. If the path contains a space, ``bin/fess`` does not start and prints ``Could not find or load main class``.
+
 2. Configure Fess
 
    The connection information to OpenSearch is in ``bin/fess.in.sh``. With an OpenSearch that

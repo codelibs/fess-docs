@@ -199,6 +199,10 @@
        $ unzip fess-15.9.0.zip
        $ cd fess-15.9.0
 
+   .. note::
+
+      请选择路径中不包含空格的目录（macOS 上同样如此）。路径中包含空格时，``bin/fess`` 无法启动，并输出 ``Could not find or load main class``\ 。
+
 2. 配置 Fess
 
    到 OpenSearch 的连接信息位于 ``bin/fess.in.sh`` 中。对于通过 ``bin/fess-setup install opensearch`` 安装到 |Fess| 目录下的 ``opensearch/`` 中、并在同一主机上运行的 OpenSearch，无需修改此文件：\ ``SEARCH_ENGINE_HTTP_URL`` 默认为 ``http://localhost:9200``\ ，\ ``FESS_DICTIONARY_PATH`` 会被设置为该 OpenSearch 的 ``config/dictionary`` 目录。
