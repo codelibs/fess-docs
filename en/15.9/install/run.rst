@@ -59,7 +59,9 @@ To start in the background::
 .. note::
 
    Startup may take several minutes.
-   You can check the startup status in the log file (``logs/fess.log``).
+   You can check the startup status in the log files in ``logs/``: ``fess.log`` holds the
+   messages of |Fess| itself, and ``server_0.log`` those of the embedded Tomcat, including the
+   startup-completion message.
 
 ZIP Version (Windows)
 ---------------------
@@ -187,9 +189,11 @@ Docker version::
 .. tip::
 
    When startup completes successfully, a startup-completion message like the
-   following is shown on the console and in the log::
+   following is written to ``server_0.log`` in the log directory (``logs/`` of the ZIP version,
+   ``/var/log/fess/`` of the RPM/DEB version). It is not shown on the console and is not written
+   to ``fess.log``::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 

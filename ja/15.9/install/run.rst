@@ -54,7 +54,8 @@ Fess の起動
 .. note::
 
    起動には数分かかる場合があります。
-   ログファイル（``logs/fess.log``）で起動状況を確認できます。
+   ``logs/`` ディレクトリのログファイルで起動状況を確認できます。|Fess| 本体のメッセージは
+   ``fess.log``、組み込み Tomcat のメッセージ（起動完了メッセージを含む）は ``server_0.log`` に出力されます。
 
 ZIP 版の場合（Windows）
 ---------------------
@@ -181,9 +182,11 @@ Docker 版::
 
 .. tip::
 
-   正常に起動した場合、コンソールおよびログに以下のような起動完了メッセージが表示されます::
+   正常に起動した場合、以下のような起動完了メッセージがログディレクトリ（ZIP 版は ``logs/``、
+   RPM/DEB 版は ``/var/log/fess/``）の ``server_0.log`` に出力されます。コンソールにも ``fess.log`` にも
+   出力されません::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 

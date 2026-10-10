@@ -59,7 +59,9 @@ Für Hintergrundstart::
 .. note::
 
    Der Start kann einige Minuten dauern.
-   Der Startstatus kann in der Protokolldatei (``logs/fess.log``) überprüft werden.
+   Der Startstatus kann in den Protokolldateien im Verzeichnis ``logs/`` überprüft werden: ``fess.log``
+   enthält die Meldungen von |Fess| selbst, ``server_0.log`` die des eingebetteten Tomcat (einschließlich
+   der Startabschlussmeldung).
 
 ZIP-Version (Windows)
 ---------------------
@@ -183,11 +185,11 @@ Docker-Version::
 
 .. tip::
 
-   Wenn der Start erfolgreich abgeschlossen wurde, wird auf der Konsole und in der Protokolldatei eine Startabschlussmeldung wie die folgende angezeigt:
+   Wenn der Start erfolgreich abgeschlossen wurde, wird eine Startabschlussmeldung wie die folgende in die Datei ``server_0.log`` im Protokollverzeichnis geschrieben (``logs/`` der ZIP-Version, ``/var/log/fess/`` der RPM/DEB-Version). Sie erscheint weder auf der Konsole noch in ``fess.log``:
 
    ::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 

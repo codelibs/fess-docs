@@ -59,7 +59,9 @@ Pour un démarrage en arrière-plan ::
 .. note::
 
    Le démarrage peut prendre quelques minutes.
-   Vous pouvez vérifier l'état du démarrage dans le fichier de log (``logs/fess.log``).
+   Vous pouvez vérifier l'état du démarrage dans les fichiers de log du répertoire ``logs/`` : ``fess.log``
+   contient les messages de |Fess| lui-même et ``server_0.log`` ceux du Tomcat intégré (y compris le
+   message de fin de démarrage).
 
 Version ZIP (Windows)
 ---------------------
@@ -183,11 +185,11 @@ Version Docker ::
 
 .. tip::
 
-   Lorsque le démarrage se termine avec succès, un message de fin de démarrage comme celui-ci s'affiche sur la console et dans les logs :
+   Lorsque le démarrage se termine avec succès, un message de fin de démarrage comme celui-ci est écrit dans ``server_0.log``, dans le répertoire des logs (``logs/`` pour la version ZIP, ``/var/log/fess/`` pour la version RPM/DEB). Il n'apparaît ni sur la console ni dans ``fess.log`` :
 
    ::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 

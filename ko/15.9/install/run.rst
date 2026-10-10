@@ -54,7 +54,8 @@ Fess 시작
 .. note::
 
    시작에는 몇 분 정도 소요될 수 있습니다.
-   로그 파일(``logs/fess.log``)에서 시작 상태를 확인할 수 있습니다.
+   ``logs/`` 디렉터리의 로그 파일에서 시작 상태를 확인할 수 있습니다. ``fess.log`` 에는 |Fess| 자체의 메시지가,
+   ``server_0.log`` 에는 내장 Tomcat의 메시지(시작 완료 메시지 포함)가 출력됩니다.
 
 ZIP 버전의 경우(Windows)
 ------------------------
@@ -180,9 +181,11 @@ Docker 버전::
 
 .. tip::
 
-   시작이 정상적으로 완료되면 콘솔 및 로그에 다음과 같은 시작 완료 메시지가 표시됩니다::
+   시작이 정상적으로 완료되면 다음과 같은 시작 완료 메시지가 로그 디렉터리(ZIP 버전은 ``logs/``,
+   RPM/DEB 버전은 ``/var/log/fess/``)의 ``server_0.log`` 에 출력됩니다. 콘솔에도 ``fess.log`` 에도
+   출력되지 않습니다::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 

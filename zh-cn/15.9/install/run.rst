@@ -54,7 +54,8 @@ ZIP 版的情况
 .. note::
 
    启动可能需要几分钟。
-   可以在日志文件（``logs/fess.log``）中确认启动状态。
+   可以在 ``logs/`` 目录的日志文件中确认启动状态。``fess.log`` 记录 |Fess| 本身的消息，
+   ``server_0.log`` 记录内嵌 Tomcat 的消息（包括启动完成消息）。
 
 ZIP 版的情况（Windows）
 ---------------------
@@ -180,9 +181,10 @@ Docker 版::
 
 .. tip::
 
-   启动成功完成后，控制台及日志中会显示如下启动完成消息::
+   启动成功完成后，如下启动完成消息会写入日志目录（ZIP 版为 ``logs/``，RPM/DEB 版为 ``/var/log/fess/``）中的
+   ``server_0.log``\ 。控制台和 ``fess.log`` 中都不会输出该消息::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 

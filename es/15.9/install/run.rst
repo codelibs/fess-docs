@@ -59,7 +59,9 @@ Para iniciar en segundo plano::
 .. note::
 
    El inicio puede tardar varios minutos.
-   Puede verificar el estado de inicio en el archivo de registro (``logs/fess.log``).
+   Puede verificar el estado de inicio en los archivos de registro del directorio ``logs/``: ``fess.log``
+   contiene los mensajes de |Fess| y ``server_0.log`` los del Tomcat integrado (incluido el mensaje de
+   finalización del inicio).
 
 En Caso de Versión ZIP (Windows)
 ---------------------------------
@@ -183,9 +185,9 @@ Para versión Docker::
 
 .. tip::
 
-   Cuando el inicio se completa correctamente, aparece un mensaje de finalización de inicio como el siguiente en la consola y en el registro::
+   Cuando el inicio se completa correctamente, se escribe un mensaje de finalización de inicio como el siguiente en ``server_0.log``, dentro del directorio de registros (``logs/`` en la versión ZIP, ``/var/log/fess/`` en la versión RPM/DEB). No aparece en la consola ni en ``fess.log``::
 
-       ...Booting the Tomcat: port=8080 contextPath=/
+       ...Booting the Tomcat: port=8080 contextPath=
        ...
        Boot successful: url -> http://localhost:8080
 
