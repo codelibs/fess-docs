@@ -109,7 +109,7 @@ Fess startup command produces an error or exits immediately.
 
 2. **Check for port conflicts**::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
 
    If port 8080 is already in use, change the port number in the configuration file.
 
@@ -216,7 +216,7 @@ Port Conflict
 
 1. Check ports in use::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
        $ sudo lsof -i :8080
 
 2. Stop the process using the port, or change Fess port number
@@ -289,7 +289,7 @@ Cannot access http://localhost:8080/ in browser.
 
    Verify Fess is listening beyond localhost::
 
-       $ netstat -tuln | grep 8080
+       $ ss -tuln | grep 8080
 
    If ``127.0.0.1:8080``, configure to listen on ``0.0.0.0:8080`` or a specific IP address.
 

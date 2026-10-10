@@ -454,7 +454,9 @@ Docker 버전의 경우
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   net-tools 가 설치되어 있는 환경에서는 ``sudo netstat -tuln | grep 8080`` 으로도 같은 내용을 확인할 수 있습니다.
 
    포트 8080이 이미 사용되고 있는 경우 포트 번호를 변경하십시오.
 

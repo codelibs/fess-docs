@@ -338,8 +338,8 @@ Docker 版的卸载
 
 ::
 
-    $ sudo netstat -tuln | grep 8080
-    $ sudo netstat -tuln | grep 9200
+    $ sudo ss -tuln | grep 8080
+    $ sudo ss -tuln | grep 9200
 
 确认端口未被使用。
 

@@ -489,8 +489,8 @@ Docker Compose での本番運用
 
 2. ポート番号の競合を確認::
 
-       $ sudo netstat -tuln | grep 8080
-       $ sudo netstat -tuln | grep 9200
+       $ sudo ss -tuln | grep 8080
+       $ sudo ss -tuln | grep 9200
 
 3. ディスク容量を確認::
 

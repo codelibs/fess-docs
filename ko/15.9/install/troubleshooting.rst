@@ -107,7 +107,7 @@ Fess 시작 명령을 실행해도 오류가 발생하거나 즉시 종료됨.
 
 2. **포트 번호 충돌 확인**::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
 
    포트 8080이 이미 사용되고 있는 경우 설정 파일에서 포트 번호를 변경하십시오.
 
@@ -214,7 +214,7 @@ OpenSearch 3.8.0 이상에서는 사전 파일이 OpenSearch 설정 디렉터리
 
 1. 사용 중인 포트 확인::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
        $ sudo lsof -i :8080
 
 2. 사용 중인 프로세스 중지, 또는 Fess의 포트 번호 변경
@@ -287,7 +287,7 @@ Fess가 OpenSearch에 연결할 수 없음
 
    Fess가 로컬호스트 이외에서 수신 대기하고 있는지 확인::
 
-       $ netstat -tuln | grep 8080
+       $ ss -tuln | grep 8080
 
    ``127.0.0.1:8080`` 인 경우 ``0.0.0.0:8080`` 또는 특정 IP 주소에서 수신 대기하도록 설정을 변경합니다.
 

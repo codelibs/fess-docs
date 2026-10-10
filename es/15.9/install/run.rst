@@ -449,7 +449,9 @@ Si no Inicia
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   Si net-tools está instalado, ``sudo netstat -tuln | grep 8080`` muestra la misma información.
 
    Si el puerto 8080 ya está en uso, cambie el número de puerto:
 

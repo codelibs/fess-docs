@@ -477,7 +477,9 @@ Won't Start
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   Where net-tools is installed, ``sudo netstat -tuln | grep 8080`` shows the same information.
 
    If port 8080 is already in use, change the port number.
 

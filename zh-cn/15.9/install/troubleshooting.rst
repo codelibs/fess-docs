@@ -107,7 +107,7 @@ Fess 无法启动
 
 2. **确认端口号冲突**::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
 
    如果端口 8080 已被使用，请在配置文件中更改端口号。
 
@@ -214,7 +214,7 @@ OpenSearch 无法启动
 
 1. 确认使用中的端口::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
        $ sudo lsof -i :8080
 
 2. 停止使用中的进程，或更改 Fess 的端口号
@@ -287,7 +287,7 @@ Fess 无法连接到 OpenSearch
 
    确认 Fess 是否在本地主机以外监听::
 
-       $ netstat -tuln | grep 8080
+       $ ss -tuln | grep 8080
 
    如果是 ``127.0.0.1:8080``，请更改配置为 ``0.0.0.0:8080`` 或特定 IP 地址监听。
 

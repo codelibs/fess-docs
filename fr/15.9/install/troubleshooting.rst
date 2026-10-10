@@ -110,7 +110,7 @@ Une erreur se produit lors de l'exécution de la commande de démarrage de Fess,
 
 2. **Vérifiez les conflits de ports** ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
 
    Si le port 8080 est déjà utilisé, modifiez le numéro de port dans le fichier de configuration.
 
@@ -217,7 +217,7 @@ Conflit de numéros de port
 
 1. Vérifiez les ports utilisés ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
        $ sudo lsof -i :8080
 
 2. Arrêtez le processus utilisé, ou modifiez le numéro de port de Fess
@@ -290,7 +290,7 @@ Impossible d'accéder à http://localhost:8080/ via le navigateur.
 
    Vérifiez que Fess écoute sur autre chose que localhost ::
 
-       $ netstat -tuln | grep 8080
+       $ ss -tuln | grep 8080
 
    Si c'est ``127.0.0.1:8080``, modifiez la configuration pour écouter sur ``0.0.0.0:8080`` ou une adresse IP spécifique.
 

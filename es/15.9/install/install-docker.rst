@@ -508,8 +508,8 @@ Los Contenedores no Inician
 
 2. Verificar conflictos de puertos::
 
-       $ sudo netstat -tuln | grep 8080
-       $ sudo netstat -tuln | grep 9200
+       $ sudo ss -tuln | grep 8080
+       $ sudo ss -tuln | grep 9200
 
 3. Verificar espacio en disco::
 

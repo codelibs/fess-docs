@@ -340,8 +340,8 @@ Vérification des ports
 
 ::
 
-    $ sudo netstat -tuln | grep 8080
-    $ sudo netstat -tuln | grep 9200
+    $ sudo ss -tuln | grep 8080
+    $ sudo ss -tuln | grep 9200
 
 Vérifiez que les ports ne sont pas utilisés.
 

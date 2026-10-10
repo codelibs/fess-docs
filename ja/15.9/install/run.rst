@@ -466,7 +466,9 @@ Docker 版の場合
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   net-tools が導入されている環境では、``sudo netstat -tuln | grep 8080`` でも同じ内容を確認できます。
 
    ポート 8080 が既に使用されている場合、ポート番号を変更します。
 

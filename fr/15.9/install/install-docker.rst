@@ -490,8 +490,8 @@ Le conteneur ne démarre pas
 
 2. Vérification des conflits de ports ::
 
-       $ sudo netstat -tuln | grep 8080
-       $ sudo netstat -tuln | grep 9200
+       $ sudo ss -tuln | grep 8080
+       $ sudo ss -tuln | grep 9200
 
 3. Vérification de l'espace disque ::
 

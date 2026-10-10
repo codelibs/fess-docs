@@ -339,8 +339,8 @@ Docker イメージを削除してディスクスペースを解放する場合:
 
 ::
 
-    $ sudo netstat -tuln | grep 8080
-    $ sudo netstat -tuln | grep 9200
+    $ sudo ss -tuln | grep 8080
+    $ sudo ss -tuln | grep 9200
 
 ポートが使用されていないことを確認します。
 

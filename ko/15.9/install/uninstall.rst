@@ -339,8 +339,8 @@ Docker 이미지를 삭제하여 디스크 공간을 확보하는 경우::
 
 ::
 
-    $ sudo netstat -tuln | grep 8080
-    $ sudo netstat -tuln | grep 9200
+    $ sudo ss -tuln | grep 8080
+    $ sudo ss -tuln | grep 9200
 
 포트가 사용되고 있지 않은지 확인합니다.
 

@@ -451,7 +451,9 @@ En cas de non-démarrage
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   Si net-tools est installé, ``sudo netstat -tuln | grep 8080`` affiche les mêmes informations.
 
    Si le port 8080 est déjà utilisé, modifiez le numéro de port.
 

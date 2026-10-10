@@ -453,7 +453,9 @@ Docker 版的情况
 
    ::
 
-       $ sudo netstat -tuln | grep 8080
+       $ sudo ss -tuln | grep 8080
+
+   已安装 net-tools 的环境中，也可以使用 ``sudo netstat -tuln | grep 8080`` 获得相同的信息。
 
    如果端口 8080 已被使用，请更改端口号。
 

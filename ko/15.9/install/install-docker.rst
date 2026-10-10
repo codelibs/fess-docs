@@ -489,8 +489,8 @@ Docker Compose로 운영 환경 운용
 
 2. 포트 번호 충돌 확인::
 
-       $ sudo netstat -tuln | grep 8080
-       $ sudo netstat -tuln | grep 9200
+       $ sudo ss -tuln | grep 8080
+       $ sudo ss -tuln | grep 9200
 
 3. 디스크 용량 확인::
 

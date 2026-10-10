@@ -339,8 +339,8 @@ Verificación de Puertos
 
 ::
 
-    $ sudo netstat -tuln | grep 8080
-    $ sudo netstat -tuln | grep 9200
+    $ sudo ss -tuln | grep 8080
+    $ sudo ss -tuln | grep 9200
 
 Verifique que los puertos no estén en uso.
 

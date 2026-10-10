@@ -339,8 +339,8 @@ Wenn nichts angezeigt wird, sind die Prozesse gestoppt.
 
 ::
 
-    $ sudo netstat -tuln | grep 8080
-    $ sudo netstat -tuln | grep 9200
+    $ sudo ss -tuln | grep 8080
+    $ sudo ss -tuln | grep 9200
 
 Überprüfen Sie, dass keine Ports verwendet werden.
 
