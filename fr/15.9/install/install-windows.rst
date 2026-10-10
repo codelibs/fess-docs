@@ -174,7 +174,7 @@ Ouvrez ``config\opensearch.yml`` avec un éditeur de texte et ajoutez les param�
 Téléchargement de Fess
 -----------------------
 
-1. Téléchargez le package ZIP pour Windows depuis le `site de téléchargement <https://fess.codelibs.org/ja/downloads.html>`__.
+1. Téléchargez le package ZIP pour Windows depuis le `site de téléchargement <https://fess.codelibs.org/fr/downloads.html>`__.
 
 2. Décompressez le fichier ZIP téléchargé dans un répertoire arbitraire.
 

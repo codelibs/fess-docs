@@ -118,7 +118,7 @@ El flujo básico es el mismo para todos los métodos de instalación.
 
 2. **Descarga del Software**
 
-   Descargue |Fess| desde el `sitio de descargas <https://fess.codelibs.org/ja/downloads.html>`__.
+   Descargue |Fess| desde el `sitio de descargas <https://fess.codelibs.org/es/downloads.html>`__.
 
    Para la versión Docker, obtenga el archivo Docker Compose.
 
@@ -228,7 +228,7 @@ Descargas
 
 |Fess| y los componentes relacionados se pueden descargar desde:
 
-- **Fess**: `Sitio de descargas <https://fess.codelibs.org/ja/downloads.html>`__
+- **Fess**: `Sitio de descargas <https://fess.codelibs.org/es/downloads.html>`__
 - **OpenSearch**: `Download OpenSearch <https://opensearch.org/downloads.html>`__
 - **Java (Adoptium)**: `Adoptium <https://adoptium.net/>`__
 - **Docker**: `Get Docker <https://docs.docker.com/get-docker/>`__

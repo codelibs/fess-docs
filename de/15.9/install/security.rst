@@ -207,7 +207,7 @@ Wenden Sie regelmäßig Sicherheitsupdates für |Fess| und OpenSearch an.
 1. Regelmäßige Überprüfung von Sicherheitsinformationen
 
    - `Fess-Versionsinformationen <https://github.com/codelibs/fess/releases>`__
-   - `OpenSearch Security Advisories <https://opensearch.org/security.html>`__
+   - `OpenSearch Security Advisories <https://github.com/opensearch-project/OpenSearch/security/advisories>`__
 
 2. Überprüfung von Updates in der Testumgebung
 3. Anwendung von Updates in der Produktionsumgebung

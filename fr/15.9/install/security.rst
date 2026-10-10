@@ -207,7 +207,7 @@ Veuillez appliquer régulièrement les mises à jour de sécurité de |Fess| et 
 1. Vérifier régulièrement les informations de sécurité
 
    - `Informations sur les versions de Fess <https://github.com/codelibs/fess/releases>`__
-   - `Avis de sécurité OpenSearch <https://opensearch.org/security.html>`__
+   - `Avis de sécurité OpenSearch <https://github.com/opensearch-project/OpenSearch/security/advisories>`__
 
 2. Valider les mises à jour dans un environnement de test
 3. Appliquer les mises à jour dans l'environnement de production
