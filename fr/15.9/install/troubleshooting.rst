@@ -40,6 +40,8 @@ Java n'est pas installé, ou la variable d'environnement PATH n'est pas correcte
        # RHEL/CentOS
        $ sudo yum install java-21-openjdk
 
+   Les dépôts standard de Debian 12 ne proposent pas de paquet ``openjdk-21-jdk``. Sous Debian 12, installez plutôt Eclipse Temurin 21 en suivant les instructions pour Debian du `guide d'installation d'Adoptium pour Linux <https://adoptium.net/installation/linux/>`__.
+
 3. Configurez la variable d'environnement JAVA_HOME ::
 
        $ export JAVA_HOME=/path/to/java
