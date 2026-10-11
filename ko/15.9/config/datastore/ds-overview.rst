@@ -11,9 +11,9 @@
 데이터스토어 커넥터를 사용하여 다음과 같은 소스에서 데이터를 검색 가능하게 만들 수 있습니다:
 
 - 클라우드 스토리지 (Box, Dropbox, Google Drive, OneDrive)
-- 협업 도구 (Confluence, Jira, Slack)
+- 협업 도구 (Confluence, Jira, Slack, Notion, Backlog)
 - 데이터베이스 (MySQL, PostgreSQL, Oracle 등)
-- 기타 시스템 (Git, Salesforce, Elasticsearch 등)
+- 기타 시스템 (Git, Salesforce, Wikipedia 덤프 등)
 
 사용 가능한 커넥터
 ==================
@@ -63,6 +63,12 @@
    * - :doc:`ds-sharepoint`
      - fess-ds-sharepoint
      - 온프레미스 SharePoint Server 사이트를 크롤링
+   * - :doc:`ds-notion`
+     - fess-ds-notion
+     - Notion의 페이지 및 데이터베이스를 크롤링
+   * - :doc:`ds-backlog`
+     - fess-ds-backlog
+     - Backlog의 이슈, Wiki 페이지, 문서, 파일을 크롤링
 
 개발·운영 도구
 ----------------
@@ -77,9 +83,6 @@
    * - :doc:`ds-git`
      - fess-ds-git
      - Git 리포지토리의 소스 코드를 크롤링
-   * - :doc:`ds-elasticsearch`
-     - fess-ds-elasticsearch
-     - Elasticsearch/OpenSearch에서 데이터를 가져옴
    * - :doc:`ds-salesforce`
      - fess-ds-salesforce
      - Salesforce 오브젝트를 크롤링
@@ -103,6 +106,9 @@
    * - :doc:`ds-json`
      - fess-ds-json
      - JSON 파일에서 데이터를 가져옴
+   * - :doc:`ds-wikipedia`
+     - fess-ds-wikipedia
+     - Wikipedia(MediaWiki) 덤프 파일의 페이지를 크롤링
 
 커넥터 설치
 ======================

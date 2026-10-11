@@ -11,9 +11,9 @@
 使用数据存储连接器，可以使以下来源的数据变得可搜索：
 
 - 云存储（Box、Dropbox、Google Drive、OneDrive）
-- 协作工具（Confluence、Jira、Slack）
+- 协作工具（Confluence、Jira、Slack、Notion、Backlog）
 - 数据库（MySQL、PostgreSQL、Oracle等）
-- 其他系统（Git、Salesforce、Elasticsearch等）
+- 其他系统（Git、Salesforce、Wikipedia转储等）
 
 可用的连接器
 ==================
@@ -63,6 +63,12 @@
    * - :doc:`ds-sharepoint`
      - fess-ds-sharepoint
      - 抓取本地部署（on-premises）SharePoint Server
+   * - :doc:`ds-notion`
+     - fess-ds-notion
+     - 抓取Notion的页面和数据库
+   * - :doc:`ds-backlog`
+     - fess-ds-backlog
+     - 抓取Backlog的问题、Wiki页面、文档和文件
 
 开发运维工具
 ----------------
@@ -77,9 +83,6 @@
    * - :doc:`ds-git`
      - fess-ds-git
      - 抓取Git仓库的源代码
-   * - :doc:`ds-elasticsearch`
-     - fess-ds-elasticsearch
-     - 从Elasticsearch/OpenSearch获取数据
    * - :doc:`ds-salesforce`
      - fess-ds-salesforce
      - 抓取Salesforce对象
@@ -103,6 +106,9 @@
    * - :doc:`ds-json`
      - fess-ds-json
      - 从JSON文件获取数据
+   * - :doc:`ds-wikipedia`
+     - fess-ds-wikipedia
+     - 抓取Wikipedia（MediaWiki）转储文件中的页面
 
 连接器安装
 ======================

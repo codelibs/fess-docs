@@ -26,13 +26,14 @@ Die Datenspeicher-Konnektoren von |Fess| ermöglichen es, Inhalte aus verschiede
    ds-atlassian
    ds-slack
    ds-sharepoint
+   ds-notion
+   ds-backlog
 
 .. toctree::
    :maxdepth: 2
    :caption: Entwicklungs- und Betriebstools
 
    ds-git
-   ds-elasticsearch
    ds-salesforce
 
 .. toctree::
@@ -42,3 +43,4 @@ Die Datenspeicher-Konnektoren von |Fess| ermöglichen es, Inhalte aus verschiede
    ds-database
    ds-csv
    ds-json
+   ds-wikipedia

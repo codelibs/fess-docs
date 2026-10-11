@@ -11,9 +11,9 @@ other than websites and file systems.
 Using Data Store Connectors, you can make data searchable from the following sources:
 
 - Cloud storage (Box, Dropbox, Google Drive, OneDrive)
-- Collaboration tools (Confluence, Jira, Slack)
+- Collaboration tools (Confluence, Jira, Slack, Notion, Backlog)
 - Databases (MySQL, PostgreSQL, Oracle, etc.)
-- Other systems (Git, Salesforce, Elasticsearch, etc.)
+- Other systems (Git, Salesforce, Wikipedia dumps, etc.)
 
 Available Connectors
 ====================
@@ -63,6 +63,12 @@ Collaboration Tools
    * - :doc:`ds-sharepoint`
      - fess-ds-sharepoint
      - Crawl on-premises SharePoint Server sites
+   * - :doc:`ds-notion`
+     - fess-ds-notion
+     - Crawl Notion pages and databases
+   * - :doc:`ds-backlog`
+     - fess-ds-backlog
+     - Crawl Backlog issues, Wiki pages, Documents and files
 
 Development & Operations Tools
 ------------------------------
@@ -77,9 +83,6 @@ Development & Operations Tools
    * - :doc:`ds-git`
      - fess-ds-git
      - Crawl source code from Git repositories
-   * - :doc:`ds-elasticsearch`
-     - fess-ds-elasticsearch
-     - Retrieve data from Elasticsearch/OpenSearch
    * - :doc:`ds-salesforce`
      - fess-ds-salesforce
      - Crawl Salesforce objects
@@ -103,6 +106,9 @@ Databases & Files
    * - :doc:`ds-json`
      - fess-ds-json
      - Retrieve data from JSON files
+   * - :doc:`ds-wikipedia`
+     - fess-ds-wikipedia
+     - Crawl pages from a Wikipedia (MediaWiki) dump file
 
 Installing Connectors
 =====================

@@ -26,13 +26,14 @@
    ds-atlassian
    ds-slack
    ds-sharepoint
+   ds-notion
+   ds-backlog
 
 .. toctree::
    :maxdepth: 2
    :caption: 개발·운영 도구
 
    ds-git
-   ds-elasticsearch
    ds-salesforce
 
 .. toctree::
@@ -42,3 +43,4 @@
    ds-database
    ds-csv
    ds-json
+   ds-wikipedia

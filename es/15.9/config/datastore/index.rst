@@ -26,13 +26,14 @@ Los conectores de almacén de datos de |Fess| permiten obtener contenido de dive
    ds-atlassian
    ds-slack
    ds-sharepoint
+   ds-notion
+   ds-backlog
 
 .. toctree::
    :maxdepth: 2
    :caption: Herramientas de Desarrollo y Operaciones
 
    ds-git
-   ds-elasticsearch
    ds-salesforce
 
 .. toctree::
@@ -42,3 +43,4 @@ Los conectores de almacén de datos de |Fess| permiten obtener contenido de dive
    ds-database
    ds-csv
    ds-json
+   ds-wikipedia

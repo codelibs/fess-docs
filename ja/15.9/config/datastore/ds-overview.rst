@@ -11,9 +11,9 @@
 データストアコネクタを使用することで、以下のようなソースからデータを検索可能にできます:
 
 - クラウドストレージ（Box、Dropbox、Google Drive、OneDrive）
-- コラボレーションツール（Confluence、Jira、Slack）
+- コラボレーションツール（Confluence、Jira、Slack、Notion、Backlog）
 - データベース（MySQL、PostgreSQL、Oracle等）
-- その他のシステム（Git、Salesforce、Elasticsearch等）
+- その他のシステム（Git、Salesforce、Wikipediaダンプ等）
 
 利用可能なコネクタ
 ==================
@@ -63,6 +63,12 @@
    * - :doc:`ds-sharepoint`
      - fess-ds-sharepoint
      - オンプレミス版 SharePoint Server をクロール
+   * - :doc:`ds-notion`
+     - fess-ds-notion
+     - Notionのページとデータベースをクロール
+   * - :doc:`ds-backlog`
+     - fess-ds-backlog
+     - Backlogの課題、Wikiページ、ドキュメント、ファイルをクロール
 
 開発・運用ツール
 ----------------
@@ -77,9 +83,6 @@
    * - :doc:`ds-git`
      - fess-ds-git
      - Gitリポジトリのソースコードをクロール
-   * - :doc:`ds-elasticsearch`
-     - fess-ds-elasticsearch
-     - Elasticsearch/OpenSearchからデータを取得
    * - :doc:`ds-salesforce`
      - fess-ds-salesforce
      - Salesforceのオブジェクトをクロール
@@ -103,22 +106,9 @@
    * - :doc:`ds-json`
      - fess-ds-json
      - JSONファイルからデータを取得
-
-その他
-------
-
-以下のコネクタも利用可能です:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 25 50
-
-   * - コネクタ
-     - プラグイン
-     - 説明
-   * - Wikipedia
+   * - :doc:`ds-wikipedia`
      - fess-ds-wikipedia
-     - Wikipediaのコンテンツを取得
+     - Wikipedia（MediaWiki）のダンプファイルのページをクロール
 
 コネクタのインストール
 ======================

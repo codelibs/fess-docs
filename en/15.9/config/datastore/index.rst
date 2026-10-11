@@ -26,13 +26,14 @@ Data Store Connector Guide
    ds-atlassian
    ds-slack
    ds-sharepoint
+   ds-notion
+   ds-backlog
 
 .. toctree::
    :maxdepth: 2
    :caption: Development & Operations Tools
 
    ds-git
-   ds-elasticsearch
    ds-salesforce
 
 .. toctree::
@@ -42,3 +43,4 @@ Data Store Connector Guide
    ds-database
    ds-csv
    ds-json
+   ds-wikipedia
