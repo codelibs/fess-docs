@@ -303,7 +303,7 @@ Principales variables d'environnement :
    * - ``SEARCH_ENGINE_HTTP_URL``
      - Point de terminaison HTTP d'OpenSearch (valeur par défaut dans ``compose.yaml`` : ``http://search01:9200``)
    * - ``SEARCH_ENGINE_TYPE``
-     - Le type de moteur de recherche (``default``, ``vanilla`` ou ``aws``). ``vanilla`` nécessite une image de Fess 15.9 ou ultérieure ; avec des images plus anciennes, utilisez ``cloud`` (voir :doc:`../config/search-engine-type`)
+     - Le type de moteur de recherche (``default``, ``vanilla`` ou ``aws``). ``vanilla`` nécessite une image de Fess 15.9 ou ultérieure ; avec des images plus anciennes, utilisez ``cloud`` (voir :doc:`../config/search-engine-type`). Avec les images 15.8, seule la variante ``-noble`` transmet la valeur à Fess.
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - Informations d'identification pour se connecter à un OpenSearch avec authentification activée
    * - ``FESS_DICTIONARY_PATH``

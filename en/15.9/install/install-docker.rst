@@ -302,7 +302,7 @@ Main environment variables:
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch HTTP endpoint (default in ``compose.yaml``: ``http://search01:9200``)
    * - ``SEARCH_ENGINE_TYPE``
-     - The type of search engine (``default``, ``vanilla`` or ``aws``). ``vanilla`` requires a Fess 15.9 or later image; use ``cloud`` with older images (see :doc:`../config/search-engine-type`)
+     - The type of search engine (``default``, ``vanilla`` or ``aws``). ``vanilla`` requires a Fess 15.9 or later image; use ``cloud`` with older images (see :doc:`../config/search-engine-type`). On the 15.8 images, only the ``-noble`` variant passes it to Fess.
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - Credentials for connecting to an OpenSearch instance with authentication enabled
    * - ``FESS_DICTIONARY_PATH``

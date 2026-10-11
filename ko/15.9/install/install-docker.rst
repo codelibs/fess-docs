@@ -302,7 +302,7 @@ Docker 컨테이너 중지
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch의 HTTP 엔드포인트(``compose.yaml`` 의 기본값: ``http://search01:9200``)
    * - ``SEARCH_ENGINE_TYPE``
-     - 검색 엔진 종류(``default``, ``vanilla``, ``aws``). ``vanilla`` 는 Fess 15.9 이상의 이미지에서 지정할 수 있으며, 그보다 이전 이미지에서는 ``cloud`` 를 지정합니다( :doc:`../config/search-engine-type` 참조)
+     - 검색 엔진 종류(``default``, ``vanilla``, ``aws``). ``vanilla`` 는 Fess 15.9 이상의 이미지에서 지정할 수 있으며, 그보다 이전 이미지에서는 ``cloud`` 를 지정합니다( :doc:`../config/search-engine-type` 참조). 15.8 이미지에서는 ``-noble`` 변형만 이 값을 Fess 에 전달합니다.
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - 인증이 활성화된 OpenSearch에 접속할 때의 자격 증명
    * - ``FESS_DICTIONARY_PATH``

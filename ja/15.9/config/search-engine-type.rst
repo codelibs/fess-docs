@@ -73,6 +73,10 @@ Docker
 
 ``vanilla`` は |Fess| 15.9 以降のイメージで指定できます。それより前のイメージでは ``SEARCH_ENGINE_TYPE=cloud`` を指定してください。そのほかの Docker の設定は :doc:`../install/install-docker` を参照してください。
 
+.. note::
+
+   |Fess| 15.8 のイメージでは、 ``-noble`` 版（例: ``ghcr.io/codelibs/fess:15.8.0-noble`` ）だけが ``SEARCH_ENGINE_TYPE`` を |Fess| に渡します。既定の（Alpine ベースの）15.8 イメージは、値を ``/etc/default/fess`` に書き込みますが、JVM に ``-Dfess.config.search_engine.type`` として渡さないため、この設定は効きません。15.9 以降は、既定のイメージでも有効です。
+
 Docker 以外
 -----------
 
