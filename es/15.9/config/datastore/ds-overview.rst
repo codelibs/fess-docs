@@ -11,9 +11,9 @@ de fuentes de datos distintas a sitios web o sistemas de archivos y indexarlo.
 Al utilizar conectores de almacén de datos, puede hacer que los datos de las siguientes fuentes sean buscables:
 
 - Almacenamiento en la nube (Box, Dropbox, Google Drive, OneDrive)
-- Herramientas de colaboración (Confluence, Jira, Slack)
+- Herramientas de colaboración (Confluence, Jira, Slack, Notion, Backlog)
 - Bases de datos (MySQL, PostgreSQL, Oracle, etc.)
-- Otros sistemas (Git, Salesforce, Elasticsearch, etc.)
+- Otros sistemas (Git, Salesforce, volcados de Wikipedia, etc.)
 
 Conectores Disponibles
 ======================
@@ -63,6 +63,12 @@ Herramientas de Colaboración
    * - :doc:`ds-sharepoint`
      - fess-ds-sharepoint
      - Rastrea sitios de SharePoint Server on-premises
+   * - :doc:`ds-notion`
+     - fess-ds-notion
+     - Rastrea páginas y bases de datos de Notion
+   * - :doc:`ds-backlog`
+     - fess-ds-backlog
+     - Rastrea incidencias, páginas Wiki, documentos y archivos de Backlog
 
 Herramientas de Desarrollo y Operaciones
 ----------------------------------------
@@ -77,9 +83,6 @@ Herramientas de Desarrollo y Operaciones
    * - :doc:`ds-git`
      - fess-ds-git
      - Rastrea código fuente de repositorios Git
-   * - :doc:`ds-elasticsearch`
-     - fess-ds-elasticsearch
-     - Obtiene datos de Elasticsearch/OpenSearch
    * - :doc:`ds-salesforce`
      - fess-ds-salesforce
      - Rastrea objetos de Salesforce
@@ -103,6 +106,9 @@ Bases de Datos y Archivos
    * - :doc:`ds-json`
      - fess-ds-json
      - Obtiene datos de archivos JSON
+   * - :doc:`ds-wikipedia`
+     - fess-ds-wikipedia
+     - Rastrea páginas de un archivo de volcado de Wikipedia (MediaWiki)
 
 Instalación de Conectores
 =========================

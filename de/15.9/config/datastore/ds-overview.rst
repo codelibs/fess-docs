@@ -10,9 +10,9 @@ Die Datenspeicher-Konnektoren von |Fess| bieten die Funktionalität, Inhalte aus
 Mit Datenspeicher-Konnektoren können Sie Daten aus folgenden Quellen durchsuchbar machen:
 
 - Cloud-Speicher (Box, Dropbox, Google Drive, OneDrive)
-- Kollaborationstools (Confluence, Jira, Slack)
+- Kollaborationstools (Confluence, Jira, Slack, Notion, Backlog)
 - Datenbanken (MySQL, PostgreSQL, Oracle usw.)
-- Andere Systeme (Git, Salesforce, Elasticsearch usw.)
+- Andere Systeme (Git, Salesforce, Wikipedia-Dumps usw.)
 
 Verfügbare Konnektoren
 ======================
@@ -62,6 +62,12 @@ Kollaborationstools
    * - :doc:`ds-sharepoint`
      - fess-ds-sharepoint
      - Crawlt On-Premises-SharePoint-Server-Sites
+   * - :doc:`ds-notion`
+     - fess-ds-notion
+     - Crawlt Notion-Seiten und -Datenbanken
+   * - :doc:`ds-backlog`
+     - fess-ds-backlog
+     - Crawlt Backlog-Vorgänge, Wiki-Seiten, Dokumente und Dateien
 
 Entwicklungs- und Betriebstools
 -------------------------------
@@ -76,9 +82,6 @@ Entwicklungs- und Betriebstools
    * - :doc:`ds-git`
      - fess-ds-git
      - Crawlt Quellcode aus Git-Repositories
-   * - :doc:`ds-elasticsearch`
-     - fess-ds-elasticsearch
-     - Ruft Daten von Elasticsearch/OpenSearch ab
    * - :doc:`ds-salesforce`
      - fess-ds-salesforce
      - Crawlt Salesforce-Objekte
@@ -102,6 +105,9 @@ Datenbank und Dateien
    * - :doc:`ds-json`
      - fess-ds-json
      - Ruft Daten aus JSON-Dateien ab
+   * - :doc:`ds-wikipedia`
+     - fess-ds-wikipedia
+     - Crawlt Seiten aus einer Wikipedia-Dumpdatei (MediaWiki)
 
 Installation von Konnektoren
 ============================

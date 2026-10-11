@@ -11,9 +11,9 @@ et d'indexer du contenu depuis des sources de données autres que les sites web 
 En utilisant les connecteurs DataStore, vous pouvez rendre recherchables les données provenant des sources suivantes :
 
 - Stockage cloud (Box, Dropbox, Google Drive, OneDrive)
-- Outils de collaboration (Confluence, Jira, Slack)
+- Outils de collaboration (Confluence, Jira, Slack, Notion, Backlog)
 - Bases de données (MySQL, PostgreSQL, Oracle, etc.)
-- Autres systèmes (Git, Salesforce, Elasticsearch, etc.)
+- Autres systèmes (Git, Salesforce, dumps Wikipedia, etc.)
 
 Connecteurs disponibles
 =======================
@@ -63,6 +63,12 @@ Outils de collaboration
    * - :doc:`ds-sharepoint`
      - fess-ds-sharepoint
      - Exploration de sites SharePoint Server sur site (on-premises)
+   * - :doc:`ds-notion`
+     - fess-ds-notion
+     - Exploration des pages et bases de données Notion
+   * - :doc:`ds-backlog`
+     - fess-ds-backlog
+     - Exploration des tickets, pages Wiki, documents et fichiers Backlog
 
 Outils de développement et opérations
 -------------------------------------
@@ -77,9 +83,6 @@ Outils de développement et opérations
    * - :doc:`ds-git`
      - fess-ds-git
      - Exploration du code source des dépôts Git
-   * - :doc:`ds-elasticsearch`
-     - fess-ds-elasticsearch
-     - Récupération de données depuis Elasticsearch/OpenSearch
    * - :doc:`ds-salesforce`
      - fess-ds-salesforce
      - Exploration des objets Salesforce
@@ -103,6 +106,9 @@ Bases de données et fichiers
    * - :doc:`ds-json`
      - fess-ds-json
      - Récupération de données depuis les fichiers JSON
+   * - :doc:`ds-wikipedia`
+     - fess-ds-wikipedia
+     - Exploration des pages d'un fichier de dump Wikipedia (MediaWiki)
 
 Installation des connecteurs
 ============================

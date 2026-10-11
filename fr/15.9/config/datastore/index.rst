@@ -26,13 +26,14 @@ Les connecteurs DataStore de |Fess| permettent de récupérer du contenu depuis 
    ds-atlassian
    ds-slack
    ds-sharepoint
+   ds-notion
+   ds-backlog
 
 .. toctree::
    :maxdepth: 2
    :caption: Outils de developpement et operations
 
    ds-git
-   ds-elasticsearch
    ds-salesforce
 
 .. toctree::
@@ -42,3 +43,4 @@ Les connecteurs DataStore de |Fess| permettent de récupérer du contenu depuis 
    ds-database
    ds-csv
    ds-json
+   ds-wikipedia
