@@ -92,6 +92,8 @@ Playwright 系のプラグイン（Playwright クローラの ``fess-crawler-pla
 
 以下のコマンドは、 |Fess| のプラグインディレクトリ ``app/WEB-INF/plugin`` を操作します。プラグインを導入、更新、削除した後は |Fess| を再起動してください。プラグインは管理画面の「システム > プラグイン」ページからも管理できます。 :doc:`../admin/plugin-guide` を参照してください。
 
+``install plugin`` 、 ``list plugins`` 、 ``list installed`` 、 ``upgrade plugins`` 、 ``remove plugin`` 、 ``check`` には ``--dest <dir>`` を指定できます。 ``app/WEB-INF/plugin`` の代わりに使うプラグインディレクトリを指定します。指定するのはプラグインの jar が置かれるディレクトリそのもので、その親ディレクトリではありません。相対パスは |Fess| のディレクトリではなく、コマンドを実行したカレントディレクトリからの相対パスです。 ``install opensearch`` と ``install nodejs`` の ``--dest`` は、アーカイブを展開するディレクトリを指します。
+
 ``install plugin`` 、 ``list plugins`` 、 ``upgrade plugins`` には ``--repository <url>`` を指定できます。指定すると、バージョンの一覧、jar、チェックサムをすべてその 1 つの Maven リポジトリ（社内のミラーなど）から取得し、既定のリリースリポジトリ、スナップショットリポジトリ、GitHub は使用しません。
 
 ``--repository`` には ``file:///`` で始まる URL も指定できます。インターネットに接続できないサーバーでは、Maven リポジトリのコピーをサーバー上に置き、そのディレクトリを指定します。指定するのは、各プラグインのディレクトリ（ ``<name>/maven-metadata.xml`` など）を含むディレクトリで、既定のリポジトリの ``https://maven.codelibs.org/release/org/codelibs/fess/`` に当たる場所です。バージョンの解決とチェックサムの検証は、HTTP のリポジトリと同じように行われます。
@@ -107,7 +109,7 @@ install plugin
 
 ::
 
-    $ bin/fess-setup install plugin <name>[:<version>]... [--version <version>] [--repository <url>]
+    $ bin/fess-setup install plugin <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
 ``fess-script-groovy`` や ``fess-ds-git`` などの |Fess| プラグインを 1 つ以上導入します。バージョンを付けない名前には、この |Fess| 向けにビルドされた最新のバージョンが導入されます。 ``<name>:<version>`` でそのプラグインのバージョンを固定でき、 ``--version`` はバージョンを付けなかった名前すべてに使われます。新しいバージョンの導入が完了した後に、同じプラグインの以前のバージョンが削除されます。
 
@@ -122,7 +124,7 @@ list plugins
 
 ::
 
-    $ bin/fess-setup list plugins [--repository <url>]
+    $ bin/fess-setup list plugins [--repository <url>] [--dest <dir>]
 
 この |Fess| 向けに公開されているプラグインを一覧表示し、導入済みのものには ``(installed: <version>)`` を付けます。導入済みでもリポジトリに公開されていないプラグイン（ローカルでビルドした jar など）は、別に一覧表示します。 |Fess| の開発版では、スナップショットリポジトリも参照します。
 
@@ -131,7 +133,7 @@ list installed
 
 ::
 
-    $ bin/fess-setup list installed
+    $ bin/fess-setup list installed [--dest <dir>]
 
 導入済みのプラグインとそのバージョンを、リポジトリに問い合わせずに一覧表示します。
 
@@ -140,7 +142,7 @@ upgrade plugins
 
 ::
 
-    $ bin/fess-setup upgrade plugins [--repository <url>]
+    $ bin/fess-setup upgrade plugins [--repository <url>] [--dest <dir>]
 
 導入済みのすべてのプラグインを、この |Fess| に合うバージョンで導入し直します。すでにそのバージョンになっているプラグインはそのままです。 ``app/WEB-INF/plugin`` のプラグインは特定の |Fess| のリリース向けにビルドされているため、 |Fess| をアップグレードした後に実行してください。
 
@@ -149,7 +151,7 @@ remove plugin
 
 ::
 
-    $ bin/fess-setup remove plugin <name>...
+    $ bin/fess-setup remove plugin <name>... [--dest <dir>]
 
 指定したプラグインの jar を削除します。導入されていない名前はその旨を表示するだけで、終了コードには影響しません。
 
@@ -173,6 +175,8 @@ remove plugin
 
 これらのコマンドは |Fess| のインストールディレクトリの ``app/themes`` を対象とします。テーマをインストールまたは削除したあとは |Fess| を再起動するか、[システム > テーマ] ページの [再読み込み] をクリックしてください。テーマは同じページからアップロードすることもできます。 :doc:`../admin/theme-guide` を参照してください。
 
+``install theme`` 、 ``list themes`` 、 ``remove theme`` にも同様に ``--dest <dir>`` を指定でき、 ``app/themes`` の代わりに使うテーマディレクトリを指定します。
+
 テーマのバージョンは、そのテーマが対象とする |Fess| の系列を表します。つまり ``15.9.0`` は |Fess| 15.9 用のテーマです。そのためバージョンを付けずに名前だけを指定すると、プラグインの場合と同じように、この |Fess| 用に作られたテーマが選ばれます。
 
 install theme
@@ -180,7 +184,7 @@ install theme
 
 ::
 
-    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>]
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
 ``docuforge`` や ``voicebox`` などの静的テーマをインストールします。バージョンを付けない名前は、この |Fess| 用に作られた最新のものをインストールします。 ``<name>:<version>`` はそのテーマのバージョンを固定し、 ``--version`` は自分のバージョンを持たないすべての名前に適用されます。
 
@@ -193,7 +197,7 @@ list themes
 
 ::
 
-    $ bin/fess-setup list themes [--repository <url>]
+    $ bin/fess-setup list themes [--repository <url>] [--dest <dir>]
 
 この |Fess| 向けに公開されているテーマを一覧表示し、インストール済みのものには ``(installed: <version>)`` を付けます。インストールされているがリポジトリの一覧に無いテーマは、別に表示されます。
 
@@ -204,7 +208,7 @@ remove theme
 
 ::
 
-    $ bin/fess-setup remove theme <name>...
+    $ bin/fess-setup remove theme <name>... [--dest <dir>]
 
 指定したテーマを ``app/themes`` から削除します。それぞれ保持期間のあいだバックアップとして残ります。インストールされていない名前は報告されますが、終了コードは変わりません。
 
@@ -227,7 +231,7 @@ check
 
 ::
 
-    $ bin/fess-setup check [--url <engine url>] [--playwright]
+    $ bin/fess-setup check [--url <engine url>] [--playwright] [--dest <dir>]
 
 インストール状態を診断し、確認項目ごとに ``OK`` 、 ``WARN`` 、 ``FAIL`` のいずれかを付けて 1 行ずつ表示します。
 

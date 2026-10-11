@@ -92,6 +92,8 @@ install nodejs
 
 以下命令操作 |Fess| 安装中的插件目录 ``app/WEB-INF/plugin``\ 。安装、升级或删除插件后，请重启 |Fess|\ 。也可以在管理界面的「系统 > 插件」页面管理插件；请参阅 :doc:`../admin/plugin-guide`\ 。
 
+``install plugin``\ 、\ ``list plugins``\ 、\ ``list installed``\ 、\ ``upgrade plugins``\ 、\ ``remove plugin`` 和 ``check`` 可以指定 ``--dest <dir>``\ 。它指定用来代替 ``app/WEB-INF/plugin`` 的插件目录，即存放插件 jar 的目录本身，而不是它的上级目录。相对路径相对于执行命令时的当前目录，而不是 |Fess| 目录。 ``install opensearch`` 和 ``install nodejs`` 的 ``--dest`` 则是解压归档的目录。
+
 ``install plugin``\ 、\ ``list plugins`` 和 ``upgrade plugins`` 可以指定 ``--repository <url>``\ 。指定后，版本列表、jar 及其校验和都从该单个 Maven 仓库（例如内部镜像）获取，而不使用默认的发布仓库、快照仓库和 GitHub。
 
 ``--repository`` 也可以指定以 ``file:///`` 开头的 URL。在无法连接互联网的服务器上，可以将 Maven 仓库的副本放到服务器上，并指定该目录。应指定包含各插件目录（ ``<name>/maven-metadata.xml`` 等）的目录，即与默认仓库的 ``https://maven.codelibs.org/release/org/codelibs/fess/`` 相对应的位置。版本解析和校验和验证与 HTTP 仓库相同。
@@ -107,7 +109,7 @@ install plugin
 
 ::
 
-    $ bin/fess-setup install plugin <name>[:<version>]... [--version <version>] [--repository <url>]
+    $ bin/fess-setup install plugin <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
 安装一个或多个 |Fess| 插件，例如 ``fess-script-groovy`` 或 ``fess-ds-git``\ 。未指定版本的名称会安装为此 |Fess| 构建的最新版本。\ ``<name>:<version>`` 用于固定该插件的版本，\ ``--version`` 则作为所有未指定版本的名称的版本。新版本安装完成后，将删除同一插件之前安装的版本。
 
@@ -122,7 +124,7 @@ list plugins
 
 ::
 
-    $ bin/fess-setup list plugins [--repository <url>]
+    $ bin/fess-setup list plugins [--repository <url>] [--dest <dir>]
 
 列出为此 |Fess| 发布的插件，并用 ``(installed: <version>)`` 标记已安装的插件。已安装但未在仓库中发布的插件（例如本地构建的 jar）会单独列出。\ |Fess| 的开发版还会列出快照仓库中的插件。
 
@@ -131,7 +133,7 @@ list installed
 
 ::
 
-    $ bin/fess-setup list installed
+    $ bin/fess-setup list installed [--dest <dir>]
 
 列出已安装的插件及其版本，不访问仓库。
 
@@ -140,7 +142,7 @@ upgrade plugins
 
 ::
 
-    $ bin/fess-setup upgrade plugins [--repository <url>]
+    $ bin/fess-setup upgrade plugins [--repository <url>] [--dest <dir>]
 
 将所有已安装的插件以适合此 |Fess| 的版本重新安装。已经是该版本的插件保持不变。\ ``app/WEB-INF/plugin`` 中的插件是为特定的 |Fess| 发布版本构建的，因此请在升级 |Fess| 后运行此命令。
 
@@ -149,7 +151,7 @@ remove plugin
 
 ::
 
-    $ bin/fess-setup remove plugin <name>...
+    $ bin/fess-setup remove plugin <name>... [--dest <dir>]
 
 删除指定插件已安装的 jar。未安装的名称只会给出提示，不影响退出码。
 
@@ -173,6 +175,8 @@ remove plugin
 
 这些命令作用于 |Fess| 安装目录下的 ``app/themes``\ 。安装或删除主题后，请重启 |Fess|\ ，或在 [系统 > 主题] 页面点击 [重新加载]。主题也可以从该页面上传，参见 :doc:`../admin/theme-guide`\ 。
 
+``install theme``\ 、\ ``list themes`` 和 ``remove theme`` 也可以同样指定 ``--dest <dir>``\ ，用来指定代替 ``app/themes`` 的主题目录。
+
 主题的版本表示该主题面向的 |Fess| 系列，即 ``15.9.0`` 是面向 |Fess| 15.9 的主题。因此只指定名称而不带版本时，与插件一样会选择为当前 |Fess| 构建的主题。
 
 install theme
@@ -180,7 +184,7 @@ install theme
 
 ::
 
-    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>]
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
 安装一个或多个静态主题，例如 ``docuforge`` 或 ``voicebox``\ 。不带版本的名称会安装为当前 |Fess| 构建的最新版本。 ``<name>:<version>`` 固定该主题的版本， ``--version`` 适用于所有没有自带版本的名称。
 
@@ -193,7 +197,7 @@ list themes
 
 ::
 
-    $ bin/fess-setup list themes [--repository <url>]
+    $ bin/fess-setup list themes [--repository <url>] [--dest <dir>]
 
 列出为当前 |Fess| 公开的主题，并为已安装的主题标注 ``(installed: <version>)``\ 。已安装但未出现在仓库列表中的主题会单独显示。
 
@@ -204,7 +208,7 @@ remove theme
 
 ::
 
-    $ bin/fess-setup remove theme <name>...
+    $ bin/fess-setup remove theme <name>... [--dest <dir>]
 
 从 ``app/themes`` 中删除指定的主题，每个都会在保留期内作为备份保留。未安装的名称会被报告，但不会改变退出码。
 
@@ -227,7 +231,7 @@ check
 
 ::
 
-    $ bin/fess-setup check [--url <engine url>] [--playwright]
+    $ bin/fess-setup check [--url <engine url>] [--playwright] [--dest <dir>]
 
 检查安装状态，每个检查项输出一行，并标记为 ``OK``\ 、\ ``WARN`` 或 ``FAIL``\ ：
 

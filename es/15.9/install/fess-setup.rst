@@ -130,6 +130,8 @@ Estos comandos trabajan sobre el directorio de plugins ``app/WEB-INF/plugin`` de
 pueden gestionar desde la página Sistema > Plugin de la pantalla de administración; consulte
 :doc:`../admin/plugin-guide`.
 
+``install plugin``, ``list plugins``, ``list installed``, ``upgrade plugins``, ``remove plugin`` y ``check`` aceptan ``--dest <dir>``. Indica el directorio de plugins que se usa en lugar de ``app/WEB-INF/plugin``: el directorio que contiene los jar de los plugins, no su directorio padre. Una ruta relativa se resuelve desde el directorio actual, no desde el directorio de |Fess|. En ``install opensearch`` e ``install nodejs``, en cambio, ``--dest`` es el directorio en el que se extrae el archivo.
+
 ``install plugin``, ``list plugins`` y ``upgrade plugins`` aceptan ``--repository <url>``. Con esta
 opción, la lista de versiones, los jar y sus sumas de comprobación se obtienen de ese único
 repositorio Maven, como un espejo interno, en lugar de los repositorios predeterminados de
@@ -154,7 +156,7 @@ install plugin
 
 ::
 
-    $ bin/fess-setup install plugin <name>[:<version>]... [--version <version>] [--repository <url>]
+    $ bin/fess-setup install plugin <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
 Instala uno o varios plugins de |Fess|, por ejemplo ``fess-script-groovy`` o ``fess-ds-git``. Un
 nombre sin versión instala la versión más reciente compilada para este |Fess|.
@@ -181,7 +183,7 @@ list plugins
 
 ::
 
-    $ bin/fess-setup list plugins [--repository <url>]
+    $ bin/fess-setup list plugins [--repository <url>] [--dest <dir>]
 
 Lista los plugins publicados para este |Fess| y marca los instalados con
 ``(installed: <version>)``. Los plugins que están instalados pero no publicados en el repositorio,
@@ -193,7 +195,7 @@ list installed
 
 ::
 
-    $ bin/fess-setup list installed
+    $ bin/fess-setup list installed [--dest <dir>]
 
 Lista los plugins instalados y sus versiones, sin consultar el repositorio.
 
@@ -202,7 +204,7 @@ upgrade plugins
 
 ::
 
-    $ bin/fess-setup upgrade plugins [--repository <url>]
+    $ bin/fess-setup upgrade plugins [--repository <url>] [--dest <dir>]
 
 Vuelve a instalar cada plugin instalado en la versión adecuada para este |Fess|. Un plugin que ya
 está en esa versión se deja como está. Los plugins de ``app/WEB-INF/plugin`` se compilan para una
@@ -213,7 +215,7 @@ remove plugin
 
 ::
 
-    $ bin/fess-setup remove plugin <name>...
+    $ bin/fess-setup remove plugin <name>... [--dest <dir>]
 
 Elimina los jar instalados de los plugins indicados. Un nombre que no está instalado se notifica y
 no cambia el código de salida.
@@ -251,6 +253,8 @@ Reinicie |Fess| después de instalar o eliminar un tema, o pulse [Recargar] en l
 Sistema > Tema. Los temas también pueden subirse desde esa página; consulte
 :doc:`../admin/theme-guide`.
 
+``install theme``, ``list themes`` y ``remove theme`` aceptan ``--dest <dir>`` de la misma forma e indican el directorio de temas que se usa en lugar de ``app/themes``.
+
 La versión de un tema indica la línea de |Fess| a la que está destinado: ``15.9.0`` es un tema
 para |Fess| 15.9. Por eso un nombre sin versión se resuelve al tema construido para este |Fess|,
 igual que ocurre con un plugin.
@@ -260,7 +264,7 @@ install theme
 
 ::
 
-    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>]
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
 Instala uno o varios temas estáticos, por ejemplo ``docuforge`` o ``voicebox``. Un nombre sin
 versión instala la más reciente construida para este |Fess|. ``<name>:<version>`` fija la versión
@@ -280,7 +284,7 @@ list themes
 
 ::
 
-    $ bin/fess-setup list themes [--repository <url>]
+    $ bin/fess-setup list themes [--repository <url>] [--dest <dir>]
 
 Lista los temas publicados para este |Fess| y marca los instalados con
 ``(installed: <version>)``. Los temas instalados que el repositorio no lista aparecen por
@@ -295,7 +299,7 @@ remove theme
 
 ::
 
-    $ bin/fess-setup remove theme <name>...
+    $ bin/fess-setup remove theme <name>... [--dest <dir>]
 
 Elimina de ``app/themes`` los temas indicados y conserva cada uno como copia de seguridad durante
 el periodo de retención. Un nombre que no esté instalado se informa y no cambia el código de
@@ -322,7 +326,7 @@ check
 
 ::
 
-    $ bin/fess-setup check [--url <engine url>] [--playwright]
+    $ bin/fess-setup check [--url <engine url>] [--playwright] [--dest <dir>]
 
 Informa sobre la instalación, con una línea por comprobación, marcada como ``OK``, ``WARN`` o
 ``FAIL``:
