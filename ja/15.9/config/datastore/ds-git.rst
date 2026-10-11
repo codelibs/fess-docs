@@ -70,7 +70,9 @@ Gitコネクタは、Gitリポジトリのファイルを取得して
 
 ::
 
-    uri=https://username:personal_access_token@github.com/company/private-repo.git
+    uri=https://github.com/company/private-repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
@@ -87,16 +89,16 @@ Gitコネクタは、Gitリポジトリのファイルを取得して
      - 説明
    * - ``uri``
      - はい
-     - GitリポジトリのURI（clone用）
+     - GitリポジトリのURI（clone用）。認証情報（ユーザー名・パスワード・トークン）は含めず、 ``username`` と ``password`` で指定してください。 ``uri`` は暗号化されません
    * - ``base_url``
      - いいえ
      - ファイル表示用のベースURL。設定しない場合、URLが空になり、削除ファイルの自動削除も無効になります
    * - ``username``
      - いいえ
-     - Git認証のユーザー名。 ``password`` と組み合わせて使用します（URIに認証情報を含める代替手段）
+     - Git認証のユーザー名。 ``password`` と組み合わせて使用します
    * - ``password``
      - いいえ
-     - Git認証のパスワードまたはトークン。 ``username`` と組み合わせて使用します
+     - Git認証のパスワードまたはトークン。 ``username`` と組み合わせて使用します。保存時に暗号化されます
    * - ``extractors``
      - いいえ
      - MIMEタイプ別の抽出器設定
@@ -108,10 +110,10 @@ Gitコネクタは、Gitリポジトリのファイルを取得して
      - 前回のコミットID（差分クロール用）。クロール成功後に自動更新されます
    * - ``commit_id``
      - いいえ
-     - 対象コミットID（デフォルト: HEAD）。ブランチやタグを指定可能
+     - 対象コミットID（デフォルト: HEAD）。ブランチやタグを指定可能（タグを指定する場合は、下記「ブランチの指定」も参照）
    * - ``ref_specs``
      - いいえ
-     - Gitのrefスペック（デフォルト: ``+refs/heads/*:refs/heads/*``）
+     - Gitのrefスペック（デフォルト: ``+refs/heads/*:refs/heads/*``）。タグを取得するには ``+refs/tags/*:refs/tags/*`` を指定します（下記「ブランチの指定」を参照）
    * - ``repository_path``
      - いいえ
      - ローカルリポジトリのパス。未設定の場合、一時ディレクトリが作成され、クロール後に削除されます
@@ -195,12 +197,14 @@ https://github.com/settings/tokens にアクセス:
 4. 「Generate token」をクリック
 5. 生成されたトークンをコピー
 
-2. URIに認証情報を含める
-~~~~~~~~~~~~~~~~~~~~~~~~
+2. ユーザー名とパスワードにトークンを設定する
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
 
 GitLab Private Token
 --------------------
@@ -215,18 +219,19 @@ GitLabのUser Settings → Access Tokens:
 3. 「Create personal access token」をクリック
 4. 生成されたトークンをコピー
 
-2. URIに認証情報を含める
-~~~~~~~~~~~~~~~~~~~~~~~~
+2. ユーザー名とパスワードにトークンを設定する
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
+    uri=https://gitlab.com/company/repo.git
+    username=your_username
+    password=YOUR_GITLAB_TOKEN
 
 ユーザー名とパスワードによる認証
 --------------------------------
 
-URIに認証情報を埋め込む代わりに、``username`` と ``password`` パラメーターを使用して
-認証情報を指定することもできます:
+認証情報は ``uri`` に埋め込まず、 ``username`` と ``password`` パラメーターで指定します:
 
 ::
 
@@ -235,6 +240,9 @@ URIに認証情報を埋め込む代わりに、``username`` と ``password`` �
     password=YOUR_PERSONAL_ACCESS_TOKEN
 
 ``username`` と ``password`` の両方を指定した場合にのみ、認証情報が使用されます。
+
+.. warning::
+   ``uri`` に認証情報（ ``https://<トークン>@github.com/...`` のような形式）を含めないでください。 ``uri`` は暗号化されず、管理画面のデータストア設定や管理APIにそのまま表示されます。 ``password`` は保存時に暗号化されます。URIに認証情報を埋め込んだ設定も動作しますが、 ``username`` と ``password`` に分けて設定してください。
 
 .. note::
    Gitコネクタは HTTP/HTTPS 経由の認証（ユーザー名とパスワード、またはアクセストークン）のみをサポートします。
@@ -344,7 +352,9 @@ GitHubプライベートリポジトリ
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
 
@@ -367,7 +377,9 @@ GitLab（セルフホスト）
 
 ::
 
-    uri=https://username:glpat-abc123@gitlab.company.com/team/project.git
+    uri=https://gitlab.company.com/team/project.git
+    username=your_username
+    password=glpat-abc123
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
@@ -437,7 +449,9 @@ GitLab（セルフホスト）
    ::
 
        # 正しい
-       uri=https://username:token@github.com/company/repo.git
+       uri=https://github.com/company/repo.git
+       username=your_username
+       password=YOUR_TOKEN
 
        # 間違い
        uri=https://github.com/company/repo.git?token=...
@@ -507,6 +521,15 @@ MIMEタイプエラー
     uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
     commit_id=develop
+
+タグを指定する場合は、そのタグが取得されている必要があります。既定の ``ref_specs`` でタグが取得されない場合は、 ``ref_specs=+refs/tags/*:refs/tags/*`` を指定してください（タグのみが取得され、ブランチは取得されません）:
+
+::
+
+    uri=https://github.com/company/repo.git
+    base_url=https://github.com/company/repo/blob/v1.0/
+    commit_id=v1.0
+    ref_specs=+refs/tags/*:refs/tags/*
 
 URLの生成
 =========

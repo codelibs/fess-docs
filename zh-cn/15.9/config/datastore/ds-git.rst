@@ -70,7 +70,9 @@ Git连接器提供从Git仓库获取文件并注册到
 
 ::
 
-    uri=https://username:personal_access_token@github.com/company/private-repo.git
+    uri=https://github.com/company/private-repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
@@ -87,16 +89,16 @@ Git连接器提供从Git仓库获取文件并注册到
      - 说明
    * - ``uri``
      - 是
-     - Git仓库URI（用于clone）
+     - Git仓库URI（用于clone）。请勿在URI中包含凭据（用户名、密码、令牌），而应使用 ``username`` 和 ``password`` 指定。 ``uri`` 不会被加密
    * - ``base_url``
      - 否
      - 文件显示用的基础URL。如未设置，URL将为空，且已删除文件的自动删除也将被禁用
    * - ``username``
      - 否
-     - Git认证用户名。与 ``password`` 一起使用，作为在URI中嵌入凭据的替代方式
+     - Git认证用户名。与 ``password`` 一起使用
    * - ``password``
      - 否
-     - Git认证密码或令牌。与 ``username`` 一起使用
+     - Git认证密码或令牌。与 ``username`` 一起使用。保存时会被加密
    * - ``extractors``
      - 否
      - 按MIME类型的提取器设置
@@ -108,10 +110,10 @@ Git连接器提供从Git仓库获取文件并注册到
      - 上次提交ID（用于增量爬取）。爬取成功后自动更新
    * - ``commit_id``
      - 否
-     - 目标提交ID（默认：HEAD）。可以指定分支或标签
+     - 目标提交ID（默认：HEAD）。可以指定分支或标签（指定标签时，另请参阅下文“指定分支”）
    * - ``ref_specs``
      - 否
-     - Git ref specs（默认：``+refs/heads/*:refs/heads/*``）
+     - Git ref specs（默认：``+refs/heads/*:refs/heads/*``）。要获取标签，请指定 ``+refs/tags/*:refs/tags/*`` （参阅下文“指定分支”）
    * - ``repository_path``
      - 否
      - 本地仓库路径。如未设置，将创建临时目录并在爬取后删除
@@ -195,12 +197,14 @@ GitHub Personal Access Token
 4. 点击「Generate token」
 5. 复制生成的令牌
 
-2. 在URI中包含认证信息
-~~~~~~~~~~~~~~~~~~~~~~~~
+2. 将令牌设置为密码
+~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
 
 GitLab Private Token
 --------------------
@@ -215,17 +219,19 @@ GitLab的User Settings → Access Tokens:
 3. 点击「Create personal access token」
 4. 复制生成的令牌
 
-2. 在URI中包含认证信息
-~~~~~~~~~~~~~~~~~~~~~~~~
+2. 将令牌设置为密码
+~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
+    uri=https://gitlab.com/company/repo.git
+    username=your_username
+    password=YOUR_GITLAB_TOKEN
 
 使用用户名和密码进行认证
 ------------------------
 
-除了在URI中嵌入凭据外，也可以使用 ``username`` 和 ``password`` 参数指定认证信息：
+请使用 ``username`` 和 ``password`` 参数指定凭据，而不要将其嵌入 ``uri`` 中：
 
 ::
 
@@ -234,6 +240,9 @@ GitLab的User Settings → Access Tokens:
     password=YOUR_PERSONAL_ACCESS_TOKEN
 
 仅当同时指定 ``username`` 和 ``password`` 时，凭据才会生效。
+
+.. warning::
+   请勿在 ``uri`` 中包含凭据（如 ``https://<令牌>@github.com/...`` 的形式）。 ``uri`` 不会被加密，会原样显示在管理控制台的数据存储设置和管理API中。 ``password`` 在保存时会被加密。在URI中嵌入凭据的配置仍可使用，但请将其拆分为 ``username`` 和 ``password`` 。
 
 .. note::
    Git连接器仅支持HTTP/HTTPS认证（用户名和密码，或访问令牌）。不支持SSH密钥认证（``git@...`` 形式的URI）。请使用HTTPS形式的URI。
@@ -341,7 +350,9 @@ GitHub私有仓库
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
 
@@ -364,7 +375,9 @@ GitLab（自托管）
 
 ::
 
-    uri=https://username:glpat-abc123@gitlab.company.com/team/project.git
+    uri=https://gitlab.company.com/team/project.git
+    username=your_username
+    password=glpat-abc123
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
@@ -434,7 +447,9 @@ GitLab（自托管）
    ::
 
        # 正确
-       uri=https://username:token@github.com/company/repo.git
+       uri=https://github.com/company/repo.git
+       username=your_username
+       password=YOUR_TOKEN
 
        # 错误
        uri=https://github.com/company/repo.git?token=...
@@ -504,6 +519,15 @@ MIME类型错误
     uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
     commit_id=develop
+
+要爬取标签，必须先获取该标签。如果默认的 ``ref_specs`` 不会获取标签，请指定 ``ref_specs=+refs/tags/*:refs/tags/*`` （仅获取标签，不获取分支）：
+
+::
+
+    uri=https://github.com/company/repo.git
+    base_url=https://github.com/company/repo/blob/v1.0/
+    commit_id=v1.0
+    ref_specs=+refs/tags/*:refs/tags/*
 
 URL生成
 =========
