@@ -70,7 +70,9 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
 
 ::
 
-    uri=https://username:personal_access_token@github.com/company/private-repo.git
+    uri=https://github.com/company/private-repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
@@ -87,16 +89,16 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
      - 설명
    * - ``uri``
      - 예
-     - Git 리포지토리의 URI(clone용)
+     - Git 리포지토리의 URI(clone용). URI에 인증 정보(사용자 이름, 비밀번호, 토큰)를 포함하지 말고 ``username``\ 과 ``password``\ 로 지정하십시오. ``uri``\ 는 암호화되지 않습니다
    * - ``base_url``
      - 아니오
      - 파일 표시용 기본 URL. 설정하지 않으면 URL이 비어 있고 삭제된 파일의 자동 삭제도 비활성화됩니다
    * - ``username``
      - 아니오
-     - Git 인증 사용자 이름. URI에 인증 정보를 포함하는 대안으로 ``password``\ 와 함께 사용합니다
+     - Git 인증 사용자 이름. ``password``\ 와 함께 사용합니다
    * - ``password``
      - 아니오
-     - Git 인증 비밀번호 또는 토큰. ``username``\ 과 함께 사용합니다
+     - Git 인증 비밀번호 또는 토큰. ``username``\ 과 함께 사용합니다. 저장 시 암호화됩니다
    * - ``extractors``
      - 아니오
      - MIME 타입별 추출기 설정
@@ -108,10 +110,10 @@ Git 커넥터는 Git 리포지토리의 파일을 가져와서
      - 이전 커밋 ID(차등 크롤링용). 크롤링 성공 후 자동으로 업데이트됩니다
    * - ``commit_id``
      - 아니오
-     - 대상 커밋 ID (기본값: HEAD). 브랜치 또는 태그 지정 가능
+     - 대상 커밋 ID (기본값: HEAD). 브랜치 또는 태그 지정 가능(태그의 경우 아래 "브랜치 지정"도 참조)
    * - ``ref_specs``
      - 아니오
-     - Git ref 스펙 (기본값: ``+refs/heads/*:refs/heads/*``)
+     - Git ref 스펙 (기본값: ``+refs/heads/*:refs/heads/*``). 태그를 가져오려면 ``+refs/tags/*:refs/tags/*``\ 를 지정합니다(아래 "브랜치 지정" 참조)
    * - ``repository_path``
      - 아니오
      - 로컬 리포지토리 경로. 설정하지 않으면 임시 디렉토리가 생성되고 크롤링 후 삭제됩니다
@@ -195,12 +197,14 @@ https://github.com/settings/tokens 에 접속:
 4. "Generate token" 클릭
 5. 생성된 토큰 복사
 
-2. URI에 인증 정보 포함
-~~~~~~~~~~~~~~~~~~~~~~~~
+2. 토큰을 비밀번호로 지정
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
 
 GitLab Private Token
 --------------------
@@ -215,17 +219,19 @@ GitLab의 User Settings → Access Tokens:
 3. "Create personal access token" 클릭
 4. 생성된 토큰 복사
 
-2. URI에 인증 정보 포함
-~~~~~~~~~~~~~~~~~~~~~~~~
+2. 토큰을 비밀번호로 지정
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
+    uri=https://gitlab.com/company/repo.git
+    username=your_username
+    password=YOUR_GITLAB_TOKEN
 
 사용자 이름 및 비밀번호 인증
 ------------------------------
 
-URI에 인증 정보를 포함하는 대신, ``username`` 및 ``password`` 파라미터를 사용하여 인증 정보를 지정할 수도 있습니다:
+인증 정보를 ``uri``\ 에 포함하지 않고 ``username`` 및 ``password`` 파라미터로 지정합니다:
 
 ::
 
@@ -234,6 +240,9 @@ URI에 인증 정보를 포함하는 대신, ``username`` 및 ``password`` 파�
     password=YOUR_PERSONAL_ACCESS_TOKEN
 
 ``username``\ 과 ``password`` 모두 지정된 경우에만 인증 정보가 사용됩니다.
+
+.. warning::
+   ``uri``\ 에 인증 정보(``https://<토큰>@github.com/...`` 형식 등)를 포함하지 마십시오. ``uri``\ 는 암호화되지 않으며 관리 콘솔의 데이터스토어 설정과 관리 API에 그대로 표시됩니다. ``password``\ 는 저장 시 암호화됩니다. URI에 인증 정보를 포함한 설정도 동작하지만, ``username``\ 과 ``password``\ 로 나누어 설정하십시오.
 
 .. note::
    Git 커넥터는 HTTP/HTTPS 인증(사용자 이름 및 비밀번호, 또는 액세스 토큰)만 지원합니다. SSH 키 인증(``git@...`` 형식의 URI)은 지원되지 않습니다. HTTPS 형식의 URI를 사용하세요.
@@ -341,7 +350,9 @@ GitHub 프라이빗 리포지토리
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
 
@@ -364,7 +375,9 @@ GitLab(셀프 호스팅)
 
 ::
 
-    uri=https://username:glpat-abc123@gitlab.company.com/team/project.git
+    uri=https://gitlab.company.com/team/project.git
+    username=your_username
+    password=glpat-abc123
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
@@ -434,7 +447,9 @@ GitLab(셀프 호스팅)
    ::
 
        # 올바름
-       uri=https://username:token@github.com/company/repo.git
+       uri=https://github.com/company/repo.git
+       username=your_username
+       password=YOUR_TOKEN
 
        # 잘못됨
        uri=https://github.com/company/repo.git?token=...
@@ -504,6 +519,15 @@ MIME 타입 오류
     uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
     commit_id=develop
+
+태그를 크롤링하려면 해당 태그를 가져와야 합니다. 기본 ``ref_specs``\ 로 태그를 가져오지 못하는 경우 ``ref_specs=+refs/tags/*:refs/tags/*``\ 를 지정하십시오(태그만 가져오며 브랜치는 가져오지 않습니다):
+
+::
+
+    uri=https://github.com/company/repo.git
+    base_url=https://github.com/company/repo/blob/v1.0/
+    commit_id=v1.0
+    ref_specs=+refs/tags/*:refs/tags/*
 
 URL 생성
 =========

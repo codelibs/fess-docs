@@ -70,7 +70,9 @@ Ejemplo de repositorio privado (con autenticación):
 
 ::
 
-    uri=https://username:personal_access_token@github.com/company/private-repo.git
+    uri=https://github.com/company/private-repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
@@ -87,16 +89,16 @@ Lista de parámetros
      - Descripción
    * - ``uri``
      - Si
-     - URI del repositorio Git (para clonar)
+     - URI del repositorio Git (para clonar). No incluya credenciales (nombre de usuario, contraseña, token) en la URI; indíquelas con ``username`` y ``password``. ``uri`` no se cifra
    * - ``base_url``
      - No
      - URL base para visualización de archivos. Si no se configura, las URL estarán vacías y la eliminación automática de archivos borrados estará desactivada
    * - ``username``
      - No
-     - Nombre de usuario para autenticación Git. Se usa con ``password`` como alternativa a incluir credenciales en la URI
+     - Nombre de usuario para autenticación Git. Se usa con ``password``
    * - ``password``
      - No
-     - Contraseña o token para autenticación Git. Se usa con ``username``
+     - Contraseña o token para autenticación Git. Se usa con ``username``. Se almacena cifrado
    * - ``extractors``
      - No
      - Configuración de extractores por tipo MIME
@@ -108,10 +110,10 @@ Lista de parámetros
      - ID del commit anterior (para crawl diferencial). Se actualiza automáticamente después de un crawl exitoso
    * - ``commit_id``
      - No
-     - ID de commit objetivo (predeterminado: HEAD). Se puede especificar rama o etiqueta
+     - ID de commit objetivo (predeterminado: HEAD). Se puede especificar rama o etiqueta (para una etiqueta, consulte también «Especificar una rama» más abajo)
    * - ``ref_specs``
      - No
-     - Git ref specs (predeterminado: ``+refs/heads/*:refs/heads/*``)
+     - Git ref specs (predeterminado: ``+refs/heads/*:refs/heads/*``). Para obtener las etiquetas, especifique ``+refs/tags/*:refs/tags/*`` (consulte «Especificar una rama» más abajo)
    * - ``repository_path``
      - No
      - Ruta del repositorio local. Si no se configura, se crea un directorio temporal que se elimina después del crawl
@@ -195,12 +197,14 @@ Acceda a https://github.com/settings/tokens:
 4. Haga clic en "Generate token"
 5. Copie el token generado
 
-2. Incluir credenciales en la URI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2. Indicar el token como contraseña
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
 
 GitLab Private Token
 --------------------
@@ -215,17 +219,19 @@ En GitLab User Settings -> Access Tokens:
 3. Haga clic en "Create personal access token"
 4. Copie el token generado
 
-2. Incluir credenciales en la URI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2. Indicar el token como contraseña
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
+    uri=https://gitlab.com/company/repo.git
+    username=your_username
+    password=YOUR_GITLAB_TOKEN
 
 Autenticación con nombre de usuario y contraseña
 -------------------------------------------------
 
-En lugar de incluir credenciales en la URI, también puede especificar credenciales usando los parámetros ``username`` y ``password``:
+Indique las credenciales con los parámetros ``username`` y ``password`` en lugar de incluirlas en ``uri``:
 
 ::
 
@@ -234,6 +240,9 @@ En lugar de incluir credenciales en la URI, también puede especificar credencia
     password=YOUR_PERSONAL_ACCESS_TOKEN
 
 Las credenciales se usan solo cuando tanto ``username`` como ``password`` están especificados.
+
+.. warning::
+   No incluya credenciales en ``uri`` (por ejemplo ``https://<token>@github.com/...``). ``uri`` no se cifra y se muestra tal cual en la configuración del almacén de datos de la consola de administración y en la API de administración. ``password`` se cifra al guardarse. Una configuración con credenciales incluidas en la URI sigue funcionando, pero sepárelas en ``username`` y ``password``.
 
 .. note::
    El conector Git admite únicamente autenticación HTTP/HTTPS (nombre de usuario y contraseña, o un token de acceso). La autenticación con clave SSH (URI con formato ``git@...``) no está soportada. Utilice una URI con formato HTTPS.
@@ -341,7 +350,9 @@ Parámetros:
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
 
@@ -364,7 +375,9 @@ Parámetros:
 
 ::
 
-    uri=https://username:glpat-abc123@gitlab.company.com/team/project.git
+    uri=https://gitlab.company.com/team/project.git
+    username=your_username
+    password=glpat-abc123
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
@@ -434,7 +447,9 @@ Error de autenticación
    ::
 
        # Correcto
-       uri=https://username:token@github.com/company/repo.git
+       uri=https://github.com/company/repo.git
+       username=your_username
+       password=YOUR_TOKEN
 
        # Incorrecto
        uri=https://github.com/company/repo.git?token=...
@@ -504,6 +519,15 @@ Para rastrear una rama diferente a la predeterminada, especifique el nombre de l
     uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
     commit_id=develop
+
+Para rastrear una etiqueta, esta debe haberse obtenido. Si el valor predeterminado de ``ref_specs`` no obtiene las etiquetas, especifique ``ref_specs=+refs/tags/*:refs/tags/*`` (solo se obtienen las etiquetas, no las ramas):
+
+::
+
+    uri=https://github.com/company/repo.git
+    base_url=https://github.com/company/repo/blob/v1.0/
+    commit_id=v1.0
+    ref_specs=+refs/tags/*:refs/tags/*
 
 Generación de URL
 =================

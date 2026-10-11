@@ -70,7 +70,9 @@ Private repository example (with authentication):
 
 ::
 
-    uri=https://username:personal_access_token@github.com/company/private-repo.git
+    uri=https://github.com/company/private-repo.git
+    username=your_username
+    password=YOUR_PERSONAL_ACCESS_TOKEN
     base_url=https://github.com/company/private-repo/blob/master/
     extractors=text/.*:textExtractor,application/xml:textExtractor,
     prev_commit_id=
@@ -87,16 +89,16 @@ Parameter List
      - Description
    * - ``uri``
      - Yes
-     - Git repository URI (for cloning)
+     - Git repository URI (for cloning). Do not put credentials (user name, password, token) in the URI; specify them with ``username`` and ``password`` instead. ``uri`` is not encrypted
    * - ``base_url``
      - No
      - Base URL for file viewing. If not set, URLs will be empty and automatic deletion of removed files will be disabled
    * - ``username``
      - No
-     - Git authentication username. Used with ``password`` as an alternative to embedding credentials in URI
+     - Git authentication username. Used with ``password``
    * - ``password``
      - No
-     - Git authentication password or token. Used with ``username``
+     - Git authentication password or token. Used with ``username``. Stored encrypted
    * - ``extractors``
      - No
      - Extractor settings by MIME type
@@ -108,10 +110,10 @@ Parameter List
      - Previous commit ID (for incremental crawl). Automatically updated after successful crawl
    * - ``commit_id``
      - No
-     - Target commit ID (default: HEAD). Branch or tag can be specified
+     - Target commit ID (default: HEAD). Branch or tag can be specified (for a tag, see also "Specifying a Branch" below)
    * - ``ref_specs``
      - No
-     - Git ref specs (default: ``+refs/heads/*:refs/heads/*``)
+     - Git ref specs (default: ``+refs/heads/*:refs/heads/*``). To fetch tags, specify ``+refs/tags/*:refs/tags/*`` (see "Specifying a Branch" below)
    * - ``repository_path``
      - No
      - Local repository path. If not set, a temporary directory is created and cleaned up after crawl
@@ -195,12 +197,14 @@ Access https://github.com/settings/tokens:
 4. Click "Generate token"
 5. Copy the generated token
 
-2. Include authentication in URI
+2. Set the token as the password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
 
 GitLab Private Token
 --------------------
@@ -215,17 +219,19 @@ GitLab User Settings -> Access Tokens:
 3. Click "Create personal access token"
 4. Copy the generated token
 
-2. Include authentication in URI
+2. Set the token as the password
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    uri=https://username:YOUR_GITLAB_TOKEN@gitlab.com/company/repo.git
+    uri=https://gitlab.com/company/repo.git
+    username=your_username
+    password=YOUR_GITLAB_TOKEN
 
 Authentication with Username and Password
 -----------------------------------------
 
-Instead of embedding credentials in the URI, you can also specify credentials using the ``username`` and ``password`` parameters:
+Specify credentials with the ``username`` and ``password`` parameters instead of embedding them in ``uri``:
 
 ::
 
@@ -234,6 +240,9 @@ Instead of embedding credentials in the URI, you can also specify credentials us
     password=YOUR_PERSONAL_ACCESS_TOKEN
 
 Credentials are used only when both ``username`` and ``password`` are specified.
+
+.. warning::
+   Do not put credentials in ``uri`` (for example ``https://<token>@github.com/...``). ``uri`` is not encrypted and is shown as is in the data store settings of the administration console and in the Admin API. ``password`` is encrypted when saved. A setting with credentials embedded in the URI still works, but split it into ``username`` and ``password``.
 
 .. note::
    The Git connector supports only HTTP/HTTPS authentication (username and password, or an access token). SSH key authentication (``git@...`` style URIs) is not supported. Use an HTTPS-style URI.
@@ -339,7 +348,9 @@ Parameters:
 
 ::
 
-    uri=https://username:YOUR_GITHUB_TOKEN@github.com/company/repo.git
+    uri=https://github.com/company/repo.git
+    username=your_username
+    password=YOUR_GITHUB_TOKEN
     base_url=https://github.com/company/repo/blob/main/
     extractors=text/.*:textExtractor,application/xml:textExtractor,application/javascript:textExtractor,
 
@@ -362,7 +373,9 @@ Parameters:
 
 ::
 
-    uri=https://username:glpat-abc123@gitlab.company.com/team/project.git
+    uri=https://gitlab.company.com/team/project.git
+    username=your_username
+    password=glpat-abc123
     base_url=https://gitlab.company.com/team/project/-/blob/main/
     extractors=text/.*:textExtractor,
     prev_commit_id=
@@ -432,7 +445,9 @@ Authentication Error
    ::
 
        # Correct
-       uri=https://username:token@github.com/company/repo.git
+       uri=https://github.com/company/repo.git
+       username=your_username
+       password=YOUR_TOKEN
 
        # Wrong
        uri=https://github.com/company/repo.git?token=...
@@ -502,6 +517,15 @@ To crawl a branch other than the default, specify the branch name or tag using t
     uri=https://github.com/company/repo.git
     base_url=https://github.com/company/repo/blob/develop/
     commit_id=develop
+
+To crawl a tag, the tag must be fetched. If the default ``ref_specs`` does not fetch tags, specify ``ref_specs=+refs/tags/*:refs/tags/*`` (only tags are fetched, not branches):
+
+::
+
+    uri=https://github.com/company/repo.git
+    base_url=https://github.com/company/repo/blob/v1.0/
+    commit_id=v1.0
+    ref_specs=+refs/tags/*:refs/tags/*
 
 URL Generation
 ==============
