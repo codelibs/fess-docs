@@ -167,7 +167,7 @@ Die folgenden Parameter steuern das CSV-Parsing-Verhalten sowie das Indexierungs
    * - ``skip_lines``
      - Anzahl der zu überspringenden Kopfzeilen (Standard: 0)
    * - ``ignore_line_patterns``
-     - Reguläres Ausdrucksmuster für zu ignorierende Zeilen (z. B. ``^#.*`` zum Ignorieren von Kommentarzeilen)
+     - Reguläres Ausdrucksmuster für zu ignorierende Zeilen. Das Muster muss auf die gesamte Zeile passen (keine Teilübereinstimmung). ``^#.*`` ignoriert beispielsweise Kommentarzeilen, die mit ``#`` beginnen, während ``#`` allein eine Zeile wie ``#comment`` nicht ignoriert.
    * - ``ignore_empty_lines``
      - Gibt an, ob leere Zeilen ignoriert werden sollen (Standard: false)
    * - ``ignore_trailing_whitespaces``
@@ -311,11 +311,15 @@ Einfache Anführungszeichen:
 Zeichenkodierung
 ----------------
 
-Japanische Datei (Shift_JIS):
+Japanische Datei (CSV, die von Windows-Anwendungen wie Excel geschrieben wird):
 
 ::
 
-    file_encoding=Shift_JIS
+    file_encoding=MS932
+
+.. note::
+
+   ``MS932`` ist derselbe Zeichensatz wie ``Windows-31J`` (CP932). Mit ``Shift_JIS`` können Zeichen, die CP932 ergänzt, etwa ``①`` und ``㈱``, nicht gelesen werden und werden durch ``U+FFFD`` (das Ersatzzeichen) ersetzt. Verwenden Sie ``Shift_JIS`` nur für Dateien, die ausschließlich Zeichen aus JIS X 0208 enthalten.
 
 Japanische Datei (EUC-JP):
 
@@ -505,7 +509,7 @@ Geben Sie die richtige Zeichenkodierung an:
     # UTF-8
     file_encoding=UTF-8
 
-    # Shift_JIS
+    # Shift_JIS (nur Zeichen aus JIS X 0208; nicht ① oder ㈱)
     file_encoding=Shift_JIS
 
     # EUC-JP

@@ -166,7 +166,7 @@ CSVコネクタは、CSVファイルからデータを取得して
    * - ``skip_lines``
      - スキップする先頭行数（デフォルト: 0）
    * - ``ignore_line_patterns``
-     - 無視する行の正規表現パターン（例: ``^#.*`` でコメント行を無視）
+     - 無視する行の正規表現パターン。パターンは行全体に一致する必要があります（部分一致ではありません）。例えば ``^#.*`` は ``#`` で始まるコメント行を無視します。 ``#`` だけでは ``#comment`` のような行は無視されません。
    * - ``ignore_empty_lines``
      - 空行を無視するか（デフォルト: false）
    * - ``ignore_trailing_whitespaces``
@@ -304,11 +304,15 @@ CSV形式の詳細
 エンコーディング
 ----------------
 
-日本語ファイル（Shift_JIS）:
+日本語ファイル（Excel など Windows のアプリケーションが出力する CSV）:
 
 ::
 
-    file_encoding=Shift_JIS
+    file_encoding=MS932
+
+.. note::
+
+   ``MS932`` は ``Windows-31J`` （CP932）と同じ文字セットです。 ``Shift_JIS`` を指定すると、CP932 で拡張された文字（ ``①`` や ``㈱`` など）が読み込めず、 ``U+FFFD`` （置換文字）に置き換わります。 ``Shift_JIS`` は、JIS X 0208 の範囲の文字だけを含むファイルに使用してください。
 
 日本語ファイル（EUC-JP）:
 
@@ -498,7 +502,7 @@ TSVファイル（data.tsv）:
     # UTF-8
     file_encoding=UTF-8
 
-    # Shift_JIS
+    # Shift_JIS（JIS X 0208 の範囲のみ。①や㈱は不可）
     file_encoding=Shift_JIS
 
     # EUC-JP

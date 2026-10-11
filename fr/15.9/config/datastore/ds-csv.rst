@@ -168,7 +168,7 @@ Les paramètres suivants permettent de contrôler finement le comportement d'ana
    * - ``skip_lines``
      - Nombre de lignes à ignorer en début de fichier (par défaut : 0)
    * - ``ignore_line_patterns``
-     - Expression régulière pour ignorer certaines lignes (ex. : ``^#.*`` pour ignorer les lignes de commentaire)
+     - Expression régulière pour ignorer certaines lignes. L'expression doit correspondre à la ligne entière (et non à une partie de la ligne). Par exemple, ``^#.*`` ignore les lignes de commentaire qui commencent par ``#``, alors que ``#`` seul n'ignore pas une ligne telle que ``#comment``.
    * - ``ignore_empty_lines``
      - Ignorer les lignes vides (par défaut : false)
    * - ``ignore_trailing_whitespaces``
@@ -314,11 +314,15 @@ Guillemet simple :
 Encodage
 --------
 
-Fichier en Shift_JIS :
+Fichier japonais (CSV produit par des applications Windows comme Excel) :
 
 ::
 
-    file_encoding=Shift_JIS
+    file_encoding=MS932
+
+.. note::
+
+   ``MS932`` est le même jeu de caractères que ``Windows-31J`` (CP932). Avec ``Shift_JIS``, les caractères ajoutés par CP932, tels que ``①`` et ``㈱``, ne peuvent pas être lus et sont remplacés par ``U+FFFD`` (le caractère de remplacement). N'utilisez ``Shift_JIS`` que pour les fichiers qui ne contiennent que des caractères de JIS X 0208.
 
 Fichier en EUC-JP :
 
@@ -508,7 +512,7 @@ Spécifier le bon encodage :
     # UTF-8
     file_encoding=UTF-8
 
-    # Shift_JIS
+    # Shift_JIS (caractères de JIS X 0208 uniquement ; pas ① ni ㈱)
     file_encoding=Shift_JIS
 
     # EUC-JP
