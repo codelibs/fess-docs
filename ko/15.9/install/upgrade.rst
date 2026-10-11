@@ -75,7 +75,8 @@
    - ``fess_basic_config.bulk`` - 설정 인덱스(크롤 설정, 스케줄러, 레이블,
      키 매치, 역할, 웹/파일 인증 등 19개 인덱스)
    - ``fess_config.bulk`` - 위 19개 인덱스에 더해 크롤 정보, 장애 URL, 작업 로그,
-     썸네일 큐 등 실행 시 데이터를 포함하는 25개 인덱스
+     썸네일 큐 등 실행 시 데이터를 포함하는 25개 인덱스(15.8 까지. 15.9 에서는 사용자 태그를
+     보관하는 ``tag_type`` 인덱스가 추가되어 26개)
    - ``fess_user.bulk`` - 사용자, 역할, 그룹
    - ``system.properties`` - 전반 설정을 포함하는 시스템 설정
    - ``fess.json`` - 인덱스 설정(샤드 수, ``index.knn`` 등)
@@ -90,7 +91,8 @@
    .. note::
 
       검색 로그나 클릭 로그 등의 로그 데이터(``search_log.ndjson``, ``click_log.ndjson``,
-      ``favorite_log.ndjson``, ``user_info.ndjson``)도 같은 페이지에서 다운로드할 수 있습니다.
+      ``favorite_log.ndjson``, ``user_info.ndjson``. 15.9 에서는 ``chat_log.ndjson`` 도 표시됩니다)도
+      같은 페이지에서 다운로드할 수 있습니다.
       설정만 백업하는 경우에는 불필요합니다. 또한 이 ``*.ndjson`` 파일들은
       백업 페이지에서 업로드하여 복원할 수 없습니다
       (「롤백 절차」 참조).
@@ -127,6 +129,7 @@
    커스터마이징한 설정 파일이 있는 경우 해당 파일도 백업합니다::
 
        $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
+       $ cp /path/to/fess/lib/classes/tomcat_config.properties /backup/
 
    .. note::
 
@@ -239,6 +242,13 @@ Docker 버전::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
+.. warning::
+
+   단계 3을 시작하기 전에 |Fess| 가 중지되어 있는지 확인하십시오. 실행 중인 |Fess| 의 패키지나
+   파일을 교체하지 마십시오. 실행 중인 15.8 |Fess| 의 DEB 패키지를 15.9 의 것으로 교체했더니
+   |Fess| 를 재시작할 때까지 검색 화면이 ``404`` 를 반환했습니다. 패키지 버전에서는
+   ``systemctl status fess.service`` 로 확인할 수 있습니다.
+
 단계 3: 새 버전 설치
 ======================================
 
@@ -273,12 +283,27 @@ ZIP 버전
 
 3. 커스터마이징한 경우에는 다음도 복사합니다::
 
-       # 로그 설정
-       $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
+       # Tomcat 설정(SAML 에 필요한 tomcat.sameSiteCookies=none 도 여기에 있습니다)
+       $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # 설치된 플러그인
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
        # 직접 업로드한 정적 테마(테마마다 하나의 디렉터리. bootstrap 은 제외)
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
+
+   .. warning::
+
+      이전 설치의 ``tomcat_config.properties`` 를 복사하지 않으면 ``tomcat.sameSiteCookies`` 가
+      아무런 알림 없이 기본값 ``lax`` 로 돌아가 SAML 로그인이 동작하지 않게 됩니다
+      ( :ref:`upgrade-159-saml` 참조). 이 파일의 기본 제공 내용은 15.8.0 과 15.9 에서 같으므로
+      그대로 복사할 수 있습니다.
+
+   .. warning::
+
+      ``log4j2.xml`` 을 15.9 의 파일 위에 복사하지 마십시오. 15.9 의 파일은 ``RequestLoggingFilter``
+      로거를 ``warn`` 으로 고정하고 있으며, 15.8 의 파일을 복사하면 이 설정이 사라집니다. 로그 레벨을
+      DEBUG 로 하면 요청 헤더( ``Authorization`` 포함)와 요청 파라미터(로그인 폼에 입력한 비밀번호
+      포함)가 로그에 기록됩니다. 두 파일을 ``diff`` 로 비교하여 직접 변경한 내용만 15.9 의 파일에
+      다시 적용하십시오.
 
    .. warning::
 
@@ -323,13 +348,23 @@ RPM/DEB 버전
 
 .. warning::
 
-   DEB 버전에서는 ``/etc/fess/*`` 가 conffile로 등록되어 있지 않습니다(conffile은
-   ``/etc/default/fess``, ``/etc/init.d/fess``, ``/usr/lib/systemd/system/fess.service``
-   3개뿐입니다). 따라서 ``dpkg -i`` 를 실행하면 ``/etc/fess/fess_config.properties`` 등이
-   새 버전의 파일로 덮어써집니다. 확인 없이 덮어쓰며 이전 파일의 사본도 남기지 않으므로 미리
-   백업하십시오(단계 1). 업그레이드 후에는 이전 파일을 통째로 되돌리지 말고, 새 파일에 변경 내용을
-   다시 적용하십시오( :ref:`upgrade-159-carried-over-config` 참조).
-   또한 ``/etc/fess/system.properties`` 는 패키지에 포함되지 않는 실행 시 생성 파일이므로
+   DEB 버전에서는 ``/etc/fess`` 아래의 파일(``fess_config.properties`` 와
+   ``tomcat_config.properties`` 등)이 ``/etc/default/fess``, ``/etc/init.d/fess``,
+   ``/usr/lib/systemd/system/fess.service`` 와 마찬가지로 conffile로 등록되어 있습니다.
+   15.8 에서 처음 업그레이드할 때 ``dpkg`` 는 이를 다음과 같이 처리합니다.
+
+   - 편집하지 않은 파일은 확인 없이 15.9 의 파일로 교체됩니다.
+   - 편집한 파일에 대해서는 ``dpkg`` 가 확인을 요청합니다. 자신의 파일을 유지하면(기본 응답 또는
+     ``--force-confold``) 15.9 의 파일이 ``<파일 이름>.dpkg-dist`` 로 함께 배치됩니다. 새 파일을
+     설치하면(``Y`` 또는 ``--force-confnew``) 자신의 파일이 ``<파일 이름>.dpkg-old`` 로 저장됩니다.
+   - 응답할 사람이 없으면 ``dpkg -i`` 와 ``apt-get install -y`` 는 첫 번째 확인에서 멈춥니다.
+     무인으로 업그레이드하려면 ``--force-confold`` 를 지정하십시오(``--force-confdef`` 로도 확인이
+     나오지 않습니다). 예를 들면 ``sudo dpkg --force-confold -i fess-15.9.0.deb`` 나
+     ``sudo apt-get install -y -o Dpkg::Options::=--force-confold ./fess-15.9.0.deb`` 입니다.
+
+   어느 경우든 먼저 ``/etc/fess`` 를 백업하십시오(단계 1). 유지한 파일은 여전히 15.8 의 값이므로
+   그대로 사용하지 말고 ``.dpkg-dist`` 파일과 비교하십시오( :ref:`upgrade-159-carried-over-config`
+   참조). 또한 ``/etc/fess/system.properties`` 는 패키지에 포함되지 않는 실행 시 생성 파일이므로
    덮어써지지 않습니다.
 
 Docker 버전
@@ -493,6 +528,15 @@ Docker 버전::
 
    15.8 이전에 생성한 문서 인덱스를 계속 사용하는 경우에는 :ref:`upgrade-reindex-new-fields` 도 참조하십시오.
 
+.. warning::
+
+   OpenSearch 3.9.0 은 15.8 이 받아들였던 사전 항목을 거부합니다. 같은 ``mapping`` 항목을 두 번
+   저장한 경우나 공백이 포함된 ``kuromoji`` 토큰이 그 예입니다. 이러한 항목이 있으면
+   「재인덱싱」은 새 문서 인덱스를 생성하지 않으며, ``fess.log`` 에는 ``Failed to create index`` 라고만
+   출력되고 이전 인덱스가 계속 검색을 제공합니다. 「시스템」→「사전」에서 사전을 다운로드하여
+   중복되거나 잘못된 행을 삭제한 뒤 다시 업로드하고 「재인덱싱」을 다시 실행하십시오. 15.9 가 더 이상
+   저장하지 않는 항목은 :ref:`upgrade-159-api-requests` 를 참조하십시오.
+
 1. 기존 크롤 일정 확인
 2. 「시스템」→「스케줄러」에서 "Default Crawler" 실행
 3. 크롤이 완료될 때까지 대기
@@ -506,7 +550,10 @@ Docker 버전::
 15.8에서 15.9로 업그레이드
 ==========================
 
-15.8에서 업그레이드하는 경우 다음 변경 사항은 하위 호환되지 않습니다.
+15.8에서 업그레이드하는 경우 다음 변경 사항은 하위 호환되지 않습니다. 15.7 이전에서 업그레이드하는
+경우에도 이 변경 사항이 모두 적용됩니다. 「내장 OpenSearch 폐지」부터 「기존 문서 인덱스에 새 필드와
+가나 정규화 반영」까지의 각 절(내장 OpenSearch, 스크립트 엔진, S3 와 SSO 플러그인, Index Exporter
+작업 등)과 이 페이지 끝의 「15.9 전용 마이그레이션 작업」을 모두 읽으십시오.
 
 내장 OpenSearch 폐지
 --------------------
@@ -543,6 +590,20 @@ Homebrew 또는 Docker 를 사용하십시오).
    내장 OpenSearch 로 운영한 경우 인덱스 데이터는 이어받을 수 없습니다. 외부 OpenSearch 서버를
    새로 구축하고 관리 화면의 「백업」에서 설정을 옮긴 뒤 다시 크롤링하십시오. 백업에 포함되는
    것은 크롤링 설정, 사용자, 로그이며 **크롤링한 문서는 포함되지 않습니다**.
+
+.. note::
+
+   15.8 의 백업을 새 15.9 서버에 복원할 때 알아 둘 점이 두 가지 있습니다.
+
+   - 작업은 서버에 있는 것보다 새로운 경우에만 복원됩니다. 따라서 15.8 에서 편집하지 않은 기본 제공 작업은
+     15.9 의 JavaScript 버전을 그대로 유지합니다. 15.8 에서 편집하거나 만든 작업은 저장된 스크립트 엔진
+     (기본 제공 작업이면 ``groovy``) 으로 복원되며, ``fess-script-groovy`` 플러그인이 없으면
+     ``groovy is not found`` 로 실패합니다. 플러그인을 설치하거나 해당 작업을 JavaScript 로 전환하십시오.
+     둘 다 :ref:`upgrade-159-script-engine` 에 설명되어 있습니다.
+   - 웹 인증, 크롤링 설정, 데이터스토어 설정의 파라미터에 저장된 비밀번호와 시크릿은
+     ``app.cipher.key`` 로 암호화되어 있습니다. 새 서버의 ``fess_config.properties`` 에 이전
+     설치의 값을 설정하십시오( :ref:`upgrade-159-carried-over-config` 참조). 그렇지 않으면
+     복호화할 수 없습니다.
 
 Playwright 크롤러를 플러그인으로 이동
 -------------------------------------
@@ -654,6 +715,8 @@ ID Token 의 ``aud`` 와 ``exp`` 클레임을 검증합니다. 새 키 ``oic.iss
 SSO 를 사용하지 않는 경우, 즉 ``sso.type`` 이 ``none`` 이거나 설정되지 않은 경우에는
 대응이 필요 없습니다.
 
+.. _upgrade-159-script-engine:
+
 내장 스크립트 엔진이 Groovy에서 JavaScript로 변경
 -------------------------------------------------
 
@@ -759,9 +822,10 @@ Index Exporter 작업이 삭제된 패키지를 참조
 
 단계 3의 ZIP 버전 절차에서는 이전 설치의 ``fess_config.properties`` 와 ``bin/fess.in.sh`` 를
 복사합니다. RPM 버전 업그레이드에서는 변경한 ``/etc/fess/fess_config.properties`` 가 그대로
-남습니다(15.9 의 파일은 ``fess_config.properties.rpmnew`` 로 함께 배치됩니다). 어느 경우든
-15.9 는 15.8 의 값으로 동작하며, 15.9 에서 기본 제공 값이 바뀐 키도 예외가 아닙니다. 적어도
-다음 키를 확인하십시오.
+남습니다(15.9 의 파일은 ``fess_config.properties.rpmnew`` 로 함께 배치됩니다). DEB 버전 업그레이드도
+확인에서 자신의 파일을 유지한 경우에는 마찬가지입니다(15.9 의 파일은
+``fess_config.properties.dpkg-dist`` 로 함께 배치됩니다). 어느 경우든 15.9 는 15.8 의 값으로
+동작하며, 15.9 에서 기본 제공 값이 바뀐 키도 예외가 아닙니다. 적어도 다음 키를 확인하십시오.
 
 .. list-table::
    :header-rows: 1
@@ -801,6 +865,20 @@ Index Exporter 작업이 삭제된 패키지를 참조
        못하는 ``Content-Security-Policy: reflected-xss block`` 헤더가 붙고, 브라우저 콘솔에
        ``Unrecognized Content-Security-Policy directive 'reflected-xss'`` 가 출력됩니다. 이 헤더는
        아무것도 제한하지 않습니다. 아래 설명대로 해당 행을 제거하십시오.
+   * - ``app.encrypt.property.pattern``
+     - ``.*password|.*key|.*token|.*secret``
+     - ``.*password|.*passphrase|.*key|.*token|.*secret``
+     - 이름이 ``passphrase`` 로 끝나는 파라미터(예: 데이터스토어 설정의 ``ssh.passphrase``)가
+       평문으로 저장됩니다. 이미 저장된 값은 15.9 의 패턴으로 설정을 다시 저장할 때까지 평문 그대로입니다.
+   * - ``index.backup.log.targets``
+     - ``click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - 「시스템 정보」→「백업」 페이지에 ``chat_log.ndjson`` 이 표시되지 않습니다.
+   * - ``index.export.exclude.fields``
+     - ``cache``
+     - ``cache,tag``
+     - 사용자 태그를 보관하는 ``tag`` 필드가 Index Export 작업이 기록하는 파일에서 더 이상
+       제외되지 않습니다.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
        ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
@@ -837,9 +915,17 @@ Node.js 를 찾지 않으므로, ``PLAYWRIGHT_NODEJS_PATH`` 를 직접 설정하
     $ diff /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/fess.in.sh
 
 RPM 버전에서는 같은 방식으로 ``/etc/fess/fess_config.properties`` 와
-``/etc/fess/fess_config.properties.rpmnew`` 를 비교하십시오. DEB 버전 업그레이드에서는
-``/etc/fess/fess_config.properties`` 가 덮어써지므로(단계 3 참조) 15.9 의 값에서 시작하며,
-다시 적용해야 하는 것은 직접 변경한 값뿐입니다.
+``/etc/fess/fess_config.properties.rpmnew`` 를, DEB 버전 업그레이드에서는
+``/etc/fess/fess_config.properties.dpkg-dist`` 를 비교하십시오. 편집하지 않은
+``fess_config.properties`` 는 DEB 버전 업그레이드에서 15.9 의 파일로 교체되므로(단계 3 참조)
+15.9 의 값에서 시작합니다.
+
+``app.cipher.key`` 는 15.9 에서 바뀌지 않았더라도 반드시 이어받아야 하는 값입니다. 웹 인증,
+크롤링 설정, 데이터스토어 설정의 파라미터에 저장된 비밀번호와 시크릿을 암호화하는 키이기
+때문입니다. 기본 제공 ``fess_config.properties`` 를 사용했거나 백업을 새 서버에 복원했기 때문에
+새 설치가 그것들을 저장했을 때와 다른 키로 동작하면 복호화할 수 없으며, ``fess-crawler.log`` 에
+``CipherFailureException`` 이 기록되고 그러한 설정을 포함하는 크롤은 아무것도 색인하지 못할 수
+있습니다.
 
 .. _upgrade-159-jcifs:
 
@@ -1059,18 +1145,33 @@ time 과 ``search_after`` 로 가져오므로 점수가 붙지 않습니다. 구
 * ``aws`` 와 ``cloud`` 의 인덱스 정의는 ``fess_indices/_vanilla/`` 에서 읽어 들입니다. 동봉되어 있던 ``fess_indices/_aws/`` 와 ``fess_indices/_cloud/`` 는 없어졌으며, 직접 추가한 ``fess_indices/_aws/`` 또는 ``fess_indices/_cloud/`` 는 더 이상 읽지 않으므로 변경 내용을 ``fess_indices/_vanilla/`` 로 옮기십시오. 이미 만들어진 인덱스는 변경되지 않습니다.
 * 15.8 이 검색 엔진에 저장한 추천 단어(Suggest) 설정은 자동으로 마이그레이션됩니다. 별도의 조치는 필요하지 않습니다.
 
+CSV 데이터스토어가 인용 부호로 감싼 필드를 해석
+-----------------------------------------------
+
+15.9 의 ``fess-ds-csv`` 플러그인은 기본적으로 인용 부호를 해석합니다. ``"Yamada, Taro"`` 와 같은
+필드는 하나의 열이 되며, 15.8.0 의 플러그인은 이를 쉼표 위치에서 분할했습니다.
+``bin/fess-setup upgrade plugins`` 실행 후에는 인용 부호로 감싼 필드가 있는 CSV 파일을 읽는
+데이터스토어 설정을 확인하십시오. 15.8 의 동작을 유지하려면 「파라미터」에
+``quote_disabled=true`` 를 추가하십시오. 짝이 맞지 않는 인용 부호의 동작도 포함하여
+:doc:`../config/datastore/ds-csv` 를 참조하십시오.
+
 .. _upgrade-reindex-new-fields:
 
 기존 문서 인덱스에 새 필드와 가나 정규화 반영
 ---------------------------------------------
 
-15.9는 시작할 때 설정·로그·사용자 인덱스에 새 필드를 추가하지만, 문서 인덱스의 매핑과 분석 설정은
-변경하지 않습니다. 15.8 이전에 생성한 문서 인덱스를 그대로 사용하면 다음 15.9 변경 사항이 적용되지
+15.9는 시작할 때 설정·로그·사용자 인덱스에 새 필드를 추가합니다. 문서 인덱스에 추가하는 것은
+사용자 태그를 보관하는 ``tag`` 필드(``keyword``)뿐이며, 매핑의 나머지 부분과 분석 설정은 변경하지
+않습니다. 15.8 이전에 생성한 문서 인덱스를 그대로 사용하면 다음 15.9 변경 사항이 적용되지
 않습니다.
 
 - **파일의 소유자와 최종 수정자** (``owner``, ``last_modifier``): 파일 시스템·SMB·FTP 크롤에서 새로
   색인되는 필드입니다. 기존 문서 인덱스에는 정의가 없으므로 처음 크롤한 값에 따라 ``text`` 형으로
   자동 매핑되어, ``owner:alice`` 와 같은 검색이나 ``facet.field=owner`` 가 의도대로 동작하지 않습니다.
+- **ETag** (``etag``): 크롤러가 크롤한 페이지의 ETag 를 저장하는 필드로, 15.9 는 이를
+  ``If-None-Match`` 로 다시 보내 변경되지 않은 페이지를 다시 가져오지 않습니다. 기존 문서
+  인덱스에는 이 필드의 정의도 없으므로, 기본 제공되는 색인하지 않는 ``keyword`` 가 아니라
+  ``text`` 형으로 자동 매핑됩니다. 이 매핑으로도 조건부 요청은 동작합니다.
 - **가나 표기 차이와 장음 기호 대신 쓰인 대시의 정규화** (예: ``サ―バ－`` 를 ``サーバー`` 와 같은
   단어로 취급): 규칙이 문서 인덱스의 분석 설정과 사전 ``mapping.txt`` 에 있으므로 기존 인덱스에는
   반영되지 않습니다.
@@ -1082,7 +1183,12 @@ time 과 ``search_after`` 로 가져오므로 점수가 붙지 않습니다. 구
 .. warning::
 
    「사전 초기화」는 동봉된 사전 파일로 OpenSearch 측 사전을 덮어씁니다. 관리 화면의 「사전」에서
-   동의어 등을 편집한 경우에는 미리 다운로드해 두고, 재인덱싱 후에 다시 반영하십시오.
+   동의어 등을 편집한 경우에는 미리 다운로드해 두고, 재인덱싱 후에 다시 반영하십시오. 다운로드한
+   파일에서 중복되거나 잘못된 항목을 삭제하고(단계 7 참조) 업로드한 다음, 「시스템 정보」→「유지보수」의
+   「문서 인덱스 다시 로드」에서 [다시 로드]를 클릭하십시오. 그렇게 하기 전까지는 문서 인덱스의
+   분석기가 기본 제공 사전을 계속 사용하므로, 복원한 동의어는 아무리 기다려도 일치하지 않습니다.
+   색인 시에 적용되는 사전은 문서를 다시 크롤해야 하기도 합니다. :ref:`dict-apply-changes` 를
+   참조하십시오.
 
 .. note::
 
@@ -1143,6 +1249,8 @@ AD 도메인 트리의 하위 도메인이나 신뢰 관계를 맺은 포리스�
    ``spnego.allow.localhost=true`` 는 위험합니다. SPNEGO 라이브러리가 동일 호스트에서 온 요청을
    Kerberos 검증 없이 서버의 OS 사용자로 인증하므로, 동일 호스트에 리버스 프록시를 두는 구성에서는
    안전하지 않습니다.
+
+.. _upgrade-159-saml:
 
 SAML 인증(SSO)을 사용하고 있었던 경우
 -------------------------------------
@@ -1289,7 +1397,10 @@ LDAP / Active Directory 연동을 사용하던 경우
 것으로 교체해야 합니다. ``bin/fess-setup upgrade plugins`` 는 설치된 모든 플러그인에 대해 이
 |Fess| 용으로 빌드된 버전을 설치하고 이전 버전을 삭제합니다. 그 후 |Fess| 를 재시작하십시오.
 ``bin/fess-setup check`` 는 OpenSearch 와 그 플러그인, 설치된 |Fess| 플러그인의 상태를 보고하며,
-문제가 있으면 종료 코드 1 로 종료합니다.
+문제가 있으면 종료 코드 1 로 종료합니다. ``bin/fess.in.sh``, ``/etc/sysconfig/fess``,
+``/etc/default/fess`` 는 읽지 않으므로, OpenSearch 가 ``http://localhost:9200`` 에 없는 경우에는
+``--url`` 을 지정하거나 실행하는 셸에서 ``SEARCH_ENGINE_HTTP_URL`` 을 설정하십시오. 그렇지 않으면
+엔진에 연결할 수 없다고 보고합니다.
 
 ::
 
@@ -1323,24 +1434,57 @@ Docker 버전에서 ``FESS_PLUGINS`` 를 지정하는 경우에는
 
 RPM/DEB 버전의 경우::
 
-    $ sudo rpm -Uvh --oldpackage fess-<old-version>.rpm
+    $ sudo rpm -Uvh --oldpackage --nodeps fess-<old-version>.rpm
 
 또는::
 
     $ sudo dpkg -i fess-<old-version>.deb
 
+.. note::
+
+   RPM 에서는 ``--nodeps`` 가 필요합니다. 15.8.0 패키지는 ``fess`` 와 ``opensearch`` 사용자 및
+   그룹을 필수로 하므로, 지정하지 않으면 ``rpm`` 은 ``Failed dependencies: group(fess) is needed by fess-15.8.0``
+   으로 다운그레이드를 거부합니다.
+
+.. warning::
+
+   15.8.0 의 DEB 패키지는 ``/etc/fess/*`` 를 conffile 로 등록하지 않으므로, ``dpkg -i`` 는 편집한
+   ``/etc/fess/fess_config.properties`` 등을 사본을 남기지 않고 덮어씁니다. 단계 1 에서 취득한
+   백업에서 복원하십시오.
+
 단계 3: 데이터 복원
 ----------------------
 
-스냅샷에서 복원::
+스냅샷에서 복원합니다. OpenSearch 는 실행 중이어야 하고 |Fess| 는 중지되어 있어야 합니다.
 
-    $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+1. OpenSearch 를 시작합니다::
 
-또는 백업에서 디렉터리 복원::
+       $ sudo systemctl start opensearch.service
+
+2. 스냅샷은 존재하는 인덱스 위에 복원할 수 없으므로, 업그레이드 후에(예를 들어 재인덱싱으로)
+   생성된 것과 OpenSearch 플러그인이 생성하는 ``configsync`` 인덱스를 포함하여 Fess 의 인덱스를
+   모두 먼저 삭제합니다. 스냅샷에 포함된 인덱스만 삭제하면 재인덱싱으로 만들어진 인덱스가 남아
+   ``fess.search`` 가 두 개의 인덱스를 가리키게 되어 15.8.0 이 시작되지 않습니다::
+
+       $ curl "http://localhost:9200/_cat/indices/fess*,configsync?h=index"
+       $ curl -X DELETE "http://localhost:9200/<index name>"
+
+   두 번째 명령은 첫 번째 명령이 표시한 인덱스마다 실행합니다.
+
+3. 스냅샷을 복원합니다::
+
+       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+
+.. note::
+
+   사전 디렉터리(``configsync.config_path``, 사전 파일 포함)는 이전과 같이 존재해야 합니다.
+   이를 잃어버린 머신에서는 복원은 완료되지만 사전을 사용하는 인덱스가 red 로 남습니다.
+
+또는 백업에서 디렉터리 복원(단계 1 에서 생성한 아카이브의 이름을 지정합니다)::
 
     $ sudo systemctl stop opensearch
     $ sudo rm -rf /var/lib/opensearch/data/*
-    $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
+    $ sudo tar xzf /backup/opensearch-data-<YYYYMMDD>.tar.gz -C /
     $ sudo systemctl start opensearch
 
 Docker 버전에서는 이전 버전의 Compose 파일로 되돌린 후 볼륨의 내용을 복원합니다::

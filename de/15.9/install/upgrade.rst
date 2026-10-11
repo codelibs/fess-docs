@@ -77,7 +77,8 @@ Backup der Konfigurationsdaten
      Key-Matches, Rollen, Web-/Datei-Authentifizierung usw., 19 Indizes)
    - ``fess_config.bulk`` - zusätzlich zu den oben genannten 19 Indizes Laufzeitdaten wie
      Crawl-Informationen, fehlgeschlagene URLs, Job-Protokolle und Thumbnail-Warteschlange,
-     insgesamt 25 Indizes
+     insgesamt 25 Indizes bis 15.8; 15.9 ergänzt den Index ``tag_type``, der die Benutzer-Tags
+     enthält, sodass es 26 sind
    - ``fess_user.bulk`` - Benutzer, Rollen und Gruppen
    - ``system.properties`` - Systemeinstellungen einschließlich der allgemeinen Einstellungen
    - ``fess.json`` - Indexeinstellungen (Anzahl der Shards, ``index.knn`` usw.)
@@ -92,7 +93,8 @@ Backup der Konfigurationsdaten
    .. note::
 
       Protokolldaten wie Suchanfragenprotokolle und Klickprotokolle (``search_log.ndjson``, ``click_log.ndjson``,
-      ``favorite_log.ndjson``, ``user_info.ndjson``) können ebenfalls von derselben Seite heruntergeladen werden.
+      ``favorite_log.ndjson``, ``user_info.ndjson``; 15.9 bietet zusätzlich ``chat_log.ndjson`` an)
+      können ebenfalls von derselben Seite heruntergeladen werden.
       Falls nur die Konfiguration gesichert wird, ist dies nicht erforderlich. Diese ``*.ndjson``-Dateien
       können außerdem nicht über die Sicherungsseite hochgeladen und wiederhergestellt werden
       (siehe „Rollback-Verfahren").
@@ -129,6 +131,7 @@ Backup der Konfigurationsdaten
    Falls angepasste Konfigurationsdateien vorhanden sind, erstellen Sie auch von diesen Backups::
 
        $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
+       $ cp /path/to/fess/lib/classes/tomcat_config.properties /backup/
 
    .. note::
 
@@ -242,6 +245,14 @@ Docker-Version::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
+.. warning::
+
+   Stellen Sie sicher, dass |Fess| gestoppt ist, bevor Sie mit Schritt 3 beginnen, und ersetzen Sie
+   weder das Paket noch die Dateien eines |Fess|, das noch läuft. Nachdem das DEB-Paket eines
+   laufenden 15.8-|Fess| durch das von 15.9 ersetzt worden war, antwortete die Suchseite mit
+   ``404``, bis |Fess| neu gestartet wurde. Die Paketversionen prüfen Sie mit
+   ``systemctl status fess.service``.
+
 Schritt 3: Installation der neuen Version
 ==========================================
 
@@ -276,12 +287,29 @@ ZIP-Version
 
 3. Falls Sie Anpassungen vorgenommen haben, kopieren Sie zusätzlich Folgendes::
 
-       # Protokollkonfiguration
-       $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
+       # Tomcat-Einstellungen (die SAML-Einstellung tomcat.sameSiteCookies=none steht hier)
+       $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # Installierte Plugins
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
        # Selbst hochgeladene statische Themes (ein Verzeichnis pro Theme; nie bootstrap)
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
+
+   .. warning::
+
+      Ohne die ``tomcat_config.properties`` der alten Installation fällt ``tomcat.sameSiteCookies``
+      stillschweigend auf den Standardwert ``lax`` zurück, und die SAML-Anmeldung funktioniert nicht
+      mehr (siehe :ref:`upgrade-159-saml`). Die ausgelieferte Datei ist in 15.8.0 und 15.9
+      identisch, sodass sie unverändert kopiert werden kann.
+
+   .. warning::
+
+      Kopieren Sie ``log4j2.xml`` nicht über die Datei von 15.9. Die Datei von 15.9 belässt den
+      Logger ``RequestLoggingFilter`` auf ``warn``, und eine aus 15.8 kopierte Datei entfernt diese
+      Einstellung: Bei der Log-Ebene DEBUG werden dann die Request-Header (einschließlich
+      ``Authorization``) und die Request-Parameter (einschließlich des im Anmeldeformular
+      eingegebenen Passworts) in das Log geschrieben. Vergleichen Sie beide Dateien mit ``diff`` und
+      übertragen Sie nur die Änderungen, die Sie selbst vorgenommen haben, erneut in die Datei von
+      15.9.
 
    .. warning::
 
@@ -330,14 +358,25 @@ Installieren Sie das Paket der neuen Version::
 
 .. warning::
 
-   Bei der DEB-Version sind die Dateien unter ``/etc/fess/*`` nicht als Conffile registriert (als
-   Conffile sind nur ``/etc/default/fess``, ``/etc/init.d/fess`` und
-   ``/usr/lib/systemd/system/fess.service`` eingetragen). Beim Ausführen von ``dpkg -i`` werden daher
-   Dateien wie ``/etc/fess/fess_config.properties`` durch die Dateien der neuen Version überschrieben.
-   Das geschieht ohne Rückfrage und ohne Sicherungskopie der alten Dateien; sichern Sie sie daher
-   vorher (Schritt 1). Übertragen Sie Ihre Änderungen nach dem Upgrade auf die neuen Dateien,
-   statt die alten Dateien vollständig zurückzuspielen (siehe
-   :ref:`upgrade-159-carried-over-config`).
+   Bei der DEB-Version sind die Dateien unter ``/etc/fess`` (wie ``fess_config.properties`` und
+   ``tomcat_config.properties``) als Conffile registriert, ebenso wie ``/etc/default/fess``,
+   ``/etc/init.d/fess`` und ``/usr/lib/systemd/system/fess.service``. Beim ersten Upgrade von 15.8
+   behandelt ``dpkg`` sie wie folgt:
+
+   - Eine Datei, die Sie nie bearbeitet haben, wird ohne Rückfrage durch die Datei von 15.9 ersetzt.
+   - Bei einer Datei, die Sie bearbeitet haben, fragt ``dpkg`` nach. Behalten Sie Ihre Datei (die
+     Standardantwort oder ``--force-confold``), wird die Datei von 15.9 daneben als
+     ``<Dateiname>.dpkg-dist`` abgelegt. Installieren Sie die neue Datei (``Y`` oder
+     ``--force-confnew``), wird Ihre Datei als ``<Dateiname>.dpkg-old`` gesichert.
+   - ``dpkg -i`` und ``apt-get install -y`` bleiben bei der ersten Frage stehen, wenn niemand sie
+     beantworten kann. Übergeben Sie für ein unbeaufsichtigtes Upgrade ``--force-confold``
+     (``--force-confdef`` vermeidet die Fragen ebenfalls), zum Beispiel
+     ``sudo dpkg --force-confold -i fess-15.9.0.deb`` oder
+     ``sudo apt-get install -y -o Dpkg::Options::=--force-confold ./fess-15.9.0.deb``.
+
+   Sichern Sie ``/etc/fess`` in jedem Fall vorher (Schritt 1). Eine Datei, die Sie behalten, hat
+   weiterhin ihre Werte von 15.8; vergleichen Sie sie daher mit der ``.dpkg-dist``-Datei, statt sie
+   unverändert zu verwenden (siehe :ref:`upgrade-159-carried-over-config`).
    ``/etc/fess/system.properties`` wird zur Laufzeit erzeugt und ist nicht Teil des Pakets, sodass
    diese Datei nicht überschrieben wird.
 
@@ -511,6 +550,17 @@ Bei Major-Version-Upgrades wird die Neuerstellung des Index empfohlen.
    Wenn Sie einen mit 15.8 oder älter erstellten Dokumentindex weiterverwenden, lesen Sie auch
    :ref:`upgrade-reindex-new-fields`.
 
+.. warning::
+
+   OpenSearch 3.9.0 lehnt Wörterbucheinträge ab, die 15.8 noch akzeptiert hat, etwa denselben
+   ``mapping``-Eintrag, der zweimal gespeichert wurde, oder ein ``kuromoji``-Token, das ein
+   Leerzeichen enthält. Bei einem solchen Eintrag legt die „Neuindizierung" den neuen Dokumentindex
+   nicht an: ``fess.log`` meldet nur ``Failed to create index``, und der alte Index beantwortet
+   weiterhin die Suchen. Laden Sie das Wörterbuch unter „System" → „Wörterbuch" herunter, entfernen
+   Sie die doppelten oder ungültigen Zeilen, laden Sie es erneut hoch und führen Sie die
+   „Neuindizierung" erneut aus. Welche Einträge 15.9 nicht mehr speichert, steht unter
+   :ref:`upgrade-159-api-requests`.
+
 1. Überprüfen Sie bestehende Crawl-Zeitpläne
 2. Führen Sie „Default Crawler" unter „System" → „Scheduler" aus
 3. Warten Sie, bis der Crawl abgeschlossen ist
@@ -524,7 +574,12 @@ Bei Major-Version-Upgrades wird die Neuerstellung des Index empfohlen.
 Upgrade von 15.8 auf 15.9
 =========================
 
-Wenn Sie von 15.8 aktualisieren, sind die folgenden Änderungen nicht abwärtskompatibel.
+Wenn Sie von 15.8 aktualisieren, sind die folgenden Änderungen nicht abwärtskompatibel. Wenn Sie von
+15.7 oder früher aktualisieren, gelten sie ebenfalls für Sie: Lesen Sie alle Abschnitte von
+„Entfernung des eingebetteten OpenSearch" bis „Neue Felder und Kana-Normalisierung auf einen
+vorhandenen Dokumentindex anwenden" (das eingebettete OpenSearch, die Skript-Engine, die S3- und
+SSO-Plugins, der Job Index Exporter und so weiter) und danach „Migrationsaufgaben speziell für 15.9"
+am Ende dieser Seite.
 
 Entfernung des eingebetteten OpenSearch
 ---------------------------------------
@@ -563,6 +618,23 @@ hängt eine solche Anfrage, statt fehlzuschlagen.
    einen neuen externen OpenSearch-Server ein, übertragen Sie die Einstellungen über die
    Sicherungsseite im Administrationsbereich und crawlen Sie erneut. Die Sicherung umfasst
    Crawl-Einstellungen, Benutzer und Protokolle, **nicht** die gecrawlten Dokumente.
+
+.. note::
+
+   Zwei Dinge sind zu beachten, wenn Sie eine 15.8-Sicherung auf dem neuen 15.9-Server
+   wiederherstellen:
+
+   - Jobs werden nur wiederhergestellt, wenn sie neuer sind als die auf dem Server. Die mitgelieferten
+     Jobs, die Sie unter 15.8 nie bearbeitet haben, behalten daher ihre JavaScript-Fassung aus 15.9.
+     Ein Job, den Sie unter 15.8 bearbeitet oder angelegt haben, kommt mit der gespeicherten
+     Skript-Engine zurück, bei einem mitgelieferten Job ist das ``groovy``, und ohne das Plugin
+     ``fess-script-groovy`` schlägt er mit ``groovy is not found`` fehl. Installieren Sie das Plugin
+     oder stellen Sie solche Jobs auf JavaScript um; beides beschreibt :ref:`upgrade-159-script-engine`.
+   - Passwörter und Geheimnisse, die in den Einstellungen der Web-Authentifizierung, der
+     Crawl-Konfiguration und der Datenspeicher-Konfiguration gespeichert sind, werden mit
+     ``app.cipher.key`` verschlüsselt. Setzen Sie in der ``fess_config.properties`` des neuen
+     Servers den Wert der alten Installation, wie unter :ref:`upgrade-159-carried-over-config`
+     beschrieben; andernfalls lassen sie sich nicht entschlüsseln.
 
 Playwright-Crawler wird als Plugin ausgeliefert
 -----------------------------------------------
@@ -681,6 +753,8 @@ Setzen Sie außerdem ``oic.issuer`` auf den ``issuer``-Wert aus dem Discovery-Do
 
 Ohne SSO ist nichts zu tun, also wenn ``sso.type`` den Wert ``none`` hat oder nicht gesetzt ist.
 
+.. _upgrade-159-script-engine:
+
 Die eingebaute Skript-Engine wechselt von Groovy zu JavaScript
 --------------------------------------------------------------
 
@@ -792,7 +866,9 @@ Aus 15.8 übernommene Konfigurationsdateien
 Das ZIP-Verfahren in Schritt 3 kopiert ``fess_config.properties`` und ``bin/fess.in.sh`` aus der
 alten Installation, und ein RPM-Upgrade behält eine von Ihnen geänderte
 ``/etc/fess/fess_config.properties`` (die Datei von 15.9 wird daneben als
-``fess_config.properties.rpmnew`` abgelegt). In beiden Fällen läuft 15.9 anschließend mit den
+``fess_config.properties.rpmnew`` abgelegt). Ein DEB-Upgrade verhält sich ebenso, wenn Sie bei der
+Rückfrage Ihre Version behalten (die Datei von 15.9 wird daneben als
+``fess_config.properties.dpkg-dist`` abgelegt). In jedem Fall läuft 15.9 anschließend mit den
 Werten von 15.8, auch dort, wo sich der ausgelieferte Wert in 15.9 geändert hat. Prüfen Sie
 mindestens die folgenden Schlüssel.
 
@@ -836,6 +912,21 @@ mindestens die folgenden Schlüssel.
        den kein Browser kennt, und die Browser-Konsole meldet
        ``Unrecognized Content-Security-Policy directive 'reflected-xss'``. Der Header schränkt nichts
        ein. Entfernen Sie die Zeile, wie unten beschrieben.
+   * - ``app.encrypt.property.pattern``
+     - ``.*password|.*key|.*token|.*secret``
+     - ``.*password|.*passphrase|.*key|.*token|.*secret``
+     - Ein Parameter, dessen Name auf ``passphrase`` endet (zum Beispiel ``ssh.passphrase`` einer
+       Datenspeicher-Konfiguration), wird im Klartext gespeichert. Ein früher gespeicherter Wert
+       bleibt im Klartext, bis die Einstellung mit dem Muster von 15.9 erneut gespeichert wird.
+   * - ``index.backup.log.targets``
+     - ``click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - Die Seite „Systeminformationen" → „Sicherung" bietet ``chat_log.ndjson`` nicht an.
+   * - ``index.export.exclude.fields``
+     - ``cache``
+     - ``cache,tag``
+     - Das Feld ``tag``, das die Benutzer-Tags enthält, wird nicht mehr aus den Dateien
+       ausgeschlossen, die der Job Index Exporter schreibt.
    * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
        ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
        ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
@@ -873,9 +964,19 @@ an::
     $ diff /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/fess.in.sh
 
 Vergleichen Sie bei einem RPM-Upgrade auf dieselbe Weise ``/etc/fess/fess_config.properties`` mit
-``/etc/fess/fess_config.properties.rpmnew``. Ein DEB-Upgrade überschreibt
-``/etc/fess/fess_config.properties`` dagegen (siehe Schritt 3); dort beginnen Sie also mit den
-Werten von 15.9 und müssen nur Ihre eigenen Änderungen erneut einspielen.
+``/etc/fess/fess_config.properties.rpmnew`` und bei einem DEB-Upgrade mit
+``/etc/fess/fess_config.properties.dpkg-dist``. Eine ``fess_config.properties``, die Sie nie
+bearbeitet haben, wird bei einem DEB-Upgrade durch die Datei von 15.9 ersetzt (siehe Schritt 3);
+dort beginnen Sie also mit den Werten von 15.9.
+
+``app.cipher.key`` ist der eine Wert, den Sie übernehmen müssen, obwohl 15.9 ihn nicht geändert hat.
+Es ist der Schlüssel, der die Passwörter und Geheimnisse verschlüsselt, die in den Parametern der
+Web-Authentifizierung, der Crawl-Konfigurationen und der Datenspeicher-Konfigurationen gespeichert
+sind. Läuft die neue Installation mit einem anderen Schlüssel als dem, mit dem sie gespeichert
+wurden, weil Sie die ausgelieferte ``fess_config.properties`` übernommen oder eine Sicherung auf
+einem neuen Server wiederhergestellt haben, lassen sie sich nicht entschlüsseln: ``fess-crawler.log``
+protokolliert eine ``CipherFailureException``, und ein Crawl, der eine solche Konfiguration
+einschließt, kann nichts indexieren.
 
 .. _upgrade-159-jcifs:
 
@@ -1112,19 +1213,35 @@ Mit 15.9 erhält ``search_engine.type`` den Wert ``vanilla`` für ein reines Ope
 * Die Indexdefinitionen von ``aws`` und ``cloud`` stammen jetzt aus ``fess_indices/_vanilla/``. Die mitgelieferten Verzeichnisse ``fess_indices/_aws/`` und ``fess_indices/_cloud/`` gibt es nicht mehr, und ein von Ihnen selbst angelegtes Verzeichnis ``fess_indices/_aws/`` oder ``fess_indices/_cloud/`` wird nicht mehr gelesen. Übernehmen Sie Ihre Änderungen nach ``fess_indices/_vanilla/``. Bereits vorhandene Indizes werden nicht verändert.
 * Die Suggest-Einstellungen, die 15.8 in der Suchmaschine gespeichert hat, werden automatisch migriert; Sie müssen nichts tun.
 
+Der CSV-Datenspeicher verarbeitet Felder in Anführungszeichen
+-------------------------------------------------------------
+
+Das Plugin ``fess-ds-csv`` von 15.9 wertet Anführungszeichen standardmäßig aus. Ein Feld wie
+``"Yamada, Taro"`` ist eine einzige Spalte, während das Plugin von 15.8.0 es am Komma trennte.
+Prüfen Sie nach ``bin/fess-setup upgrade plugins`` die Datenspeicher-Konfigurationen, die
+CSV-Dateien mit Feldern in Anführungszeichen lesen. Um das Verhalten von 15.8 beizubehalten,
+ergänzen Sie ``quote_disabled=true`` in „Parameter"; siehe :doc:`../config/datastore/ds-csv`, wo auch
+beschrieben ist, was ein nicht geschlossenes Anführungszeichen bewirkt.
+
 .. _upgrade-reindex-new-fields:
 
 Neue Felder und Kana-Normalisierung auf einen vorhandenen Dokumentindex anwenden
 --------------------------------------------------------------------------------
 
-Beim Start fügt 15.9 den Konfigurations-, Log- und Benutzerindizes neue Felder hinzu, ändert aber
-weder das Mapping noch die Analyseeinstellungen des Dokumentindex. Wenn Sie einen mit 15.8 oder älter
-erstellten Dokumentindex weiterverwenden, wirken die folgenden Änderungen von 15.9 nicht.
+Beim Start fügt 15.9 den Konfigurations-, Log- und Benutzerindizes neue Felder hinzu. Im
+Dokumentindex ergänzt es nur das Feld ``tag`` (``keyword``), das die Benutzer-Tags enthält; das
+übrige Mapping und die Analyseeinstellungen werden nicht geändert. Wenn Sie einen mit 15.8 oder
+älter erstellten Dokumentindex weiterverwenden, wirken die folgenden Änderungen von 15.9 nicht.
 
 - **Eigentümer und letzter Bearbeiter einer Datei** (``owner``, ``last_modifier``): neue Felder, die
   beim Crawlen von Dateisystem, SMB und FTP indiziert werden. Der vorhandene Dokumentindex enthält
   keine Definition dafür, daher werden sie anhand des ersten gecrawlten Werts dynamisch als ``text``
   gemappt, und Suchen wie ``owner:alice`` oder ``facet.field=owner`` funktionieren nicht wie vorgesehen.
+- **ETag** (``etag``): das Feld, in dem der Crawler den ETag einer gecrawlten Seite speichert und
+  das 15.9 als ``If-None-Match`` zurücksendet, damit eine unveränderte Seite nicht erneut abgerufen
+  wird. Auch dafür enthält der vorhandene Dokumentindex keine Definition, daher wird es dynamisch
+  als ``text`` gemappt statt als das mitgelieferte nicht indizierte ``keyword``. Bedingte Anfragen
+  funktionieren mit diesem Mapping weiterhin.
 - **Normalisierung von Kana-Varianten und von Strichen anstelle des Dehnungszeichens** (zum Beispiel
   wird ``サ―バ－`` als dasselbe Wort wie ``サーバー`` behandelt): Die Regeln stehen in den
   Analyseeinstellungen des Dokumentindex und im Wörterbuch ``mapping.txt``, ein vorhandener Index
@@ -1140,7 +1257,13 @@ ist nicht nötig.
    „Wörterbücher zurücksetzen" überschreibt die Wörterbücher auf der OpenSearch-Seite mit den
    mitgelieferten Wörterbuchdateien. Wenn Sie Synonyme oder andere Wörterbücher unter „Wörterbuch"
    in der Admin-Oberfläche bearbeitet haben, laden Sie sie vorher herunter und übernehmen Sie sie
-   nach der Neuindizierung erneut.
+   nach der Neuindizierung erneut: Entfernen Sie doppelte oder ungültige Einträge aus den
+   heruntergeladenen Dateien (siehe Schritt 7), laden Sie sie hoch und klicken Sie dann unter
+   „Dokumentenindex neu laden" in „Systeminformationen" → „Wartung" auf „Neu laden". Bis dahin
+   verwenden die Analyzer des Dokumentindex weiterhin die mitgelieferten Wörterbücher, und ein
+   wiederhergestelltes Synonym greift nicht, wie lange Sie auch warten. Ein Wörterbuch, das beim
+   Indexieren wirkt, erfordert zusätzlich, dass die Dokumente erneut gecrawlt werden; siehe
+   :ref:`dict-apply-changes`.
 
 .. note::
 
@@ -1210,6 +1333,8 @@ unter :doc:`../config/sso-spnego`.
    SPNEGO-Bibliothek authentifiziert Anfragen vom selben Host dann als Betriebssystembenutzer des
    Servers, ganz ohne Kerberos-Prüfung, was hinter einem Reverse-Proxy auf demselben Host unsicher
    ist.
+
+.. _upgrade-159-saml:
 
 Falls Sie SAML-Authentifizierung (SSO) genutzt haben
 ----------------------------------------------------
@@ -1374,7 +1499,10 @@ passenden Versionen ersetzt werden. ``bin/fess-setup upgrade plugins`` erledigt 
 installierten Plugins: Es installiert die für dieses |Fess| gebaute Version und löscht die alte.
 Starten Sie |Fess| anschließend neu. ``bin/fess-setup check`` meldet danach den Zustand von
 OpenSearch, seinen Plugins und den installierten |Fess|-Plugins und endet mit dem Exit-Code 1,
-wenn etwas nicht stimmt.
+wenn etwas nicht stimmt. Es liest weder ``bin/fess.in.sh`` noch ``/etc/sysconfig/fess`` oder
+``/etc/default/fess``; wenn OpenSearch nicht unter ``http://localhost:9200`` erreichbar ist,
+übergeben Sie daher ``--url`` oder setzen Sie ``SEARCH_ENGINE_HTTP_URL`` in der Shell, die es
+ausführt, sonst meldet es die Suchmaschine als nicht erreichbar.
 
 ::
 
@@ -1408,24 +1536,60 @@ Stellen Sie Konfigurationsdateien und Daten aus dem Backup wieder her.
 
 Bei RPM/DEB-Version::
 
-    $ sudo rpm -Uvh --oldpackage fess-<old-version>.rpm
+    $ sudo rpm -Uvh --oldpackage --nodeps fess-<old-version>.rpm
 
 oder::
 
     $ sudo dpkg -i fess-<old-version>.deb
 
+.. note::
+
+   Bei RPM ist ``--nodeps`` erforderlich. Das Paket 15.8.0 verlangt die Benutzer und Gruppen ``fess``
+   und ``opensearch``, und ohne die Option lehnt ``rpm`` das Downgrade mit ``Failed dependencies:
+   group(fess) is needed by fess-15.8.0`` ab.
+
+.. warning::
+
+   Das DEB-Paket 15.8.0 registriert ``/etc/fess/*`` nicht als Conffile, sodass ``dpkg -i`` die von
+   Ihnen bearbeiteten Dateien wie ``/etc/fess/fess_config.properties`` ohne Sicherungskopie
+   überschreibt. Stellen Sie sie aus dem Backup wieder her, das Sie in Schritt 1 erstellt haben.
+
 Schritt 3: Datenwiederherstellung
 ----------------------------------
 
-Wiederherstellung aus Snapshot::
+Wiederherstellung aus Snapshot. OpenSearch muss laufen und |Fess| gestoppt sein:
 
-    $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+1. Starten Sie OpenSearch::
 
-Oder Wiederherstellung des Verzeichnisses aus dem Backup::
+       $ sudo systemctl start opensearch.service
+
+2. Ein Snapshot lässt sich nicht über einen vorhandenen Index wiederherstellen. Löschen Sie daher
+   zuerst jeden Fess-Index, auch die nach dem Upgrade (zum Beispiel durch eine Neuindizierung)
+   erstellten, sowie den Index ``configsync``, den das OpenSearch-Plugin anlegt. Löschen Sie nur die
+   Indizes, die im Snapshot enthalten sind, bleibt ein durch die Neuindizierung erstellter Index
+   zurück, ``fess.search`` zeigt auf zwei Indizes, und 15.8.0 startet nicht::
+
+       $ curl "http://localhost:9200/_cat/indices/fess*,configsync?h=index"
+       $ curl -X DELETE "http://localhost:9200/<index name>"
+
+   Führen Sie den zweiten Befehl für jeden Index aus, den der erste auflistet.
+
+3. Stellen Sie den Snapshot wieder her::
+
+       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+
+.. note::
+
+   Das Wörterbuchverzeichnis muss wie zuvor vorhanden sein (``configsync.config_path``, mit den
+   Wörterbuchdateien). Auf einem Rechner, auf dem es verloren gegangen ist, wird die
+   Wiederherstellung abgeschlossen, aber die Indizes, die die Wörterbücher verwenden, bleiben rot.
+
+Oder Wiederherstellung des Verzeichnisses aus dem Backup (verwenden Sie den Namen des Archivs, das
+Sie in Schritt 1 erstellt haben)::
 
     $ sudo systemctl stop opensearch
     $ sudo rm -rf /var/lib/opensearch/data/*
-    $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
+    $ sudo tar xzf /backup/opensearch-data-<YYYYMMDD>.tar.gz -C /
     $ sudo systemctl start opensearch
 
 Setzen Sie bei der Docker-Version zunächst die Compose-Dateien der alten Version wieder ein und
