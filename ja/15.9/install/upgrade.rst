@@ -75,7 +75,8 @@
    - ``fess_basic_config.bulk`` - 設定インデックス（クロール設定、スケジューラー、ラベル、
      キーマッチ、ロール、Web/ファイル認証など 19 インデックス）
    - ``fess_config.bulk`` - 上記 19 インデックスに加えて、クロール情報、障害 URL、ジョブログ、
-     サムネイルキューなどの実行時データを含む 25 インデックス
+     サムネイルキューなどの実行時データを含む 25 インデックス（15.8 まで。15.9 ではユーザータグを
+     保持する ``tag_type`` インデックスが加わり 26 インデックス）
    - ``fess_user.bulk`` - ユーザー、ロール、グループ
    - ``system.properties`` - 全般設定を含むシステム設定
    - ``fess.json`` - インデックスの設定（シャード数、\ ``index.knn`` など）
@@ -90,7 +91,8 @@
    .. note::
 
       検索ログやクリックログなどのログデータ（``search_log.ndjson``、``click_log.ndjson``、
-      ``favorite_log.ndjson``、``user_info.ndjson``）も同じページからダウンロードできます。
+      ``favorite_log.ndjson``、``user_info.ndjson``。15.9 では ``chat_log.ndjson`` も表示されます）も
+      同じページからダウンロードできます。
       設定のみをバックアップする場合は不要です。なお、これらの ``*.ndjson`` ファイルは
       バックアップページからアップロードして復元することはできません
       （「ロールバック手順」を参照）。
@@ -127,6 +129,7 @@
    カスタマイズした設定ファイルがある場合、それらもバックアップします::
 
        $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
+       $ cp /path/to/fess/lib/classes/tomcat_config.properties /backup/
 
    .. note::
 
@@ -239,6 +242,13 @@ Docker 版::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
+.. warning::
+
+   ステップ 3 を始める前に |Fess| が停止していることを確認してください。起動中の |Fess| のパッケージや
+   ファイルを入れ替えないでください。起動中の 15.8 の |Fess| で DEB パッケージを 15.9 のものに
+   入れ替えたところ、|Fess| を再起動するまで検索画面が ``404`` を返しました。パッケージ版では
+   ``systemctl status fess.service`` で確認できます。
+
 ステップ 3: 新しいバージョンのインストール
 ==========================================
 
@@ -273,12 +283,27 @@ ZIP 版
 
 3. カスタマイズしている場合は、以下もコピーします::
 
-       # ログ設定
-       $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
+       # Tomcat の設定（SAML で必要な tomcat.sameSiteCookies=none もここにあります）
+       $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # インストール済みプラグイン
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
        # 自分でアップロードした静的テーマ（テーマごとのディレクトリ。bootstrap は除く）
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
+
+   .. warning::
+
+      旧バージョンの ``tomcat_config.properties`` をコピーしないと、 ``tomcat.sameSiteCookies`` は
+      何も知らせずに既定値の ``lax`` に戻り、SAML ログインが動作しなくなります
+      （ :ref:`upgrade-159-saml` を参照）。このファイルの同梱の内容は 15.8.0 と 15.9 で同じなので、
+      そのままコピーできます。
+
+   .. warning::
+
+      ``log4j2.xml`` を 15.9 のファイルに上書きコピーしないでください。15.9 のファイルは
+      ``RequestLoggingFilter`` のロガーを ``warn`` に固定しており、15.8 のファイルをコピーすると
+      この設定が失われます。ログレベルを DEBUG にすると、リクエストヘッダー（ ``Authorization`` を含む）と
+      リクエストパラメーター（ログインフォームに入力したパスワードを含む）がログに書き出されます。
+      2 つのファイルを ``diff`` で比較し、自分で変更した内容だけを 15.9 のファイルに再適用してください。
 
    .. warning::
 
@@ -323,15 +348,25 @@ RPM/DEB 版
 
 .. warning::
 
-   DEB 版では ``/etc/fess/*`` は conffile として登録されていません（conffile は
-   ``/etc/default/fess``\ 、\ ``/etc/init.d/fess``\ 、\ ``/usr/lib/systemd/system/fess.service``
-   の 3 つのみです）。そのため ``dpkg -i`` を実行すると ``/etc/fess/fess_config.properties`` などが
-   新しいバージョンのファイルで上書きされます。確認は求められず、旧ファイルのコピーも残らないため、
-   事前にバックアップしてください（ステップ 1）。アップグレード後は、旧ファイルをそのまま戻すの
-   ではなく、新しいファイルに変更内容を再適用してください（ :ref:`upgrade-159-carried-over-config`
-   を参照）。
-   なお ``/etc/fess/system.properties`` はパッケージに含まれない実行時生成ファイルのため、
-   上書きされません。
+   DEB 版では、 ``/etc/fess`` 以下のファイル（ ``fess_config.properties`` や
+   ``tomcat_config.properties`` など）は、 ``/etc/default/fess``\ 、\ ``/etc/init.d/fess``\ 、
+   ``/usr/lib/systemd/system/fess.service`` と同様に conffile として登録されています。15.8 からの
+   最初のアップグレードでは、 ``dpkg`` は次のように扱います。
+
+   - 編集していないファイルは、確認なしに 15.9 のファイルへ置き換えられます。
+   - 編集したファイルについては、 ``dpkg`` が確認を求めます。自分のファイルを残す場合（既定の回答、または
+     ``--force-confold`` ）は、15.9 のファイルが ``<ファイル名>.dpkg-dist`` として併置されます。新しいファイルを
+     インストールする場合（ ``Y`` または ``--force-confnew`` ）は、自分のファイルが
+     ``<ファイル名>.dpkg-old`` として保存されます。
+   - 回答する人がいないとき、 ``dpkg -i`` と ``apt-get install -y`` は最初の確認で停止します。
+     無人でアップグレードする場合は ``--force-confold`` を指定してください（ ``--force-confdef`` でも確認は
+     出なくなります）。たとえば ``sudo dpkg --force-confold -i fess-15.9.0.deb`` や
+     ``sudo apt-get install -y -o Dpkg::Options::=--force-confold ./fess-15.9.0.deb`` です。
+
+   いずれの場合も、事前に ``/etc/fess`` をバックアップしてください（ステップ 1）。残したファイルは 15.8 の値の
+   ままなので、そのまま使わず ``.dpkg-dist`` のファイルと比較してください（
+   :ref:`upgrade-159-carried-over-config` を参照）。なお ``/etc/fess/system.properties`` はパッケージに
+   含まれない実行時生成ファイルのため、上書きされません。
 
 Docker 版
 ---------
@@ -494,6 +529,16 @@ Docker 版::
 
    15.8 以前で作成した文書インデックスを引き続き使う場合は、 :ref:`upgrade-reindex-new-fields` も参照してください。
 
+.. warning::
+
+   15.8 が受け付けた辞書のエントリーのうち、OpenSearch 3.9.0 が拒否するものがあります。たとえば
+   同じ ``mapping`` のエントリーを 2 回保存している場合や、 ``kuromoji`` のトークンに空白が含まれる
+   場合です。そのようなエントリーがあると「再インデクシング」は新しい文書インデックスを作成しません。
+   ``fess.log`` には ``Failed to create index`` としか出力されず、古いインデックスが検索を提供し続けます。
+   「システム」→「辞書」で辞書をダウンロードし、重複または不正な行を削除してから再度アップロードし、
+   「再インデクシング」をもう一度実行してください。15.9 が保存しなくなったエントリーは
+   :ref:`upgrade-159-api-requests` を参照してください。
+
 1. 既存のクロールスケジュールを確認
 2. 「システム」→「スケジューラ」から「Default Crawler」を実行
 3. クロールが完了するまで待機
@@ -507,7 +552,11 @@ Docker 版::
 15.8 から 15.9 へのアップグレード
 =================================
 
-15.8 からアップグレードする場合、以下が互換性のない変更です。
+15.8 からアップグレードする場合、以下が互換性のない変更です。15.7 以前からアップグレードする場合も
+これらがすべて当てはまります。「組み込み OpenSearch の廃止」から「既存の文書インデックスへの新しい
+フィールドとかなの正規化の反映」までの各節（組み込み OpenSearch、スクリプトエンジン、S3 と SSO の
+プラグイン、Index Exporter ジョブなど）と、このページの最後にある「15.9 固有の移行作業」をすべて
+読んでください。
 
 組み込み OpenSearch の廃止
 --------------------------
@@ -540,6 +589,19 @@ Docker を使用してください）。
    OpenSearch サーバーを新しく構築し、管理画面「バックアップ」で設定を移したうえで
    再クロールしてください。バックアップに含まれるのはクロール設定・ユーザー・ログで、
    **クロール済みの文書は含まれません**。
+
+.. note::
+
+   15.8 のバックアップを新しい 15.9 のサーバーへ復元するときは、次の 2 点に注意してください。
+
+   - ジョブは、サーバー上のものより新しい場合にだけ復元されます。そのため、15.8 で編集していない同梱ジョブは
+     15.9 の JavaScript 版のまま残ります。15.8 で編集または作成したジョブは、保存されたスクリプトエンジン
+     （同梱ジョブなら ``groovy``）のまま復元され、 ``fess-script-groovy`` プラグインがないと
+     ``groovy is not found`` で失敗します。プラグインを導入するか、そのジョブを JavaScript に切り替えてください。
+     どちらも :ref:`upgrade-159-script-engine` で説明しています。
+   - Web 認証、クロール設定、データストア設定のパラメーターに保存されたパスワードやシークレットは
+     ``app.cipher.key`` で暗号化されています。新しいサーバーの ``fess_config.properties`` に、旧環境の値を
+     設定してください（ :ref:`upgrade-159-carried-over-config` を参照）。そうしないと復号できません。
 
 Playwright クローラをプラグインへ移動
 -------------------------------------
@@ -649,6 +711,8 @@ JSP を提供できないためで、この画面はプラグインが未導入�
 SSO を使用していない場合、つまり ``sso.type`` が ``none`` または未設定の場合、
 対応は不要です。
 
+.. _upgrade-159-script-engine:
+
 標準のスクリプトエンジンが Groovy から JavaScript に変更
 --------------------------------------------------------
 
@@ -756,6 +820,8 @@ Index Exporter ジョブが削除されたパッケージを参照
 ステップ 3 の ZIP 版の手順では、旧バージョンの ``fess_config.properties`` と ``bin/fess.in.sh``
 をコピーします。RPM 版のアップグレードでは、変更を加えた ``/etc/fess/fess_config.properties``
 がそのまま残ります（15.9 のファイルは ``fess_config.properties.rpmnew`` として併置されます）。
+DEB 版でも、確認で自分のファイルを残した場合は同様です（15.9 のファイルは
+``fess_config.properties.dpkg-dist`` として併置されます）。
 いずれの場合も 15.9 は 15.8 の値のまま動作し、15.9 で同梱の値が変わったキーも例外ではありません。
 少なくとも次のキーを確認してください。
 
@@ -798,6 +864,20 @@ Index Exporter ジョブが削除されたパッケージを参照
        ``Content-Security-Policy: reflected-xss block`` ヘッダーが付き、ブラウザーのコンソールに
        ``Unrecognized Content-Security-Policy directive 'reflected-xss'`` が出ます。このヘッダーは
        何も制限しません。次の段落のとおり、その行を削除してください。
+   * - ``app.encrypt.property.pattern``
+     - ``.*password|.*key|.*token|.*secret``
+     - ``.*password|.*passphrase|.*key|.*token|.*secret``
+     - 名前が ``passphrase`` で終わるパラメーター（たとえばデータストア設定の ``ssh.passphrase``）が
+       平文で保存されます。すでに保存されている値は、15.9 のパターンで設定を保存し直すまで平文のままです。
+   * - ``index.backup.log.targets``
+     - ``click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - 「システム情報」→「バックアップ」ページに ``chat_log.ndjson`` が表示されません。
+   * - ``index.export.exclude.fields``
+     - ``cache``
+     - ``cache,tag``
+     - ユーザータグを保持する ``tag`` フィールドが、Index Export ジョブが書き出すファイルから
+       除外されなくなります。
    * - ``crawler.default.script``\ 、\ ``theme.allowed.archive.extensions``\ 、
        ``theme.assets.cache.max.age``\ 、\ ``theme.assets.precompressed``\ 、
        ``rag.chat.message.max.length``\ 、\ ``supported.uploaded.js.extentions``\ 、
@@ -832,9 +912,16 @@ Node.js を検出しないため、 ``PLAYWRIGHT_NODEJS_PATH`` を自分で設�
     $ diff /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/fess.in.sh
 
 RPM 版では、同じように ``/etc/fess/fess_config.properties`` と
-``/etc/fess/fess_config.properties.rpmnew`` を比較してください。DEB 版のアップグレードでは
-``/etc/fess/fess_config.properties`` が上書きされるため（ステップ 3 を参照）、15.9 の値から
-始まり、再適用が必要なのは自分で変更した値だけです。
+``/etc/fess/fess_config.properties.rpmnew`` を、DEB 版では
+``/etc/fess/fess_config.properties.dpkg-dist`` を比較してください。DEB 版のアップグレードでは、
+編集していない ``fess_config.properties`` は 15.9 のファイルに置き換えられるため（ステップ 3 を参照）、
+15.9 の値から始まります。
+
+``app.cipher.key`` は、15.9 で変わっていなくても必ず引き継ぐ必要がある値です。Web 認証、クロール設定、
+データストア設定のパラメーターに保存されたパスワードやシークレットを暗号化する鍵だからです。新しい
+環境が、それらを保存したときとは別の鍵で動作していると（同梱の ``fess_config.properties`` を使った場合や、
+バックアップを新しいサーバーへ復元した場合など）復号できず、 ``fess-crawler.log`` に
+``CipherFailureException`` が記録され、そのような設定を含むクロールは何も索引できないことがあります。
 
 .. _upgrade-159-jcifs:
 
@@ -1064,19 +1151,34 @@ API が拒否するようになったリクエスト
 * ``aws`` と ``cloud`` のインデックス定義は ``fess_indices/_vanilla/`` から読み込まれます。同梱されていた ``fess_indices/_aws/`` と ``fess_indices/_cloud/`` はなくなりました。独自に追加した ``fess_indices/_aws/`` または ``fess_indices/_cloud/`` は読み込まれなくなるため、変更内容を ``fess_indices/_vanilla/`` に移してください。作成済みのインデックスは変更されません。
 * 15.8 が検索エンジンに保存したサジェストの設定は、自動的に移行されます。対応は不要です。
 
+CSV データストアが引用符で囲まれたフィールドを解釈
+--------------------------------------------------
+
+15.9 の ``fess-ds-csv`` プラグインは、既定で引用符を解釈します。 ``"山田, 太郎"`` のようなフィールドは
+1 つの列になります。15.8.0 のプラグインはカンマの位置で分割していました。
+``bin/fess-setup upgrade plugins`` の実行後は、引用符で囲まれたフィールドを含む CSV ファイルを読む
+データストア設定を確認してください。15.8 の動作を維持するには、「パラメーター」に
+``quote_disabled=true`` を追加します。対応する引用符がない場合の動作も含め、
+:doc:`../config/datastore/ds-csv` を参照してください。
+
 .. _upgrade-reindex-new-fields:
 
 既存の文書インデックスへの新しいフィールドとかなの正規化の反映
 --------------------------------------------------------------
 
-15.9 は起動時に、設定・ログ・ユーザーのインデックスへ新しいフィールドを追加しますが、文書の
-インデックスのマッピングと解析の設定は変更しません。15.8 以前で作成した文書インデックスを
+15.9 は起動時に、設定・ログ・ユーザーのインデックスへ新しいフィールドを追加します。文書の
+インデックスに追加するのは、ユーザータグを保持する ``tag`` フィールド（ ``keyword`` ）だけで、
+マッピングのそれ以外の部分と解析の設定は変更しません。15.8 以前で作成した文書インデックスを
 そのまま使うと、次の 15.9 の変更が効きません。
 
 - **ファイルの所有者と最終更新者**\ （\ ``owner``\ ・\ ``last_modifier``\ ）: ファイルシステム・SMB・FTP の
   クロールで新たに索引されるフィールドです。既存の文書インデックスには定義がないため、最初に
   クロールした値から ``text`` 型として自動でマッピングされ、\ ``owner:alice`` のような検索や
   ``facet.field=owner`` が期待どおりに動きません。
+- **ETag**\ （\ ``etag``\ ）: クロールしたページの ETag を保存するフィールドです。15.9 はこれを
+  ``If-None-Match`` として送り返し、変更のないページを再取得しません。既存の文書インデックスにはこれも
+  定義がないため、同梱の「索引されない ``keyword``」ではなく ``text`` 型として自動でマッピングされます。
+  このマッピングでも条件付きリクエストは動作します。
 - **かなの表記ゆれと、長音符の代わりに書かれたダッシュの正規化**\ （例: ``サ―バ－`` を ``サーバー`` と
   同じ語として扱う）: 規則は文書インデックスの解析の設定と辞書 ``mapping.txt`` にあるため、
   既存のインデックスには反映されません。
@@ -1089,7 +1191,11 @@ API が拒否するようになったリクエスト
 
    「辞書の初期化」は、同梱の辞書ファイルで OpenSearch 側の辞書を上書きします。管理画面の「辞書」で
    同義語などを編集している場合は、事前にダウンロードしておき、再インデクシングの後に反映し直して
-   ください。
+   ください。ダウンロードしたファイルから重複または不正なエントリーを削除し（ステップ 7 を参照）、
+   アップロードしたうえで、「システム情報」→「メンテナンス」の「ドキュメントインデックスのリロード」で
+   [リロード] をクリックしてください。リロードするまで、文書インデックスのアナライザーは同梱の辞書を
+   使い続けるため、復元した同義語は、どれだけ待っても一致しません。インデックス時に効く辞書は、さらに
+   文書の再クロールが必要です。 :ref:`dict-apply-changes` を参照してください。
 
 .. note::
 
@@ -1152,6 +1258,8 @@ TLS をリバースプロキシで終端して HTTP で転送している構成�
    ``spnego.allow.localhost=true`` は危険です。SPNEGO ライブラリが同一ホストからのリクエストを
    Kerberos の検証なしにサーバーの OS ユーザーとして認証するため、同一ホスト上にリバースプロキシを
    置く構成では安全ではありません。
+
+.. _upgrade-159-saml:
 
 SAML 認証（SSO）を利用していた場合
 ----------------------------------
@@ -1303,7 +1411,9 @@ RDN として解析した値になりました。DN の中でエスケープさ�
 プラグインについて、この |Fess| 向けにビルドされたバージョンをインストールし、古いものを
 削除します。その後 |Fess| を再起動してください。 ``bin/fess-setup check`` は、OpenSearch と
 そのプラグイン、インストール済みの |Fess| プラグインの状態を報告し、問題がある場合は終了コード 1
-で終了します。
+で終了します。 ``bin/fess.in.sh``\ 、\ ``/etc/sysconfig/fess``\ 、\ ``/etc/default/fess`` は読み込まないため、
+OpenSearch が ``http://localhost:9200`` にない場合は、 ``--url`` を指定するか、実行するシェルで
+``SEARCH_ENGINE_HTTP_URL`` を設定してください。そうしないと、エンジンに接続できないと報告されます。
 
 ::
 
@@ -1337,24 +1447,58 @@ Docker 版で ``FESS_PLUGINS`` を指定している場合は、
 
 RPM/DEB 版の場合::
 
-    $ sudo rpm -Uvh --oldpackage fess-<old-version>.rpm
+    $ sudo rpm -Uvh --oldpackage --nodeps fess-<old-version>.rpm
 
 または::
 
     $ sudo dpkg -i fess-<old-version>.deb
 
+.. note::
+
+   RPM では ``--nodeps`` が必要です。15.8.0 のパッケージは ``fess`` と ``opensearch`` のユーザーとグループを
+   必須としているため、指定しないと ``rpm`` は ``Failed dependencies: group(fess) is needed by fess-15.8.0``
+   でダウングレードを拒否します。
+
+.. warning::
+
+   15.8.0 の DEB パッケージは ``/etc/fess/*`` を conffile として登録していないため、 ``dpkg -i`` は、
+   編集した ``/etc/fess/fess_config.properties`` などを、コピーを残さずに上書きします。ステップ 1 で
+   取ったバックアップから戻してください。
+
 ステップ 3: データの復元
 ------------------------
 
-スナップショットから復元::
+スナップショットから復元します。OpenSearch を起動し、 |Fess| は停止したままにしてください。
 
-    $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+1. OpenSearch を起動します::
 
-または、バックアップからディレクトリを復元::
+       $ sudo systemctl start opensearch.service
+
+2. スナップショットは、存在するインデックスの上には復元できません。そのため、アップグレード後に
+   （再インデクシングなどで）作成されたものと、OpenSearch のプラグインが作成する ``configsync``
+   インデックスを含め、Fess のインデックスをすべて先に削除します。スナップショットに含まれる
+   インデックスだけを削除すると、再インデクシングで作られたインデックスが残り、 ``fess.search`` が
+   2 つのインデックスを指して、15.8.0 が起動しません::
+
+       $ curl "http://localhost:9200/_cat/indices/fess*,configsync?h=index"
+       $ curl -X DELETE "http://localhost:9200/<index name>"
+
+   2 つ目のコマンドは、1 つ目が表示したインデックスごとに実行します。
+
+3. スナップショットを復元します::
+
+       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+
+.. note::
+
+   辞書ディレクトリ（ ``configsync.config_path`` 。辞書ファイルを含む）は、以前と同じように存在している
+   必要があります。失われたマシンでは、復元は完了しても、辞書を使うインデックスは red のままになります。
+
+または、バックアップからディレクトリを復元（ステップ 1 で作成したアーカイブの名前を指定します）::
 
     $ sudo systemctl stop opensearch
     $ sudo rm -rf /var/lib/opensearch/data/*
-    $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
+    $ sudo tar xzf /backup/opensearch-data-<YYYYMMDD>.tar.gz -C /
     $ sudo systemctl start opensearch
 
 Docker 版では、旧バージョンの Compose ファイルに戻したうえで、ボリュームの内容を復元します::

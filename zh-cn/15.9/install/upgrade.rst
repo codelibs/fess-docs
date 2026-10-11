@@ -75,7 +75,8 @@
    - ``fess_basic_config.bulk`` - 配置索引（爬取设置、调度器、标签、
      关键词匹配、角色、Web/文件认证等 19 个索引）
    - ``fess_config.bulk`` - 除上述 19 个索引外，还包含爬取信息、失败 URL、作业日志、
-     缩略图队列等运行时数据，共 25 个索引
+     缩略图队列等运行时数据，共 25 个索引（15.8 及之前；15.9 增加了保存用户标签的
+     ``tag_type`` 索引，共 26 个）
    - ``fess_user.bulk`` - 用户、角色、群组
    - ``system.properties`` - 包含常规设置的系统设置
    - ``fess.json`` - 索引设置（分片数、\ ``index.knn`` 等）
@@ -90,7 +91,8 @@
    .. note::
 
       搜索日志、点击日志等日志数据（``search_log.ndjson``、``click_log.ndjson``、
-      ``favorite_log.ndjson``、``user_info.ndjson``）也可从同一页面下载。
+      ``favorite_log.ndjson``、``user_info.ndjson``；15.9 中还会显示 ``chat_log.ndjson``）也可从
+      同一页面下载。
       如果仅备份配置，则不需要下载这些文件。另外，这些 ``*.ndjson`` 文件无法
       通过备份页面的上传功能重新导入恢复
       （请参阅「回滚步骤」）。
@@ -127,6 +129,7 @@
    如有定制的配置文件，也请备份::
 
        $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
+       $ cp /path/to/fess/lib/classes/tomcat_config.properties /backup/
 
    .. note::
 
@@ -239,6 +242,12 @@ Docker 版::
 
     $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
 
+.. warning::
+
+   开始步骤 3 之前，请确认 |Fess| 已经停止，不要替换仍在运行的 |Fess| 的软件包或文件。
+   在运行中的 15.8 的 |Fess| 上将 DEB 软件包替换为 15.9 的软件包后，直到重启 |Fess|，
+   搜索页面一直返回 ``404``\ 。软件包版可以通过 ``systemctl status fess.service`` 确认。
+
 步骤 3: 安装新版本
 ======================================
 
@@ -272,12 +281,25 @@ ZIP 版
 
 3. 如有定制内容，请同时复制以下文件::
 
-       # 日志配置
-       $ cp /path/to/old-fess/app/WEB-INF/classes/log4j2.xml /path/to/fess-15.9.0/app/WEB-INF/classes/
+       # Tomcat 设置（SAML 所需的 tomcat.sameSiteCookies=none 也在此文件中）
+       $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # 已安装的插件
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
        # 自己上传的静态主题（每个主题一个目录；不要复制 bootstrap）
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
+
+   .. warning::
+
+      如果不复制旧版本的 ``tomcat_config.properties`` ，``tomcat.sameSiteCookies`` 会在没有任何提示的
+      情况下恢复为默认值 ``lax`` ，SAML 登录将无法使用（参阅 :ref:`upgrade-159-saml` ）。
+      该文件的随附内容在 15.8.0 和 15.9 中相同，因此可以原样复制。
+
+   .. warning::
+
+      请不要将 ``log4j2.xml`` 复制并覆盖 15.9 的文件。15.9 的文件将 ``RequestLoggingFilter`` 的
+      日志记录器固定为 ``warn`` ，而复制 15.8 的文件会丢失这一设置：将日志级别设为 DEBUG 时，
+      请求头（包括 ``Authorization`` ）和请求参数（包括在登录表单中输入的密码）会被写入日志。
+      请用 ``diff`` 比较这两个文件，只将自己修改过的内容重新应用到 15.9 的文件中。
 
    .. warning::
 
@@ -320,12 +342,22 @@ RPM/DEB 版
 
 .. warning::
 
-   DEB 版中，``/etc/fess/*`` 并未注册为 conffile（conffile 仅有
-   ``/etc/default/fess``\ 、\ ``/etc/init.d/fess``\ 、\ ``/usr/lib/systemd/system/fess.service``
-   这 3 个）。因此执行 ``dpkg -i`` 时，``/etc/fess/fess_config.properties`` 等文件会被
-   新版本的文件覆盖。覆盖时不会确认，也不会保留旧文件的副本，因此请事先备份（步骤 1）。升级后，
-   请不要原样恢复旧文件，而是将修改内容重新应用到新文件中（参阅
-   :ref:`upgrade-159-carried-over-config` ）。
+   DEB 版中，``/etc/fess`` 下的文件（如 ``fess_config.properties`` 和
+   ``tomcat_config.properties`` ）与 ``/etc/default/fess``\ 、\ ``/etc/init.d/fess``\ 、
+   ``/usr/lib/systemd/system/fess.service`` 一样，被注册为 conffile。从 15.8 首次升级时，
+   ``dpkg`` 的处理方式如下。
+
+   - 从未编辑过的文件，会不经询问直接替换为 15.9 的文件。
+   - 对于编辑过的文件，``dpkg`` 会询问。如果保留自己的文件（默认回答，或 ``--force-confold`` ），
+     15.9 的文件会以 ``<文件名>.dpkg-dist`` 的形式并存。如果安装新文件（``Y`` 或
+     ``--force-confnew`` ），自己的文件会保存为 ``<文件名>.dpkg-old`` 。
+   - 无人可以回答时，``dpkg -i`` 和 ``apt-get install -y`` 会在第一个询问处停止。无人值守升级时，
+     请指定 ``--force-confold`` （``--force-confdef`` 同样可以避免询问），例如
+     ``sudo dpkg --force-confold -i fess-15.9.0.deb`` 或
+     ``sudo apt-get install -y -o Dpkg::Options::=--force-confold ./fess-15.9.0.deb`` 。
+
+   无论哪种情况，都请事先备份 ``/etc/fess`` （步骤 1）。保留下来的文件仍是 15.8 的值，
+   因此不要原样使用，请与 ``.dpkg-dist`` 文件比较（参阅 :ref:`upgrade-159-carried-over-config` ）。
    另外，``/etc/fess/system.properties`` 是不包含在软件包中的运行时生成文件，
    因此不会被覆盖。
 
@@ -487,6 +519,14 @@ Docker 版::
 
    如果继续使用由 15.8 或更早版本创建的文档索引，另请参阅 :ref:`upgrade-reindex-new-fields`\ 。
 
+.. warning::
+
+   OpenSearch 3.9.0 会拒绝 15.8 曾接受的字典条目，例如重复保存的同一条 ``mapping`` 条目，或
+   含有空格的 ``kuromoji`` 词元。存在此类条目时，「重新索引」不会创建新的文档索引：``fess.log``
+   中只会输出 ``Failed to create index`` ，旧索引继续提供搜索。请在「系统」→「字典」下载字典，
+   删除重复或无效的行后重新上传，然后再次运行「重新索引」。15.9 不再保存的条目请参阅
+   :ref:`upgrade-159-api-requests` 。
+
 1. 确认现有爬取计划
 2. 从「系统」→「调度器」执行「Default Crawler」
 3. 等待爬取完成
@@ -500,7 +540,10 @@ Docker 版::
 从 15.8 升级到 15.9
 ===================
 
-若从 15.8 升级，以下为不向后兼容的变更。
+若从 15.8 升级，以下为不向后兼容的变更。若从 15.7 及更早版本升级，这些变更同样适用：请阅读从
+「内嵌 OpenSearch 的移除」到「将新字段和假名规范化应用到现有文档索引」的所有小节（内嵌
+OpenSearch、脚本引擎、S3 与 SSO 插件、Index Exporter 作业等），以及本页末尾的
+「15.9 特有的迁移工作」。
 
 内嵌 OpenSearch 的移除
 ----------------------
@@ -530,6 +573,18 @@ Docker）。
 
    使用内嵌 OpenSearch 运行时的索引数据无法继承。请新建外部 OpenSearch 服务器，通过管理界面的
    「备份」迁移配置后重新爬取。备份包含爬取配置、用户和日志，**不包含已爬取的文档**。
+
+.. note::
+
+   将 15.8 的备份恢复到新的 15.9 服务器时，请注意以下两点。
+
+   - 作业仅在比服务器上的作业更新时才会恢复。因此，在 15.8 中从未编辑过的内置作业会保留 15.9 的 JavaScript 版本。
+     在 15.8 中编辑或创建的作业会以保存时的脚本引擎恢复（内置作业为 ``groovy``），没有 ``fess-script-groovy``
+     插件时会因 ``groovy is not found`` 而失败。请安装该插件，或将这些作业切换为 JavaScript；
+     两种做法都在 :ref:`upgrade-159-script-engine` 中说明。
+   - Web 认证、爬取配置和数据存储配置的参数中保存的密码和密钥，是用 ``app.cipher.key`` 加密的。
+     请将旧环境的值设置到新服务器的 ``fess_config.properties`` 中（参阅
+     :ref:`upgrade-159-carried-over-config` ）。否则无法解密。
 
 Playwright 爬虫移至插件
 -----------------------
@@ -629,6 +684,8 @@ SSO 认证移至插件
 
 如果不使用 SSO，即 ``sso.type`` 为 ``none`` 或未设置，则无需处理。
 
+.. _upgrade-159-script-engine:
+
 内置脚本引擎由 Groovy 改为 JavaScript
 -------------------------------------
 
@@ -724,8 +781,9 @@ Index Exporter 作业引用了已删除的包
 
 步骤 3 的 ZIP 版步骤会从旧安装中复制 ``fess_config.properties`` 与 ``bin/fess.in.sh`` ；RPM 版
 升级则会保留修改过的 ``/etc/fess/fess_config.properties`` （15.9 的文件以
-``fess_config.properties.rpmnew`` 的形式并存）。无论哪种情况，15.9 都会以 15.8 的值运行，15.9
-中随附值已变更的键也不例外。请至少确认以下各键。
+``fess_config.properties.rpmnew`` 的形式并存）。DEB 版升级在询问时保留自己的版本，也是同样的
+结果（15.9 的文件以 ``fess_config.properties.dpkg-dist`` 的形式并存）。无论哪种情况，15.9 都会以
+15.8 的值运行，15.9 中随附值已变更的键也不例外。请至少确认以下各键。
 
 .. list-table::
    :header-rows: 1
@@ -765,6 +823,19 @@ Index Exporter 作业引用了已删除的包
        ``Content-Security-Policy: reflected-xss block`` 头，浏览器控制台会输出
        ``Unrecognized Content-Security-Policy directive 'reflected-xss'`` 。该头不起任何限制作用。
        请按下文说明删除该行。
+   * - ``app.encrypt.property.pattern``
+     - ``.*password|.*key|.*token|.*secret``
+     - ``.*password|.*passphrase|.*key|.*token|.*secret``
+     - 名称以 ``passphrase`` 结尾的参数（例如数据存储配置的 ``ssh.passphrase`` ）会以明文保存。
+       之前已保存的值会一直是明文，直到用 15.9 的模式重新保存该设置。
+   * - ``index.backup.log.targets``
+     - ``click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - 「系统信息」→「备份」页面不会显示 ``chat_log.ndjson`` 。
+   * - ``index.export.exclude.fields``
+     - ``cache``
+     - ``cache,tag``
+     - 保存用户标签的 ``tag`` 字段，不再从 Index Export 作业写出的文件中排除。
    * - ``crawler.default.script``\ 、\ ``theme.allowed.archive.extensions``\ 、
        ``theme.assets.cache.max.age``\ 、\ ``theme.assets.precompressed``\ 、
        ``rag.chat.message.max.length``\ 、\ ``supported.uploaded.js.extentions``\ 、
@@ -798,9 +869,14 @@ Content-Security-Policy 早期草案中的指令，现在的浏览器已不再�
     $ diff /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.9.0/bin/fess.in.sh
 
 RPM 版请以同样方式比较 ``/etc/fess/fess_config.properties`` 与
-``/etc/fess/fess_config.properties.rpmnew`` 。DEB 版升级则会覆盖
-``/etc/fess/fess_config.properties`` （参阅步骤 3），因此从 15.9 的值开始，只需重新应用自己的
-修改。
+``/etc/fess/fess_config.properties.rpmnew`` ，DEB 版升级则比较 ``/etc/fess/fess_config.properties``
+与 ``/etc/fess/fess_config.properties.dpkg-dist`` 。DEB 版升级时，从未编辑过的
+``fess_config.properties`` 会被替换为 15.9 的文件（参阅步骤 3），因此从 15.9 的值开始。
+
+``app.cipher.key`` 是即使 15.9 没有变更也必须沿用的值。它是对 Web 认证、爬取配置和数据存储配置
+的参数中保存的密码和密钥进行加密的密钥。如果新环境使用的密钥与保存这些内容时的密钥不同
+（因为使用了随附的 ``fess_config.properties`` ，或将备份恢复到了新服务器），就无法解密：
+``fess-crawler.log`` 中会记录 ``CipherFailureException`` ，包含此类配置的爬取将无法索引任何内容。
 
 .. _upgrade-159-jcifs:
 
@@ -998,17 +1074,29 @@ API 现在会拒绝的请求
 * ``aws`` 和 ``cloud`` 的索引定义现在从 ``fess_indices/_vanilla/`` 读取。随附的 ``fess_indices/_aws/`` 和 ``fess_indices/_cloud/`` 已不存在，自行添加的 ``fess_indices/_aws/`` 或 ``fess_indices/_cloud/`` 也不再被读取，请将修改内容移到 ``fess_indices/_vanilla/`` 。已存在的索引不会改变。
 * 15.8 保存在搜索引擎中的建议（suggest）设置会自动迁移，无需任何操作。
 
+CSV 数据存储会解析带引号的字段
+------------------------------
+
+15.9 的 ``fess-ds-csv`` 插件默认会解释引号。 ``"山田, 太郎"`` 这样的字段会成为一列，而 15.8.0 的
+插件会在逗号处将其拆分。执行 ``bin/fess-setup upgrade plugins`` 之后，请检查读取含有带引号字段的
+CSV 文件的数据存储配置。要保持 15.8 的行为，请在「参数」中添加 ``quote_disabled=true`` ；
+请参阅 :doc:`../config/datastore/ds-csv` ，其中也说明了引号不匹配时的行为。
+
 .. _upgrade-reindex-new-fields:
 
 将新字段和假名规范化应用到现有文档索引
 --------------------------------------
 
-15.9 在启动时会向配置、日志和用户索引添加新字段，但不会更改文档索引的映射和分析设置。如果继续使用
-由 15.8 或更早版本创建的文档索引，以下 15.9 的变更不会生效。
+15.9 在启动时会向配置、日志和用户索引添加新字段。对于文档索引，只会添加保存用户标签的 ``tag``
+字段（``keyword``），映射的其余部分和分析设置不会更改。如果继续使用由 15.8 或更早版本创建的
+文档索引，以下 15.9 的变更不会生效。
 
 - **文件的所有者和最后修改者**\ （\ ``owner``\ 、\ ``last_modifier``\ ）: 文件系统、SMB 和 FTP 爬取时新索引的
   字段。现有文档索引中没有它们的定义，因此会根据首次爬取的值被自动映射为 ``text`` 类型，
   ``owner:alice`` 之类的搜索和 ``facet.field=owner`` 无法按预期工作。
+- **ETag**\ （\ ``etag``\ ）: 爬虫保存所爬取页面 ETag 的字段，15.9 会将其作为 ``If-None-Match``
+  回传，以避免重复获取未更改的页面。现有文档索引中同样没有它的定义，因此会被自动映射为 ``text``
+  类型，而不是随附的不索引的 ``keyword`` 。使用该映射时条件请求仍可正常工作。
 - **假名异体和代替长音符号书写的破折号的规范化**\ （例如将 ``サ―バ－`` 视为与 ``サーバー`` 相同的词）:
   规则位于文档索引的分析设置和词典 ``mapping.txt`` 中，因此不会应用到现有索引。
 
@@ -1018,7 +1106,10 @@ API 现在会拒绝的请求
 .. warning::
 
    「重置字典」会用随附的词典文件覆盖 OpenSearch 端的词典。如果在管理界面的「字典」中编辑过同义词等，
-   请事先下载，并在重新索引后重新应用。
+   请事先下载，并在重新索引后重新应用：从下载的文件中删除重复或无效的条目（参阅步骤 7），
+   上传后，在「系统信息」→「维护」的“重新加载文档索引”中单击 [重新加载]。在此之前，文档索引的
+   分析器会继续使用随附的词典，恢复的同义词无论等待多久都不会匹配。在索引时生效的词典，还需要
+   重新爬取文档；请参阅 :ref:`dict-apply-changes` 。
 
 .. note::
 
@@ -1075,6 +1166,8 @@ API 现在会拒绝的请求
    有意识地关闭这两项。其中 ``spnego.allow.localhost=true`` 更为危险：SPNEGO 库会把来自同一
    主机的请求以服务器的 OS 用户身份进行认证，完全不做 Kerberos 验证，在同一主机上部署反向
    代理时并不安全。
+
+.. _upgrade-159-saml:
 
 若此前使用过 SAML 认证（SSO）
 -----------------------------
@@ -1205,7 +1298,9 @@ Graph。在解析完成之前——或解析未能完全成功时——用户拥
 安装在 ``app/WEB-INF/plugin/`` 中的插件，需要替换为与 |Fess| 版本对应的版本。
 ``bin/fess-setup upgrade plugins`` 会针对所有已安装的插件，安装为此 |Fess| 构建的版本并删除旧版本。
 之后请重启 |Fess| 。 ``bin/fess-setup check`` 会报告 OpenSearch 及其插件、已安装的 |Fess| 插件的
-状态，出现问题时以退出码 1 结束。
+状态，出现问题时以退出码 1 结束。它不会读取 ``bin/fess.in.sh`` 、 ``/etc/sysconfig/fess`` 和
+``/etc/default/fess`` ，因此当 OpenSearch 不在 ``http://localhost:9200`` 时，请指定 ``--url`` ，
+或在运行它的 shell 中设置 ``SEARCH_ENGINE_HTTP_URL`` ；否则它会报告无法连接到引擎。
 
 ::
 
@@ -1238,24 +1333,54 @@ Graph。在解析完成之前——或解析未能完全成功时——用户拥
 
 RPM/DEB 版的情况::
 
-    $ sudo rpm -Uvh --oldpackage fess-<old-version>.rpm
+    $ sudo rpm -Uvh --oldpackage --nodeps fess-<old-version>.rpm
 
 或::
 
     $ sudo dpkg -i fess-<old-version>.deb
 
+.. note::
+
+   RPM 需要 ``--nodeps`` 。15.8.0 的软件包要求存在 ``fess`` 和 ``opensearch`` 用户及组，不指定时
+   ``rpm`` 会以 ``Failed dependencies: group(fess) is needed by fess-15.8.0`` 拒绝降级。
+
+.. warning::
+
+   15.8.0 的 DEB 软件包没有将 ``/etc/fess/*`` 注册为 conffile，因此 ``dpkg -i`` 会覆盖编辑过的
+   ``/etc/fess/fess_config.properties`` 等文件，且不保留副本。请从步骤 1 中获取的备份恢复。
+
 步骤 3: 恢复数据
 ----------------------
 
-从快照恢复::
+从快照恢复。请保持 OpenSearch 运行，|Fess| 停止：
 
-    $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+1. 启动 OpenSearch::
 
-或从备份恢复目录::
+       $ sudo systemctl start opensearch.service
+
+2. 快照无法恢复到已存在的索引之上，因此请先删除所有 Fess 的索引，包括升级后（例如通过重新索引）
+   创建的索引，以及 OpenSearch 插件创建的 ``configsync`` 索引。如果只删除快照中包含的索引，
+   重新索引创建的索引会残留，``fess.search`` 会指向两个索引，15.8.0 无法启动::
+
+       $ curl "http://localhost:9200/_cat/indices/fess*,configsync?h=index"
+       $ curl -X DELETE "http://localhost:9200/<index name>"
+
+   对第一条命令列出的每个索引，分别执行第二条命令。
+
+3. 恢复快照::
+
+       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+
+.. note::
+
+   词典目录（``configsync.config_path`` ，其中包含词典文件）必须与以前一样存在。在丢失了该目录的
+   机器上，恢复虽然会完成，但使用词典的索引会一直是 red 状态。
+
+或从备份恢复目录（请指定步骤 1 中创建的归档文件名）::
 
     $ sudo systemctl stop opensearch
     $ sudo rm -rf /var/lib/opensearch/data/*
-    $ sudo tar xzf /backup/opensearch-data-backup.tar.gz -C /
+    $ sudo tar xzf /backup/opensearch-data-<YYYYMMDD>.tar.gz -C /
     $ sudo systemctl start opensearch
 
 Docker 版中，请先切换回旧版本的 Compose 文件，再恢复卷中的内容::
