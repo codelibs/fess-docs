@@ -96,7 +96,9 @@ OP에서 취득한 정보를 설정합니다.
 
 .. note::
    이 URL들과 발행자는 OP의 Discovery 엔드포인트（``/.well-known/openid-configuration``）에서 취득할 수 있으며, 발행자는 그 안의 ``issuer`` 값입니다.
-   토큰 엔드포인트 URL은 HTTPS여야 합니다.
+   토큰 엔드포인트 URL（``oic.token.server.url``）은 HTTPS여야 합니다. ``http`` 는 호스트가 ``localhost`` （대소문자 구분 없음）, ``127.x.x.x`` 형식의 IPv4 주소, ``::1`` 중 하나인 경우에만 허용됩니다. 호스트는 적힌 그대로 문자열로 비교하며 이름 해석은 하지 않습니다. 따라서 Docker Compose의 서비스 이름（``http://keycloak:8080/...`` 등）이나 사내 호스트 이름은 같은 머신을 가리키더라도 ``http`` 로는 거부됩니다.
+
+   이 확인은 토큰 엔드포인트에만 적용되며 인가 엔드포인트（``oic.auth.server.url``）에는 적용되지 않습니다. 확인은 로그인 시에 수행되며 시작 시에는 수행되지 않습니다. ``oic.issuer`` 를 설정해도 이 규칙은 완화되지 않으며, ``iss`` 클레임 검증이 활성화될 뿐입니다.
 
 클라이언트 설정
 ---------------
@@ -288,7 +290,7 @@ OP의 설정 화면 또는 Discovery 엔드포인트에서 다음 정보를 취�
 - ``The ID token was not issued for this client``: ID Token의 ``aud`` 가 ``oic.client.id`` 가 아닙니다. 클라이언트 ID를 확인하십시오
 - ``The ID token has expired``: |Fess| 호스트와 OP의 시계가 300초를 넘게 어긋나 있습니다. 시각을 동기화（NTP）하십시오
 - ``The ID token was not issued by the configured issuer``: ``oic.issuer`` 가 메시지에 표시된 ``iss`` 와 다릅니다. Discovery 문서의 ``issuer`` 값을 정확히 복사하십시오
-- ``oic.token.server.url must be https``: HTTPS 토큰 엔드포인트 URL을 사용하십시오（``http`` 는 ``localhost``, ``127.x.x.x``, ``::1`` 에서만 사용할 수 있습니다）
+- ``oic.token.server.url must be https``: HTTPS 토큰 엔드포인트 URL을 사용하십시오（``http`` 는 ``localhost``, ``127.x.x.x``, ``::1`` 에서만 사용할 수 있으며, Docker Compose의 서비스 이름이나 사내 호스트 이름에 대한 ``http`` 도 거부됩니다）
 
 사용자 정보를 취득할 수 없음
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

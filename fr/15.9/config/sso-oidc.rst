@@ -96,7 +96,11 @@ Configurez les informations obtenues de votre OP.
      - (vide : ``iss`` n'est pas vérifié)
 
 .. note::
-   Ces URLs et l'émetteur peuvent être obtenus depuis le endpoint Discovery de l'OP (``/.well-known/openid-configuration``) ; l'émetteur correspond à sa valeur ``issuer``. L'URL du endpoint de token doit être en HTTPS.
+   Ces URLs et l'émetteur peuvent être obtenus depuis le endpoint Discovery de l'OP (``/.well-known/openid-configuration``) ; l'émetteur correspond à sa valeur ``issuer``.
+
+   L'URL du endpoint de token (``oic.token.server.url``) doit être en HTTPS. ``http`` n'est accepté que si l'hôte est ``localhost`` (sans distinction de casse), une adresse IPv4 de la forme ``127.x.x.x`` ou ``::1``. L'hôte est comparé tel qu'il est écrit et n'est jamais résolu ; un nom de service Docker Compose (par exemple ``http://keycloak:8080/...``) ou un nom d'hôte interne est donc refusé en ``http``, même s'il désigne la même machine.
+
+   Seul le endpoint de token est contrôlé, pas le endpoint d'autorisation (``oic.auth.server.url``). Le contrôle a lieu à la connexion, pas au démarrage. Définir ``oic.issuer`` n'assouplit pas cette règle ; cela active seulement la vérification du claim ``iss``.
 
 Configuration du client
 -----------------------
@@ -291,7 +295,7 @@ Des erreurs d'authentification se produisent
 - ``The ID token was not issued for this client`` : le claim ``aud`` de l'ID Token n'est pas ``oic.client.id`` ; vérifiez l'ID client
 - ``The ID token has expired`` : les horloges de l'hôte |Fess| et de l'OP diffèrent de plus de 300 secondes ; synchronisez l'heure (NTP)
 - ``The ID token was not issued by the configured issuer`` : ``oic.issuer`` diffère du ``iss`` indiqué dans le message ; copiez exactement la valeur ``issuer`` du document Discovery
-- ``oic.token.server.url must be https`` : utilisez une URL de endpoint de token en HTTPS (``http`` ne fonctionne que pour ``localhost``, ``127.x.x.x`` et ``::1``)
+- ``oic.token.server.url must be https`` : utilisez une URL de endpoint de token en HTTPS (``http`` ne fonctionne que pour ``localhost``, ``127.x.x.x`` et ``::1`` ; ``http`` vers un nom de service Docker Compose ou un nom d'hôte interne est également refusé)
 
 Impossible de récupérer les informations utilisateur
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

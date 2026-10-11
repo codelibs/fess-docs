@@ -96,7 +96,11 @@ Konfigurieren Sie die vom OP erhaltenen Informationen.
      - (leer: ``iss`` wird nicht geprüft)
 
 .. note::
-   Diese URLs und der Aussteller können vom Discovery-Endpunkt des OP (``/.well-known/openid-configuration``) abgerufen werden; der Aussteller ist dessen ``issuer``-Wert. Die Token-Endpunkt-URL muss HTTPS verwenden.
+   Diese URLs und der Aussteller können vom Discovery-Endpunkt des OP (``/.well-known/openid-configuration``) abgerufen werden; der Aussteller ist dessen ``issuer``-Wert.
+
+   Die Token-Endpunkt-URL (``oic.token.server.url``) muss HTTPS verwenden. ``http`` wird nur akzeptiert, wenn der Host ``localhost`` (Groß-/Kleinschreibung egal), eine IPv4-Adresse der Form ``127.x.x.x`` oder ``::1`` ist. Der Host wird so verglichen, wie er geschrieben ist, und nie aufgelöst. Deshalb wird ein Docker-Compose-Servicename (z. B. ``http://keycloak:8080/...``) oder ein interner Hostname über ``http`` abgelehnt, auch wenn er auf denselben Rechner zeigt.
+
+   Geprüft wird nur der Token-Endpunkt, nicht der Autorisierungsendpunkt (``oic.auth.server.url``). Die Prüfung erfolgt bei der Anmeldung, nicht beim Start. Das Setzen von ``oic.issuer`` lockert diese Regel nicht; es aktiviert nur die Prüfung des ``iss``-Claims.
 
 Client-Konfiguration
 --------------------
@@ -291,7 +295,7 @@ Authentifizierungsfehler treten auf
 - ``The ID token was not issued for this client``: Der ``aud``-Claim des ID-Tokens entspricht nicht ``oic.client.id``; überprüfen Sie die Client-ID
 - ``The ID token has expired``: Die Uhren des |Fess|-Hosts und des OP weichen um mehr als 300 Sekunden voneinander ab; synchronisieren Sie die Uhrzeit (NTP)
 - ``The ID token was not issued by the configured issuer``: ``oic.issuer`` weicht vom ``iss`` ab, das in der Meldung angezeigt wird; kopieren Sie den ``issuer``-Wert des Discovery-Dokuments exakt
-- ``oic.token.server.url must be https``: Verwenden Sie eine HTTPS-Token-Endpunkt-URL (``http`` funktioniert nur für ``localhost``, ``127.x.x.x`` und ``::1``)
+- ``oic.token.server.url must be https``: Verwenden Sie eine HTTPS-Token-Endpunkt-URL (``http`` funktioniert nur für ``localhost``, ``127.x.x.x`` und ``::1``; ``http`` zu einem Docker-Compose-Servicenamen oder einem internen Hostnamen wird ebenfalls abgelehnt)
 
 Benutzerinformationen können nicht abgerufen werden
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

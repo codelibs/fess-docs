@@ -96,7 +96,9 @@ Configure the information obtained from your OP.
 
 .. note::
    These URLs and the issuer can be obtained from the OP's Discovery endpoint (``/.well-known/openid-configuration``); the issuer is its ``issuer`` value.
-   The token endpoint URL must be HTTPS.
+   The token endpoint URL (``oic.token.server.url``) must be HTTPS. ``http`` is accepted only when the host is ``localhost`` (any case), an IPv4 address of the form ``127.x.x.x``, or ``::1``. The host is compared as written and is never resolved, so a Docker Compose service name (such as ``http://keycloak:8080/...``) or an internal host name is refused over ``http`` even if it points to the same machine.
+
+   Only the token endpoint is checked, not the authorization endpoint (``oic.auth.server.url``). The check runs at login, not at startup. Setting ``oic.issuer`` does not relax this rule; it only turns on the check of the ``iss`` claim.
 
 Client Configuration
 --------------------
@@ -290,7 +292,7 @@ Authentication Errors Occur
 - ``The ID token was not issued for this client``: ``aud`` of the ID Token is not ``oic.client.id``; check the client ID
 - ``The ID token has expired``: the clocks of the |Fess| host and the OP differ by more than 300 seconds; synchronize the time (NTP)
 - ``The ID token was not issued by the configured issuer``: ``oic.issuer`` differs from the ``iss`` shown in the message; copy the ``issuer`` value of the Discovery document exactly
-- ``oic.token.server.url must be https``: use an HTTPS token endpoint URL (``http`` works only for ``localhost``, ``127.x.x.x`` and ``::1``)
+- ``oic.token.server.url must be https``: use an HTTPS token endpoint URL (``http`` works only for ``localhost``, ``127.x.x.x`` and ``::1``; ``http`` to a Docker Compose service name or an internal host name is refused too)
 
 Cannot Retrieve User Information
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

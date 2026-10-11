@@ -680,6 +680,10 @@ Le plugin ``oic`` est plus strict que l'authentificateur de la 15.8. ``oic.token
 ``aud`` et ``exp`` de l'ID Token sont vérifiés, et ``iss`` est vérifié lorsque la nouvelle clé
 ``oic.issuer`` est définie. Pour plus de détails, consultez :doc:`../config/sso-oidc`.
 
+En 15.8, ``oic.token.server.url`` pouvait être une URL ``http`` vers n'importe quel hôte. En 15.9, ``http`` vers un nom de service Docker Compose (par exemple ``http://keycloak:8080/...``) ou un nom d'hôte interne est refusé, même s'il désigne la même machine. La connexion échoue alors et ``fess.log`` contient un avertissement commençant par ``Failed to process the OpenID Connect callback: oic.token.server.url must be https``. Passez le endpoint de token en URL HTTPS avant la mise à jour.
+
+Définissez aussi ``oic.issuer`` avec la valeur ``issuer`` du document Discovery de l'OP. Sans cette valeur, ``iss`` n'est pas vérifié et un avertissement est journalisé lors de la première connexion après le démarrage. Définir ``oic.issuer`` n'assouplit pas la règle HTTPS.
+
 Rien à faire si vous n'utilisez pas le SSO, c'est-à-dire si ``sso.type`` vaut ``none`` ou n'est
 pas défini.
 

@@ -96,7 +96,9 @@ OPから取得した情報を設定します。
 
 .. note::
    これらのURLと発行者は、OPのDiscoveryエンドポイント（``/.well-known/openid-configuration``）から取得できます。発行者は、その ``issuer`` の値です。
-   トークンエンドポイントのURLはHTTPSである必要があります。
+   トークンエンドポイントのURL（``oic.token.server.url``）はHTTPSである必要があります。 ``http`` が使えるのは、ホストが ``localhost`` （大文字小文字は区別しません）、``127.x.x.x`` の形式のIPv4アドレス、``::1`` のいずれかである場合のみです。ホスト名は書かれたとおりに文字列として比較し、名前解決は行いません。そのため、Docker Composeのサービス名（``http://keycloak:8080/...`` など）や社内のホスト名は、同じマシンを指していても ``http`` では拒否されます。
+
+   この確認の対象はトークンエンドポイントだけで、認可エンドポイント（``oic.auth.server.url``）には行いません。確認はログイン時に行われ、起動時には行われません。 ``oic.issuer`` を設定してもこの規則は緩和されず、``iss`` クレームの検証が有効になるだけです。
 
 クライアント設定
 ----------------
@@ -289,7 +291,7 @@ OPの設定画面またはDiscoveryエンドポイントから以下の情報を
 - ``The ID token was not issued for this client``: ID Tokenの ``aud`` が ``oic.client.id`` ではありません。クライアントIDを確認してください
 - ``The ID token has expired``: |Fess| のホストとOPの時計が300秒を超えてずれています。時刻を同期（NTP）してください
 - ``The ID token was not issued by the configured issuer``: ``oic.issuer`` がメッセージに表示された ``iss`` と異なります。Discoveryドキュメントの ``issuer`` の値を正確にコピーしてください
-- ``oic.token.server.url must be https``: HTTPSのトークンエンドポイントURLを指定してください（``http`` が使えるのは ``localhost``、``127.x.x.x``、``::1`` のみです）
+- ``oic.token.server.url must be https``: HTTPSのトークンエンドポイントURLを指定してください（``http`` が使えるのは ``localhost``、``127.x.x.x``、``::1`` のみです。Docker Composeのサービス名や社内のホスト名への ``http`` も拒否されます）
 
 ユーザー情報が取得できない
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

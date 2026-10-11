@@ -675,6 +675,10 @@ HTTPS verwenden (``http`` nur für ``localhost``, ``127.x.x.x`` und ``::1``), di
 und ``exp`` des ID-Tokens werden geprüft, und ``iss`` wird geprüft, wenn der neue Schlüssel
 ``oic.issuer`` gesetzt ist. Einzelheiten finden Sie unter :doc:`../config/sso-oidc`.
 
+In 15.8 konnte für ``oic.token.server.url`` eine ``http``-URL mit beliebigem Host angegeben werden. In 15.9 wird ``http`` zu einem Docker-Compose-Servicenamen (z. B. ``http://keycloak:8080/...``) oder einem internen Hostnamen abgelehnt, auch wenn dieser auf denselben Rechner zeigt. Die Anmeldung schlägt dann fehl, und ``fess.log`` enthält eine Warnung, die mit ``Failed to process the OpenID Connect callback: oic.token.server.url must be https`` beginnt. Stellen Sie den Token-Endpunkt vor dem Update auf eine HTTPS-URL um.
+
+Setzen Sie außerdem ``oic.issuer`` auf den ``issuer``-Wert aus dem Discovery-Dokument des OP. Ohne diesen Wert wird ``iss`` nicht geprüft, und bei der ersten Anmeldung nach dem Start wird eine Warnung protokolliert. Das Setzen von ``oic.issuer`` lockert die HTTPS-Regel nicht.
+
 Ohne SSO ist nichts zu tun, also wenn ``sso.type`` den Wert ``none`` hat oder nicht gesetzt ist.
 
 Die eingebaute Skript-Engine wechselt von Groovy zu JavaScript

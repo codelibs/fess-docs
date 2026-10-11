@@ -647,6 +647,10 @@ HTTPS 여야 하며(``http`` 는 ``localhost``, ``127.x.x.x``, ``::1`` 에서만
 ID Token 의 ``aud`` 와 ``exp`` 클레임을 검증합니다. 새 키 ``oic.issuer`` 를 설정한 경우에는
 ``iss`` 도 검증합니다. 자세한 내용은 :doc:`../config/sso-oidc` 를 참조하십시오.
 
+15.8 에서는 ``oic.token.server.url`` 에 호스트 제한 없이 ``http`` URL을 지정할 수 있었습니다. 15.9 에서는 Docker Compose의 서비스 이름（``http://keycloak:8080/...`` 등）이나 사내 호스트 이름에 대한 ``http`` 는 같은 머신을 가리키더라도 거부됩니다. 거부되면 로그인에 실패하고 ``fess.log`` 에 ``Failed to process the OpenID Connect callback: oic.token.server.url must be https`` 로 시작하는 경고가 출력됩니다. 업데이트하기 전에 토큰 엔드포인트를 HTTPS URL로 변경하십시오.
+
+``oic.issuer`` 에 OP의 Discovery 문서에 있는 ``issuer`` 값을 설정하는 것도 권장합니다. 설정하지 않으면 ``iss`` 는 검증되지 않으며, 시작 후 첫 로그인 때 경고가 출력됩니다. ``oic.issuer`` 를 설정해도 HTTPS 규칙은 완화되지 않습니다.
+
 SSO 를 사용하지 않는 경우, 즉 ``sso.type`` 이 ``none`` 이거나 설정되지 않은 경우에는
 대응이 필요 없습니다.
 
