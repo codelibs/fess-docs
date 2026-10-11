@@ -32,6 +32,10 @@ NOT 检索在不包含的词前加上 NOT 进行搜索。NOT
 
     title:搜索词1 NOT title:搜索词2
 
+.. note::
+
+    安装 ``fess-webapp-bangs`` 插件后，``!g`` 这样已定义的 bang 不再是排除检索，而是把搜索发送到其他网站。请参阅 :doc:`search-bangs`。
+
 相关主题
 ------
 

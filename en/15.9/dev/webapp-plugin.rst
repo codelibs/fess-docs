@@ -311,6 +311,8 @@ for development:
      - Legacy REST API for ``/json`` / ``/suggest``
    * - ``fess-webapp-mcp``
      - MCP (Model Context Protocol) server
+   * - ``fess-webapp-bangs``
+     - DuckDuckGo-style bangs (``!g``) that send a search to another site
    * - ``fess-webapp-semantic-search``
      - Neural search / vector search (deprecated; superseded by the core integration in 15.9)
    * - ``fess-webapp-multimodal``

@@ -12,6 +12,7 @@ AND·OR·NOT, 필드 검색과 라벨 검색, 정렬, 와일드카드, 범위 �
    search-and
    search-or
    search-not
+   search-bangs
    search-label
    search-field
    search-sort

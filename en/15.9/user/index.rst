@@ -12,6 +12,7 @@ and geo search.
    search-and
    search-or
    search-not
+   search-bangs
    search-label
    search-field
    search-sort

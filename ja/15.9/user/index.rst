@@ -12,6 +12,7 @@ AND・OR・NOT、フィールド検索やラベル検索、並び替え、ワイ
    search-and
    search-or
    search-not
+   search-bangs
    search-label
    search-field
    search-sort

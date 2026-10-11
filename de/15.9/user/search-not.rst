@@ -33,6 +33,10 @@ Sie können die NOT-Suche auch für ein bestimmtes Feld durchführen. Im folgend
 
     title:Suchbegriff1 NOT title:Suchbegriff2
 
+.. note::
+
+    Ist das Plugin ``fess-webapp-bangs`` installiert, ist ein definierter Bang wie ``!g`` kein Ausschluss mehr, sondern sendet die Suche an eine andere Website. Siehe :doc:`search-bangs`.
+
 Siehe auch
 -----------
 
