@@ -95,7 +95,11 @@ Configure la información obtenida de su OP.
      - (vacío: no se comprueba ``iss``)
 
 .. note::
-   Estas URLs y el emisor se pueden obtener del endpoint Discovery del OP (``/.well-known/openid-configuration``); el emisor es su valor ``issuer``. La URL del endpoint de token debe ser HTTPS.
+   Estas URLs y el emisor se pueden obtener del endpoint Discovery del OP (``/.well-known/openid-configuration``); el emisor es su valor ``issuer``.
+
+   La URL del endpoint de token (``oic.token.server.url``) debe ser HTTPS. ``http`` solo se acepta cuando el host es ``localhost`` (sin distinguir mayúsculas y minúsculas), una dirección IPv4 con la forma ``127.x.x.x`` o ``::1``. El host se compara tal como está escrito y nunca se resuelve, por lo que un nombre de servicio de Docker Compose (como ``http://keycloak:8080/...``) o un nombre de host interno se rechaza con ``http`` aunque apunte a la misma máquina.
+
+   Solo se comprueba el endpoint de token, no el endpoint de autorización (``oic.auth.server.url``). La comprobación se realiza en el inicio de sesión, no al arrancar. Definir ``oic.issuer`` no relaja esta regla; solo activa la comprobación del claim ``iss``.
 
 Configuración del cliente
 -------------------------
@@ -289,7 +293,7 @@ Ocurren errores de autenticación
 - ``The ID token was not issued for this client``: el claim ``aud`` del ID Token no es ``oic.client.id``; verifique el ID de cliente
 - ``The ID token has expired``: los relojes del host de |Fess| y del OP difieren en más de 300 segundos; sincronice la hora (NTP)
 - ``The ID token was not issued by the configured issuer``: ``oic.issuer`` difiere del ``iss`` que muestra el mensaje; copie exactamente el valor ``issuer`` del documento Discovery
-- ``oic.token.server.url must be https``: utilice una URL de endpoint de token HTTPS (``http`` solo funciona con ``localhost``, ``127.x.x.x`` y ``::1``)
+- ``oic.token.server.url must be https``: utilice una URL de endpoint de token HTTPS (``http`` solo funciona con ``localhost``, ``127.x.x.x`` y ``::1``; ``http`` hacia el nombre de un servicio de Docker Compose o un nombre de host interno también se rechaza)
 
 No se puede recuperar información del usuario
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

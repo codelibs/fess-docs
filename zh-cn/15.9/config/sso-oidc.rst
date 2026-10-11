@@ -94,7 +94,9 @@ OpenID Connect认证的工作原理
 
 .. note::
    这些URL和颁发者可以从OP的Discovery端点（``/.well-known/openid-configuration``）获取，颁发者即其中的 ``issuer`` 值。
-   令牌端点URL必须为HTTPS。
+   令牌端点URL（``oic.token.server.url``）必须为HTTPS。只有当主机是 ``localhost`` （不区分大小写）、形如 ``127.x.x.x`` 的IPv4地址或 ``::1`` 时，才允许使用 ``http``。主机按字面字符串比较，不会进行名称解析，因此Docker Compose的服务名（如 ``http://keycloak:8080/...``）或内部主机名即使指向同一台机器，使用 ``http`` 也会被拒绝。
+
+   此检查只针对令牌端点，不针对授权端点（``oic.auth.server.url``）。检查在登录时进行，而不是在启动时。设置 ``oic.issuer`` 不会放宽这一规则，只是启用对 ``iss`` 声明的校验。
 
 客户端配置
 ----------
@@ -286,7 +288,7 @@ OP侧配置
 - ``The ID token was not issued for this client``：ID Token的 ``aud`` 不是 ``oic.client.id``，请确认客户端ID
 - ``The ID token has expired``：|Fess| 主机与OP的时钟相差超过300秒，请同步时间（NTP）
 - ``The ID token was not issued by the configured issuer``：``oic.issuer`` 与消息中显示的 ``iss`` 不同，请原样复制Discovery文档中的 ``issuer`` 值
-- ``oic.token.server.url must be https``：请使用HTTPS的令牌端点URL（只有 ``localhost``、``127.x.x.x`` 和 ``::1`` 可以使用 ``http``）
+- ``oic.token.server.url must be https``：请使用HTTPS的令牌端点URL（只有 ``localhost``、``127.x.x.x`` 和 ``::1`` 可以使用 ``http``；指向Docker Compose服务名或内部主机名的 ``http`` 也会被拒绝）
 
 无法获取用户信息
 ~~~~~~~~~~~~~~~~

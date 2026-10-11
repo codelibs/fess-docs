@@ -675,6 +675,10 @@ HTTPS (``http`` solo para ``localhost``, ``127.x.x.x`` y ``::1``), se comprueban
 ``aud`` y ``exp`` del ID Token, y ``iss`` se comprueba cuando se define la nueva clave
 ``oic.issuer``. Para más detalles, consulte :doc:`../config/sso-oidc`.
 
+En 15.8, ``oic.token.server.url`` podía ser una URL ``http`` de cualquier host. En 15.9, ``http`` hacia el nombre de un servicio de Docker Compose (como ``http://keycloak:8080/...``) o un nombre de host interno se rechaza, aunque apunte a la misma máquina. El inicio de sesión falla y ``fess.log`` registra una advertencia que empieza por ``Failed to process the OpenID Connect callback: oic.token.server.url must be https``. Cambie el endpoint de token a una URL HTTPS antes de actualizar.
+
+Además, defina ``oic.issuer`` con el valor ``issuer`` del documento Discovery del OP. Si no se define, ``iss`` no se comprueba y se registra una advertencia en el primer inicio de sesión tras el arranque. Definir ``oic.issuer`` no relaja la regla de HTTPS.
+
 Si no utiliza SSO, es decir, si ``sso.type`` es ``none`` o no está definido, no hay nada que
 hacer.
 

@@ -623,6 +623,10 @@ SSO 认证移至插件
 ``exp`` 声明；设置了新增的 ``oic.issuer`` 键时，还会校验 ``iss``。详情请参阅
 :doc:`../config/sso-oidc`。
 
+在 15.8 中，``oic.token.server.url`` 可以指定任意主机的 ``http`` URL。在 15.9 中，指向Docker Compose服务名（如 ``http://keycloak:8080/...``）或内部主机名的 ``http`` 会被拒绝，即使它指向同一台机器。被拒绝时登录失败，``fess.log`` 中会输出以 ``Failed to process the OpenID Connect callback: oic.token.server.url must be https`` 开头的警告。请在更新前将令牌端点改为HTTPS的URL。
+
+此外，建议将 ``oic.issuer`` 设置为OP的Discovery文档中 ``issuer`` 的值。未设置时不会校验 ``iss``，并在启动后的首次登录时输出警告。设置 ``oic.issuer`` 不会放宽HTTPS规则。
+
 如果不使用 SSO，即 ``sso.type`` 为 ``none`` 或未设置，则无需处理。
 
 内置脚本引擎由 Groovy 改为 JavaScript

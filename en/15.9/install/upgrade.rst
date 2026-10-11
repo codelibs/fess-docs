@@ -654,6 +654,10 @@ HTTPS (``http`` only for ``localhost``, ``127.x.x.x`` and ``::1``), the ``aud`` 
 of the ID Token are checked, and ``iss`` is checked when the new ``oic.issuer`` key is set. See
 :doc:`../config/sso-oidc`.
 
+In 15.8, ``oic.token.server.url`` could be an ``http`` URL for any host. In 15.9, ``http`` to a Docker Compose service name (such as ``http://keycloak:8080/...``) or an internal host name is refused, even if it points to the same machine. Login then fails and ``fess.log`` records a warning that starts with ``Failed to process the OpenID Connect callback: oic.token.server.url must be https``. Change the token endpoint to an HTTPS URL before you upgrade.
+
+Also set ``oic.issuer`` to the ``issuer`` value of the OP's Discovery document. Without it, ``iss`` is not checked and a warning is logged at the first login after startup. Setting ``oic.issuer`` does not relax the HTTPS rule.
+
 Nothing is needed if you do not use SSO, that is if ``sso.type`` is ``none`` or unset.
 
 The Built-in Script Engine Changed from Groovy to JavaScript

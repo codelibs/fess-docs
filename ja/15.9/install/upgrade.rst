@@ -642,6 +642,10 @@ JSP を提供できないためで、この画面はプラグインが未導入�
 ``exp`` を検証します。新しいキー ``oic.issuer`` を設定した場合は ``iss`` も検証します。詳しくは
 :doc:`../config/sso-oidc` を参照してください。
 
+15.8 では ``oic.token.server.url`` に ``http`` のURLを指定でき、ホスト名の制限もありませんでした。15.9 では、Docker Composeのサービス名（``http://keycloak:8080/...`` など）や社内のホスト名への ``http`` は、同じマシンを指していても拒否されます。拒否されるとログインに失敗し、 ``fess.log`` に ``Failed to process the OpenID Connect callback: oic.token.server.url must be https`` で始まる警告が出力されます。更新する前に、トークンエンドポイントを HTTPS のURLに変更してください。
+
+あわせて ``oic.issuer`` に、OPのDiscoveryドキュメントの ``issuer`` の値を設定することをお勧めします。設定しない場合、 ``iss`` は検証されず、起動後の最初のログインで警告が出力されます。 ``oic.issuer`` を設定しても HTTPS の規則は緩和されません。
+
 SSO を使用していない場合、つまり ``sso.type`` が ``none`` または未設定の場合、
 対応は不要です。
 
