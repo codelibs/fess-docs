@@ -81,6 +81,7 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
    scripting-overview
    scripting-javascript
    scripting-groovy
+   scripting-ognl
 
 .. toctree::
    :maxdepth: 2

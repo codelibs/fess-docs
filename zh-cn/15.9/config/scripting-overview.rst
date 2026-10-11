@@ -30,6 +30,10 @@
      - ``groovy``
      - 以 ``fess-script-groovy`` 插件形式提供。**该插件不随发行包分发**，需从管理界面
        安装，或执行 ``bin/fess-setup install plugin fess-script-groovy`` 。
+   * - OGNL
+     - ``ognl``
+     - 以 ``fess-script-ognl`` 插件形式提供。**该插件不随发行包分发**。它对单个表达式（无语句）求值，
+       详见 :doc:`scripting-ognl` 。
 
 .. note::
    未记录脚本类型的脚本配置将被视为 Groovy。这并非临时的过渡措施，而是永久性行为：
@@ -255,5 +259,6 @@ Slack 使用 ``message.*``，不同连接器的前缀各不相同。
 
 - :doc:`scripting-javascript` - JavaScript 脚本指南
 - :doc:`scripting-groovy` - Groovy 脚本指南（插件）
+- :doc:`scripting-ognl` - OGNL脚本指南（插件）
 - :doc:`../admin/dataconfig-guide` - 数据存储配置指南
 - :doc:`../admin/scheduler-guide` - 调度器配置指南

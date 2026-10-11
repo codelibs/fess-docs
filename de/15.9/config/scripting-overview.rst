@@ -32,6 +32,11 @@ Unterstützte Skriptsprachen
      - Wird als ``fess-script-groovy``-Plugin bereitgestellt, das **nicht Teil der
        Distribution ist**. Installieren Sie es über die Administrationsoberfläche oder
        mit ``bin/fess-setup install plugin fess-script-groovy``.
+   * - OGNL
+     - ``ognl``
+     - Wird als ``fess-script-ognl``-Plugin bereitgestellt, das **nicht Teil der
+       Distribution ist**. Es wertet einen einzelnen Ausdruck aus (keine Anweisungen). Siehe
+       :doc:`scripting-ognl`.
 
 .. note::
    Eine Skript-Konfiguration ohne hinterlegten Skripttyp wird als Groovy behandelt.
@@ -272,5 +277,6 @@ Referenzinformationen
 
 - :doc:`scripting-javascript` - JavaScript-Skripting-Leitfaden
 - :doc:`scripting-groovy` - Groovy-Skripting-Leitfaden (Plugin)
+- :doc:`scripting-ognl` - OGNL-Skriptleitfaden (Plugin)
 - :doc:`../admin/dataconfig-guide` - Datenspeicher-Konfigurationsleitfaden
 - :doc:`../admin/scheduler-guide` - Scheduler-Konfigurationsleitfaden
