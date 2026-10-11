@@ -320,6 +320,8 @@ le développement :
      - API REST historique ``/json`` / ``/suggest``
    * - ``fess-webapp-mcp``
      - Serveur MCP (Model Context Protocol)
+   * - ``fess-webapp-bangs``
+     - Bangs de type DuckDuckGo (``!g``) qui envoient une recherche vers un autre site
    * - ``fess-webapp-semantic-search``
      - Recherche neuronale / recherche vectorielle (obsolète ; remplacée par l'intégration au
        cœur en 15.9)

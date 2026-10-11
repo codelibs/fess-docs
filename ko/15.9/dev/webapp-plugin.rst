@@ -301,6 +301,8 @@ REST API 추가(fess_api++.xml)
      - ``/json`` / ``/suggest`` 레거시 REST API
    * - ``fess-webapp-mcp``
      - MCP(Model Context Protocol) 서버
+   * - ``fess-webapp-bangs``
+     - DuckDuckGo 방식의 뱅(``!g``). 다른 사이트로 검색을 보냄
    * - ``fess-webapp-semantic-search``
      - 뉴럴 검색/벡터 검색(사용 중단됨; 15.9의 코어 통합 기능으로 대체됨)
    * - ``fess-webapp-multimodal``

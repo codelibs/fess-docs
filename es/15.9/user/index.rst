@@ -12,6 +12,7 @@ búsqueda difusa, búsqueda de proximidad y búsqueda geográfica.
    search-and
    search-or
    search-not
+   search-bangs
    search-label
    search-field
    search-sort

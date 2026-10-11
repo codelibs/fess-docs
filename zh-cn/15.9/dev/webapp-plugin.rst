@@ -288,6 +288,8 @@ Web应用插件无法添加 JSP 视图。这是因为 JSP 视图存放在 |Fess|
      - ``/json`` / ``/suggest`` 旧版REST API
    * - ``fess-webapp-mcp``
      - MCP（Model Context Protocol）服务器
+   * - ``fess-webapp-bangs``
+     - DuckDuckGo 风格的 bang（``!g``），把搜索发送到其他网站
    * - ``fess-webapp-semantic-search``
      - 神经搜索/向量搜索（已弃用；已被 15.9 中的核心集成功能取代）
    * - ``fess-webapp-multimodal``

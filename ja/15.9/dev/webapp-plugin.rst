@@ -295,6 +295,8 @@ Web アプリプラグインは JSP ビューを追加できません。JSP ビ�
      - ``/json`` / ``/suggest`` レガシー REST API
    * - ``fess-webapp-mcp``
      - MCP(Model Context Protocol)サーバー
+   * - ``fess-webapp-bangs``
+     - DuckDuckGo 形式のバング(``!g``)。別のサイトへ検索を送る
    * - ``fess-webapp-semantic-search``
      - ニューラル検索/ベクトル検索(15.9でコアに統合されたため非推奨)
    * - ``fess-webapp-multimodal``

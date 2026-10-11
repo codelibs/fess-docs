@@ -31,6 +31,10 @@ You can also perform a NOT search by specifying a field. In the following exampl
 
     title:term1 NOT title:term2
 
+.. note::
+
+    When the ``fess-webapp-bangs`` plugin is installed, a defined bang such as ``!g`` is no longer an exclusion. It sends the search to another site. See :doc:`search-bangs`.
+
 Related Topics
 --------------
 

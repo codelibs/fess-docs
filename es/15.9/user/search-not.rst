@@ -33,6 +33,10 @@ También es posible realizar una búsqueda NOT especificando un campo. En el sig
     title:Término1 NOT title:Término2
 
 
+.. note::
+
+    Si el plugin ``fess-webapp-bangs`` está instalado, un bang definido como ``!g`` deja de ser una exclusión y envía la búsqueda a otro sitio. Véase :doc:`search-bangs`.
+
 Véase también
 -------------
 

@@ -317,6 +317,8 @@ Sie sind als Referenz für die Entwicklung auf
      - ``/json`` / ``/suggest`` Legacy-REST-API
    * - ``fess-webapp-mcp``
      - MCP-Server (Model Context Protocol)
+   * - ``fess-webapp-bangs``
+     - Bangs im Stil von DuckDuckGo (``!g``), die eine Suche an eine andere Website senden
    * - ``fess-webapp-semantic-search``
      - Neuronale Suche/Vektorsuche (veraltet; abgelöst durch die Kernintegration in 15.9)
    * - ``fess-webapp-multimodal``
