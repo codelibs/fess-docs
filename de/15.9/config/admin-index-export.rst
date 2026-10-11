@@ -47,7 +47,7 @@ Konfigurieren Sie die Index-Export-Funktion in ``fess_config.properties``:
      - ``/var/lib/fess/export``
      - Verzeichnis zum Speichern der exportierten Dateien
    * - ``index.export.exclude.fields``
-     - ``cache``
+     - ``cache,tag``
      - Kommagetrennte Liste der vom Export auszuschließenden Felder
    * - ``index.export.scroll.size``
      - ``100``

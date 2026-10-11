@@ -76,4 +76,8 @@ user_info.ndjson包含搜索用户的信息。
 可以上传和导入配置信息。
 可以恢复的文件是 \*.bulk 和 system.properties。
 
+\*.bulk 中带有 ``updatedTime`` 的文档，仅在已存储的文档不存在、没有 ``updatedTime`` 或更旧时才会写入。
+不比已存储文档更新的文档会被跳过，并以 INFO 级别记录在 ``fess.log`` 中。因此恢复不会撤销备份之后所做的更改，
+已安装版本自带的计划作业（``updatedTime`` 为 0）也会原样保留。没有 ``updatedTime`` 的文档总是会被写入。
+
   .. |image0| image:: ../../../resources/images/en/15.9/admin/backup-1.png

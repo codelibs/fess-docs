@@ -76,4 +76,9 @@ user_info.ndjson은 검색 사용자 정보를 포함합니다.
 설정 정보를 업로드하여 가져올 수 있습니다.
 복원 가능한 파일은 \*.bulk와 system.properties입니다.
 
+\*.bulk 안의 문서 중 ``updatedTime`` 이 있는 문서는 저장된 문서가 없거나, ``updatedTime`` 이 없거나,
+더 오래된 경우에만 기록됩니다. 더 새롭지 않은 문서는 건너뛰고 ``fess.log`` 에 INFO 수준으로
+기록하므로, 복원해도 백업 이후의 변경이 되돌려지지 않고 설치된 버전이 포함하는 예약 작업
+(``updatedTime`` 0)도 그대로 유지됩니다. ``updatedTime`` 이 없는 문서는 항상 기록됩니다.
+
   .. |image0| image:: ../../../resources/images/en/15.9/admin/backup-1.png

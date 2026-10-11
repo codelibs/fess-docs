@@ -47,7 +47,7 @@
      - ``/var/lib/fess/export``
      - エクスポートファイルを保存するディレクトリ
    * - ``index.export.exclude.fields``
-     - ``cache``
+     - ``cache,tag``
      - エクスポートから除外するフィールド（カンマ区切り）
    * - ``index.export.scroll.size``
      - ``100``
