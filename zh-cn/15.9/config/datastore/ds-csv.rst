@@ -165,7 +165,7 @@ CSV连接器提供从CSV文件获取数据并注册到
    * - ``skip_lines``
      - 跳过的开头行数（默认: 0）
    * - ``ignore_line_patterns``
-     - 忽略行的正则表达式模式（例: ``^#.*`` 忽略注释行）
+     - 忽略行的正则表达式模式。模式必须匹配整行（不是部分匹配）。例如 ``^#.*`` 会忽略以 ``#`` 开头的注释行，而仅指定 ``#`` 不会忽略 ``#comment`` 这样的行。
    * - ``ignore_empty_lines``
      - 是否忽略空行（默认: false）
    * - ``ignore_trailing_whitespaces``
@@ -302,13 +302,17 @@ CSV格式详情
 编码
 ----------------
 
-中文文件（Shift_JIS）:
+日文文件（Excel 等 Windows 应用程序输出的 CSV）:
 
 ::
 
-    file_encoding=Shift_JIS
+    file_encoding=MS932
 
-中文文件（EUC-JP）:
+.. note::
+
+   ``MS932`` 与 ``Windows-31J`` （CP932）是相同的字符集。如果指定 ``Shift_JIS`` ，CP932 扩展的字符（例如 ``①`` 和 ``㈱`` ）将无法读取，并被替换为 ``U+FFFD`` （替换字符）。 ``Shift_JIS`` 仅适用于只包含 JIS X 0208 范围内字符的文件。
+
+日文文件（EUC-JP）:
 
 ::
 
@@ -496,7 +500,7 @@ TSV文件（data.tsv）:
     # UTF-8
     file_encoding=UTF-8
 
-    # Shift_JIS
+    # Shift_JIS（仅限 JIS X 0208 范围内的字符；不含 ① 和 ㈱）
     file_encoding=Shift_JIS
 
     # EUC-JP

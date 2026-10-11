@@ -167,7 +167,7 @@ The following parameters provide fine-grained control over CSV parsing and index
    * - ``skip_lines``
      - Number of leading lines to skip (default: 0)
    * - ``ignore_line_patterns``
-     - Regular expression pattern for lines to ignore (e.g., ``^#.*`` to ignore comment lines)
+     - Regular expression pattern for lines to ignore. The pattern must match the whole line (it is not a partial match). For example, ``^#.*`` ignores comment lines that start with ``#``, whereas ``#`` alone does not ignore a line such as ``#comment``.
    * - ``ignore_empty_lines``
      - Whether to ignore empty lines (default: false)
    * - ``ignore_trailing_whitespaces``
@@ -313,11 +313,15 @@ Single quote:
 Encoding
 --------
 
-Non-ASCII file (Shift_JIS):
+Japanese file (CSV written by Windows applications such as Excel):
 
 ::
 
-    file_encoding=Shift_JIS
+    file_encoding=MS932
+
+.. note::
+
+   ``MS932`` is the same character set as ``Windows-31J`` (CP932). With ``Shift_JIS``, characters that CP932 adds, such as ``①`` and ``㈱``, cannot be read and are replaced with ``U+FFFD`` (the replacement character). Use ``Shift_JIS`` only for files that contain just the characters of JIS X 0208.
 
 Non-ASCII file (EUC-JP):
 
@@ -507,7 +511,7 @@ Specify the correct character encoding:
     # UTF-8
     file_encoding=UTF-8
 
-    # Shift_JIS
+    # Shift_JIS (JIS X 0208 characters only; not ① or ㈱)
     file_encoding=Shift_JIS
 
     # EUC-JP

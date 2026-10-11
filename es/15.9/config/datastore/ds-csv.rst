@@ -168,7 +168,7 @@ Los siguientes parámetros controlan de forma detallada el comportamiento del an
    * - ``skip_lines``
      - Número de líneas iniciales a omitir (predeterminado: 0)
    * - ``ignore_line_patterns``
-     - Patrón de expresión regular para ignorar líneas (por ejemplo: ``^#.*`` para ignorar líneas de comentario)
+     - Patrón de expresión regular para ignorar líneas. El patrón debe coincidir con la línea completa (no es una coincidencia parcial). Por ejemplo, ``^#.*`` ignora las líneas de comentario que empiezan por ``#``, mientras que ``#`` por sí solo no ignora una línea como ``#comment``.
    * - ``ignore_empty_lines``
      - Si ignorar las líneas vacías (predeterminado: false)
    * - ``ignore_trailing_whitespaces``
@@ -313,11 +313,15 @@ Comillas simples:
 Codificación
 ------------
 
-Archivo en español con codificación Shift_JIS:
+Archivo en japonés (CSV generado por aplicaciones de Windows como Excel):
 
 ::
 
-    file_encoding=Shift_JIS
+    file_encoding=MS932
+
+.. note::
+
+   ``MS932`` es el mismo juego de caracteres que ``Windows-31J`` (CP932). Con ``Shift_JIS`` no se pueden leer los caracteres que añade CP932, como ``①`` y ``㈱``, y se sustituyen por ``U+FFFD`` (el carácter de reemplazo). Use ``Shift_JIS`` solo para archivos que contengan únicamente caracteres de JIS X 0208.
 
 Archivo con codificación EUC-JP:
 
@@ -507,7 +511,7 @@ Especificar la codificación correcta:
     # UTF-8
     file_encoding=UTF-8
 
-    # Shift_JIS
+    # Shift_JIS (solo caracteres de JIS X 0208; no ① ni ㈱)
     file_encoding=Shift_JIS
 
     # EUC-JP
