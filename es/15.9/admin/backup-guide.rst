@@ -76,4 +76,11 @@ Carga
 Puede cargar e importar información de configuración.
 Los archivos que se pueden restaurar son \*.bulk y system.properties.
 
+Un documento de un archivo \*.bulk que tiene ``updatedTime`` solo se escribe si el documento
+almacenado no existe, no tiene ``updatedTime`` o es más antiguo. Un documento que no es más
+reciente se omite y se registra con nivel INFO en ``fess.log``, de modo que una restauración no
+deshace los cambios hechos después de la copia de seguridad y los trabajos programados que incluye
+la versión instalada (``updatedTime`` 0) se conservan tal cual. Los documentos sin ``updatedTime``
+siempre se escriben.
+
   .. |image0| image:: ../../../resources/images/en/15.9/admin/backup-1.png

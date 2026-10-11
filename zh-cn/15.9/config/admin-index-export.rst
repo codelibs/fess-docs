@@ -47,7 +47,7 @@
      - ``/var/lib/fess/export``
      - 导出文件的保存目录
    * - ``index.export.exclude.fields``
-     - ``cache``
+     - ``cache,tag``
      - 要从导出中排除的字段（逗号分隔）
    * - ``index.export.scroll.size``
      - ``100``

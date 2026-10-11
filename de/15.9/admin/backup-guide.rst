@@ -76,4 +76,11 @@ Upload
 Sie können Konfigurationsinformationen hochladen und importieren.
 Dateien, die wiederhergestellt werden können, sind \*.bulk und system.properties.
 
+Ein Dokument in einer \*.bulk-Datei, das ein ``updatedTime`` hat, wird nur geschrieben, wenn das
+gespeicherte Dokument nicht existiert, kein ``updatedTime`` hat oder älter ist. Ein Dokument, das
+nicht neuer ist, wird übersprungen und in ``fess.log`` auf INFO-Ebene protokolliert. So macht eine
+Wiederherstellung Änderungen nach der Sicherung nicht rückgängig, und die mit der installierten
+Version gelieferten geplanten Jobs (``updatedTime`` 0) bleiben unverändert. Dokumente ohne
+``updatedTime`` werden immer geschrieben.
+
   .. |image0| image:: ../../../resources/images/en/15.9/admin/backup-1.png

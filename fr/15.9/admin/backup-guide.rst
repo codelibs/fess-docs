@@ -76,4 +76,11 @@ Téléversement
 Vous pouvez téléverser et importer les informations de configuration.
 Les fichiers qui peuvent être restaurés sont \*.bulk et system.properties.
 
+Un document d'un fichier \*.bulk qui possède un ``updatedTime`` n'est écrit que si le document
+stocké n'existe pas, n'a pas de ``updatedTime`` ou est plus ancien. Un document qui n'est pas plus
+récent est ignoré et consigné au niveau INFO dans ``fess.log`` : une restauration n'annule donc pas
+les modifications faites après la sauvegarde, et les jobs planifiés fournis avec la version
+installée (``updatedTime`` 0) sont conservés tels quels. Les documents sans ``updatedTime`` sont
+toujours écrits.
+
   .. |image0| image:: ../../../resources/images/en/15.9/admin/backup-1.png

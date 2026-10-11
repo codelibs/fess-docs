@@ -47,7 +47,7 @@
      - ``/var/lib/fess/export``
      - 내보낸 파일을 저장하는 디렉토리
    * - ``index.export.exclude.fields``
-     - ``cache``
+     - ``cache,tag``
      - 내보내기에서 제외할 필드(쉼표로 구분)
    * - ``index.export.scroll.size``
      - ``100``

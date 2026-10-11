@@ -79,4 +79,10 @@ Upload
 Configuration data can be imported by uploading a file.
 Files that can be restored are \*.bulk and system.properties.
 
+A document in a \*.bulk file that has an ``updatedTime`` is written only when the stored document
+does not exist, has no ``updatedTime``, or is older. A document that is not newer is skipped and
+logged at INFO level in ``fess.log``, so a restore does not roll back changes made after the backup
+was taken, and the scheduled jobs bundled with the installed version (``updatedTime`` 0) are kept
+as they are. Documents without an ``updatedTime`` are always written.
+
 .. |image0| image:: ../../../resources/images/en/15.9/admin/backup-1.png
