@@ -73,6 +73,10 @@ Docker
 
 ``vanilla`` 可用于 |Fess| 15.9 及更高版本的镜像。使用更早的镜像时，请指定 ``SEARCH_ENGINE_TYPE=cloud`` 。其他 Docker 设置请参阅 :doc:`../install/install-docker` 。
 
+.. note::
+
+   在 |Fess| 15.8 的镜像中，只有 ``-noble`` 版本（例如 ``ghcr.io/codelibs/fess:15.8.0-noble`` ）会把 ``SEARCH_ENGINE_TYPE`` 传递给 |Fess| 。默认的（基于 Alpine 的）15.8 镜像虽然会把该值写入 ``/etc/default/fess`` ，但不会以 ``-Dfess.config.search_engine.type`` 的形式传递给 JVM，因此该设置不会生效。从 15.9 起，默认镜像也会生效。
+
 非 Docker 环境
 --------------
 

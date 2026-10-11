@@ -71,6 +71,10 @@ Set the ``SEARCH_ENGINE_TYPE`` environment variable on the ``fess01`` service in
 
 ``vanilla`` can be used with |Fess| 15.9 and later images. With an earlier image, set ``SEARCH_ENGINE_TYPE=cloud``. For the other Docker settings, see :doc:`../install/install-docker`.
 
+.. note::
+
+   On the |Fess| 15.8 images, only the ``-noble`` variant (for example ``ghcr.io/codelibs/fess:15.8.0-noble``) passes ``SEARCH_ENGINE_TYPE`` on to |Fess|. The default (Alpine-based) 15.8 image writes the value to ``/etc/default/fess`` but does not give it to the JVM as ``-Dfess.config.search_engine.type``, so the setting has no effect there. From 15.9 on, the default image honors it as well.
+
 Non-Docker Installations
 ------------------------
 

@@ -302,7 +302,7 @@ Docker コンテナの停止
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch の HTTP エンドポイント（``compose.yaml`` の既定値: ``http://search01:9200``）
    * - ``SEARCH_ENGINE_TYPE``
-     - 検索エンジンの種別（ ``default`` 、 ``vanilla`` 、 ``aws`` ）。 ``vanilla`` は Fess 15.9 以降のイメージで指定できます。それより前のイメージでは ``cloud`` を指定します（ :doc:`../config/search-engine-type` を参照）
+     - 検索エンジンの種別（ ``default`` 、 ``vanilla`` 、 ``aws`` ）。 ``vanilla`` は Fess 15.9 以降のイメージで指定できます。それより前のイメージでは ``cloud`` を指定します（ :doc:`../config/search-engine-type` を参照）。15.8 のイメージでは、 ``-noble`` 版だけがこの値を Fess に渡します。
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - 認証が有効な OpenSearch に接続する際の資格情報
    * - ``FESS_DICTIONARY_PATH``

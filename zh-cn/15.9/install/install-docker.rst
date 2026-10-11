@@ -302,7 +302,7 @@ Fess 本体（``fess01``）的容器本身不保存状态，也没有专用的�
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch 的 HTTP 端点（``compose.yaml`` 的默认值：``http://search01:9200``）
    * - ``SEARCH_ENGINE_TYPE``
-     - 搜索引擎的类型（ ``default`` 、 ``vanilla`` 、 ``aws`` ）。 ``vanilla`` 需要 Fess 15.9 及更高版本的镜像，更早的镜像请使用 ``cloud`` （请参阅 :doc:`../config/search-engine-type` ）
+     - 搜索引擎的类型（ ``default`` 、 ``vanilla`` 、 ``aws`` ）。 ``vanilla`` 需要 Fess 15.9 及更高版本的镜像，更早的镜像请使用 ``cloud`` （请参阅 :doc:`../config/search-engine-type` ）。在 15.8 镜像中，只有 ``-noble`` 版本会把该值传递给 Fess 。
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - 连接到已启用认证的 OpenSearch 时使用的凭据
    * - ``FESS_DICTIONARY_PATH``
