@@ -81,6 +81,7 @@
    scripting-overview
    scripting-javascript
    scripting-groovy
+   scripting-ognl
 
 .. toctree::
    :maxdepth: 2

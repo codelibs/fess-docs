@@ -32,6 +32,11 @@
      - ``fess-script-groovy`` 플러그인으로 제공됩니다. **플러그인은 배포물에
        동봉되지 않으므로** 관리 화면 또는
        ``bin/fess-setup install plugin fess-script-groovy`` 로 설치해야 합니다.
+   * - OGNL
+     - ``ognl``
+     - ``fess-script-ognl`` 플러그인으로 제공됩니다. **플러그인은 배포물에
+       동봉되지 않습니다**. 하나의 식(문 없음)을 평가합니다. 자세한 내용은
+       :doc:`scripting-ognl`\ 을 참조하세요.
 
 .. note::
    스크립트 설정에 스크립트 타입이 기록되어 있지 않은 경우, 해당 스크립트는
@@ -265,5 +270,6 @@ JavaScript에서는 일반적으로 최상위 레벨의 ``return`` 문은 구문
 
 - :doc:`scripting-javascript` - JavaScript 스크립트 가이드
 - :doc:`scripting-groovy` - Groovy 스크립트 가이드（플러그인）
+- :doc:`scripting-ognl` - OGNL 스크립트 가이드（플러그인）
 - :doc:`../admin/dataconfig-guide` - 데이터 스토어 설정 가이드
 - :doc:`../admin/scheduler-guide` - 스케줄러 설정 가이드

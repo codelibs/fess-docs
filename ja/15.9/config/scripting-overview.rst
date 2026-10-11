@@ -31,6 +31,12 @@
      - ``fess-script-groovy`` プラグインとして提供されるスクリプト言語。
        **プラグインは配布物に同梱されない** ため、管理画面または
        ``bin/fess-setup install plugin fess-script-groovy`` でのインストールが必要です。
+   * - OGNL
+     - ``ognl``
+     - ``fess-script-ognl`` プラグインとして提供されるスクリプトエンジン。
+       **プラグインは配布物に同梱されない** ため、管理画面または
+       ``bin/fess-setup install plugin fess-script-ognl`` でのインストールが必要です。
+       1つの式（文なし）を評価します。詳細は :doc:`scripting-ognl` を参照してください。
 
 .. note::
    スクリプトの設定にスクリプトタイプが記録されていない場合、そのスクリプトは Groovy として
@@ -261,5 +267,6 @@ JavaScriptでは通常、トップレベルの ``return`` 文は構文エラー�
 
 - :doc:`scripting-javascript` - JavaScriptスクリプトガイド
 - :doc:`scripting-groovy` - Groovyスクリプトガイド（プラグイン）
+- :doc:`scripting-ognl` - OGNLスクリプトガイド（プラグイン）
 - :doc:`../admin/dataconfig-guide` - データストア設定ガイド
 - :doc:`../admin/scheduler-guide` - スケジューラー設定ガイド

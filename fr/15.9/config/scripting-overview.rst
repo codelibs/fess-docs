@@ -32,6 +32,11 @@ Langages de script pris en charge
      - Fourni sous forme de plugin ``fess-script-groovy``, qui **ne fait pas partie de la
        distribution**. Installez-le depuis l'ecran d'administration ou avec
        ``bin/fess-setup install plugin fess-script-groovy``.
+   * - OGNL
+     - ``ognl``
+     - Fourni sous forme de plugin ``fess-script-ognl``, qui **ne fait pas partie de la
+       distribution**. Il évalue une expression unique (sans instruction). Voir
+       :doc:`scripting-ognl`.
 
 .. note::
    Une configuration de script sans type de script enregistre est traitee comme du
@@ -268,5 +273,6 @@ Informations de reference
 
 - :doc:`scripting-javascript` - Guide du scripting JavaScript
 - :doc:`scripting-groovy` - Guide du scripting Groovy (plugin)
+- :doc:`scripting-ognl` - Guide des scripts OGNL (plugin)
 - :doc:`../admin/dataconfig-guide` - Guide de configuration Data Store
 - :doc:`../admin/scheduler-guide` - Guide de configuration du planificateur
