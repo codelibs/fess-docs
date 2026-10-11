@@ -60,7 +60,7 @@ Beispiel für Cloud-Version (OAuth 2.0):
 ::
 
     home=https://yourcompany.atlassian.net
-    is_cloud=true
+    deployment=cloud
     auth_type=oauth2
     oauth2.client_id=your_client_id
     oauth2.client_secret=your_client_secret
@@ -72,7 +72,7 @@ Beispiel für Server-Version (Basic-Authentifizierung):
 ::
 
     home=https://jira.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=basic
     basic.username=admin
     basic.password=your_password
@@ -82,7 +82,7 @@ Beispiel für Server-Version (OAuth 1.0a):
 ::
 
     home=https://jira.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=oauth
     oauth.consumer_key=OauthKey
     oauth.private_key=-----BEGIN RSA PRIVATE KEY-----\nMIIE...=\n-----END RSA PRIVATE KEY-----
@@ -102,12 +102,15 @@ Parameterliste
    * - ``home``
      - Ja
      - URL der Atlassian-Instanz
+   * - ``deployment``
+     - Nein
+     - ``cloud`` für Atlassian Cloud, ``datacenter`` für Data Center oder Server (``data_center`` und ``dc`` werden ebenfalls akzeptiert). Wenn nicht angegeben, wird ein Hostname mit der Endung ``.atlassian.net`` als Cloud und jeder andere als Data Center behandelt.
    * - ``is_cloud``
      - Nein
-     - ``true`` für Cloud, ``false`` für Server (Standard: ``true``). Wird nur zur Endpunkt-Auswahl bei der OAuth 2.0-Authentifizierung verwendet; bei Basic- und OAuth 1.0a-Authentifizierung wird dieser Parameter ignoriert.
+     - **Veraltet** (verwenden Sie ``deployment``). ``true`` für Cloud, ``false`` für Data Center / Server. Wird weiterhin ausgewertet und schreibt eine Warnung ins Log; bei Angabe beider Parameter hat ``deployment`` Vorrang. Wird in 16.0 entfernt.
    * - ``auth_type``
      - Ja
-     - Authentifizierungstyp: ``oauth``, ``oauth2``, ``basic``
+     - Authentifizierungstyp: ``oauth``, ``oauth2``, ``basic``, ``pat``
    * - ``oauth.consumer_key``
      - Bei OAuth 1.0a
      - Consumer Key (normalerweise ``OauthKey``)
@@ -135,21 +138,36 @@ Parameterliste
    * - ``oauth2.token_url``
      - Nein
      - Token-URL (OAuth 2.0, Standard: ``https://auth.atlassian.com/oauth/token``)
+   * - ``oauth2.grant_type``
+     - Nein
+     - Grant-Typ (OAuth 2.0): ``authorization_code`` (Standard) oder ``client_credentials``. Bei ``client_credentials`` sind nur ``oauth2.client_id`` und ``oauth2.client_secret`` erforderlich; die erhaltenen Tokens werden nicht in die Konfiguration des Datenspeichers zurückgeschrieben.
    * - ``basic.username``
      - Bei Basic-Authentifizierung
      - Benutzername
    * - ``basic.password``
      - Bei Basic-Authentifizierung
      - Passwort
-   * - ``issue.jql``
+   * - ``pat.token``
+     - Bei PAT-Authentifizierung
+     - Persönliches Zugriffstoken (``auth_type=pat``, nur Data Center)
+   * - ``jira.jql``
      - Nein
      - JQL (nur Jira, erweiterte Suchbedingungen). Wenn nicht angegeben, werden alle Issues (``created is not empty``) berücksichtigt.
-   * - ``issue_max_results``
+   * - ``jira.max_results``
      - Nein
      - Maximale Ergebnisse pro Jira-API-Anfrage (Standard: ``50``, nur Jira)
-   * - ``content_limit``
+   * - ``confluence.limit``
      - Nein
      - Maximale Inhalte pro Confluence-API-Anfrage (Standard: ``25``, nur Confluence)
+   * - ``issue.jql``
+     - Nein
+     - **Veraltet** (verwenden Sie ``jira.jql``). Wird weiterhin ausgewertet und schreibt eine Warnung ins Log; bei Angabe beider Parameter hat der neue Name Vorrang. Wird in 16.0 entfernt.
+   * - ``issue_max_results``
+     - Nein
+     - **Veraltet** (verwenden Sie ``jira.max_results``). Behandlung wie oben.
+   * - ``content_limit``
+     - Nein
+     - **Veraltet** (verwenden Sie ``confluence.limit``). Behandlung wie oben.
    * - ``ignore_error``
      - Nein
      - Verarbeitung bei Fehlern fortsetzen (Standard: ``true``)
@@ -170,13 +188,13 @@ Parameterliste
      - HTTP-Proxy-Portnummer
    * - ``connection_timeout``
      - Nein
-     - HTTP-Verbindungs-Timeout (Millisekunden)
+     - HTTP-Verbindungs-Timeout (Millisekunden, Standard: ``20000``)
    * - ``read_timeout``
      - Nein
-     - HTTP-Lese-Timeout (Millisekunden)
-   * - ``readInterval``
+     - HTTP-Lese-Timeout (Millisekunden, Standard: ``60000``)
+   * - ``read_interval``
      - Nein
-     - Wartezeit zwischen der Verarbeitung einzelner Dokumente (in Millisekunden, Standard: ``0``)
+     - Mindestabstand zwischen API-Anfragen (in Millisekunden, Standard: ``0``). Der Abstand gilt gemeinsam für alle Threads und bleibt daher auch bei ``number_of_threads`` größer als ``1`` erhalten.
 
 Skript-Einstellungen
 --------------------
@@ -278,16 +296,16 @@ Crawlen Sie nur Issues, die bestimmte Bedingungen erfüllen:
 ::
 
     # Nur bestimmtes Projekt
-    issue.jql=project = "MYPROJECT"
+    jira.jql=project = "MYPROJECT"
 
     # Bestimmten Status ausschließen
-    issue.jql=project = "MYPROJECT" AND status != "Closed"
+    jira.jql=project = "MYPROJECT" AND status != "Closed"
 
     # Zeitraum angeben
-    issue.jql=updated >= -30d
+    jira.jql=updated >= -30d
 
     # Kombination mehrerer Bedingungen
-    issue.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
+    jira.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
 
 Für Details zu JQL siehe die `Atlassian JQL-Dokumentation <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_.
 
@@ -302,13 +320,13 @@ Parameter:
 ::
 
     home=https://yourcompany.atlassian.net
-    is_cloud=true
+    deployment=cloud
     auth_type=oauth2
     oauth2.client_id=Abc123DefGhi456
     oauth2.client_secret=xyz789uvw456rst123
     oauth2.access_token=eyJhbGciOiJIUzI1...
     oauth2.refresh_token=def456ghi789jkl012
-    issue.jql=project = "SUPPORT" AND status != "Closed"
+    jira.jql=project = "SUPPORT" AND status != "Closed"
 
 Skript:
 
@@ -327,7 +345,7 @@ Parameter:
 ::
 
     home=https://wiki.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=basic
     basic.username=crawler_user
     basic.password=secure_password
@@ -367,7 +385,7 @@ Verbindungsfehler
 1. Überprüfen Sie, ob die ``home``-URL korrekt ist
 2. Überprüfen Sie die Firewall-Einstellungen
 3. Überprüfen Sie, ob die Atlassian-Instanz läuft
-4. Überprüfen Sie, ob der ``is_cloud``-Parameter korrekt eingestellt ist
+4. Überprüfen Sie, ob der ``deployment``-Parameter korrekt eingestellt ist (oder, falls er fehlt, ob der Hostname in ``home`` zur Umgebung passt)
 
 Keine Daten abrufbar
 --------------------

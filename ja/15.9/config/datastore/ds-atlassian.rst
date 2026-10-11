@@ -61,7 +61,7 @@ Cloud版（OAuth 2.0）の例:
 ::
 
     home=https://yourcompany.atlassian.net
-    is_cloud=true
+    deployment=cloud
     auth_type=oauth2
     oauth2.client_id=your_client_id
     oauth2.client_secret=your_client_secret
@@ -73,7 +73,7 @@ Server版（Basic認証）の例:
 ::
 
     home=https://jira.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=basic
     basic.username=admin
     basic.password=your_password
@@ -83,7 +83,7 @@ Server版（OAuth 1.0a）の例:
 ::
 
     home=https://jira.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=oauth
     oauth.consumer_key=OauthKey
     oauth.private_key=-----BEGIN RSA PRIVATE KEY-----\nMIIE...=\n-----END RSA PRIVATE KEY-----
@@ -103,12 +103,15 @@ Server版（OAuth 1.0a）の例:
    * - ``home``
      - はい
      - AtlassianインスタンスのURL
+   * - ``deployment``
+     - いいえ
+     - Atlassian Cloudの場合は ``cloud``、Data CenterまたはServerの場合は ``datacenter``\ （``data_center``、``dc`` も指定可能）。省略した場合は、ホスト名が ``.atlassian.net`` で終わるURLをCloud、それ以外をData Centerとみなします
    * - ``is_cloud``
      - いいえ
-     - Cloud版の場合は ``true``、Server版の場合は ``false``\ （デフォルト: ``true``）。OAuth 2.0認証時のエンドポイント選択にのみ使用され、Basic認証・OAuth 1.0a認証では無視されます
+     - 非推奨（``deployment`` を使用してください）。Cloud版の場合は ``true``、Data Center / Server版の場合は ``false``。現在も有効で、使用するとログに警告が出力されますが、両方指定した場合は ``deployment`` が優先されます。16.0で削除される予定です
    * - ``auth_type``
      - はい
-     - 認証タイプ: ``oauth``、``oauth2``、``basic``
+     - 認証タイプ: ``oauth``、``oauth2``、``basic``、``pat``
    * - ``oauth.consumer_key``
      - OAuth 1.0aの場合
      - コンシューマーキー（通常は ``OauthKey``）
@@ -136,21 +139,36 @@ Server版（OAuth 1.0a）の例:
    * - ``oauth2.token_url``
      - いいえ
      - トークンURL（OAuth 2.0、デフォルト: ``https://auth.atlassian.com/oauth/token``）
+   * - ``oauth2.grant_type``
+     - いいえ
+     - OAuth 2.0のグラントタイプ: ``authorization_code``\ （デフォルト）または ``client_credentials``。``client_credentials`` の場合は ``oauth2.client_id`` と ``oauth2.client_secret`` のみ必須で、取得したトークンはデータストア設定に書き戻されません
    * - ``basic.username``
      - Basic認証の場合
      - ユーザー名
    * - ``basic.password``
      - Basic認証の場合
      - パスワード
-   * - ``issue.jql``
+   * - ``pat.token``
+     - PAT認証の場合
+     - パーソナルアクセストークン（``auth_type=pat``、Data Centerのみ）
+   * - ``jira.jql``
      - いいえ
      - JQL（Jiraのみ、高度な検索条件）。未指定の場合はすべての課題（``created is not empty``）が対象になります
-   * - ``issue_max_results``
+   * - ``jira.max_results``
      - いいえ
      - Jira APIの1リクエストあたりの最大取得件数（デフォルト: ``50``、Jiraのみ）
-   * - ``content_limit``
+   * - ``confluence.limit``
      - いいえ
      - Confluence APIの1リクエストあたりの最大取得件数（デフォルト: ``25``、Confluenceのみ）
+   * - ``issue.jql``
+     - いいえ
+     - 非推奨（``jira.jql`` を使用してください）。現在も有効でログに警告が出力されますが、両方指定した場合は新しい名前が優先されます。16.0で削除される予定です
+   * - ``issue_max_results``
+     - いいえ
+     - 非推奨（``jira.max_results`` を使用してください）。扱いは上記と同じです
+   * - ``content_limit``
+     - いいえ
+     - 非推奨（``confluence.limit`` を使用してください）。扱いは上記と同じです
    * - ``ignore_error``
      - いいえ
      - エラー時に処理を継続するかどうか（デフォルト: ``true``）
@@ -171,13 +189,13 @@ Server版（OAuth 1.0a）の例:
      - HTTPプロキシのポート番号
    * - ``connection_timeout``
      - いいえ
-     - HTTP接続タイムアウト（ミリ秒）
+     - HTTP接続タイムアウト（ミリ秒、デフォルト: ``20000``）
    * - ``read_timeout``
      - いいえ
-     - HTTP読み取りタイムアウト（ミリ秒）
-   * - ``readInterval``
+     - HTTP読み取りタイムアウト（ミリ秒、デフォルト: ``60000``）
+   * - ``read_interval``
      - いいえ
-     - 各ドキュメントの処理間隔（ミリ秒、デフォルト: ``0``）
+     - APIリクエスト間の最小間隔（ミリ秒、デフォルト: ``0``）。間隔はすべてのスレッドで共有されるため、``number_of_threads`` が ``1`` より大きい場合も維持されます
 
 スクリプト設定
 --------------
@@ -279,16 +297,16 @@ Jiraの課題をJQLで絞り込む
 ::
 
     # 特定のプロジェクトのみ
-    issue.jql=project = "MYPROJECT"
+    jira.jql=project = "MYPROJECT"
 
     # 特定のステータスを除外
-    issue.jql=project = "MYPROJECT" AND status != "Closed"
+    jira.jql=project = "MYPROJECT" AND status != "Closed"
 
     # 期間を指定
-    issue.jql=updated >= -30d
+    jira.jql=updated >= -30d
 
     # 複数条件の組み合わせ
-    issue.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
+    jira.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
 
 JQLの詳細は `Atlassian JQLドキュメント <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_ を参照してください。
 
@@ -303,13 +321,13 @@ Jira Cloudのクロール
 ::
 
     home=https://yourcompany.atlassian.net
-    is_cloud=true
+    deployment=cloud
     auth_type=oauth2
     oauth2.client_id=Abc123DefGhi456
     oauth2.client_secret=xyz789uvw456rst123
     oauth2.access_token=eyJhbGciOiJIUzI1...
     oauth2.refresh_token=def456ghi789jkl012
-    issue.jql=project = "SUPPORT" AND status != "Closed"
+    jira.jql=project = "SUPPORT" AND status != "Closed"
 
 スクリプト:
 
@@ -328,7 +346,7 @@ Confluence Serverのクロール
 ::
 
     home=https://wiki.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=basic
     basic.username=crawler_user
     basic.password=secure_password
@@ -368,7 +386,7 @@ Confluence Serverのクロール
 1. ``home`` URLが正しいか確認
 2. ファイアウォール設定を確認
 3. Atlassianインスタンスが稼働しているか確認
-4. ``is_cloud`` パラメーターが正しく設定されているか確認
+4. ``deployment`` パラメーターが正しく設定されているか（省略している場合は ``home`` のホスト名が環境に合っているか）確認
 
 データが取得できない
 --------------------

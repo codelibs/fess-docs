@@ -61,7 +61,7 @@ Cloud 버전(OAuth 2.0) 예:
 ::
 
     home=https://yourcompany.atlassian.net
-    is_cloud=true
+    deployment=cloud
     auth_type=oauth2
     oauth2.client_id=your_client_id
     oauth2.client_secret=your_client_secret
@@ -73,7 +73,7 @@ Server 버전(Basic 인증) 예:
 ::
 
     home=https://jira.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=basic
     basic.username=admin
     basic.password=your_password
@@ -83,7 +83,7 @@ Server 버전(OAuth 1.0a) 예:
 ::
 
     home=https://jira.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=oauth
     oauth.consumer_key=OauthKey
     oauth.private_key=-----BEGIN RSA PRIVATE KEY-----\nMIIE...=\n-----END RSA PRIVATE KEY-----
@@ -103,12 +103,15 @@ Server 버전(OAuth 1.0a) 예:
    * - ``home``
      - 예
      - Atlassian 인스턴스의 URL
+   * - ``deployment``
+     - 아니요
+     - Atlassian Cloud는 ``cloud``, Data Center 또는 Server는 ``datacenter`` (``data_center``, ``dc`` 도 지정 가능). 생략하면 호스트명이 ``.atlassian.net`` 으로 끝나는 URL은 Cloud, 그 외는 Data Center로 간주합니다
    * - ``is_cloud``
      - 아니요
-     - Cloud의 경우 ``true``, Server의 경우 ``false`` (기본값: ``true``). OAuth 2.0 인증 시 엔드포인트 선택에만 사용되며, Basic 인증 및 OAuth 1.0a 인증에서는 무시됩니다.
+     - 더 이상 사용되지 않음(``deployment`` 를 사용하세요). Cloud는 ``true``, Data Center / Server는 ``false``. 현재도 동작하며 사용하면 로그에 경고가 출력되지만, 둘 다 지정하면 ``deployment`` 가 우선합니다. 16.0에서 제거될 예정입니다
    * - ``auth_type``
      - 예
-     - 인증 유형: ``oauth``, ``oauth2``, ``basic``
+     - 인증 유형: ``oauth``, ``oauth2``, ``basic``, ``pat``
    * - ``oauth.consumer_key``
      - OAuth 1.0a의 경우
      - 컨슈머 키 (보통 ``OauthKey``)
@@ -136,21 +139,36 @@ Server 버전(OAuth 1.0a) 예:
    * - ``oauth2.token_url``
      - 아니요
      - 토큰 URL (OAuth 2.0, 기본값: ``https://auth.atlassian.com/oauth/token``)
+   * - ``oauth2.grant_type``
+     - 아니요
+     - OAuth 2.0 그랜트 유형: ``authorization_code`` (기본값) 또는 ``client_credentials``. ``client_credentials`` 에서는 ``oauth2.client_id`` 와 ``oauth2.client_secret`` 만 필수이며, 가져온 토큰은 데이터 스토어 설정에 다시 저장되지 않습니다
    * - ``basic.username``
      - Basic 인증의 경우
      - 사용자명
    * - ``basic.password``
      - Basic 인증의 경우
      - 비밀번호
-   * - ``issue.jql``
+   * - ``pat.token``
+     - PAT 인증의 경우
+     - 개인 액세스 토큰 (``auth_type=pat``, Data Center만)
+   * - ``jira.jql``
      - 아니요
      - JQL (Jira만, 고급 검색 조건). 지정하지 않으면 모든 이슈 (``created is not empty``) 가 대상이 됩니다.
-   * - ``issue_max_results``
+   * - ``jira.max_results``
      - 아니요
      - Jira API 요청당 최대 결과 수 (기본값: ``50``, Jira만)
-   * - ``content_limit``
+   * - ``confluence.limit``
      - 아니요
      - Confluence API 요청당 최대 콘텐츠 수 (기본값: ``25``, Confluence만)
+   * - ``issue.jql``
+     - 아니요
+     - 더 이상 사용되지 않음(``jira.jql`` 을 사용하세요). 현재도 동작하며 로그에 경고가 출력되지만, 둘 다 지정하면 새 이름이 우선합니다. 16.0에서 제거될 예정입니다
+   * - ``issue_max_results``
+     - 아니요
+     - 더 이상 사용되지 않음(``jira.max_results`` 를 사용하세요). 처리 방식은 위와 같습니다
+   * - ``content_limit``
+     - 아니요
+     - 더 이상 사용되지 않음(``confluence.limit`` 을 사용하세요). 처리 방식은 위와 같습니다
    * - ``ignore_error``
      - 아니요
      - 오류 시 처리를 계속할지 여부 (기본값: ``true``)
@@ -171,13 +189,13 @@ Server 버전(OAuth 1.0a) 예:
      - HTTP 프록시 포트 번호
    * - ``connection_timeout``
      - 아니요
-     - HTTP 연결 타임아웃 (밀리초)
+     - HTTP 연결 타임아웃 (밀리초, 기본값: ``20000``)
    * - ``read_timeout``
      - 아니요
-     - HTTP 읽기 타임아웃 (밀리초)
-   * - ``readInterval``
+     - HTTP 읽기 타임아웃 (밀리초, 기본값: ``60000``)
+   * - ``read_interval``
      - 아니요
-     - 각 문서 처리 사이의 대기 시간 (밀리초, 기본값: ``0``)
+     - API 요청 사이의 최소 간격 (밀리초, 기본값: ``0``). 이 간격은 모든 스레드가 공유하므로 ``number_of_threads`` 가 ``1`` 보다 커도 유지됩니다
 
 스크립트 설정
 --------------
@@ -279,16 +297,16 @@ Jira 이슈를 JQL로 필터링
 ::
 
     # 특정 프로젝트만
-    issue.jql=project = "MYPROJECT"
+    jira.jql=project = "MYPROJECT"
 
     # 특정 상태 제외
-    issue.jql=project = "MYPROJECT" AND status != "Closed"
+    jira.jql=project = "MYPROJECT" AND status != "Closed"
 
     # 기간 지정
-    issue.jql=updated >= -30d
+    jira.jql=updated >= -30d
 
     # 복수 조건 조합
-    issue.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
+    jira.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
 
 JQL 자세한 내용은 `Atlassian JQL 문서 <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_ 를 참조하세요.
 
@@ -303,13 +321,13 @@ Jira Cloud 크롤링
 ::
 
     home=https://yourcompany.atlassian.net
-    is_cloud=true
+    deployment=cloud
     auth_type=oauth2
     oauth2.client_id=Abc123DefGhi456
     oauth2.client_secret=xyz789uvw456rst123
     oauth2.access_token=eyJhbGciOiJIUzI1...
     oauth2.refresh_token=def456ghi789jkl012
-    issue.jql=project = "SUPPORT" AND status != "Closed"
+    jira.jql=project = "SUPPORT" AND status != "Closed"
 
 스크립트:
 
@@ -328,7 +346,7 @@ Confluence Server 크롤링
 ::
 
     home=https://wiki.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=basic
     basic.username=crawler_user
     basic.password=secure_password
@@ -368,7 +386,7 @@ Confluence Server 크롤링
 1. ``home`` URL이 올바른지 확인
 2. 방화벽 설정 확인
 3. Atlassian 인스턴스가 가동 중인지 확인
-4. ``is_cloud`` 파라미터가 올바르게 설정되어 있는지 확인
+4. ``deployment`` 파라미터가 올바르게 설정되어 있는지 (생략한 경우 ``home`` 의 호스트명이 환경과 일치하는지) 확인
 
 데이터를 가져올 수 없음
 -----------------------

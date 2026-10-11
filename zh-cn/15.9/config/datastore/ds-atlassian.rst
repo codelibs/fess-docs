@@ -61,7 +61,7 @@ Cloud版（OAuth 2.0）示例：
 ::
 
     home=https://yourcompany.atlassian.net
-    is_cloud=true
+    deployment=cloud
     auth_type=oauth2
     oauth2.client_id=your_client_id
     oauth2.client_secret=your_client_secret
@@ -73,7 +73,7 @@ Server版（Basic认证）示例：
 ::
 
     home=https://jira.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=basic
     basic.username=admin
     basic.password=your_password
@@ -83,7 +83,7 @@ Server版（OAuth 1.0a）示例：
 ::
 
     home=https://jira.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=oauth
     oauth.consumer_key=OauthKey
     oauth.private_key=-----BEGIN RSA PRIVATE KEY-----\nMIIE...=\n-----END RSA PRIVATE KEY-----
@@ -103,12 +103,15 @@ Server版（OAuth 1.0a）示例：
    * - ``home``
      - 是
      - Atlassian实例的URL
+   * - ``deployment``
+     - 否
+     - Atlassian Cloud设为 ``cloud``，Data Center或Server设为 ``datacenter``\ （也可指定 ``data_center``、``dc``）。省略时，主机名以 ``.atlassian.net`` 结尾的URL视为Cloud，其他视为Data Center
    * - ``is_cloud``
      - 否
-     - Cloud版设为 ``true``，Server版设为 ``false``\ （默认值：``true``）。仅在OAuth 2.0认证时用于选择端点；Basic认证和OAuth 1.0a认证时忽略此参数。
+     - 已弃用（请使用 ``deployment``）。Cloud版设为 ``true``，Data Center / Server版设为 ``false``。目前仍然有效，使用时日志中会输出警告，但同时指定两者时以 ``deployment`` 为准。计划在16.0中删除
    * - ``auth_type``
      - 是
-     - 认证类型：``oauth``、``oauth2``、``basic``
+     - 认证类型：``oauth``、``oauth2``、``basic``、``pat``
    * - ``oauth.consumer_key``
      - OAuth 1.0a时
      - Consumer Key（通常为 ``OauthKey``）
@@ -136,21 +139,36 @@ Server版（OAuth 1.0a）示例：
    * - ``oauth2.token_url``
      - 否
      - 令牌URL（OAuth 2.0，默认值: ``https://auth.atlassian.com/oauth/token``）
+   * - ``oauth2.grant_type``
+     - 否
+     - OAuth 2.0的授权类型：``authorization_code``\ （默认）或 ``client_credentials``。使用 ``client_credentials`` 时仅需 ``oauth2.client_id`` 和 ``oauth2.client_secret``，获取的令牌不会写回数据存储配置
    * - ``basic.username``
      - Basic认证时
      - 用户名
    * - ``basic.password``
      - Basic认证时
      - 密码
-   * - ``issue.jql``
+   * - ``pat.token``
+     - PAT认证时
+     - 个人访问令牌（``auth_type=pat``，仅Data Center）
+   * - ``jira.jql``
      - 否
      - JQL（仅Jira，高级搜索条件）。未指定时，以所有问题（``created is not empty``）为处理对象。
-   * - ``issue_max_results``
+   * - ``jira.max_results``
      - 否
      - Jira API每次请求的最大结果数（默认值: ``50``，仅Jira）
-   * - ``content_limit``
+   * - ``confluence.limit``
      - 否
      - Confluence API每次请求的最大内容数（默认值: ``25``，仅Confluence）
+   * - ``issue.jql``
+     - 否
+     - 已弃用（请使用 ``jira.jql``）。目前仍然有效，日志中会输出警告，但同时指定两者时以新名称为准。计划在16.0中删除
+   * - ``issue_max_results``
+     - 否
+     - 已弃用（请使用 ``jira.max_results``）。处理方式同上
+   * - ``content_limit``
+     - 否
+     - 已弃用（请使用 ``confluence.limit``）。处理方式同上
    * - ``ignore_error``
      - 否
      - 出错时是否继续处理（默认值: ``true``）
@@ -171,13 +189,13 @@ Server版（OAuth 1.0a）示例：
      - HTTP代理端口号
    * - ``connection_timeout``
      - 否
-     - HTTP连接超时（毫秒）
+     - HTTP连接超时（毫秒，默认值：``20000``）
    * - ``read_timeout``
      - 否
-     - HTTP读取超时（毫秒）
-   * - ``readInterval``
+     - HTTP读取超时（毫秒，默认值：``60000``）
+   * - ``read_interval``
      - 否
-     - 处理每个文档之间的间隔时间（毫秒，默认值：``0``）
+     - API请求之间的最小间隔（毫秒，默认值：``0``）。该间隔由所有线程共享，因此 ``number_of_threads`` 大于 ``1`` 时也会保持
 
 脚本设置
 --------------
@@ -279,16 +297,16 @@ JQL高级搜索
 ::
 
     # 仅特定项目
-    issue.jql=project = "MYPROJECT"
+    jira.jql=project = "MYPROJECT"
 
     # 排除特定状态
-    issue.jql=project = "MYPROJECT" AND status != "Closed"
+    jira.jql=project = "MYPROJECT" AND status != "Closed"
 
     # 指定时间段
-    issue.jql=updated >= -30d
+    jira.jql=updated >= -30d
 
     # 组合多个条件
-    issue.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
+    jira.jql=project IN ("PROJ1", "PROJ2") AND updated >= -90d AND status != "Done"
 
 有关JQL的详细信息，请参阅 `Atlassian JQL文档 <https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html>`_\ 。
 
@@ -303,13 +321,13 @@ Jira Cloud抓取
 ::
 
     home=https://yourcompany.atlassian.net
-    is_cloud=true
+    deployment=cloud
     auth_type=oauth2
     oauth2.client_id=Abc123DefGhi456
     oauth2.client_secret=xyz789uvw456rst123
     oauth2.access_token=eyJhbGciOiJIUzI1...
     oauth2.refresh_token=def456ghi789jkl012
-    issue.jql=project = "SUPPORT" AND status != "Closed"
+    jira.jql=project = "SUPPORT" AND status != "Closed"
 
 脚本：
 
@@ -328,7 +346,7 @@ Confluence Server抓取
 ::
 
     home=https://wiki.yourcompany.com
-    is_cloud=false
+    deployment=datacenter
     auth_type=basic
     basic.username=crawler_user
     basic.password=secure_password
@@ -368,7 +386,7 @@ Confluence Server抓取
 1. 确认 ``home`` URL是否正确
 2. 检查防火墙设置
 3. 确认Atlassian实例是否正在运行
-4. 确认 ``is_cloud`` 参数是否正确设置
+4. 确认 ``deployment`` 参数是否正确设置（省略时，确认 ``home`` 的主机名是否与环境一致）
 
 无法获取数据
 --------------------
