@@ -88,7 +88,7 @@ Backup der Konfigurationsdaten
 
       ``fess_config.bulk`` enthält bereits alle Daten aus ``fess_basic_config.bulk``. Als
       Konfigurationssicherung vor dem Upgrade genügen daher ``fess_basic_config.bulk``,
-      ``fess_user.bulk`` und ``system.properties``.
+      ``fess_user.bulk`` und ``system.properties``. Stammt die Sicherung von 15.9 oder neuer und werden Benutzer-Tags verwendet, laden Sie zusätzlich ``fess_config.bulk`` herunter, da der Index ``tag_type`` mit den Benutzer-Tags nicht in ``fess_basic_config.bulk`` enthalten ist (siehe :doc:`../admin/tagtype-guide`).
 
    .. note::
 

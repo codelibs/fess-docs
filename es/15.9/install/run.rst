@@ -326,7 +326,7 @@ La configuración del número de puerto, el tamaño del montón JVM y la URL de 
      - Directorio de archivos temporales, incluido el directorio de trabajo del Tomcat integrado. El usuario que ejecuta |Fess| debe poder escribir en él.
    * - ``FESS_CONF_PATH``
      - (sin definir) (edición RPM/DEB: ``/etc/fess``)
-     - Directorio que contiene los archivos de configuración. Se coloca al principio del classpath, por lo que un ``fess_config.properties`` en él se utiliza en lugar del de ``app/WEB-INF/classes``.
+     - Directorio que contiene los archivos de configuración. ``bin/fess`` lo coloca al principio del classpath y se lo pasa a |Fess| como ``-Dfess.conf.path``. De los archivos como ``tomcat_config.properties`` de ``lib/classes``, tiene prioridad el de este directorio. Sin embargo, en la edición ZIP la aplicación web lee primero los archivos de ``app/WEB-INF/classes``, por lo que un ``fess_config.properties`` colocado en este directorio no sobrescribe los valores del ``fess_config.properties`` de ``app/WEB-INF/classes`` (los procesos hijos, como el rastreador, leen este directorio antes que ``WEB-INF/classes``). En la edición ZIP, edite el archivo de ``app/WEB-INF/classes`` para modificar ``fess_config.properties``. La edición RPM/DEB no incluye ``fess_config.properties`` en ``app/WEB-INF/classes`` y utiliza únicamente el de ``/etc/fess``.
    * - ``FESS_USE_IPV4``
      - (sin definir)
      - Con cualquier valor no vacío, la JVM utiliza solo la pila IPv4 (``-Djava.net.preferIPv4Stack=true``).

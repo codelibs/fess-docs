@@ -174,6 +174,27 @@ Pour exécuter immédiatement une indexation configurée, démarrez le travail d
    de bouton « Démarrer » individuel. Les indexations s'exécutent au niveau du travail planificateur.
    Le travail « Default Crawler » s'exécute sur toutes les configurations d'indexation activées.
 
+.. note::
+   Au cours d'une exécution du travail, les configurations d'indexation Web et Système de fichiers sont
+   démarrées une par une, à 5 secondes d'intervalle. Les configurations Magasin de données sont démarrées
+   de la même façon, séparément. Le nombre de configurations pouvant s'exécuter simultanément se définit
+   dans « Configuration du robot d'exploration simultané » de [Système > Général] (par défaut : 5) ; il
+   s'applique à Web et Système de fichiers ensemble, et séparément à Magasin de données. Tant que ce
+   nombre est atteint, la configuration suivante n'est démarrée qu'après la fin d'une configuration en
+   cours. Quand il y a beaucoup de configurations, il faut un certain temps avant qu'elles soient toutes
+   en cours d'exécution.
+
+.. note::
+   Une exécution du travail charge au plus 100 configurations d'indexation pour chacun des
+   types Web, Système de fichiers et Magasin de données, en partant du début de l'ordre de tri
+   (normalement par nom) (valeur par défaut de ``page.web.config.max.fetch.size``,
+   ``page.file.config.max.fetch.size`` et ``page.data.config.max.fetch.size``). Ces valeurs ne
+   correspondent pas à un nombre d'éléments par page : elles plafonnent le nombre total de
+   configurations chargées. Les configurations au-delà de la 100e ne sont pas indexées, sans
+   aucune erreur ni avertissement. Si vous créez plus de 100 configurations, augmentez ces
+   valeurs dans ``fess_config.properties`` (un redémarrage de |Fess| est nécessaire après la
+   modification).
+
 Exécution planifiée
 ----------------
 
@@ -304,6 +325,12 @@ Spécifie le nombre d'URLs à indexer simultanément.
    Le nombre de threads par défaut à la création est de ``1`` pour le robot Web et de ``5`` pour le robot
    de fichiers. L'intervalle entre les requêtes (intervalle) est par défaut de ``10000`` millisecondes
    pour le robot Web et de ``1000`` millisecondes pour le robot de fichiers.
+
+   Chaque thread attend la durée de l'intervalle après avoir traité une URL. Avec les valeurs
+   par défaut du robot Web (un thread, 10000 millisecondes), on ne peut donc traiter qu'environ
+   360 URL par heure au maximum. Pour un site de plusieurs milliers de pages ou plus, augmentez
+   le nombre de threads ou réduisez l'intervalle, en tenant compte de la charge sur le serveur
+   cible.
 
 Intervalle d'indexation
 ------------

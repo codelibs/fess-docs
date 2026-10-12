@@ -166,17 +166,18 @@ Specifies whether to enable recording of favorite logs.
 Delete old search logs
 ::::::::::::::::::::::
 
-Deletes search logs older than the specified number of days.
+Deletes search logs older than the specified number of days. The default is ``-1``; with ``-1``, logs are never deleted and are kept indefinitely.
+Click logs, favorite logs, and chat logs are deleted by the same number of days.
 
 Delete old job logs
 :::::::::::::::::::
 
-Deletes job logs older than the specified number of days.
+Deletes job logs older than the specified number of days. The default is ``-1``; with ``-1``, they are not deleted.
 
 Delete old user logs
 ::::::::::::::::::::
 
-Deletes user logs older than the specified number of days.
+Deletes user logs older than the specified number of days. The default is ``-1``; with ``-1``, they are not deleted.
 
 Bot names to delete logs
 ::::::::::::::::::::::::

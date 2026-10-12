@@ -86,7 +86,7 @@ Configuration Data Backup
 
       ``fess_config.bulk`` already includes everything in ``fess_basic_config.bulk``. For a
       configuration backup before upgrading, ``fess_basic_config.bulk``, ``fess_user.bulk``, and
-      ``system.properties`` are sufficient.
+      ``system.properties`` are sufficient. However, if the source is 15.9 or later and you use user tags, also download ``fess_config.bulk``: the ``tag_type`` index that holds the user tags is not part of ``fess_basic_config.bulk`` (see :doc:`../admin/tagtype-guide`).
 
    .. note::
 

@@ -329,7 +329,7 @@ Einstellungen wie Portnummer, JVM-Heap-Größe und die OpenSearch-Verbindungs-UR
      - Verzeichnis für temporäre Dateien, einschließlich des Arbeitsverzeichnisses des eingebetteten Tomcat. Der Benutzer, unter dem |Fess| läuft, muss darin schreiben können.
    * - ``FESS_CONF_PATH``
      - (nicht gesetzt) (RPM/DEB-Version: ``/etc/fess``)
-     - Verzeichnis mit den Konfigurationsdateien. Es wird an den Anfang des Klassenpfads gestellt, sodass eine darin liegende ``fess_config.properties`` Vorrang vor der Datei in ``app/WEB-INF/classes`` hat.
+     - Verzeichnis mit den Konfigurationsdateien. ``bin/fess`` stellt es an den Anfang des Klassenpfads und übergibt es als ``-Dfess.conf.path`` an |Fess|. Von Dateien wie ``tomcat_config.properties`` in ``lib/classes`` hat die Datei in diesem Verzeichnis Vorrang. In der ZIP-Version liest die Webanwendung jedoch zuerst die Dateien in ``app/WEB-INF/classes``; eine in diesem Verzeichnis abgelegte ``fess_config.properties`` überschreibt daher die Werte der ``fess_config.properties`` in ``app/WEB-INF/classes`` nicht (Kindprozesse wie der Crawler lesen dieses Verzeichnis vor ``WEB-INF/classes``). Ändern Sie in der ZIP-Version die Datei in ``app/WEB-INF/classes``, um ``fess_config.properties`` anzupassen. Die RPM/DEB-Version legt keine ``fess_config.properties`` in ``app/WEB-INF/classes`` ab und verwendet nur die Datei in ``/etc/fess``.
    * - ``FESS_USE_IPV4``
      - (nicht gesetzt)
      - Mit einem beliebigen nicht leeren Wert verwendet die JVM nur den IPv4-Stack (``-Djava.net.preferIPv4Stack=true``).

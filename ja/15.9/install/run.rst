@@ -329,7 +329,7 @@ ZIP 版は ``bin/fess.in.sh``、RPM 版は ``/etc/sysconfig/fess``、DEB 版は
      - 一時ファイルを保存するディレクトリ（組み込み Tomcat の作業ディレクトリを含む）。|Fess| を実行するユーザーが書き込める必要があります。
    * - ``FESS_CONF_PATH``
      - （未設定）\ （RPM/DEB 版は ``/etc/fess``）
-     - 設定ファイルを置くディレクトリ。クラスパスの先頭に追加されるため、このディレクトリの ``fess_config.properties`` が ``app/WEB-INF/classes`` のものより優先されます。
+     - 設定ファイルを置くディレクトリ。 ``bin/fess`` がこのディレクトリをクラスパスの先頭に追加し、 ``-Dfess.conf.path`` として |Fess| に渡します。 ``lib/classes`` にある ``tomcat_config.properties`` などは、このディレクトリのものが優先されます。ただし、ZIP 版の Web アプリケーションは ``app/WEB-INF/classes`` のファイルを先に参照するため、このディレクトリに置いた ``fess_config.properties`` では ``app/WEB-INF/classes`` の ``fess_config.properties`` の値を上書きできません（クローラーなどの子プロセスは、このディレクトリを ``WEB-INF/classes`` より先に参照します）。ZIP 版で ``fess_config.properties`` を変更するときは ``app/WEB-INF/classes`` のファイルを編集してください。RPM/DEB 版は ``app/WEB-INF/classes`` に ``fess_config.properties`` を含めず、 ``/etc/fess`` のファイルだけを使用します。
    * - ``FESS_USE_IPV4``
      - （未設定）
      - 空でない値を設定すると、JVM は IPv4 スタックだけを使用します（``-Djava.net.preferIPv4Stack=true``）。

@@ -86,7 +86,7 @@
 
       ``fess_config.bulk`` は ``fess_basic_config.bulk`` を包含しています。アップグレード前の
       設定バックアップとしては、\ ``fess_basic_config.bulk``\ 、\ ``fess_user.bulk``\ 、
-      ``system.properties`` の 3 つで十分です。
+      ``system.properties`` の 3 つで十分です。ただし、バックアップ元が 15.9 以降でユーザータグを使っている場合は、ユーザータグを保持する ``tag_type`` インデックスが ``fess_basic_config.bulk`` には含まれないため、\ ``fess_config.bulk`` も取得してください（ :doc:`../admin/tagtype-guide` を参照）。
 
    .. note::
 

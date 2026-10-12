@@ -144,7 +144,7 @@ HTTP 方法            GET
    * - ``page_number``
      - 当前页码。
    * - ``record_count``
-     - 命中数量（int64）。
+     - 命中数量（int64）。精确计数仅到 ``query.track.total.hits``\ （默认：``10000``\ ）为止；命中数超过该值时，此值为上限数量，``record_count_relation`` 为 ``GREATER_THAN_OR_EQUAL_TO``\ 。可以通过请求的 ``track_total_hits`` 更改上限。
    * - ``record_count_relation``
      - ``EQUAL_TO`` 表示精确计数，\ ``GREATER_THAN_OR_EQUAL_TO`` 表示仅知下限。
    * - ``page_count``
@@ -236,7 +236,7 @@ HTTP 方法            GET
 因此，客户端必须检查最后一行的第一个键，以区分正常完成（\ ``data``\ ）还是服务器异常（\ ``error``\ ）。
 
 查询使用与 ``GET /search`` 相同的参数集（\ ``q``\ 、\ ``sort``\ 、\ ``num``\ 、\ ``lang``\ 、\ ``ex_q``\ 、\ ``sdh``\ 、\ ``fields.*``\ 、\ ``as.*``\ 、\ ``track_total_hits``\ 、\ ``facet.*``\ 、\ ``geo.*``\ ）构建。
-若 ``api.search.scroll=false`` 禁用了滚动搜索，则返回 ``invalid_request``\ （400）。
+滚动搜索默认是禁用的（``api.search.scroll=false``\ ）。禁用时返回 ``invalid_request``\ （400）。要启用它，请在 ``fess_config.properties`` 中设置 ``api.search.scroll=true``\ （参见 :doc:`../config/search-scroll`\ ）。
 
 请求参数
 --------

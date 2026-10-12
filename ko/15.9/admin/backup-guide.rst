@@ -15,6 +15,12 @@
 
 |image0|
 
+.. note::
+
+   사전(동의어, 불용어 등) 파일은 백업 대상에 포함되지 않습니다.
+   사전 파일은 검색 엔진의 사전 디렉터리(``FESS_DICTIONARY_PATH``)에 저장되어 있으므로,
+   필요하면 별도로 복사하십시오.
+
 fess_config.bulk
 ::::::::::::::::
 
@@ -23,7 +29,7 @@ fess_config.bulk는 |Fess| 의 설정 정보를 포함하고 있습니다.
 fess_basic_config.bulk
 ::::::::::::::::::::::
 
-fess_basic_config.bulk는 장애 URL을 제외한 |Fess| 의 설정 정보를 포함하고 있습니다.
+fess_basic_config.bulk는 크롤링 정보, 장애 URL, 작업 로그, 썸네일 큐, 사용자 태그 등을 제외한 |Fess| 의 설정 정보를 포함하고 있습니다.
 
 fess_user.bulk
 ::::::::::::::
@@ -74,7 +80,14 @@ user_info.ndjson은 검색 사용자 정보를 포함합니다.
 ---------
 
 설정 정보를 업로드하여 가져올 수 있습니다.
-복원 가능한 파일은 \*.bulk와 system.properties입니다.
+복원 가능한 파일은 다음과 같습니다.
+
+- ``*.bulk``
+- ``system.properties``
+- ``fess.json`` , ``doc.json``: |Fess| 가 사용하는 인덱스 정의 파일을 교체합니다. 기존 인덱스의 설정이나 매핑은 그 자리에서 변경되지 않습니다.
+- ``gsa*.xml``: Google Search Appliance 의 설정 파일입니다. 웹 크롤링 설정, 파일 크롤링 설정, 레이블로 가져옵니다.
+
+``*.ndjson`` (검색 로그 등의 로그)은 업로드하여 복원할 수 없습니다.
 
 \*.bulk 안의 문서 중 ``updatedTime`` 이 있는 문서는 저장된 문서가 없거나, ``updatedTime`` 이 없거나,
 더 오래된 경우에만 기록됩니다. 더 새롭지 않은 문서는 건너뛰고 ``fess.log`` 에 INFO 수준으로

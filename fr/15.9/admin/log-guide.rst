@@ -61,10 +61,19 @@ searchlog.log
 :::::::::::::
 
 Les journaux de recherche sont enregistrés.
+Si « Journal de recherche » de [Système > Général] est activé, une ligne (JSON) est ajoutée à chaque recherche dans la configuration par défaut.
+Une ligne contient les champs des documents retournés par cette recherche (``logging.search.docs.fields``) ; sa taille augmente donc avec le nombre de résultats retournés (avec ``num=100``, une ligne peut atteindre environ 70 Ko).
+Pour la rotation et la conservation des journaux, voir :doc:`../config/admin-logging`.
+Pour ne pas inclure les champs des documents retournés dans le journal de recherche, définissez ``logging.search.docs.enabled=false`` dans ``fess_config.properties`` ; pour ne plus écrire dans ce fichier, définissez ``logging.search.use.logfile=false``.
 
 gc-crawler.log
 ::::::::::::::
 
-Les journaux GC de fess sont enregistrés.
+Les journaux GC du processus de crawl sont enregistrés (écrits par le travail par défaut « Default Crawler »).
+
+gc-fess.log
+:::::::::::
+
+Les journaux GC de |Fess| lui-même sont enregistrés. Ils ne sont écrits que si la variable d'environnement ``FESS_USE_GC_LOGGING`` a une valeur non vide (voir :doc:`../install/run`).
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/log-1.png

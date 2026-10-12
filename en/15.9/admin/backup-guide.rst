@@ -18,6 +18,12 @@ To download your configuration, click the index name.
 
 |image0|
 
+.. note::
+
+   Dictionary files (synonyms, stop words, and so on) are not part of the backup.
+   They are stored in the dictionary directory of the search engine (``FESS_DICTIONARY_PATH``),
+   so copy them separately if you need them.
+
 fess_config.bulk
 ::::::::::::::::
 
@@ -26,7 +32,7 @@ fess_config.bulk contains configuration information for Fess.
 fess_basic_config.bulk
 ::::::::::::::::::::::
 
-fess_basic_config.bulk contains Fess configuration information excluding faulty URLs.
+fess_basic_config.bulk contains Fess configuration information excluding crawl information, failure URLs, job logs, the thumbnail queue, user tags, and similar data.
 
 fess_user.bulk
 ::::::::::::::
@@ -77,7 +83,14 @@ Upload
 ------
 
 Configuration data can be imported by uploading a file.
-Files that can be restored are \*.bulk and system.properties.
+The files that can be restored are as follows.
+
+- ``*.bulk``
+- ``system.properties``
+- ``fess.json`` and ``doc.json``: replace the index definition files that |Fess| uses. The settings and mapping of an existing index are not changed on the spot.
+- ``gsa*.xml``: a Google Search Appliance configuration file. It is imported as web crawl configuration, file crawl configuration, and labels.
+
+``*.ndjson`` files (search logs and other logs) cannot be uploaded to restore them.
 
 A document in a \*.bulk file that has an ``updatedTime`` is written only when the stored document
 does not exist, has no ``updatedTime``, or is older. A document that is not newer is skipped and

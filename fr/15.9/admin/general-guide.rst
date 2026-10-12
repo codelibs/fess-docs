@@ -166,17 +166,18 @@ Spécifie s'il faut activer l'enregistrement du journal des favoris.
 Supprimer les anciens journaux de recherche
 :::::::::::::::::::::::::::::::::::::::::::
 
-Supprime les journaux de recherche antérieurs au nombre de jours spécifié.
+Supprime les journaux de recherche antérieurs au nombre de jours spécifié. La valeur par défaut est ``-1`` ; avec ``-1``, les journaux ne sont pas supprimés et sont conservés indéfiniment.
+Les journaux de clics, de favoris et de chat sont supprimés selon le même nombre de jours.
 
 Supprimer les anciens journaux de tâches
 ::::::::::::::::::::::::::::::::::::::::
 
-Supprime les journaux de tâches antérieurs au nombre de jours spécifié.
+Supprime les journaux de tâches antérieurs au nombre de jours spécifié. La valeur par défaut est ``-1`` ; avec ``-1``, ils ne sont pas supprimés.
 
 Supprimer les anciens journaux utilisateur
 ::::::::::::::::::::::::::::::::::::::::::
 
-Supprime les journaux utilisateur antérieurs au nombre de jours spécifié.
+Supprime les journaux utilisateur antérieurs au nombre de jours spécifié. La valeur par défaut est ``-1`` ; avec ``-1``, ils ne sont pas supprimés.
 
 Noms de robots pour supprimer les journaux
 :::::::::::::::::::::::::::::::::::::::::::

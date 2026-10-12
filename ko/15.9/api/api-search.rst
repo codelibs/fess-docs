@@ -144,7 +144,7 @@ HTTP 메서드          GET
    * - ``page_number``
      - 현재 페이지 번호.
    * - ``record_count``
-     - 히트 건수 (int64).
+     - 히트 건수 (int64). 정확하게 세는 것은 ``query.track.total.hits`` (기본값: ``10000`` ) 건까지이며, 히트 수가 그보다 많으면 이 값은 상한 건수가 되고 ``record_count_relation`` 은 ``GREATER_THAN_OR_EQUAL_TO`` 가 됩니다. 요청의 ``track_total_hits`` 로 상한을 변경할 수 있습니다.
    * - ``record_count_relation``
      - ``EQUAL_TO`` 일 때는 정확한 카운트, ``GREATER_THAN_OR_EQUAL_TO`` 일 때는 하한만 확인된 것을 나타냅니다.
    * - ``page_count``
@@ -236,7 +236,7 @@ HTTP 메서드          GET
 이 때문에 클라이언트는 마지막 행의 첫 번째 키를 확인하여 정상 완료 ( ``data`` ) 인지 서버 이상 ( ``error`` ) 인지 구별해야 합니다.
 
 쿼리는 ``GET /search`` 와 동일한 파라미터 세트 ( ``q`` , ``sort`` , ``num`` , ``lang`` , ``ex_q`` , ``sdh`` , ``fields.*`` , ``as.*`` , ``track_total_hits`` , ``facet.*`` , ``geo.*`` ) 로 구성됩니다.
-``api.search.scroll=false`` 로 스크롤 검색이 비활성화된 경우에는 ``invalid_request`` (400) 를 반환합니다.
+스크롤 검색은 기본적으로 비활성화되어 있습니다(``api.search.scroll=false`` ). 비활성화된 경우에는 ``invalid_request`` (400) 를 반환합니다. 활성화하려면 ``fess_config.properties`` 에서 ``api.search.scroll=true`` 를 설정합니다( :doc:`../config/search-scroll` 참조).
 
 요청 파라미터
 -------------

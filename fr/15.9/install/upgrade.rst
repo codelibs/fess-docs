@@ -88,7 +88,7 @@ Sauvegarde des données de configuration
 
       ``fess_config.bulk`` inclut ``fess_basic_config.bulk``. Pour la sauvegarde de configuration
       avant la mise à niveau, ``fess_basic_config.bulk``, ``fess_user.bulk`` et
-      ``system.properties`` suffisent.
+      ``system.properties`` suffisent. Toutefois, si la source est en 15.9 ou ultérieure et que vous utilisez des tags utilisateur, téléchargez aussi ``fess_config.bulk`` : l'index ``tag_type``, qui contient les tags utilisateur, n'est pas inclus dans ``fess_basic_config.bulk`` (voir :doc:`../admin/tagtype-guide`).
 
    .. note::
 

@@ -144,7 +144,7 @@ Die einzelnen Felder sind wie folgt beschrieben:
    * - ``page_number``
      - Aktuelle Seitennummer.
    * - ``record_count``
-     - Anzahl der Treffer (int64).
+     - Anzahl der Treffer (int64). Exakt gezählt wird nur bis ``query.track.total.hits`` (Standard: ``10000``); gibt es mehr Treffer, entspricht dieser Wert dieser Obergrenze und ``record_count_relation`` ist ``GREATER_THAN_OR_EQUAL_TO``. Die Obergrenze lässt sich je Anfrage mit ``track_total_hits`` ändern.
    * - ``record_count_relation``
      - Bei ``EQUAL_TO`` ist die Anzahl exakt; bei ``GREATER_THAN_OR_EQUAL_TO`` ist nur eine Untergrenze bekannt.
    * - ``page_count``
@@ -236,7 +236,7 @@ Wenn der Stream während der Übertragung fehlschlägt, wird als letzte Zeile fo
 Daher müssen Clients den ersten Schlüssel der letzten Zeile prüfen, um zwischen normalem Abschluss (``data``) und einem Serverfehler (``error``) zu unterscheiden.
 
 Die Abfrage wird mit denselben Parametern wie ``GET /search`` erstellt (``q``, ``sort``, ``num``, ``lang``, ``ex_q``, ``sdh``, ``fields.*``, ``as.*``, ``track_total_hits``, ``facet.*``, ``geo.*``).
-Wenn die Scroll-Suche durch ``api.search.scroll=false`` deaktiviert ist, wird ``invalid_request`` (400) zurückgegeben.
+Die Scroll-Suche ist standardmäßig deaktiviert (``api.search.scroll=false``). Solange sie deaktiviert ist, gibt der Endpunkt ``invalid_request`` (400) zurück. Zum Aktivieren setzen Sie in ``fess_config.properties`` ``api.search.scroll=true`` (siehe :doc:`../config/search-scroll`).
 
 Anfrageparameter
 ~~~~~~~~~~~~~~~~

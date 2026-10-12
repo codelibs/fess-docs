@@ -71,7 +71,7 @@ NGワード一覧取得
    * - ``size``
      - Integer
      - いいえ
-     - 1ページあたりの件数（デフォルト: 20）
+     - 1ページあたりの件数（デフォルト: 25。\ ``fess_config.properties`` の ``paging.page.size`` で変更可能）
    * - ``page``
      - Integer
      - いいえ
@@ -80,6 +80,8 @@ NGワード一覧取得
      - String
      - いいえ
      - 指定したIDのNGワードのみに絞り込み
+
+これらのパラメーターは、JSON のリクエストボディ（例: ``{"size": 50, "page": 1}`` ）で指定します。URL のクエリ文字列（例: ``?size=50`` ）で指定した値は無視されるため、指定しない場合は常に先頭の 25 件が返ります。
 
 レスポンス
 ----------
@@ -296,6 +298,16 @@ CSVは1行目に ``BadWord`` というヘッダー行を持ち、2行目以降�
 
 使用例
 ======
+
+NGワード一覧の取得
+------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 スパムキーワードの除外
 ----------------------

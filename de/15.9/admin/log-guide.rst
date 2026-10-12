@@ -61,10 +61,19 @@ searchlog.log
 :::::::::::::
 
 Protokolliert werden die Suchprotokolle.
+Wenn „Suchprotokoll" unter [System > Allgemein] aktiviert ist, wird in der Standardkonfiguration für jede Suche eine Zeile (JSON) angehängt.
+Eine Zeile enthält die Felder der von dieser Suche zurückgegebenen Dokumente (``logging.search.docs.fields``); ihre Größe wächst daher mit der Zahl der zurückgegebenen Treffer (bei ``num=100`` kann eine Zeile etwa 70 KB groß werden).
+Zu Rotation und Aufbewahrung siehe :doc:`../config/admin-logging`.
+Um die Felder der zurückgegebenen Dokumente nicht ins Suchprotokoll aufzunehmen, setzen Sie in ``fess_config.properties`` ``logging.search.docs.enabled=false``; um nicht mehr in diese Datei zu schreiben, setzen Sie ``logging.search.use.logfile=false``.
 
 gc-crawler.log
 ::::::::::::::
 
-Protokolliert werden die GC-Protokolle von Fess.
+Protokolliert werden die GC-Protokolle des Crawler-Prozesses (vom Standard-Job „Default Crawler" geschrieben).
+
+gc-fess.log
+:::::::::::
+
+Protokolliert werden die GC-Protokolle von |Fess| selbst. Sie werden nur geschrieben, wenn die Umgebungsvariable ``FESS_USE_GC_LOGGING`` auf einen nicht leeren Wert gesetzt ist (siehe :doc:`../install/run`).
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/log-1.png

@@ -71,7 +71,7 @@ NG 워드 목록 조회
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수 (기본값: 20)
+     - 페이지당 건수 (기본값: 25. ``fess_config.properties`` 의 ``paging.page.size`` 로 변경 가능)
    * - ``page``
      - Integer
      - 아니오
@@ -80,6 +80,8 @@ NG 워드 목록 조회
      - String
      - 아니오
      - 지정한 ID의 NG 워드만으로 필터링
+
+이 파라미터들은 JSON 요청 본문(예: ``{"size": 50, "page": 1}`` )으로 지정합니다. URL 쿼리 문자열(예: ``?size=50`` )로 지정한 값은 무시되므로, 본문에 지정하지 않으면 항상 처음 25건이 반환됩니다.
 
 응답
 ----------
@@ -296,6 +298,16 @@ CSV는 1행째에 ``BadWord`` 라는 헤더 행을 가지며, 2행째 이후로�
 
 사용 예
 ======
+
+NG 워드 목록 조회
+-----------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 스팸 키워드 제외
 ----------------------

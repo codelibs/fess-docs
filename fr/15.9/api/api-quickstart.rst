@@ -121,9 +121,8 @@ Le point de terminaison de contrôle de santé est ``GET /api/v2/health``.
       "response": {
         "status": 0,
         "engine": {
-          "cluster_name": "fess",
-          "status": "green",
-          "ping_status": 200
+          "status": "GREEN",
+          "ping_status": 0
         }
       }
     }

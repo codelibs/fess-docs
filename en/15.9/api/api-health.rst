@@ -19,26 +19,27 @@ Endpoint            ``/api/v2/health``
 ==================  ====================================================
 
 Returns a snapshot of the search engine cluster status (``monitor`` tag).
-The HTTP status is 200 when the cluster status is ``green`` or ``yellow``, and 503 when it is ``red``.
+The HTTP status is 200 when the cluster status is ``GREEN`` or ``YELLOW``, and 503 when it is ``RED`` or when the search engine cannot be reached.
 
 This endpoint respects the envelope invariant "``status >= 1`` ⇔ HTTP status ``>= 400``".
 
-- When ``green`` or ``yellow``: returns a success envelope (``status: 0``) with ``engine``.
-- When ``red``: returns an error envelope (``status: 9``, ``error.code: service_unavailable``) with the engine snapshot embedded under ``error.details.engine`` (to allow monitoring tools to parse cluster metadata).
+- When ``GREEN`` or ``YELLOW``: returns a success envelope (``status: 0``) with ``engine``.
+- When ``RED``: returns an error envelope (``status: 9``, ``error.code: service_unavailable``) with the engine snapshot embedded under ``error.details.engine`` (to allow monitoring tools to parse cluster metadata).
+- When the search engine cannot be reached: returns an error envelope in the same way as ``RED`` (``error.code: service_unavailable``, ``error.message: search engine is not reachable``), with ``status: UNAVAILABLE`` and ``ping_status: 1`` in ``error.details.engine``.
 
 The fields of ``engine`` are as follows:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: engine Fields
 
-   * - ``cluster_name``
-     - Cluster name (str).
    * - ``status``
-     - Cluster status. One of ``green``, ``yellow``, or ``red``.
+     - Cluster status. One of ``GREEN``, ``YELLOW``, or ``RED`` (upper case). ``UNAVAILABLE`` when the search engine cannot be reached.
    * - ``ping_status``
-     - Ping status (int). It is ``1`` when the cluster status is ``red``, and ``0`` otherwise (``green`` or ``yellow``).
+     - Ping status (int). It is ``1`` when the cluster status is ``RED`` or the search engine cannot be reached, and ``0`` otherwise (``GREEN`` or ``YELLOW``).
 
 Table: engine Fields
+
+The cluster name (``cluster_name``) is not returned, because this endpoint can be called without authentication.
 
 Request Parameters
 ------------------
@@ -48,7 +49,7 @@ There are no available request parameters.
 Response
 --------
 
-When the cluster is ``green`` or ``yellow`` (200), a success envelope with ``engine`` is returned.
+When the cluster is ``GREEN`` or ``YELLOW`` (200), a success envelope with ``engine`` is returned.
 
 ::
 
@@ -56,14 +57,13 @@ When the cluster is ``green`` or ``yellow`` (200), a success envelope with ``eng
       "response": {
         "status": 0,
         "engine": {
-          "cluster_name": "fess-es",
-          "status": "green",
+          "status": "GREEN",
           "ping_status": 0
         }
       }
     }
 
-When the cluster is ``red`` (503), an error envelope is returned with the engine snapshot embedded under ``error.details.engine``.
+When the cluster is ``RED`` (503), an error envelope is returned with the engine snapshot embedded under ``error.details.engine``.
 
 ::
 
@@ -75,8 +75,7 @@ When the cluster is ``red`` (503), an error envelope is returned with the engine
           "message": "search engine cluster is red",
           "details": {
             "engine": {
-              "cluster_name": "fess-es",
-              "status": "red",
+              "status": "RED",
               "ping_status": 1
             }
           }
@@ -104,10 +103,10 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
    * - Status Code
      - Description
    * - 200 OK
-     - Cluster is ``green`` or ``yellow`` and reachable. The success envelope contains ``engine``.
+     - Cluster is ``GREEN`` or ``YELLOW`` and reachable. The success envelope contains ``engine``.
    * - 405 Method Not Allowed
      - The HTTP method is not allowed.
    * - 503 Service Unavailable
-     - Cluster is ``red``. An error envelope (``error.code: service_unavailable``) with the engine snapshot under ``error.details.engine``.
+     - Cluster is ``RED`` or the search engine cannot be reached. An error envelope (``error.code: service_unavailable``) with the engine snapshot under ``error.details.engine``.
 
 Table: Response List

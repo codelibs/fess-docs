@@ -71,7 +71,7 @@ Parámetros
    * - ``size``
      - Integer
      - No
-     - Número de elementos por página (predeterminado: 20)
+     - Número de elementos por página (predeterminado: 25; se puede cambiar con ``paging.page.size`` en ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
@@ -80,6 +80,8 @@ Parámetros
      - String
      - No
      - Filtrar solo la palabra prohibida con el ID especificado
+
+Estos parámetros se indican en el cuerpo de la solicitud JSON (por ejemplo, ``{"size": 50, "page": 1}``). Los valores indicados en la cadena de consulta de la URL (por ejemplo, ``?size=50``) se ignoran, por lo que, si no se indican en el cuerpo, siempre se devuelven los primeros 25 elementos.
 
 Respuesta
 ---------
@@ -296,6 +298,16 @@ Solicitud
 
 Ejemplos de Uso
 ===============
+
+Obtener la lista de palabras prohibidas
+---------------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 Excluir Palabra Clave de Spam
 -----------------------------

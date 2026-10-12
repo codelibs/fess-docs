@@ -15,6 +15,12 @@ Klicken Sie zum Herunterladen auf den Indexnamen.
 
 |image0|
 
+.. note::
+
+   Wörterbuchdateien (Synonyme, Stoppwörter usw.) sind nicht Teil der Sicherung.
+   Sie liegen im Wörterbuchverzeichnis der Suchmaschine (``FESS_DICTIONARY_PATH``);
+   kopieren Sie sie bei Bedarf separat.
+
 fess_config.bulk
 ::::::::::::::::
 
@@ -23,7 +29,7 @@ fess_config.bulk enthält die Konfigurationsinformationen von |Fess|.
 fess_basic_config.bulk
 ::::::::::::::::::::::
 
-fess_basic_config.bulk enthält die Konfigurationsinformationen von |Fess| ohne Fehler-URLs.
+fess_basic_config.bulk enthält die Konfigurationsinformationen von |Fess| ohne Crawl-Informationen, Fehler-URLs, Job-Protokolle, Thumbnail-Warteschlange, Benutzer-Tags und Ähnliches.
 
 fess_user.bulk
 ::::::::::::::
@@ -74,7 +80,14 @@ Upload
 ------
 
 Sie können Konfigurationsinformationen hochladen und importieren.
-Dateien, die wiederhergestellt werden können, sind \*.bulk und system.properties.
+Folgende Dateien können wiederhergestellt werden:
+
+- ``*.bulk``
+- ``system.properties``
+- ``fess.json`` und ``doc.json``: Sie ersetzen die Indexdefinitionsdateien, die |Fess| verwendet. Einstellungen und Mapping eines bestehenden Index werden dadurch nicht sofort geändert.
+- ``gsa*.xml``: eine Konfigurationsdatei der Google Search Appliance. Sie wird als Web-Crawl-Konfiguration, Dateisystem-Crawl-Konfiguration und als Labels importiert.
+
+``*.ndjson``-Dateien (Suchprotokolle und andere Protokolle) können nicht hochgeladen und wiederhergestellt werden.
 
 Ein Dokument in einer \*.bulk-Datei, das ein ``updatedTime`` hat, wird nur geschrieben, wenn das
 gespeicherte Dokument nicht existiert, kein ``updatedTime`` hat oder älter ist. Ein Dokument, das

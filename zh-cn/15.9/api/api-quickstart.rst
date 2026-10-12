@@ -120,9 +120,8 @@ v2 的响应以 ``response`` 信封返回。
       "response": {
         "status": 0,
         "engine": {
-          "cluster_name": "fess",
-          "status": "green",
-          "ping_status": 200
+          "status": "GREEN",
+          "ping_status": 0
         }
       }
     }

@@ -328,7 +328,7 @@ Les paramètres tels que le numéro de port, la taille du tas JVM et l'URL de co
      - Répertoire des fichiers temporaires, y compris le répertoire de travail du Tomcat intégré. L'utilisateur qui exécute |Fess| doit pouvoir y écrire.
    * - ``FESS_CONF_PATH``
      - (non défini) (édition RPM/DEB : ``/etc/fess``)
-     - Répertoire contenant les fichiers de configuration. Il est placé au début du classpath ; un ``fess_config.properties`` qui s'y trouve est donc utilisé à la place de celui de ``app/WEB-INF/classes``.
+     - Répertoire contenant les fichiers de configuration. ``bin/fess`` le place au début du classpath et le transmet à |Fess| sous la forme ``-Dfess.conf.path``. Pour les fichiers tels que ``tomcat_config.properties`` de ``lib/classes``, celui de ce répertoire est prioritaire. Toutefois, dans l'édition ZIP, l'application Web lit d'abord les fichiers de ``app/WEB-INF/classes`` ; un ``fess_config.properties`` placé dans ce répertoire ne remplace donc pas les valeurs du ``fess_config.properties`` de ``app/WEB-INF/classes`` (les processus enfants, comme le crawler, lisent ce répertoire avant ``WEB-INF/classes``). Dans l'édition ZIP, modifiez le fichier de ``app/WEB-INF/classes`` pour changer ``fess_config.properties``. L'édition RPM/DEB ne place pas de ``fess_config.properties`` dans ``app/WEB-INF/classes`` et utilise uniquement celui de ``/etc/fess``.
    * - ``FESS_USE_IPV4``
      - (non défini)
      - Avec n'importe quelle valeur non vide, la JVM n'utilise que la pile IPv4 (``-Djava.net.preferIPv4Stack=true``).

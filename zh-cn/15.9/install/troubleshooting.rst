@@ -318,15 +318,11 @@ Fess 无法连接到 OpenSearch
 
        export OPENSEARCH_JAVA_OPTS="-Xms4g -Xmx4g"
 
-2. **优化索引**
-
-   从管理页面的「系统」→「调度器」定期执行优化。
-
-3. **使用 SSD**
+2. **使用 SSD**
 
    如果磁盘 I/O 是瓶颈，请迁移到 SSD。
 
-4. **启用缓存**
+3. **启用缓存**
 
    在配置文件中启用查询缓存。
 
@@ -351,9 +347,7 @@ Fess 无法连接到 OpenSearch
 
 2. **增加线程数**
 
-   在配置文件中增加爬取线程数::
-
-       crawler.thread.count=10
+   在管理页面中增大爬取配置的「线程数」。默认值：Web 爬取为 1，文件系统爬取为 5。
 
 3. **调整超时值**
 
@@ -381,7 +375,7 @@ Fess 无法连接到 OpenSearch
 
 2. **确认爬取日志**
 
-   从管理页面的「系统」→「日志」确认爬取日志，检查是否有错误。
+   从管理页面的「系统信息」→「日志文件」下载爬取日志（``fess-crawler.log``），检查是否有错误。
 
 3. **重新执行爬取**
 
@@ -509,11 +503,30 @@ Windows 特有的问题
 
 要重置配置，请删除 OpenSearch 的索引::
 
-    $ curl -X DELETE http://localhost:9200/.fess_config*
+    $ curl -X DELETE 'http://localhost:9200/fess_config.*'
 
 .. warning::
 
    执行此命令会删除所有配置数据。
+
+忘记管理员密码
+--------------
+
+如果忘记了管理员密码，可以直接更新 OpenSearch 的 ``fess_user.user`` 索引中的用户文档来重置密码。密码以 ``{bcrypt}$2a$...`` 形式的哈希保存在 ``password`` 字段中。更新后无需重启 |Fess| 即可生效。
+
+1. 生成新密码的哈希。|Fess| 只接受以 ``$2a$`` 开头的 bcrypt 哈希，因此请将 ``htpasswd``\ （包含在 ``apache2-utils`` 或 ``httpd-tools`` 软件包中）输出的 ``$2y$`` 替换为 ``$2a$``\ 。请将 ``NewPassword`` 替换为新密码::
+
+       $ HASH=$(htpasswd -bnBC 10 "" 'NewPassword' | tr -d ':\n' | sed 's/^\$2y/$2a/')
+
+2. 更新 admin 用户文档中的密码。初始状态下 admin 用户的文档 ID 为 ``YWRtaW4=``::
+
+       $ curl -X POST 'http://localhost:9200/fess_user.user/_update/YWRtaW4=?refresh=true' \
+              -H 'Content-Type: application/json' \
+              -d "{\"doc\":{\"password\":\"{bcrypt}${HASH}\"}}"
+
+   要重置其他用户的密码，请用 ``curl 'http://localhost:9200/fess_user.user/_search?q=name:用户名'`` 查询 ``_id``\ ，并指定该 ID。如果为 OpenSearch 启用了认证，请在 curl 中指定认证信息。
+
+3. 确认可以使用新密码登录管理页面。如果命令历史中残留了密码，请在登录后通过 [用户 > 用户] 重新设置密码。
 
 支持信息
 ==========
@@ -547,9 +560,9 @@ Windows 特有的问题
 
 报告问题时，收集以下信息会有所帮助：
 
-1. **版本信息**::
+1. **版本信息**\ （``bin/fess -v`` 从 15.9 起可用）::
 
-       $ cat /path/to/fess/VERSION
+       $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version
        $ java -version
 

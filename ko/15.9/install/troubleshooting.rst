@@ -318,15 +318,11 @@ Fess가 OpenSearch에 연결할 수 없음
 
        export OPENSEARCH_JAVA_OPTS="-Xms4g -Xmx4g"
 
-2. **인덱스 최적화**
-
-   관리 화면에서 "시스템"→"스케줄러"로 정기적으로 최적화 실행합니다.
-
-3. **SSD 사용**
+2. **SSD 사용**
 
    디스크 I/O가 병목인 경우 SSD로 이전합니다.
 
-4. **캐시 활성화**
+3. **캐시 활성화**
 
    설정 파일에서 쿼리 캐시를 활성화합니다.
 
@@ -351,9 +347,7 @@ Fess가 OpenSearch에 연결할 수 없음
 
 2. **스레드 수 증가**
 
-   설정 파일에서 크롤 스레드 수를 늘립니다::
-
-       crawler.thread.count=10
+   관리 화면에서 크롤링 설정의 "스레드 수"를 늘립니다. 기본값은 웹 크롤이 1, 파일 시스템 크롤이 5입니다.
 
 3. **타임아웃 값 조정**
 
@@ -381,7 +375,7 @@ Fess가 OpenSearch에 연결할 수 없음
 
 2. **크롤 로그 확인**
 
-   관리 화면에서 "시스템"→"로그"에서 크롤 로그를 확인하여 오류가 없는지 조사합니다.
+   관리 화면의 "시스템 정보"→"로그 파일"에서 크롤 로그(``fess-crawler.log``)를 다운로드하여 오류가 없는지 조사합니다.
 
 3. **크롤 재실행**
 
@@ -509,11 +503,30 @@ NSSM 등의 타사 도구를 사용하여 Windows 서비스로 등록합니다.
 
 설정을 재설정하는 경우 OpenSearch의 인덱스를 삭제합니다::
 
-    $ curl -X DELETE http://localhost:9200/.fess_config*
+    $ curl -X DELETE 'http://localhost:9200/fess_config.*'
 
 .. warning::
 
    이 명령을 실행하면 모든 설정 데이터가 삭제됩니다.
+
+관리자 비밀번호를 잊은 경우
+---------------------------
+
+관리자 비밀번호를 잊은 경우에는 OpenSearch 의 ``fess_user.user`` 인덱스에 있는 사용자 문서를 직접 갱신하여 비밀번호를 다시 설정할 수 있습니다. 비밀번호는 ``password`` 필드에 ``{bcrypt}$2a$...`` 형식의 해시로 저장되어 있습니다. 갱신은 |Fess| 를 재시작하지 않아도 유효합니다.
+
+1. 새 비밀번호의 해시를 만듭니다. |Fess| 가 받아들이는 것은 ``$2a$`` 로 시작하는 bcrypt 해시뿐이므로, ``htpasswd`` (``apache2-utils`` 또는 ``httpd-tools`` 패키지에 포함)가 출력하는 ``$2y$`` 를 ``$2a$`` 로 바꿉니다. ``NewPassword`` 는 새 비밀번호로 바꾸십시오::
+
+       $ HASH=$(htpasswd -bnBC 10 "" 'NewPassword' | tr -d ':\n' | sed 's/^\$2y/$2a/')
+
+2. admin 사용자 문서의 비밀번호를 갱신합니다. 초기 상태의 admin 사용자의 문서 ID는 ``YWRtaW4=`` 입니다::
+
+       $ curl -X POST 'http://localhost:9200/fess_user.user/_update/YWRtaW4=?refresh=true' \
+              -H 'Content-Type: application/json' \
+              -d "{\"doc\":{\"password\":\"{bcrypt}${HASH}\"}}"
+
+   다른 사용자의 비밀번호를 다시 설정하는 경우에는 ``curl 'http://localhost:9200/fess_user.user/_search?q=name:사용자명'`` 로 ``_id`` 를 조회하여 그 ID를 지정합니다. OpenSearch 에 인증을 설정한 경우에는 curl 에 인증 정보를 지정하십시오.
+
+3. 새 비밀번호로 관리 화면에 로그인할 수 있는지 확인합니다. 명령 이력에 비밀번호가 남는 경우에는 로그인 후 [사용자 > 사용자] 에서 비밀번호를 다시 설정하십시오.
 
 지원 정보
 ==========
@@ -547,9 +560,9 @@ NSSM 등의 타사 도구를 사용하여 Windows 서비스로 등록합니다.
 
 문제를 보고할 때 다음 정보를 수집해 두면 도움이 됩니다:
 
-1. **버전 정보**::
+1. **버전 정보** (``bin/fess -v`` 는 15.9 이상에서 사용할 수 있습니다)::
 
-       $ cat /path/to/fess/VERSION
+       $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version
        $ java -version
 

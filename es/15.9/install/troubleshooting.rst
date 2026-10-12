@@ -321,15 +321,11 @@ La Búsqueda es Lenta
 
        export OPENSEARCH_JAVA_OPTS="-Xms4g -Xmx4g"
 
-2. **Optimización del índice**
-
-   Ejecute periódicamente la optimización desde la pantalla de administración en "Sistema" → "Programador".
-
-3. **Usar SSD**
+2. **Usar SSD**
 
    Si la E/S de disco es un cuello de botella, migre a SSD.
 
-4. **Habilitar caché**
+3. **Habilitar caché**
 
    Habilite la caché de consultas en el archivo de configuración.
 
@@ -354,9 +350,7 @@ El Rastreo es Lento
 
 2. **Aumentar número de hilos**
 
-   Aumente el número de hilos de rastreo en el archivo de configuración::
-
-       crawler.thread.count=10
+   Aumente en la pantalla de administración el "Número de hilos" de la configuración de rastreo. El valor predeterminado es 1 para el rastreo Web y 5 para el rastreo del sistema de archivos.
 
 3. **Ajustar valores de tiempo de espera**
 
@@ -384,7 +378,7 @@ No se Muestran Resultados de Búsqueda
 
 2. **Verificar registro de rastreo**
 
-   Verifique el registro de rastreo en "Sistema" → "Registro" de la pantalla de administración para ver si hay errores.
+   Descargue el registro de rastreo (``fess-crawler.log``) desde "Información del sistema" → "Archivo de registro" de la pantalla de administración y compruebe si hay errores.
 
 3. **Volver a ejecutar rastreo**
 
@@ -512,11 +506,30 @@ Reinicio de Base de Datos
 
 Para restablecer la configuración, elimine el índice de OpenSearch::
 
-    $ curl -X DELETE http://localhost:9200/.fess_config*
+    $ curl -X DELETE 'http://localhost:9200/fess_config.*'
 
 .. warning::
 
    Ejecutar este comando eliminará todos los datos de configuración.
+
+Contraseña de administrador olvidada
+------------------------------------
+
+Si olvidó la contraseña del administrador, puede restablecerla actualizando directamente el documento del usuario en el índice ``fess_user.user`` de OpenSearch. La contraseña se guarda en el campo ``password`` como un hash con la forma ``{bcrypt}$2a$...``. El cambio surte efecto sin reiniciar |Fess|.
+
+1. Cree el hash de la nueva contraseña. |Fess| solo acepta hashes bcrypt que empiecen por ``$2a$``, así que sustituya el ``$2y$`` que genera ``htpasswd`` (incluido en el paquete ``apache2-utils`` o ``httpd-tools``) por ``$2a$``. Sustituya ``NewPassword`` por la nueva contraseña::
+
+       $ HASH=$(htpasswd -bnBC 10 "" 'NewPassword' | tr -d ':\n' | sed 's/^\$2y/$2a/')
+
+2. Actualice la contraseña en el documento del usuario administrador. El ID del documento del usuario administrador en el estado inicial es ``YWRtaW4=``::
+
+       $ curl -X POST 'http://localhost:9200/fess_user.user/_update/YWRtaW4=?refresh=true' \
+              -H 'Content-Type: application/json' \
+              -d "{\"doc\":{\"password\":\"{bcrypt}${HASH}\"}}"
+
+   Para restablecer la contraseña de otro usuario, busque el ``_id`` con ``curl 'http://localhost:9200/fess_user.user/_search?q=name:USUARIO'`` y utilice ese ID. Si la autenticación está habilitada en OpenSearch, añada las credenciales a curl.
+
+3. Compruebe que puede iniciar sesión en la pantalla de administración con la nueva contraseña. Si la contraseña queda en el historial de comandos, vuelva a establecerla después de iniciar sesión en [Usuario > Usuario].
 
 Información de Soporte
 ======================
@@ -550,9 +563,9 @@ Recopilación de Información de Depuración
 
 Al informar problemas, es útil recopilar la siguiente información:
 
-1. **Información de versión**::
+1. **Información de versión** (``bin/fess -v`` está disponible desde la 15.9)::
 
-       $ cat /path/to/fess/VERSION
+       $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version
        $ java -version
 
