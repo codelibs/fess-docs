@@ -236,6 +236,8 @@ Cuando se aplica el límite de tasa, se registra en el log:
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
+El mensaje se registra a nivel INFO, por lo que no se escribe con el nivel de log predeterminado (``warn``). Añada el ``Logger`` anterior a ``log4j2.xml`` (para su ubicación, consulte :doc:`admin-logging`) o establezca ``FESS_LOG_LEVEL`` en ``info``.
+
 Solución de problemas
 =====================
 

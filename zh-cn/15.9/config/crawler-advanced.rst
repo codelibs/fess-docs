@@ -729,23 +729,36 @@ JVM 选项
      - 默认值
    * - ``jvm.crawler.options``
      - 爬虫的 JVM 选项
-     - ``-Xms128m -Xmx512m...``
+     - ``-Xms128m``、``-Xmx512m`` 等
 
 默认配置
 --------------
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000 \
-        -XX:-HeapDumpOnOutOfMemoryError
+    jvm.crawler.options=\
+    -Djava.awt.headless=true\n\
+    ...
+    -Xms128m\n\
+    -Xmx512m\n\
+    -XX:MaxMetaspaceSize=128m\n\
+    ...
+    -XX:-HeapDumpOnOutOfMemoryError\n\
+    ...
+    -XX:+UseG1GC\n\
+    ...
+    -XX:MaxGCPauseMillis=60000\n\
+    ...
 
 .. note::
    以上仅为主要选项的摘录。实际默认值包含约40个选项，涵盖jcifs SMB超时、Netty设置、Log4j配置、详细G1GC设置、PDFBox设置等。
    完整的默认值请参阅 ``fess_config.properties``\ 。
    自定义时，仅更改需要的选项，其他默认值请保持不变。
+
+.. note::
+   每行写一个选项，每行末尾加 ``\n\``。 ``\n`` 是分隔符，行尾的 ``\`` 用于把值延续到下一行。 ``...`` 表示省略的行。
+   |Fess| 会按 ``\n`` 拆分该值，并把每个元素作为一个 JVM 参数传递。如果像 ``-Xms128m -Xmx512m`` 这样用空格分隔，整段文字会成为一个参数，JVM 无法启动，爬取也不会执行。
+   设置该属性会替换全部默认选项，因此请保留 ``fess_config.properties`` 中的默认值，只修改需要更改的行。
 
 主要选项说明
 ----------------------
@@ -772,24 +785,24 @@ JVM 选项
 自定义配置示例
 --------------
 
+以下示例只列出默认值中需要改写的行，其余行请保持不变。
+
 **爬取大型文件时:**
 
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx2g \
-        -XX:MaxMetaspaceSize=256m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000
+    -Xms256m\n\
+    -Xmx2g\n\
+    -XX:MaxMetaspaceSize=256m\n\
 
 **调试时:**
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:+HeapDumpOnOutOfMemoryError \
-        -XX:HeapDumpPath=/tmp/crawler_dump.hprof
+    -XX:+HeapDumpOnOutOfMemoryError\n\
+    -XX:HeapDumpPath=/tmp/crawler_dump.hprof\n\
+
+把默认的 ``-XX:-HeapDumpOnOutOfMemoryError`` 行替换为这两行。
 
 详情请参阅 :doc:`setup-memory`。
 
@@ -838,9 +851,12 @@ HTTP 爬取的重试次数（默认5次）和重试间隔（默认500毫秒）�
 
 **1. 调整堆大小**
 
+按如下方式改写默认值中的 ``-Xms128m`` 和 ``-Xmx512m`` 行。
+
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx1g
+    -Xms256m\n\
+    -Xmx1g\n\
 
 **2. 调整缓存大小**
 
@@ -897,11 +913,12 @@ HTTP 爬取的重试次数（默认5次）和重试间隔（默认500毫秒）�
 
 **对策:**
 
-1. 增加爬虫堆大小
+1. 增加爬虫堆大小（改写 ``jvm.crawler.options`` 默认值中的 ``-Xms`` 和 ``-Xmx`` 行）
 
    ::
 
-       jvm.crawler.options=-Xms256m -Xmx2g
+       -Xms256m\n\
+       -Xmx2g\n\
 
 2. 减少并行线程数
 

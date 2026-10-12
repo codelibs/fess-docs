@@ -732,23 +732,36 @@ Vous pouvez configurer les options JVM du processus du robot d'indexation.
      - Par défaut
    * - ``jvm.crawler.options``
      - Options JVM du robot d'indexation
-     - ``-Xms128m -Xmx512m...``
+     - ``-Xms128m``, ``-Xmx512m``, ...
 
 Configuration par défaut
 ------------------------
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000 \
-        -XX:-HeapDumpOnOutOfMemoryError
+    jvm.crawler.options=\
+    -Djava.awt.headless=true\n\
+    ...
+    -Xms128m\n\
+    -Xmx512m\n\
+    -XX:MaxMetaspaceSize=128m\n\
+    ...
+    -XX:-HeapDumpOnOutOfMemoryError\n\
+    ...
+    -XX:+UseG1GC\n\
+    ...
+    -XX:MaxGCPauseMillis=60000\n\
+    ...
 
 .. note::
    Ce qui précède ne montre que les options principales. Les valeurs par défaut réelles comprennent environ 40 options couvrant les délais jcifs SMB, les paramètres Netty, la configuration Log4j, les paramètres détaillés G1GC, les paramètres PDFBox, etc.
    Consultez ``fess_config.properties`` pour les valeurs par défaut complètes.
    Lors de la personnalisation, ne modifiez que les options nécessaires et conservez les autres valeurs par défaut.
+
+.. note::
+   Écrivez une option par ligne et terminez chaque ligne par ``\n\``. ``\n`` est le séparateur et le ``\`` final poursuit la valeur sur la ligne suivante. ``...`` représente les lignes omises.
+   |Fess| découpe la valeur au niveau de ``\n`` et transmet chaque élément à la JVM comme un seul argument. Si vous séparez les options par des espaces, comme dans ``-Xms128m -Xmx512m``, tout le texte devient un seul argument, la JVM ne démarre pas et l'indexation n'est pas exécutée.
+   Définir cette propriété remplace toutes les options par défaut ; conservez donc les valeurs par défaut de ``fess_config.properties`` et ne modifiez que les lignes voulues.
 
 Description des principales options
 -----------------------------------
@@ -775,24 +788,24 @@ Description des principales options
 Exemples de configuration personnalisée
 ---------------------------------------
 
+Les exemples suivants ne montrent que les lignes de la valeur par défaut à modifier. Laissez toutes les autres lignes inchangées.
+
 **Pour indexer des fichiers volumineux :**
 
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx2g \
-        -XX:MaxMetaspaceSize=256m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000
+    -Xms256m\n\
+    -Xmx2g\n\
+    -XX:MaxMetaspaceSize=256m\n\
 
 **Lors du débogage :**
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:+HeapDumpOnOutOfMemoryError \
-        -XX:HeapDumpPath=/tmp/crawler_dump.hprof
+    -XX:+HeapDumpOnOutOfMemoryError\n\
+    -XX:HeapDumpPath=/tmp/crawler_dump.hprof\n\
+
+Remplacez la ligne par défaut ``-XX:-HeapDumpOnOutOfMemoryError`` par ces deux lignes.
 
 Consultez :doc:`setup-memory` pour plus de détails.
 
@@ -841,9 +854,12 @@ Optimisation de l'utilisation de la mémoire
 
 **1. Ajustement de la taille du tas**
 
+Modifiez les lignes ``-Xms128m`` et ``-Xmx512m`` de la valeur par défaut comme suit.
+
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx1g
+    -Xms256m\n\
+    -Xmx1g\n\
 
 **2. Ajustement de la taille du cache**
 
@@ -900,11 +916,12 @@ Mémoire insuffisante
 
 **Solutions :**
 
-1. Augmenter la taille du tas du robot d'indexation
+1. Augmenter la taille du tas du robot d'indexation (modifiez pour cela les lignes ``-Xms`` et ``-Xmx`` de la valeur par défaut de ``jvm.crawler.options``)
 
    ::
 
-       jvm.crawler.options=-Xms256m -Xmx2g
+       -Xms256m\n\
+       -Xmx2g\n\
 
 2. Réduire le nombre de threads parallèles
 

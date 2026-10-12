@@ -239,6 +239,8 @@ Lorsque la limitation de débit est appliquée, elle est enregistrée dans les l
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
+Le message est enregistré au niveau INFO ; il n'est donc pas écrit avec le niveau de log par défaut (``warn``). Ajoutez le ``Logger`` ci-dessus à ``log4j2.xml`` (emplacement : voir :doc:`admin-logging`) ou définissez ``FESS_LOG_LEVEL`` à ``info``.
+
 Dépannage
 ======================
 

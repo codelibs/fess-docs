@@ -235,6 +235,8 @@ Wenn Rate-Limiting angewendet wird, wird es in den Protokollen aufgezeichnet:
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
+Die Meldung steht auf INFO-Ebene und wird bei der Standard-Protokollstufe (``warn``) daher nicht geschrieben. Fügen Sie den obigen ``Logger`` in ``log4j2.xml`` ein (Speicherort siehe :doc:`admin-logging`) oder setzen Sie ``FESS_LOG_LEVEL`` auf ``info``.
+
 Fehlerbehebung
 ==============
 

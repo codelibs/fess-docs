@@ -112,6 +112,8 @@ Lorsqu'une requête arrive, LoadControlFilter la traite dans l'ordre suivant :
    ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
    Cela permet de vérifier quel chemin a été rejeté et pour quel seuil.
 
+   Ce message est enregistré au niveau INFO ; le niveau de log par défaut (``warn``) ne l'écrit donc pas. Pour le voir, définissez ``FESS_LOG_LEVEL`` à ``info`` et redémarrez |Fess| (voir :doc:`admin-logging`).
+
 Exemples de configuration
 =========================
 

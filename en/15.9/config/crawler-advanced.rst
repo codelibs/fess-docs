@@ -732,23 +732,36 @@ You can configure JVM options for the crawler process.
      - Default
    * - ``jvm.crawler.options``
      - Crawler JVM options
-     - ``-Xms128m -Xmx512m...``
+     - ``-Xms128m``, ``-Xmx512m``, ...
 
 Default Settings
 ----------------
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000 \
-        -XX:-HeapDumpOnOutOfMemoryError
+    jvm.crawler.options=\
+    -Djava.awt.headless=true\n\
+    ...
+    -Xms128m\n\
+    -Xmx512m\n\
+    -XX:MaxMetaspaceSize=128m\n\
+    ...
+    -XX:-HeapDumpOnOutOfMemoryError\n\
+    ...
+    -XX:+UseG1GC\n\
+    ...
+    -XX:MaxGCPauseMillis=60000\n\
+    ...
 
 .. note::
    The above shows only the main options. The actual defaults include approximately 40 options covering jcifs SMB timeouts, Netty settings, Log4j configuration, detailed G1GC settings, PDFBox settings, etc.
    See ``fess_config.properties`` for the complete default values.
    When customizing, change only the required options and keep the other defaults.
+
+.. note::
+   Write one option per line and end each line with ``\n\``. ``\n`` is the separator and the trailing ``\`` continues the value on the next line. ``...`` stands for lines left out here.
+   |Fess| splits the value at ``\n`` and passes each element to the JVM as a single argument. If you separate options with spaces, as in ``-Xms128m -Xmx512m``, the whole text becomes one argument, the JVM does not start and the crawl does not run.
+   Setting this property replaces all of the default options, so keep the defaults from ``fess_config.properties`` and rewrite only the lines you want to change.
 
 Key Options Explained
 ----------------------
@@ -775,24 +788,24 @@ Key Options Explained
 Custom Configuration Examples
 ------------------------------
 
+The examples below show only the lines of the default value that you rewrite. Leave all other lines unchanged.
+
 **For crawling large files:**
 
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx2g \
-        -XX:MaxMetaspaceSize=256m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000
+    -Xms256m\n\
+    -Xmx2g\n\
+    -XX:MaxMetaspaceSize=256m\n\
 
 **For debugging:**
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:+HeapDumpOnOutOfMemoryError \
-        -XX:HeapDumpPath=/tmp/crawler_dump.hprof
+    -XX:+HeapDumpOnOutOfMemoryError\n\
+    -XX:HeapDumpPath=/tmp/crawler_dump.hprof\n\
+
+Replace the default ``-XX:-HeapDumpOnOutOfMemoryError`` line with these two lines.
 
 For details, see :doc:`setup-memory`.
 
@@ -841,9 +854,12 @@ Optimizing Memory Usage
 
 **1. Adjust Heap Size**
 
+Rewrite the ``-Xms128m`` and ``-Xmx512m`` lines of the default value as follows.
+
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx1g
+    -Xms256m\n\
+    -Xmx1g\n\
 
 **2. Adjust Cache Size**
 
@@ -900,11 +916,12 @@ Memory Shortage
 
 **Solutions:**
 
-1. Increase crawler heap size
+1. Increase crawler heap size by rewriting the ``-Xms`` and ``-Xmx`` lines of the default value of ``jvm.crawler.options``
 
    ::
 
-       jvm.crawler.options=-Xms256m -Xmx2g
+       -Xms256m\n\
+       -Xmx2g\n\
 
 2. Reduce parallel thread count
 

@@ -218,6 +218,8 @@ robots.txt 按照 RFC 9309 解释。 ``Allow:`` 和 ``Disallow:`` 以最长匹�
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
+该消息以 INFO 级别输出，因此默认日志级别（``warn``）不会写出。请将上面的 ``Logger`` 添加到 ``log4j2.xml``\ （位置参见 :doc:`admin-logging`），或将 ``FESS_LOG_LEVEL`` 设为 ``info``。
+
 故障排除
 ======================
 

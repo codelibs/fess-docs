@@ -111,6 +111,8 @@ HTTPリクエスト負荷制御の設定
    ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
    が出力されます。どのパスがどの閾値で拒否されたかを確認できます。
 
+   このメッセージは INFO で出力されるため、既定のログレベル（ ``warn`` ）では書き込まれません。確認するには、 ``FESS_LOG_LEVEL`` を ``info`` に変更して\ |Fess| を再起動します（ :doc:`admin-logging` を参照）。
+
 設定例
 ======
 

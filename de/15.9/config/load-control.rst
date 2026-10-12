@@ -111,6 +111,8 @@ Wenn eine Anfrage eintrifft, verarbeitet LoadControlFilter sie in folgender Reih
    ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
    ausgegeben. Damit lässt sich nachvollziehen, welcher Pfad mit welchem Schwellenwert abgelehnt wurde.
 
+   Diese Meldung wird auf INFO-Ebene ausgegeben und daher bei der Standard-Protokollstufe (``warn``) nicht geschrieben. Setzen Sie ``FESS_LOG_LEVEL`` auf ``info`` und starten Sie |Fess| neu, um sie zu sehen (siehe :doc:`admin-logging`).
+
 Konfigurationsbeispiele
 =======================
 

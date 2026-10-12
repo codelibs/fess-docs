@@ -730,23 +730,36 @@ Sie können JVM-Optionen für den Crawler-Prozess konfigurieren.
      - Standard
    * - ``jvm.crawler.options``
      - JVM-Optionen für Crawler
-     - ``-Xms128m -Xmx512m...``
+     - ``-Xms128m``, ``-Xmx512m``, ...
 
 Standardkonfiguration
 ---------------------
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000 \
-        -XX:-HeapDumpOnOutOfMemoryError
+    jvm.crawler.options=\
+    -Djava.awt.headless=true\n\
+    ...
+    -Xms128m\n\
+    -Xmx512m\n\
+    -XX:MaxMetaspaceSize=128m\n\
+    ...
+    -XX:-HeapDumpOnOutOfMemoryError\n\
+    ...
+    -XX:+UseG1GC\n\
+    ...
+    -XX:MaxGCPauseMillis=60000\n\
+    ...
 
 .. note::
    Oben sind nur die wichtigsten Optionen aufgeführt. Die tatsächlichen Standardwerte umfassen etwa 40 Optionen, darunter jcifs-SMB-Timeouts, Netty-Einstellungen, Log4j-Konfiguration, detaillierte G1GC-Einstellungen, PDFBox-Einstellungen usw.
    Die vollständigen Standardwerte finden Sie in ``fess_config.properties``.
    Ändern Sie bei der Anpassung nur die erforderlichen Optionen und behalten Sie die anderen Standardwerte bei.
+
+.. note::
+   Schreiben Sie pro Zeile eine Option und beenden Sie jede Zeile mit ``\n\``. ``\n`` ist das Trennzeichen, das abschließende ``\`` setzt den Wert in der nächsten Zeile fort. ``...`` steht für ausgelassene Zeilen.
+   |Fess| teilt den Wert an ``\n`` und übergibt jedes Element als ein einzelnes Argument an die JVM. Werden die Optionen durch Leerzeichen getrennt, etwa ``-Xms128m -Xmx512m``, wird der gesamte Text zu einem Argument; die JVM startet nicht und der Crawl wird nicht ausgeführt.
+   Wird diese Eigenschaft gesetzt, ersetzt sie alle Standardoptionen. Behalten Sie daher die Standardwerte aus ``fess_config.properties`` bei und ändern Sie nur die gewünschten Zeilen.
 
 Erklärung wichtiger Optionen
 ----------------------------
@@ -773,24 +786,24 @@ Erklärung wichtiger Optionen
 Beispiele für benutzerdefinierte Konfiguration
 ----------------------------------------------
 
+Die folgenden Beispiele zeigen nur die Zeilen des Standardwerts, die Sie ändern. Lassen Sie alle anderen Zeilen unverändert.
+
 **Beim Crawlen großer Dateien:**
 
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx2g \
-        -XX:MaxMetaspaceSize=256m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000
+    -Xms256m\n\
+    -Xmx2g\n\
+    -XX:MaxMetaspaceSize=256m\n\
 
 **Beim Debuggen:**
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:+HeapDumpOnOutOfMemoryError \
-        -XX:HeapDumpPath=/tmp/crawler_dump.hprof
+    -XX:+HeapDumpOnOutOfMemoryError\n\
+    -XX:HeapDumpPath=/tmp/crawler_dump.hprof\n\
+
+Ersetzen Sie die Standardzeile ``-XX:-HeapDumpOnOutOfMemoryError`` durch diese beiden Zeilen.
 
 Details siehe :doc:`setup-memory`.
 
@@ -839,9 +852,12 @@ Optimierung der Speichernutzung
 
 **1. Heap-Größe anpassen**
 
+Ändern Sie die Zeilen ``-Xms128m`` und ``-Xmx512m`` des Standardwerts wie folgt.
+
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx1g
+    -Xms256m\n\
+    -Xmx1g\n\
 
 **2. Cache-Größe anpassen**
 
@@ -898,11 +914,12 @@ Speichermangel
 
 **Gegenmaßnahmen:**
 
-1. Crawler-Heap-Größe erhöhen
+1. Crawler-Heap-Größe erhöhen (ändern Sie dazu die Zeilen ``-Xms`` und ``-Xmx`` des Standardwerts von ``jvm.crawler.options``)
 
    ::
 
-       jvm.crawler.options=-Xms256m -Xmx2g
+       -Xms256m\n\
+       -Xmx2g\n\
 
 2. Anzahl paralleler Threads reduzieren
 

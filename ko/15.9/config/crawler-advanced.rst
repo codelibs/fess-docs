@@ -730,23 +730,36 @@ JVM 옵션
      - 기본값
    * - ``jvm.crawler.options``
      - 크롤러 JVM 옵션
-     - ``-Xms128m -Xmx512m...``
+     - ``-Xms128m``, ``-Xmx512m`` 등
 
 기본 설정
 --------------
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000 \
-        -XX:-HeapDumpOnOutOfMemoryError
+    jvm.crawler.options=\
+    -Djava.awt.headless=true\n\
+    ...
+    -Xms128m\n\
+    -Xmx512m\n\
+    -XX:MaxMetaspaceSize=128m\n\
+    ...
+    -XX:-HeapDumpOnOutOfMemoryError\n\
+    ...
+    -XX:+UseG1GC\n\
+    ...
+    -XX:MaxGCPauseMillis=60000\n\
+    ...
 
 .. note::
    위의 내용은 주요 옵션만 발췌한 것입니다. 실제 기본값에는 jcifs SMB 타임아웃, Netty 설정, Log4j 설정, 상세 G1GC 설정, PDFBox 설정 등 약 40개의 옵션이 포함되어 있습니다.
    전체 기본값은 ``fess_config.properties`` 를 참조하십시오.
    사용자 지정 시 필요한 옵션만 변경하고 나머지 기본값은 유지하십시오.
+
+.. note::
+   한 줄에 옵션을 하나씩 쓰고 각 줄의 끝을 ``\n\`` 으로 합니다. ``\n`` 이 구분자이고 줄 끝의 ``\`` 는 값을 다음 줄로 이어 가기 위한 기호입니다. ``...`` 는 생략한 줄을 나타냅니다.
+   |Fess|\ 는 값을 ``\n`` 으로 나누어 각 요소를 하나의 JVM 인수로 전달합니다. ``-Xms128m -Xmx512m`` 처럼 공백으로 구분하면 전체가 하나의 인수가 되어 JVM이 시작되지 않고 크롤이 실행되지 않습니다.
+   이 값을 설정하면 기본 옵션이 모두 대체되므로 ``fess_config.properties`` 의 기본값은 그대로 두고 변경할 줄만 수정하십시오.
 
 주요 옵션 설명
 ----------------------
@@ -773,24 +786,24 @@ JVM 옵션
 사용자 정의 설정 예
 -------------------
 
+다음 예는 기본값 중 수정할 줄만 보여 줍니다. 나머지 줄은 그대로 두십시오.
+
 **큰 파일을 크롤링하는 경우:**
 
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx2g \
-        -XX:MaxMetaspaceSize=256m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000
+    -Xms256m\n\
+    -Xmx2g\n\
+    -XX:MaxMetaspaceSize=256m\n\
 
 **디버그 시:**
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:+HeapDumpOnOutOfMemoryError \
-        -XX:HeapDumpPath=/tmp/crawler_dump.hprof
+    -XX:+HeapDumpOnOutOfMemoryError\n\
+    -XX:HeapDumpPath=/tmp/crawler_dump.hprof\n\
+
+기본값의 ``-XX:-HeapDumpOnOutOfMemoryError`` 줄을 이 두 줄로 바꿉니다.
 
 자세한 내용은 :doc:`setup-memory` 를 참조하십시오.
 
@@ -840,9 +853,12 @@ HTTP 크롤의 재시도 횟수(기본값 5회)와 재시도 간격(기본값 50
 
 **1. 힙 크기 조정**
 
+기본값의 ``-Xms128m`` 및 ``-Xmx512m`` 줄을 다음과 같이 수정합니다.
+
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx1g
+    -Xms256m\n\
+    -Xmx1g\n\
 
 **2. 캐시 크기 조정**
 
@@ -899,11 +915,12 @@ HTTP 크롤의 재시도 횟수(기본값 5회)와 재시도 간격(기본값 50
 
 **대책:**
 
-1. 크롤러의 힙 크기를 늘림
+1. 크롤러의 힙 크기를 늘림 (``jvm.crawler.options`` 기본값의 ``-Xms`` 및 ``-Xmx`` 줄을 수정합니다)
 
    ::
 
-       jvm.crawler.options=-Xms256m -Xmx2g
+       -Xms256m\n\
+       -Xmx2g\n\
 
 2. 병렬 스레드 수를 줄임
 

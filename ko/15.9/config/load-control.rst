@@ -111,6 +111,8 @@ HTTP 요청 부하 제어 설정
    ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
    가 출력됩니다. 어떤 경로가 어떤 임계값으로 거부되었는지 확인할 수 있습니다.
 
+   이 메시지는 INFO 레벨로 출력되므로 기본 로그 레벨(``warn``)에서는 기록되지 않습니다. 확인하려면 ``FESS_LOG_LEVEL`` 을 ``info`` 로 변경하고 |Fess|\ 를 다시 시작하십시오( :doc:`admin-logging` 참조).
+
 설정 예시
 =========
 

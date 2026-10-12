@@ -111,6 +111,8 @@ HTTP请求负载控制配置
    ``Rejecting request due to high CPU load: path=..., cpu=...%, threshold=...%``
    可以确认哪个路径以何阈值被拒绝。
 
+   该消息以 INFO 级别输出，因此默认日志级别（``warn``）不会写出。要查看它，请将 ``FESS_LOG_LEVEL`` 设为 ``info`` 并重启 |Fess|\ （参见 :doc:`admin-logging`）。
+
 配置示例
 ========
 
