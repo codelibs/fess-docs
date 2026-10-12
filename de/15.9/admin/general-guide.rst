@@ -166,17 +166,18 @@ Gibt an, ob die Favoritenprotokollierung aktiviert werden soll.
 Alte Suchprotokolle löschen
 :::::::::::::::::::::::::::
 
-Löscht Suchprotokolle, die älter als die angegebene Anzahl von Tagen sind.
+Löscht Suchprotokolle, die älter als die angegebene Anzahl von Tagen sind. Der Standardwert ist ``-1``; bei ``-1`` werden die Protokolle nicht gelöscht, sondern unbegrenzt aufbewahrt.
+Klickprotokolle, Favoritenprotokolle und Chat-Protokolle werden nach derselben Anzahl von Tagen gelöscht.
 
 Alte Jobprotokolle löschen
 ::::::::::::::::::::::::::
 
-Löscht Jobprotokolle, die älter als die angegebene Anzahl von Tagen sind.
+Löscht Jobprotokolle, die älter als die angegebene Anzahl von Tagen sind. Der Standardwert ist ``-1``; bei ``-1`` werden sie nicht gelöscht.
 
 Alte Benutzerprotokolle löschen
 :::::::::::::::::::::::::::::::
 
-Löscht Benutzerprotokolle, die älter als die angegebene Anzahl von Tagen sind.
+Löscht Benutzerprotokolle, die älter als die angegebene Anzahl von Tagen sind. Der Standardwert ist ``-1``; bei ``-1`` werden sie nicht gelöscht.
 
 Bot-Namen zum Löschen von Protokollen
 ::::::::::::::::::::::::::::::::::::::

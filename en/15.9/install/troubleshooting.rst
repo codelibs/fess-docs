@@ -320,15 +320,11 @@ Slow Search
 
        export OPENSEARCH_JAVA_OPTS="-Xms4g -Xmx4g"
 
-2. **Optimize index**
-
-   Periodically run optimization from the admin screen at "System" → "Scheduler".
-
-3. **Use SSD**
+2. **Use SSD**
 
    If disk I/O is a bottleneck, migrate to SSD.
 
-4. **Enable caching**
+3. **Enable caching**
 
    Enable query cache in configuration file.
 
@@ -353,9 +349,7 @@ Slow Crawling
 
 2. **Increase number of threads**
 
-   Increase crawl thread count in configuration file::
-
-       crawler.thread.count=10
+   Increase the "Number of Threads" of the crawl configuration on the admin screen. The default is 1 for Web crawls and 5 for file system crawls.
 
 3. **Adjust timeout values**
 
@@ -383,7 +377,7 @@ No Search Results Displayed
 
 2. **Check crawl logs**
 
-   Check crawl logs at "System" → "Log" in the admin screen for errors.
+   Download the crawl log (``fess-crawler.log``) from "System Info" → "Log File" in the admin screen and check it for errors.
 
 3. **Re-run crawl**
 
@@ -511,11 +505,30 @@ Reset Database
 
 To reset configuration, delete OpenSearch indexes::
 
-    $ curl -X DELETE http://localhost:9200/.fess_config*
+    $ curl -X DELETE 'http://localhost:9200/fess_config.*'
 
 .. warning::
 
    This command will delete all configuration data.
+
+Forgotten Administrator Password
+--------------------------------
+
+If you forgot the administrator password, you can reset it by updating the user document directly in the ``fess_user.user`` index of OpenSearch. The password is stored in the ``password`` field as a hash in the form ``{bcrypt}$2a$...``. The change takes effect without restarting |Fess|.
+
+1. Create the hash of the new password. |Fess| accepts only bcrypt hashes that start with ``$2a$``, so replace the ``$2y$`` printed by ``htpasswd`` (contained in the ``apache2-utils`` or ``httpd-tools`` package) with ``$2a$``. Replace ``NewPassword`` with the new password::
+
+       $ HASH=$(htpasswd -bnBC 10 "" 'NewPassword' | tr -d ':\n' | sed 's/^\$2y/$2a/')
+
+2. Update the password in the document of the admin user. The document ID of the admin user in its initial state is ``YWRtaW4=``::
+
+       $ curl -X POST 'http://localhost:9200/fess_user.user/_update/YWRtaW4=?refresh=true' \
+              -H 'Content-Type: application/json' \
+              -d "{\"doc\":{\"password\":\"{bcrypt}${HASH}\"}}"
+
+   To reset the password of another user, look up the ``_id`` with ``curl 'http://localhost:9200/fess_user.user/_search?q=name:USERNAME'`` and use that ID. If authentication is enabled for OpenSearch, add the credentials to curl.
+
+3. Confirm that you can log in to the admin screen with the new password. If the password remains in your command history, set the password again under [User > User] after logging in.
 
 Support Information
 ===================
@@ -549,9 +562,9 @@ Collecting Debug Information
 
 When reporting issues, collecting the following information is helpful:
 
-1. **Version information**::
+1. **Version information** (``bin/fess -v`` is available in 15.9 and later)::
 
-       $ cat /path/to/fess/VERSION
+       $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version
        $ java -version
 

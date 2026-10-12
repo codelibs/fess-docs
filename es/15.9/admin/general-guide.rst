@@ -166,17 +166,18 @@ Especifique si desea habilitar el registro de favoritos.
 Eliminar registros de búsqueda anteriores
 ::::::::::::::::::::::::::::::::::::::::::
 
-Elimina los registros de búsqueda anteriores al número de días especificado.
+Elimina los registros de búsqueda anteriores al número de días especificado. El valor predeterminado es ``-1``; con ``-1`` los registros no se eliminan y se conservan indefinidamente.
+Los registros de clics, de favoritos y de chat también se eliminan con este mismo número de días.
 
 Eliminar registros de trabajos anteriores
 ::::::::::::::::::::::::::::::::::::::::::
 
-Elimina los registros de trabajo anteriores al número de días especificado.
+Elimina los registros de trabajo anteriores al número de días especificado. El valor predeterminado es ``-1``; con ``-1`` no se eliminan.
 
 Eliminar registros de usuarios anteriores
 ::::::::::::::::::::::::::::::::::::::::::
 
-Elimina los registros de usuario anteriores al número de días especificado.
+Elimina los registros de usuario anteriores al número de días especificado. El valor predeterminado es ``-1``; con ``-1`` no se eliminan.
 
 Nombre del bot para eliminar registros
 :::::::::::::::::::::::::::::::::::::::

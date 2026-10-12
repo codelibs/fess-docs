@@ -15,6 +15,11 @@
 
 |image0|
 
+.. note::
+
+   词典（同义词、停用词等）文件不包含在备份中。
+   词典文件保存在搜索引擎的词典目录（ ``FESS_DICTIONARY_PATH`` ）中，如有需要，请另行复制。
+
 fess_config.bulk
 ::::::::::::::::
 
@@ -23,7 +28,7 @@ fess_config.bulk 包含 |Fess| 的配置信息。
 fess_basic_config.bulk
 ::::::::::::::::::::::
 
-fess_basic_config.bulk 包含除失败URL外的 |Fess| 配置信息。
+fess_basic_config.bulk 包含除爬取信息、失败URL、作业日志、缩略图队列、用户标签等以外的 |Fess| 配置信息。
 
 fess_user.bulk
 ::::::::::::::
@@ -74,7 +79,14 @@ user_info.ndjson包含搜索用户的信息。
 ---------
 
 可以上传和导入配置信息。
-可以恢复的文件是 \*.bulk 和 system.properties。
+可以恢复的文件如下。
+
+- ``*.bulk``
+- ``system.properties``
+- ``fess.json`` 、 ``doc.json`` ：替换 |Fess| 使用的索引定义文件。已有索引的设置和映射不会被立即更改。
+- ``gsa*.xml`` ：Google Search Appliance 的配置文件。将作为 Web 爬取配置、文件爬取配置和标签导入。
+
+``*.ndjson`` （搜索日志等日志）无法通过上传来恢复。
 
 \*.bulk 中带有 ``updatedTime`` 的文档，仅在已存储的文档不存在、没有 ``updatedTime`` 或更旧时才会写入。
 不比已存储文档更新的文档会被跳过，并以 INFO 级别记录在 ``fess.log`` 中。因此恢复不会撤销备份之后所做的更改，

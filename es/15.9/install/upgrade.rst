@@ -87,7 +87,7 @@ Respaldo de Datos de Configuración
 
       ``fess_config.bulk`` incluye el contenido de ``fess_basic_config.bulk``. Como respaldo de
       configuración antes de la actualización, basta con ``fess_basic_config.bulk``, ``fess_user.bulk``
-      y ``system.properties``.
+      y ``system.properties``. Sin embargo, si el origen es 15.9 o posterior y utiliza etiquetas de usuario, descargue también ``fess_config.bulk``: el índice ``tag_type``, que contiene las etiquetas de usuario, no está incluido en ``fess_basic_config.bulk`` (consulte :doc:`../admin/tagtype-guide`).
 
    .. note::
 

@@ -118,9 +118,8 @@ v2 의 응답은 ``response`` 엔벨로프로 반환됩니다.
       "response": {
         "status": 0,
         "engine": {
-          "cluster_name": "fess",
-          "status": "green",
-          "ping_status": 200
+          "status": "GREEN",
+          "ping_status": 0
         }
       }
     }

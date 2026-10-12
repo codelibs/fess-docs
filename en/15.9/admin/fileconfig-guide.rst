@@ -75,6 +75,12 @@ Configuration Parameters
 
 Specifies crawl configuration information.
 
+For crawls of paths that start with ``file:`` (the local or mounted file system), ``client.followSymlink`` specifies whether symbolic links are followed. The default is ``true`` (follow). When set to ``false``, symbolic links are skipped and the files they point to are not crawled through the link (each skipped link is logged at INFO level in ``fess-crawler.log``). Following a link registers the target file a second time under the permissions of the configuration that contains the link, so consider ``false`` when you crawl a share that more users can read than the tree its links point into.
+
+::
+
+    client.followSymlink=false
+
 Depth
 :::::
 

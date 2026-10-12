@@ -321,15 +321,11 @@ La recherche est lente
 
        export OPENSEARCH_JAVA_OPTS="-Xms4g -Xmx4g"
 
-2. **Optimisation de l'index**
-
-   Exécutez régulièrement l'optimisation depuis « Système » → « Planificateur » dans l'écran d'administration.
-
-3. **Utilisez un SSD**
+2. **Utilisez un SSD**
 
    Si les E/S disque sont le goulot d'étranglement, migrez vers un SSD.
 
-4. **Activez le cache**
+3. **Activez le cache**
 
    Activez le cache de requêtes dans le fichier de configuration.
 
@@ -354,9 +350,7 @@ L'exploration est lente
 
 2. **Augmentez le nombre de threads**
 
-   Augmentez le nombre de threads d'exploration dans le fichier de configuration ::
-
-       crawler.thread.count=10
+   Augmentez le « Nombre de threads » de la configuration d'exploration dans l'écran d'administration. La valeur par défaut est 1 pour l'exploration Web et 5 pour l'exploration du système de fichiers.
 
 3. **Ajustez la valeur de timeout**
 
@@ -384,7 +378,7 @@ Les résultats de recherche ne s'affichent pas
 
 2. **Vérifiez les journaux d'exploration**
 
-   Vérifiez les journaux d'exploration depuis « Système » → « Journal » dans l'écran d'administration pour rechercher les erreurs.
+   Téléchargez le journal d'exploration (``fess-crawler.log``) depuis « Informations système » → « Fichier journal » dans l'écran d'administration et recherchez-y les erreurs.
 
 3. **Réexécutez l'exploration**
 
@@ -512,11 +506,30 @@ Réinitialisation de la base de données
 
 Pour réinitialiser la configuration, supprimez l'index d'OpenSearch ::
 
-    $ curl -X DELETE http://localhost:9200/.fess_config*
+    $ curl -X DELETE 'http://localhost:9200/fess_config.*'
 
 .. warning::
 
    L'exécution de cette commande supprimera toutes les données de configuration.
+
+Mot de passe administrateur oublié
+----------------------------------
+
+Si vous avez oublié le mot de passe de l'administrateur, vous pouvez le réinitialiser en mettant à jour directement le document de l'utilisateur dans l'index ``fess_user.user`` d'OpenSearch. Le mot de passe est stocké dans le champ ``password`` sous la forme d'un hash ``{bcrypt}$2a$...``. La modification prend effet sans redémarrer |Fess|.
+
+1. Créez le hash du nouveau mot de passe. |Fess| n'accepte que les hashes bcrypt commençant par ``$2a$`` ; remplacez donc le ``$2y$`` produit par ``htpasswd`` (fourni par le paquet ``apache2-utils`` ou ``httpd-tools``) par ``$2a$``. Remplacez ``NewPassword`` par le nouveau mot de passe ::
+
+       $ HASH=$(htpasswd -bnBC 10 "" 'NewPassword' | tr -d ':\n' | sed 's/^\$2y/$2a/')
+
+2. Mettez à jour le mot de passe dans le document de l'utilisateur administrateur. L'ID du document de l'utilisateur administrateur à l'état initial est ``YWRtaW4=`` ::
+
+       $ curl -X POST 'http://localhost:9200/fess_user.user/_update/YWRtaW4=?refresh=true' \
+              -H 'Content-Type: application/json' \
+              -d "{\"doc\":{\"password\":\"{bcrypt}${HASH}\"}}"
+
+   Pour réinitialiser le mot de passe d'un autre utilisateur, recherchez l'``_id`` avec ``curl 'http://localhost:9200/fess_user.user/_search?q=name:UTILISATEUR'`` et utilisez cet ID. Si l'authentification est activée sur OpenSearch, ajoutez les identifiants à curl.
+
+3. Vérifiez que vous pouvez vous connecter à l'écran d'administration avec le nouveau mot de passe. Si le mot de passe reste dans l'historique des commandes, redéfinissez-le après la connexion dans [Utilisateur > Utilisateur].
 
 Informations de support
 ========================
@@ -550,9 +563,9 @@ Collecte d'informations de débogage
 
 Lors du signalement d'un problème, il est utile de collecter les informations suivantes :
 
-1. **Informations de version** ::
+1. **Informations de version** (``bin/fess -v`` est disponible à partir de la 15.9) ::
 
-       $ cat /path/to/fess/VERSION
+       $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version
        $ java -version
 

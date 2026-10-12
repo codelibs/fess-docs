@@ -71,7 +71,7 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
    * - ``size``
      - Integer
      - 否
-     - 每页记录数（默认：20）
+     - 每页记录数（默认：25。可通过 ``fess_config.properties`` 中的 ``paging.page.size`` 更改）
    * - ``page``
      - Integer
      - 否
@@ -80,6 +80,8 @@ BadWord API是用于管理 |Fess| 屏蔽词（不适当的建议词排除）的A
      - String
      - 否
      - 仅筛选指定ID的屏蔽词
+
+这些参数通过 JSON 请求体指定（例如 ``{"size": 50, "page": 1}``\ ）。通过 URL 查询字符串指定的值（例如 ``?size=50``\ ）会被忽略，因此未在请求体中指定时，始终返回前 25 条。
 
 响应
 ----
@@ -296,6 +298,16 @@ CSV格式
 
 使用示例
 ========
+
+获取屏蔽词列表
+--------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 排除垃圾关键词
 --------------

@@ -15,6 +15,12 @@ Para descargar, haga clic en el nombre del índice.
 
 |image0|
 
+.. note::
+
+   Los archivos de diccionario (sinónimos, palabras vacías, etc.) no forman parte de la copia de seguridad.
+   Se guardan en el directorio de diccionarios del motor de búsqueda (``FESS_DICTIONARY_PATH``),
+   por lo que debe copiarlos aparte si los necesita.
+
 fess_config.bulk
 ::::::::::::::::
 
@@ -23,7 +29,7 @@ fess_config.bulk contiene la información de configuración de |Fess|.
 fess_basic_config.bulk
 ::::::::::::::::::::::
 
-fess_basic_config.bulk contiene la información de configuración de |Fess| excluyendo las URL con falla.
+fess_basic_config.bulk contiene la información de configuración de |Fess| excluyendo la información de rastreo, las URL con falla, los registros de tareas, la cola de miniaturas, las etiquetas de usuario y datos similares.
 
 fess_user.bulk
 ::::::::::::::
@@ -74,7 +80,14 @@ Carga
 -----
 
 Puede cargar e importar información de configuración.
-Los archivos que se pueden restaurar son \*.bulk y system.properties.
+Los archivos que se pueden restaurar son los siguientes:
+
+- ``*.bulk``
+- ``system.properties``
+- ``fess.json`` y ``doc.json``: sustituyen los archivos de definición de índice que usa |Fess|. La configuración y el mapeo de un índice existente no se modifican en ese momento.
+- ``gsa*.xml``: un archivo de configuración de Google Search Appliance. Se importa como configuración de rastreo web, configuración de rastreo de archivos y etiquetas.
+
+Los archivos ``*.ndjson`` (registros de búsqueda y otros registros) no se pueden cargar para restaurarlos.
 
 Un documento de un archivo \*.bulk que tiene ``updatedTime`` solo se escribe si el documento
 almacenado no existe, no tiene ``updatedTime`` o es más antiguo. Un documento que no es más

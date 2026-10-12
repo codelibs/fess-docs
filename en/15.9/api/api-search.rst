@@ -144,7 +144,7 @@ Each field is described below.
    * - ``page_number``
      - Current page number.
    * - ``record_count``
-     - Number of hits (int64).
+     - Number of hits (int64). The exact count is tracked only up to ``query.track.total.hits`` (default: ``10000``); when there are more hits, this value is that limit and ``record_count_relation`` is ``GREATER_THAN_OR_EQUAL_TO``. The limit can be changed per request with ``track_total_hits``.
    * - ``record_count_relation``
      - When ``EQUAL_TO``, the count is exact; when ``GREATER_THAN_OR_EQUAL_TO``, only the lower bound is known.
    * - ``page_count``
@@ -236,7 +236,7 @@ If a failure occurs mid-stream, the final line is flushed as follows:
 Therefore, clients must check the first key of the last line to distinguish successful completion (``data``) from a server error (``error``).
 
 The query is built using the same parameter set as ``GET /search`` (``q``, ``sort``, ``num``, ``lang``, ``ex_q``, ``sdh``, ``fields.*``, ``as.*``, ``track_total_hits``, ``facet.*``, ``geo.*``).
-If scroll search is disabled with ``api.search.scroll=false``, the endpoint returns ``invalid_request`` (400).
+Scroll search is disabled by default (``api.search.scroll=false``). While it is disabled, the endpoint returns ``invalid_request`` (400). To enable it, set ``api.search.scroll=true`` in ``fess_config.properties`` (see :doc:`../config/search-scroll`).
 
 Request Parameters
 ~~~~~~~~~~~~~~~~~~

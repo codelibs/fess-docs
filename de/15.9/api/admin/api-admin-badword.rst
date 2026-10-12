@@ -71,7 +71,7 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite (Standard: 25; änderbar über ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
      - Nein
@@ -80,6 +80,8 @@ Parameter
      - String
      - Nein
      - Auf das Bad Word mit der angegebenen ID einschränken
+
+Diese Parameter werden im JSON-Anfragekörper angegeben (z. B. ``{"size": 50, "page": 1}``). Werte in der URL-Query-String (z. B. ``?size=50``) werden ignoriert; ohne Angabe im Anfragekörper werden daher immer die ersten 25 Einträge zurückgegeben.
 
 Response
 --------
@@ -296,6 +298,16 @@ Request
 
 Verwendungsbeispiele
 ====================
+
+Liste der Bad Words abrufen
+---------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/badword/settings" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
 
 Spam-Schlüsselwörter ausschließen
 ---------------------------------

@@ -321,15 +321,11 @@ Suche ist langsam
 
        export OPENSEARCH_JAVA_OPTS="-Xms4g -Xmx4g"
 
-2. **Index optimieren**
-
-   Führen Sie regelmäßig Optimierung über die Verwaltungsseite unter „System" → „Scheduler" aus.
-
-3. **SSD verwenden**
+2. **SSD verwenden**
 
    Bei Festplatten-I/O als Engpass wechseln Sie zu SSD.
 
-4. **Cache aktivieren**
+3. **Cache aktivieren**
 
    Aktivieren Sie Query-Cache in der Konfigurationsdatei.
 
@@ -354,9 +350,7 @@ Crawling ist langsam
 
 2. **Thread-Anzahl erhöhen**
 
-   Erhöhen Sie die Anzahl der Crawl-Threads in der Konfigurationsdatei::
-
-       crawler.thread.count=10
+   Erhöhen Sie in der Verwaltungsseite die „Anzahl der Threads" der Crawl-Konfiguration. Der Standardwert beträgt 1 für Web-Crawls und 5 für Dateisystem-Crawls.
 
 3. **Timeout-Wert anpassen**
 
@@ -384,7 +378,7 @@ Keine Suchergebnisse angezeigt
 
 2. **Crawl-Protokoll überprüfen**
 
-   Überprüfen Sie in der Verwaltungsseite unter „System" → „Protokoll" das Crawl-Protokoll auf Fehler.
+   Laden Sie in der Verwaltungsseite unter „Systeminformationen" → „Protokolldatei" das Crawl-Protokoll (``fess-crawler.log``) herunter und prüfen Sie es auf Fehler.
 
 3. **Crawl erneut ausführen**
 
@@ -512,11 +506,30 @@ Datenbank zurücksetzen
 
 Löschen Sie OpenSearch-Indizes, um die Konfiguration zurückzusetzen::
 
-    $ curl -X DELETE http://localhost:9200/.fess_config*
+    $ curl -X DELETE 'http://localhost:9200/fess_config.*'
 
 .. warning::
 
    Dieser Befehl löscht alle Konfigurationsdaten.
+
+Administratorpasswort vergessen
+-------------------------------
+
+Wenn Sie das Administratorpasswort vergessen haben, können Sie es zurücksetzen, indem Sie das Benutzerdokument direkt im Index ``fess_user.user`` von OpenSearch aktualisieren. Das Passwort ist im Feld ``password`` als Hash in der Form ``{bcrypt}$2a$...`` gespeichert. Die Änderung wird ohne Neustart von |Fess| wirksam.
+
+1. Erstellen Sie den Hash des neuen Passworts. |Fess| akzeptiert nur bcrypt-Hashes, die mit ``$2a$`` beginnen. Ersetzen Sie daher das von ``htpasswd`` (enthalten im Paket ``apache2-utils`` bzw. ``httpd-tools``) ausgegebene ``$2y$`` durch ``$2a$``. Ersetzen Sie ``NewPassword`` durch das neue Passwort::
+
+       $ HASH=$(htpasswd -bnBC 10 "" 'NewPassword' | tr -d ':\n' | sed 's/^\$2y/$2a/')
+
+2. Aktualisieren Sie das Passwort im Dokument des Admin-Benutzers. Die Dokument-ID des Admin-Benutzers im Ausgangszustand lautet ``YWRtaW4=``::
+
+       $ curl -X POST 'http://localhost:9200/fess_user.user/_update/YWRtaW4=?refresh=true' \
+              -H 'Content-Type: application/json' \
+              -d "{\"doc\":{\"password\":\"{bcrypt}${HASH}\"}}"
+
+   Um das Passwort eines anderen Benutzers zurückzusetzen, ermitteln Sie die ``_id`` mit ``curl 'http://localhost:9200/fess_user.user/_search?q=name:BENUTZERNAME'`` und verwenden Sie diese ID. Wenn für OpenSearch eine Authentifizierung aktiviert ist, geben Sie die Zugangsdaten bei curl an.
+
+3. Prüfen Sie, ob Sie sich mit dem neuen Passwort an der Verwaltungsseite anmelden können. Bleibt das Passwort in Ihrem Befehlsverlauf erhalten, setzen Sie es nach der Anmeldung unter [Benutzer > Benutzer] erneut.
 
 Support-Informationen
 =====================
@@ -550,9 +563,9 @@ Sammlung von Debug-Informationen
 
 Beim Melden von Problemen ist das Sammeln folgender Informationen hilfreich:
 
-1. **Versionsinformationen**::
+1. **Versionsinformationen** (``bin/fess -v`` ist ab 15.9 verfügbar)::
 
-       $ cat /path/to/fess/VERSION
+       $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version
        $ java -version
 

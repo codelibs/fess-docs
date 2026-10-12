@@ -75,6 +75,12 @@ Konfigurationsparameter
 
 Sie können Crawl-Konfigurationsinformationen angeben.
 
+Beim Crawlen von Pfaden, die mit ``file:`` beginnen (lokales oder eingehängtes Dateisystem), legen Sie mit ``client.followSymlink`` fest, ob symbolischen Links gefolgt wird. Der Standardwert ist ``true`` (Links werden verfolgt). Bei ``false`` werden symbolische Links übersprungen, und die Dateien, auf die sie verweisen, werden nicht über den Link gecrawlt (jeder übersprungene Link wird in ``fess-crawler.log`` auf INFO-Ebene protokolliert). Wird einem Link gefolgt, wird die Zieldatei ein zweites Mal mit den Berechtigungen der Konfiguration registriert, die den Link enthält. Erwägen Sie daher ``false``, wenn Sie eine Freigabe crawlen, die für mehr Benutzer lesbar ist als die Verzeichnisstruktur, auf die ihre Links verweisen.
+
+::
+
+    client.followSymlink=false
+
 Tiefe
 :::::
 

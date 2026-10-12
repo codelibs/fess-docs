@@ -19,26 +19,27 @@ Point de terminaison  ``/api/v2/health``
 ====================  ====================================================
 
 Retourne un instantané de l'état du cluster du moteur de recherche (tag ``monitor``).
-Le statut HTTP est 200 si l'état du cluster est ``green`` ou ``yellow``, et 503 si l'état est ``red``.
+Le statut HTTP est 200 si l'état du cluster est ``GREEN`` ou ``YELLOW``, et 503 si l'état est ``RED`` ou si le moteur de recherche est injoignable.
 
 Ce point de terminaison respecte l'invariant de l'enveloppe : « ``status >= 1`` ⟺ statut HTTP ``>= 400`` ».
 
-- En cas d'état ``green`` ou ``yellow`` : retourne l'enveloppe de succès (``status: 0``) avec ``engine``.
-- En cas d'état ``red`` : retourne l'enveloppe d'erreur (``status: 9``, ``error.code: service_unavailable``) et intègre l'instantané du moteur sous ``error.details.engine`` (pour permettre aux outils de supervision d'analyser les métadonnées du cluster).
+- En cas d'état ``GREEN`` ou ``YELLOW`` : retourne l'enveloppe de succès (``status: 0``) avec ``engine``.
+- En cas d'état ``RED`` : retourne l'enveloppe d'erreur (``status: 9``, ``error.code: service_unavailable``) et intègre l'instantané du moteur sous ``error.details.engine`` (pour permettre aux outils de supervision d'analyser les métadonnées du cluster).
+- Si le moteur de recherche est injoignable : retourne, comme pour ``RED``, l'enveloppe d'erreur (``error.code: service_unavailable``, ``error.message: search engine is not reachable``) ; ``error.details.engine`` contient ``status: UNAVAILABLE`` et ``ping_status: 1``.
 
 Les champs de ``engine`` sont les suivants.
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: Champs de engine
 
-   * - ``cluster_name``
-     - Nom du cluster (str).
    * - ``status``
-     - État du cluster. L'une des valeurs ``green`` / ``yellow`` / ``red``.
+     - État du cluster. L'une des valeurs ``GREEN`` / ``YELLOW`` / ``RED`` (en majuscules). ``UNAVAILABLE`` si le moteur de recherche est injoignable.
    * - ``ping_status``
-     - Statut du ping (int). La valeur est ``1`` lorsque le cluster est ``red``, et ``0`` dans les autres cas (``green`` / ``yellow``).
+     - Statut du ping (int). La valeur est ``1`` lorsque le cluster est ``RED`` ou que le moteur de recherche est injoignable, et ``0`` dans les autres cas (``GREEN`` / ``YELLOW``).
 
 Tableau : Champs de engine
+
+Le nom du cluster (``cluster_name``) n'est pas retourné, car ce point de terminaison peut être appelé sans authentification.
 
 Paramètres de requête
 ---------------------
@@ -48,7 +49,7 @@ Aucun paramètre de requête n'est disponible.
 Réponse
 -------
 
-Lorsque le cluster est ``green`` ou ``yellow`` (200), l'enveloppe de succès est retournée avec ``engine``.
+Lorsque le cluster est ``GREEN`` ou ``YELLOW`` (200), l'enveloppe de succès est retournée avec ``engine``.
 
 ::
 
@@ -56,14 +57,13 @@ Lorsque le cluster est ``green`` ou ``yellow`` (200), l'enveloppe de succès est
       "response": {
         "status": 0,
         "engine": {
-          "cluster_name": "fess-es",
-          "status": "green",
+          "status": "GREEN",
           "ping_status": 0
         }
       }
     }
 
-Lorsque le cluster est ``red`` (503), l'enveloppe d'erreur est retournée, avec l'instantané du moteur intégré sous ``error.details.engine``.
+Lorsque le cluster est ``RED`` (503), l'enveloppe d'erreur est retournée, avec l'instantané du moteur intégré sous ``error.details.engine``.
 
 ::
 
@@ -75,8 +75,7 @@ Lorsque le cluster est ``red`` (503), l'enveloppe d'erreur est retournée, avec 
           "message": "search engine cluster is red",
           "details": {
             "engine": {
-              "cluster_name": "fess-es",
-              "status": "red",
+              "status": "RED",
               "ping_status": 1
             }
           }
@@ -104,10 +103,10 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
    * - Code de statut
      - Description
    * - 200 OK
-     - Le cluster est ``green`` ou ``yellow`` et joignable. L'enveloppe de succès contient ``engine``.
+     - Le cluster est ``GREEN`` ou ``YELLOW`` et joignable. L'enveloppe de succès contient ``engine``.
    * - 405 Method Not Allowed
      - La méthode HTTP n'est pas autorisée.
    * - 503 Service Unavailable
-     - Le cluster est ``red``. L'enveloppe d'erreur (``error.code: service_unavailable``) contient l'instantané du moteur sous ``error.details.engine``.
+     - Le cluster est ``RED`` ou le moteur de recherche est injoignable. L'enveloppe d'erreur (``error.code: service_unavailable``) contient l'instantané du moteur sous ``error.details.engine``.
 
 Tableau : Liste des réponses

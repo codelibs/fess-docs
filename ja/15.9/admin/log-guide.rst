@@ -61,10 +61,19 @@ searchlog.log
 :::::::::::::
 
 検索ログが記録されます。
+[システム > 全般] の「検索ログ」が有効な場合、デフォルトの設定では検索のたびに 1 行（JSON）が追記されます。
+1 行には、その検索で返したドキュメントのフィールド（ ``logging.search.docs.fields`` ）が含まれるため、大きさは返した件数に応じて増えます（ ``num=100`` では 1 行が 70 KB 前後になる例があります）。
+ログのローテーションと保持期間は :doc:`../config/admin-logging` を参照してください。
+返したドキュメントのフィールドを検索ログに含めないようにするには ``fess_config.properties`` で ``logging.search.docs.enabled=false`` を、このファイルに出力しないようにするには ``logging.search.use.logfile=false`` を設定します。
 
 gc-crawler.log
 ::::::::::::::
 
-fessのGCログが記録されています。
+クローラープロセスのGCログが記録されています（デフォルトの「Default Crawler」ジョブが出力します）。
+
+gc-fess.log
+:::::::::::
+
+|Fess| 本体のGCログが記録されています。環境変数 ``FESS_USE_GC_LOGGING`` に空でない値を設定した場合にだけ出力されます（詳しくは :doc:`../install/run` を参照してください）。
 
 .. |image0| image:: ../../../resources/images/ja/15.9/admin/log-1.png

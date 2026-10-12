@@ -19,26 +19,27 @@ HTTPメソッド         GET
 ==================  ====================================================
 
 検索エンジンクラスターの状態スナップショットを返します（ ``monitor`` タグ）。
-HTTP ステータスは、クラスターの状態が ``green`` / ``yellow`` の場合は 200、 ``red`` の場合は 503 になります。
+HTTP ステータスは、クラスターの状態が ``GREEN`` / ``YELLOW`` の場合は 200、 ``RED`` の場合、または検索エンジンに接続できない場合は 503 になります。
 
 このエンドポイントはエンベロープの不変条件「 ``status >= 1`` ⇔ HTTP ステータス ``>= 400`` 」を守ります。
 
-- ``green`` / ``yellow`` の場合: 成功エンベロープ（ ``status: 0`` ）で ``engine`` を返します。
-- ``red`` の場合: エラーエンベロープ（ ``status: 9`` , ``error.code: service_unavailable`` ）を返し、エンジンスナップショットを ``error.details.engine`` の下に埋め込みます（監視ツールがクラスターメタデータを解析できるようにするため）。
+- ``GREEN`` / ``YELLOW`` の場合: 成功エンベロープ（ ``status: 0`` ）で ``engine`` を返します。
+- ``RED`` の場合: エラーエンベロープ（ ``status: 9`` , ``error.code: service_unavailable`` ）を返し、エンジンスナップショットを ``error.details.engine`` の下に埋め込みます（監視ツールがクラスターメタデータを解析できるようにするため）。
+- 検索エンジンに接続できない場合: ``RED`` と同様にエラーエンベロープ（ ``error.code: service_unavailable`` , ``error.message: search engine is not reachable`` ）を返し、 ``error.details.engine`` は ``status: UNAVAILABLE`` 、 ``ping_status: 1`` になります。
 
 ``engine`` の各フィールドは以下の通りです。
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: engine フィールド
 
-   * - ``cluster_name``
-     - クラスター名（str）。
    * - ``status``
-     - クラスターの状態。 ``green`` / ``yellow`` / ``red`` のいずれか。
+     - クラスターの状態。大文字の ``GREEN`` / ``YELLOW`` / ``RED`` のいずれか。検索エンジンに接続できない場合は ``UNAVAILABLE`` 。
    * - ``ping_status``
-     - ping のステータス（int）。クラスターが ``red`` の場合は ``1`` 、それ以外（ ``green`` / ``yellow`` ）の場合は ``0`` になります。
+     - ping のステータス（int）。クラスターが ``RED`` の場合と、検索エンジンに接続できない場合は ``1`` 、それ以外（ ``GREEN`` / ``YELLOW`` ）の場合は ``0`` になります。
 
 表: engine フィールド
+
+クラスター名（ ``cluster_name`` ）は、このエンドポイントが認証なしで呼び出せるため、返しません。
 
 リクエストパラメーター
 -----------------
@@ -48,7 +49,7 @@ HTTP ステータスは、クラスターの状態が ``green`` / ``yellow`` の
 レスポンス
 --------
 
-クラスターが ``green`` / ``yellow`` の場合（200）は、成功エンベロープで ``engine`` が返ります。
+クラスターが ``GREEN`` / ``YELLOW`` の場合（200）は、成功エンベロープで ``engine`` が返ります。
 
 ::
 
@@ -56,14 +57,13 @@ HTTP ステータスは、クラスターの状態が ``green`` / ``yellow`` の
       "response": {
         "status": 0,
         "engine": {
-          "cluster_name": "fess-es",
-          "status": "green",
+          "status": "GREEN",
           "ping_status": 0
         }
       }
     }
 
-クラスターが ``red`` の場合（503）は、エラーエンベロープで返り、エンジンスナップショットが ``error.details.engine`` の下に埋め込まれます。
+クラスターが ``RED`` の場合（503）は、エラーエンベロープで返り、エンジンスナップショットが ``error.details.engine`` の下に埋め込まれます。
 
 ::
 
@@ -75,8 +75,7 @@ HTTP ステータスは、クラスターの状態が ``green`` / ``yellow`` の
           "message": "search engine cluster is red",
           "details": {
             "engine": {
-              "cluster_name": "fess-es",
-              "status": "red",
+              "status": "RED",
               "ping_status": 1
             }
           }
@@ -104,10 +103,10 @@ curl コマンドでのリクエスト例:
    * - ステータスコード
      - 説明
    * - 200 OK
-     - クラスターが ``green`` / ``yellow`` で到達可能な場合。成功エンベロープに ``engine`` が含まれます。
+     - クラスターが ``GREEN`` / ``YELLOW`` で到達可能な場合。成功エンベロープに ``engine`` が含まれます。
    * - 405 Method Not Allowed
      - HTTP メソッドが許可されていない場合。
    * - 503 Service Unavailable
-     - クラスターが ``red`` の場合。エラーエンベロープ（ ``error.code: service_unavailable`` ）で ``error.details.engine`` にエンジンスナップショットが含まれます。
+     - クラスターが ``RED`` の場合、または検索エンジンに接続できない場合。エラーエンベロープ（ ``error.code: service_unavailable`` ）で ``error.details.engine`` にエンジンスナップショットが含まれます。
 
 表: レスポンス一覧

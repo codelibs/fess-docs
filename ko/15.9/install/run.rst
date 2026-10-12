@@ -328,7 +328,7 @@ ZIP 버전은 ``bin/fess.in.sh``, RPM 버전은 ``/etc/sysconfig/fess``, DEB 버
      - 임시 파일을 저장하는 디렉터리입니다(내장 Tomcat의 작업 디렉터리 포함). |Fess| 를 실행하는 사용자가 쓸 수 있어야 합니다.
    * - ``FESS_CONF_PATH``
      - (미설정) (RPM/DEB 버전은 ``/etc/fess``)
-     - 설정 파일을 두는 디렉터리입니다. 클래스패스 맨 앞에 추가되므로, 이 디렉터리의 ``fess_config.properties`` 가 ``app/WEB-INF/classes`` 의 것보다 우선합니다.
+     - 설정 파일을 두는 디렉터리입니다. ``bin/fess`` 가 이 디렉터리를 클래스패스 맨 앞에 추가하고 ``-Dfess.conf.path`` 로 |Fess| 에 전달합니다. ``lib/classes`` 의 ``tomcat_config.properties`` 등은 이 디렉터리의 파일이 우선합니다. 다만 ZIP 버전의 웹 애플리케이션은 ``app/WEB-INF/classes`` 의 파일을 먼저 참조하므로, 이 디렉터리에 둔 ``fess_config.properties`` 로는 ``app/WEB-INF/classes`` 의 ``fess_config.properties`` 값을 덮어쓸 수 없습니다(크롤러 등 자식 프로세스는 이 디렉터리를 ``WEB-INF/classes`` 보다 먼저 참조합니다). ZIP 버전에서 ``fess_config.properties`` 를 변경할 때는 ``app/WEB-INF/classes`` 의 파일을 편집하십시오. RPM/DEB 버전은 ``app/WEB-INF/classes`` 에 ``fess_config.properties`` 를 포함하지 않고 ``/etc/fess`` 의 파일만 사용합니다.
    * - ``FESS_USE_IPV4``
      - (미설정)
      - 비어 있지 않은 값을 설정하면 JVM이 IPv4 스택만 사용합니다(``-Djava.net.preferIPv4Stack=true``).

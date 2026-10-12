@@ -75,6 +75,12 @@ Paramètres de configuration
 
 Vous pouvez spécifier les informations de configuration du crawl.
 
+Lors du crawl de chemins commençant par ``file:`` (système de fichiers local ou monté), ``client.followSymlink`` indique si les liens symboliques sont suivis. La valeur par défaut est ``true`` (les liens sont suivis). Avec ``false``, les liens symboliques sont ignorés et les fichiers vers lesquels ils pointent ne sont pas crawlés via le lien (chaque lien ignoré est consigné au niveau INFO dans ``fess-crawler.log``). Suivre un lien enregistre le fichier cible une seconde fois avec les permissions de la configuration qui contient le lien ; envisagez donc ``false`` si vous crawlez un partage lisible par plus d'utilisateurs que l'arborescence vers laquelle pointent ses liens.
+
+::
+
+    client.followSymlink=false
+
 Profondeur
 ::::::::::
 

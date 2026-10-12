@@ -75,6 +75,12 @@ Parámetros de configuración
 
 Puede especificar información de configuración de rastreo.
 
+En el rastreo de rutas que comienzan con ``file:`` (sistema de archivos local o montado), ``client.followSymlink`` especifica si se siguen los enlaces simbólicos. El valor predeterminado es ``true`` (se siguen). Con ``false``, los enlaces simbólicos se omiten y los archivos a los que apuntan no se rastrean a través del enlace (cada enlace omitido se registra con nivel INFO en ``fess-crawler.log``). Al seguir un enlace, el archivo de destino se registra por segunda vez con los permisos de la configuración que contiene el enlace; por ello, considere ``false`` si rastrea un recurso compartido que pueden leer más usuarios que el árbol al que apuntan sus enlaces.
+
+::
+
+    client.followSymlink=false
+
 Profundidad
 :::::::::::
 

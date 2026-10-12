@@ -174,6 +174,25 @@ Para ejecutar un rastreo de forma inmediata, inicie el trabajo del rastreador de
    Los rastreos se ejecutan por unidad de trabajo del programador.
    El trabajo "Default Crawler" se ejecuta contra todas las configuraciones de rastreo habilitadas.
 
+.. note::
+   Dentro de una ejecución del trabajo, las configuraciones de rastreo Web y de sistema de archivos se
+   inician una a una, con un intervalo de 5 segundos. Las configuraciones de almacén de datos se inician
+   del mismo modo, por separado. El número de configuraciones que pueden ejecutarse a la vez se define en
+   "Configuración de rastreadores simultáneos" de [Sistema > General] (predeterminado: 5); se aplica a
+   Web y sistema de archivos en conjunto, y por separado a almacén de datos. Mientras se alcanza ese
+   número, la siguiente configuración se inicia solo cuando termina una de las que están en ejecución.
+   Si hay muchas configuraciones, tarda un tiempo hasta que todas están en ejecución.
+
+.. note::
+   Una ejecución del trabajo carga como máximo 100 configuraciones de rastreo para cada tipo
+   (Web, Sistema de archivos y Almacén de datos), contadas desde el principio del orden
+   (normalmente por nombre) (valor predeterminado de ``page.web.config.max.fetch.size``,
+   ``page.file.config.max.fetch.size`` y ``page.data.config.max.fetch.size``). Estos valores no
+   son un número de elementos por página, sino el límite del número total de configuraciones
+   que se cargan. Las configuraciones a partir de la 101 no se rastrean y no se registra ningún
+   error ni advertencia. Si crea más de 100 configuraciones, aumente estos valores en
+   ``fess_config.properties`` (tras el cambio es necesario reiniciar |Fess|).
+
 Ejecución Programada
 --------------------
 
@@ -304,6 +323,12 @@ Especifique el número de URLs a rastrear simultáneamente.
    El número de hilos predeterminado al crear una nueva configuración es ``1`` para el rastreador Web
    y ``5`` para el rastreador de archivos. El intervalo de solicitudes (intervalo) predeterminado es
    ``10000`` milisegundos para el rastreador Web y ``1000`` milisegundos para el rastreador de archivos.
+
+   Cada hilo espera el intervalo después de procesar una URL. Por ello, con los valores
+   predeterminados del rastreador Web (un hilo, 10000 milisegundos) se pueden procesar como
+   máximo unas 360 URL por hora. Si rastrea un sitio de varios miles de páginas o más, aumente
+   el número de hilos o acorte el intervalo, teniendo en cuenta la carga en el servidor de
+   destino.
 
 Intervalo de Rastreo
 --------------------

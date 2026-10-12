@@ -318,15 +318,11 @@ Fess が OpenSearch に接続できない
 
        export OPENSEARCH_JAVA_OPTS="-Xms4g -Xmx4g"
 
-2. **インデックスの最適化**
-
-   管理画面から「システム」→「スケジューラー」で定期的に最適化を実行します。
-
-3. **SSD を使用する**
+2. **SSD を使用する**
 
    ディスク I/O がボトルネックの場合、SSD に移行します。
 
-4. **キャッシュを有効化**
+3. **キャッシュを有効化**
 
    設定ファイルでクエリキャッシュを有効化します。
 
@@ -351,9 +347,7 @@ Fess が OpenSearch に接続できない
 
 2. **スレッド数を増やす**
 
-   設定ファイルでクロールスレッド数を増やします::
-
-       crawler.thread.count=10
+   管理画面でクロール設定の「スレッド数」を増やします。デフォルトは、ウェブクロールが 1、ファイルシステムのクロールが 5 です。
 
 3. **タイムアウト値を調整**
 
@@ -381,11 +375,11 @@ Fess が OpenSearch に接続できない
 
 2. **クロールログを確認**
 
-   管理画面で「システム」→「ログ」からクロールログを確認し、エラーがないか調べます。
+   管理画面で「システム情報 > ログファイル」から ``fess-crawler.log`` などのログをダウンロードし、エラーがないか調べます。
 
 3. **クロールを再実行**
 
-   管理画面で「システム」→「スケジューラー」から「Default Crawler」を実行します。
+   管理画面で「システム > スケジューラ」から「Default Crawler」を実行します。
 
 4. **検索クエリをシンプルにする**
 
@@ -509,11 +503,30 @@ NSSM などのサードパーティツールを使用して、Windows サービ�
 
 設定をリセットする場合、OpenSearch のインデックスを削除します::
 
-    $ curl -X DELETE http://localhost:9200/.fess_config*
+    $ curl -X DELETE 'http://localhost:9200/fess_config.*'
 
 .. warning::
 
    このコマンドを実行すると、すべての設定データが削除されます。
+
+管理者パスワードを忘れた場合
+----------------------------
+
+管理者のパスワードを忘れた場合は、OpenSearch の ``fess_user.user`` インデックスにあるユーザーのドキュメントを直接更新して、パスワードを再設定できます。パスワードは ``password`` フィールドに ``{bcrypt}$2a$...`` の形式のハッシュで保存されています。更新は |Fess| を再起動しなくても有効になります。
+
+1. 新しいパスワードのハッシュを作成します。|Fess| が受け付けるのは ``$2a$`` で始まる bcrypt のハッシュだけなので、 ``htpasswd`` （ ``apache2-utils`` や ``httpd-tools`` パッケージに含まれます）が出力する ``$2y$`` を ``$2a$`` に置き換えます。 ``NewPassword`` は新しいパスワードに置き換えてください::
+
+       $ HASH=$(htpasswd -bnBC 10 "" 'NewPassword' | tr -d ':\n' | sed 's/^\$2y/$2a/')
+
+2. admin ユーザーのドキュメントのパスワードを更新します。初期状態の admin ユーザーのドキュメント ID は ``YWRtaW4=`` です::
+
+       $ curl -X POST 'http://localhost:9200/fess_user.user/_update/YWRtaW4=?refresh=true' \
+              -H 'Content-Type: application/json' \
+              -d "{\"doc\":{\"password\":\"{bcrypt}${HASH}\"}}"
+
+   別のユーザーのパスワードを再設定する場合は、 ``curl 'http://localhost:9200/fess_user.user/_search?q=name:ユーザー名'`` で ``_id`` を調べて、その ID を指定します。OpenSearch に認証を設定している場合は、curl に認証情報を指定してください。
+
+3. 新しいパスワードで管理画面にログインできることを確認します。コマンドの履歴にパスワードが残る場合は、ログイン後に [ユーザー > ユーザー] でパスワードを設定し直してください。
 
 サポート情報
 ==========
@@ -547,9 +560,9 @@ NSSM などのサードパーティツールを使用して、Windows サービ�
 
 問題を報告する際に、以下の情報を収集しておくと役立ちます：
 
-1. **バージョン情報**::
+1. **バージョン情報**\ （ ``bin/fess -v`` は 15.9 以降で使用できます）::
 
-       $ cat /path/to/fess/VERSION
+       $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version
        $ java -version
 

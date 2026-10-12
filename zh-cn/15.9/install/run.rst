@@ -326,7 +326,7 @@ ZIP 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``�
      - 存放临时文件的目录，包括内嵌 Tomcat 的工作目录。运行 |Fess| 的用户必须对其有写入权限。
    * - ``FESS_CONF_PATH``
      - （未设置）\ （RPM/DEB 版为 ``/etc/fess``）
-     - 存放配置文件的目录。它会被添加到类路径开头，因此其中的 ``fess_config.properties`` 优先于 ``app/WEB-INF/classes`` 中的同名文件。
+     - 存放配置文件的目录。 ``bin/fess`` 会将该目录添加到类路径开头，并以 ``-Dfess.conf.path`` 传递给 |Fess|\ 。对于 ``lib/classes`` 中的 ``tomcat_config.properties`` 等文件，优先使用该目录中的文件。但在 ZIP 版中，Web 应用程序会先读取 ``app/WEB-INF/classes`` 中的文件，因此放在该目录中的 ``fess_config.properties`` 无法覆盖 ``app/WEB-INF/classes`` 中 ``fess_config.properties`` 的值（爬虫等子进程会先于 ``WEB-INF/classes`` 读取该目录）。在 ZIP 版中要修改 ``fess_config.properties`` 时，请编辑 ``app/WEB-INF/classes`` 中的文件。RPM/DEB 版不会在 ``app/WEB-INF/classes`` 中放置 ``fess_config.properties``\ ，只使用 ``/etc/fess`` 中的文件。
    * - ``FESS_USE_IPV4``
      - （未设置）
      - 设置任意非空值后，JVM 仅使用 IPv4 协议栈（``-Djava.net.preferIPv4Stack=true``）。

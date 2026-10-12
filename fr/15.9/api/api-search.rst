@@ -144,7 +144,7 @@ Les détails de chaque champ sont les suivants.
    * - ``page_number``
      - Numéro de la page courante.
    * - ``record_count``
-     - Nombre de résultats (int64).
+     - Nombre de résultats (int64). Le décompte exact n'est suivi que jusqu'à ``query.track.total.hits`` (par défaut : ``10000``) ; s'il y a davantage de résultats, cette valeur correspond à cette limite et ``record_count_relation`` vaut ``GREATER_THAN_OR_EQUAL_TO``. La limite peut être modifiée pour chaque requête avec ``track_total_hits``.
    * - ``record_count_relation``
      - ``EQUAL_TO`` indique un comptage exact ; ``GREATER_THAN_OR_EQUAL_TO`` indique que seule la borne inférieure est connue.
    * - ``page_count``
@@ -236,7 +236,7 @@ En cas d'échec en cours de stream, la ligne finale sera la suivante.
 Le client doit donc vérifier la première clé de la dernière ligne pour distinguer une fin normale (``data``) d'une erreur serveur (``error``).
 
 La requête est construite avec le même ensemble de paramètres que ``GET /search`` (``q``, ``sort``, ``num``, ``lang``, ``ex_q``, ``sdh``, ``fields.*``, ``as.*``, ``track_total_hits``, ``facet.*``, ``geo.*``).
-Si la recherche par défilement est désactivée (``api.search.scroll=false``), une erreur ``invalid_request`` (400) est retournée.
+La recherche par défilement est désactivée par défaut (``api.search.scroll=false``). Tant qu'elle est désactivée, une erreur ``invalid_request`` (400) est retournée. Pour l'activer, définissez ``api.search.scroll=true`` dans ``fess_config.properties`` (voir :doc:`../config/search-scroll`).
 
 Paramètres de requête
 ~~~~~~~~~~~~~~~~~~~~~

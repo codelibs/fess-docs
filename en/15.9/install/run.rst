@@ -339,7 +339,7 @@ making changes.
      - Directory for temporary files, including the working directory of the embedded Tomcat. The user that runs |Fess| must be able to write to it.
    * - ``FESS_CONF_PATH``
      - (unset) (RPM/DEB edition: ``/etc/fess``)
-     - Directory that holds the configuration files. It is placed at the front of the class path, so a ``fess_config.properties`` in it is used instead of the one in ``app/WEB-INF/classes``.
+     - Directory that holds the configuration files. ``bin/fess`` places it at the front of the class path and passes it to |Fess| as ``-Dfess.conf.path``. For files such as ``tomcat_config.properties`` in ``lib/classes``, the one in this directory takes priority. However, in the ZIP edition the web application reads the files in ``app/WEB-INF/classes`` first, so a ``fess_config.properties`` placed in this directory does not override the values of the ``fess_config.properties`` in ``app/WEB-INF/classes`` (child processes such as the crawler read this directory before ``WEB-INF/classes``). In the ZIP edition, edit the file in ``app/WEB-INF/classes`` to change ``fess_config.properties``. The RPM/DEB edition does not put a ``fess_config.properties`` in ``app/WEB-INF/classes`` and uses only the one in ``/etc/fess``.
    * - ``FESS_USE_IPV4``
      - (unset)
      - With any non-empty value, the JVM uses the IPv4 stack only (``-Djava.net.preferIPv4Stack=true``).

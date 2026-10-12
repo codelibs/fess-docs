@@ -172,6 +172,24 @@ To run a configured crawl immediately, start the crawler job from the Scheduler 
    crawls run per scheduler job. The "Default Crawler" job runs against all enabled crawl
    configurations.
 
+.. note::
+   Within one job run, the Web and File System crawl configurations are started one at a time, at an
+   interval of 5 seconds. The Data Store crawl configurations are started the same way, separately from
+   them. The number of configurations that can run at the same time is set by "Concurrent Crawler Config"
+   under [System > General] (default: 5); it applies to Web and File System together, and to Data Store
+   separately. While that number is reached, the next configuration is started only after a running one
+   finishes. When there are many configurations, it takes a while until all of them are running.
+
+.. note::
+   A job run loads at most 100 crawl configurations for each of Web, File System, and Data
+   Store, counted from the top of the sort order (normally by name) (the default of
+   ``page.web.config.max.fetch.size``, ``page.file.config.max.fetch.size``, and
+   ``page.data.config.max.fetch.size``). These values are not a number of items per page;
+   they cap the total number of configurations that are loaded. Configurations after the
+   100th are not crawled, and no error or warning is logged. If you create more than 100
+   configurations, increase these values in ``fess_config.properties`` (a restart of |Fess|
+   is required after the change).
+
 Scheduled Execution
 -------------------
 
@@ -300,6 +318,11 @@ Specifies the number of URLs to crawl simultaneously.
 .. note::
    The default thread count for new configs is 1 for the Web crawler and 5 for the File crawler.
    The default request interval is 10000 ms for the Web crawler and 1000 ms for the File crawler.
+
+   Each thread waits for the interval after it processes one URL. With the Web crawler defaults
+   (one thread, 10000 ms), therefore, at most about 360 URLs can be processed per hour. When you
+   crawl a site of several thousand pages or more, increase the number of threads or shorten
+   the interval, taking the load on the target server into account.
 
 Crawl Interval
 --------------

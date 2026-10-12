@@ -19,26 +19,27 @@ HTTP 方法            GET
 ==================  ====================================================
 
 返回搜索引擎集群的状态快照（\ ``monitor`` 标签）。
-当集群状态为 ``green`` / ``yellow`` 时，HTTP 状态码为 200；为 ``red`` 时，HTTP 状态码为 503。
+当集群状态为 ``GREEN`` / ``YELLOW`` 时，HTTP 状态码为 200；为 ``RED`` 或无法连接搜索引擎时，HTTP 状态码为 503。
 
 本端点遵守信封不变量"``status >= 1`` ⇔ HTTP 状态码 ``>= 400``"。
 
-- ``green`` / ``yellow`` 时：以成功信封（\ ``status: 0``\ ）返回 ``engine``\ 。
-- ``red`` 时：以错误信封（\ ``status: 9``\ ，\ ``error.code: service_unavailable``\ ）返回，并将引擎快照嵌入 ``error.details.engine`` 中（以便监控工具解析集群元数据）。
+- ``GREEN`` / ``YELLOW`` 时：以成功信封（\ ``status: 0``\ ）返回 ``engine``\ 。
+- ``RED`` 时：以错误信封（\ ``status: 9``\ ，\ ``error.code: service_unavailable``\ ）返回，并将引擎快照嵌入 ``error.details.engine`` 中（以便监控工具解析集群元数据）。
+- 无法连接搜索引擎时：与 ``RED`` 一样以错误信封（\ ``error.code: service_unavailable``\ ，\ ``error.message: search engine is not reachable``\ ）返回，\ ``error.details.engine`` 中为 ``status: UNAVAILABLE``\ 、\ ``ping_status: 1``\ 。
 
 ``engine`` 各字段说明如下。
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|
 .. list-table:: engine 字段
 
-   * - ``cluster_name``
-     - 集群名称（str）。
    * - ``status``
-     - 集群状态。为 ``green`` / ``yellow`` / ``red`` 之一。
+     - 集群状态。为大写的 ``GREEN`` / ``YELLOW`` / ``RED`` 之一。无法连接搜索引擎时为 ``UNAVAILABLE``\ 。
    * - ``ping_status``
-     - ping 的状态码（int）。集群为 ``red`` 时值为 ``1``\ ，其他情况（\ ``green`` / ``yellow``\ ）值为 ``0``\ 。
+     - ping 的状态码（int）。集群为 ``RED`` 或无法连接搜索引擎时值为 ``1``\ ，其他情况（\ ``GREEN`` / ``YELLOW``\ ）值为 ``0``\ 。
 
 表: engine 字段
+
+由于该端点无需认证即可调用，因此不会返回集群名称（\ ``cluster_name``\ ）。
 
 请求参数
 --------
@@ -48,7 +49,7 @@ HTTP 方法            GET
 响应
 ----
 
-集群为 ``green`` / ``yellow`` 时（200），以成功信封返回 ``engine``\ 。
+集群为 ``GREEN`` / ``YELLOW`` 时（200），以成功信封返回 ``engine``\ 。
 
 ::
 
@@ -56,14 +57,13 @@ HTTP 方法            GET
       "response": {
         "status": 0,
         "engine": {
-          "cluster_name": "fess-es",
-          "status": "green",
+          "status": "GREEN",
           "ping_status": 0
         }
       }
     }
 
-集群为 ``red`` 时（503），以错误信封返回，引擎快照嵌入在 ``error.details.engine`` 中。
+集群为 ``RED`` 时（503），以错误信封返回，引擎快照嵌入在 ``error.details.engine`` 中。
 
 ::
 
@@ -75,8 +75,7 @@ HTTP 方法            GET
           "message": "search engine cluster is red",
           "details": {
             "engine": {
-              "cluster_name": "fess-es",
-              "status": "red",
+              "status": "RED",
               "ping_status": 1
             }
           }
@@ -104,10 +103,10 @@ HTTP 方法            GET
    * - 状态码
      - 说明
    * - 200 OK
-     - 集群为 ``green`` / ``yellow`` 且可达时。成功信封中包含 ``engine``\ 。
+     - 集群为 ``GREEN`` / ``YELLOW`` 且可达时。成功信封中包含 ``engine``\ 。
    * - 405 Method Not Allowed
      - 不允许使用该 HTTP 方法时。
    * - 503 Service Unavailable
-     - 集群为 ``red`` 时。错误信封（\ ``error.code: service_unavailable``\ ）中，\ ``error.details.engine`` 包含引擎快照。
+     - 集群为 ``RED`` 或无法连接搜索引擎时。错误信封（\ ``error.code: service_unavailable``\ ）中，\ ``error.details.engine`` 包含引擎快照。
 
 表: 响应一览

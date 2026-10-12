@@ -174,6 +174,25 @@ Um einen konfigurierten Crawl sofort auszuführen, starten Sie den Crawler-Job �
    „Starten"-Button. Crawls werden als Scheduler-Job ausgeführt.
    Der Job „Default Crawler" verarbeitet alle aktivierten Crawl-Konfigurationen.
 
+.. note::
+   Innerhalb eines Job-Laufs werden die Crawl-Konfigurationen für Web und Dateisystem nacheinander im
+   Abstand von 5 Sekunden gestartet. Die Datenspeicher-Konfigurationen werden unabhängig davon auf
+   dieselbe Weise gestartet. Wie viele Konfigurationen gleichzeitig laufen dürfen, legen Sie unter
+   [System > Allgemein] mit „Gleichzeitige Crawler-Konfiguration" fest (Standard: 5); der Wert gilt für
+   Web und Dateisystem zusammen sowie getrennt für Datenspeicher. Ist diese Zahl erreicht, wird die
+   nächste Konfiguration erst gestartet, wenn eine laufende beendet ist. Bei vielen Konfigurationen
+   dauert es daher eine Weile, bis alle laufen.
+
+.. note::
+   Ein Job-Lauf lädt für Web, Dateisystem und Datenspeicher jeweils höchstens 100
+   Crawl-Konfigurationen, gezählt vom Anfang der Sortierung (normalerweise nach Name)
+   (Standardwert von ``page.web.config.max.fetch.size``, ``page.file.config.max.fetch.size``
+   und ``page.data.config.max.fetch.size``). Diese Werte sind keine Anzahl pro Seite, sondern
+   die Obergrenze für die Gesamtzahl der geladenen Konfigurationen. Konfigurationen ab der
+   101. werden nicht gecrawlt, ohne dass ein Fehler oder eine Warnung ausgegeben wird. Wenn Sie
+   mehr als 100 Konfigurationen anlegen, erhöhen Sie diese Werte in ``fess_config.properties``
+   (nach der Änderung ist ein Neustart von |Fess| erforderlich).
+
 Geplante Ausführung
 ----------------
 
@@ -302,6 +321,12 @@ Gibt die Anzahl gleichzeitig zu crawlender URLs an.
 .. note::
    Der Standard-Thread-Wert bei Neuerstellung beträgt ``1`` (Web-Crawler) bzw. ``5`` (Datei-Crawler).
    Das Standard-Anforderungsintervall (Intervall) beträgt ``10000`` ms (Web-Crawler) bzw. ``1000`` ms (Datei-Crawler).
+
+   Jeder Thread wartet nach der Verarbeitung einer URL das Intervall ab. Mit den Standardwerten
+   des Web-Crawlers (ein Thread, 10000 ms) lassen sich daher höchstens etwa 360 URLs pro
+   Stunde verarbeiten. Wenn Sie eine Site mit mehreren tausend Seiten oder mehr crawlen,
+   erhöhen Sie unter Berücksichtigung der Last auf dem Zielserver die Thread-Anzahl oder
+   verkürzen Sie das Intervall.
 
 Crawl-Intervall
 ------------

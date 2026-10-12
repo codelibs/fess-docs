@@ -86,7 +86,7 @@
 
       ``fess_config.bulk`` 包含 ``fess_basic_config.bulk``。作为升级前的
       配置备份，\ ``fess_basic_config.bulk``\ 、\ ``fess_user.bulk``\ 、
-      ``system.properties`` 这 3 个文件就已足够。
+      ``system.properties`` 这 3 个文件就已足够。但是，如果备份来源为 15.9 或更高版本且使用了用户标签，由于保存用户标签的 ``tag_type`` 索引不包含在 ``fess_basic_config.bulk`` 中，请同时下载 ``fess_config.bulk``\ （参见 :doc:`../admin/tagtype-guide`\ ）。
 
    .. note::
 

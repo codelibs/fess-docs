@@ -144,7 +144,7 @@ HTTPメソッド         GET
    * - ``page_number``
      - 現在のページ番号。
    * - ``record_count``
-     - ヒット件数（int64）。
+     - ヒット件数（int64）。正確に数えるのは ``query.track.total.hits`` （デフォルト: ``10000`` ）件までで、ヒット数がそれを超える場合は、この値が上限の件数になり、 ``record_count_relation`` は ``GREATER_THAN_OR_EQUAL_TO`` になります。リクエストの ``track_total_hits`` で上限を変更できます。
    * - ``record_count_relation``
      - ``EQUAL_TO`` のときは正確なカウント、 ``GREATER_THAN_OR_EQUAL_TO`` のときは下限のみ判明していることを示します。
    * - ``page_count``
@@ -236,7 +236,7 @@ HTTPメソッド         GET
 このため、クライアントは最後の行の最初のキーを確認し、正常完了（ ``data`` ）かサーバー異常（ ``error`` ）かを区別しなければなりません。
 
 クエリは ``GET /search`` と同じパラメーターセット（ ``q`` , ``sort`` , ``num`` , ``lang`` , ``ex_q`` , ``sdh`` , ``fields.*`` , ``as.*`` , ``track_total_hits`` , ``facet.*`` , ``geo.*`` ）で構築されます。
-``api.search.scroll=false`` でスクロール検索が無効な場合は ``invalid_request`` （400）を返します。
+スクロール検索は、デフォルトでは無効（ ``api.search.scroll=false`` ）です。無効な場合は ``invalid_request`` （400）を返します。有効にするには ``fess_config.properties`` で ``api.search.scroll=true`` を設定します（ :doc:`../config/search-scroll` を参照）。
 
 リクエストパラメーター
 -----------------
