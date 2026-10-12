@@ -71,7 +71,7 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
    * - ``size``
      - Integer
      - 否
-     - 每页记录数（默认：20）
+     - 每页记录数（默认：25。可通过 ``fess_config.properties`` 中的 ``paging.page.size`` 更改）
    * - ``page``
      - Integer
      - 否
@@ -80,6 +80,8 @@ ElevateWord API是用于管理 |Fess| 提升词（特定关键词的搜索排名
      - String
      - 否
      - 按提升词ID进行精确匹配过滤
+
+这些参数通过 JSON 请求体指定（例如 ``{"size": 50, "page": 1}``\ ）。通过 URL 查询字符串指定的值（例如 ``?size=50``\ ）会被忽略，因此未在请求体中指定时，始终返回前 25 条。
 
 响应
 ----

@@ -62,7 +62,7 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
    * - ``size``
      - Integer
      - 아니오
-     - 페이지당 건수 (기본값: 20)
+     - 페이지당 건수 (기본값: 25. ``fess_config.properties`` 의 ``paging.page.size`` 로 변경 가능)
    * - ``page``
      - Integer
      - 아니오
@@ -83,6 +83,8 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
      - String
      - 아니오
      - 오류 이름 필터 (저장된 완전한정 클래스명에 대한 와일드카드 매칭; ``*`` ``?`` 지원)
+
+이 파라미터들은 JSON 요청 본문(예: ``{"size": 50, "page": 1}`` )으로 지정합니다. URL 쿼리 문자열(예: ``?size=50`` )로 지정한 값은 무시되므로, 본문에 지정하지 않으면 항상 처음 25건이 반환됩니다.
 
 응답
 ----------

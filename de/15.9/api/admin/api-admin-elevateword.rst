@@ -71,7 +71,7 @@ Parameter
    * - ``size``
      - Integer
      - Nein
-     - Anzahl der Einträge pro Seite (Standard: 20)
+     - Anzahl der Einträge pro Seite (Standard: 25; änderbar über ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
      - Nein
@@ -80,6 +80,8 @@ Parameter
      - String
      - Nein
      - Exact-Match-Filter nach Elevate-Word-ID
+
+Diese Parameter werden im JSON-Anfragekörper angegeben (z. B. ``{"size": 50, "page": 1}``). Werte in der URL-Query-String (z. B. ``?size=50``) werden ignoriert; ohne Angabe im Anfragekörper werden daher immer die ersten 25 Einträge zurückgegeben.
 
 Response
 --------
