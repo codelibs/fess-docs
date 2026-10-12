@@ -96,4 +96,16 @@ les modifications faites après la sauvegarde, et les jobs planifiés fournis av
 installée (``updatedTime`` 0) sont conservés tels quels. Les documents sans ``updatedTime`` sont
 toujours écrits.
 
+.. note::
+
+   |Fess| 15.9 enregistre le ``password`` de l'authentification Web et fichier chiffré avec la clé de chiffrement de
+   l'application (``app.cipher.key`` dans ``fess_config.properties``) ; ``fess_basic_config.bulk`` et
+   ``fess_config.bulk`` contiennent donc les valeurs chiffrées. Lorsque vous restaurez une sauvegarde sur une autre
+   installation, reprenez la même ``app.cipher.key``. Avec une clé différente, les explorations qui utilisent ces
+   identifiants échouent avec une erreur. Une sauvegarde créée avant la 15.9 les contient en clair et continue de
+   fonctionner.
+
+   Les autres valeurs d'un fichier ``*.bulk`` ne sont pas chiffrées ; conservez donc ces fichiers comme des fichiers
+   sensibles.
+
   .. |image0| image:: ../../../resources/images/en/15.9/admin/backup-1.png

@@ -982,6 +982,14 @@ fonctionne avec une clé différente de celle qui les a enregistrés, parce que 
 pas être déchiffrés : ``fess-crawler.log`` consigne une ``CipherFailureException`` et une
 exploration qui inclut une telle configuration peut n'indexer rien.
 
+.. note::
+
+   |Fess| 15.9 enregistre aussi le ``password`` de l'authentification Web et fichier chiffré avec ``app.cipher.key`` ;
+   ``fess_basic_config.bulk`` et ``fess_config.bulk`` d'une sauvegarde contiennent donc les valeurs chiffrées. Lorsque
+   vous restaurez sur une autre installation, reprenez la même ``app.cipher.key`` ; avec une clé différente, les
+   explorations qui utilisent ces identifiants échouent avec une erreur. Une sauvegarde créée avant la 15.9 les contient
+   en clair et continue de fonctionner (voir :doc:`../admin/backup-guide`).
+
 .. _upgrade-159-jcifs:
 
 Les délais d'attente SMB utilisent les noms de propriétés de jcifs 3

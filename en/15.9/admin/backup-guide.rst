@@ -98,4 +98,14 @@ logged at INFO level in ``fess.log``, so a restore does not roll back changes ma
 was taken, and the scheduled jobs bundled with the installed version (``updatedTime`` 0) are kept
 as they are. Documents without an ``updatedTime`` are always written.
 
+.. note::
+
+   |Fess| 15.9 stores the ``password`` of web and file authentication encrypted with the application cipher key
+   (``app.cipher.key`` in ``fess_config.properties``), so ``fess_basic_config.bulk`` and ``fess_config.bulk`` contain
+   the encrypted values. When you restore a backup onto another installation, carry the same ``app.cipher.key``
+   over. With a different key, crawls that use these credentials fail with an error. A backup made before 15.9 holds
+   them in plain text and keeps working.
+
+   Other values in a ``*.bulk`` file are not encrypted, so keep these files as sensitive files.
+
 .. |image0| image:: ../../../resources/images/en/15.9/admin/backup-1.png

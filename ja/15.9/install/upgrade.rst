@@ -923,6 +923,14 @@ RPM 版では、同じように ``/etc/fess/fess_config.properties`` と
 バックアップを新しいサーバーへ復元した場合など）復号できず、 ``fess-crawler.log`` に
 ``CipherFailureException`` が記録され、そのような設定を含むクロールは何も索引できないことがあります。
 
+.. note::
+
+   15.9 の |Fess| は、Web 認証とファイル認証の ``password`` も ``app.cipher.key`` で暗号化して保存するため、
+   バックアップの ``fess_basic_config.bulk`` と ``fess_config.bulk`` には暗号化された値が含まれます。
+   別のインストールに復元するときは同じ ``app.cipher.key`` を引き継いでください。鍵が異なると、これらの認証情報を使う
+   クロールはエラーで失敗します。15.9 より前のバックアップには平文で含まれており、そのまま使えます
+   （詳細は :doc:`../admin/backup-guide` を参照）。
+
 .. _upgrade-159-jcifs:
 
 SMB のタイムアウトは jcifs 3 のプロパティ名を使用

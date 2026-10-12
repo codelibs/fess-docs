@@ -878,6 +878,13 @@ RPM 版请以同样方式比较 ``/etc/fess/fess_config.properties`` 与
 （因为使用了随附的 ``fess_config.properties`` ，或将备份恢复到了新服务器），就无法解密：
 ``fess-crawler.log`` 中会记录 ``CipherFailureException`` ，包含此类配置的爬取将无法索引任何内容。
 
+.. note::
+
+   |Fess| 15.9 同样使用 ``app.cipher.key`` 加密保存 Web 认证和文件认证的 ``password`` ，因此备份中的
+   ``fess_basic_config.bulk`` 和 ``fess_config.bulk`` 包含加密后的值。恢复到其他安装环境时请沿用相同的 ``app.cipher.key`` ；
+   密钥不同时，使用这些认证信息的爬取会因错误而失败。15.9 之前创建的备份以明文包含这些值，可以继续正常使用
+   （详见 :doc:`../admin/backup-guide` ）。
+
 .. _upgrade-159-jcifs:
 
 SMB 超时改用 jcifs 3 的属性名
