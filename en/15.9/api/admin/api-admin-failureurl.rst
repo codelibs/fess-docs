@@ -62,7 +62,7 @@ Parameters
    * - ``size``
      - Integer
      - No
-     - Number of items per page (default: 20)
+     - Number of items per page (default: 25; can be changed with ``paging.page.size`` in ``fess_config.properties``)
    * - ``page``
      - Integer
      - No
@@ -83,6 +83,8 @@ Parameters
      - String
      - No
      - Error name filter (wildcard match against the stored fully-qualified class name; ``*`` ``?`` supported)
+
+These parameters are given in the JSON request body (for example, ``{"size": 50, "page": 1}``). Values given in the URL query string (for example, ``?size=50``) are ignored, so the first 25 items are always returned unless you specify them in the body.
 
 Response
 --------

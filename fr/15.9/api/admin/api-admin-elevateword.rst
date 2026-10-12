@@ -71,7 +71,7 @@ Paramètres
    * - ``size``
      - Integer
      - Non
-     - Nombre d'éléments par page (par défaut : 20)
+     - Nombre d'éléments par page (par défaut : 25 ; modifiable avec ``paging.page.size`` dans ``fess_config.properties``)
    * - ``page``
      - Integer
      - Non
@@ -80,6 +80,8 @@ Paramètres
      - String
      - Non
      - Filtre par correspondance exacte sur l'ID du mot élevé
+
+Ces paramètres sont indiqués dans le corps JSON de la requête (par exemple ``{"size": 50, "page": 1}``). Les valeurs indiquées dans la chaîne de requête de l'URL (par exemple ``?size=50``) sont ignorées ; si elles ne figurent pas dans le corps, les 25 premiers éléments sont donc toujours retournés.
 
 Réponse
 -------

@@ -62,7 +62,7 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
    * - ``size``
      - Integer
      - 否
-     - 每页显示的记录数（默认：20）
+     - 每页记录数（默认：25。可通过 ``fess_config.properties`` 中的 ``paging.page.size`` 更改）
    * - ``page``
      - Integer
      - 否
@@ -83,6 +83,8 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
      - String
      - 否
      - 错误名称过滤（对存储的完全限定类名进行通配符匹配；支持 ``*`` ``?``）
+
+这些参数通过 JSON 请求体指定（例如 ``{"size": 50, "page": 1}``\ ）。通过 URL 查询字符串指定的值（例如 ``?size=50``\ ）会被忽略，因此未在请求体中指定时，始终返回前 25 条。
 
 响应
 ----
