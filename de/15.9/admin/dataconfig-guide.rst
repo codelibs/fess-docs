@@ -46,6 +46,11 @@ Der Handler-Name zur Verarbeitung des Datenspeichers.
 * CsvDataStore: Crawlt CSV/TSV-Dateien
 * CsvListDataStore: Crawlt eine CSV-Datei, die Dateipfade zu indizierenden Dateien beschreibt
 
+Die Auswahlliste für den Handler-Namen enthält nur die Handler der installierten Datenspeicher-Konnektor-Plugins (``fess-ds-*``).
+Ist kein Plugin installiert, kann kein Handler ausgewählt werden.
+Informationen zu weiteren Handlern finden Sie auf den Konnektor-Seiten, die in :doc:`../config/datastore/ds-overview` aufgeführt sind.
+Beachten Sie, dass ``EsDataStore`` (das Plugin ``fess-ds-elasticsearch``) aus der Dokumentation früherer Versionen seit 15.6.0 nicht mehr veröffentlicht wurde und in 15.9 nicht verfügbar ist.
+
 .. note::
 
    ``DatabaseDataStore`` wird durch das Datenbank-Konnektor-Plugin (``fess-ds-db``) bereitgestellt, ``CsvDataStore`` / ``CsvListDataStore`` durch das CSV-Konnektor-Plugin (``fess-ds-csv``). Eine Übersicht der verfügbaren Konnektoren finden Sie unter :doc:`../config/datastore/ds-overview`.
@@ -304,63 +309,6 @@ Parameter haben das Format „Schlüssel=Wert".
 Die Schlüssel sind dieselben wie beim Datenbank-Crawling.
 Daten in CSV-Dateien werden in cell[Nummer] gespeichert (Nummern beginnen bei 1).
 Wenn keine Daten in einer CSV-Zelle vorhanden sind, kann der Wert null sein.
-
-EsDataStore
------------
-
-Die Datenquelle ist Elasticsearch, aber die grundlegende Verwendung ist dieselbe wie bei CsvDataStore.
-
-Parameter
-:::::::::
-
-Ein Beispiel für die Parameterkonfiguration ist wie folgt:
-
-::
-
-    settings.cluster.name=elasticsearch
-    hosts=SERVERNAME:9300
-    index=logindex
-    type=data
-
-Parameter haben das Format „Schlüssel=Wert". Die Schlüsselerklärungen sind wie folgt:
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - settings.\*
-     - Elasticsearch-Einstellungsinformationen
-   * - hosts
-     - Elasticsearch-Verbindungsziel
-   * - index
-     - Indexname
-   * - type
-     - Typname
-   * - query
-     - Abfrage für Abrufbedingungen
-
-Tabelle: Beispiel für Elasticsearch-Konfigurationsparameter
-
-
-Skript
-::::::
-
-Ein Beispiel für die Skriptkonfiguration ist wie folgt:
-
-::
-
-    url=source.url
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=source.title
-    content=source.content
-    digest=
-    anchor=
-    content_length=source.size
-    last_modified=new java.util.Date()
-
-Parameter haben das Format „Schlüssel=Wert".
-Die Schlüssel sind dieselben wie beim Datenbank-Crawling.
-Sie können Werte mit source.\* abrufen und festlegen.
 
 CsvListDataStore
 ----------------

@@ -46,6 +46,11 @@ Es el nombre del manejador que procesa el almacén de datos.
 * CsvDataStore: Rastrea archivos CSV/TSV
 * CsvListDataStore: Rastrea archivos CSV que describen rutas de archivos a indexar
 
+La lista desplegable del nombre del manejador solo muestra los manejadores proporcionados por los complementos conectores de almacén de datos instalados (``fess-ds-*``).
+Si no hay ningún complemento instalado, no hay ningún manejador que seleccionar.
+Para otros manejadores, consulte las páginas de conectores que se enumeran en :doc:`../config/datastore/ds-overview`.
+Tenga en cuenta que ``EsDataStore`` (el complemento ``fess-ds-elasticsearch``), descrito en la documentación de versiones anteriores, no se publica desde la versión 15.6.0 y no está disponible en la 15.9.
+
 .. note::
 
    ``DatabaseDataStore`` es proporcionado por el complemento conector de base de datos ( ``fess-ds-db`` ), y ``CsvDataStore`` / ``CsvListDataStore`` son proporcionados por el complemento conector de CSV ( ``fess-ds-csv`` ). Para ver la lista completa de conectores disponibles, consulte :doc:`../config/datastore/ds-overview`.
@@ -303,63 +308,6 @@ Los parámetros están en formato "clave=valor".
 Las claves son las mismas que en el caso del rastreo de bases de datos.
 Los datos dentro del archivo CSV se mantienen en cell[número] (el número comienza desde 1).
 Si no hay datos en una celda del archivo CSV, puede ser nulo.
-
-EsDataStore
------------
-
-La fuente de obtención de datos es elasticsearch, pero el uso básico es el mismo que CsvDataStore.
-
-Parámetros
-::::::::::
-
-Un ejemplo de configuración de parámetros sería el siguiente.
-
-::
-
-    settings.cluster.name=elasticsearch
-    hosts=SERVERNAME:9300
-    index=logindex
-    type=data
-
-Los parámetros están en formato "clave=valor". La descripción de las claves es la siguiente.
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - settings.\*
-     - Información de configuración de elasticsearch
-   * - hosts
-     - elasticsearch de destino de conexión
-   * - index
-     - Nombre del índice
-   * - type
-     - Nombre del tipo
-   * - query
-     - Consulta de condiciones para obtener
-
-Tabla: Ejemplo de parámetros de configuración de elasticsearch
-
-
-Script
-::::::
-
-Un ejemplo de configuración de script sería el siguiente.
-
-::
-
-    url=source.url
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=source.title
-    content=source.content
-    digest=
-    anchor=
-    content_length=source.size
-    last_modified=new java.util.Date()
-
-Los parámetros están en formato "clave=valor".
-Las claves son las mismas que en el caso del rastreo de bases de datos.
-Puede obtener y configurar valores mediante source.\*.
 
 CsvListDataStore
 ----------------

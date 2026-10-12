@@ -35,6 +35,12 @@ Nombre
 
 Nombre del grupo.
 
+gidNumber
+:::::::::
+
+El gidNumber (el ID de grupo POSIX en LDAP) del grupo, como número. Es opcional. Si se introduce un valor que no es un número, se produce un error.
+Cuando |Fess| está configurado para administrar LDAP desde las pantallas de administración (``ldap.admin.enabled=true``), el valor se escribe en el atributo ``gidNumber`` de la entrada del grupo en LDAP (el nombre del atributo se puede cambiar con ``ldap.attr.gidNumber``). Si no utiliza LDAP, no es necesario especificarlo.
+
 Método de eliminación
 ---------------------
 

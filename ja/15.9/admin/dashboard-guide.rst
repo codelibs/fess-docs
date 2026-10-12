@@ -15,11 +15,11 @@
 
    * - インデックス名
      - 説明
-   * - fess.YYYYMMDD
+   * - fess.yyyyMMddHHmmssSSS
      - インデックスされたドキュメント
    * - fess_log
      - アクセスログ
-   * - fess.suggest.YYYYMMDD
+   * - fess.suggest.yyyyMMddHHmmssSSS
      - サジェストワード
    * - fess_config
      - |Fess| の設定
@@ -38,9 +38,10 @@
    * - fess_crawler
      - クロール情報
 
+インデックス名の ``fess.`` および ``fess.suggest.`` に続く部分は、インデックスを作成した日時（ ``yyyyMMddHHmmssSSS`` の17桁）です。
 
 ドット(.)で始まるインデックス名はシステム用のインデックスであるため、表示されていません。
-システム用のインデックスも表示するためには、specialのチェックボックスを有効にしてください。
+システム用のインデックスも表示するためには、Specialのチェックボックスを有効にしてください。
 
 インデックスされているドキュメント数の確認
 ================================
@@ -50,7 +51,7 @@
 |image1|
 
 各インデックスの右上のアイコンをクリックすると、インデックスに対する操作メニューが表示されます。
-インデックスされたドキュメントを削除する場合は管理用の検索画面で削除します。「delete index」で削除しないように注意してください。
+インデックスされたドキュメントを削除する場合は管理用の検索画面で削除します。「インデックスを削除」で削除しないように注意してください。
 
 .. |image0| image:: ../../../resources/images/ja/15.9/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/ja/15.9/admin/dashboard-2.png

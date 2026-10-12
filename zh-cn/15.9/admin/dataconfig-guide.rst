@@ -50,6 +50,11 @@
 * CsvDataStore: 以CSV/TSV文件为对象进行爬取
 * CsvListDataStore: 爬取包含索引目标文件路径的CSV文件
 
+处理器名称下拉列表中只显示已安装的数据存储连接器插件（``fess-ds-*``）所提供的处理器。
+如果没有安装插件，则没有可选择的处理器。
+其他处理器请参阅 :doc:`../config/datastore/ds-overview` 中列出的各连接器页面。
+另外，早期版本文档中的 ``EsDataStore`` （``fess-ds-elasticsearch`` 插件）自 15.6.0 起未再发布，在 15.9 中无法使用。
+
 参数
 :::::::::
 
@@ -301,63 +306,6 @@ CsvDataStore
 键与数据库爬取的情况相同。
 CSV文件中的数据保存在cell[数字]中(数字从1开始)。
 如果CSV文件的单元格中不存在数据,可能会为null。
-
-EsDataStore
------------
-
-数据获取源为elasticsearch,但基本使用方法与CsvDataStore相同。
-
-参数
-:::::::::
-
-参数配置示例如下。
-
-::
-
-    settings.cluster.name=elasticsearch
-    hosts=SERVERNAME:9300
-    index=logindex
-    type=data
-
-参数采用"键=值"格式。键的说明如下。
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - settings.\*
-     - elasticsearch的Settings信息
-   * - hosts
-     - 连接目标elasticsearch
-   * - index
-     - 索引名称
-   * - type
-     - 类型名称
-   * - query
-     - 获取条件的查询
-
-表: elasticsearch配置参数示例
-
-
-脚本
-::::::::
-
-脚本配置示例如下。
-
-::
-
-    url=source.url
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=source.title
-    content=source.content
-    digest=
-    anchor=
-    content_length=source.size
-    last_modified=new java.util.Date()
-
-参数采用"键=值"格式。
-键与数据库爬取的情况相同。
-可以通过source.\*获取值并进行设置。
 
 CsvListDataStore
 ----------------

@@ -5,4 +5,5 @@ Aktualisierung
 Referenz
 ========
 
-Bitte beziehen Sie sich auf den `Installationshandbuch <https://fess.codelibs.org/de/15.9/install/index.html>`__.
+Das Vorgehen bei der Aktualisierung finden Sie unter :doc:`../install/upgrade`.
+Allgemeine Informationen zur Installation finden Sie unter :doc:`../install/index`.

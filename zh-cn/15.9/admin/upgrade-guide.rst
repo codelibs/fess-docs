@@ -5,4 +5,5 @@
 参考
 ====
 
-请参考 `Installation Guide <https://fess.codelibs.org/zh-cn/15.9/install/index.html>`__\ 。
+升级步骤请参考 :doc:`../install/upgrade` 。
+安装的总体说明请参考 :doc:`../install/index` 。

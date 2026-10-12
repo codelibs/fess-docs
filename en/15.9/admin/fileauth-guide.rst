@@ -33,11 +33,16 @@ Hostname
 ::::::::
 
 Specify the hostname of the site that requires authentication.
+Use the same name as the hostname in the URL to be crawled. This authentication is not used for a URL written with a different name (for example, an IP address instead of an alias).
 
 Port
 ::::
 
 Specify the port of the site that requires authentication.
+If left blank, the list shows "Any". The meaning of a blank port depends on the scheme.
+
+* FTP: Used for URLs with any port (a URL without a port is treated as port 21).
+* SAMBA: Used only for URLs that do not contain a port (``smb://server/share/``). It is not used for a URL that contains a port, such as ``smb://server:445/share/``. To crawl a URL that contains a port, specify the same port here.
 
 Scheme
 ::::::

@@ -62,6 +62,17 @@ Ordre de tri
 
 Configure l'ordre de tri du boost de document.
 
+Moment d'application des règles
+-------------------------------
+
+Les règles de boost de document sont évaluées lorsqu'une exploration Web ou une exploration de fichiers enregistre un document dans l'index. Elles ne s'appliquent pas aux explorations de magasins de données.
+Ajouter, modifier ou supprimer une règle ne change pas le boost des documents déjà présents dans l'index.
+
+Lorsque « Vérifier la dernière modification » dans [Système > Général] est activé (valeur par défaut), un document dont le contenu n'a pas changé n'est pas enregistré à nouveau dans l'index lors d'une nouvelle exploration, de sorte que son boost n'est pas réévalué.
+Pour appliquer une règle nouvelle ou modifiée aux documents existants, supprimez ces documents de l'index (voir :doc:`searchlist-guide`), puis relancez l'exploration.
+Un document enregistré à nouveau, par exemple parce que son contenu a été mis à jour, est évalué à ce moment-là.
+Si « Vérifier la dernière modification » est désactivé, chaque document est enregistré à nouveau à chaque exploration, et les règles sont donc évaluées à chaque fois.
+
 Suppression de configuration
 ----------------------------
 

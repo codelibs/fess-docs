@@ -50,6 +50,11 @@
 * CsvDataStore: CSV/TSVファイルを対象としてクロールする
 * CsvListDataStore: インデクシング対象のファイルパスを記述したCSVファイルをクロールする
 
+ハンドラー名のプルダウンに表示されるのは、インストールされているデータストアコネクタプラグイン（ ``fess-ds-*`` ）が提供するハンドラーだけです。
+プラグインをインストールしていない場合、選択できるハンドラーはありません。
+上記以外のハンドラーについては、 :doc:`../config/datastore/ds-overview` に掲載している各コネクタのページを参照してください。
+なお、以前のバージョンの文書にある ``EsDataStore`` （ ``fess-ds-elasticsearch`` プラグイン）は、15.6.0 を最後に公開されておらず、15.9 では利用できません。
+
 パラメーター
 :::::::::
 
@@ -305,63 +310,6 @@ CSVファイルを対象としたクロールについて説明します。
 キーはデータベースクロールの場合と同様です。
 CSVファイル内のデータは、cell[数字]で保持しています(数字は 1 から始まります)。
 CSVファイルのセルにデータが存在しない場合はnullになる場合があります。
-
-EsDataStore
------------
-
-データの取得先がelasticsearchになりますが、基本的な利用方法はCsvDataStoreと同様です。
-
-パラメーター
-:::::::::
-
-パラメーターの設定例は以下のようになります。
-
-::
-
-    settings.cluster.name=elasticsearch
-    hosts=SERVERNAME:9300
-    index=logindex
-    type=data
-
-パラメーターは「キー=値」形式となっています。キーの説明は以下です。
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - settings.\*
-     - elasticsearchのSettings情報
-   * - hosts
-     - 接続先のelasticsearch
-   * - index
-     - インデックス名
-   * - type
-     - タイプ名
-   * - query
-     - 取得する条件のクエリー
-
-表: elasticsearch用設定パラメーター例
-
-
-スクリプト
-::::::::
-
-スクリプトの設定例は以下のようになります。
-
-::
-
-    url=source.url
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=source.title
-    content=source.content
-    digest=
-    anchor=
-    content_length=source.size
-    last_modified=new java.util.Date()
-
-パラメーターは「キー=値」形式になります。
-キーはデータベースクロールの場合と同様です。
-source.\*により値を取得して、設定することができます。
 
 CsvListDataStore
 ----------------

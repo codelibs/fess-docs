@@ -41,6 +41,14 @@ Nom en double
 
 Spécifie le nom d'hôte en double. Spécifiez le nom d'hôte que vous souhaitez remplacer.
 
+.. note::
+
+   Une URL dont le nom d'hôte correspond à un nom en double est remplacée par l'URL du nom régulier avant l'exploration. Cela concerne les URL saisies dans « URL » (les URL de départ) de la configuration de crawl ainsi que les URL des liens trouvés pendant le crawl.
+   Par conséquent, « URL incluses » et « URL exclues » de la configuration de crawl sont évaluées sur l'URL après remplacement. Écrivez-les avec le nom d'hôte du nom régulier.
+
+   Par exemple, si le nom régulier est ``example.com`` et le nom en double ``www.example.com``, saisir uniquement ``https://www.example.com/.*`` dans « URL incluses » exclut l'URL de départ après remplacement (``https://example.com/``).
+   Dans ce cas, aucun document n'est enregistré dans l'index, et aucune erreur ni aucun message de journal n'est produit.
+
 Suppression de configuration
 ----------------------------
 

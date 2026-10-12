@@ -9,6 +9,11 @@ Vous pouvez gérer les mots à exclure du traitement de stemming.
 Le traitement de stemming étant essentiellement basé sur des règles, une normalisation non intentionnelle peut se produire.
 Par exemple, le mot Maine (nom d'un état américain) serait normalisé en main.
 
+Pour que ce mot reste recherchable tel quel, enregistrez ``maine`` (écrivez les mots en minuscules ; voir « Paramètres de configuration »).
+
+La liste affiche un dictionnaire par langue (``en/protwords.txt``, ``de/protwords.txt``, etc.). Choisissez et modifiez le dictionnaire qui correspond à la langue du mot. Voir :doc:`dict-guide` pour savoir quel dictionnaire s'applique à quels champs.
+Enregistrer une modification ne suffit pas pour qu'elle soit prise en compte dans les recherches. Voir :ref:`dict-apply-changes` pour savoir comment l'appliquer.
+
 Gestion
 =======
 
@@ -36,6 +41,8 @@ Informations sur les mots
 
 Entrez les mots à exclure du traitement de stemming.
 
+Entrez les mots en minuscules. L'analyse convertit le mot en minuscules avant de le comparer à ce dictionnaire ; saisir ``Maine`` ne le protège donc pas. Dans l'exemple de la présentation, saisissez ``maine``.
+
 
 Téléchargement
 ==============
@@ -46,6 +53,10 @@ Téléversement
 =============
 
 Vous pouvez téléverser au format de dictionnaire Protwords.
+
+.. warning::
+
+   Le téléversement remplace le contenu du dictionnaire par celui du fichier téléversé. Les mots qui ne figurent pas dans le fichier, y compris ceux enregistrés depuis l'écran, sont supprimés. Si nécessaire, téléchargez d'abord le dictionnaire et incluez son contenu dans le fichier à téléverser.
 
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/protwords-1.png

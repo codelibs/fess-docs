@@ -41,6 +41,14 @@ Nombre duplicado
 
 Especifique el nombre de host duplicado. Especifique el nombre de host que desea reemplazar.
 
+.. note::
+
+   Una URL cuyo nombre de host coincide con un nombre duplicado se sustituye por la URL del nombre regular antes del rastreo. Esto se aplica tanto a las URL escritas en "URLs" (las URL iniciales) de la configuración de rastreo como a las URL de los enlaces encontrados durante el rastreo.
+   Por ello, "URLs a incluir en el rastreo" y "URLs a excluir del rastreo" de la configuración de rastreo se evalúan sobre la URL ya sustituida. Escríbalas con el nombre de host del nombre regular.
+
+   Por ejemplo, si el nombre regular es ``example.com`` y el nombre duplicado es ``www.example.com``, escribir solo ``https://www.example.com/.*`` en "URLs a incluir en el rastreo" deja fuera la URL inicial tras la sustitución (``https://example.com/``).
+   En ese caso no se registra ningún documento en el índice y no se genera ni un error ni un mensaje de registro.
+
 Eliminar configuración
 ----------------------
 

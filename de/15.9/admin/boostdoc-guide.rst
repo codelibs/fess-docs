@@ -62,6 +62,17 @@ Sortierreihenfolge
 
 Legen Sie die Sortierreihenfolge für das Dokument-Boosting fest.
 
+Zeitpunkt der Regelanwendung
+----------------------------
+
+Die Regeln für das Dokument-Boosting werden ausgewertet, wenn ein Web-Crawl oder ein Datei-Crawl ein Dokument im Index registriert. Auf Datenspeicher-Crawls werden sie nicht angewendet.
+Das Hinzufügen, Ändern oder Löschen einer Regel ändert den Boost von Dokumenten, die sich bereits im Index befinden, nicht.
+
+Ist „Letzte Änderung prüfen" unter [System > Allgemein] aktiviert (Standard), wird ein Dokument, dessen Inhalt sich nicht geändert hat, beim erneuten Crawlen nicht erneut im Index registriert. Sein Boost wird daher nicht erneut ausgewertet.
+Um eine neue oder geänderte Regel auf vorhandene Dokumente anzuwenden, löschen Sie diese Dokumente aus dem Index (siehe :doc:`searchlist-guide`) und crawlen Sie erneut.
+Ein Dokument, das erneut registriert wird, zum Beispiel weil sich sein Inhalt geändert hat, wird zu diesem Zeitpunkt ausgewertet.
+Ist „Letzte Änderung prüfen" deaktiviert, wird bei jedem Crawl jedes Dokument erneut registriert, sodass die Regeln jedes Mal ausgewertet werden.
+
 Konfiguration löschen
 ---------------------
 

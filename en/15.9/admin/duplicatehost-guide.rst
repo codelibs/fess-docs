@@ -39,6 +39,14 @@ Duplicate Name
 
 Specify the duplicate hostname that you want to replace.
 
+.. note::
+
+   A URL whose hostname matches a duplicate name is replaced with the URL of the regular name before crawling. This applies to the URLs written in "URLs" (the start URLs) of the crawl configuration and to the URLs of links found during the crawl.
+   As a result, "Included URLs" and "Excluded URLs" of the crawl configuration are evaluated against the URL after the replacement. Write them with the hostname of the regular name.
+
+   For example, if the regular name is ``example.com`` and the duplicate name is ``www.example.com``, writing only ``https://www.example.com/.*`` in "Included URLs" excludes the start URL after the replacement (``https://example.com/``).
+   In this case, no document is registered in the index, and neither an error nor a log message is output.
+
 Delete Configuration
 --------------------
 

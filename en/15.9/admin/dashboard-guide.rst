@@ -15,11 +15,11 @@ The Dashboard provides a web-based management tool for administering the OpenSea
 
    * - Index Name
      - Description
-   * - fess.YYYYMMDD
+   * - fess.yyyyMMddHHmmssSSS
      - Indexed documents
    * - fess_log
      - Access logs
-   * - fess.suggest.YYYYMMDD
+   * - fess.suggest.yyyyMMddHHmmssSSS
      - Suggest words
    * - fess_config
      - |Fess| configuration
@@ -38,9 +38,10 @@ The Dashboard provides a web-based management tool for administering the OpenSea
    * - fess_crawler
      - Crawl information
 
+In ``fess.`` and ``fess.suggest.``, the part that follows is the date and time the index was created (17 digits, ``yyyyMMddHHmmssSSS``).
 
 Indices starting with a dot (.) are system indices and are not displayed by default.
-To display system indices, enable the "special" checkbox.
+To display system indices, enable the "Special" checkbox.
 
 Checking Indexed Document Count
 ================================

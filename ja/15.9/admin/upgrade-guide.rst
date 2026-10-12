@@ -5,4 +5,5 @@
 参照
 ====
 
-`Installation Guide <https://fess.codelibs.org/ja/15.9/install/index.html>`__ を参照してください。
+アップグレードの手順は :doc:`../install/upgrade` を参照してください。
+インストール全般については :doc:`../install/index` を参照してください。

@@ -15,11 +15,11 @@ El panel de control proporciona una herramienta de administración web para gest
 
    * - Nombre del índice
      - Descripción
-   * - fess.YYYYMMDD
+   * - fess.yyyyMMddHHmmssSSS
      - Documentos indexados
    * - fess_log
      - Registro de accesos
-   * - fess.suggest.YYYYMMDD
+   * - fess.suggest.yyyyMMddHHmmssSSS
      - Palabras de sugerencia
    * - fess_config
      - Configuración de |Fess|
@@ -38,9 +38,10 @@ El panel de control proporciona una herramienta de administración web para gest
    * - fess_crawler
      - Información de rastreo
 
+La parte que sigue a ``fess.`` y ``fess.suggest.`` es la fecha y hora de creación del índice (17 dígitos, ``yyyyMMddHHmmssSSS``).
 
 Los nombres de índices que comienzan con un punto (.) son índices del sistema y no se muestran.
-Para mostrar también los índices del sistema, active la casilla de verificación "special".
+Para mostrar también los índices del sistema, active la casilla de verificación "Special".
 
 Verificar el número de documentos indexados
 ============================================
@@ -50,7 +51,7 @@ El número de documentos indexados se muestra en el índice fess, como se muestr
 |image1|
 
 Al hacer clic en el icono de la esquina superior derecha de cada índice, se muestra un menú de operaciones para el índice.
-Si desea eliminar documentos indexados, elimínelos desde la pantalla de búsqueda administrativa. Tenga cuidado de no eliminarlos con "delete index".
+Si desea eliminar documentos indexados, elimínelos desde la pantalla de búsqueda administrativa. Tenga cuidado de no eliminarlos con "eliminar el índice".
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/dashboard-2.png

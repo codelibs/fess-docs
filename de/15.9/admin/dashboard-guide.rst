@@ -15,11 +15,11 @@ Das Dashboard bietet ein Web-Verwaltungstool zur Verwaltung der OpenSearch-Clust
 
    * - Indexname
      - Beschreibung
-   * - fess.YYYYMMDD
+   * - fess.yyyyMMddHHmmssSSS
      - Indizierte Dokumente
    * - fess_log
      - Zugriffsprotokolle
-   * - fess.suggest.YYYYMMDD
+   * - fess.suggest.yyyyMMddHHmmssSSS
      - Vorschlagswörter
    * - fess_config
      - |Fess| Konfiguration
@@ -38,9 +38,10 @@ Das Dashboard bietet ein Web-Verwaltungstool zur Verwaltung der OpenSearch-Clust
    * - fess_crawler
      - Crawl-Informationen
 
+Der Teil nach ``fess.`` und ``fess.suggest.`` ist der Zeitpunkt, zu dem der Index erstellt wurde (17 Ziffern, ``yyyyMMddHHmmssSSS``).
 
 Indexnamen, die mit einem Punkt (.) beginnen, sind Systemindizes und werden daher nicht angezeigt.
-Um Systemindizes anzuzeigen, aktivieren Sie das Kontrollkästchen „special".
+Um Systemindizes anzuzeigen, aktivieren Sie das Kontrollkästchen „Special".
 
 Anzahl indizierter Dokumente überprüfen
 ========================================
@@ -50,7 +51,7 @@ Die Anzahl der indizierten Dokumente wird wie in der Abbildung unten im Fess-Ind
 |image1|
 
 Wenn Sie auf das Symbol oben rechts in jedem Index klicken, wird ein Operationsmenü für den Index angezeigt.
-Um indizierte Dokumente zu löschen, löschen Sie sie über den Verwaltungssuchbildschirm. Achten Sie darauf, NICHT „delete index" zu verwenden.
+Um indizierte Dokumente zu löschen, löschen Sie sie über den Verwaltungssuchbildschirm. Achten Sie darauf, NICHT „Index löschen" zu verwenden.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/dashboard-2.png

@@ -35,6 +35,12 @@ LDAP 연계를 하는 경우 등에 사용할 수 있습니다.
 
 그룹 이름.
 
+gidNumber
+:::::::::
+
+그룹의 gidNumber(LDAP의 POSIX 그룹 ID)를 숫자로 지정합니다. 생략할 수 있습니다. 숫자가 아닌 값을 입력하면 오류가 발생합니다.
+|Fess| 가 관리 화면에서 LDAP를 관리하도록 설정된 경우(``ldap.admin.enabled=true``), LDAP의 그룹 엔트리의 ``gidNumber`` 속성(속성 이름은 ``ldap.attr.gidNumber`` 로 변경할 수 있습니다)에 기록됩니다. LDAP를 사용하지 않는 경우에는 지정할 필요가 없습니다.
+
 삭제 방법
 --------
 
