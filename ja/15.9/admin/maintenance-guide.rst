@@ -88,6 +88,17 @@ fess_crawlerインデックス(クロール情報)を削除することができ
 診断
 ----
 
-ログファイルをzip形式でダウンロードすることができます。
+診断用の zip ファイルをダウンロードできます。zip の ``log<yyyyMMddHHmm>/`` ディレクトリの下に、次のファイルが入ります。
+
+- ログディレクトリにある ``*.log`` と ``*.log.gz`` （ ``fess.log`` 、 ``fess-crawler.log`` 、 ``audit.log`` 、 ``searchlog.log`` など）
+- ``system.properties`` （システム設定）と ``fess_config.properties`` （アプリケーション設定）
+- ``fess_basic_config.bulk`` （クロール設定、認証設定、ラベルなど設定インデックスの内容。管理 API のアクセストークンは含まれません）
+- ``es_cat_*.txt`` と ``es_*.json`` （OpenSearch の ``_cat`` API の出力と、クラスタ・ノード・タスクなどの状態）
+
+``system.properties`` と ``fess_config.properties`` では、システム情報画面と同じ規則で秘密の値を ``XXXXXXXX`` に置き換えます。対象は、ストレージの秘密鍵、Webhook URL（Slack・Google Chat）、SSO のクライアントシークレット、LLM・埋め込みの API キー、アプリケーションの暗号鍵（ ``app.cipher.key`` ）などです。キーは残るので、どの設定があるかは分かります。
+
+.. note::
+
+   ログファイルと ``fess_basic_config.bulk`` の内容はマスクされません。zip を外部へ送る前に、内容を確認してください。
 
 .. |image0| image:: ../../../resources/images/ja/15.9/admin/maintenance-1.png

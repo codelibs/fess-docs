@@ -133,7 +133,9 @@ Specifies the user agent name used by the crawler.
 Delete old documents
 ::::::::::::::::::::
 
-Specifies the number of days for the retention period after indexing.
+Specifies the expiration period of documents in days. A document that is registered or updated by a crawl expires this many days after the crawl started, and a document that is found again by the next crawl has its expiration extended. The Doc Purger job of the scheduler (run every minute by default) deletes expired documents from the index.
+
+The default is ``3`` and the allowed values are ``-1`` to ``1000``. With ``-1``, no expiration is set on documents registered or updated by later crawls (an expiration that is already set is not extended).
 
 Ignore Failure Types
 ::::::::::::::::::::

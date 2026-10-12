@@ -69,6 +69,9 @@ Contrôle Détaillé de la Mémoire
 .. note::
    Lorsque ``FESS_HEAP_SIZE`` est défini, ``FESS_MIN_MEM`` et ``FESS_MAX_MEM`` sont ignorés.
 
+.. note::
+   Avec les paquets RPM/DEB, le fichier d'environnement (``/etc/sysconfig/fess``, ou ``/etc/default/fess`` pour DEB) définit ``FESS_HEAP_SIZE=512m``. Le heap est donc fixé à 512m au lieu des valeurs par défaut du tableau ci-dessus. Pour modifier la taille du heap, changez cette valeur de ``FESS_HEAP_SIZE``.
+
 Pour les packages RPM/DEB
 ------------------------
 
@@ -127,15 +130,14 @@ Méthode de configuration
 
 Éditez ``app/WEB-INF/classes/fess_config.properties`` ou ``/etc/fess/fess_config.properties``.
 
-::
+``jvm.crawler.options`` est un paramètre unique qui énumère les options JVM du processus du crawler, séparées par des retours à la ligne (``\n``). Modifier la valeur remplace toutes les options par défaut : si vous n'écrivez que ``-Xmx512m``, les autres options par défaut, comme ``-Dfile.encoding=UTF-8`` et les réglages G1GC, sont également perdues. Conservez la valeur par défaut indiquée dans ``fess_config.properties`` et ne modifiez que les lignes relatives à la taille du heap.
 
-    jvm.crawler.options=-Xmx512m
-
-Par exemple, pour passer à 1 Go :
+Par exemple, pour porter le heap maximal à 1 Go, modifiez comme suit la ligne ``-Xmx512m`` de la valeur par défaut.
 
 ::
 
-    jvm.crawler.options=-Xmx1g
+    -Xms128m\n\
+    -Xmx1g\n\
 
 .. note::
    Ce paramètre est appliqué par processus de crawl (par tâche du planificateur).
@@ -272,9 +274,7 @@ Processus de génération de suggestions
 
 Les paramètres de mémoire pour le processus de génération de suggestions sont configurés avec ``jvm.suggest.options``.
 
-::
-
-    jvm.suggest.options=-Xmx256m
+Comme pour le crawler, ce paramètre contient toutes les options par défaut : ne modifiez que la ligne ``-Xmx256m`` et conservez les autres.
 
 Par défaut, les paramètres suivants sont utilisés :
 
@@ -287,9 +287,7 @@ Processus de génération de miniatures
 
 Les paramètres de mémoire pour le processus de génération de miniatures sont configurés avec ``jvm.thumbnail.options``.
 
-::
-
-    jvm.thumbnail.options=-Xmx256m
+Comme pour le crawler, ce paramètre contient toutes les options par défaut : ne modifiez que la ligne ``-Xmx256m`` et conservez les autres.
 
 Par défaut, les paramètres suivants sont utilisés :
 

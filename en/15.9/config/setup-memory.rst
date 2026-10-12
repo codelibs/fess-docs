@@ -69,6 +69,9 @@ Fine-Grained Memory Control
 .. note::
    When ``FESS_HEAP_SIZE`` is set, ``FESS_MIN_MEM`` and ``FESS_MAX_MEM`` are ignored.
 
+.. note::
+   With the RPM/DEB packages, the environment file (``/etc/sysconfig/fess``, or ``/etc/default/fess`` for DEB) sets ``FESS_HEAP_SIZE=512m``. The heap is therefore fixed at 512m instead of the defaults in the table above. To change the heap size, change this ``FESS_HEAP_SIZE`` value.
+
 For RPM/DEB Packages
 ---------------------
 
@@ -127,15 +130,14 @@ Configuration Method
 
 Edit ``app/WEB-INF/classes/fess_config.properties`` or ``/etc/fess/fess_config.properties``.
 
-::
+``jvm.crawler.options`` is a single setting that lists the JVM options of the crawler process, separated by newlines (``\n``). Changing the value replaces all of the default options, so if you write only ``-Xmx512m``, the other default options, such as ``-Dfile.encoding=UTF-8`` and the G1GC settings, are lost as well. Keep the default value listed in ``fess_config.properties`` and change only the heap size lines.
 
-    jvm.crawler.options=-Xmx512m
-
-For example, to change to 1GB:
+For example, to change the maximum heap to 1GB, rewrite the ``-Xmx512m`` line of the default value as follows.
 
 ::
 
-    jvm.crawler.options=-Xmx1g
+    -Xms128m\n\
+    -Xmx1g\n\
 
 .. note::
    This setting applies per crawler process (per scheduler job).
@@ -274,9 +276,7 @@ Suggest Generation Process
 
 Memory configuration for suggest generation processing is set in ``jvm.suggest.options``.
 
-::
-
-    jvm.suggest.options=-Xmx256m
+Like the crawler's, this setting holds all the default options, so change only the ``-Xmx256m`` line and keep the others.
 
 The following settings are used by default:
 
@@ -289,9 +289,7 @@ Thumbnail Generation Process
 
 Memory configuration for thumbnail generation processing is set in ``jvm.thumbnail.options``.
 
-::
-
-    jvm.thumbnail.options=-Xmx256m
+Like the crawler's, this setting holds all the default options, so change only the ``-Xmx256m`` line and keep the others.
 
 The following settings are used by default:
 

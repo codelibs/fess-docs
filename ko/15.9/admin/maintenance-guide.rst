@@ -88,6 +88,17 @@ fess_crawler 인덱스(크롤링 정보)를 삭제할 수 있습니다.
 진단
 ----
 
-로그 파일을 zip 형식으로 다운로드할 수 있습니다.
+진단용 zip 파일을 다운로드할 수 있습니다. zip 의 ``log<yyyyMMddHHmm>/`` 디렉터리 아래에 다음 파일이 들어 있습니다.
+
+- 로그 디렉터리의 ``*.log`` 와 ``*.log.gz`` (``fess.log`` , ``fess-crawler.log`` , ``audit.log`` , ``searchlog.log`` 등)
+- ``system.properties`` (시스템 설정)와 ``fess_config.properties`` (애플리케이션 설정)
+- ``fess_basic_config.bulk`` (크롤링 설정, 인증 설정, 라벨 등 설정 인덱스의 내용. 관리 API의 액세스 토큰은 포함되지 않습니다)
+- ``es_cat_*.txt`` 와 ``es_*.json`` (OpenSearch ``_cat`` API의 출력과 클러스터, 노드, 태스크 등의 상태)
+
+``system.properties`` 와 ``fess_config.properties`` 에서는 시스템 정보 화면과 같은 규칙으로 비밀 값을 ``XXXXXXXX`` 로 바꿉니다. 스토리지 비밀 키, Webhook URL(Slack, Google Chat), SSO 클라이언트 시크릿, LLM 및 임베딩 API 키, 애플리케이션 암호화 키(``app.cipher.key``) 등이 대상입니다. 키는 남으므로 어떤 설정이 있는지는 알 수 있습니다.
+
+.. note::
+
+   로그 파일과 ``fess_basic_config.bulk`` 의 내용은 마스킹되지 않습니다. zip을 외부로 보내기 전에 내용을 확인하십시오.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/maintenance-1.png

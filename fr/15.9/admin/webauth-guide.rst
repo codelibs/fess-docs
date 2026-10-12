@@ -40,7 +40,7 @@ Port
 ::::
 
 Spécifie le port du site nécessitant une authentification.
-Pour l'appliquer à tous les ports, spécifiez -1.
+Pour l'appliquer à tous les ports, laissez le champ vide. ``-1`` ne peut pas être spécifié ; seules les valeurs supérieures ou égales à 0 sont acceptées.
 Dans ce cas, il sera appliqué à tout port dans la configuration de crawl Web spécifiée.
 
 Domaine

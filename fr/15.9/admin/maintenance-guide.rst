@@ -86,6 +86,17 @@ Ne l'exécutez pas pendant l'exécution du crawler.
 Diagnostic
 ----------
 
-Vous pouvez télécharger les fichiers journaux au format zip.
+Vous pouvez télécharger un fichier zip de diagnostic. Le zip contient les fichiers suivants dans le répertoire ``log<yyyyMMddHHmm>/``.
+
+- Les fichiers ``*.log`` et ``*.log.gz`` du répertoire des journaux (``fess.log``, ``fess-crawler.log``, ``audit.log``, ``searchlog.log``, etc.)
+- ``system.properties`` (paramètres système) et ``fess_config.properties`` (paramètres de l'application)
+- ``fess_basic_config.bulk`` (contenu des index de configuration, tels que les paramètres de crawl, d'authentification et les étiquettes ; les jetons d'accès de l'API d'administration n'y figurent pas)
+- ``es_cat_*.txt`` et ``es_*.json`` (sortie des API ``_cat`` d'OpenSearch et état du cluster, des nœuds et des tâches)
+
+Dans ``system.properties`` et ``fess_config.properties``, les valeurs secrètes sont remplacées par ``XXXXXXXX`` selon la même règle que l'écran Informations système. Cela concerne par exemple la clé secrète de stockage, les URL de webhook (Slack et Google Chat), les secrets client SSO, les clés d'API des LLM et d'embedding, ainsi que la clé de chiffrement de l'application (``app.cipher.key``). Les clés sont conservées : on voit donc toujours quels paramètres existent.
+
+.. note::
+
+   Les fichiers journaux et le contenu de ``fess_basic_config.bulk`` ne sont pas masqués. Vérifiez le contenu avant d'envoyer le zip en dehors de votre organisation.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/maintenance-1.png

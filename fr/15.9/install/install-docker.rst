@@ -109,6 +109,40 @@ Exemple : pour modifier la configuration mémoire ::
         environment:
           - "FESS_HEAP_SIZE=2g"  # Définir la taille du tas de Fess à 2 Go
 
+Types d'images et vignettes
+---------------------------
+
+Les images Docker de |Fess| existent en plusieurs types, qui se distinguent par un suffixe de tag (``-noble``, ``-al2023``, etc.). L'image par défaut sans suffixe (basée sur Alpine) ne contient pas les outils externes qui créent les vignettes des images, des fichiers PDF et des documents Office (ImageMagick, poppler-utils, unoconv et LibreOffice). Avec cette image, seules les pages HTML ont une vignette ; aucune vignette n'est générée pour les images, les fichiers PDF ni les documents Office.
+
+Si vous avez besoin de ces vignettes, indiquez dans ``image`` de ``compose.yaml`` un tag avec le suffixe ``-noble``, qui inclut les outils.
+
+::
+
+    services:
+      fess01:
+        image: ghcr.io/codelibs/fess:15.9.0-noble
+
+Le tableau suivant indique ce que prend en charge chaque image.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 30 30
+
+   * - Tag
+     - Images et PDF
+     - Documents Office
+   * - ``15.9.0-noble``
+     - Générée
+     - Générée
+   * - ``15.9.0-al2023``
+     - Générée
+     - Non générée
+   * - ``15.9.0``, ``15.9.0-slim``, ``15.9.0-slim-noble``, ``15.9.0-slim-al2023``
+     - Non générée
+     - Non générée
+
+Quelle que soit l'image, la vignette d'une page HTML est créée à partir d'une image de la page. Pour afficher les vignettes, activez aussi l'affichage des vignettes dans les paramètres généraux de l'interface d'administration. Voir :doc:`../config/crawler-thumbnail` pour plus de détails.
+
 Étape 3 : Démarrage des conteneurs Docker
 ==========================================
 

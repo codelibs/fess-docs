@@ -190,8 +190,7 @@ Pour exécuter immédiatement une indexation configurée, démarrez le travail d
    (normalement par nom) (valeur par défaut de ``page.web.config.max.fetch.size``,
    ``page.file.config.max.fetch.size`` et ``page.data.config.max.fetch.size``). Ces valeurs ne
    correspondent pas à un nombre d'éléments par page : elles plafonnent le nombre total de
-   configurations chargées. Les configurations au-delà de la 100e ne sont pas indexées, sans
-   aucune erreur ni avertissement. Si vous créez plus de 100 configurations, augmentez ces
+   configurations chargées. Lorsque le nombre de configurations atteint la limite, les configurations au-delà ne sont pas indexées et une ligne WARN est écrite dans le journal du crawler, ``fess-crawler.log`` (une fois par clé et par processus de crawl). Comme elle est écrite dès que le nombre de configurations chargées est égal à la limite, elle apparaît aussi lorsqu'il y a exactement 100 configurations. Exemple : ``page.web.config.max.fetch.size=100 limits how many crawling configs are loaded, and that many were found. Any further configs are ignored and are not crawled. Increase page.web.config.max.fetch.size to load more.`` Si vous créez plus de 100 configurations, augmentez ces
    valeurs dans ``fess_config.properties`` (un redémarrage de |Fess| est nécessaire après la
    modification).
 

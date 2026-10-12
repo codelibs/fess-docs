@@ -109,6 +109,40 @@ Ejemplo: para cambiar la configuración de memoria::
         environment:
           - "FESS_HEAP_SIZE=2g"  # Establecer el tamaño del heap de Fess en 2GB
 
+Tipos de imagen y miniaturas
+----------------------------
+
+Las imágenes Docker de |Fess| existen en varios tipos que se distinguen por un sufijo en la etiqueta (``-noble``, ``-al2023``, etc.). La imagen predeterminada sin sufijo (basada en Alpine) no incluye las herramientas externas que crean las miniaturas de imágenes, archivos PDF y documentos de Office (ImageMagick, poppler-utils, unoconv y LibreOffice). Con esta imagen, solo las páginas HTML obtienen miniaturas; no se generan miniaturas de imágenes, archivos PDF ni documentos de Office.
+
+Si necesita estas miniaturas, indique en ``image`` de ``compose.yaml`` una etiqueta con el sufijo ``-noble``, que incluye las herramientas.
+
+::
+
+    services:
+      fess01:
+        image: ghcr.io/codelibs/fess:15.9.0-noble
+
+La siguiente tabla muestra qué admite cada imagen.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 30 30
+
+   * - Etiqueta
+     - Imágenes y PDF
+     - Documentos de Office
+   * - ``15.9.0-noble``
+     - Se genera
+     - Se genera
+   * - ``15.9.0-al2023``
+     - Se genera
+     - No se genera
+   * - ``15.9.0``, ``15.9.0-slim``, ``15.9.0-slim-noble``, ``15.9.0-slim-al2023``
+     - No se genera
+     - No se genera
+
+Con cualquier imagen, la miniatura de una página HTML se crea a partir de una imagen de la propia página. Para que se muestren las miniaturas, active también la visualización de miniaturas en la configuración general de la pantalla de administración. Consulte :doc:`../config/crawler-thumbnail` para más detalles.
+
 Paso 3: Inicio del Contenedor Docker
 =====================================
 

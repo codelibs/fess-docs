@@ -181,7 +181,7 @@ SMB/CIFS(Windowsファイル共有)
 .. note::
    1 回のジョブが読み込むクロール設定は、ウェブ、ファイルシステム、データストアのそれぞれで、並び順（通常は名前順）の先頭から最大 100 件です（ ``page.web.config.max.fetch.size`` 、 ``page.file.config.max.fetch.size`` 、 ``page.data.config.max.fetch.size`` のデフォルト値）。
    これらの値は 1 ページあたりの件数ではなく、読み込む設定の総数の上限です。
-   101 件目以降の設定は、エラーや警告が出力されないままクロールされません。
+   設定の数が上限に達すると、それを超える分の設定はクロールされません。このとき、クロールのログ ``fess-crawler.log`` に WARN が 1 行出力されます（クロールのプロセスごとに、キーごとに 1 回）。上限と同じ数の設定を読み込んだ時点で出力されるため、設定がちょうど 100 件のときにも出力されます。出力例: ``page.web.config.max.fetch.size=100 limits how many crawling configs are loaded, and that many were found. Any further configs are ignored and are not crawled. Increase page.web.config.max.fetch.size to load more.``
    100 件を超えて設定を作成する場合は、 ``fess_config.properties`` でこれらの値を大きくしてください（変更後は |Fess| の再起動が必要です）。
 
 スケジュール実行

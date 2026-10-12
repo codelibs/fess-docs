@@ -98,6 +98,10 @@ siempre se escriben.
 
 .. note::
 
+   La omisión se registra con nivel INFO, por lo que con el nivel de registro predeterminado (``warn``) no se escribe en ``fess.log``. Para ver estas entradas, cambie el nivel de registro a ``info`` antes de la restauración. Puede cambiarlo en "Nivel de Registro" de [Sistema > General] en la pantalla de administración (vuelve al valor configurado al reiniciar |Fess|) o, en Linux, con ``FESS_LOG_LEVEL=info``. Consulte :doc:`../config/admin-logging` para más detalles.
+
+.. note::
+
    |Fess| 15.9 guarda el ``password`` de la autenticación web y de archivos cifrado con la clave de cifrado de la
    aplicación (``app.cipher.key`` de ``fess_config.properties``), por lo que ``fess_basic_config.bulk`` y
    ``fess_config.bulk`` contienen los valores cifrados. Al restaurar una copia de seguridad en otra instalación,

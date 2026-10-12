@@ -86,6 +86,17 @@ No lo ejecute mientras el rastreador esté en ejecución.
 Diagnóstico
 -----------
 
-Puede descargar archivos de registro en formato zip.
+Puede descargar un archivo zip de diagnóstico. El zip contiene los siguientes archivos en el directorio ``log<yyyyMMddHHmm>/``.
+
+- Los archivos ``*.log`` y ``*.log.gz`` del directorio de registros (``fess.log``, ``fess-crawler.log``, ``audit.log``, ``searchlog.log``, etc.)
+- ``system.properties`` (configuración del sistema) y ``fess_config.properties`` (configuración de la aplicación)
+- ``fess_basic_config.bulk`` (contenido de los índices de configuración, como la configuración de rastreo, la de autenticación y las etiquetas; no incluye los tokens de acceso de la API de administración)
+- ``es_cat_*.txt`` y ``es_*.json`` (salida de las API ``_cat`` de OpenSearch y estado del clúster, los nodos y las tareas)
+
+En ``system.properties`` y ``fess_config.properties``, los valores secretos se sustituyen por ``XXXXXXXX`` con la misma regla que usa la pantalla Información del Sistema. Esto incluye, por ejemplo, la clave secreta del almacenamiento, las URL de webhook (Slack y Google Chat), los secretos de cliente de SSO, las claves de API de LLM y de embedding, y la clave de cifrado de la aplicación (``app.cipher.key``). Las claves se conservan, por lo que sigue siendo posible ver qué ajustes existen.
+
+.. note::
+
+   Los archivos de registro y el contenido de ``fess_basic_config.bulk`` no se enmascaran. Revise el contenido antes de enviar el zip fuera de su organización.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/maintenance-1.png

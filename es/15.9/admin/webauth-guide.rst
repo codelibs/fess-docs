@@ -40,7 +40,7 @@ Puerto
 ::::::
 
 Especifique el puerto del sitio que requiere autenticación.
-Si desea aplicarlo a todos los puertos, especifique -1.
+Si desea aplicarlo a todos los puertos, deje el campo vacío. No se puede especificar ``-1``; solo se admiten valores de 0 o más.
 En ese caso, se aplicará con cualquier puerto en la configuración de rastreo web especificada.
 
 Dominio

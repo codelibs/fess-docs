@@ -109,6 +109,40 @@ Git이 설치되어 있는 경우 리포지토리 전체를 클론할 수도 있
         environment:
           - "FESS_HEAP_SIZE=2g"  # Fess의 힙 크기를 2GB로 설정
 
+이미지 종류와 썸네일
+--------------------
+
+|Fess| 의 Docker 이미지에는 태그 접미사(``-noble`` , ``-al2023`` 등)가 다른 여러 종류가 있습니다. 접미사가 없는 기본 이미지(Alpine 기반)에는 이미지, PDF, Office 문서의 썸네일을 만드는 외부 도구(ImageMagick, poppler-utils, unoconv, LibreOffice)가 들어 있지 않습니다. 이 이미지에서 썸네일이 생성되는 것은 HTML 페이지뿐이며, 이미지, PDF, Office 문서의 썸네일은 생성되지 않습니다.
+
+이러한 썸네일이 필요하면 ``compose.yaml`` 의 ``image`` 에 도구가 포함된 ``-noble`` 접미사가 붙은 태그를 지정하십시오.
+
+::
+
+    services:
+      fess01:
+        image: ghcr.io/codelibs/fess:15.9.0-noble
+
+이미지별 지원 여부는 다음과 같습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 30 30
+
+   * - 태그
+     - 이미지·PDF
+     - Office 문서
+   * - ``15.9.0-noble``
+     - 생성됨
+     - 생성됨
+   * - ``15.9.0-al2023``
+     - 생성됨
+     - 생성되지 않음
+   * - ``15.9.0``, ``15.9.0-slim``, ``15.9.0-slim-noble``, ``15.9.0-slim-al2023``
+     - 생성되지 않음
+     - 생성되지 않음
+
+HTML 페이지의 썸네일은 어느 이미지에서나 페이지 안의 이미지로 생성됩니다. 썸네일을 표시하려면 관리 화면의 전반 설정에서 썸네일 표시도 활성화하십시오. 자세한 내용은 :doc:`../config/crawler-thumbnail` 을 참조하십시오.
+
 단계 3: Docker 컨테이너 시작
 ================================
 

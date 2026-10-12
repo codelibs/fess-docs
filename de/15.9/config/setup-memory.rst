@@ -69,6 +69,9 @@ Detaillierte Speichersteuerung
 .. note::
    Wenn ``FESS_HEAP_SIZE`` gesetzt ist, werden ``FESS_MIN_MEM`` und ``FESS_MAX_MEM`` ignoriert.
 
+.. note::
+   Bei den RPM/DEB-Paketen setzt die Umgebungsdatei (``/etc/sysconfig/fess``, bei DEB ``/etc/default/fess``) ``FESS_HEAP_SIZE=512m``. Der Heap ist daher auf 512m festgelegt und nicht auf die Standardwerte der obigen Tabelle. Um die Heap-Größe zu ändern, passen Sie diesen Wert von ``FESS_HEAP_SIZE`` an.
+
 Bei RPM/DEB-Paketen
 ------------------------
 
@@ -127,15 +130,14 @@ Konfigurationsmethode
 
 Bearbeiten Sie ``app/WEB-INF/classes/fess_config.properties`` oder ``/etc/fess/fess_config.properties``.
 
-::
+``jvm.crawler.options`` ist eine einzelne Einstellung, die die JVM-Optionen des Crawler-Prozesses durch Zeilenumbrüche (``\n``) getrennt auflistet. Beim Ändern des Werts werden alle Standardoptionen ersetzt. Wenn Sie nur ``-Xmx512m`` schreiben, gehen daher auch die übrigen Standardoptionen verloren, etwa ``-Dfile.encoding=UTF-8`` und die G1GC-Einstellungen. Behalten Sie den in ``fess_config.properties`` aufgeführten Standardwert bei und ändern Sie nur die Zeilen zur Heap-Größe.
 
-    jvm.crawler.options=-Xmx512m
-
-Beispiel für Änderung auf 1 GB:
+Um beispielsweise den maximalen Heap auf 1 GB zu ändern, ändern Sie die Zeile ``-Xmx512m`` des Standardwerts wie folgt.
 
 ::
 
-    jvm.crawler.options=-Xmx1g
+    -Xms128m\n\
+    -Xmx1g\n\
 
 .. note::
    Diese Einstellung wird pro Crawler-Prozess (pro Scheduler-Job) angewendet.
@@ -275,9 +277,7 @@ Vorschlags-Generierungsprozess
 
 Die Speicherkonfiguration für die Vorschlags-Generierung wird über ``jvm.suggest.options`` konfiguriert.
 
-::
-
-    jvm.suggest.options=-Xmx256m
+Wie beim Crawler enthält diese Einstellung alle Standardoptionen. Ändern Sie daher nur die Zeile ``-Xmx256m`` und behalten Sie die übrigen bei.
 
 Standardmäßig werden folgende Einstellungen verwendet:
 
@@ -290,9 +290,7 @@ Thumbnail-Generierungsprozess
 
 Die Speicherkonfiguration für die Thumbnail-Generierung wird über ``jvm.thumbnail.options`` konfiguriert.
 
-::
-
-    jvm.thumbnail.options=-Xmx256m
+Wie beim Crawler enthält diese Einstellung alle Standardoptionen. Ändern Sie daher nur die Zeile ``-Xmx256m`` und behalten Sie die übrigen bei.
 
 Standardmäßig werden folgende Einstellungen verwendet:
 

@@ -179,7 +179,7 @@ SMB/CIFS(Windows文件共享)
 .. note::
    一次任务执行加载的爬取配置，在 Web、文件系统和数据存储中各自从排序（通常为按名称）的开头起最多 100 个（ ``page.web.config.max.fetch.size`` 、 ``page.file.config.max.fetch.size`` 、 ``page.data.config.max.fetch.size`` 的默认值）。
    这些值不是每页的条数，而是加载的配置总数的上限。
-   第 101 个及之后的配置不会被爬取，也不会输出错误或警告。
+   当配置数量达到上限时，超出的配置不会被爬取，并且爬取日志 ``fess-crawler.log`` 中会输出一行 WARN（每个爬取进程中每个键输出一次）。由于在加载的配置数量与上限相同时就会输出，因此配置正好为 100 个时也会输出。输出示例： ``page.web.config.max.fetch.size=100 limits how many crawling configs are loaded, and that many were found. Any further configs are ignored and are not crawled. Increase page.web.config.max.fetch.size to load more.``
    如果要创建超过 100 个配置，请在 ``fess_config.properties`` 中增大这些值（修改后需要重启 |Fess|\ ）。
 
 计划执行

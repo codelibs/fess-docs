@@ -84,7 +84,7 @@ El "tipo de dato" indica la diferencia en el método de búsqueda según cada ca
 Si no se especifica ningún campo, la búsqueda se realiza sobre los campos title y content. Según la configuración, también es posible agregar campos adicionales como objetivo de búsqueda.
 
 .. note::
-    Según el objetivo del rastreo, hay campos en los que no se registra ningún valor. Por ejemplo, anchor solo se registra durante el rastreo web, y lang solo cuando el HTML tiene un atributo de idioma. Además, también se pueden especificar campos como segment (el ID de sesión que representa la unidad de ejecución del rastreo) o doc_id (el ID interno asignado por el sistema), aunque normalmente no se utilizan en las búsquedas habituales.
+    Según el objetivo del rastreo, hay campos en los que no se registra ningún valor. Por ejemplo, anchor solo se registra durante el rastreo web. lang se toma del atributo de idioma del HTML o del idioma detectado en el texto del documento; no se registra si no se puede detectar ningún idioma o si el idioma detectado no figura en ``supported.languages``. Además, también se pueden especificar campos como segment (el ID de sesión que representa la unidad de ejecución del rastreo) o doc_id (el ID interno asignado por el sistema), aunque normalmente no se utilizan en las búsquedas habituales.
 
 owner y last_modifier se registran al rastrear servidores de archivos y similares. owner contiene el
 nombre de cuenta del propietario del archivo obtenido en rastreos SMB, de sistema de archivos y FTP

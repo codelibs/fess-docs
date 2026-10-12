@@ -98,6 +98,10 @@ Version gelieferten geplanten Jobs (``updatedTime`` 0) bleiben unverändert. Dok
 
 .. note::
 
+   Das Überspringen wird auf INFO-Ebene protokolliert und erscheint daher mit der Standard-Protokollebene (``warn``) nicht in ``fess.log``. Um diese Einträge zu sehen, setzen Sie die Protokollebene vor der Wiederherstellung auf ``info``. Sie können sie in der Verwaltungsoberfläche unter [System > Allgemein] bei „Protokollebene" ändern (nach einem Neustart von |Fess| gilt wieder der konfigurierte Wert) oder unter Linux mit ``FESS_LOG_LEVEL=info``. Details finden Sie unter :doc:`../config/admin-logging`.
+
+.. note::
+
    |Fess| 15.9 speichert das ``password`` der Web- und Datei-Authentifizierung mit dem Anwendungsschlüssel
    (``app.cipher.key`` in ``fess_config.properties``) verschlüsselt, sodass ``fess_basic_config.bulk`` und
    ``fess_config.bulk`` die verschlüsselten Werte enthalten. Übernehmen Sie beim Wiederherstellen einer Sicherung auf

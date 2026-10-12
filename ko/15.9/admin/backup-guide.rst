@@ -96,6 +96,10 @@ user_info.ndjson은 검색 사용자 정보를 포함합니다.
 
 .. note::
 
+   건너뜀은 INFO 수준으로 기록되므로, 기본 로그 레벨(``warn``)에서는 ``fess.log`` 에 출력되지 않습니다. 기록을 확인하려면 복원 전에 로그 레벨을 ``info`` 로 변경하십시오. 관리 화면의 [시스템 > 전반]에 있는 "로그 레벨"에서 변경할 수 있으며(|Fess| 를 재시작하면 원래대로 돌아갑니다), Linux에서는 ``FESS_LOG_LEVEL=info`` 로도 지정할 수 있습니다. 자세한 내용은 :doc:`../config/admin-logging` 을 참조하십시오.
+
+.. note::
+
    |Fess| 15.9 는 웹 인증과 파일 인증의 ``password`` 를 애플리케이션 암호화 키(``fess_config.properties`` 의
    ``app.cipher.key``)로 암호화하여 저장하므로, ``fess_basic_config.bulk`` 와 ``fess_config.bulk`` 에도 암호화된 값이
    포함됩니다. 백업을 다른 설치에 복원할 때는 동일한 ``app.cipher.key`` 를 이어받으십시오. 키가 다르면 이 인증 정보를

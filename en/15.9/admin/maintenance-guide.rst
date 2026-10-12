@@ -77,6 +77,17 @@ Do not execute this task when Crawler is running.
 Diagnostic
 ----------
 
-Download log files and system state information.
+You can download a diagnostic zip file. The zip contains the following files under the ``log<yyyyMMddHHmm>/`` directory.
+
+- ``*.log`` and ``*.log.gz`` files in the log directory (``fess.log``, ``fess-crawler.log``, ``audit.log``, ``searchlog.log``, and so on)
+- ``system.properties`` (system settings) and ``fess_config.properties`` (application settings)
+- ``fess_basic_config.bulk`` (the contents of the configuration indexes, such as crawl settings, authentication settings, and labels; the access tokens of the admin API are not included)
+- ``es_cat_*.txt`` and ``es_*.json`` (the output of the OpenSearch ``_cat`` APIs and the state of the cluster, nodes, and tasks)
+
+In ``system.properties`` and ``fess_config.properties``, secret values are replaced with ``XXXXXXXX`` by the same rule as the System Info screen. This covers, for example, the storage secret key, webhook URLs (Slack and Google Chat), SSO client secrets, LLM and embedding API keys, and the application cipher key (``app.cipher.key``). The keys are kept, so you can still see which settings exist.
+
+.. note::
+
+   Log files and the contents of ``fess_basic_config.bulk`` are not masked. Check the contents before you send the zip outside your organization.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/maintenance-1.png

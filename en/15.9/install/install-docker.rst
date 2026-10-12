@@ -109,6 +109,40 @@ Example: Changing memory settings::
         environment:
           - "FESS_HEAP_SIZE=2g"  # Set the Fess heap size to 2GB
 
+Image Types and Thumbnails
+--------------------------
+
+The |Fess| Docker images come in several types that differ by a tag suffix (``-noble``, ``-al2023``, and so on). The default image without a suffix (Alpine-based) does not contain the external tools that create thumbnails of images, PDF files, and Office documents (ImageMagick, poppler-utils, unoconv, and LibreOffice). With this image, only HTML pages get thumbnails; no thumbnails are generated for images, PDF files, or Office documents.
+
+If you need these thumbnails, set the ``image`` in ``compose.yaml`` to a tag with the ``-noble`` suffix, which includes the tools.
+
+::
+
+    services:
+      fess01:
+        image: ghcr.io/codelibs/fess:15.9.0-noble
+
+The following table shows what each image supports.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 30 30
+
+   * - Tag
+     - Images and PDF
+     - Office documents
+   * - ``15.9.0-noble``
+     - Generated
+     - Generated
+   * - ``15.9.0-al2023``
+     - Generated
+     - Not generated
+   * - ``15.9.0``, ``15.9.0-slim``, ``15.9.0-slim-noble``, ``15.9.0-slim-al2023``
+     - Not generated
+     - Not generated
+
+With any image, the thumbnail of an HTML page is created from an image in the page. To display thumbnails, also enable thumbnail display in the General settings of the administration screen. See :doc:`../config/crawler-thumbnail` for details.
+
 Step 3: Start Docker Containers
 ===============================
 

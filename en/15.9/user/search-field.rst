@@ -84,7 +84,7 @@ Table: Available Field List
 If no field is specified, the search targets the title and content fields. Depending on the configuration, you can also add fields to be searched.
 
 .. note::
-    Depending on the crawl target, some fields may not have values registered. For example, anchor is registered only during web crawling, and lang is registered only when the HTML has a language attribute. Fields such as segment (a session ID representing the crawl execution unit) and doc_id (an internal ID assigned by the system) can also be specified, but they are not used in normal searches.
+    Depending on the crawl target, some fields may not have values registered. For example, anchor is registered only during web crawling. lang is registered from the language attribute of the HTML or from the language detected in the text of the document; it is not registered when no language can be detected or when the detected language is not in ``supported.languages``. Fields such as segment (a session ID representing the crawl execution unit) and doc_id (an internal ID assigned by the system) can also be specified, but they are not used in normal searches.
 
 owner and last_modifier are registered when crawling file servers and the like. owner holds the
 account name of the file owner obtained by SMB, file system and FTP crawls (a value such as

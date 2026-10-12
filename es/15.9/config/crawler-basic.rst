@@ -189,8 +189,7 @@ Para ejecutar un rastreo de forma inmediata, inicie el trabajo del rastreador de
    (normalmente por nombre) (valor predeterminado de ``page.web.config.max.fetch.size``,
    ``page.file.config.max.fetch.size`` y ``page.data.config.max.fetch.size``). Estos valores no
    son un número de elementos por página, sino el límite del número total de configuraciones
-   que se cargan. Las configuraciones a partir de la 101 no se rastrean y no se registra ningún
-   error ni advertencia. Si crea más de 100 configuraciones, aumente estos valores en
+   que se cargan. Cuando el número de configuraciones alcanza el límite, las que lo superan no se rastrean y se escribe una línea WARN en el registro del rastreador, ``fess-crawler.log`` (una vez por clave en cada proceso de rastreo). Como se escribe en cuanto el número de configuraciones cargadas es igual al límite, también aparece cuando hay exactamente 100 configuraciones. Ejemplo: ``page.web.config.max.fetch.size=100 limits how many crawling configs are loaded, and that many were found. Any further configs are ignored and are not crawled. Increase page.web.config.max.fetch.size to load more.`` Si crea más de 100 configuraciones, aumente estos valores en
    ``fess_config.properties`` (tras el cambio es necesario reiniciar |Fess|).
 
 Ejecución Programada

@@ -40,7 +40,7 @@ Port
 ::::
 
 Geben Sie den Port der Site an, die Authentifizierung erfordert.
-Um dies auf alle Ports anzuwenden, geben Sie -1 an.
+Um dies auf alle Ports anzuwenden, lassen Sie das Feld leer. ``-1`` kann nicht angegeben werden; zulässig sind nur Werte ab 0.
 In diesem Fall wird dies auf jeden Port in der angegebenen Web-Crawl-Konfiguration angewendet.
 
 Realm
