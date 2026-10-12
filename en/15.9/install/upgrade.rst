@@ -934,6 +934,14 @@ different key than the one that saved them, because you took the shipped ``fess_
 or restored a backup onto a new server, they cannot be decrypted: ``fess-crawler.log`` records a
 ``CipherFailureException``, and a crawl that includes such a configuration can index nothing.
 
+.. note::
+
+   |Fess| 15.9 also stores the ``password`` of web and file authentication encrypted with ``app.cipher.key``, so
+   ``fess_basic_config.bulk`` and ``fess_config.bulk`` in a backup contain the encrypted values. When you restore onto
+   another installation, carry the same ``app.cipher.key`` over; with a different key, crawls that use these
+   credentials fail with an error. A backup made before 15.9 holds them in plain text and keeps working (see
+   :doc:`../admin/backup-guide`).
+
 .. _upgrade-159-jcifs:
 
 SMB Timeouts Use the jcifs 3 Property Names

@@ -971,6 +971,14 @@ instalación funciona con una clave distinta de la que los guardó, porque tomó
 pueden descifrar: ``fess-crawler.log`` registra una ``CipherFailureException`` y un rastreo que
 incluya una configuración así puede no indexar nada.
 
+.. note::
+
+   |Fess| 15.9 también guarda el ``password`` de la autenticación web y de archivos cifrado con ``app.cipher.key``, por
+   lo que ``fess_basic_config.bulk`` y ``fess_config.bulk`` de una copia de seguridad contienen los valores cifrados.
+   Al restaurar en otra instalación, traslade la misma ``app.cipher.key``; con una clave distinta, los rastreos que usan
+   estas credenciales fallan con un error. Una copia de seguridad creada antes de 15.9 las contiene en texto sin cifrar
+   y sigue funcionando (consulte :doc:`../admin/backup-guide`).
+
 .. _upgrade-159-jcifs:
 
 Los tiempos de espera de SMB usan los nombres de propiedad de jcifs 3

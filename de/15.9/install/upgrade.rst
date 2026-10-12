@@ -978,6 +978,15 @@ einem neuen Server wiederhergestellt haben, lassen sie sich nicht entschlüsseln
 protokolliert eine ``CipherFailureException``, und ein Crawl, der eine solche Konfiguration
 einschließt, kann nichts indexieren.
 
+.. note::
+
+   |Fess| 15.9 speichert auch das ``password`` der Web- und Datei-Authentifizierung mit ``app.cipher.key``
+   verschlüsselt, sodass ``fess_basic_config.bulk`` und ``fess_config.bulk`` einer Sicherung die verschlüsselten Werte
+   enthalten. Übernehmen Sie beim Wiederherstellen auf einer anderen Installation denselben ``app.cipher.key``; mit
+   einem anderen Schlüssel schlagen Crawls, die diese Zugangsdaten verwenden, mit einem Fehler fehl. Eine Sicherung,
+   die vor 15.9 erstellt wurde, enthält sie im Klartext und funktioniert weiterhin (siehe
+   :doc:`../admin/backup-guide`).
+
 .. _upgrade-159-jcifs:
 
 SMB-Timeouts verwenden die Eigenschaftsnamen von jcifs 3

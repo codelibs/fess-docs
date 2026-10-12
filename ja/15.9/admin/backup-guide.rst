@@ -82,4 +82,14 @@ user_info.ndjsonは検索ユーザの情報を含みます。
 巻き戻されることはなく、インストール済みの版が同梱するスケジュールジョブ（ ``updatedTime`` は 0）も
 そのまま残ります。 ``updatedTime`` を持たないドキュメントは常に書き込まれます。
 
+.. note::
+
+   15.9 の |Fess| は、Web 認証とファイル認証の ``password`` をアプリケーションの暗号鍵（ ``fess_config.properties`` の
+   ``app.cipher.key`` ）で暗号化して保存します。そのため、 ``fess_basic_config.bulk`` と ``fess_config.bulk`` にも
+   暗号化された値が含まれます。バックアップを別のインストールに復元するときは、同じ ``app.cipher.key`` を引き継いでください。
+   鍵が異なると、これらの認証情報を使うクロールはエラーで失敗します。15.9 より前のバックアップには平文で含まれており、
+   そのまま使えます。
+
+   なお、 ``*.bulk`` にはこれら以外の値が暗号化されずに含まれます。 ``*.bulk`` は機密ファイルとして保管してください。
+
   .. |image0| image:: ../../../resources/images/ja/15.9/admin/backup-1.png

@@ -927,6 +927,13 @@ RPM 버전에서는 같은 방식으로 ``/etc/fess/fess_config.properties`` 와
 ``CipherFailureException`` 이 기록되고 그러한 설정을 포함하는 크롤은 아무것도 색인하지 못할 수
 있습니다.
 
+.. note::
+
+   |Fess| 15.9 는 웹 인증과 파일 인증의 ``password`` 도 ``app.cipher.key`` 로 암호화하여 저장하므로, 백업의
+   ``fess_basic_config.bulk`` 와 ``fess_config.bulk`` 에는 암호화된 값이 포함됩니다. 다른 설치에 복원할 때는 동일한
+   ``app.cipher.key`` 를 이어받으십시오. 키가 다르면 이 인증 정보를 사용하는 크롤이 오류로 실패합니다. 15.9 이전에 만든
+   백업에는 평문으로 들어 있으며 그대로 사용할 수 있습니다(:doc:`../admin/backup-guide` 참조).
+
 .. _upgrade-159-jcifs:
 
 SMB 타임아웃은 jcifs 3 의 속성 이름을 사용
