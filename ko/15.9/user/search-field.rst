@@ -84,7 +84,7 @@
 필드를 지정하지 않은 경우는 title 및 content를 대상으로 검색합니다. 설정에 따라 검색 대상 필드를 추가할 수도 있습니다.
 
 .. note::
-    크롤링 대상에 따라 값이 등록되지 않는 필드도 있습니다. 예를 들어 anchor는 웹 크롤링 시에만, lang은 HTML에 언어 속성이 있는 경우에만 등록됩니다. 또한 segment(크롤링 실행 단위를 나타내는 세션 ID)나 doc_id(시스템이 부여하는 내부 ID) 등의 필드도 지정할 수 있지만, 일반적인 검색에서는 사용하지 않습니다.
+    크롤링 대상에 따라 값이 등록되지 않는 필드도 있습니다. 예를 들어 anchor는 웹 크롤링 시에만 등록됩니다. lang에는 HTML의 언어 속성 또는 문서 본문에서 판별한 언어가 등록되며, 언어를 판별할 수 없거나 판별한 언어가 ``supported.languages`` 에 없으면 등록되지 않습니다. 또한 segment(크롤링 실행 단위를 나타내는 세션 ID)나 doc_id(시스템이 부여하는 내부 ID) 등의 필드도 지정할 수 있지만, 일반적인 검색에서는 사용하지 않습니다.
 
 owner 와 last_modifier 는 파일 서버 등을 크롤링할 때 등록됩니다. owner 에는 SMB, 파일 시스템, FTP 크롤링에서 가져온 파일 소유자의 계정 이름이 들어갑니다( ``DOMAIN\alice`` 와 같은 값은 ``alice`` 가 됩니다). last_modifier 에는 Office 문서 등에서 추출한 최종 수정자가 들어가며, 가져올 수 없으면 소유자가 들어갑니다. 웹 크롤링한 HTML 에는 owner 가 등록되지 않습니다. 예를 들어 ``owner:alice`` 나 ``last_modifier:"Taro Yamada"`` 와 같이 검색합니다. 기본 제공 테마에서는 고급 검색에서 소유자와 최종 수정자를 지정할 수 있습니다. 등록 여부는 관리자가 ``crawler.document.file.owner.enabled`` 와 ``crawler.document.file.last.modifier.enabled`` (둘 다 기본값은 ``true`` )로 전환할 수 있습니다.
 

@@ -86,7 +86,7 @@ Table : Liste des champs disponibles
 Si aucun champ n'est spécifié, la recherche porte sur les champs title et content. Selon la configuration, il est également possible d'ajouter des champs supplémentaires à cibler pour la recherche.
 
 .. note::
-    Selon la cible du crawl, certains champs peuvent ne pas être renseignés. Par exemple, anchor n'est enregistré que lors d'un crawl Web, et lang uniquement lorsque le document HTML possède un attribut de langue. Par ailleurs, des champs tels que segment (identifiant de session représentant une exécution de crawl) ou doc_id (identifiant interne attribué par le système) peuvent également être spécifiés, mais ils ne sont pas utilisés dans le cadre d'une recherche normale.
+    Selon la cible du crawl, certains champs peuvent ne pas être renseignés. Par exemple, anchor n'est enregistré que lors d'un crawl Web. lang provient de l'attribut de langue du document HTML ou de la langue détectée dans le texte du document ; il n'est pas enregistré si aucune langue ne peut être détectée ou si la langue détectée ne figure pas dans ``supported.languages``. Par ailleurs, des champs tels que segment (identifiant de session représentant une exécution de crawl) ou doc_id (identifiant interne attribué par le système) peuvent également être spécifiés, mais ils ne sont pas utilisés dans le cadre d'une recherche normale.
 
 owner et last_modifier sont enregistrés lors du crawl de serveurs de fichiers et autres. owner
 contient le nom de compte du propriétaire du fichier obtenu par les crawls SMB, système de fichiers

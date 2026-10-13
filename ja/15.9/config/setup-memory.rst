@@ -69,6 +69,9 @@ Fess ウェブアプリケーションのメモリ設定
 .. note::
    ``FESS_HEAP_SIZE`` を設定した場合、``FESS_MIN_MEM`` と ``FESS_MAX_MEM`` は無視されます。
 
+.. note::
+   RPM/DEB パッケージでは、環境設定ファイル（ ``/etc/sysconfig/fess`` 、DEB は ``/etc/default/fess`` ）に ``FESS_HEAP_SIZE=512m`` が設定されています。そのため、ヒープは上の表の既定値ではなく 512m に固定されます。ヒープサイズを変更するときは、この ``FESS_HEAP_SIZE`` の値を書き換えてください。
+
 RPM/DEBパッケージの場合
 ------------------------
 
@@ -127,15 +130,14 @@ DEBパッケージの場合は、``/etc/default/fess`` を編集します。
 
 ``app/WEB-INF/classes/fess_config.properties`` または ``/etc/fess/fess_config.properties`` を編集します。
 
-::
+``jvm.crawler.options`` は、クローラープロセスの JVM オプションを改行（ ``\n`` ）で区切って並べた 1 つの設定値です。値を書き換えると既定のオプションがすべて置き換わるため、 ``-Xmx512m`` だけを書くと、 ``-Dfile.encoding=UTF-8`` や G1GC の指定などの既定のオプションもなくなります。 ``fess_config.properties`` に記載された既定値を残したまま、ヒープサイズの行だけを書き換えてください。
 
-    jvm.crawler.options=-Xmx512m
-
-例えば、1GB に変更する場合:
+例えば、最大ヒープを 1GB に変更する場合は、既定値の ``-Xmx512m`` の行を次のように書き換えます。
 
 ::
 
-    jvm.crawler.options=-Xmx1g
+    -Xms128m\n\
+    -Xmx1g\n\
 
 .. note::
    この設定は、クローラープロセス単位(スケジューラーのジョブ単位)で適用されます。
@@ -274,9 +276,7 @@ Windows環境
 
 サジェスト生成処理のメモリ設定は、``jvm.suggest.options`` で設定します。
 
-::
-
-    jvm.suggest.options=-Xmx256m
+既定のオプションをすべて含む設定値なので、クローラーと同様に ``-Xmx256m`` の行だけを書き換えてください。
 
 デフォルトでは以下の設定が使用されます:
 
@@ -289,9 +289,7 @@ Windows環境
 
 サムネイル生成処理のメモリ設定は、``jvm.thumbnail.options`` で設定します。
 
-::
-
-    jvm.thumbnail.options=-Xmx256m
+既定のオプションをすべて含む設定値なので、クローラーと同様に ``-Xmx256m`` の行だけを書き換えてください。
 
 デフォルトでは以下の設定が使用されます:
 

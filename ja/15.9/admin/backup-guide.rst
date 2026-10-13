@@ -96,6 +96,10 @@ user_info.ndjsonは検索ユーザの情報を含みます。
 
 .. note::
 
+   スキップの記録は INFO レベルなので、既定のログレベル（ ``warn`` ）では ``fess.log`` に出力されません。記録を確認するときは、復元の前にログレベルを ``info`` にしてください。管理画面の [システム > 全般] の「ログレベル」で変更でき（ |Fess| を再起動すると元に戻ります）、Linux では ``FESS_LOG_LEVEL=info`` でも指定できます。詳しくは :doc:`../config/admin-logging` を参照してください。
+
+.. note::
+
    15.9 の |Fess| は、Web 認証とファイル認証の ``password`` をアプリケーションの暗号鍵（ ``fess_config.properties`` の
    ``app.cipher.key`` ）で暗号化して保存します。そのため、 ``fess_basic_config.bulk`` と ``fess_config.bulk`` にも
    暗号化された値が含まれます。バックアップを別のインストールに復元するときは、同じ ``app.cipher.key`` を引き継いでください。

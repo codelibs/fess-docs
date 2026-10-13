@@ -109,6 +109,40 @@ Compose 文件及启动步骤由 `docker-fess <https://github.com/codelibs/docke
         environment:
           - "FESS_HEAP_SIZE=2g"  # 将 Fess 的堆大小设置为 2GB
 
+镜像类型与缩略图
+----------------
+
+|Fess| 的 Docker 镜像有多种类型，区别在于标签后缀（ ``-noble`` 、 ``-al2023`` 等）。没有后缀的默认镜像（基于 Alpine）不包含生成图片、PDF 和 Office 文档缩略图所需的外部工具（ImageMagick、poppler-utils、unoconv 和 LibreOffice）。使用该镜像时，只有 HTML 页面会生成缩略图，图片、PDF 和 Office 文档不会生成缩略图。
+
+如果需要这些缩略图，请在 ``compose.yaml`` 的 ``image`` 中指定带有 ``-noble`` 后缀、已包含这些工具的标签。
+
+::
+
+    services:
+      fess01:
+        image: ghcr.io/codelibs/fess:15.9.0-noble
+
+各镜像的支持情况如下。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 30 30
+
+   * - 标签
+     - 图片和 PDF
+     - Office 文档
+   * - ``15.9.0-noble``
+     - 会生成
+     - 会生成
+   * - ``15.9.0-al2023``
+     - 会生成
+     - 不会生成
+   * - ``15.9.0`` 、 ``15.9.0-slim`` 、 ``15.9.0-slim-noble`` 、 ``15.9.0-slim-al2023``
+     - 不会生成
+     - 不会生成
+
+无论使用哪种镜像，HTML 页面的缩略图都是根据页面中的图片生成的。要显示缩略图，还需要在管理页面的常规设置中启用缩略图显示。详情请参阅 :doc:`../config/crawler-thumbnail` 。
+
 步骤 3: 启动 Docker 容器
 ========================
 

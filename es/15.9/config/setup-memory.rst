@@ -69,6 +69,9 @@ Control Detallado de Memoria
 .. note::
    Cuando se establece ``FESS_HEAP_SIZE``, ``FESS_MIN_MEM`` y ``FESS_MAX_MEM`` se ignoran.
 
+.. note::
+   En los paquetes RPM/DEB, el archivo de entorno (``/etc/sysconfig/fess``, o ``/etc/default/fess`` en DEB) establece ``FESS_HEAP_SIZE=512m``. Por ello, el heap queda fijado en 512m en lugar de los valores predeterminados de la tabla anterior. Para cambiar el tamaño del heap, modifique este valor de ``FESS_HEAP_SIZE``.
+
 Para Paquetes RPM/DEB
 ----------------------
 
@@ -127,15 +130,14 @@ Método de Configuración
 
 Edite ``app/WEB-INF/classes/fess_config.properties`` o ``/etc/fess/fess_config.properties``.
 
-::
+``jvm.crawler.options`` es un único ajuste que enumera las opciones de JVM del proceso del rastreador, separadas por saltos de línea (``\n``). Al cambiar el valor se sustituyen todas las opciones predeterminadas, por lo que, si escribe solo ``-Xmx512m``, también se pierden las demás opciones predeterminadas, como ``-Dfile.encoding=UTF-8`` y los ajustes de G1GC. Conserve el valor predeterminado indicado en ``fess_config.properties`` y cambie únicamente las líneas del tamaño del heap.
 
-    jvm.crawler.options=-Xmx512m
-
-Por ejemplo, para cambiar a 1GB:
+Por ejemplo, para cambiar el heap máximo a 1GB, modifique la línea ``-Xmx512m`` del valor predeterminado como sigue.
 
 ::
 
-    jvm.crawler.options=-Xmx1g
+    -Xms128m\n\
+    -Xmx1g\n\
 
 .. note::
    Esta configuración se aplica por unidad de proceso del rastreador (por unidad de trabajo del programador).
@@ -273,9 +275,7 @@ Proceso de Generación de Sugerencias
 
 La configuración de memoria para el proceso de generación de sugerencias se configura en ``jvm.suggest.options``.
 
-::
-
-    jvm.suggest.options=-Xmx256m
+Al igual que en el rastreador, este ajuste contiene todas las opciones predeterminadas, así que cambie solo la línea ``-Xmx256m`` y conserve las demás.
 
 Por defecto se utiliza la siguiente configuración:
 
@@ -288,9 +288,7 @@ Proceso de Generación de Miniaturas
 
 La configuración de memoria para el proceso de generación de miniaturas se configura en ``jvm.thumbnail.options``.
 
-::
-
-    jvm.thumbnail.options=-Xmx256m
+Al igual que en el rastreador, este ajuste contiene todas las opciones predeterminadas, así que cambie solo la línea ``-Xmx256m`` y conserve las demás.
 
 Por defecto se utiliza la siguiente configuración:
 

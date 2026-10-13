@@ -188,8 +188,7 @@ Um einen konfigurierten Crawl sofort auszuführen, starten Sie den Crawler-Job �
    Crawl-Konfigurationen, gezählt vom Anfang der Sortierung (normalerweise nach Name)
    (Standardwert von ``page.web.config.max.fetch.size``, ``page.file.config.max.fetch.size``
    und ``page.data.config.max.fetch.size``). Diese Werte sind keine Anzahl pro Seite, sondern
-   die Obergrenze für die Gesamtzahl der geladenen Konfigurationen. Konfigurationen ab der
-   101. werden nicht gecrawlt, ohne dass ein Fehler oder eine Warnung ausgegeben wird. Wenn Sie
+   die Obergrenze für die Gesamtzahl der geladenen Konfigurationen. Erreicht die Zahl der Konfigurationen die Obergrenze, werden die darüber hinausgehenden Konfigurationen nicht gecrawlt, und im Crawler-Protokoll ``fess-crawler.log`` wird eine WARN-Zeile ausgegeben (pro Schlüssel einmal je Crawler-Prozess). Da die Warnung bereits ausgegeben wird, sobald die Zahl der geladenen Konfigurationen der Obergrenze entspricht, erscheint sie auch bei genau 100 Konfigurationen. Beispiel: ``page.web.config.max.fetch.size=100 limits how many crawling configs are loaded, and that many were found. Any further configs are ignored and are not crawled. Increase page.web.config.max.fetch.size to load more.`` Wenn Sie
    mehr als 100 Konfigurationen anlegen, erhöhen Sie diese Werte in ``fess_config.properties``
    (nach der Änderung ist ein Neustart von |Fess| erforderlich).
 

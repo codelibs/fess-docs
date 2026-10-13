@@ -100,6 +100,10 @@ as they are. Documents without an ``updatedTime`` are always written.
 
 .. note::
 
+   The skip is logged at INFO level, so with the default log level (``warn``) nothing is written to ``fess.log``. To see these entries, set the log level to ``info`` before the restore. You can change it with "Log Level" under [System > General] in the administration screen (it returns to its configured value when |Fess| restarts), or, on Linux, with ``FESS_LOG_LEVEL=info``. See :doc:`../config/admin-logging` for details.
+
+.. note::
+
    |Fess| 15.9 stores the ``password`` of web and file authentication encrypted with the application cipher key
    (``app.cipher.key`` in ``fess_config.properties``), so ``fess_basic_config.bulk`` and ``fess_config.bulk`` contain
    the encrypted values. When you restore a backup onto another installation, carry the same ``app.cipher.key``

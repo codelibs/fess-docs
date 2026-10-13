@@ -133,7 +133,9 @@ Spécifie le nom de l'agent utilisateur utilisé par le robot d'exploration.
 Supprimer les anciens documents
 ::::::::::::::::::::::::::::::::
 
-Spécifie le nombre de jours de la période de validité après l'indexation.
+Spécifie la durée de validité des documents, en jours. Un document enregistré ou mis à jour par un crawl expire ce nombre de jours après le début du crawl, et un document retrouvé lors du crawl suivant voit sa validité prolongée. Le travail Doc Purger du planificateur de tâches (exécuté chaque minute par défaut) supprime de l'index les documents expirés.
+
+La valeur par défaut est ``3`` et les valeurs autorisées vont de ``-1`` à ``1000``. Avec ``-1``, aucune expiration n'est définie pour les documents enregistrés ou mis à jour par les crawls suivants (une expiration déjà définie n'est pas prolongée).
 
 Ignorer les types d'échec
 :::::::::::::::::::::::::

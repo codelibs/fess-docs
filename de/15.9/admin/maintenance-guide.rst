@@ -86,6 +86,17 @@ Führen Sie dies nicht während der Crawler-Ausführung aus.
 Diagnose
 --------
 
-Sie können Protokolldateien im ZIP-Format herunterladen.
+Sie können eine ZIP-Datei für die Diagnose herunterladen. Die ZIP-Datei enthält im Verzeichnis ``log<yyyyMMddHHmm>/`` die folgenden Dateien.
+
+- ``*.log`` und ``*.log.gz`` aus dem Protokollverzeichnis (``fess.log``, ``fess-crawler.log``, ``audit.log``, ``searchlog.log`` usw.)
+- ``system.properties`` (Systemeinstellungen) und ``fess_config.properties`` (Anwendungseinstellungen)
+- ``fess_basic_config.bulk`` (Inhalt der Konfigurationsindizes, etwa Crawl-Einstellungen, Authentifizierungseinstellungen und Labels; die Zugriffstoken der Admin-API sind nicht enthalten)
+- ``es_cat_*.txt`` und ``es_*.json`` (Ausgabe der ``_cat``-APIs von OpenSearch sowie der Zustand von Cluster, Knoten und Tasks)
+
+In ``system.properties`` und ``fess_config.properties`` werden geheime Werte nach derselben Regel wie in der Ansicht Systeminformationen durch ``XXXXXXXX`` ersetzt. Dazu gehören zum Beispiel der geheime Speicherschlüssel, Webhook-URLs (Slack und Google Chat), SSO-Client-Secrets, API-Schlüssel für LLM und Embedding sowie der Verschlüsselungsschlüssel der Anwendung (``app.cipher.key``). Die Schlüssel bleiben erhalten, sodass weiterhin erkennbar ist, welche Einstellungen vorhanden sind.
+
+.. note::
+
+   Protokolldateien und der Inhalt von ``fess_basic_config.bulk`` werden nicht maskiert. Prüfen Sie den Inhalt, bevor Sie die ZIP-Datei an Dritte weitergeben.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/maintenance-1.png

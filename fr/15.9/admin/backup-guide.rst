@@ -98,6 +98,10 @@ toujours écrits.
 
 .. note::
 
+   L'omission est consignée au niveau INFO ; avec le niveau de journalisation par défaut (``warn``), elle n'apparaît donc pas dans ``fess.log``. Pour voir ces entrées, passez le niveau de journalisation à ``info`` avant la restauration. Vous pouvez le modifier dans « Niveau de journalisation » sous [Système > Général] dans l'interface d'administration (il revient à la valeur configurée au redémarrage de |Fess|) ou, sous Linux, avec ``FESS_LOG_LEVEL=info``. Voir :doc:`../config/admin-logging` pour plus de détails.
+
+.. note::
+
    |Fess| 15.9 enregistre le ``password`` de l'authentification Web et fichier chiffré avec la clé de chiffrement de
    l'application (``app.cipher.key`` dans ``fess_config.properties``) ; ``fess_basic_config.bulk`` et
    ``fess_config.bulk`` contiennent donc les valeurs chiffrées. Lorsque vous restaurez une sauvegarde sur une autre

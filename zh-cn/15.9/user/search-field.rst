@@ -84,7 +84,7 @@
 如果未指定字段,则以 title 和 content 为搜索对象。根据设置,也可以添加作为搜索对象的字段。
 
 .. note::
-    根据爬取对象的不同,有些字段可能不会被注册值。例如,anchor 仅在 Web 爬取时才会被注册,lang 仅在 HTML 具有语言属性时才会被注册。此外,还可以指定 segment(表示爬取执行单位的会话 ID)、doc_id(系统分配编号的内部 ID)等字段,但通常的搜索中不会使用它们。
+    根据爬取对象的不同,有些字段可能不会被注册值。例如,anchor 仅在 Web 爬取时才会被注册。lang 会注册 HTML 的语言属性,或根据文档正文判定出的语言;无法判定语言,或判定出的语言不在 ``supported.languages`` 中时,则不会注册。此外,还可以指定 segment(表示爬取执行单位的会话 ID)、doc_id(系统分配编号的内部 ID)等字段,但通常的搜索中不会使用它们。
 
 owner 和 last_modifier 会在爬取文件服务器等时注册。owner 中存放通过 SMB、文件系统、FTP 爬取获取的文件所有者的账户名（ ``DOMAIN\alice`` 这样的值会变为 ``alice`` ）。last_modifier 中存放从 Office 文档等中提取的最后修改者，无法获取时存放所有者。Web 爬取的 HTML 不会注册 owner。例如，可以像 ``owner:alice`` 或 ``last_modifier:"Taro Yamada"`` 这样搜索。在内置主题中，可以在高级搜索中指定所有者和最后修改者。管理员可以通过 ``crawler.document.file.owner.enabled`` 和 ``crawler.document.file.last.modifier.enabled`` （默认均为 ``true`` ）切换是否注册。
 

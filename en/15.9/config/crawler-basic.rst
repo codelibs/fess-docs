@@ -185,8 +185,7 @@ To run a configured crawl immediately, start the crawler job from the Scheduler 
    Store, counted from the top of the sort order (normally by name) (the default of
    ``page.web.config.max.fetch.size``, ``page.file.config.max.fetch.size``, and
    ``page.data.config.max.fetch.size``). These values are not a number of items per page;
-   they cap the total number of configurations that are loaded. Configurations after the
-   100th are not crawled, and no error or warning is logged. If you create more than 100
+   they cap the total number of configurations that are loaded. When the number of configurations reaches the cap, the configurations beyond it are not crawled, and one WARN line is written to the crawler log, ``fess-crawler.log`` (once per key for each crawler process). Because it is written as soon as the number of loaded configurations equals the cap, it also appears when there are exactly 100 configurations. For example: ``page.web.config.max.fetch.size=100 limits how many crawling configs are loaded, and that many were found. Any further configs are ignored and are not crawled. Increase page.web.config.max.fetch.size to load more.`` If you create more than 100
    configurations, increase these values in ``fess_config.properties`` (a restart of |Fess|
    is required after the change).
 

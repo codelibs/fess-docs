@@ -94,6 +94,10 @@ user_info.ndjson包含搜索用户的信息。
 
 .. note::
 
+   跳过的记录以 INFO 级别输出，因此在默认的日志级别（ ``warn`` ）下不会写入 ``fess.log`` 。要查看这些记录，请在恢复之前将日志级别改为 ``info`` 。可以在管理页面的 [系统 > 常规] 的“日志级别”中更改（重启 |Fess| 后会恢复原值），在 Linux 上也可以通过 ``FESS_LOG_LEVEL=info`` 指定。详情请参阅 :doc:`../config/admin-logging` 。
+
+.. note::
+
    |Fess| 15.9 会使用应用程序加密密钥（ ``fess_config.properties`` 中的 ``app.cipher.key`` ）加密保存 Web 认证和文件认证的
    ``password`` ，因此 ``fess_basic_config.bulk`` 和 ``fess_config.bulk`` 中也包含加密后的值。将备份恢复到其他安装环境时，
    请沿用相同的 ``app.cipher.key`` 。密钥不同时，使用这些认证信息的爬取会因错误而失败。15.9 之前创建的备份以明文包含这些值，

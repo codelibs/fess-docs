@@ -188,7 +188,7 @@ SMB/CIFS(Windows 파일 공유)
    (``page.web.config.max.fetch.size`` , ``page.file.config.max.fetch.size`` ,
    ``page.data.config.max.fetch.size`` 의 기본값).
    이 값들은 페이지당 건수가 아니라 불러오는 설정 총수의 상한입니다.
-   101번째 이후의 설정은 오류나 경고가 출력되지 않은 채 크롤링되지 않습니다.
+   설정 수가 상한에 도달하면 상한을 넘는 설정은 크롤링되지 않으며, 크롤러 로그 ``fess-crawler.log`` 에 WARN이 한 줄 출력됩니다(크롤러 프로세스마다 키별로 한 번). 불러온 설정 수가 상한과 같아진 시점에 출력되므로, 설정이 정확히 100건일 때도 출력됩니다. 출력 예: ``page.web.config.max.fetch.size=100 limits how many crawling configs are loaded, and that many were found. Any further configs are ignored and are not crawled. Increase page.web.config.max.fetch.size to load more.``
    100건을 넘는 설정을 만드는 경우에는 ``fess_config.properties`` 에서 이 값들을 늘리십시오
    (변경 후에는 |Fess| 를 재시작해야 합니다).
 

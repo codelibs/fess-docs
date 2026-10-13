@@ -39,7 +39,7 @@ Port
 ::::
 
 Specify the port of the site that requires authentication.
-Specify -1 to apply to all ports.
+Leave the port blank to apply to all ports. ``-1`` cannot be specified; only values of 0 or more are accepted.
 In that case, it will apply to any port in the specified web crawl configuration.
 
 Realm

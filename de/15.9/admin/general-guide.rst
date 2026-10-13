@@ -133,7 +133,9 @@ Geben Sie den Benutzer-Agent-Namen an, der vom Crawler verwendet wird.
 Alte Dokumente löschen
 ::::::::::::::::::::::
 
-Geben Sie die Anzahl der Tage für die Gültigkeitsdauer nach der Indizierung an.
+Geben Sie die Gültigkeitsdauer von Dokumenten in Tagen an. Ein Dokument, das bei einem Crawl registriert oder aktualisiert wird, läuft diese Anzahl von Tagen nach dem Beginn des Crawls ab; wird ein Dokument beim nächsten Crawl erneut gefunden, verlängert sich seine Gültigkeit. Der Doc-Purger-Job des Schedulers (standardmäßig jede Minute ausgeführt) löscht abgelaufene Dokumente aus dem Index.
+
+Der Standardwert ist ``3``; zulässig sind Werte von ``-1`` bis ``1000``. Bei ``-1`` wird für Dokumente, die bei späteren Crawls registriert oder aktualisiert werden, kein Ablaufdatum gesetzt (ein bereits gesetztes Ablaufdatum wird nicht verlängert).
 
 Fehlertypen ignorieren
 ::::::::::::::::::::::

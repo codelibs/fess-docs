@@ -88,6 +88,17 @@
 诊断
 ----
 
-可以以 zip 格式下载日志文件。
+可以下载诊断用的 zip 文件。zip 的 ``log<yyyyMMddHHmm>/`` 目录下包含以下文件。
+
+- 日志目录中的 ``*.log`` 和 ``*.log.gz`` （ ``fess.log`` 、 ``fess-crawler.log`` 、 ``audit.log`` 、 ``searchlog.log`` 等）
+- ``system.properties`` （系统设置）和 ``fess_config.properties`` （应用程序设置）
+- ``fess_basic_config.bulk`` （爬取设置、认证设置、标签等设置索引的内容。不包含管理 API 的访问令牌）
+- ``es_cat_*.txt`` 和 ``es_*.json`` （OpenSearch ``_cat`` API 的输出，以及集群、节点、任务等的状态）
+
+在 ``system.properties`` 和 ``fess_config.properties`` 中，会按照与系统信息页面相同的规则，将机密值替换为 ``XXXXXXXX`` 。例如存储的密钥、Webhook URL（Slack 和 Google Chat）、SSO 客户端密钥、LLM 和嵌入的 API 密钥、应用程序的加密密钥（ ``app.cipher.key`` ）等。键会保留，因此仍可看出存在哪些设置。
+
+.. note::
+
+   日志文件和 ``fess_basic_config.bulk`` 的内容不会被屏蔽。将 zip 发送到外部之前，请先确认其内容。
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/maintenance-1.png

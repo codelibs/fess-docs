@@ -69,6 +69,9 @@ Fess 웹 애플리케이션의 메모리 설정
 .. note::
    ``FESS_HEAP_SIZE`` 가 설정된 경우 ``FESS_MIN_MEM`` 과 ``FESS_MAX_MEM`` 은 무시됩니다.
 
+.. note::
+   RPM/DEB 패키지에서는 환경 설정 파일(``/etc/sysconfig/fess`` , DEB는 ``/etc/default/fess`` )에 ``FESS_HEAP_SIZE=512m`` 이 설정되어 있습니다. 따라서 힙은 위 표의 기본값이 아니라 512m로 고정됩니다. 힙 크기를 바꾸려면 이 ``FESS_HEAP_SIZE`` 값을 변경하십시오.
+
 RPM/DEB 패키지의 경우
 ------------------------
 
@@ -127,15 +130,14 @@ DEB 패키지의 경우 ``/etc/default/fess`` 를 편집합니다.
 
 ``app/WEB-INF/classes/fess_config.properties`` 또는 ``/etc/fess/fess_config.properties`` 를 편집합니다.
 
-::
+``jvm.crawler.options`` 는 크롤러 프로세스의 JVM 옵션을 줄바꿈(``\n``)으로 구분하여 나열한 하나의 설정값입니다. 값을 바꾸면 기본 옵션이 모두 교체되므로, ``-Xmx512m`` 만 쓰면 ``-Dfile.encoding=UTF-8`` 이나 G1GC 지정 등 다른 기본 옵션도 사라집니다. ``fess_config.properties`` 에 기재된 기본값을 그대로 두고 힙 크기 줄만 변경하십시오.
 
-    jvm.crawler.options=-Xmx512m
-
-예를 들어 1GB로 변경하는 경우:
+예를 들어 최대 힙을 1GB로 변경하려면 기본값의 ``-Xmx512m`` 줄을 다음과 같이 바꿉니다.
 
 ::
 
-    jvm.crawler.options=-Xmx1g
+    -Xms128m\n\
+    -Xmx1g\n\
 
 .. note::
    이 설정은 크롤러 프로세스 단위(스케줄러의 작업 단위)로 적용됩니다.
@@ -268,9 +270,7 @@ Windows 환경
 
 제안 생성 처리의 메모리 설정은 ``jvm.suggest.options`` 에서 설정합니다.
 
-::
-
-    jvm.suggest.options=-Xmx256m
+크롤러와 마찬가지로 이 설정값에는 모든 기본 옵션이 들어 있으므로, ``-Xmx256m`` 줄만 변경하고 나머지는 그대로 두십시오.
 
 기본적으로 다음 설정이 사용됩니다:
 
@@ -283,9 +283,7 @@ Windows 환경
 
 썸네일 생성 처리의 메모리 설정은 ``jvm.thumbnail.options`` 에서 설정합니다.
 
-::
-
-    jvm.thumbnail.options=-Xmx256m
+크롤러와 마찬가지로 이 설정값에는 모든 기본 옵션이 들어 있으므로, ``-Xmx256m`` 줄만 변경하고 나머지는 그대로 두십시오.
 
 기본적으로 다음 설정이 사용됩니다:
 

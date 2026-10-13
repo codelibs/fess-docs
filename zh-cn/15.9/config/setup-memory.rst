@@ -69,6 +69,9 @@ Fess Web 应用程序的内存配置
 .. note::
    设置 ``FESS_HEAP_SIZE`` 后，``FESS_MIN_MEM`` 和 ``FESS_MAX_MEM`` 将被忽略。
 
+.. note::
+   RPM/DEB 软件包的环境配置文件（ ``/etc/sysconfig/fess`` ，DEB 为 ``/etc/default/fess`` ）中已设置 ``FESS_HEAP_SIZE=512m`` 。因此堆大小固定为 512m，而不是上表中的默认值。要更改堆大小，请修改该 ``FESS_HEAP_SIZE`` 的值。
+
 RPM/DEB 软件包配置
 ------------------------
 
@@ -127,15 +130,14 @@ RPM/DEB 软件包配置
 
 编辑 ``app/WEB-INF/classes/fess_config.properties`` 或 ``/etc/fess/fess_config.properties``\ 。
 
-::
+``jvm.crawler.options`` 是一个设置值，其中以换行（ ``\n`` ）分隔列出了爬取进程的 JVM 选项。修改该值会替换全部默认选项，因此如果只写 ``-Xmx512m`` ，则 ``-Dfile.encoding=UTF-8`` 和 G1GC 设置等其他默认选项也会随之丢失。请保留 ``fess_config.properties`` 中记载的默认值，只修改堆大小所在的行。
 
-    jvm.crawler.options=-Xmx512m
-
-例如,要变更为 1GB:
+例如，要将最大堆改为 1GB，请将默认值中的 ``-Xmx512m`` 行改为如下内容。
 
 ::
 
-    jvm.crawler.options=-Xmx1g
+    -Xms128m\n\
+    -Xmx1g\n\
 
 .. note::
    此配置按爬虫进程单位(调度器的任务单位)应用。
@@ -272,9 +274,7 @@ Windows 环境
 
 建议生成处理的内存配置通过 ``jvm.suggest.options`` 设置。
 
-::
-
-    jvm.suggest.options=-Xmx256m
+与爬取进程一样，该设置值包含全部默认选项，因此请只修改 ``-Xmx256m`` 所在的行，其余保持不变。
 
 默认使用以下配置:
 
@@ -287,9 +287,7 @@ Windows 环境
 
 缩略图生成处理的内存配置通过 ``jvm.thumbnail.options`` 设置。
 
-::
-
-    jvm.thumbnail.options=-Xmx256m
+与爬取进程一样，该设置值包含全部默认选项，因此请只修改 ``-Xmx256m`` 所在的行，其余保持不变。
 
 默认使用以下配置:
 

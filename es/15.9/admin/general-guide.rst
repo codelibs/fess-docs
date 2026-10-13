@@ -133,7 +133,9 @@ Especifica el nombre del agente de usuario utilizado por el rastreador.
 Eliminar documentos anteriores
 :::::::::::::::::::::::::::::::
 
-Especifique el número de días del período de validez después de la indexación.
+Especifique el período de validez de los documentos en días. Un documento registrado o actualizado por un rastreo caduca esa cantidad de días después del inicio del rastreo, y la validez de un documento que vuelve a encontrarse en el siguiente rastreo se prolonga. El trabajo Doc Purger del programador de tareas (se ejecuta cada minuto de forma predeterminada) elimina del índice los documentos caducados.
+
+El valor predeterminado es ``3`` y los valores permitidos van de ``-1`` a ``1000``. Con ``-1`` no se establece caducidad en los documentos registrados o actualizados por rastreos posteriores (una caducidad ya establecida no se prolonga).
 
 Tipos de error a ignorar
 :::::::::::::::::::::::::

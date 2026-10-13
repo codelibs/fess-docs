@@ -86,7 +86,7 @@ Der „Datentyp" gibt an, wie sich die Suchmethode je nach Feld unterscheidet.
 Wenn kein Feld angegeben wird, erfolgt die Suche über title und content. Je nach Konfiguration können auch weitere Felder als Suchziel hinzugefügt werden.
 
 .. note::
-    Je nach Crawling-Ziel werden manche Felder nicht mit einem Wert belegt. So wird anchor beispielsweise nur beim Web-Crawling registriert, und lang nur, wenn das HTML ein Sprachattribut enthält. Außerdem lassen sich Felder wie segment (eine Sitzungs-ID, die den jeweiligen Crawling-Lauf kennzeichnet) oder doc_id (eine vom System vergebene interne ID) angeben, diese werden jedoch bei der normalen Suche in der Regel nicht verwendet.
+    Je nach Crawling-Ziel werden manche Felder nicht mit einem Wert belegt. So wird anchor beispielsweise nur beim Web-Crawling registriert. lang wird aus dem Sprachattribut des HTML oder aus der im Text des Dokuments erkannten Sprache übernommen; es wird nicht registriert, wenn keine Sprache erkannt werden kann oder die erkannte Sprache nicht in ``supported.languages`` enthalten ist. Außerdem lassen sich Felder wie segment (eine Sitzungs-ID, die den jeweiligen Crawling-Lauf kennzeichnet) oder doc_id (eine vom System vergebene interne ID) angeben, diese werden jedoch bei der normalen Suche in der Regel nicht verwendet.
 
 owner und last_modifier werden beim Crawlen von Dateiservern und Ähnlichem registriert. owner
 enthält den Kontonamen des Dateibesitzers aus SMB-, Dateisystem- und FTP-Crawls (ein Wert wie
