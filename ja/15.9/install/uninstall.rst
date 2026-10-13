@@ -387,7 +387,16 @@ OpenSearch を他のアプリケーションでも使用している場合、Fes
 1. Fess を停止
 2. Fess のパッケージまたはディレクトリを削除
 3. Fess のデータディレクトリを削除（``/var/lib/fess`` など）
-4. OpenSearch 内に作成された |Fess| のインデックス（``fess.*``、``.fess_*`` など）を削除
+4. OpenSearch 内に作成された |Fess| のインデックスを削除
+
+   |Fess| のインデックスの名前は ``fess`` で始まります（``fess.*``、``fess_config.*``、``fess_user.*``、``fess_log.*``、``fess_crawler.*``、``fess_suggest*`` など）。次のコマンドでまとめて削除できます。
+
+   ::
+
+       $ curl -X DELETE 'http://localhost:9200/fess*'
+
+   削除する前に ``curl 'http://localhost:9200/_cat/indices?v'`` で、``fess`` で始まる名前のほかのアプリケーションのインデックスがないことを確認してください。辞書を同期する ``configsync`` インデックスも、ほかのアプリケーションで使っていなければ削除できます。
+
 5. OpenSearch は削除しない
 
 OpenSearch のみを削除して Fess を残す

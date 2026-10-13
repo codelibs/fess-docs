@@ -50,3 +50,7 @@ Mehrfachangabe
 .. note::
 
    ``geo.<fieldname>.point`` und ``geo.<fieldname>.distance`` müssen beide angegeben werden. Wird ``distance`` nicht angegeben, wird die Bedingung für dieses ``point`` ignoriert. Zudem tritt ein Fehler auf, wenn der Wert von ``point`` nicht dem Format ``Breitengrad,Längengrad`` (zwei durch Komma getrennte Zahlen) entspricht oder nicht als Zahl interpretiert werden kann.
+
+.. note::
+
+   Die Standortsuche ist eine Einschränkung der Suchbegriffe. Ist der Suchbegriff leer, wird die Suche daher nicht ausgeführt und das Ergebnis enthält 0 Treffer. Geben Sie bei Anfragen für die Standortsuche einen Suchbegriff an.

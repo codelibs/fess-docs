@@ -78,11 +78,13 @@ So aktivieren Sie den Job:
 5. Legen Sie den Zeitplan mit einem Cron-Ausdruck fest
 6. Speichern Sie die Einstellungen
 
+Ein Cron-Ausdruck besteht aus den fünf Feldern „Minute Stunde Tag Monat Wochentag“, die durch Leerzeichen getrennt werden. Ein Sekundenfeld und ``?`` können nicht verwendet werden (Ausdrücke im Quartz-Format werden nicht akzeptiert).
+
 Beispiele für Cron-Ausdrücke:
 
-- ``0 0 2 * * ?`` - Täglich um 2:00 Uhr ausführen
-- ``0 0 3 ? * SUN`` - Jeden Sonntag um 3:00 Uhr ausführen
-- ``0 0 0 1 * ?`` - Am ersten Tag jedes Monats um Mitternacht ausführen
+- ``0 2 * * *`` - Täglich um 2:00 Uhr ausführen
+- ``0 3 * * 0`` - Jeden Sonntag um 3:00 Uhr ausführen (der Wochentag wird als 0 bis 6 angegeben, wobei 0 Sonntag ist)
+- ``0 0 1 * *`` - Am ersten Tag jedes Monats um Mitternacht ausführen
 
 Benutzerdefinierte Abfragefilterung
 ====================================
@@ -191,6 +193,7 @@ Best Practices
 Speicherüberlegungen
 --------------------
 
+- Geben Sie für ``index.export.path`` ein Verzeichnis an, in das der Benutzer, unter dem |Fess| läuft, schreiben kann (der Standardwert ``/var/lib/fess/export`` ist ein Verzeichnis der RPM/DEB-Version und ist nicht beschreibbar, wenn die ZIP-Version als normaler Benutzer ausgeführt wird. Ist das Verzeichnis nicht beschreibbar, werden keine Exportdateien erstellt und in ``fess.log`` wird pro Dokument eine Warnung ausgegeben)
 - Stellen Sie ausreichend Speicherplatz im Export-Verzeichnis sicher
 - Erwägen Sie dedizierten Speicher für große Dokumentenmengen
 - Implementieren Sie bei regelmäßigen Exporten eine periodische Bereinigung alter Exporte

@@ -63,21 +63,20 @@ Googleマップなどの地図サービスと連携した検索システムを�
 **例: データベースからの取得**
 
 緯度・経度を別々のカラムで保持している場合は、SQL でカンマ区切りの文字列に結合します。
+データストアのパラメーターは 1 行が 1 項目なので、 ``sql=`` に続けて SQL を 1 行で記述します
+（改行して複数行に分けると、1 行目の ``SELECT`` だけが SQL として扱われ、構文エラーになります）。
 
 ::
 
-    SELECT
-        id,
-        name,
-        address,
-        CONCAT(latitude, ',', longitude) AS location
-    FROM stores
+    sql=SELECT id, name, address, CONCAT(latitude, ',', longitude) AS location FROM stores
 
 データストアの設定スクリプトで、取得した値を ``location`` フィールドにマッピングします。
+データベースのデータストアでは、SQL の列名（``AS`` で付けた別名を含む）が、そのままスクリプトの変数名になります。
+``data.`` のような接頭辞は付きません。
 
 ::
 
-    location=data.location
+    location=location
 
 スクリプトでの位置情報追加
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,6 +118,10 @@ Googleマップなどの地図サービスと連携した検索システムを�
    ``point`` と ``distance`` は対で指定します。 ``distance`` を指定しない ``point`` は無視されます。
    また、 ``point`` の値は「緯度,経度」の2つの数値で構成されている必要があり、形式が不正な場合は
    エラーになります。
+
+.. note::
+   位置情報検索は検索語 ``q`` に対する絞り込みとして動作します。 ``q`` が空の場合は検索自体が実行されず、
+   結果は 0 件になります。位置情報検索のリクエストには、検索語を指定してください。
 
 .. note::
    同じフィールドに対して複数の ``point`` を指定した場合は OR 条件（いずれかの範囲内）、
@@ -185,10 +188,14 @@ v2 の JSON 検索 API（ ``/api/v2/search`` ）でも位置情報検索を使�
 
 .. note::
    ``location`` フィールドは、既定では API レスポンスに含まれません。検索結果に緯度経度を含めたい場合は、
-   ``fess_config.properties`` に次の設定を追加してください。
+   ``fess_config.properties`` に次の 2 つの設定を追加して、 |Fess| を再起動してください。
+   ``query.additional.response.fields`` は検索エンジンから取得するフィールドを追加し、
+   ``query.additional.api.response.fields`` は API レスポンスに出力するフィールドを許可します。
+   どちらか一方だけでは ``location`` はレスポンスに含まれません。
 
    ::
 
+       query.additional.response.fields=location
        query.additional.api.response.fields=location
 
 フィールド名のカスタマイズ
@@ -233,8 +240,8 @@ JavaScriptで現在地を取得して検索する例:
         const longitude = position.coords.longitude;
         const distance = "5km";
 
-        // 検索URLの構築
-        const searchUrl = `/search?q=&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
+        // 検索URLの構築（検索語 q は省略できません）
+        const searchUrl = `/search?q=${encodeURIComponent('店舗')}&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
 
         // 検索実行
         window.location.href = searchUrl;
@@ -247,8 +254,8 @@ Googleマップとの連携
 
 .. note::
    この例では検索結果から ``location`` フィールドを参照します。事前に
-   ``query.additional.api.response.fields=location`` を設定して、レスポンスに緯度経度を
-   含めておく必要があります。
+   ``query.additional.response.fields=location`` と ``query.additional.api.response.fields=location`` を
+   設定して、レスポンスに緯度経度を含めておく必要があります。
 
 .. code-block:: javascript
 
@@ -326,7 +333,8 @@ APIレスポンスに位置情報が含まれない
 
 ``location`` フィールドは既定では API レスポンスに含まれません。
 検索結果に緯度経度を含めるには、 ``fess_config.properties`` に
-``query.additional.api.response.fields=location`` を設定してください。
+``query.additional.response.fields=location`` と ``query.additional.api.response.fields=location``
+の両方を設定して、 |Fess| を再起動してください。
 
 位置情報が正しく登録されない
 ----------------------------

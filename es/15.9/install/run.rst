@@ -234,7 +234,7 @@ Paso 1: Cambio de Contraseña de Administrador
 ----------------------------------------------
 
 1. Inicie sesión en la pantalla de administración (http://localhost:8080/admin)
-2. Haga clic en "Sistema" → "Usuario" en el menú izquierdo
+2. Haga clic en "Usuario" → "Usuario" en el menú izquierdo
 3. Haga clic en el usuario ``admin``
 4. Ingrese una nueva contraseña en el campo "Contraseña"
 5. Vuelva a ingresar la misma contraseña en el campo "Contraseña (confirmar)"
@@ -336,7 +336,20 @@ La configuración del número de puerto, el tamaño del montón JVM y la URL de 
 
 .. note::
 
-   De estas variables de entorno, el archivo ``bin\fess.in.bat`` de la edición ZIP para Windows solo lee ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` y ``FESS_USE_GC_LOGGING`` (además de las relacionadas con el proxy). Los demás valores se escriben directamente en el archivo, por lo que para modificarlos edite ``bin\fess.in.bat`` directamente.
+   Las variables de entorno que lee el archivo ``bin\fess.in.bat`` de la edición ZIP para Windows son, de las de la tabla,
+   ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` y ``FESS_USE_GC_LOGGING``,
+   además de las siguientes variables que no figuran en la tabla.
+
+   - ``FESS_MIN_MEM``, ``FESS_MAX_MEM``: especifican por separado el tamaño mínimo y máximo del montón (se ignoran si se define ``FESS_HEAP_SIZE``).
+   - ``FESS_DIRECT_SIZE``: límite de la memoria directa (``-XX:MaxDirectMemorySize``).
+   - ``FESS_DICTIONARY_PATH``: directorio ``config\dictionary`` de OpenSearch.
+   - ``FESS_PROXY_HOST``, ``FESS_PROXY_PORT``, ``FESS_NON_PROXY_HOSTS``: configuración del proxy.
+   - ``FESS_JAVA_OPTS``: ``fess.in.bat`` añade estas opciones de la JVM después de los valores ya configurados.
+   - ``PLAYWRIGHT_NODEJS_PATH``: ejecutable de Node.js que utiliza el plugin de Playwright.
+   - ``JAVA_HOME``: obligatoria.
+
+   ``FESS_PORT``, ``FESS_LOG_LEVEL``, ``FESS_TEMP_PATH``, ``FESS_CONF_PATH`` y ``SEARCH_ENGINE_HTTP_URL``
+   no se leen. Estos valores se escriben directamente en el archivo, por lo que para modificarlos edite ``bin\fess.in.bat`` directamente.
 
 Configuración del Servidor de Correo
 -------------------------------------

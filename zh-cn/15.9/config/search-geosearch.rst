@@ -62,21 +62,20 @@
 **示例: 从数据库获取**
 
 如果纬度和经度分别保存在不同的列中,请在 SQL 中将其拼接为逗号分隔的字符串。
+数据存储的参数是每行一个项目,因此请在 ``sql=`` 之后用一行写出 SQL
+（如果换行拆成多行,只有第一行的 ``SELECT`` 会被当作 SQL,从而导致语法错误）。
 
 ::
 
-    SELECT
-        id,
-        name,
-        address,
-        CONCAT(latitude, ',', longitude) AS location
-    FROM stores
+    sql=SELECT id, name, address, CONCAT(latitude, ',', longitude) AS location FROM stores
 
 在数据存储配置脚本中,将获取到的值映射到 ``location`` 字段。
+在数据库数据存储中,SQL 的列名（包括用 ``AS`` 指定的别名）会直接成为脚本的变量名,
+不带 ``data.`` 之类的前缀。
 
 ::
 
-    location=data.location
+    location=location
 
 通过脚本添加位置信息
 ~~~~~~~~~~~~~~~~~~~~
@@ -117,6 +116,10 @@
 .. note::
    ``point`` 和 ``distance`` 须成对指定。未指定 ``distance`` 的 ``point`` 将被忽略。
    此外, ``point`` 的值必须由"纬度,经度"两个数值组成,格式不正确时将报错。
+
+.. note::
+   位置信息搜索是对搜索词 ``q`` 的进一步筛选。 ``q`` 为空时不会执行搜索本身,
+   结果为 0 件。位置信息搜索的请求中请指定搜索词。
 
 .. note::
    对同一字段指定多个 ``point`` 时为 OR 条件（位于任一范围内），
@@ -183,10 +186,14 @@ v2 JSON 搜索 API（ ``/api/v2/search`` ）同样支持位置信息搜索。
 
 .. note::
    ``location`` 字段默认不包含在 API 响应中。如需在搜索结果中包含经纬度,
-   请在 ``fess_config.properties`` 中添加以下配置。
+   请在 ``fess_config.properties`` 中添加以下 2 项配置,并重启 |Fess|\ 。
+   ``query.additional.response.fields`` 用于从搜索引擎中额外获取字段,
+   ``query.additional.api.response.fields`` 用于允许将字段输出到 API 响应中。
+   只设置其中一项时,响应中不会包含 ``location``\ 。
 
    ::
 
+       query.additional.response.fields=location
        query.additional.api.response.fields=location
 
 字段名自定义
@@ -230,8 +237,8 @@ JavaScript 获取当前位置并执行搜索的示例:
         const longitude = position.coords.longitude;
         const distance = "5km";
 
-        // 构建搜索 URL
-        const searchUrl = `/search?q=&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
+        // 构建搜索 URL（搜索词 q 不可省略）
+        const searchUrl = `/search?q=${encodeURIComponent('店铺')}&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
 
         // 执行搜索
         window.location.href = searchUrl;
@@ -244,7 +251,8 @@ Google 地图集成
 
 .. note::
    此示例从搜索结果中引用 ``location`` 字段。需要事先设置
-   ``query.additional.api.response.fields=location``,以便在响应中包含经纬度。
+   ``query.additional.response.fields=location`` 和 ``query.additional.api.response.fields=location``,
+   以便在响应中包含经纬度。
 
 .. code-block:: javascript
 
@@ -319,7 +327,8 @@ API 响应中不包含位置信息
 
 ``location`` 字段默认不包含在 API 响应中。
 如需在搜索结果中包含经纬度,请在 ``fess_config.properties`` 中
-设置 ``query.additional.api.response.fields=location``\ 。
+同时设置 ``query.additional.response.fields=location`` 和 ``query.additional.api.response.fields=location``,
+并重启 |Fess|\ 。
 
 位置信息未正确注册
 ------------------

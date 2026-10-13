@@ -14,6 +14,9 @@ Si des rôles sont configurés et que le contenu a été exploré et indexé dan
 Si l'utilisateur est connecté, la recherche est effectuée en fonction des rôles et des groupes auxquels il appartient.
 S'il n'est pas connecté, la recherche est effectuée en tant qu'utilisateur guest, et seul le contenu publié pour guest est affiché.
 
+.. note::
+    La recherche d'un utilisateur connecté est effectuée uniquement avec les permissions de cet utilisateur et des rôles et groupes auxquels il appartient ; le contenu publié pour guest (``{role}guest``) n'est pas inclus. Ainsi, un contenu publié uniquement pour guest est affiché aux visiteurs non connectés, mais pas aux utilisateurs connectés (y compris ceux qui n'ont ni rôle ni groupe). Pour qu'un contenu soit également visible des utilisateurs connectés, définissez dans les permissions de la configuration d'exploration, en plus de ``{role}guest``, le rôle que possèdent ces utilisateurs (pour l'afficher à tous, un rôle attribué à tous les utilisateurs).
+
 Connexion
 ---------
 

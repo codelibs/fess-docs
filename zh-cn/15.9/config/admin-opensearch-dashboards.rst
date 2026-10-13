@@ -49,6 +49,17 @@ OpenSearch Dashboards 是用于可视化 |Fess| 所使用的 OpenSearch 数据�
 .. note::
    如 OpenSearch 端口号不同，请更改为适当的端口号。
 
+禁用安全插件
+--------------------
+
+|Fess| 安装步骤中引入的 OpenSearch 已禁用安全插件（``plugins.security.disabled: true``）。
+OpenSearch Dashboards 也自带安全插件，如果保持启用，则会要求认证，仅设置 ``opensearch.hosts`` 时 ``/api/status`` 等会返回 ``401 Unauthorized``，无法直接使用。
+与 OpenSearch 一侧相同，请同时禁用 OpenSearch Dashboards 一侧的安全插件。
+
+使用 Docker 镜像时，请指定环境变量 ``DISABLE_SECURITY_DASHBOARDS_PLUGIN=true`` 来启动容器。
+
+以其他方式安装时，请按照 OpenSearch Dashboards 的官方文档禁用 OpenSearch Dashboards 的安全插件后再启动。
+
 启动 OpenSearch Dashboards
 -----------------------------
 
@@ -90,6 +101,10 @@ OpenSearch Dashboards 是用于可视化 |Fess| 所使用的 OpenSearch 数据�
 5. 点击「Import」执行导入。
 
 导入完成后，将注册6个可视化图表和 ``fess_log`` 仪表板。
+
+.. note::
+   ``fess_log.ndjson`` 中还包含索引模式 ``fess_log*``\ （时间字段为 ``requestedAt``）。
+   因此，执行此导入时，无需按照前面"配置索引模式"的步骤手动创建。手动创建后再导入，会注册两个同名的索引模式。
 
 显示仪表板
 --------------------

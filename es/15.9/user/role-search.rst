@@ -14,6 +14,9 @@ Si se han configurado roles y el contenido se ha rastreado e indexado en ese est
 Si el usuario ha iniciado sesión, la búsqueda se realiza en función de los roles y grupos a los que pertenece.
 Si no ha iniciado sesión, la búsqueda se realiza como usuario guest, y solo se muestran los contenidos publicados para guest.
 
+.. note::
+    La búsqueda de un usuario que ha iniciado sesión se realiza únicamente con los permisos del propio usuario y de los roles y grupos a los que pertenece; no incluye el contenido publicado para guest (``{role}guest``). Por ello, el contenido publicado únicamente para guest se muestra a los visitantes que no han iniciado sesión, pero no a los usuarios que sí la han iniciado (incluidos los usuarios que no tienen ningún rol ni grupo). Para que el contenido también sea visible para los usuarios que han iniciado sesión, configure en los permisos de la configuración de rastreo, además de ``{role}guest``, el rol que tienen esos usuarios (si desea mostrarlo a todos, el rol asignado a todos los usuarios).
+
 Inicio de sesión
 -----------------
 

@@ -63,21 +63,20 @@ desde una fuente de datos que contiene información de ubicación.
 **Ejemplo: Obtención desde Base de Datos**
 
 Si la latitud y la longitud se almacenan en columnas separadas, combínelas en una cadena separada por comas mediante SQL.
+En los parámetros del almacén de datos cada línea es un elemento, por lo que escriba el SQL en una sola línea a continuación de ``sql=``
+(si lo divide en varias líneas, solo el ``SELECT`` de la primera línea se trata como SQL y se produce un error de sintaxis).
 
 ::
 
-    SELECT
-        id,
-        name,
-        address,
-        CONCAT(latitude, ',', longitude) AS location
-    FROM stores
+    sql=SELECT id, name, address, CONCAT(latitude, ',', longitude) AS location FROM stores
 
 En el script de configuración del almacén de datos, mapee el valor obtenido al campo ``location``.
+En el almacén de datos de base de datos, los nombres de las columnas del SQL (incluidos los alias definidos con ``AS``) se convierten directamente en los nombres de variable del script.
+No lleva un prefijo como ``data.``.
 
 ::
 
-    location=data.location
+    location=location
 
 Adición de Información de Ubicación mediante Script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,6 +118,10 @@ y ``geo.<nombre_campo>.distance``. En ``<nombre_campo>`` se utiliza el nombre de
    ``point`` y ``distance`` deben especificarse juntos. Un ``point`` sin ``distance`` será ignorado.
    Además, el valor de ``point`` debe estar compuesto por dos valores numéricos en formato "latitud,longitud";
    si el formato es incorrecto, se producirá un error.
+
+.. note::
+   La búsqueda geográfica funciona como un filtro sobre el término de búsqueda ``q``. Si ``q`` está vacío, la búsqueda no se ejecuta
+   y el resultado es de 0 elementos. Especifique un término de búsqueda en las solicitudes de búsqueda geográfica.
 
 .. note::
    Si se especifican varios ``point`` para el mismo campo, se tratarán como condición OR (dentro de cualquiera de los rangos).
@@ -187,10 +190,14 @@ consulte :doc:`../api/api-search` y :doc:`../api/api-overview`.
 
 .. note::
    El campo ``location`` no se incluye en la respuesta de la API de forma predeterminada. Si desea incluir
-   las coordenadas en los resultados de búsqueda, agregue la siguiente configuración a ``fess_config.properties``:
+   las coordenadas en los resultados de búsqueda, agregue las siguientes dos configuraciones a ``fess_config.properties`` y reinicie |Fess|.
+   ``query.additional.response.fields`` añade el campo que se obtiene del motor de búsqueda y
+   ``query.additional.api.response.fields`` permite que el campo se incluya en la respuesta de la API.
+   Con solo una de las dos, ``location`` no se incluye en la respuesta.
 
    ::
 
+       query.additional.response.fields=location
        query.additional.api.response.fields=location
 
 Personalización del Nombre del Campo
@@ -234,8 +241,8 @@ Ejemplo de búsqueda obteniendo la ubicación actual con JavaScript:
         const longitude = position.coords.longitude;
         const distance = "5km";
 
-        // Construir la URL de búsqueda
-        const searchUrl = `/search?q=&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
+        // Construir la URL de búsqueda (el término de búsqueda q no se puede omitir)
+        const searchUrl = `/search?q=${encodeURIComponent('tienda')}&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
 
         // Ejecutar búsqueda
         window.location.href = searchUrl;
@@ -248,7 +255,7 @@ Ejemplo de visualización de resultados de búsqueda con marcadores en Google Ma
 
 .. note::
    Este ejemplo hace referencia al campo ``location`` de los resultados de búsqueda. Es necesario configurar
-   previamente ``query.additional.api.response.fields=location`` para incluir las coordenadas en la respuesta.
+   previamente ``query.additional.response.fields=location`` y ``query.additional.api.response.fields=location`` para incluir las coordenadas en la respuesta.
 
 .. code-block:: javascript
 
@@ -325,8 +332,9 @@ La Información de Ubicación No Aparece en la Respuesta de la API
 -----------------------------------------------------------------
 
 El campo ``location`` no se incluye en la respuesta de la API de forma predeterminada.
-Para incluir las coordenadas en los resultados de búsqueda, configure
-``query.additional.api.response.fields=location`` en ``fess_config.properties``.
+Para incluir las coordenadas en los resultados de búsqueda, configure en ``fess_config.properties``
+tanto ``query.additional.response.fields=location`` como ``query.additional.api.response.fields=location``
+y reinicie |Fess|.
 
 La Información de Ubicación No Se Registra Correctamente
 ---------------------------------------------------------

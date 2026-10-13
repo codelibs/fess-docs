@@ -49,6 +49,17 @@ By default, |Fess| connects to OpenSearch on port 9200.
 .. note::
    If the OpenSearch port number is different, change it to the appropriate port number.
 
+Disabling the Security Plugin
+-----------------------------
+
+The OpenSearch installed by the |Fess| installation procedure has the security plugin disabled (``plugins.security.disabled: true``).
+OpenSearch Dashboards also bundles a security plugin. If it is left enabled, authentication is required, and with only ``opensearch.hosts`` configured, requests such as ``/api/status`` return ``401 Unauthorized`` and OpenSearch Dashboards cannot be used as is.
+As with OpenSearch, disable the security plugin on the OpenSearch Dashboards side as well.
+
+When using the Docker image, start the container with the environment variable ``DISABLE_SECURITY_DASHBOARDS_PLUGIN=true``.
+
+If you installed OpenSearch Dashboards by other means, follow the OpenSearch Dashboards official documentation to disable its security plugin before starting it.
+
 Starting OpenSearch Dashboards
 --------------------------------
 
@@ -90,6 +101,10 @@ By importing the dashboard definition bundled with |Fess|, you can use the pre-b
 5. Click "Import" to execute the import.
 
 Once the import is complete, six visualizations and the ``fess_log`` dashboard will be registered.
+
+.. note::
+   ``fess_log.ndjson`` also contains the index pattern ``fess_log*`` (with ``requestedAt`` as the time field).
+   Therefore, if you perform this import, you do not need to create it manually in the previous "Index Pattern Configuration" procedure. If you import after creating it manually, two index patterns with the same name will be registered.
 
 Displaying the Dashboard
 --------------------------

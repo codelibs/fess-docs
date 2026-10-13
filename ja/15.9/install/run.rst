@@ -232,7 +232,7 @@ Fess の検索画面が表示されます。初期状態では、クロール設
 -------------------------------
 
 1. 管理画面にログイン（http://localhost:8080/admin）
-2. 左メニューから「システム」→「ユーザー」をクリック
+2. 左メニューから「ユーザー」→「ユーザー」をクリック
 3. ``admin`` ユーザーをクリック
 4. 「パスワード」フィールドに新しいパスワードを入力
 5. 「パスワード(確認)」フィールドに同じパスワードを再入力
@@ -339,10 +339,20 @@ ZIP 版は ``bin/fess.in.sh``、RPM 版は ``/etc/sysconfig/fess``、DEB 版は
 
 .. note::
 
-   ZIP 版（Windows）の ``bin\fess.in.bat`` が参照するのは、これらの環境変数のうち
+   ZIP 版（Windows）の ``bin\fess.in.bat`` が参照する環境変数は、これらのうち
    ``FESS_HEAP_SIZE``、``FESS_HEAP_NEWSIZE``、``FESS_USE_IPV4``、``FESS_USE_GC_LOGGING``
-   だけです（プロキシ関連の環境変数も参照します）。それ以外の値はファイル内に直接記述されているため、
-   変更する場合は ``bin\fess.in.bat`` を直接編集してください。
+   と、表にない次の環境変数です。
+
+   - ``FESS_MIN_MEM``、``FESS_MAX_MEM``: 最小・最大ヒープサイズを個別に指定します（``FESS_HEAP_SIZE`` を設定した場合は無視されます）。
+   - ``FESS_DIRECT_SIZE``: ダイレクトメモリの上限（``-XX:MaxDirectMemorySize``）です。
+   - ``FESS_DICTIONARY_PATH``: OpenSearch の ``config\dictionary`` ディレクトリです。
+   - ``FESS_PROXY_HOST``、``FESS_PROXY_PORT``、``FESS_NON_PROXY_HOSTS``: プロキシの設定です。
+   - ``FESS_JAVA_OPTS``: 設定済みの値の後ろに、``fess.in.bat`` が JVM オプションを追加します。
+   - ``PLAYWRIGHT_NODEJS_PATH``: Playwright プラグインが使用する Node.js の実行ファイルです。
+   - ``JAVA_HOME``: 必須です。
+
+   ``FESS_PORT``、``FESS_LOG_LEVEL``、``FESS_TEMP_PATH``、``FESS_CONF_PATH``、``SEARCH_ENGINE_HTTP_URL``
+   は参照されません。これらの値はファイル内に直接記述されているため、変更する場合は ``bin\fess.in.bat`` を直接編集してください。
 
 メールサーバーの設定
 ------------------

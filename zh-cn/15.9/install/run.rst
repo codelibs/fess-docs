@@ -231,7 +231,7 @@ Docker 版::
 -------------------------------
 
 1. 登录管理页面（http://localhost:8080/admin）
-2. 点击左侧菜单的「系统」→「用户」
+2. 点击左侧菜单的「用户」→「用户」
 3. 点击 ``admin`` 用户
 4. 在 [密码] 字段输入新密码
 5. 在 [密码 (确认)] 字段再次输入相同密码
@@ -336,9 +336,20 @@ ZIP 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``�
 
 .. note::
 
-   Windows ZIP 版的 ``bin\fess.in.bat`` 只读取这些环境变量中的 ``FESS_HEAP_SIZE``、``FESS_HEAP_NEWSIZE``、
-   ``FESS_USE_IPV4`` 和 ``FESS_USE_GC_LOGGING``\ （以及与代理相关的变量）。
-   其余各项值直接写在文件中，如需更改请直接编辑 ``bin\fess.in.bat``\ 。
+   Windows ZIP 版的 ``bin\fess.in.bat`` 读取的环境变量，除了这些环境变量中的
+   ``FESS_HEAP_SIZE``、``FESS_HEAP_NEWSIZE``、``FESS_USE_IPV4`` 和 ``FESS_USE_GC_LOGGING`` 之外，
+   还有表中没有列出的以下环境变量。
+
+   - ``FESS_MIN_MEM``、``FESS_MAX_MEM``：分别指定最小和最大堆大小（设置了 ``FESS_HEAP_SIZE`` 时将被忽略）。
+   - ``FESS_DIRECT_SIZE``：直接内存的上限（``-XX:MaxDirectMemorySize``）。
+   - ``FESS_DICTIONARY_PATH``：OpenSearch 的 ``config\dictionary`` 目录。
+   - ``FESS_PROXY_HOST``、``FESS_PROXY_PORT``、``FESS_NON_PROXY_HOSTS``：代理设置。
+   - ``FESS_JAVA_OPTS``：``fess.in.bat`` 会将 JVM 选项追加到已设置的值之后。
+   - ``PLAYWRIGHT_NODEJS_PATH``：Playwright 插件使用的 Node.js 可执行文件。
+   - ``JAVA_HOME``：必需。
+
+   ``FESS_PORT``、``FESS_LOG_LEVEL``、``FESS_TEMP_PATH``、``FESS_CONF_PATH``、``SEARCH_ENGINE_HTTP_URL``
+   不会被读取。这些值直接写在文件中，如需更改请直接编辑 ``bin\fess.in.bat``\ 。
 
 邮件服务器设置
 ------------------

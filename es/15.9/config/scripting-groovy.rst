@@ -142,7 +142,7 @@ Mapeo básico
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 Generación de URL
 -----------------
@@ -178,10 +178,10 @@ Procesamiento de fechas
 ::
 
     // Parseo de fecha (expresion unica usando FQCN)
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // Conversion desde segundos epoch
-    lastModified=new Date(data.timestamp * 1000L)
+    last_modified=new Date(data.timestamp * 1000L)
 
 Objetos disponibles
 ===================

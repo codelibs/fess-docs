@@ -188,7 +188,7 @@ Mapee los nombres de columnas SQL a campos del índice:
     url="https://example.com/articles/" + id
     title=title
     content=content
-    lastModified=updated_at
+    last_modified=updated_at
 
 Campos disponibles:
 
@@ -409,7 +409,7 @@ Script:
     url="https://shop.example.com/product/" + id
     title=name
     content=description + " Categoria: " + category + " Precio: " + price + " EUR"
-    lastModified=updated_at
+    last_modified=updated_at
 
 Artículos de Base de Conocimientos
 -------------------------------------
@@ -434,7 +434,7 @@ Script:
     digest=tags
     author=author
     created=created_at
-    lastModified=updated_at
+    last_modified=updated_at
 
 Solución de Problemas
 ======================

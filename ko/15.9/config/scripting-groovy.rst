@@ -141,7 +141,7 @@ Java 가상 머신(JVM) 위에서 동작하며, Java와의 높은 호환성을 �
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 URL 생성
 ---------
@@ -177,10 +177,10 @@ URL 생성
 ::
 
     // 날짜 파싱 (FQCN을 사용한 단일 식)
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // 에포크 초에서 변환
-    lastModified=new Date(data.timestamp * 1000L)
+    last_modified=new Date(data.timestamp * 1000L)
 
 사용 가능한 객체
 =================

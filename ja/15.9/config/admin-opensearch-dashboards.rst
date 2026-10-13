@@ -49,6 +49,17 @@ OpenSearch Dashboards に |Fess| で使用している OpenSearch を認識さ�
 .. note::
    OpenSearch のポート番号が異なる場合は、適切なポート番号に変更してください。
 
+セキュリティプラグインの無効化
+------------------------------
+
+|Fess| のインストール手順で導入する OpenSearch は、セキュリティプラグインを無効にしています（``plugins.security.disabled: true``）。
+OpenSearch Dashboards にもセキュリティプラグインが同梱されており、有効なままだと認証が要求され、``opensearch.hosts`` を設定しただけでは ``/api/status`` などが ``401 Unauthorized`` を返して、そのままでは利用できません。
+OpenSearch 側と同じく、OpenSearch Dashboards 側のセキュリティプラグインも無効にしてください。
+
+Docker のイメージを使う場合は、環境変数 ``DISABLE_SECURITY_DASHBOARDS_PLUGIN=true`` を指定してコンテナーを起動します。
+
+それ以外の方法でインストールした場合は、OpenSearch Dashboards の公式ドキュメントに従って、OpenSearch Dashboards のセキュリティプラグインを無効にしてから起動してください。
+
 OpenSearch Dashboards の起動
 -----------------------------
 
@@ -90,6 +101,10 @@ OpenSearch Dashboards の起動
 5. 「Import」をクリックして、インポートを実行します。
 
 インポートが完了すると、6つのビジュアライゼーションと ``fess_log`` ダッシュボードが登録されます。
+
+.. note::
+   ``fess_log.ndjson`` には、インデックスパターン ``fess_log*``（時間フィールドは ``requestedAt``）も含まれています。
+   そのため、このインポートを行う場合は、前の「インデックスパターンの設定」の手順で手動作成する必要はありません。手動で作成したあとにインポートすると、同じ名前のインデックスパターンが 2 つ登録されます。
 
 ダッシュボードの表示
 --------------------

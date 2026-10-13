@@ -50,3 +50,7 @@ Specifying Multiple Conditions
 .. note::
 
    Both ``geo.<fieldname>.point`` and ``geo.<fieldname>.distance`` must be specified. If ``distance`` is not specified, the corresponding ``point`` condition is ignored. In addition, an error occurs if the value of ``point`` is not in the ``latitude,longitude`` format (two comma-separated numbers) or cannot be interpreted as numbers.
+
+.. note::
+
+   Geolocation search works as a filter on the search term, so if the search term is empty, the search is not executed and the result is 0 documents. Specify a search term in geolocation search requests.

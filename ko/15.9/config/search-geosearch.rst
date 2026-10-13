@@ -63,21 +63,20 @@ Google Maps 등의 지도 서비스와 연계한 검색 시스템을 구축할 �
 **예: 데이터베이스에서 가져오기**
 
 위도·경도를 별도 컬럼으로 저장하는 경우, SQL에서 쉼표로 구분된 문자열로 결합합니다.
+데이터 스토어의 파라미터는 한 줄이 한 항목이므로, ``sql=`` 에 이어서 SQL을 한 줄로 작성합니다
+(줄을 바꿔 여러 줄로 나누면 첫 번째 줄의 ``SELECT`` 만 SQL로 취급되어 구문 오류가 발생합니다).
 
 ::
 
-    SELECT
-        id,
-        name,
-        address,
-        CONCAT(latitude, ',', longitude) AS location
-    FROM stores
+    sql=SELECT id, name, address, CONCAT(latitude, ',', longitude) AS location FROM stores
 
 데이터 스토어 설정 스크립트에서 가져온 값을 ``location`` 필드에 매핑합니다.
+데이터베이스 데이터 스토어에서는 SQL의 컬럼 이름(``AS`` 로 붙인 별칭 포함)이 그대로 스크립트의 변수 이름이 됩니다.
+``data.`` 와 같은 접두사는 붙지 않습니다.
 
 ::
 
-    location=data.location
+    location=location
 
 스크립트로 위치 정보 추가
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,6 +118,10 @@ Google Maps 등의 지도 서비스와 연계한 검색 시스템을 구축할 �
    ``point`` 와 ``distance`` 는 쌍으로 지정합니다. ``distance`` 를 지정하지 않은 ``point`` 는 무시됩니다.
    또한 ``point`` 의 값은 "위도,경도" 의 두 숫자로 구성되어야 하며, 형식이 올바르지 않은 경우
    오류가 발생합니다.
+
+.. note::
+   위치 정보 검색은 검색어 ``q`` 에 대한 필터로 동작합니다. ``q`` 가 비어 있으면 검색 자체가 실행되지 않으며
+   결과는 0건이 됩니다. 위치 정보 검색 요청에는 검색어를 지정하십시오.
 
 .. note::
    같은 필드에 대해 여러 개의 ``point`` 를 지정한 경우 OR 조건(어느 범위 내), 여러 필드에 대해
@@ -185,10 +188,14 @@ v2 JSON 검색 API( ``/api/v2/search`` )에서도 위치 정보 검색을 사용
 
 .. note::
    ``location`` 필드는 기본적으로 API 응답에 포함되지 않습니다. 검색 결과에 위도·경도를 포함하려면
-   ``fess_config.properties`` 에 다음 설정을 추가하십시오.
+   ``fess_config.properties`` 에 다음 2개의 설정을 추가하고 |Fess| 를 재시작하십시오.
+   ``query.additional.response.fields`` 는 검색 엔진에서 가져올 필드를 추가하고,
+   ``query.additional.api.response.fields`` 는 API 응답에 출력할 필드를 허용합니다.
+   둘 중 하나만으로는 ``location`` 이 응답에 포함되지 않습니다.
 
    ::
 
+       query.additional.response.fields=location
        query.additional.api.response.fields=location
 
 필드 이름 사용자 정의
@@ -233,8 +240,8 @@ JavaScript로 현재 위치를 가져와 검색하는 예:
         const longitude = position.coords.longitude;
         const distance = "5km";
 
-        // 검색 URL 구축
-        const searchUrl = `/search?q=&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
+        // 검색 URL 구축(검색어 q는 생략할 수 없음)
+        const searchUrl = `/search?q=${encodeURIComponent('매장')}&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
 
         // 검색 실행
         window.location.href = searchUrl;
@@ -247,8 +254,8 @@ Google Maps와의 연계
 
 .. note::
    이 예에서는 검색 결과에서 ``location`` 필드를 참조합니다. 사전에
-   ``query.additional.api.response.fields=location`` 을 설정하여 응답에 위도·경도를
-   포함해 두어야 합니다.
+   ``query.additional.response.fields=location`` 과 ``query.additional.api.response.fields=location`` 을
+   설정하여 응답에 위도·경도를 포함해 두어야 합니다.
 
 .. code-block:: javascript
 
@@ -326,7 +333,8 @@ API 응답에 위치 정보가 포함되지 않음
 
 ``location`` 필드는 기본적으로 API 응답에 포함되지 않습니다.
 검색 결과에 위도·경도를 포함하려면 ``fess_config.properties`` 에
-``query.additional.api.response.fields=location`` 을 설정하십시오.
+``query.additional.response.fields=location`` 과 ``query.additional.api.response.fields=location``
+을 모두 설정하고 |Fess| 를 재시작하십시오.
 
 위치 정보가 올바르게 등록되지 않음
 ------------------------------------

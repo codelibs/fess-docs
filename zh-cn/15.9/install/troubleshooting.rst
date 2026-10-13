@@ -310,9 +310,11 @@ Fess 无法连接到 OpenSearch
 
 1. **增加堆大小**
 
-   编辑 ``fess.in.sh``::
+   将 ``FESS_HEAP_SIZE`` 作为环境变量传入并启动 |Fess|::
 
-       FESS_HEAP_SIZE=4g
+       $ FESS_HEAP_SIZE=4g bin/fess
+
+   如果在 ``bin/fess.in.sh`` 中设置，请将 ``FESS_HEAP_SIZE=4g`` 写在决定堆大小的那一行（设置 ``FESS_MIN_MEM`` 默认值的那一行）\ **之前**\ 。即使追加到文件末尾，此时堆大小已经确定，因此不会生效。RPM/DEB 版请在 ``/etc/sysconfig/fess``\ （DEB 版为 ``/etc/default/fess``）中设置。
 
    同时调整 OpenSearch 的堆大小::
 
@@ -404,9 +406,13 @@ Fess 无法连接到 OpenSearch
 
        $ curl -X DELETE http://localhost:9200/fess*
 
-2. **重新执行爬取**
+2. **重启 Fess**
 
-   从管理页面执行「Default Crawler」，重建索引。
+   索引在 |Fess| 启动时创建。刚删除之后，用户信息的索引也已丢失，因此无法登录管理页面（``/api/v2/health`` 仍会返回 ``200``）。重启 |Fess| 后，索引、默认作业和初始用户（``admin``）会被重新创建。
+
+3. **重新执行爬取**
+
+   从管理页面执行「Default Crawler」，重新登记要检索的文档。
 
 Docker 特有的问题
 ===============

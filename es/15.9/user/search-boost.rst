@@ -39,4 +39,8 @@ La búsqueda con boost puede combinarse con otra sintaxis de búsqueda. Por ejem
 
     title:manzana^100 naranja
 
-En este ejemplo, se priorizan los documentos que contienen "manzana" en el campo title.
+En este ejemplo, como se aplica el operador predeterminado (AND) cuando se escriben varios términos de búsqueda, solo se buscan los documentos que contienen "manzana" en el campo title y que además contienen "naranja". Si desea priorizar los documentos que contienen "manzana" pero conservar también en los resultados los que no la contienen, combine los términos con OR.
+
+::
+
+    title:manzana^100 OR naranja

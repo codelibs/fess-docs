@@ -50,3 +50,7 @@ Especificación múltiple
 .. note::
 
    Es necesario especificar tanto ``geo.<fieldname>.point`` como ``geo.<fieldname>.distance``. Si no se especifica ``distance``, la condición de ese ``point`` se ignora. Además, se producirá un error si el valor de ``point`` no tiene el formato ``latitud,longitud`` (dos números separados por una coma) o si no se puede interpretar como números.
+
+.. note::
+
+   La búsqueda geográfica es un filtro sobre el término de búsqueda, por lo que, si el término de búsqueda está vacío, la búsqueda no se ejecuta y el resultado es de 0 elementos. Especifique un término de búsqueda en las solicitudes de búsqueda geográfica.

@@ -49,6 +49,17 @@ Standardmäßig verbindet sich |Fess| mit OpenSearch auf Port 9200.
 .. note::
    Wenn die Portnummer von OpenSearch abweicht, ändern Sie sie auf die entsprechende Portnummer.
 
+Deaktivieren des Sicherheits-Plugins
+--------------------------------------
+
+Das OpenSearch, das mit der Installationsanleitung von |Fess| eingerichtet wird, hat das Sicherheits-Plugin deaktiviert (``plugins.security.disabled: true``).
+Auch OpenSearch Dashboards enthält ein Sicherheits-Plugin. Bleibt es aktiviert, wird eine Authentifizierung verlangt, und allein durch das Setzen von ``opensearch.hosts`` liefern z. B. ``/api/status`` und andere Aufrufe ``401 Unauthorized`` zurück, sodass OpenSearch Dashboards so nicht verwendet werden kann.
+Deaktivieren Sie daher wie bei OpenSearch auch das Sicherheits-Plugin von OpenSearch Dashboards.
+
+Wenn Sie ein Docker-Image verwenden, starten Sie den Container mit der Umgebungsvariablen ``DISABLE_SECURITY_DASHBOARDS_PLUGIN=true``.
+
+Bei einer anderen Installationsart deaktivieren Sie das Sicherheits-Plugin von OpenSearch Dashboards gemäß der offiziellen Dokumentation von OpenSearch Dashboards, bevor Sie es starten.
+
 Start von OpenSearch Dashboards
 ---------------------------------
 
@@ -90,6 +101,10 @@ Durch den Import der mitgelieferten Dashboard-Definition von |Fess| können die 
 5. Klicken Sie auf „Import", um den Import auszuführen.
 
 Nach Abschluss des Imports werden sechs Visualisierungen und das ``fess_log``-Dashboard registriert.
+
+.. note::
+   ``fess_log.ndjson`` enthält auch das Index-Muster ``fess_log*`` (Zeitfeld ``requestedAt``).
+   Wenn Sie diesen Import durchführen, müssen Sie das Index-Muster daher nicht manuell nach den Schritten im vorherigen Abschnitt „Konfiguration von Index-Mustern" anlegen. Wenn Sie es manuell anlegen und danach importieren, werden zwei Index-Muster mit demselben Namen registriert.
 
 Dashboard-Anzeige
 -------------------

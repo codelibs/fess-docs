@@ -240,7 +240,7 @@ Step 1: Change Administrator Password
 --------------------------------------
 
 1. Log in to the admin screen (http://localhost:8080/admin)
-2. Click "System" → "User" from the left menu
+2. Click "User" → "User" from the left menu
 3. Click the ``admin`` user
 4. Enter a new password in the [Password] field
 5. Re-enter the same password in the [Password (Confirm)] field
@@ -349,10 +349,20 @@ making changes.
 
 .. note::
 
-   Of these environment variables, the Windows ZIP edition's ``bin\fess.in.bat`` reads
-   only ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` and
-   ``FESS_USE_GC_LOGGING`` (and the proxy-related ones). The other values are
-   written directly in the file, so edit ``bin\fess.in.bat`` directly to change them.
+   The environment variables that the Windows ZIP edition's ``bin\fess.in.bat`` reads are
+   ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` and
+   ``FESS_USE_GC_LOGGING`` from the table above, and the following ones that are not in the table.
+
+   - ``FESS_MIN_MEM``, ``FESS_MAX_MEM``: Specify the minimum and maximum heap sizes individually (ignored when ``FESS_HEAP_SIZE`` is set).
+   - ``FESS_DIRECT_SIZE``: Upper limit of direct memory (``-XX:MaxDirectMemorySize``).
+   - ``FESS_DICTIONARY_PATH``: The ``config\dictionary`` directory of OpenSearch.
+   - ``FESS_PROXY_HOST``, ``FESS_PROXY_PORT``, ``FESS_NON_PROXY_HOSTS``: Proxy settings.
+   - ``FESS_JAVA_OPTS``: ``fess.in.bat`` appends these JVM options after the values already set.
+   - ``PLAYWRIGHT_NODEJS_PATH``: The Node.js executable used by the Playwright plugin.
+   - ``JAVA_HOME``: Required.
+
+   ``FESS_PORT``, ``FESS_LOG_LEVEL``, ``FESS_TEMP_PATH``, ``FESS_CONF_PATH`` and ``SEARCH_ENGINE_HTTP_URL``
+   are not read. These values are written directly in the file, so edit ``bin\fess.in.bat`` directly to change them.
 
 Configure Mail Server
 ---------------------

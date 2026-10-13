@@ -313,9 +313,11 @@ La recherche est lente
 
 1. **Augmentez la taille du tas**
 
-   Modifiez ``fess.in.sh`` ::
+   Démarrez |Fess| en transmettant ``FESS_HEAP_SIZE`` comme variable d'environnement ::
 
-       FESS_HEAP_SIZE=4g
+       $ FESS_HEAP_SIZE=4g bin/fess
+
+   Si vous le définissez dans ``bin/fess.in.sh``, écrivez ``FESS_HEAP_SIZE=4g`` **avant** la ligne qui détermine la taille du tas (celle qui définit la valeur par défaut de ``FESS_MIN_MEM``). Si vous l'ajoutez à la fin du fichier, la taille du tas est déjà décidée à ce stade et la valeur n'est pas prise en compte. Pour les versions RPM/DEB, définissez-le dans ``/etc/sysconfig/fess`` (``/etc/default/fess`` pour la version DEB).
 
    Ajustez également la taille du tas d'OpenSearch ::
 
@@ -407,9 +409,13 @@ Des erreurs se produisent lors de la recherche, ou des résultats inattendus son
 
        $ curl -X DELETE http://localhost:9200/fess*
 
-2. **Réexécutez l'exploration**
+2. **Redémarrez Fess**
 
-   Exécutez « Default Crawler » depuis l'écran d'administration pour recréer l'index.
+   Les index sont créés au démarrage de |Fess|. Juste après la suppression, l'index des informations utilisateur a également disparu : vous ne pouvez donc pas vous connecter à l'écran d'administration (``/api/v2/health`` continue de renvoyer ``200``). Au redémarrage de |Fess|, les index, les travaux par défaut et l'utilisateur initial (``admin``) sont recréés.
+
+3. **Réexécutez l'exploration**
+
+   Exécutez « Default Crawler » depuis l'écran d'administration pour enregistrer à nouveau les documents à rechercher.
 
 Problèmes spécifiques à Docker
 ===============================

@@ -78,11 +78,13 @@ Pour activer le travail :
 5. Définissez le calendrier à l'aide d'une expression cron
 6. Enregistrez les paramètres
 
+L'expression cron se compose de 5 champs séparés par des espaces : minute, heure, jour du mois, mois et jour de la semaine. Le champ des secondes et le caractère ``?`` ne sont pas utilisables (les expressions au format Quartz sont refusées).
+
 Exemples d'expressions cron :
 
-- ``0 0 2 * * ?`` - Exécuter quotidiennement à 2h00
-- ``0 0 3 ? * SUN`` - Exécuter chaque dimanche à 3h00
-- ``0 0 0 1 * ?`` - Exécuter le premier jour de chaque mois à minuit
+- ``0 2 * * *`` - Exécuter quotidiennement à 2h00
+- ``0 3 * * 0`` - Exécuter chaque dimanche à 3h00 (le jour de la semaine va de 0 à 6, 0 correspondant au dimanche)
+- ``0 0 1 * *`` - Exécuter le premier jour de chaque mois à minuit
 
 Filtrage de requête personnalisé
 =================================
@@ -191,6 +193,7 @@ Bonnes pratiques
 Considérations de stockage
 --------------------------
 
+- Indiquez dans ``index.export.path`` un répertoire dans lequel l'utilisateur qui exécute |Fess| peut écrire (le répertoire par défaut ``/var/lib/fess/export`` est celui des versions RPM/DEB ; il n'est pas accessible en écriture si la version ZIP est exécutée par un utilisateur ordinaire. Dans ce cas, les fichiers d'exportation ne sont pas créés et un avertissement par document est écrit dans ``fess.log``)
 - Assurez-vous d'avoir suffisamment d'espace disque dans le répertoire d'exportation
 - Envisagez d'utiliser un stockage dédié pour les grands ensembles de documents
 - Implémentez un nettoyage régulier des anciennes exportations si vous effectuez des exportations périodiques

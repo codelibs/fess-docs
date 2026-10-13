@@ -198,7 +198,7 @@ Sai（|Fess| がDI XMLの式判定にも利用している、CodeLibsによるNa
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 URLの生成
 ---------
@@ -234,10 +234,18 @@ URLの生成
 ::
 
     // 日付のパース（FQCNを使用した単一式。Java相互運用はGroovyと同じ記法）
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
-    // エポック秒からの変換（long型の L サフィックスは不要）
-    lastModified=new Date(data.timestamp * 1000)
+    // エポック秒からの変換（long型の L サフィックスは不要。FQCN の java.util.Date を使用）
+    last_modified=new java.util.Date(data.timestamp * 1000)
+
+.. note::
+   インデックスのフィールド名は ``lastModified`` ではなく ``last_modified`` です。 ``lastModified=...`` と書いても最終更新日時は設定されません。
+
+.. note::
+   現時点では、JavaScript 組み込みの ``new Date(...)`` で作成した値は ``last_modified`` などの日付フィールドに登録できず、
+   そのドキュメントを含む登録が失敗して、ドキュメントがインデックスに登録されません。
+   日付は上記のとおり、完全修飾名の ``new java.util.Date(...)`` で作成してください。
 
 利用可能なオブジェクト
 ======================

@@ -200,7 +200,7 @@ JavaScript는 |Fess| 15.9 이후의 기본 스크립트 언어입니다.
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 URL 생성
 --------
@@ -236,10 +236,18 @@ URL 생성
 ::
 
     // 날짜 파싱（FQCN을 사용한 단일 식. Java 상호운용은 Groovy와 동일한 표기법을 사용）
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
-    // 에포크 초에서 변환（long 타입의 L 접미사는 필요 없음）
-    lastModified=new Date(data.timestamp * 1000)
+    // 에포크 초에서 변환（long 타입의 L 접미사는 필요 없음. FQCN의 java.util.Date를 사용）
+    last_modified=new java.util.Date(data.timestamp * 1000)
+
+.. note::
+   인덱스의 필드 이름은 ``lastModified`` 가 아니라 ``last_modified`` 입니다. ``lastModified=...`` 라고 작성해도 최종 수정 일시는 설정되지 않습니다.
+
+.. note::
+   현재로서는 JavaScript 내장 ``new Date(...)`` 로 만든 값은 ``last_modified`` 등의 날짜 필드에 등록할 수 없으며,
+   해당 문서를 포함한 등록이 실패하여 문서가 인덱스에 등록되지 않습니다.
+   날짜는 위와 같이 정규화된 이름(FQCN)인 ``new java.util.Date(...)`` 로 만드십시오.
 
 사용 가능한 객체
 =================

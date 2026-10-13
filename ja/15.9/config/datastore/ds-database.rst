@@ -188,7 +188,7 @@ SQLの列名をインデックスフィールドにマッピングします:
     url="https://example.com/articles/" + id
     title=title
     content=content
-    lastModified=updated_at
+    last_modified=updated_at
 
 利用可能なフィールド:
 
@@ -405,7 +405,7 @@ PostgreSQLは通常UTF-8がデフォルトです。必要に応じて:
     url="https://shop.example.com/product/" + id
     title=name
     content=description + " カテゴリ: " + category + " 価格: " + price + "円"
-    lastModified=updated_at
+    last_modified=updated_at
 
 ナレッジベース記事
 ------------------
@@ -430,7 +430,7 @@ PostgreSQLは通常UTF-8がデフォルトです。必要に応じて:
     digest=tags
     author=author
     created=created_at
-    lastModified=updated_at
+    last_modified=updated_at
 
 トラブルシューティング
 ======================

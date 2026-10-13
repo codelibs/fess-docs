@@ -49,6 +49,17 @@ De forma predeterminada, |Fess| se conecta a OpenSearch en el puerto 9200.
 .. note::
    Si el número de puerto de OpenSearch es diferente, cámbielo al número de puerto apropiado.
 
+Desactivación del Plugin de Seguridad
+--------------------------------------
+
+El OpenSearch que se instala siguiendo el procedimiento de instalación de |Fess| tiene el plugin de seguridad desactivado (``plugins.security.disabled: true``).
+OpenSearch Dashboards también incluye un plugin de seguridad; si permanece activado, se exige autenticación y, con solo configurar ``opensearch.hosts``, rutas como ``/api/status`` devuelven ``401 Unauthorized``, por lo que no se puede utilizar tal cual.
+Al igual que en OpenSearch, desactive también el plugin de seguridad de OpenSearch Dashboards.
+
+Si utiliza la imagen de Docker, inicie el contenedor con la variable de entorno ``DISABLE_SECURITY_DASHBOARDS_PLUGIN=true``.
+
+Si lo ha instalado de otra forma, desactive el plugin de seguridad de OpenSearch Dashboards siguiendo la documentación oficial de OpenSearch Dashboards antes de iniciarlo.
+
 Inicio de OpenSearch Dashboards
 --------------------------------
 
@@ -90,6 +101,10 @@ Al importar la definición de dashboard incluida con |Fess|, podrá utilizar las
 5. Haga clic en «Import» para ejecutar la importación.
 
 Una vez completada la importación, se registrarán 6 visualizaciones y el dashboard ``fess_log``.
+
+.. note::
+   ``fess_log.ndjson`` también incluye el patrón de índice ``fess_log*`` (el campo de tiempo es ``requestedAt``).
+   Por ello, si realiza esta importación, no es necesario crearlo manualmente con el procedimiento anterior de «Configuración del Patrón de Índice». Si lo crea manualmente y después realiza la importación, se registrarán dos patrones de índice con el mismo nombre.
 
 Visualización del Dashboard
 -----------------------------

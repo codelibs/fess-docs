@@ -387,7 +387,16 @@ If OpenSearch is also used by other applications, you can remove only Fess.
 1. Stop Fess
 2. Remove the Fess package or directory
 3. Remove the Fess data directory (such as ``/var/lib/fess``)
-4. Delete the |Fess| indexes created in OpenSearch (such as ``fess.*`` and ``.fess_*``)
+4. Delete the |Fess| indexes created in OpenSearch
+
+   The names of |Fess| indexes begin with ``fess`` (such as ``fess.*``, ``fess_config.*``, ``fess_user.*``, ``fess_log.*``, ``fess_crawler.*`` and ``fess_suggest*``). You can delete them all at once with the following command.
+
+   ::
+
+       $ curl -X DELETE 'http://localhost:9200/fess*'
+
+   Before deleting, run ``curl 'http://localhost:9200/_cat/indices?v'`` and confirm that there are no indexes of other applications whose names begin with ``fess``. The ``configsync`` index used to synchronize dictionaries can also be deleted if no other application uses it.
+
 5. Do not remove OpenSearch
 
 Remove Only OpenSearch, Keeping Fess

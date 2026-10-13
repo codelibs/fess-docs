@@ -138,7 +138,7 @@ Groovy是 |Fess| 中可用的脚本语言之一。
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 URL生成
 ---------
@@ -174,10 +174,10 @@ URL生成
 ::
 
     // 解析日期（使用FQCN的单一表达式）
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // 从epoch秒转换
-    lastModified=new Date(data.timestamp * 1000L)
+    last_modified=new Date(data.timestamp * 1000L)
 
 可用对象
 ========
