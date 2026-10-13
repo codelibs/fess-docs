@@ -278,15 +278,15 @@ Configuración de Manejo de Errores
      - Valor Predeterminado
    * - ``crawler.failure.url.status.codes``
      - Códigos de estado HTTP considerados como fallo (separados por comas)
-     - ``404,403,410``
+     - ``404,403,410,401``
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # Además de los valores predeterminados (404,403,410), tratar también 500 como error
-    crawler.failure.url.status.codes=404,403,410,500
+    # Además de los valores predeterminados (404,403,410,401), tratar también 500 como error
+    crawler.failure.url.status.codes=404,403,410,401,500
 
 Configuración de Monitoreo del Sistema
 =======================================

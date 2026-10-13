@@ -250,7 +250,7 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
    * - ``java.io.IOException``
      - 入出力エラー
    * - ``org.codelibs.fess.exception.ContentNotFoundException``
-     - ``crawler.failure.url.status.codes`` に設定したHTTPステータスコード（デフォルト: 403, 404, 410）が返されたURL
+     - ``crawler.failure.url.status.codes`` に設定したHTTPステータスコード（デフォルト: 401, 403, 404, 410）が返されたURL
    * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
      - コンテンツが最大長を超過
 

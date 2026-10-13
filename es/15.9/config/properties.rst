@@ -483,7 +483,7 @@ Límite de tasa
     - ``true``
   * - crawler.failure.url.status.codes
     - Códigos de estado HTTP considerados como URLs de fallo.
-    - ``404,403,410``
+    - ``404,403,410,401``
   * - crawler.system.monitor.interval
     - Intervalo (segundos) del monitor del sistema durante el rastreo.
     - ``60``

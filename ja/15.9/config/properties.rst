@@ -483,7 +483,7 @@ one, fill in ``properties.po`` beside this file.
     - ``true``
   * - crawler.failure.url.status.codes
     - 障害URLとみなすHTTPステータスコード。
-    - ``404,403,410``
+    - ``404,403,410,401``
   * - crawler.system.monitor.interval
     - クロール中のシステム監視の間隔（秒）。
     - ``60``

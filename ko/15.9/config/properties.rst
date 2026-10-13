@@ -483,7 +483,7 @@ one, fill in ``properties.po`` beside this file.
     - ``true``
   * - crawler.failure.url.status.codes
     - 장애 URL로 간주하는 HTTP 상태 코드.
-    - ``404,403,410``
+    - ``404,403,410,401``
   * - crawler.system.monitor.interval
     - 크롤링 중 시스템 모니터링 간격(초).
     - ``60``

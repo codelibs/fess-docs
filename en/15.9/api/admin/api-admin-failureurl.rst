@@ -250,7 +250,7 @@ depending on the exception that was raised. The following are representative exa
    * - ``java.io.IOException``
      - I/O error
    * - ``org.codelibs.fess.exception.ContentNotFoundException``
-     - URL that returned an HTTP status code configured in ``crawler.failure.url.status.codes`` (default: 403, 404, 410)
+     - URL that returned an HTTP status code configured in ``crawler.failure.url.status.codes`` (default: 401, 403, 404, 410)
    * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
      - Content exceeded the maximum length
 

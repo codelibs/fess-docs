@@ -276,15 +276,15 @@ Fehlerbehandlungs-Konfiguration
      - Standard
    * - ``crawler.failure.url.status.codes``
      - Als Fehler behandelte HTTP-Statuscodes (kommagetrennt)
-     - ``404,403,410``
+     - ``404,403,410,401``
 
 Konfigurationsbeispiel
 ~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # Zusätzlich zu den Standardwerten (404,403,410) auch 500 als Fehler behandeln
-    crawler.failure.url.status.codes=404,403,410,500
+    # Zusätzlich zu den Standardwerten (404,403,410,401) auch 500 als Fehler behandeln
+    crawler.failure.url.status.codes=404,403,410,401,500
 
 Systemüberwachungs-Konfiguration
 ================================

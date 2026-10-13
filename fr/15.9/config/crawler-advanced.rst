@@ -278,15 +278,15 @@ Configuration de la gestion des erreurs
      - Par défaut
    * - ``crawler.failure.url.status.codes``
      - Codes d'état HTTP considérés comme des échecs (séparés par des virgules)
-     - ``404,403,410``
+     - ``404,403,410,401``
 
 Exemple de configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # En plus des valeurs par défaut (404,403,410), traiter également 500 comme une erreur
-    crawler.failure.url.status.codes=404,403,410,500
+    # En plus des valeurs par défaut (404,403,410,401), traiter également 500 comme une erreur
+    crawler.failure.url.status.codes=404,403,410,401,500
 
 Configuration de la surveillance système
 ========================================
