@@ -50,6 +50,11 @@
 * CsvDataStore: CSV/TSV 파일을 대상으로 크롤링합니다
 * CsvListDataStore: 인덱싱 대상 파일 경로를 기술한 CSV 파일을 크롤링합니다
 
+핸들러 이름 드롭다운에 표시되는 것은 설치된 데이터 저장소 커넥터 플러그인(``fess-ds-*``)이 제공하는 핸들러뿐입니다.
+플러그인을 설치하지 않은 경우 선택할 수 있는 핸들러가 없습니다.
+위 이외의 핸들러는 :doc:`../config/datastore/ds-overview` 에 나열된 각 커넥터 페이지를 참조하십시오.
+또한 이전 버전의 문서에 있는 ``EsDataStore`` (``fess-ds-elasticsearch`` 플러그인)는 15.6.0 이후 공개되지 않았으며 15.9에서는 사용할 수 없습니다.
+
 파라미터
 :::::::::
 
@@ -304,63 +309,6 @@ CSV 파일을 대상으로 한 크롤링에 대해 설명합니다.
 키는 데이터베이스 크롤링의 경우와 동일합니다.
 CSV 파일 내의 데이터는 cell[숫자]로 보유하고 있습니다(숫자는 1부터 시작).
 CSV 파일의 셀에 데이터가 존재하지 않는 경우 null이 될 수 있습니다.
-
-EsDataStore
------------
-
-데이터 가져오기 대상이 elasticsearch가 되지만, 기본적인 사용 방법은 CsvDataStore와 동일합니다.
-
-매개변수
-:::::::::
-
-매개변수 설정 예는 다음과 같습니다.
-
-::
-
-    settings.cluster.name=elasticsearch
-    hosts=SERVERNAME:9300
-    index=logindex
-    type=data
-
-매개변수는 "키=값" 형식입니다. 키에 대한 설명은 다음과 같습니다.
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - settings.\*
-     - elasticsearch의 Settings 정보
-   * - hosts
-     - 접속할 elasticsearch
-   * - index
-     - 인덱스 이름
-   * - type
-     - 타입 이름
-   * - query
-     - 가져올 조건의 쿼리
-
-표: elasticsearch용 설정 매개변수 예
-
-
-스크립트
-::::::::
-
-스크립트 설정 예는 다음과 같습니다.
-
-::
-
-    url=source.url
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=source.title
-    content=source.content
-    digest=
-    anchor=
-    content_length=source.size
-    last_modified=new java.util.Date()
-
-매개변수는 "키=값" 형식입니다.
-키는 데이터베이스 크롤링의 경우와 동일합니다.
-source.\*를 통해 값을 가져와서 설정할 수 있습니다.
 
 CsvListDataStore
 ----------------

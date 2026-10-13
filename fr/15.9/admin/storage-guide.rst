@@ -18,7 +18,7 @@ Ouvrez la configuration du stockage depuis [Système > Général] et configurez 
 Paramètres communs
 ~~~~~~~~~~~~~~~~~~
 
-- Type : Type de stockage (Automatique/S3/GCS)
+- Type : Type de stockage (Auto/S3/GCS)
 - Compartiment : Nom du compartiment à gérer
 
 Paramètres S3
@@ -34,7 +34,7 @@ Paramètres S3
    ``fess-storage-s3``, qui ne fait pas partie de la distribution. Installez-le depuis la page
    **Système > Plugin** de l'écran d'administration ou avec
    ``bin/fess-setup install plugin fess-storage-s3``.
-   Le type « Automatique » se résout aussi en S3 lorsque le point de terminaison est vide.
+   Le type « Auto » se résout aussi en S3 lorsque le point de terminaison est vide.
 
 Paramètres GCS
 ~~~~~~~~~~~~~~

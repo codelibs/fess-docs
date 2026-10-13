@@ -35,6 +35,12 @@
 
 组名称。
 
+gidNumber
+:::::::::
+
+组的 gidNumber（LDAP 中的 POSIX 组 ID），以数字指定。可以省略。输入非数字的值会出错。
+当 |Fess| 设置为通过管理界面管理 LDAP（ ``ldap.admin.enabled=true`` ）时，该值会写入 LDAP 中组条目的 ``gidNumber`` 属性（属性名可通过 ``ldap.attr.gidNumber`` 更改）。不使用 LDAP 时无需指定。
+
 删除方法
 --------
 

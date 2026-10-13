@@ -5,4 +5,5 @@ Mise à niveau
 Référence
 =========
 
-Veuillez consulter le `Guide d'installation <https://fess.codelibs.org/ja/15.9/install/index.html>`__.
+Pour la procédure de mise à niveau, consultez :doc:`../install/upgrade`.
+Pour l'installation en général, consultez :doc:`../install/index`.

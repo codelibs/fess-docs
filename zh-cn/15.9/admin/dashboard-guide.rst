@@ -15,11 +15,11 @@
 
    * - 索引名称
      - 说明
-   * - fess.YYYYMMDD
+   * - fess.yyyyMMddHHmmssSSS
      - 已索引的文档
    * - fess_log
      - 访问日志
-   * - fess.suggest.YYYYMMDD
+   * - fess.suggest.yyyyMMddHHmmssSSS
      - 建议词
    * - fess_config
      - |Fess| 的配置
@@ -38,9 +38,10 @@
    * - fess_crawler
      - 爬取信息
 
+``fess.`` 和 ``fess.suggest.`` 后面的部分是创建索引的日期和时间（``yyyyMMddHHmmssSSS``，共 17 位）。
 
 以点(.)开头的索引名称是系统索引,因此不会显示。
-要显示系统索引,请启用 special 复选框。
+要显示系统索引,请启用 Special 复选框。
 
 确认已索引的文档数
 ================================
@@ -50,7 +51,7 @@
 |image1|
 
 单击每个索引右上角的图标,将显示索引操作菜单。
-要删除已索引的文档,请在管理搜索界面中删除。请注意不要使用"delete index"删除。
+要删除已索引的文档,请在管理搜索界面中删除。请注意不要使用"删除索引"删除。
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/dashboard-2.png

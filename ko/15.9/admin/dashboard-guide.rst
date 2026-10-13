@@ -15,11 +15,11 @@
 
    * - 인덱스명
      - 설명
-   * - fess.YYYYMMDD
+   * - fess.yyyyMMddHHmmssSSS
      - 인덱싱된 문서
    * - fess_log
      - 액세스 로그
-   * - fess.suggest.YYYYMMDD
+   * - fess.suggest.yyyyMMddHHmmssSSS
      - 제안 키워드
    * - fess_config
      - |Fess| 의 설정
@@ -38,9 +38,10 @@
    * - fess_crawler
      - 크롤 정보
 
+``fess.`` 및 ``fess.suggest.`` 뒤에 오는 부분은 인덱스를 생성한 일시(``yyyyMMddHHmmssSSS``, 17자리)입니다.
 
 점(.)으로 시작하는 인덱스명은 시스템용 인덱스이므로 표시되지 않습니다.
-시스템용 인덱스도 표시하려면 special 체크박스를 활성화하십시오.
+시스템용 인덱스도 표시하려면 Special 체크박스를 활성화하십시오.
 
 인덱싱된 문서 수 확인
 ================================
@@ -50,7 +51,7 @@
 |image1|
 
 각 인덱스의 오른쪽 상단 아이콘을 클릭하면 인덱스에 대한 작업 메뉴가 표시됩니다.
-인덱싱된 문서를 삭제하는 경우 관리용 검색 화면에서 삭제합니다. "delete index"로 삭제하지 않도록 주의하십시오.
+인덱싱된 문서를 삭제하는 경우 관리용 검색 화면에서 삭제합니다. "인덱스 삭제"로 삭제하지 않도록 주의하십시오.
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/dashboard-1.png
 .. |image1| image:: ../../../resources/images/en/15.9/admin/dashboard-2.png

@@ -34,11 +34,16 @@ Nombre de host
 ::::::::::::::
 
 Especifique el nombre de host del sitio que requiere autenticación.
+Utilice el mismo nombre que el nombre de host de la URL que se va a rastrear. Esta autenticación no se utiliza para una URL escrita con otro nombre (por ejemplo, una dirección IP en lugar de un alias).
 
 Puerto
 ::::::
 
 Especifique el puerto del sitio que requiere autenticación.
+Si se deja en blanco, la lista muestra "Cualquiera". El significado de un puerto en blanco depende del esquema.
+
+* FTP: Se utiliza para URL con cualquier puerto (una URL sin puerto se trata como el puerto 21).
+* SAMBA: Se utiliza solo para URL que no incluyen un puerto (``smb://servidor/recurso/``). No se utiliza para una URL que incluye un puerto, como ``smb://servidor:445/recurso/``. Para rastrear una URL que incluye un puerto, especifique aquí el mismo puerto.
 
 Esquema
 :::::::

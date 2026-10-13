@@ -62,6 +62,17 @@ Orden de clasificación
 
 Configure el orden de clasificación del impulso de documento.
 
+Cuándo se aplican las reglas
+----------------------------
+
+Las reglas de impulso de documentos se evalúan cuando un rastreo web o un rastreo de archivos registra un documento en el índice. No se aplican a los rastreos de almacenes de datos.
+Agregar, cambiar o eliminar una regla no modifica el impulso de los documentos que ya están en el índice.
+
+Si "Comprobar fecha de última modificación" en [Sistema > General] está habilitado (valor predeterminado), un documento cuyo contenido no ha cambiado no se vuelve a registrar en el índice en un nuevo rastreo, por lo que su impulso no se vuelve a evaluar.
+Para aplicar una regla nueva o modificada a los documentos existentes, elimínelos del índice (consulte :doc:`searchlist-guide`) y vuelva a rastrear.
+Un documento que se registra de nuevo, por ejemplo porque su contenido ha cambiado, se evalúa en ese momento.
+Si "Comprobar fecha de última modificación" está deshabilitado, todos los documentos se vuelven a registrar en cada rastreo, por lo que las reglas se evalúan cada vez.
+
 Eliminar configuración
 ----------------------
 

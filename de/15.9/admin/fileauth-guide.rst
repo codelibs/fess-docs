@@ -34,11 +34,16 @@ Hostname
 ::::::::
 
 Geben Sie den Hostnamen der Site an, die Authentifizierung erfordert.
+Verwenden Sie denselben Namen wie den Hostnamen in der zu crawlenden URL. Für eine URL mit einem anderen Namen (zum Beispiel einer IP-Adresse statt eines Alias) wird diese Authentifizierung nicht verwendet.
 
 Port
 ::::
 
 Geben Sie den Port der Site an, die Authentifizierung erfordert.
+Bleibt das Feld leer, zeigt die Liste „Beliebig" an. Die Bedeutung eines leeren Ports hängt vom Schema ab.
+
+* FTP: Wird für URLs mit beliebigem Port verwendet (eine URL ohne Port gilt als Port 21).
+* SAMBA: Wird nur für URLs verwendet, die keinen Port enthalten (``smb://Server/Freigabe/``). Für eine URL mit Port, etwa ``smb://Server:445/Freigabe/``, wird sie nicht verwendet. Wenn Sie eine URL mit Port crawlen, geben Sie hier denselben Port an.
 
 Schema
 ::::::

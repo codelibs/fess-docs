@@ -34,11 +34,16 @@ Nom d'hôte
 ::::::::::
 
 Spécifie le nom d'hôte du site nécessitant une authentification.
+Utilisez le même nom que le nom d'hôte de l'URL à crawler. Cette authentification n'est pas utilisée pour une URL écrite avec un autre nom (par exemple, une adresse IP au lieu d'un alias).
 
 Port
 ::::
 
 Spécifie le port du site nécessitant une authentification.
+Si le champ est laissé vide, la liste affiche « N'importe lequel ». La signification d'un port vide dépend du schéma.
+
+* FTP : utilisée pour les URL de n'importe quel port (une URL sans port est traitée comme le port 21).
+* SAMBA : utilisée uniquement pour les URL qui ne contiennent pas de port (``smb://serveur/partage/``). Elle n'est pas utilisée pour une URL qui contient un port, comme ``smb://serveur:445/partage/``. Pour crawler une URL contenant un port, indiquez ici le même port.
 
 Schéma
 ::::::

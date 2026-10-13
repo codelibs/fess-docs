@@ -50,6 +50,11 @@ The handler name for processing the data store.
 * CsvDataStore: Crawls CSV/TSV files
 * CsvListDataStore: Crawls a CSV file containing file paths to index
 
+The handler name drop-down lists only the handlers provided by the installed data store connector plugins (``fess-ds-*``).
+If no plugin is installed, there is no handler to select.
+For other handlers, see the connector pages listed in :doc:`../config/datastore/ds-overview`.
+Note that ``EsDataStore`` (the ``fess-ds-elasticsearch`` plugin) described in the documentation of earlier versions has not been published since 15.6.0 and is not available in 15.9.
+
 Parameters
 ::::::::::
 
@@ -299,63 +304,6 @@ Parameters are in "key=value" format.
 Keys are the same as for database crawling.
 CSV file data is stored in cell[number] format (numbers start from 1).
 Cells with no data may be null.
-
-EsDataStore
------------
-
-The data source is Elasticsearch, but the basic usage is the same as CsvDataStore.
-
-Parameters
-::::::::::
-
-An example parameter configuration is as follows:
-
-::
-
-    settings.cluster.name=elasticsearch
-    hosts=SERVERNAME:9300
-    index=logindex
-    type=data
-
-Parameters are in "key=value" format. Key descriptions are as follows:
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - settings.\*
-     - Elasticsearch Settings information
-   * - hosts
-     - Elasticsearch connection destination
-   * - index
-     - Index name
-   * - type
-     - Type name
-   * - query
-     - Query for retrieval conditions
-
-Table: Elasticsearch Configuration Parameters Example
-
-
-Script
-::::::
-
-An example script configuration is as follows:
-
-::
-
-    url=source.url
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=source.title
-    content=source.content
-    digest=
-    anchor=
-    content_length=source.size
-    last_modified=new java.util.Date()
-
-Parameters are in "key=value" format.
-Keys are the same as for database crawling.
-Values can be retrieved and set using source.\*.
 
 CsvListDataStore
 ----------------

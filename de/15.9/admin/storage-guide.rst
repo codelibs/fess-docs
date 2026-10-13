@@ -18,7 +18,7 @@ Konfiguration des Objektspeicher-Servers
 Allgemeine Einstellungen
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Typ: Speichertyp (Automatisch/S3/GCS)
+- Typ: Speichertyp (Auto/S3/GCS)
 - Bucket: Name des zu verwaltenden Buckets
 
 S3-Einstellungen
@@ -34,7 +34,7 @@ S3-Einstellungen
    ``fess-storage-s3``, das nicht Teil der Distribution ist. Installieren Sie es über die
    Seite **System > Plugin** in der Administrationsoberfläche oder mit
    ``bin/fess-setup install plugin fess-storage-s3``.
-   Bei Auswahl von „Automatisch" wird bei leerem Endpunkt ebenfalls S3 verwendet.
+   Bei Auswahl von „Auto" wird bei leerem Endpunkt ebenfalls S3 verwendet.
 
 GCS-Einstellungen
 ~~~~~~~~~~~~~~~~~

@@ -50,6 +50,11 @@ Nom du gestionnaire qui traite le magasin de données.
 * CsvDataStore : Crawler des fichiers CSV/TSV cibles
 * CsvListDataStore : Crawler un fichier CSV décrivant les chemins de fichiers cibles d'indexation
 
+La liste déroulante du nom du gestionnaire n'affiche que les gestionnaires fournis par les plugins connecteurs de magasin de données installés (``fess-ds-*``).
+Si aucun plugin n'est installé, aucun gestionnaire ne peut être sélectionné.
+Pour les autres gestionnaires, consultez les pages des connecteurs listées dans :doc:`../config/datastore/ds-overview`.
+Notez que ``EsDataStore`` (le plugin ``fess-ds-elasticsearch``), décrit dans la documentation des versions précédentes, n'est plus publié depuis la version 15.6.0 et n'est pas disponible dans la version 15.9.
+
 Paramètres
 ::::::::::
 
@@ -303,63 +308,6 @@ Les paramètres sont au format « clé=valeur ».
 Les clés sont les mêmes que pour le crawl de base de données.
 Les données dans le fichier CSV sont conservées dans cell[nombre] (le nombre commence à 1).
 Si aucune donnée n'existe dans la cellule du fichier CSV, elle peut être null.
-
-EsDataStore
------------
-
-La source d'obtention des données est elasticsearch, mais l'utilisation de base est la même que CsvDataStore.
-
-Paramètres
-::::::::::
-
-Un exemple de configuration des paramètres est le suivant.
-
-::
-
-    settings.cluster.name=elasticsearch
-    hosts=SERVERNAME:9300
-    index=logindex
-    type=data
-
-Les paramètres sont au format « clé=valeur ». La description des clés est la suivante.
-
-.. tabularcolumns:: |p{4cm}|p{8cm}|
-.. list-table::
-
-   * - settings.\*
-     - Informations de paramètres d'elasticsearch
-   * - hosts
-     - Elasticsearch de destination de connexion
-   * - index
-     - Nom de l'index
-   * - type
-     - Nom du type
-   * - query
-     - Requête de condition pour obtenir
-
-Tableau : Exemple de paramètres de configuration pour elasticsearch
-
-
-Script
-::::::
-
-Un exemple de configuration du script est le suivant.
-
-::
-
-    url=source.url
-    host="SERVERNAME"
-    site="SERVERNAME"
-    title=source.title
-    content=source.content
-    digest=
-    anchor=
-    content_length=source.size
-    last_modified=new java.util.Date()
-
-Les paramètres sont au format « clé=valeur ».
-Les clés sont les mêmes que pour le crawl de base de données.
-Vous pouvez obtenir et configurer les valeurs avec source.\*.
 
 CsvListDataStore
 ----------------

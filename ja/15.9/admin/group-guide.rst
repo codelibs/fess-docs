@@ -35,6 +35,12 @@ LDAP連携する場合などに利用することができます。
 
 グループ名。
 
+gidNumber
+:::::::::
+
+グループのgidNumber（LDAPのPOSIXグループID）を数値で指定します。省略できます。数値以外を入力するとエラーになります。
+|Fess| が管理画面からLDAPを管理する設定（ ``ldap.admin.enabled=true`` ）の場合に、LDAPのグループエントリーの ``gidNumber`` 属性（属性名は ``ldap.attr.gidNumber`` で変更できます）に書き込まれます。LDAPを使っていない場合は、指定する必要はありません。
+
 削除の方法
 --------
 

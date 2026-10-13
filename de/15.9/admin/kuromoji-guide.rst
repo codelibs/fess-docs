@@ -7,6 +7,9 @@ Kuromoji-Wörterbuch
 
 Personennamen, Eigennamen, Fachbegriffe usw. können für die morphologische Analyse registriert werden.
 
+Dieses Wörterbuch gilt für Japanisch (``ja/kuromoji.txt``) und wird nur bei der Analyse der ``_ja``-Felder wie ``content_ja`` verwendet.
+Das Speichern allein wirkt sich noch nicht auf die Suche aus. Wie Sie eine Änderung übernehmen, steht unter :ref:`dict-apply-changes`. Da dieses Wörterbuch beim Indizieren wirkt, sind bereits indizierte Dokumente erst nach erneutem Crawlen betroffen.
+
 Verwaltung
 ==========
 
@@ -70,6 +73,16 @@ Zum Beispiel:
 
     朝青龍,朝青龍,アサショウリュウ,カスタム名詞
     関西国際空港,関西 国際 空港,カンサイ コクサイ クウコウ,カスタム名詞
+
+.. warning::
+
+   Beim Hochladen wird der Inhalt des Wörterbuchs durch den Inhalt der hochgeladenen Datei ersetzt. Wörter, die nicht in der Datei stehen, werden entfernt, auch solche, die über die Oberfläche registriert wurden. Laden Sie das Wörterbuch bei Bedarf zuerst herunter und nehmen Sie dessen Inhalt in die hochzuladende Datei auf.
+
+.. note::
+
+   Das mitgelieferte Wörterbuch enthält die beiden obigen Beispiele („朝青龍" und „関西国際空港") bereits.
+   Bei der Analyse von ``content_ja`` werden Zeichen vor der morphologischen Analyse durch das Zeichenersetzungs-Wörterbuch ``ja/mapping.txt`` ersetzt (siehe :doc:`mapping-guide`). Das mitgelieferte ``ja/mapping.txt`` enthält ``龍 => 竜``; daher wird „朝青龍" vor der Analyse durch ``朝青竜`` ersetzt; es stimmt nicht mit „朝青龍" im Wörterbuch überein und wird in ``朝 青 竜`` zerlegt.
+   Um die Wirkung einer Registrierung zu prüfen, verwenden Sie ein Wort, das nicht im Wörterbuch steht und kein durch ``ja/mapping.txt`` ersetztes Zeichen enthält.
 
 
 .. |image0| image:: ../../../resources/images/en/15.9/admin/kuromoji-1.png

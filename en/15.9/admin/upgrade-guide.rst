@@ -5,4 +5,5 @@ Upgrade
 Information
 ===========
 
-Please refer to `Installation Guide <https://fess.codelibs.org/15.9/install/index.html>`__.
+For the upgrade procedure, see :doc:`../install/upgrade`.
+For installation in general, see :doc:`../install/index`.

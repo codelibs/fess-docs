@@ -62,6 +62,17 @@ Sort Order
 
 Configures the sort order for document boost.
 
+When Rules Are Applied
+----------------------
+
+Document boost rules are evaluated when a web crawl or a file crawl registers a document in the index. They are not applied to data store crawls.
+Adding, changing or deleting a rule does not change the boost of documents that are already in the index.
+
+When "Check Last Modified" in [System > General] is enabled (the default), a document whose content has not changed is not registered in the index again by a recrawl, so its boost is not evaluated again.
+To apply a new or changed rule to existing documents, delete those documents from the index (see :doc:`searchlist-guide`) and crawl again.
+A document that is registered again, for example because its content has been updated, is evaluated at that time.
+If "Check Last Modified" is disabled, every document is registered again on each crawl, so the rules are evaluated every time.
+
 Deleting Configuration
 ----------------------
 
