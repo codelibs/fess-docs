@@ -222,6 +222,8 @@ robots.txt の処理そのものを無効にするには、 ``client.robotsTxtEn
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
+このログは INFO で出力されるため、既定のログレベル（ ``warn`` ）では書き込まれません。上の ``Logger`` を ``log4j2.xml`` に追加する（場所は :doc:`admin-logging` を参照）か、 ``FESS_LOG_LEVEL`` を ``info`` に変更します。
+
 トラブルシューティング
 ======================
 

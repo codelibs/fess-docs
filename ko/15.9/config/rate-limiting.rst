@@ -228,6 +228,8 @@ robots.txt 처리 자체를 비활성화하려면 ``client.robotsTxtEnabled=fals
 
     <Logger name="org.codelibs.fess.helper.RateLimitHelper" level="INFO"/>
 
+이 메시지는 INFO 레벨로 출력되므로 기본 로그 레벨(``warn``)에서는 기록되지 않습니다. 위의 ``Logger`` 를 ``log4j2.xml`` 에 추가하거나( 위치는 :doc:`admin-logging` 참조) ``FESS_LOG_LEVEL`` 을 ``info`` 로 변경하십시오.
+
 문제 해결
 ======================
 

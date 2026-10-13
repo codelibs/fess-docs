@@ -730,23 +730,36 @@ JVM オプション
      - デフォルト
    * - ``jvm.crawler.options``
      - クローラーのJVMオプション
-     - ``-Xms128m -Xmx512m...``
+     - ``-Xms128m`` 、 ``-Xmx512m`` など
 
 デフォルト設定
 --------------
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000 \
-        -XX:-HeapDumpOnOutOfMemoryError
+    jvm.crawler.options=\
+    -Djava.awt.headless=true\n\
+    ...
+    -Xms128m\n\
+    -Xmx512m\n\
+    -XX:MaxMetaspaceSize=128m\n\
+    ...
+    -XX:-HeapDumpOnOutOfMemoryError\n\
+    ...
+    -XX:+UseG1GC\n\
+    ...
+    -XX:MaxGCPauseMillis=60000\n\
+    ...
 
 .. note::
    上記は主要なオプションの抜粋です。実際のデフォルト値には、jcifs SMBタイムアウト、Netty設定、Log4j設定、G1GC詳細設定、PDFBox設定など、約40のオプションが含まれています。
    完全なデフォルト値は ``fess_config.properties`` を参照してください。
    カスタマイズ時は必要なオプションのみを変更し、他のデフォルト値は維持してください。
+
+.. note::
+   値は、1 行に 1 つのオプションを書き、各行の末尾を ``\n\`` にします。 ``\n`` が区切りで、行末の ``\`` は次の行へ続けるための記号です。 ``...`` は省略した行を表します。
+   \ |Fess| は値を ``\n`` で分割し、1 つの要素を 1 つの JVM 引数として渡します。 ``-Xms128m -Xmx512m`` のようにスペースで区切ると全体が 1 つの引数になり、JVM が起動しないため、クロールが実行されません。
+   この値を設定すると既定のオプションがすべて置き換わります。 ``fess_config.properties`` の既定値を残したまま、変更する行だけを書き換えてください。
 
 主要なオプションの説明
 ----------------------
@@ -773,24 +786,24 @@ JVM オプション
 カスタム設定例
 --------------
 
+次の例は、既定値のうち書き換える行だけを示します。ほかの行は既定値のまま残してください。
+
 **大きなファイルをクロールする場合:**
 
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx2g \
-        -XX:MaxMetaspaceSize=256m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000
+    -Xms256m\n\
+    -Xmx2g\n\
+    -XX:MaxMetaspaceSize=256m\n\
 
 **デバッグ時:**
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:+HeapDumpOnOutOfMemoryError \
-        -XX:HeapDumpPath=/tmp/crawler_dump.hprof
+    -XX:+HeapDumpOnOutOfMemoryError\n\
+    -XX:HeapDumpPath=/tmp/crawler_dump.hprof\n\
+
+既定の ``-XX:-HeapDumpOnOutOfMemoryError`` の行を、この 2 行に置き換えます。
 
 詳細は :doc:`setup-memory` を参照してください。
 
@@ -842,9 +855,12 @@ HTTPクロールのリトライ回数(デフォルト5回)とリトライ間隔(
 
 **1. ヒープサイズの調整**
 
+既定値の ``-Xms128m`` と ``-Xmx512m`` の行を、次のように書き換えます。
+
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx1g
+    -Xms256m\n\
+    -Xmx1g\n\
 
 **2. キャッシュサイズの調整**
 
@@ -901,11 +917,12 @@ HTTPクロールのリトライ回数(デフォルト5回)とリトライ間隔(
 
 **対策:**
 
-1. クローラーのヒープサイズを増やす
+1. クローラーのヒープサイズを増やす（ ``jvm.crawler.options`` の既定値のうち ``-Xms`` と ``-Xmx`` の行を書き換えます）
 
    ::
 
-       jvm.crawler.options=-Xms256m -Xmx2g
+       -Xms256m\n\
+       -Xmx2g\n\
 
 2. 並列スレッド数を減らす
 

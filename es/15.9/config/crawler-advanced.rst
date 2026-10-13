@@ -732,23 +732,36 @@ Puede configurar las opciones de JVM para el proceso del rastreador.
      - Valor Predeterminado
    * - ``jvm.crawler.options``
      - Opciones de JVM del rastreador
-     - ``-Xms128m -Xmx512m...``
+     - ``-Xms128m``, ``-Xmx512m``, ...
 
 Configuración Predeterminada
 -----------------------------
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000 \
-        -XX:-HeapDumpOnOutOfMemoryError
+    jvm.crawler.options=\
+    -Djava.awt.headless=true\n\
+    ...
+    -Xms128m\n\
+    -Xmx512m\n\
+    -XX:MaxMetaspaceSize=128m\n\
+    ...
+    -XX:-HeapDumpOnOutOfMemoryError\n\
+    ...
+    -XX:+UseG1GC\n\
+    ...
+    -XX:MaxGCPauseMillis=60000\n\
+    ...
 
 .. note::
    Lo anterior muestra solo las opciones principales. Los valores predeterminados reales incluyen aproximadamente 40 opciones que cubren tiempos de espera jcifs SMB, configuración de Netty, configuración de Log4j, configuración detallada de G1GC, configuración de PDFBox, etc.
    Consulte ``fess_config.properties`` para los valores predeterminados completos.
    Al personalizar, cambie solo las opciones necesarias y mantenga los demás valores predeterminados.
+
+.. note::
+   Escriba una opción por línea y termine cada línea con ``\n\``. ``\n`` es el separador y la ``\`` final continúa el valor en la línea siguiente. ``...`` representa las líneas omitidas.
+   |Fess| divide el valor en ``\n`` y pasa cada elemento a la JVM como un único argumento. Si separa las opciones con espacios, como en ``-Xms128m -Xmx512m``, todo el texto se convierte en un solo argumento, la JVM no se inicia y el rastreo no se ejecuta.
+   Al definir esta propiedad se reemplazan todas las opciones predeterminadas, por lo que debe conservar los valores predeterminados de ``fess_config.properties`` y modificar solo las líneas que desee cambiar.
 
 Descripción de las Opciones Principales
 ----------------------------------------
@@ -775,24 +788,24 @@ Descripción de las Opciones Principales
 Ejemplos de Configuración Personalizada
 ----------------------------------------
 
+Los ejemplos siguientes muestran solo las líneas del valor predeterminado que se modifican. Deje sin cambios el resto de las líneas.
+
 **Al rastrear archivos grandes:**
 
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx2g \
-        -XX:MaxMetaspaceSize=256m \
-        -XX:+UseG1GC \
-        -XX:MaxGCPauseMillis=60000
+    -Xms256m\n\
+    -Xmx2g\n\
+    -XX:MaxMetaspaceSize=256m\n\
 
 **Durante depuración:**
 
 ::
 
-    jvm.crawler.options=-Xms128m -Xmx512m \
-        -XX:MaxMetaspaceSize=128m \
-        -XX:+UseG1GC \
-        -XX:+HeapDumpOnOutOfMemoryError \
-        -XX:HeapDumpPath=/tmp/crawler_dump.hprof
+    -XX:+HeapDumpOnOutOfMemoryError\n\
+    -XX:HeapDumpPath=/tmp/crawler_dump.hprof\n\
+
+Sustituya la línea predeterminada ``-XX:-HeapDumpOnOutOfMemoryError`` por estas dos líneas.
 
 Para más detalles, consulte :doc:`setup-memory`.
 
@@ -841,9 +854,12 @@ Optimización del Uso de Memoria
 
 **1. Ajuste del Tamaño del Heap**
 
+Modifique las líneas ``-Xms128m`` y ``-Xmx512m`` del valor predeterminado de la siguiente manera.
+
 ::
 
-    jvm.crawler.options=-Xms256m -Xmx1g
+    -Xms256m\n\
+    -Xmx1g\n\
 
 **2. Ajuste del Tamaño de Caché**
 
@@ -900,11 +916,12 @@ Falta de Memoria
 
 **Soluciones:**
 
-1. Aumentar el tamaño del heap del rastreador
+1. Aumentar el tamaño del heap del rastreador (modifique las líneas ``-Xms`` y ``-Xmx`` del valor predeterminado de ``jvm.crawler.options``)
 
    ::
 
-       jvm.crawler.options=-Xms256m -Xmx2g
+       -Xms256m\n\
+       -Xmx2g\n\
 
 2. Reducir el número de hilos paralelos
 
