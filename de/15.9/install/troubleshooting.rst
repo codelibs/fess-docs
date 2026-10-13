@@ -313,9 +313,11 @@ Suche ist langsam
 
 1. **Heap-Größe erhöhen**
 
-   Bearbeiten Sie ``fess.in.sh``::
+   Übergeben Sie ``FESS_HEAP_SIZE`` als Umgebungsvariable beim Start von |Fess|::
 
-       FESS_HEAP_SIZE=4g
+       $ FESS_HEAP_SIZE=4g bin/fess
+
+   Wenn Sie die Einstellung in ``bin/fess.in.sh`` vornehmen, schreiben Sie ``FESS_HEAP_SIZE=4g`` **vor** die Zeile, die den Standardwert von ``FESS_MIN_MEM`` und damit die Heap-Größe festlegt. Ein Eintrag am Ende der Datei wirkt nicht, da die Heap-Größe zu diesem Zeitpunkt bereits feststeht. Bei der RPM/DEB-Version tragen Sie die Einstellung in ``/etc/sysconfig/fess`` ein (bei der DEB-Version in ``/etc/default/fess``).
 
    Passen Sie auch die OpenSearch-Heap-Größe an::
 
@@ -407,9 +409,13 @@ Bei der Suche treten Fehler auf oder es werden unerwartete Ergebnisse zurückgeg
 
        $ curl -X DELETE http://localhost:9200/fess*
 
-2. **Crawl erneut ausführen**
+2. **Fess neu starten**
 
-   Führen Sie über die Verwaltungsseite „Default Crawler" aus, um den Index neu zu erstellen.
+   Die Indizes werden beim Start von |Fess| angelegt. Unmittelbar nach dem Löschen ist auch der Index mit den Benutzerinformationen verloren, sodass Sie sich nicht in der Verwaltungsseite anmelden können (``/api/v2/health`` liefert weiterhin ``200``). Nach einem Neustart von |Fess| werden die Indizes, die Standard-Jobs und der Anfangsbenutzer (``admin``) neu erstellt.
+
+3. **Crawl erneut ausführen**
+
+   Führen Sie über die Verwaltungsseite „Default Crawler" aus, um die zu durchsuchenden Dokumente erneut zu registrieren.
 
 Docker-spezifische Probleme
 ===========================

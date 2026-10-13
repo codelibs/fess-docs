@@ -310,9 +310,11 @@ Fess が OpenSearch に接続できない
 
 1. **ヒープサイズを増やす**
 
-   ``fess.in.sh`` を編集::
+   ``FESS_HEAP_SIZE`` を環境変数として渡して |Fess| を起動します::
 
-       FESS_HEAP_SIZE=4g
+       $ FESS_HEAP_SIZE=4g bin/fess
+
+   ``bin/fess.in.sh`` で設定する場合は、ヒープサイズを決めている行（``FESS_MIN_MEM`` の既定値を設定している行）\ **より前**\ に ``FESS_HEAP_SIZE=4g`` を書きます。ファイルの末尾に追記しても、その時点でヒープサイズは決まっているため反映されません。RPM/DEB 版は ``/etc/sysconfig/fess``\ （DEB 版は ``/etc/default/fess``）に設定します。
 
    OpenSearch のヒープサイズも調整::
 
@@ -404,9 +406,13 @@ Fess が OpenSearch に接続できない
 
        $ curl -X DELETE http://localhost:9200/fess*
 
-2. **クロールを再実行**
+2. **Fess を再起動**
 
-   管理画面から「Default Crawler」を実行して、インデックスを再作成します。
+   インデックスは |Fess| の起動時に作成されます。削除した直後は、ユーザー情報のインデックスも失われているため管理画面にログインできません（``/api/v2/health`` は ``200`` を返したままです）。|Fess| を再起動すると、インデックスと既定のジョブ、初期ユーザー（``admin``）が作り直されます。
+
+3. **クロールを再実行**
+
+   管理画面から「Default Crawler」を実行して、検索対象のドキュメントを再度登録します。
 
 Docker 固有の問題
 ===============

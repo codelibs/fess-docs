@@ -313,9 +313,11 @@ La Búsqueda es Lenta
 
 1. **Aumentar tamaño del heap**
 
-   Edite ``fess.in.sh``::
+   Inicie |Fess| pasando ``FESS_HEAP_SIZE`` como variable de entorno::
 
-       FESS_HEAP_SIZE=4g
+       $ FESS_HEAP_SIZE=4g bin/fess
+
+   Si lo configura en ``bin/fess.in.sh``, escriba ``FESS_HEAP_SIZE=4g`` **antes** de la línea que establece el valor predeterminado de ``FESS_MIN_MEM`` (la línea que determina el tamaño del montón). Si lo añade al final del archivo, no tendrá efecto, porque el tamaño del montón ya se ha determinado en ese punto. En las ediciones RPM/DEB, configúrelo en ``/etc/sysconfig/fess`` (en la edición DEB, ``/etc/default/fess``).
 
    Ajuste también el tamaño del heap de OpenSearch::
 
@@ -407,9 +409,13 @@ Ocurren errores durante la búsqueda, o se devuelven resultados inesperados.
 
        $ curl -X DELETE http://localhost:9200/fess*
 
-2. **Volver a ejecutar rastreo**
+2. **Reiniciar Fess**
 
-   Ejecute "Default Crawler" desde la pantalla de administración para recrear el índice.
+   Los índices se crean al iniciar |Fess|. Justo después de eliminarlos, también se ha perdido el índice de información de usuarios, por lo que no es posible iniciar sesión en la pantalla de administración (``/api/v2/health`` sigue devolviendo ``200``). Al reiniciar |Fess|, se vuelven a crear los índices, los trabajos predeterminados y el usuario inicial (``admin``).
+
+3. **Volver a ejecutar rastreo**
+
+   Ejecute "Default Crawler" desde la pantalla de administración para volver a registrar los documentos objeto de búsqueda.
 
 Problemas Específicos de Docker
 ================================

@@ -236,7 +236,7 @@ Schritt 1: Änderung des Administratorpassworts
 -----------------------------------------------
 
 1. Anmeldung in der Verwaltungsseite (http://localhost:8080/admin)
-2. Klicken Sie im linken Menü auf „System" → „Benutzer"
+2. Klicken Sie im linken Menü auf „Benutzer" → „Benutzer"
 3. Klicken Sie auf den Benutzer ``admin``
 4. Geben Sie ein neues Passwort in das Feld [Passwort] ein
 5. Geben Sie dasselbe Passwort erneut in das Feld [Passwort (bestätigen)] ein
@@ -339,7 +339,18 @@ Einstellungen wie Portnummer, JVM-Heap-Größe und die OpenSearch-Verbindungs-UR
 
 .. note::
 
-   Von diesen Umgebungsvariablen liest die Datei ``bin\fess.in.bat`` der Windows-ZIP-Version nur ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` und ``FESS_USE_GC_LOGGING`` (dazu die Proxy-bezogenen). Die übrigen Werte werden direkt in der Datei eingetragen; bearbeiten Sie daher ``bin\fess.in.bat`` direkt, um sie zu ändern.
+   Die Datei ``bin\fess.in.bat`` der Windows-ZIP-Version liest von diesen Umgebungsvariablen ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` und ``FESS_USE_GC_LOGGING`` sowie die folgenden Umgebungsvariablen, die nicht in der Tabelle stehen:
+
+   - ``FESS_MIN_MEM``, ``FESS_MAX_MEM``: Legen die minimale und die maximale Heap-Größe einzeln fest (werden ignoriert, wenn ``FESS_HEAP_SIZE`` gesetzt ist).
+   - ``FESS_DIRECT_SIZE``: Obergrenze des Direct Memory (``-XX:MaxDirectMemorySize``).
+   - ``FESS_DICTIONARY_PATH``: Das Verzeichnis ``config\dictionary`` von OpenSearch.
+   - ``FESS_PROXY_HOST``, ``FESS_PROXY_PORT``, ``FESS_NON_PROXY_HOSTS``: Proxy-Einstellungen.
+   - ``FESS_JAVA_OPTS``: ``fess.in.bat`` hängt diese JVM-Optionen hinter die bereits gesetzten Werte an.
+   - ``PLAYWRIGHT_NODEJS_PATH``: Die ausführbare Node.js-Datei, die das Playwright-Plugin verwendet.
+   - ``JAVA_HOME``: Erforderlich.
+
+   ``FESS_PORT``, ``FESS_LOG_LEVEL``, ``FESS_TEMP_PATH``, ``FESS_CONF_PATH`` und ``SEARCH_ENGINE_HTTP_URL``
+   werden nicht gelesen. Diese Werte sind direkt in der Datei eingetragen; bearbeiten Sie daher ``bin\fess.in.bat`` direkt, um sie zu ändern.
 
 Konfiguration des Mail-Servers
 -------------------------------

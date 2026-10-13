@@ -236,7 +236,7 @@ Après vous être connecté à l'écran d'administration, effectuez les configur
 ------------------------------------------------------
 
 1. Connexion à l'écran d'administration (http://localhost:8080/admin)
-2. Cliquez sur « Système » → « Utilisateur » dans le menu de gauche
+2. Cliquez sur « Utilisateur » → « Utilisateur » dans le menu de gauche
 3. Cliquez sur l'utilisateur ``admin``
 4. Saisissez un nouveau mot de passe dans le champ [Mot de passe]
 5. Saisissez à nouveau le même mot de passe dans le champ [Mot de passe (confirmer)]
@@ -338,7 +338,19 @@ Les paramètres tels que le numéro de port, la taille du tas JVM et l'URL de co
 
 .. note::
 
-   Parmi ces variables d'environnement, l'édition ZIP Windows (``bin\fess.in.bat``) ne lit que ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` et ``FESS_USE_GC_LOGGING`` (ainsi que celles liées au proxy). Les autres valeurs sont écrites directement dans le fichier ; modifiez ``bin\fess.in.bat`` directement pour les changer.
+   Parmi ces variables d'environnement, l'édition ZIP Windows (``bin\fess.in.bat``) lit ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` et ``FESS_USE_GC_LOGGING``,
+   ainsi que les variables d'environnement suivantes, absentes du tableau :
+
+   - ``FESS_MIN_MEM``, ``FESS_MAX_MEM`` : définissent séparément la taille minimale et maximale du tas (ignorées si ``FESS_HEAP_SIZE`` est défini).
+   - ``FESS_DIRECT_SIZE`` : limite de la mémoire directe (``-XX:MaxDirectMemorySize``).
+   - ``FESS_DICTIONARY_PATH`` : répertoire ``config\dictionary`` d'OpenSearch.
+   - ``FESS_PROXY_HOST``, ``FESS_PROXY_PORT``, ``FESS_NON_PROXY_HOSTS`` : paramètres du proxy.
+   - ``FESS_JAVA_OPTS`` : ``fess.in.bat`` ajoute ces options JVM après les valeurs déjà configurées.
+   - ``PLAYWRIGHT_NODEJS_PATH`` : exécutable Node.js utilisé par le plugin Playwright.
+   - ``JAVA_HOME`` : obligatoire.
+
+   ``FESS_PORT``, ``FESS_LOG_LEVEL``, ``FESS_TEMP_PATH``, ``FESS_CONF_PATH`` et ``SEARCH_ENGINE_HTTP_URL``
+   ne sont pas lues. Ces valeurs sont écrites directement dans le fichier ; modifiez ``bin\fess.in.bat`` directement pour les changer.
 
 Configuration du serveur de messagerie
 ---------------------------------------

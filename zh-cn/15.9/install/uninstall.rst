@@ -386,7 +386,16 @@ DEB 版::
 1. 停止 Fess
 2. 删除 Fess 的包或目录
 3. 删除 Fess 的数据目录（如 ``/var/lib/fess``）
-4. 删除 OpenSearch 中创建的 |Fess| 索引（如 ``fess.*``、``.fess_*``）
+4. 删除 OpenSearch 中创建的 |Fess| 索引
+
+   |Fess| 索引的名称以 ``fess`` 开头（``fess.*``、``fess_config.*``、``fess_user.*``、``fess_log.*``、``fess_crawler.*``、``fess_suggest*`` 等）。可以使用以下命令一并删除。
+
+   ::
+
+       $ curl -X DELETE 'http://localhost:9200/fess*'
+
+   删除之前，请先用 ``curl 'http://localhost:9200/_cat/indices?v'`` 确认没有其他应用程序的索引名称以 ``fess`` 开头。用于同步词典的 ``configsync`` 索引，如果没有被其他应用程序使用，也可以删除。
+
 5. 不删除 OpenSearch
 
 仅删除 OpenSearch 保留 Fess

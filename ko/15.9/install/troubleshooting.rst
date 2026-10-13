@@ -310,9 +310,11 @@ Fess가 OpenSearch에 연결할 수 없음
 
 1. **힙 크기 증가**
 
-   ``fess.in.sh`` 편집::
+   ``FESS_HEAP_SIZE`` 를 환경 변수로 전달하여 |Fess| 를 시작합니다::
 
-       FESS_HEAP_SIZE=4g
+       $ FESS_HEAP_SIZE=4g bin/fess
+
+   ``bin/fess.in.sh`` 에서 설정하는 경우에는 힙 크기를 결정하는 줄(``FESS_MIN_MEM`` 의 기본값을 설정하는 줄)\ **보다 앞**\ 에 ``FESS_HEAP_SIZE=4g`` 를 작성합니다. 파일 끝에 추가해도 그 시점에는 이미 힙 크기가 결정되어 있으므로 반영되지 않습니다. RPM/DEB 버전은 ``/etc/sysconfig/fess``\ (DEB 버전은 ``/etc/default/fess``)에 설정합니다.
 
    OpenSearch의 힙 크기도 조정::
 
@@ -404,9 +406,13 @@ Fess가 OpenSearch에 연결할 수 없음
 
        $ curl -X DELETE http://localhost:9200/fess*
 
-2. **크롤 재실행**
+2. **Fess 재시작**
 
-   관리 화면에서 "Default Crawler"를 실행하여 인덱스를 재작성합니다.
+   인덱스는 |Fess| 시작 시에 생성됩니다. 삭제한 직후에는 사용자 정보 인덱스도 함께 사라졌으므로 관리 화면에 로그인할 수 없습니다(``/api/v2/health`` 는 ``200`` 을 계속 반환합니다). |Fess| 를 재시작하면 인덱스와 기본 작업, 초기 사용자(``admin``)가 다시 생성됩니다.
+
+3. **크롤 재실행**
+
+   관리 화면에서 "Default Crawler"를 실행하여 검색 대상 문서를 다시 등록합니다.
 
 Docker 고유 문제
 ===============
