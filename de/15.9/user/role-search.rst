@@ -14,6 +14,9 @@ Wenn Rollen festgelegt sind und die entsprechenden Inhalte gecrawlt und indizier
 Wenn ein Benutzer angemeldet ist, erfolgt die Suche basierend auf den Rollen und Gruppen, denen dieser Benutzer angehört.
 Ist der Benutzer nicht angemeldet, erfolgt die Suche als guest-Benutzer, wobei nur die für guest freigegebenen Inhalte angezeigt werden.
 
+.. note::
+    Die Suche eines angemeldeten Benutzers verwendet ausschließlich die Berechtigungen des Benutzers selbst sowie seiner Rollen und Gruppen; für guest freigegebene Inhalte (``{role}guest``) werden dabei nicht berücksichtigt. Inhalte, die nur für guest freigegeben sind, werden daher nicht angemeldeten Besuchern angezeigt, angemeldeten Benutzern jedoch nicht (auch nicht solchen, die keine Rollen oder Gruppen haben). Wenn Inhalte auch angemeldeten Benutzern angezeigt werden sollen, tragen Sie in den Berechtigungen der Crawl-Konfiguration zusätzlich zu ``{role}guest`` auch die Rolle ein, die diese Benutzer besitzen (wenn die Inhalte allen Benutzern angezeigt werden sollen, eine Rolle, die allen Benutzern zugewiesen ist).
+
 Anmeldung
 ---------
 

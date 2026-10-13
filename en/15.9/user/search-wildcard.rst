@@ -47,5 +47,5 @@ Usage Conditions
 Please note the following points when using wildcard search.
 
 * Wildcards match strings (tokens) registered in the index. Since the search term is not re-analyzed, if the index was created using bi-gram or similar methods, Japanese text is treated as fixed-length strings without meaning, and wildcards in Japanese will not work as expected. When using wildcards in Japanese, use them on fields that utilize morphological analysis.
-* Wildcard patterns are case-sensitive. Since words registered in the index are usually converted to lowercase, use lowercase letters in your patterns. For example, ``Test*`` does not match ``test``, which is registered in lowercase.
+* Patterns that contain a wildcard (``*`` or ``?``) at the beginning or in the middle of the search term are case-sensitive. Since words registered in the index are usually converted to lowercase, use lowercase letters in your patterns. For example, ``Te*t``, ``Te?t`` and ``*Test`` do not match ``test``, which is registered in lowercase. On the other hand, a pattern with ``*`` only at the end (such as ``Test*``) is analyzed as a prefix match with the search term converted to lowercase, so ``Test*`` also matches ``test``.
 * A search with a wildcard at the beginning (for example, ``*test``) scans all words in the index, so it may take longer to process.

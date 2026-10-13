@@ -50,3 +50,7 @@ Spécification multiple
 .. note::
 
    ``geo.<fieldname>.point`` et ``geo.<fieldname>.distance`` doivent tous deux être spécifiés. Si ``distance`` n'est pas spécifié, la condition du ``point`` correspondant est ignorée. Par ailleurs, une erreur se produit si la valeur de ``point`` n'est pas au format ``latitude,longitude`` (deux nombres séparés par une virgule) ou si elle ne peut pas être interprétée comme des nombres.
+
+.. note::
+
+   La recherche par géolocalisation étant un filtre appliqué au terme de recherche, si celui-ci est vide, la recherche n'est pas exécutée et le résultat est de 0 document. Indiquez donc un terme de recherche dans les requêtes de recherche par géolocalisation.

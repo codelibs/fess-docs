@@ -14,6 +14,9 @@ If roles are configured and the content has been crawled and indexed with those 
 When a user is logged in, searches are performed based on the roles and groups that user belongs to.
 When not logged in, searches are performed as the guest user, and only content published for guest is displayed.
 
+.. note::
+    A search by a logged-in user is performed using only the permissions of that user and of the roles and groups the user belongs to, and content published for guest (``{role}guest``) is not included. Therefore, content published only for guest is displayed to visitors who are not logged in, but is not displayed to logged-in users (including users who have no roles or groups). For content that logged-in users should also see, set in the permissions of the crawl configuration, in addition to ``{role}guest``, the roles those users have (or, to show it to all users, a role granted to all users).
+
 Login
 -----
 

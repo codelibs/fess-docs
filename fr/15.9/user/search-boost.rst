@@ -39,4 +39,8 @@ La recherche avec boost peut être combinée avec d'autres syntaxes de recherche
 
     title:pomme^100 orange
 
-Dans cet exemple, les documents dont le champ ``title`` contient « pomme » sont prioritaires.
+Dans cet exemple, l'opérateur par défaut (AND) s'applique lorsque plusieurs termes de recherche sont placés l'un après l'autre : seuls les documents dont le champ ``title`` contient « pomme » et qui contiennent également « orange » sont donc retournés. Pour donner la priorité aux documents contenant « pomme » tout en conservant dans les résultats ceux qui n'en contiennent pas, reliez les termes par OR.
+
+::
+
+    title:pomme^100 OR orange

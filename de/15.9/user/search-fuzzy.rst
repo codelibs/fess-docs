@@ -12,27 +12,27 @@ Verwendung
 
 Fügen Sie "~" nach dem Suchbegriff an, auf den Sie die unscharfe Suche anwenden möchten.
 
-Wenn Sie beispielsweise das Wort "Fess" unscharf suchen möchten, können Sie durch Eingabe des Folgenden in das Suchformular Dokumente finden, die Wörter enthalten, die "Fess" ähnlich sind (z. B. "Fes").
+Wenn Sie beispielsweise das Wort "fess" unscharf suchen möchten, können Sie durch Eingabe des Folgenden in das Suchformular Dokumente finden, die Wörter enthalten, die "fess" ähnlich sind (z. B. "fes").
 
 ::
 
-    Fess~
+    fess~
 
 Wenn Sie nach "~" eine Zahl anfügen, können Sie die zulässige Editierdistanz (bis zu wie vielen Zeichen Unterschied toleriert wird) angeben. Zulässige Werte sind die ganzen Zahlen 0, 1 oder 2.
 
 ::
 
-    Fess~1
+    fess~1
 
-Im obigen Beispiel werden Wörter gesucht, deren Editierdistanz zu "Fess" höchstens 1 beträgt.
+Im obigen Beispiel werden Wörter gesucht, deren Editierdistanz zu "fess" höchstens 1 beträgt.
 
 Wenn Sie die Zahl weglassen und nur "~" angeben, wird eine Editierdistanz von 2 verwendet. Der Höchstwert der Editierdistanz ist 2; auch wenn ein Wert von 3 oder mehr angegeben wird, wird er als 2 behandelt.
 
-Sie können die unscharfe Suche auch auf ein bestimmtes Feld anwenden. Im folgenden Beispiel werden im Feld title Dokumente gesucht, die Wörter enthalten, die "Fess" ähnlich sind.
+Sie können die unscharfe Suche auch auf ein bestimmtes Feld anwenden. Im folgenden Beispiel werden im Feld title Dokumente gesucht, die Wörter enthalten, die "fess" ähnlich sind.
 
 ::
 
-    title:Fess~
+    title:fess~
 
 Wenn kein Feld angegeben wird, erfolgt die unscharfe Suche in den Feldern title und content.
 
@@ -43,7 +43,8 @@ Beachten Sie bei der Verwendung der unscharfen Suche die folgenden Punkte:
 
 * Die unscharfe Suche wird auf einzelne Wörter angewendet. Sie kann nicht auf Phrasen angewendet werden, die in Anführungszeichen eingeschlossen sind. Eine Zahl, die einer Phrase angehängt wird (zum Beispiel ``"Fess Search"~2``), stellt dabei keine unscharfe Suche dar, sondern eine :doc:`Näherungssuche <search-proximity>` (proximity search), die den Abstand zwischen den Wörtern angibt.
 * Die unscharfe Suche erfolgt auf Basis der im Index registrierten Wörter, wobei der Suchbegriff nicht erneut analysiert wird. Daher funktioniert sie möglicherweise nicht wie erwartet bei Texten wie Japanisch, die per Bi-Gramm oder morphologischer Analyse in Token zerlegt werden. Die unscharfe Suche ist vor allem bei alphanumerischen Wörtern wirksam.
-* Bei sehr kurzen Wörtern mit 1 bis 2 Zeichen kann das Verhalten trotz angehängtem "~" einer exakten Übereinstimmung nahekommen, da ein Treffer nur zustande kommt, wenn die Editierdistanz kleiner als die Wortlänge ist.
+* Der Suchbegriff der unscharfen Suche wird einschließlich Groß- und Kleinschreibung unverändert für die Editierdistanz herangezogen. Englische Wörter werden im Index normalerweise in Kleinbuchstaben umgewandelt gespeichert; verwenden Sie daher für den Suchbegriff Kleinbuchstaben. Zum Beispiel verbraucht ``Fess~1`` die Editierdistanz 1 bereits allein durch den Großbuchstaben ``F`` am Anfang und liefert daher nicht dasselbe Ergebnis wie ``fess~1``. Außerdem trifft ``Fess~0`` auf nichts zu, da im Index kein Wort ``Fess`` mit Großbuchstaben existiert (das kleingeschriebene ``fess~0`` ist eine exakte Übereinstimmung).
+* Wenn Sie an sehr kurze Wörter mit 1 bis 2 Zeichen "~" (Editierdistanz 2) anhängen, werden auch Wörter gefunden, bei denen nur ungefähr so viele Zeichen ersetzt wurden, wie das Wort lang ist. Zum Beispiel trifft ``ab~`` neben ``ab`` und ``ac`` auch auf ``xy`` zu, bei dem sich beide Zeichen unterscheiden. Da dadurch mehr unerwünschte Treffer entstehen, geben Sie bei kurzen Wörtern eine kleinere Editierdistanz an, etwa ``ab~1``.
 
 .. note::
 
@@ -55,7 +56,7 @@ Beachten Sie bei der Verwendung der unscharfen Suche die folgenden Punkte:
 
 .. note::
 
-    Auch bei einer normalen Suche ohne angehängtes "~" fügt |Fess| für Suchbegriffe ab einer bestimmten Länge (standardmäßig ab 4 Zeichen) automatisch eine leicht gewichtete unscharfe Übereinstimmung als unterstützende Funktion hinzu, um die Relevanz zu erhöhen (``query.boost.fuzzy.*``). Dies dient der Anpassung der Rangfolge der Suchergebnisse und ist ein von der unscharfen Suche mittels "~" unabhängiger Mechanismus.
+    Auch bei einer normalen Suche ohne angehängtes "~" fügt |Fess| für Suchbegriffe ab einer bestimmten Länge (standardmäßig ab 4 Zeichen) automatisch eine leicht gewichtete unscharfe Übereinstimmung als unterstützende Funktion hinzu, um die Relevanz zu erhöhen (``query.boost.fuzzy.*``). Dies dient hauptsächlich der Anpassung der Rangfolge der Suchergebnisse und ist ein von der unscharfen Suche mittels "~" unabhängiger Mechanismus. Da diese unterstützende Übereinstimmung jedoch ebenfalls in die Suchergebnisse einfließt, können Dokumente zum Ergebnis hinzukommen, die den Suchbegriff selbst nicht enthalten, sondern nur ein Wort, das sich um ein Zeichen unterscheidet (Dokumente, die den Suchbegriff selbst enthalten, werden höher eingestuft). Wenn Sie dieses Verhalten abschalten möchten, setzen Sie ``query.boost.fuzzy.min.length`` auf einen negativen Wert (z. B. ``-1``).
 
 Siehe auch
 ==========

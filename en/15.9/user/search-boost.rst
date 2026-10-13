@@ -10,7 +10,7 @@ Use boost search when you want to prioritize specific search terms among your se
 Usage
 -----
 
-To use boost search, specify a boost value (weighting value) in the format "^boost_value" immediately after the search term. Do not include a space between the search term and the boost value.
+To use boost search, specify a boost value (weighting value) in the format "^boost_value" immediately after the search term. Make sure not to include a space between the search term and the boost value.
 
 For example, if you want to prioritize "apple" when searching for "apple orange", enter the following in the search form:
 
@@ -39,4 +39,8 @@ Boost search can be combined with other search syntax. For example, you can also
 
     title:apple^100 orange
 
-In this example, documents whose title field contains "apple" are prioritized.
+In this example, the default operator (AND) for multiple search terms is applied, so only documents whose title field contains "apple" and that also contain "orange" are searched. To prioritize documents containing "apple" while keeping documents that do not contain it in the results, combine the terms with OR.
+
+::
+
+    title:apple^100 OR orange

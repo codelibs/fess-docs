@@ -10,7 +10,7 @@ Wenn Sie unter den Suchbegriffen einen bestimmten Suchbegriff bevorzugen möchte
 Verwendung
 ------------
 
-Um die Boost-Suche zu verwenden, geben Sie den Boost-Wert (Gewichtungswert) unmittelbar nach dem Suchbegriff im Format „^Boost-Wert“ an. Zwischen dem Suchbegriff und dem Boost-Wert darf kein Leerzeichen stehen.
+Um die Boost-Suche zu verwenden, geben Sie den Boost-Wert (Gewichtungswert) unmittelbar nach dem Suchbegriff im Format „^Boost-Wert“ an. Schreiben Sie den Boost-Wert ohne Leerzeichen direkt hinter den Suchbegriff.
 
 Wenn Sie beispielsweise bei der Suche nach „Apfel Orange“ „Apfel“ stärker gewichten möchten, geben Sie Folgendes in das Suchformular ein:
 
@@ -39,4 +39,8 @@ Die Boost-Suche kann mit anderer Suchsyntax kombiniert werden. So kann beispiels
 
     title:Apfel^100 Orange
 
-In diesem Beispiel werden Dokumente bevorzugt, die im Feld title „Apfel“ enthalten.
+In diesem Beispiel gilt der Standardoperator (AND) für mehrere nebeneinander stehende Suchbegriffe. Es werden daher nur Dokumente gefunden, die im Feld title „Apfel“ und außerdem „Orange“ enthalten. Wenn Dokumente mit „Apfel“ bevorzugt werden sollen, Dokumente ohne „Apfel“ aber ebenfalls im Ergebnis bleiben sollen, verknüpfen Sie die Begriffe mit OR.
+
+::
+
+    title:Apfel^100 OR Orange
