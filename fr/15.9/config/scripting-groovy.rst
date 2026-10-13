@@ -142,7 +142,7 @@ Mapping de base
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 Génération d'URL
 ---------
@@ -178,10 +178,10 @@ Traitement des dates
 ::
 
     // Analyse de date (expression unique utilisant FQCN)
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // Conversion depuis un timestamp Unix
-    lastModified=new Date(data.timestamp * 1000L)
+    last_modified=new Date(data.timestamp * 1000L)
 
 Objets disponibles
 ==================

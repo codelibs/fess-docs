@@ -139,7 +139,7 @@ Java仮想マシン（JVM）上で動作し、Javaとの高い互換性を持ち
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 URLの生成
 ---------
@@ -175,10 +175,10 @@ URLの生成
 ::
 
     // 日付のパース（FQCNを使用した単一式）
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // エポック秒からの変換
-    lastModified=new Date(data.timestamp * 1000L)
+    last_modified=new Date(data.timestamp * 1000L)
 
 利用可能なオブジェクト
 ======================

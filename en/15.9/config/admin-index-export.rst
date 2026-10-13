@@ -78,11 +78,13 @@ To enable the job:
 5. Set the schedule using a cron expression
 6. Save the settings
 
+Specify the cron expression as five fields separated by spaces: "minute hour day-of-month month day-of-week". A seconds field and ``?`` cannot be used (Quartz-style expressions are not accepted).
+
 Example cron expressions:
 
-- ``0 0 2 * * ?`` - Run daily at 2:00 AM
-- ``0 0 3 ? * SUN`` - Run every Sunday at 3:00 AM
-- ``0 0 0 1 * ?`` - Run on the first day of each month at midnight
+- ``0 2 * * *`` - Run daily at 2:00 AM
+- ``0 3 * * 0`` - Run every Sunday at 3:00 AM (day of week is 0-6, where 0 is Sunday)
+- ``0 0 1 * *`` - Run on the first day of each month at midnight
 
 Custom Query Filtering
 ======================
@@ -191,6 +193,7 @@ Best Practices
 Storage Considerations
 ----------------------
 
+- Set ``index.export.path`` to a directory that the user running |Fess| can write to (the default ``/var/lib/fess/export`` is the RPM/DEB directory and is not writable when the ZIP distribution is run as a regular user; if it is not writable, no export files are created and a warning is written to ``fess.log`` for each document)
 - Ensure sufficient disk space in the export directory
 - Consider using dedicated storage for large document sets
 - Implement regular cleanup of old exports if running periodic exports

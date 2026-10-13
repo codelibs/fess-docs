@@ -187,7 +187,7 @@ Ordnen Sie die SQL-Spaltennamen den Index-Feldern zu:
     url="https://example.com/articles/" + id
     title=title
     content=content
-    lastModified=updated_at
+    last_modified=updated_at
 
 Verfügbare Felder:
 
@@ -406,7 +406,7 @@ Skript:
     url="https://shop.example.com/product/" + id
     title=name
     content=description + " Kategorie: " + category + " Preis: " + price + " EUR"
-    lastModified=updated_at
+    last_modified=updated_at
 
 Wissensdatenbank-Artikel
 ------------------------
@@ -431,7 +431,7 @@ Skript:
     digest=tags
     author=author
     created=created_at
-    lastModified=updated_at
+    last_modified=updated_at
 
 Fehlerbehebung
 ==============

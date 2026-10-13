@@ -206,7 +206,7 @@ Mapping de base
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 Génération d'URL
 -----------------
@@ -242,10 +242,18 @@ Traitement des dates
 ::
 
     // Analyse de date (expression unique utilisant FQCN ; l'interoperabilite Java utilise la meme notation qu'en Groovy)
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
-    // Conversion depuis un timestamp Unix (le suffixe L des littéraux long n'est pas nécessaire)
-    lastModified=new Date(data.timestamp * 1000)
+    // Conversion depuis un timestamp Unix (le suffixe L des littéraux long n'est pas nécessaire ; utilisez le FQCN java.util.Date)
+    last_modified=new java.util.Date(data.timestamp * 1000)
+
+.. note::
+   Le nom du champ de l'index est ``last_modified`` et non ``lastModified``. Avec ``lastModified=...``, la date de dernière modification n'est pas définie.
+
+.. note::
+   Actuellement, une valeur créée avec le ``new Date(...)`` natif de JavaScript ne peut pas être enregistrée dans un champ de date tel que ``last_modified`` :
+   l'enregistrement contenant ce document échoue et le document n'est pas ajouté à l'index.
+   Créez la date avec le nom complet ``new java.util.Date(...)``, comme ci-dessus.
 
 Objets disponibles
 ==================

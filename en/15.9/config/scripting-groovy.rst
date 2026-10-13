@@ -141,7 +141,7 @@ Basic Mapping
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 URL Generation
 --------------
@@ -177,10 +177,10 @@ Date Processing
 ::
 
     // Date parsing (single expression using FQCN)
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
     // Conversion from epoch seconds
-    lastModified=new Date(data.timestamp * 1000L)
+    last_modified=new Date(data.timestamp * 1000L)
 
 Available Objects
 =================

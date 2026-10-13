@@ -63,21 +63,20 @@ Lors de l'utilisation de l'exploration de source de données, définissez la lat
 **Exemple : Récupération depuis une base de données**
 
 Si la latitude et la longitude sont stockées dans des colonnes séparées, concaténez-les en une chaîne séparée par une virgule via SQL.
+Les paramètres d'une source de données comptent un élément par ligne : écrivez donc le SQL sur une seule ligne, à la suite de ``sql=``
+(si vous le répartissez sur plusieurs lignes, seul le ``SELECT`` de la première ligne est traité comme SQL, ce qui provoque une erreur de syntaxe).
 
 ::
 
-    SELECT
-        id,
-        name,
-        address,
-        CONCAT(latitude, ',', longitude) AS location
-    FROM stores
+    sql=SELECT id, name, address, CONCAT(latitude, ',', longitude) AS location FROM stores
 
 Dans le script de configuration de la source de données, mappez la valeur récupérée vers le champ ``location``.
+Pour la source de données de base de données, les noms de colonnes du SQL (y compris les alias définis avec ``AS``) deviennent directement les noms de variables du script.
+Aucun préfixe tel que ``data.`` n'est ajouté.
 
 ::
 
-    location=data.location
+    location=location
 
 Ajout d'informations de géolocalisation via script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,6 +118,10 @@ Le nom des paramètres de la recherche par géolocalisation suit le format ``geo
    ``point`` et ``distance`` doivent être spécifiés ensemble. Un ``point`` sans ``distance`` est ignoré.
    De plus, la valeur de ``point`` doit être composée de deux nombres (latitude,longitude) ; un format incorrect
    entraîne une erreur.
+
+.. note::
+   La recherche par géolocalisation fonctionne comme un filtre appliqué au terme de recherche ``q``. Si ``q`` est vide, la recherche elle-même n'est pas exécutée
+   et le résultat est de 0 document. Indiquez donc un terme de recherche dans les requêtes de recherche par géolocalisation.
 
 .. note::
    Si plusieurs ``point`` sont spécifiés pour le même champ, ils sont traités comme une condition OU (dans l'une des zones).
@@ -186,10 +189,14 @@ et :doc:`../api/api-overview`.
 
 .. note::
    Le champ ``location`` n'est pas inclus dans la réponse de l'API par défaut. Pour inclure les coordonnées de latitude/longitude
-   dans les résultats de recherche, ajoutez le paramètre suivant dans ``fess_config.properties`` :
+   dans les résultats de recherche, ajoutez les deux paramètres suivants dans ``fess_config.properties`` et redémarrez |Fess|.
+   ``query.additional.response.fields`` ajoute le champ à récupérer depuis le moteur de recherche,
+   et ``query.additional.api.response.fields`` autorise le champ à figurer dans la réponse de l'API.
+   Avec seulement l'un des deux, ``location`` n'est pas inclus dans la réponse.
 
    ::
 
+       query.additional.response.fields=location
        query.additional.api.response.fields=location
 
 Personnalisation du nom de champ
@@ -233,8 +240,8 @@ Exemple d'obtention de la position actuelle avec JavaScript pour effectuer une r
         const longitude = position.coords.longitude;
         const distance = "5km";
 
-        // Construction de l'URL de recherche
-        const searchUrl = `/search?q=&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
+        // Construction de l'URL de recherche (le terme de recherche q ne peut pas être omis)
+        const searchUrl = `/search?q=${encodeURIComponent('magasin')}&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
 
         // Exécution de la recherche
         window.location.href = searchUrl;
@@ -247,7 +254,7 @@ Exemple d'affichage des résultats de recherche sous forme de marqueurs sur Goog
 
 .. note::
    Cet exemple accède au champ ``location`` dans les résultats de recherche. Assurez-vous de configurer
-   ``query.additional.api.response.fields=location`` au préalable pour inclure les coordonnées de latitude/longitude
+   ``query.additional.response.fields=location`` et ``query.additional.api.response.fields=location`` au préalable pour inclure les coordonnées de latitude/longitude
    dans la réponse.
 
 .. code-block:: javascript
@@ -326,7 +333,8 @@ Les informations de géolocalisation ne sont pas incluses dans la réponse de l'
 
 Le champ ``location`` n'est pas inclus dans la réponse de l'API par défaut.
 Pour inclure les coordonnées de latitude/longitude dans les résultats de recherche, ajoutez
-``query.additional.api.response.fields=location`` dans ``fess_config.properties``.
+``query.additional.response.fields=location`` et ``query.additional.api.response.fields=location``
+dans ``fess_config.properties``, puis redémarrez |Fess|.
 
 Les informations de géolocalisation ne sont pas enregistrées correctement
 --------------------------------------------------------------------------

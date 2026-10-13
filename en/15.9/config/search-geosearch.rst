@@ -62,21 +62,20 @@ When using data store crawl, set latitude and longitude in the ``location`` fiel
 **Example: Retrieving from Database**
 
 If latitude and longitude are stored in separate columns, concatenate them into a comma-separated string in SQL.
+Data store parameters take one item per line, so write the SQL on a single line following ``sql=``
+(if you break it across multiple lines, only the first line, ``SELECT``, is treated as the SQL and a syntax error occurs).
 
 ::
 
-    SELECT
-        id,
-        name,
-        address,
-        CONCAT(latitude, ',', longitude) AS location
-    FROM stores
+    sql=SELECT id, name, address, CONCAT(latitude, ',', longitude) AS location FROM stores
 
 Map the retrieved value to the ``location`` field in the data store configuration script.
+In the database data store, the SQL column names (including aliases given with ``AS``) become the script variable names as they are.
+No prefix such as ``data.`` is added.
 
 ::
 
-    location=data.location
+    location=location
 
 Adding Location Information via Script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -118,6 +117,10 @@ The parameter names for geolocation search follow the format ``geo.<field-name>.
    ``point`` and ``distance`` must be specified together. A ``point`` without ``distance`` is ignored.
    Also, the value of ``point`` must consist of exactly two numeric values (latitude,longitude); an error
    will occur if the format is invalid.
+
+.. note::
+   Geolocation search works as a filter on the search term ``q``. If ``q`` is empty, the search itself is not executed
+   and the result is 0 documents. Specify a search term in geolocation search requests.
 
 .. note::
    If multiple ``point`` values are specified for the same field, they are treated as OR conditions (within any of the ranges).
@@ -185,10 +188,14 @@ Search results are returned in the ``response.data`` array of the common envelop
 
 .. note::
    The ``location`` field is not included in the API response by default. To include latitude and longitude in
-   the search results, add the following setting to ``fess_config.properties``.
+   the search results, add the following two settings to ``fess_config.properties`` and restart |Fess|.
+   ``query.additional.response.fields`` adds the field to be retrieved from the search engine, and
+   ``query.additional.api.response.fields`` allows the field to be output in the API response.
+   If only one of them is set, ``location`` is not included in the response.
 
    ::
 
+       query.additional.response.fields=location
        query.additional.api.response.fields=location
 
 Field Name Customization
@@ -232,8 +239,8 @@ Example of retrieving current location and searching using JavaScript:
         const longitude = position.coords.longitude;
         const distance = "5km";
 
-        // Build search URL
-        const searchUrl = `/search?q=&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
+        // Build search URL (the search term q cannot be omitted)
+        const searchUrl = `/search?q=${encodeURIComponent('store')}&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
 
         // Execute search
         window.location.href = searchUrl;
@@ -246,8 +253,8 @@ Example of displaying search results as markers on Google Maps:
 
 .. note::
    This example references the ``location`` field from search results. You must configure
-   ``query.additional.api.response.fields=location`` in advance so that latitude and longitude
-   are included in the response.
+   ``query.additional.response.fields=location`` and ``query.additional.api.response.fields=location`` in advance
+   so that latitude and longitude are included in the response.
 
 .. code-block:: javascript
 
@@ -324,8 +331,9 @@ Location Information Not Included in API Response
 --------------------------------------------------
 
 The ``location`` field is not included in the API response by default.
-To include latitude and longitude in search results, set
-``query.additional.api.response.fields=location`` in ``fess_config.properties``.
+To include latitude and longitude in search results, set both
+``query.additional.response.fields=location`` and ``query.additional.api.response.fields=location``
+in ``fess_config.properties`` and restart |Fess|.
 
 Location Information Not Registered Correctly
 ----------------------------------------------

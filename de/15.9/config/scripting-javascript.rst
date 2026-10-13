@@ -205,7 +205,7 @@ Grundlegendes Mapping
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 URL-Generierung
 ----------------
@@ -241,10 +241,18 @@ Datumsverarbeitung
 ::
 
     // Datum parsen (Einzelausdruck mit FQCN; Java-Interoperabilität nutzt dieselbe Notation wie Groovy)
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
-    // Konvertierung von Epochensekunden (kein L-Suffix für long-Literale erforderlich)
-    lastModified=new Date(data.timestamp * 1000)
+    // Konvertierung von Epochensekunden (kein L-Suffix für long-Literale erforderlich; FQCN java.util.Date verwenden)
+    last_modified=new java.util.Date(data.timestamp * 1000)
+
+.. note::
+   Der Feldname im Index lautet ``last_modified`` und nicht ``lastModified``. Mit ``lastModified=...`` wird das Datum der letzten Änderung nicht gesetzt.
+
+.. note::
+   Derzeit können mit dem in JavaScript integrierten ``new Date(...)`` erzeugte Werte nicht in Datumsfeldern wie ``last_modified`` registriert werden.
+   Die Registrierung, die dieses Dokument enthält, schlägt dann fehl, und das Dokument wird nicht in den Index aufgenommen.
+   Erzeugen Sie Datumswerte wie oben gezeigt mit dem vollqualifizierten ``new java.util.Date(...)``.
 
 Verfügbare Objekte
 ===================

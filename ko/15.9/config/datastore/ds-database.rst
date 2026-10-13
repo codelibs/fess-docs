@@ -188,7 +188,7 @@ SQL 열 이름을 인덱스 필드에 매핑합니다:
     url="https://example.com/articles/" + id
     title=title
     content=content
-    lastModified=updated_at
+    last_modified=updated_at
 
 사용 가능한 필드:
 
@@ -402,7 +402,7 @@ PostgreSQL은 보통 UTF-8이 기본입니다. 필요한 경우:
     url="https://shop.example.com/product/" + id
     title=name
     content=description + " 카테고리: " + category + " 가격: " + price + "원"
-    lastModified=updated_at
+    last_modified=updated_at
 
 지식 베이스 문서
 ----------------
@@ -427,7 +427,7 @@ PostgreSQL은 보통 UTF-8이 기본입니다. 필요한 경우:
     digest=tags
     author=author
     created=created_at
-    lastModified=updated_at
+    last_modified=updated_at
 
 문제 해결
 =========

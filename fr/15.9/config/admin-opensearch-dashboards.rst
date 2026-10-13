@@ -49,6 +49,17 @@ Par défaut, |Fess| se connecte à OpenSearch sur le port 9200.
 .. note::
    Si le numéro de port d'OpenSearch est différent, modifiez-le avec le numéro de port approprié.
 
+Désactivation du plugin de sécurité
+-------------------------------------
+
+L'OpenSearch installé selon la procédure d'installation de |Fess| a le plugin de sécurité désactivé (``plugins.security.disabled: true``).
+OpenSearch Dashboards est lui aussi fourni avec un plugin de sécurité. S'il reste activé, une authentification est exigée : il ne suffit alors pas de définir ``opensearch.hosts``, car ``/api/status`` et d'autres points d'accès renvoient ``401 Unauthorized`` et OpenSearch Dashboards reste inutilisable en l'état.
+Comme pour OpenSearch, désactivez également le plugin de sécurité côté OpenSearch Dashboards.
+
+Si vous utilisez l'image Docker, démarrez le conteneur en définissant la variable d'environnement ``DISABLE_SECURITY_DASHBOARDS_PLUGIN=true``.
+
+Pour les autres modes d'installation, désactivez le plugin de sécurité d'OpenSearch Dashboards en suivant la documentation officielle d'OpenSearch Dashboards avant de le démarrer.
+
 Démarrage d'OpenSearch Dashboards
 -----------------------------------
 
@@ -90,6 +101,10 @@ En important la définition de tableau de bord incluse avec |Fess|, vous pouvez 
 5. Cliquez sur « Import » pour exécuter l'importation.
 
 Une fois l'importation terminée, 6 visualisations et le tableau de bord ``fess_log`` sont enregistrés.
+
+.. note::
+   ``fess_log.ndjson`` contient également le modèle d'index ``fess_log*`` (le champ temporel est ``requestedAt``).
+   Si vous effectuez cet import, il n'est donc pas nécessaire de créer le modèle d'index manuellement selon l'étape précédente « Configuration du modèle d'index ». Si vous l'avez créé manuellement avant l'import, deux modèles d'index portant le même nom seront enregistrés.
 
 Affichage du tableau de bord
 ------------------------------

@@ -186,7 +186,7 @@ PostgreSQL示例：
     url="https://example.com/articles/" + id
     title=title
     content=content
-    lastModified=updated_at
+    last_modified=updated_at
 
 可用字段：
 
@@ -392,7 +392,7 @@ PostgreSQL通常默认使用UTF-8。如有需要：
     url="https://shop.example.com/product/" + id
     title=name
     content=description + " 类别：" + category + " 价格：" + price + "元"
-    lastModified=updated_at
+    last_modified=updated_at
 
 知识库文章
 ----------
@@ -417,7 +417,7 @@ PostgreSQL通常默认使用UTF-8。如有需要：
     digest=tags
     author=author
     created=created_at
-    lastModified=updated_at
+    last_modified=updated_at
 
 故障排除
 ========

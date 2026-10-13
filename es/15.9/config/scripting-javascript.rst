@@ -205,7 +205,7 @@ Mapeo básico
     url=data.url
     title=data.title
     content=data.content
-    lastModified=data.updated_at
+    last_modified=data.updated_at
 
 Generación de URL
 -----------------
@@ -240,11 +240,19 @@ Procesamiento de fechas
 
 ::
 
-    // Parseo de fecha (expresion unica usando FQCN; la interoperabilidad con Java usa la misma notacion que Groovy)
-    lastModified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
+    // Parseo de fecha (expresión única usando FQCN; la interoperabilidad con Java usa la misma notación que Groovy)
+    last_modified=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(data.date_string)
 
-    // Conversion desde segundos epoch (no se necesita el sufijo L de long)
-    lastModified=new Date(data.timestamp * 1000)
+    // Conversión desde segundos epoch (no se necesita el sufijo L de long; se usa el FQCN java.util.Date)
+    last_modified=new java.util.Date(data.timestamp * 1000)
+
+.. note::
+   El nombre del campo del índice es ``last_modified``, no ``lastModified``. Aunque escriba ``lastModified=...``, no se establecerá la fecha de última modificación.
+
+.. note::
+   Actualmente, un valor creado con el ``new Date(...)`` integrado de JavaScript no puede registrarse en campos de fecha como ``last_modified``;
+   el registro que contiene ese documento falla y el documento no se añade al índice.
+   Cree las fechas con el nombre completamente calificado ``new java.util.Date(...)``, como se muestra arriba.
 
 Objetos disponibles
 ===================

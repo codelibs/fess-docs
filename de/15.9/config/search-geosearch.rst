@@ -66,21 +66,20 @@ aus einer Datenquelle mit Standortinformationen im ``location``-Feld festgelegt.
 **Beispiel: Abruf aus Datenbank**
 
 Wenn Breiten- und Längengrad in getrennten Spalten gespeichert sind, verbinden Sie diese per SQL zu einer kommaseparierten Zeichenfolge.
+Die Parameter des Datenspeichers enthalten pro Zeile einen Eintrag. Schreiben Sie daher das SQL nach ``sql=`` in einer einzigen Zeile
+(wenn Sie es auf mehrere Zeilen verteilen, wird nur das ``SELECT`` der ersten Zeile als SQL behandelt und es tritt ein Syntaxfehler auf).
 
 ::
 
-    SELECT
-        id,
-        name,
-        address,
-        CONCAT(latitude, ',', longitude) AS location
-    FROM stores
+    sql=SELECT id, name, address, CONCAT(latitude, ',', longitude) AS location FROM stores
 
 Im Konfigurationsskript des Datenspeichers ordnen Sie den abgerufenen Wert dem ``location``-Feld zu.
+Beim Datenbank-Datenspeicher werden die Spaltennamen des SQL (einschließlich mit ``AS`` vergebener Aliase) direkt zu den Variablennamen im Skript.
+Ein Präfix wie ``data.`` wird nicht vorangestellt.
 
 ::
 
-    location=data.location
+    location=location
 
 Hinzufügen von Standortinformationen per Skript
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,6 +121,10 @@ Für ``<Feldname>`` wird der in ``query.geo.fields`` konfigurierte Feldname eing
    ``point`` und ``distance`` müssen immer zusammen angegeben werden. Ein ``point`` ohne ``distance`` wird ignoriert.
    Außerdem muss der Wert von ``point`` aus genau zwei numerischen Werten (Breiten- und Längengrad) bestehen;
    bei ungültigem Format tritt ein Fehler auf.
+
+.. note::
+   Die Standortsuche arbeitet als Einschränkung der Suchanfrage ``q``. Ist ``q`` leer, wird die Suche selbst nicht ausgeführt
+   und das Ergebnis enthält 0 Treffer. Geben Sie bei Anfragen für die Standortsuche daher einen Suchbegriff an.
 
 .. note::
    Werden für dasselbe Feld mehrere ``point``-Werte angegeben, gelten diese als ODER-Bedingung (innerhalb eines der Bereiche).
@@ -190,10 +193,14 @@ und :doc:`../api/api-overview`.
 
 .. note::
    Das ``location``-Feld ist standardmäßig nicht in der API-Antwort enthalten. Um Breiten- und Längengrad in den Suchergebnissen einzuschließen,
-   fügen Sie folgende Einstellung in ``fess_config.properties`` hinzu:
+   fügen Sie die folgenden beiden Einstellungen in ``fess_config.properties`` hinzu und starten Sie |Fess| neu.
+   ``query.additional.response.fields`` fügt Felder hinzu, die von der Suchmaschine abgerufen werden,
+   und ``query.additional.api.response.fields`` erlaubt die Ausgabe von Feldern in der API-Antwort.
+   Mit nur einer der beiden Einstellungen ist ``location`` nicht in der Antwort enthalten.
 
    ::
 
+       query.additional.response.fields=location
        query.additional.api.response.fields=location
 
 =======================
@@ -239,8 +246,8 @@ Beispiel für die Suche mit JavaScript unter Abruf des aktuellen Standorts:
         const longitude = position.coords.longitude;
         const distance = "5km";
 
-        // Such-URL erstellen
-        const searchUrl = `/search?q=&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
+        // Such-URL erstellen (der Suchbegriff q darf nicht fehlen)
+        const searchUrl = `/search?q=${encodeURIComponent('Geschäfte')}&geo.location.point=${latitude},${longitude}&geo.location.distance=${distance}`;
 
         // Suche ausführen
         window.location.href = searchUrl;
@@ -253,7 +260,8 @@ Beispiel für die Anzeige von Suchergebnissen als Marker auf Google Maps:
 
 .. note::
    Dieses Beispiel greift auf das ``location``-Feld aus den Suchergebnissen zu. Setzen Sie zuvor
-   ``query.additional.api.response.fields=location``, um die Koordinaten in der Antwort einzuschließen.
+   ``query.additional.response.fields=location`` und ``query.additional.api.response.fields=location``,
+   um die Koordinaten in der Antwort einzuschließen.
 
 .. code-block:: javascript
 
@@ -330,7 +338,8 @@ API-Antwort enthält keine Standortinformationen
 
 Das ``location``-Feld ist standardmäßig nicht in der API-Antwort enthalten.
 Um Koordinaten in die Suchergebnisse aufzunehmen, setzen Sie
-``query.additional.api.response.fields=location`` in ``fess_config.properties``.
+sowohl ``query.additional.response.fields=location`` als auch ``query.additional.api.response.fields=location``
+in ``fess_config.properties`` und starten Sie |Fess| neu.
 
 Standortinformationen werden nicht korrekt gespeichert
 -------------------------------------------------------

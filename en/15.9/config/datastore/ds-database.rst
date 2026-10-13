@@ -186,7 +186,7 @@ Map SQL column names to index fields:
     url="https://example.com/articles/" + id
     title=title
     content=content
-    lastModified=updated_at
+    last_modified=updated_at
 
 Available fields:
 
@@ -401,7 +401,7 @@ Script:
     url="https://shop.example.com/product/" + id
     title=name
     content=description + " Category: " + category + " Price: " + price
-    lastModified=updated_at
+    last_modified=updated_at
 
 Knowledge Base Articles
 -----------------------
@@ -426,7 +426,7 @@ Script:
     digest=tags
     author=author
     created=created_at
-    lastModified=updated_at
+    last_modified=updated_at
 
 Troubleshooting
 ===============

@@ -188,7 +188,7 @@ Mappez les noms de colonnes SQL vers les champs d'index :
     url="https://example.com/articles/" + id
     title=title
     content=content
-    lastModified=updated_at
+    last_modified=updated_at
 
 Champs disponibles :
 
@@ -410,7 +410,7 @@ Script :
     url="https://shop.example.com/product/" + id
     title=name
     content=description + " Catégorie: " + category + " Prix: " + price + " EUR"
-    lastModified=updated_at
+    last_modified=updated_at
 
 Articles de base de connaissances
 -----------------------------------
@@ -435,7 +435,7 @@ Script :
     digest=tags
     author=author
     created=created_at
-    lastModified=updated_at
+    last_modified=updated_at
 
 Dépannage
 =========
