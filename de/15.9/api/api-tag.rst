@@ -50,6 +50,16 @@ und Anfang und Ende werden getrimmt. Das Ergebnis muss 1 bis ``user.tag.name.max
 (Standard: ``50``) Zeichen lang sein; Namen mit einem Steuer- oder Formatzeichen (etwa einem
 Nullbreitenzeichen oder einer Bidi-Überschreibung) werden abgelehnt.
 
+Virtuelle Hosts
+=================
+
+Wenn virtuelle Hosts konfiguriert sind, folgen Tags wie die Tag-Facette dem virtuellen Host der Anfrage.
+
+- Ein Tag speichert den virtuellen Host der Anfrage, die es erstellt hat.
+- Bei einer Anfrage, die zu einem virtuellen Host passt, listen ``GET /api/v2/tags`` und das Feld ``addable`` der Dokument-Tag-Endpunkte nur die Tags des Aufrufers dieses virtuellen Hosts auf. Ein Tag eines anderen virtuellen Hosts oder ein Tag ohne virtuellen Host wird nicht aufgelistet. Es umzubenennen, zu löschen oder per ``id`` auf ein Dokument zu setzen, ergibt ``not_found`` (404). Es per ``name`` auf ein Dokument zu setzen, ergibt ``conflict`` (409), weil ein Aufrufer über alle virtuellen Hosts hinweg nur ein Tag je Name hat. Eine Anfrage, die zu keinem virtuellen Host passt, sieht alle Tags.
+- Ein Tag eines virtuellen Hosts wird nur dann auf ein Dokument gesetzt, wenn die Crawl-Einstellungen des Dokuments diesen virtuellen Host enthalten. Das gilt, wenn das Dokument erneut indiziert wird, wenn der Job ``tag_updater`` läuft und wenn das Tag auf das Dokument gesetzt wird. Ein Tag ohne virtuellen Host und ein Dokument ohne virtuellen Host sind nicht eingeschränkt.
+- Ein Administrator kann den virtuellen Host eines Tags ändern oder das Tag auf dem Bildschirm „Tag-Typ" löschen (siehe :doc:`../admin/tagtype-guide`).
+
 Tags in der Suche
 =================
 

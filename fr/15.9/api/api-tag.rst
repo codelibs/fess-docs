@@ -50,6 +50,16 @@ extrémités sont rognées. Le résultat doit compter de 1 à ``user.tag.name.ma
 ``50``) caractères, et les noms contenant un caractère de contrôle ou de format (comme un caractère
 de largeur nulle ou un forçage bidirectionnel) sont refusés.
 
+Hôtes virtuels
+================
+
+Lorsque des hôtes virtuels sont configurés, les tags suivent l'hôte virtuel de la requête, comme la facette des tags.
+
+- Un tag enregistre l'hôte virtuel de la requête qui l'a créé.
+- Pour une requête qui correspond à un hôte virtuel, ``GET /api/v2/tags`` et le champ ``addable`` des points d'accès de tags de document ne listent que les tags de l'appelant de cet hôte virtuel. Un tag d'un autre hôte virtuel, ou un tag sans hôte virtuel, n'est pas listé. Le renommer, le supprimer ou le poser sur un document par ``id`` renvoie ``not_found`` (404). Le poser sur un document par ``name`` renvoie ``conflict`` (409), car un appelant n'a qu'un tag par nom pour l'ensemble des hôtes virtuels. Une requête qui ne correspond à aucun hôte virtuel voit tous les tags.
+- Un tag d'un hôte virtuel n'est posé sur un document que si les paramètres d'exploration du document ont cet hôte virtuel. Cela s'applique lorsque le document est indexé à nouveau, lorsque la tâche ``tag_updater`` s'exécute et lorsque le tag est posé sur le document. Un tag sans hôte virtuel et un document sans hôte virtuel ne sont pas limités.
+- Un administrateur peut modifier l'hôte virtuel d'un tag, ou supprimer le tag, sur l'écran Type de tag (voir :doc:`../admin/tagtype-guide`).
+
 Les tags dans la recherche
 ==========================
 
