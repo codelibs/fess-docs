@@ -45,6 +45,16 @@ trimmed. The result must be 1 to ``user.tag.name.max.length`` (default: ``50``) 
 names with a control or format character (such as a zero-width character or a bidi override) are
 refused.
 
+Virtual Hosts
+===============
+
+When virtual hosts are configured, tags follow the virtual host of the request, as the tag facet does.
+
+- A tag records the virtual host of the request that created it.
+- On a request that matches a virtual host, ``GET /api/v2/tags`` and the ``addable`` field of the document tag endpoints list only the caller's tags of that virtual host. A tag of another virtual host, or a tag that has no virtual host, is not listed. Renaming it, deleting it or putting it on a document by ``id`` answers ``not_found`` (404). Putting it on a document by ``name`` answers ``conflict`` (409), because a caller has one tag of each name across virtual hosts. A request that matches no virtual host sees every tag.
+- A tag of a virtual host is set on a document only when the crawl settings of the document have that virtual host. This applies when the document is indexed again, when the ``tag_updater`` job runs and when the tag is put on the document. A tag that has no virtual host, and a document that has no virtual host, are not limited.
+- An administrator can change the virtual host of a tag, or delete the tag, on the Tag Type screen (see :doc:`../admin/tagtype-guide`).
+
 Tags in Search
 ==============
 

@@ -52,6 +52,16 @@ recortan los extremos. El resultado debe tener entre 1 y ``user.tag.name.max.len
 (predeterminado: ``50``) caracteres, y se rechazan los nombres con un carácter de control o de
 formato (como un carácter de ancho cero o una anulación bidireccional).
 
+Hosts virtuales
+=================
+
+Cuando hay hosts virtuales configurados, las etiquetas siguen el host virtual de la solicitud, igual que la faceta de etiquetas.
+
+- Una etiqueta guarda el host virtual de la solicitud que la creó.
+- En una solicitud que coincide con un host virtual, ``GET /api/v2/tags`` y el campo ``addable`` de los endpoints de etiquetas de documentos solo listan las etiquetas del llamador de ese host virtual. Una etiqueta de otro host virtual, o una que no tiene host virtual, no se lista. Renombrarla, eliminarla o ponerla en un documento por ``id`` responde ``not_found`` (404). Ponerla en un documento por ``name`` responde ``conflict`` (409), porque un llamador tiene una sola etiqueta de cada nombre entre todos los hosts virtuales. Una solicitud que no coincide con ningún host virtual ve todas las etiquetas.
+- Una etiqueta de un host virtual se pone en un documento solo cuando la configuración de rastreo del documento tiene ese host virtual. Esto se aplica cuando el documento se indexa de nuevo, cuando se ejecuta el trabajo ``tag_updater`` y cuando la etiqueta se pone en el documento. Una etiqueta sin host virtual y un documento sin host virtual no tienen límite.
+- Un administrador puede cambiar el host virtual de una etiqueta, o eliminarla, en la pantalla Tipo de etiqueta (consulte :doc:`../admin/tagtype-guide`).
+
 Etiquetas de usuario en la búsqueda
 ===================================
 
