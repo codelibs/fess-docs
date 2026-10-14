@@ -278,15 +278,15 @@ Error Handling Settings
      - Default
    * - ``crawler.failure.url.status.codes``
      - HTTP status codes considered failures (comma-separated)
-     - ``404,403,410``
+     - ``404,403,410,401``
 
 Configuration Example
 ~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # In addition to the defaults (404,403,410), also treat 500 as an error
-    crawler.failure.url.status.codes=404,403,410,500
+    # In addition to the defaults (404,403,410,401), also treat 500 as an error
+    crawler.failure.url.status.codes=404,403,410,401,500
 
 System Monitoring Settings
 ===========================

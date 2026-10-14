@@ -483,7 +483,7 @@ Index
     - ``true``
   * - crawler.failure.url.status.codes
     - HTTP status codes considered as failure URLs.
-    - ``404,403,410``
+    - ``404,403,410,401``
   * - crawler.system.monitor.interval
     - Interval (seconds) for system monitor during crawling.
     - ``60``

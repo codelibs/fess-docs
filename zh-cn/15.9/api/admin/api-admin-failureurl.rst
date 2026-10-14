@@ -247,7 +247,7 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
    * - ``java.io.IOException``
      - I/O错误
    * - ``org.codelibs.fess.exception.ContentNotFoundException``
-     - URL返回的HTTP状态码在 ``crawler.failure.url.status.codes`` 中配置（默认：403、404、410）
+     - URL返回的HTTP状态码在 ``crawler.failure.url.status.codes`` 中配置（默认：401、403、404、410）
    * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
      - 内容超过最大长度限制
 
