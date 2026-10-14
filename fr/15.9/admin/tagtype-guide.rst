@@ -84,11 +84,17 @@ non connecté ne voit jamais de tag, quelles que soient les autorisations.
 Hôte virtuel
 ::::::::::::
 
-Spécifie le nom d'hôte de l'hôte virtuel sur lequel le tag est affiché. Un tag créé par un
-utilisateur reçoit l'hôte virtuel par lequel l'utilisateur accédait. Sur un écran de recherche
-accédé par un hôte virtuel, seuls les tags portant ici ce nom d'hôte virtuel sont visibles. Un accès
-qui ne correspond à aucun hôte virtuel voit les tags quelle que soit la valeur de ce champ. Pour plus
-de détails, consultez :doc:`Hôte virtuel dans le guide de configuration <../config/security-virtual-host>`.
+Spécifie le nom de l'hôte virtuel sur lequel le tag est affiché. C'est le nom qui suit ``=`` dans le
+paramètre « Hôte virtuel » de :doc:`general-guide` (``host1`` pour ``Host:abc.example.com=host1``),
+et non le nom d'hôte. Un nom d'hôte avec un port, tel que ``www.example.com:8080``, est accepté mais ne
+correspond à aucun hôte virtuel : le tag reste donc masqué. Un tag créé par un utilisateur reçoit
+l'hôte virtuel par lequel l'utilisateur accédait. Sur un écran de recherche accédé par un hôte
+virtuel, seuls les tags portant ici ce nom d'hôte virtuel sont visibles. Un accès qui ne correspond à
+aucun hôte virtuel voit les tags quelle que soit la valeur de ce champ. Lors d'une nouvelle
+exploration, de l'exécution de la tâche ``tag_updater`` et de l'ajout d'un tag à un document, un tag
+qui a un hôte virtuel n'est posé que sur les documents des paramètres d'exploration qui ont cet hôte
+virtuel. Pour plus de détails, consultez
+:doc:`Hôte virtuel dans le guide de configuration <../config/security-virtual-host>`.
 
 Ordre de tri
 ::::::::::::
@@ -147,6 +153,12 @@ Remarques pour l'exploitation
   ``user.tag.queue.max.size`` (par défaut : 10000), les modifications en trop sont abandonnées avec
   un journal WARN. Dans chacun de ces cas, exécuter ``tag_updater`` reconstruit les tags des
   documents.
+- **Exécutez Tag Updater après avoir modifié l'hôte virtuel d'un tag.** Les documents déjà indexés
+  conservent les anciennes valeurs de ``tag`` jusqu'à l'exécution de la tâche ``tag_updater`` ou
+  jusqu'à leur nouvelle exploration. De plus, un tag sans hôte virtuel n'est pas affiché pour une
+  requête qui correspond à un hôte virtuel (il l'est pour les requêtes qui n'en correspondent à
+  aucun). Définissez sur cet écran l'hôte virtuel d'un tag utilisé avec un hôte virtuel, ou supprimez
+  le tag s'il est inutile. Pour le comportement dans l'API, voir :doc:`../api/api-tag`.
 - **Le propriétaire d'un tag est l'identifiant de connexion.** Si un identifiant change, les tags
   restent attachés à l'ancien. Avec SAML, le NameID doit être persistant. Avec Entra ID, le
   propriétaire est l'UPN, et avec LDAP, le nom d'utilisateur avec la casse saisie à la connexion.

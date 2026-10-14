@@ -79,10 +79,15 @@ sees a tag, whatever the permissions.
 Virtual Host
 ::::::::::::
 
-Specifies the host name of the virtual host where the tag is shown. A tag created by a user gets
-the virtual host the user was accessing. On a search screen accessed through a virtual host, only
-the tags with that virtual host name here are visible. An access that matches no virtual host sees
-tags whatever this field holds. For details, see
+Specifies the virtual host name of the virtual host where the tag is shown. This is the name after
+``=`` in the "Virtual Host" setting of :doc:`general-guide` (``host1`` for
+``Host:abc.example.com=host1``), not the host name. A host name with a port, such as
+``www.example.com:8080``, is accepted but matches no virtual host, so the tag stays hidden. A tag
+created by a user gets the virtual host the user was accessing. On a search screen accessed through
+a virtual host, only the tags with that virtual host name here are visible. An access that matches
+no virtual host sees tags whatever this field holds. When documents are crawled again, when the
+``tag_updater`` job runs and when a tag is added to a document, a tag that has a virtual host is put
+only on the documents of crawl settings that have that virtual host. For details, see
 :doc:`Virtual Host in the Configuration Guide <../config/security-virtual-host>`.
 
 Sort Order
@@ -136,6 +141,11 @@ Notes for Operators
   the documents also need rebuilding. And when the queue exceeds ``user.tag.queue.max.size``
   (default: 10000), the changes beyond it are dropped with a WARN log. In each case, running
   ``tag_updater`` rebuilds the tags of the documents.
+- **Run Tag Updater after you change the virtual host of a tag.** Documents already indexed keep
+  the old ``tag`` values until you run the ``tag_updater`` job or crawl them again. Also, a tag that
+  has no virtual host is not shown on a request that matches a virtual host (it is shown on requests
+  that match none). Set the virtual host of a tag you use with a virtual host on this screen, or
+  delete the tag if you do not need it. For the behavior in the API, see :doc:`../api/api-tag`.
 - **The owner of a tag is the login user ID.** When a user ID changes, the tags stay with the old
   ID. With SAML, the NameID must be persistent. With Entra ID the owner is the UPN, and with LDAP it
   is the user name with the letter case typed at login. Deleting a user leaves the user's tags;

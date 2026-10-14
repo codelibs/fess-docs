@@ -83,3 +83,9 @@ En los accesos que no coinciden con ningún host virtual (acceso normal sin host
 
    * - *Host Virtual*
      - ``host1``
+
+
+Etiquetas de usuario
+--------------------
+
+Las etiquetas que los usuarios con sesión iniciada ponen en los resultados de búsqueda (Mis etiquetas) también siguen al host virtual, cuando la función de etiquetas está habilitada. Una etiqueta creada en un host virtual solo se lista y se puede usar en ese host virtual. Una solicitud que no coincide con ningún host virtual ve todas las etiquetas. Una etiqueta que tiene host virtual se pone solo en los documentos de la configuración de rastreo que tiene ese host virtual. Para obtener más información, consulte :doc:`../admin/tagtype-guide` y :doc:`../api/api-tag`.

@@ -28,7 +28,7 @@ How Tags Work
 - Only the owner can change or delete a tag, or put it on and take it off documents. A shared tag of
   another user can only be shown and filtered on. Administrators manage all tags on the admin
   screen (see :doc:`../admin/tagtype-guide`).
-- A tag is put on the URL of a document, so every indexed document with that URL gets it.
+- A tag is put on the URL of a document, so every indexed document with that URL gets it. The exception is a tag that has a virtual host: it is put only on the documents of crawl settings that have that virtual host, so the same URL crawled for two virtual hosts is two documents. A tag that has no virtual host, and a document that has no virtual host, behave as before (see Virtual Hosts below).
 
 Each tag has two identifiers.
 

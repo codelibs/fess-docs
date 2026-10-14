@@ -85,11 +85,17 @@ iniciado sesión nunca ve una etiqueta, sean cuales sean los permisos.
 Host virtual
 ::::::::::::
 
-Especifica el nombre de host del host virtual en el que se muestra la etiqueta. Una etiqueta creada
-por un usuario recibe el host virtual por el que accedía el usuario. En una pantalla de búsqueda a la
-que se accede mediante un host virtual, solo son visibles las etiquetas que tienen aquí ese nombre de
-host virtual. Un acceso que no coincide con ningún host virtual ve las etiquetas sea cual sea el valor
-de este campo. Para obtener más información, consulte
+Especifica el nombre del host virtual en el que se muestra la etiqueta. Es el nombre que va después
+de ``=`` en el ajuste "Host virtual" de :doc:`general-guide` (``host1`` en
+``Host:abc.example.com=host1``), no el nombre de host. Un nombre de host con puerto, como
+``www.example.com:8080``, se acepta pero no coincide con ningún host virtual, por lo que la etiqueta
+queda oculta. Una etiqueta creada por un usuario recibe el host virtual por el que accedía el
+usuario. En una pantalla de búsqueda a la que se accede mediante un host virtual, solo son visibles
+las etiquetas que tienen aquí ese nombre de host virtual. Un acceso que no coincide con ningún host
+virtual ve las etiquetas sea cual sea el valor de este campo. Al rastrear de nuevo los documentos,
+al ejecutar el trabajo ``tag_updater`` y al añadir una etiqueta a un documento, una etiqueta que tiene
+host virtual se pone solo en los documentos de la configuración de rastreo que tiene ese host
+virtual. Para obtener más información, consulte
 :doc:`Host virtual en la guía de configuración <../config/security-virtual-host>`.
 
 Orden de clasificación
@@ -149,6 +155,12 @@ Notas para la operación
   documentos. Y cuando la cola supera ``user.tag.queue.max.size`` (predeterminado: 10000), los
   cambios que sobran se descartan con un registro WARN. En todos estos casos, ejecutar
   ``tag_updater`` reconstruye las etiquetas de los documentos.
+- **Ejecute Tag Updater después de cambiar el host virtual de una etiqueta.** Los documentos ya
+  indexados conservan los valores antiguos de ``tag`` hasta que ejecute el trabajo ``tag_updater`` o
+  los rastree de nuevo. Además, una etiqueta sin host virtual no se muestra en una solicitud que
+  coincide con un host virtual (sí se muestra en las solicitudes que no coinciden con ninguno).
+  Indique en esta pantalla el host virtual de la etiqueta que use con un host virtual, o elimine la
+  etiqueta si no la necesita. Para el comportamiento en la API, consulte :doc:`../api/api-tag`.
 - **El propietario de una etiqueta es el ID de usuario de inicio de sesión.** Si un ID de usuario
   cambia, las etiquetas se quedan con el ID anterior. Con SAML, el NameID debe ser persistente. Con
   Entra ID el propietario es el UPN, y con LDAP es el nombre de usuario con las mayúsculas y

@@ -31,7 +31,10 @@ Funktionsweise der Tags
   freigegebenes Tag eines anderen Benutzers kann nur angezeigt und zum Filtern verwendet werden.
   Administratoren verwalten alle Tags im Verwaltungsbildschirm (siehe :doc:`../admin/tagtype-guide`).
 - Ein Tag wird an die URL eines Dokuments vergeben, sodass jedes indexierte Dokument mit dieser URL
-  es erhält.
+  es erhält. Die Ausnahme ist ein Tag mit virtuellem Host: Es wird nur an die Dokumente der
+  Crawl-Einstellungen vergeben, die diesen virtuellen Host haben; dieselbe URL, die für zwei virtuelle
+  Hosts gecrawlt wird, sind also zwei Dokumente. Ein Tag ohne virtuellen Host und ein Dokument ohne
+  virtuellen Host verhalten sich wie zuvor (siehe unten „Virtuelle Hosts“).
 
 Jedes Tag hat zwei Bezeichner.
 

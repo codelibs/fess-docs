@@ -85,11 +85,17 @@ angemeldeter Benutzer sieht nie ein Tag, unabhängig von den Berechtigungen.
 Virtueller Host
 :::::::::::::::
 
-Gibt den Hostnamen des virtuellen Hosts an, auf dem das Tag angezeigt wird. Ein von einem Benutzer
-erstelltes Tag erhält den virtuellen Host, über den der Benutzer zugegriffen hat. Auf einem über einen
-virtuellen Host aufgerufenen Suchbildschirm sind nur die Tags sichtbar, die hier diesen virtuellen
-Hostnamen haben. Ein Zugriff, der keinem virtuellen Host entspricht, sieht die Tags unabhängig von
-diesem Feld. Weitere Informationen finden Sie unter
+Gibt den virtuellen Hostnamen des virtuellen Hosts an, auf dem das Tag angezeigt wird. Das ist der
+Name hinter ``=`` in der Einstellung „Virtueller Host“ in :doc:`general-guide` (``host1`` bei
+``Host:abc.example.com=host1``), nicht der Hostname. Ein Hostname mit Port, etwa
+``www.example.com:8080``, wird zwar akzeptiert, entspricht aber keinem virtuellen Host, sodass das Tag
+verborgen bleibt. Ein von einem Benutzer erstelltes Tag erhält den virtuellen Host, über den der
+Benutzer zugegriffen hat. Auf einem über einen virtuellen Host aufgerufenen Suchbildschirm sind nur
+die Tags sichtbar, die hier diesen virtuellen Hostnamen haben. Ein Zugriff, der keinem virtuellen
+Host entspricht, sieht die Tags unabhängig von diesem Feld. Beim erneuten Crawlen, beim Ausführen des
+Jobs ``tag_updater`` und beim Hinzufügen eines Tags zu einem Dokument wird ein Tag mit virtuellem Host
+nur an die Dokumente der Crawl-Einstellungen vergeben, die diesen virtuellen Host haben. Weitere
+Informationen finden Sie unter
 :doc:`Virtueller Host im Konfigurationshandbuch <../config/security-virtual-host>`.
 
 Sortierreihenfolge
@@ -149,6 +155,13 @@ Hinweise für den Betrieb
   Tags der Dokumente neu aufgebaut werden. Und wenn die Warteschlange ``user.tag.queue.max.size``
   (Standard: 10000) überschreitet, werden die überzähligen Änderungen mit einem WARN-Log verworfen.
   In jedem dieser Fälle baut ``tag_updater`` die Tags der Dokumente neu auf.
+- **Führen Sie Tag Updater aus, nachdem Sie den virtuellen Host eines Tags geändert haben.** Bereits
+  indexierte Dokumente behalten die alten ``tag``-Werte, bis Sie den Job ``tag_updater`` ausführen
+  oder die Dokumente erneut crawlen. Außerdem wird ein Tag ohne virtuellen Host bei einer Anfrage, die
+  zu einem virtuellen Host passt, nicht angezeigt (bei Anfragen ohne passenden virtuellen Host schon).
+  Legen Sie den virtuellen Host eines Tags, das Sie mit einem virtuellen Host verwenden, auf diesem
+  Bildschirm fest, oder löschen Sie das Tag, wenn Sie es nicht benötigen. Das Verhalten in der API
+  finden Sie unter :doc:`../api/api-tag`.
 - **Der Besitzer eines Tags ist die Benutzer-ID der Anmeldung.** Ändert sich eine Benutzer-ID,
   bleiben die Tags bei der alten ID. Bei SAML muss die NameID persistent sein. Bei Entra ID ist der
   Besitzer der UPN, bei LDAP der Benutzername in der bei der Anmeldung eingegebenen Groß- und

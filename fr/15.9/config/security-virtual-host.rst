@@ -83,3 +83,9 @@ Pour un accès ne correspondant à aucun hôte virtuel (accès normal sans hôte
 
    * - *Hôte virtuel*
      - ``host1``
+
+
+Tags utilisateur
+----------------
+
+Les tags que les utilisateurs connectés posent sur les résultats de recherche (Mes tags) suivent aussi l'hôte virtuel, lorsque la fonction de tags est activée. Un tag créé sur un hôte virtuel n'est listé et utilisable que sur cet hôte virtuel. Une requête qui ne correspond à aucun hôte virtuel voit tous les tags. Un tag qui a un hôte virtuel n'est posé que sur les documents des paramètres d'exploration qui ont cet hôte virtuel. Pour plus de détails, consultez :doc:`../admin/tagtype-guide` et :doc:`../api/api-tag`.

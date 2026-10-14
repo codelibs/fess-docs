@@ -32,6 +32,10 @@ Fonctionnement des tags
   administrateurs gèrent tous les tags dans l'écran d'administration (voir
   :doc:`../admin/tagtype-guide`).
 - Un tag est posé sur l'URL d'un document : tous les documents indexés ayant cette URL le reçoivent.
+  L'exception est un tag qui a un hôte virtuel : il n'est posé que sur les documents des paramètres
+  d'exploration qui ont cet hôte virtuel, de sorte que la même URL explorée pour deux hôtes virtuels
+  donne deux documents. Un tag sans hôte virtuel et un document sans hôte virtuel se comportent comme
+  avant (voir Hôtes virtuels ci-dessous).
 
 Chaque tag a deux identifiants.
 

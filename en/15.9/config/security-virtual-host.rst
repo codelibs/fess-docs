@@ -83,3 +83,9 @@ Accesses that do not match any virtual host (normal access with no virtual host 
 
    * - *Virtual Host*
      - ``host1``
+
+
+User Tags
+---------
+
+The tags that logged-in users put on search results (My tags) follow the virtual host too, when the tag feature is enabled. A tag made on a virtual host is listed and usable only on that virtual host. A request that matches no virtual host sees every tag. A tag that has a virtual host is put only on the documents of crawl settings that have that virtual host. For details, see :doc:`../admin/tagtype-guide` and :doc:`../api/api-tag`.
