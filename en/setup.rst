@@ -13,15 +13,16 @@ Using Docker allows you to easily set up Fess on Windows, Mac, and other platfor
    This page explains setup on **Windows using Docker**. Users on Linux or macOS can follow similar steps, but the Docker Desktop installation differs by platform.
    For details, refer to the `Docker <https://docs.docker.com/get-docker/>`_ documentation.
 
-For production environments, be sure to refer to :doc:`15.6/install/index`.
-For system requirements, see :doc:`15.6/install/prerequisites`.
+For production environments, be sure to refer to :doc:`15.9/install/index`.
+For system requirements, see :doc:`15.9/install/prerequisites`.
 
 .. warning::
 
    **Important Notes for Production Environments**
 
-   Running with the embedded OpenSearch is not recommended for production environments or load testing.
-   Always set up an external OpenSearch server.
+   This page describes a setup for trying out Fess. For production environments or load testing,
+   set up a dedicated OpenSearch server by referring to :doc:`15.9/install/install-docker` or
+   :doc:`15.9/install/index`.
 
 Setup Overview
 --------------
@@ -184,11 +185,11 @@ Next Steps
 
 Now that Fess is set up, refer to the following documentation to get started:
 
-- :doc:`15.6/install/run` — Detailed startup, stop, and configuration
-- :doc:`15.6/admin/index` — Administrator guide (crawl settings, user management, etc.)
-- :doc:`15.6/user/index` — User guide (how to search)
+- :doc:`15.9/install/run` — Detailed startup, stop, and configuration
+- :doc:`15.9/admin/index` — Administrator guide (crawl settings, user management, etc.)
+- :doc:`15.9/user/index` — User guide (how to search)
 
-If you encounter any issues, refer to :doc:`15.6/install/troubleshooting`.
+If you encounter any issues, refer to :doc:`15.9/install/troubleshooting`.
 
 .. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
 .. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png
