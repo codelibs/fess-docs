@@ -83,3 +83,9 @@ Bei Zugriffen, die keinem virtuellen Host entsprechen (normaler Zugriff ohne kon
 
    * - *Virtueller Host*
      - ``host1``
+
+
+Benutzer-Tags
+-------------
+
+Auch die Tags, die angemeldete Benutzer an Suchergebnisse vergeben (Meine Tags), folgen dem virtuellen Host, wenn die Tag-Funktion aktiviert ist. Ein auf einem virtuellen Host erstelltes Tag wird nur auf diesem virtuellen Host aufgelistet und kann nur dort verwendet werden. Eine Anfrage, die zu keinem virtuellen Host passt, sieht alle Tags. Ein Tag mit virtuellem Host wird nur an die Dokumente der Crawl-Einstellungen vergeben, die diesen virtuellen Host haben. Weitere Informationen finden Sie unter :doc:`../admin/tagtype-guide` und :doc:`../api/api-tag`.

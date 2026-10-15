@@ -33,7 +33,10 @@ Funcionamiento de las etiquetas de usuario
   gestionan todas las etiquetas en la pantalla de administración (consulte
   :doc:`../admin/tagtype-guide`).
 - Una etiqueta se asigna a la URL de un documento, por lo que todos los documentos indexados con esa
-  URL la reciben.
+  URL la reciben. La excepción es una etiqueta que tiene host virtual: solo se asigna a los
+  documentos de la configuración de rastreo que tiene ese host virtual, de modo que la misma URL
+  rastreada para dos hosts virtuales son dos documentos. Una etiqueta sin host virtual y un documento
+  sin host virtual se comportan como antes (consulte Hosts virtuales más abajo).
 
 Cada etiqueta tiene dos identificadores.
 
