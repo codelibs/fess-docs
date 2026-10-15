@@ -7,9 +7,9 @@
 
 .. toctree::
 
-   安装 <15.8/install/index>
-   搜索 <15.8/user/index>
-   管理 <15.8/admin/index>
-   API <15.8/api/index>
-   设置 <15.8/config/index>
+   安装 <15.9/install/index>
+   搜索 <15.9/user/index>
+   管理 <15.9/admin/index>
+   API <15.9/api/index>
+   设置 <15.9/config/index>
 

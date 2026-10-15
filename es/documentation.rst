@@ -8,9 +8,9 @@ que necesite.
 
 .. toctree::
 
-   Instalación <15.8/install/index>
-   Búsqueda <15.8/user/index>
-   Administración <15.8/admin/index>
-   API <15.8/api/index>
-   Configuración <15.8/config/index>
+   Instalación <15.9/install/index>
+   Búsqueda <15.9/user/index>
+   Administración <15.9/admin/index>
+   API <15.9/api/index>
+   Configuración <15.9/config/index>
 

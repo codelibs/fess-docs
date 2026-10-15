@@ -7,9 +7,9 @@
 
 .. toctree::
 
-   설치 <15.8/install/index>
-   검색 <15.8/user/index>
-   관리 <15.8/admin/index>
-   API <15.8/api/index>
-   설정 <15.8/config/index>
+   설치 <15.9/install/index>
+   검색 <15.9/user/index>
+   관리 <15.9/admin/index>
+   API <15.9/api/index>
+   설정 <15.9/config/index>
 
