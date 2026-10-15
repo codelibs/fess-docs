@@ -7,9 +7,9 @@ administration, the API, and configuration. Choose the topic you need below.
 
 .. toctree::
 
-   Installation <15.8/install/index>
-   Search <15.8/user/index>
-   Administration <15.8/admin/index>
-   API <15.8/api/index>
-   Configuration <15.8/config/index>
+   Installation <15.9/install/index>
+   Search <15.9/user/index>
+   Administration <15.9/admin/index>
+   API <15.9/api/index>
+   Configuration <15.9/config/index>
 

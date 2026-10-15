@@ -5,6 +5,20 @@
 这是 |Fess| 历史版本的文档存档，按版本整理，涵盖安装、搜索、管理、API 及配置。\
 请从下方选择所需版本。
 
+15.8
+~~~~
+
+.. toctree::
+
+   15.8/install/index
+   15.8/user/index
+   15.8/api/index
+   15.8/admin/index
+   15.8/config/index
+   JavaDocs <https://fess.codelibs.org/15.8/apidocs/index.html>
+   XRef <https://fess.codelibs.org/15.8/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/15.8/lastadoc-fess.html>
+
 15.7
 ~~~~
 

@@ -6,6 +6,20 @@ Voici la documentation de |Fess| des versions précédentes, couvrant
 l'installation, la recherche, l'administration, l'API et la configuration.
 Choisissez une version ci-dessous.
 
+15.8
+~~~~
+
+.. toctree::
+
+   15.8/install/index
+   15.8/user/index
+   15.8/api/index
+   15.8/admin/index
+   15.8/config/index
+   JavaDocs <https://fess.codelibs.org/15.8/apidocs/index.html>
+   XRef <https://fess.codelibs.org/15.8/xref/index.html>
+   I/F Doc <https://fess.codelibs.org/15.8/lastadoc-fess.html>
+
 15.7
 ~~~~
 
