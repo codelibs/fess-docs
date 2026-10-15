@@ -43,7 +43,7 @@ OpenSearch에 연결하기 위한 설정을 ``c:\opt\fess\bin\fess.in.bat`` 에 
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=c:/opt/opensearch/config/dictionary/
 
 .. note::
-   - ``fess.search_engine.http_address`` 에는 등록한 OpenSearch 서비스의 연결 대상을 지정합니다. 이 설정을 하지 않으면 |Fess| 는 연결 대상을 찾지 못하고 프로덕션 환경에서는 권장하지 않는 내장 OpenSearch를 시작합니다.
+   - ``fess.search_engine.http_address`` 에는 등록한 OpenSearch 서비스의 연결 대상을 지정합니다. 이 설정을 하지 않으면 |Fess| 는 연결 대상을 찾지 못해 시작되지 않으며, 검색 엔진 주소가 설정되어 있지 않다는 내용을 보고합니다.
    - OpenSearch를 다른 호스트에서 실행하는 경우 호스트명 또는 IP 주소를 적절히 변경하십시오.
    - 경로 구분 문자는 ``/`` 를 사용하십시오.
 

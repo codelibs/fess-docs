@@ -14,15 +14,16 @@ Dockerを利用することで、WindowsやMacなどでも、Fessを簡単にセ
    Linux や macOS をご利用の方も同様の手順でセットアップできますが、Docker Desktop のインストール手順は異なります。
    詳細は `Docker <https://docs.docker.com/get-docker/>`_ のドキュメントを参照してください。
 
-本番環境を構築する場合は、必ず :doc:`15.6/install/index` を参照してください。
-また、システム要件については :doc:`15.6/install/prerequisites` を確認してください。
+本番環境を構築する場合は、必ず :doc:`15.9/install/index` を参照してください。
+また、システム要件については :doc:`15.9/install/prerequisites` を確認してください。
 
 .. warning::
 
    **本番環境での重要な注意事項**
 
-   本番環境や負荷検証などでは、組み込み OpenSearch での稼働は推奨しません。
-   必ず外部の OpenSearch サーバーを構築してください。
+   このページは Fess を試すためのセットアップ手順です。本番環境や負荷検証などでは、
+   :doc:`15.9/install/install-docker` または :doc:`15.9/install/index` を参照して、
+   専用の OpenSearch サーバーを構築してください。
 
 セットアップの流れ
 ------------------
@@ -185,11 +186,11 @@ Fessの停止は、Fessを起動したフォルダーで、以下のコマンド
 
 Fessのセットアップが完了したら、以下のドキュメントを参照してFessを活用してください。
 
-- :doc:`15.6/install/run` — Fessの起動・停止・設定の詳細
-- :doc:`15.6/admin/index` — 管理者向けガイド（クロール設定、ユーザー管理など）
-- :doc:`15.6/user/index` — ユーザーガイド（検索の使い方）
+- :doc:`15.9/install/run` — Fessの起動・停止・設定の詳細
+- :doc:`15.9/admin/index` — 管理者向けガイド（クロール設定、ユーザー管理など）
+- :doc:`15.9/user/index` — ユーザーガイド（検索の使い方）
 
-問題が発生した場合は、 :doc:`15.6/install/troubleshooting` を参照してください。
+問題が発生した場合は、 :doc:`15.9/install/troubleshooting` を参照してください。
 
 .. |image0| image:: ../resources/images/ja/install/dockerdesktop-1.png
 .. |image1| image:: ../resources/images/ja/install/dockerdesktop-2.png

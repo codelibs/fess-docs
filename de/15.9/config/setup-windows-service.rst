@@ -43,7 +43,7 @@ Fügen Sie die Verbindungseinstellungen für OpenSearch in ``c:\opt\fess\bin\fes
     set FESS_JAVA_OPTS=%FESS_JAVA_OPTS% -Dfess.dictionary.path=c:/opt/opensearch/config/dictionary/
 
 .. note::
-   - Geben Sie unter ``fess.search_engine.http_address`` die Verbindungsadresse des registrierten OpenSearch-Dienstes an. Ohne diese Einstellung kann |Fess| die Verbindungsadresse nicht ermitteln und startet die eingebettete OpenSearch-Version, die in Produktionsumgebungen nicht empfohlen wird.
+   - Geben Sie unter ``fess.search_engine.http_address`` die Verbindungsadresse des registrierten OpenSearch-Dienstes an. Ohne diese Einstellung kann |Fess| die Verbindungsadresse nicht ermitteln und startet nicht; es meldet, dass keine Adresse der Suchmaschine konfiguriert ist.
    - Wenn OpenSearch auf einem anderen Host läuft, ändern Sie den Hostnamen oder die IP-Adresse entsprechend.
    - Verwenden Sie ``/`` als Pfadtrennzeichen.
 

@@ -13,15 +13,16 @@ Al utilizar Docker, puede configurar fácilmente Fess en Windows, Mac, etc.
    Esta página explica la configuración en **Windows con Docker**. Los usuarios de Linux o macOS pueden seguir pasos similares, pero la instalación de Docker Desktop varía según la plataforma.
    Para más detalles, consulte la documentación de `Docker <https://docs.docker.com/get-docker/>`_.
 
-Al construir un entorno de operación, asegúrese de consultar :doc:`15.6/install/index`.
-Para conocer los requisitos del sistema, consulte :doc:`15.6/install/prerequisites`.
+Al construir un entorno de operación, asegúrese de consultar :doc:`15.9/install/index`.
+Para conocer los requisitos del sistema, consulte :doc:`15.9/install/prerequisites`.
 
 .. warning::
 
    **Notas importantes para el entorno de producción**
 
-   No se recomienda ejecutar con OpenSearch integrado en entornos de producción o pruebas de carga.
-   Asegúrese de construir un servidor OpenSearch externo.
+   Esta página describe una configuración para probar |Fess|. Para entornos de producción o pruebas de carga,
+   configure un servidor OpenSearch dedicado consultando :doc:`15.9/install/install-docker` o
+   :doc:`15.9/install/index`.
 
 Resumen de la Configuración
 ----------------------------
@@ -184,11 +185,11 @@ Próximos Pasos
 
 Una vez configurado Fess, consulte la siguiente documentación para continuar:
 
-- :doc:`15.6/install/run` — Inicio, detención y configuración detallada
-- :doc:`15.6/admin/index` — Guía del administrador (configuración de rastreo, gestión de usuarios, etc.)
-- :doc:`15.6/user/index` — Guía del usuario (cómo buscar)
+- :doc:`15.9/install/run` — Inicio, detención y configuración detallada
+- :doc:`15.9/admin/index` — Guía del administrador (configuración de rastreo, gestión de usuarios, etc.)
+- :doc:`15.9/user/index` — Guía del usuario (cómo buscar)
 
-Si encuentra algún problema, consulte :doc:`15.6/install/troubleshooting`.
+Si encuentra algún problema, consulte :doc:`15.9/install/troubleshooting`.
 
 .. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
 .. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png

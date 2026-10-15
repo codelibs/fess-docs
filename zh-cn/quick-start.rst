@@ -21,10 +21,10 @@ Fess 是一款开源全文检索服务器，可对网站和文件服务器进行
      - ZIP 包
    * - 事前准备
      - Docker 和 Docker Compose
-     - Java 21、OpenSearch
+     - Java 21（OpenSearch 通过 ``fess-setup`` 命令安装）
    * - 启动便捷性
      - ◎ 仅需几条命令
-     - △ 需要安装多个软件
+     - △ 安装 Java 后，执行几条设置命令
    * - 适合人群
      - 想先试试的用户
      - 无法使用 Docker 环境的用户
@@ -75,9 +75,11 @@ Docker 提供了最快、最可靠的 Fess 运行方式。所有依赖都已打�
 使用 ZIP 包启动
 ================
 
-所需时间目标：**首次 20〜30 分钟左右**\ （包含 Java·OpenSearch 安装时间）
+所需时间目标：**首次 20〜30 分钟左右**\ （包含 Java 安装和 OpenSearch 下载时间）
 
 如果您不使用 Docker，可以通过 ZIP 包直接运行 Fess。
+Fess 不内置搜索引擎，ZIP 包中附带的 ``fess-setup`` 命令会下载 OpenSearch，
+并安装 Fess 所需的插件。
 
 这里的步骤是用于试用的启动方法，关于面向运营的构建步骤，请参考使用 Docker 的 :doc:`安装步骤 <setup>` 等。
 （此处启动的 Fess 是用于简单的功能确认，不推荐在此环境下进行运营）
@@ -85,47 +87,77 @@ Docker 提供了最快、最可靠的 Fess 运行方式。所有依赖都已打�
 前期准备
 --------
 
-在启动 Fess 之前，请先安装以下软件。
+启动前请先安装 Java 21。推荐使用 `Eclipse Temurin <https://adoptium.net/temurin>`__ 的 Java 21。
+无需事先安装 OpenSearch：步骤 2 会进行安装。
 
-**1. 安装 Java 21**
+.. note::
 
-推荐使用 `Eclipse Temurin <https://adoptium.net/temurin>`__ 的 Java 21。
+   OpenSearch 仅为 Linux 和 Windows 提供官方构建。在 macOS 上，
+   ``fess-setup install opensearch`` 会以错误退出；请使用 Docker（方法 1），或参阅
+   :doc:`15.9/install/install-linux` 了解使用 Homebrew 安装 OpenSearch 的方法。
 
-**2. 安装并启动 OpenSearch**
+步骤 1：下载并解压
+------------------
 
-Fess 需要 OpenSearch 来存储数据。
-请参考 :doc:`安装步骤 <setup>` 进行安装并启动。
-
-下载
-----
-
-从 `GitHub 发布站点 <https://github.com/codelibs/fess/releases>`__ 下载最新的 Fess ZIP 包。
-
-安装
-----
-
-解压下载的 fess-x.y.z.zip。
+从 `GitHub 发布站点 <https://github.com/codelibs/fess/releases>`__ 下载最新的 Fess ZIP 包，
+解压后进入该目录。
 
 ::
 
     $ unzip fess-x.y.z.zip
     $ cd fess-x.y.z
 
-启动 Fess
------------
+步骤 2：安装 OpenSearch
+-----------------------
 
-执行 fess 脚本启动 Fess。
-（在 Windows 的情况下，请执行 fess.bat）
+请以普通用户而非 ``root`` 身份执行 ``fess-setup``：OpenSearch 无法以 ``root`` 身份启动。
 
 ::
 
-    $ ./bin/fess
+    # Linux
+    $ bin/fess-setup install opensearch
+
+    # Windows
+    > bin\fess-setup.bat install opensearch
+
+该命令会将此 Fess 所支持版本的 OpenSearch 下载到 Fess 目录下的 ``opensearch/``，
+安装 Fess 所需的四个插件，并将 Fess 需要的设置添加到 ``config/opensearch.yml`` 中。
+``bin/fess`` 会自动找到该 OpenSearch，因此只要 OpenSearch 运行在同一主机上，
+就无需编辑任何配置文件。
+
+.. warning::
+
+   该命令会设置 ``plugins.security.disabled: true``，因此 OpenSearch 无需认证即可接受请求。
+   默认情况下它仅监听回环地址；请勿将其暴露到网络中。
+   有关生产环境的设置，请参阅 :doc:`15.9/install/security`。
+
+有关所有命令（安装 Node.js 和插件、``check``），请参阅 :doc:`15.9/install/fess-setup`。
+
+步骤 3：启动 OpenSearch 和 Fess
+-------------------------------
+
+请先启动 OpenSearch，再启动 Fess：
+
+::
+
+    # Linux
+    $ opensearch/opensearch-3.9.0/bin/opensearch -d
+    $ bin/fess
+
+.. code-block:: bat
+
+    :: Windows（请分别在各自的命令提示符中执行）
+    opensearch\opensearch-3.9.0\bin\opensearch.bat
+    bin\fess.bat
 
 访问管理界面
 ------------
 
 访问 \http://localhost:8080/admin。
 默认管理员账户的用户名/密码为 admin/admin。
+
+如需确认安装情况，请执行 ``bin/fess-setup check``\ （在 Windows 上为 ``bin\fess-setup.bat check``）。
+它会报告 OpenSearch 是否可以连接，以及是否已安装 Fess 所需的插件。
 
 .. warning::
 
@@ -136,6 +168,7 @@ Fess 需要 OpenSearch 来存储数据。
 --------------------
 
 使用 Ctrl-C 或 kill 命令等停止 fess 进程。
+然后以同样的方式停止 OpenSearch（使用 ``kill`` 终止其进程，如果它在前台运行，则使用 ``Ctrl+C``）。
 
 ----
 

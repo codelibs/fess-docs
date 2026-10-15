@@ -13,15 +13,16 @@ Mit Docker können Sie Fess auf Windows, Mac und anderen Systemen einfach einric
    Diese Seite erklärt das Setup unter **Windows mit Docker**. Benutzer von Linux oder macOS können ähnliche Schritte befolgen, aber die Docker Desktop-Installation unterscheidet sich je nach Plattform.
    Weitere Details finden Sie in der `Docker <https://docs.docker.com/get-docker/>`_-Dokumentation.
 
-Wenn Sie eine Produktionsumgebung aufbauen, lesen Sie bitte unbedingt :doc:`15.6/install/index`.
-Die Systemanforderungen finden Sie unter :doc:`15.6/install/prerequisites`.
+Wenn Sie eine Produktionsumgebung aufbauen, lesen Sie bitte unbedingt :doc:`15.9/install/index`.
+Die Systemanforderungen finden Sie unter :doc:`15.9/install/prerequisites`.
 
 .. warning::
 
    **Wichtige Hinweise für die Produktionsumgebung**
 
-   In Produktionsumgebungen oder bei Lasttests wird der Betrieb mit eingebettetem OpenSearch nicht empfohlen.
-   Richten Sie unbedingt einen externen OpenSearch-Server ein.
+   Diese Seite beschreibt ein Setup zum Ausprobieren von Fess. Richten Sie für Produktionsumgebungen
+   oder Lasttests einen dedizierten OpenSearch-Server ein und lesen Sie dazu :doc:`15.9/install/install-docker` oder
+   :doc:`15.9/install/index`.
 
 Setup-Übersicht
 ---------------
@@ -184,11 +185,11 @@ Nächste Schritte
 
 Nach dem Einrichten von Fess können Sie mit folgender Dokumentation weiterarbeiten:
 
-- :doc:`15.6/install/run` — Detaillierte Anleitung zum Starten, Stoppen und Konfigurieren
-- :doc:`15.6/admin/index` — Administratorhandbuch (Crawl-Einstellungen, Benutzerverwaltung usw.)
-- :doc:`15.6/user/index` — Benutzerhandbuch (Suche verwenden)
+- :doc:`15.9/install/run` — Detaillierte Anleitung zum Starten, Stoppen und Konfigurieren
+- :doc:`15.9/admin/index` — Administratorhandbuch (Crawl-Einstellungen, Benutzerverwaltung usw.)
+- :doc:`15.9/user/index` — Benutzerhandbuch (Suche verwenden)
 
-Bei Problemen lesen Sie bitte :doc:`15.6/install/troubleshooting`.
+Bei Problemen lesen Sie bitte :doc:`15.9/install/troubleshooting`.
 
 .. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
 .. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png

@@ -21,10 +21,10 @@ Esta guía está destinada a quienes desean probar Fess rápidamente, describien
      - Paquete ZIP
    * - Requisitos previos
      - Docker y Docker Compose
-     - Java 21, OpenSearch
+     - Java 21 (OpenSearch se instala con el comando ``fess-setup``)
    * - Facilidad de inicio
      - ◎ Solo unos pocos comandos
-     - △ Se requieren múltiples instalaciones de software
+     - △ Instalar Java y ejecutar unos pocos comandos de configuración
    * - Ideal para
      - Quienes quieren probarlo primero
      - Quienes no pueden usar Docker en su entorno
@@ -77,9 +77,11 @@ consulte la :doc:`Guia de instalacion con Docker <15.9/install/install-docker>`.
 Metodo 2: Paquete ZIP
 ======================
 
-Tiempo estimado: **20–30 minutos en el primer inicio** (incluyendo la instalación de Java y OpenSearch)
+Tiempo estimado: **20–30 minutos en el primer inicio** (incluyendo la instalación de Java y la descarga de OpenSearch)
 
 Si no desea usar Docker, puede ejecutar Fess directamente desde el paquete ZIP.
+Fess no incluye un motor de búsqueda; el comando ``fess-setup`` incluido en el paquete ZIP
+descarga OpenSearch e instala los plugins que Fess necesita.
 
 .. note::
 
@@ -89,44 +91,76 @@ Si no desea usar Docker, puede ejecutar Fess directamente desde el paquete ZIP.
 Preparacion Previa
 ------------------
 
-Por favor, instale el siguiente software antes de iniciar Fess.
+Instale Java 21 antes de comenzar. Se recomienda `Eclipse Temurin <https://adoptium.net/temurin>`__ para Java 21.
+No es necesario instalar OpenSearch de antemano: el Paso 2 lo instala.
 
-**1. Instalar Java 21**
+.. note::
 
-Se recomienda `Eclipse Temurin <https://adoptium.net/temurin>`__ para Java 21.
+   OpenSearch publica compilaciones oficiales solo para Linux y Windows. En macOS,
+   ``fess-setup install opensearch`` termina con un error; utilice Docker (Método 1) o consulte
+   :doc:`15.9/install/install-linux` para instalar OpenSearch con Homebrew.
 
-**2. Instalar e iniciar OpenSearch**
+Paso 1: Descargar y extraer
+---------------------------
 
-OpenSearch es necesario para almacenar los datos de Fess.
-Consulte la :doc:`guia de instalacion <setup>` para instalar e iniciar OpenSearch.
-
-Descarga e Instalacion
------------------------
-
-1. Descargue el paquete ZIP mas reciente desde `GitHub Releases <https://github.com/codelibs/fess/releases>`__
-
-2. Extraiga e ingrese al directorio:
+Descargue el paquete ZIP más reciente desde `GitHub Releases <https://github.com/codelibs/fess/releases>`__,
+extráigalo e ingrese al directorio:
 
 .. code-block:: bash
 
     unzip fess-x.y.z.zip
     cd fess-x.y.z
 
-Inicio de Fess
---------------
+Paso 2: Instalar OpenSearch
+---------------------------
+
+Ejecute ``fess-setup`` como usuario normal, no como ``root``: OpenSearch se niega a iniciarse como ``root``.
 
 .. code-block:: bash
 
-    # Linux/Mac
-    ./bin/fess
+    # Linux
+    bin/fess-setup install opensearch
 
     # Windows
+    bin\fess-setup.bat install opensearch
+
+Esto descarga la versión de OpenSearch compatible con este Fess en ``opensearch/`` dentro del
+directorio de Fess, instala los cuatro plugins que Fess necesita y agrega los ajustes que Fess requiere a su
+``config/opensearch.yml``. ``bin/fess`` encuentra este OpenSearch por sí mismo, por lo que no es necesario
+editar ningún archivo de configuración mientras OpenSearch se ejecute en el mismo host.
+
+.. warning::
+
+   El comando establece ``plugins.security.disabled: true``, por lo que OpenSearch acepta solicitudes sin
+   autenticación. De forma predeterminada solo escucha en la dirección de loopback; no lo exponga a
+   una red. Consulte :doc:`15.9/install/security` para la configuración de producción.
+
+Para ver todos los comandos (instalación de Node.js y plugins, ``check``), consulte :doc:`15.9/install/fess-setup`.
+
+Paso 3: Iniciar OpenSearch y Fess
+---------------------------------
+
+Inicie primero OpenSearch y después Fess:
+
+.. code-block:: bash
+
+    # Linux
+    opensearch/opensearch-3.9.0/bin/opensearch -d
+    bin/fess
+
+.. code-block:: bat
+
+    :: Windows (ejecute cada uno en su propio Símbolo del sistema)
+    opensearch\opensearch-3.9.0\bin\opensearch.bat
     bin\fess.bat
 
 Espere aproximadamente 30 segundos para que Fess se inicie, luego acceda a:
 
 - http://localhost:8080/ (Busqueda)
 - http://localhost:8080/admin (Administracion - usuario: admin/admin)
+
+Para comprobar la instalación, ejecute ``bin/fess-setup check`` (``bin\fess-setup.bat check`` en Windows).
+Informa de si OpenSearch es accesible y tiene los plugins que Fess necesita.
 
 .. warning::
 
@@ -137,6 +171,7 @@ Detencion de Fess (ZIP)
 ------------------------
 
 Presione ``Ctrl+C`` en la terminal, o use ``kill`` para detener el proceso fess.
+A continuación, detenga OpenSearch de la misma forma (``kill`` a su proceso, o ``Ctrl+C`` si se ejecuta en primer plano).
 
 ----
 

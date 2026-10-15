@@ -13,15 +13,16 @@ En utilisant Docker, vous pouvez facilement configurer Fess sur Windows, Mac, et
    Cette page explique la configuration sur **Windows avec Docker**. Les utilisateurs de Linux ou macOS peuvent suivre des étapes similaires, mais l'installation de Docker Desktop varie selon la plateforme.
    Pour plus de détails, veuillez consulter la documentation de `Docker <https://docs.docker.com/get-docker/>`_.
 
-Si vous construisez un environnement de production, veuillez absolument consulter :doc:`15.6/install/index`.
-Pour les exigences système, consultez :doc:`15.6/install/prerequisites`.
+Si vous construisez un environnement de production, veuillez absolument consulter :doc:`15.9/install/index`.
+Pour les exigences système, consultez :doc:`15.9/install/prerequisites`.
 
 .. warning::
 
    **Notes importantes pour l'environnement de production**
 
-   Pour les environnements de production ou les tests de charge, l'utilisation d'OpenSearch intégré n'est pas recommandée.
-   Veuillez obligatoirement construire un serveur OpenSearch externe.
+   Cette page décrit une configuration destinée à l'essai de Fess. Pour les environnements de production ou les tests de charge,
+   construisez un serveur OpenSearch dédié en vous référant à :doc:`15.9/install/install-docker` ou
+   :doc:`15.9/install/index`.
 
 Vue d'ensemble de la configuration
 ------------------------------------
@@ -184,11 +185,11 @@ Prochaines étapes
 
 Une fois Fess configuré, consultez la documentation suivante pour aller plus loin :
 
-- :doc:`15.6/install/run` — Démarrage, arrêt et configuration détaillée
-- :doc:`15.6/admin/index` — Guide administrateur (paramètres de crawl, gestion des utilisateurs, etc.)
-- :doc:`15.6/user/index` — Guide utilisateur (comment effectuer des recherches)
+- :doc:`15.9/install/run` — Démarrage, arrêt et configuration détaillée
+- :doc:`15.9/admin/index` — Guide administrateur (paramètres de crawl, gestion des utilisateurs, etc.)
+- :doc:`15.9/user/index` — Guide utilisateur (comment effectuer des recherches)
 
-En cas de problème, consultez :doc:`15.6/install/troubleshooting`.
+En cas de problème, consultez :doc:`15.9/install/troubleshooting`.
 
 .. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
 .. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png

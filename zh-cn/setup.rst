@@ -13,15 +13,16 @@ Fess 提供 ZIP 归档、RPM/DEB 包、Docker 镜像的分发包。
    本页面说明在 **Windows 上使用 Docker 的安装步骤**\ 。Linux 或 macOS 用户也可以按照类似步骤进行安装，但 Docker Desktop 的安装方式因平台而异。
    详情请参考 `Docker <https://docs.docker.com/get-docker/>`_ 的文档。
 
-构建运营环境时，请务必参考 :doc:`15.6/install/index`。
-有关系统要求，请参阅 :doc:`15.6/install/prerequisites`。
+构建运营环境时，请务必参考 :doc:`15.9/install/index`。
+有关系统要求，请参阅 :doc:`15.9/install/prerequisites`。
 
 .. warning::
 
    **生产环境的重要注意事项**
 
-   在生产环境或负载验证等情况下，不推荐使用内置的 OpenSearch 运行。
-   请务必构建外部的 OpenSearch 服务器。
+   本页面介绍的是用于试用 Fess 的安装步骤。在生产环境或负载验证等情况下，
+   请参考 :doc:`15.9/install/install-docker` 或
+   :doc:`15.9/install/index`，构建专用的 OpenSearch 服务器。
 
 设置流程概述
 ------------
@@ -184,11 +185,11 @@ Fess 提供 ZIP 归档、RPM/DEB 包、Docker 镜像的分发包。
 
 Fess 设置完成后，请参考以下文档进一步使用 Fess：
 
-- :doc:`15.6/install/run` — Fess 启动·停止·配置详情
-- :doc:`15.6/admin/index` — 管理员指南（爬虫设置、用户管理等）
-- :doc:`15.6/user/index` — 用户指南（如何搜索）
+- :doc:`15.9/install/run` — Fess 启动·停止·配置详情
+- :doc:`15.9/admin/index` — 管理员指南（爬虫设置、用户管理等）
+- :doc:`15.9/user/index` — 用户指南（如何搜索）
 
-如果遇到问题，请参考 :doc:`15.6/install/troubleshooting`。
+如果遇到问题，请参考 :doc:`15.9/install/troubleshooting`。
 
 .. |image0| image:: ../resources/images/en/install/dockerdesktop-1.png
 .. |image1| image:: ../resources/images/en/install/dockerdesktop-2.png
