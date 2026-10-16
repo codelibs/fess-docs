@@ -1,0 +1,1628 @@
+==================
+Upgrade Procedure
+==================
+
+This page describes the procedures for upgrading |Fess| from a previous version to the latest release.
+
+.. warning::
+
+   **Important Notes Before Upgrade**
+
+   - Always create a backup before upgrading
+   - It is strongly recommended to validate the upgrade in a test environment first
+   - Services will be stopped during the upgrade, so schedule appropriate maintenance time
+   - Configuration file formats may have changed depending on the version
+
+Supported Versions
+==================
+
+This upgrade procedure supports upgrades between the following versions:
+
+- Fess 14.x → Fess 15.10
+- Fess 15.x → Fess 15.10
+
+.. important::
+
+   |Fess| 14.x supports the OpenSearch 2.x series, while |Fess| 15.10 supports OpenSearch 3.9.0.
+   Because the OpenSearch plugins for |Fess| must exactly match the OpenSearch version, upgrading
+   from 14.x also requires a major version upgrade of OpenSearch.
+   See :ref:`upgrade-opensearch` for details.
+
+.. note::
+
+   When upgrading from older versions (13.x or earlier), a phased upgrade may be necessary.
+   For details, check the release notes.
+
+Pre-Upgrade Preparation
+=======================
+
+Verify Version Compatibility
+-----------------------------
+
+Verify the compatibility between the upgrade target version and the current version.
+
+- `Release Notes <https://github.com/codelibs/fess/releases>`__
+- :doc:`prerequisites` - |Fess| 15.10 system requirements (Java and OpenSearch versions)
+
+Plan Downtime
+-------------
+
+The upgrade process requires system shutdown. Plan downtime considering the following:
+
+- Backup time: 10 minutes to several hours (depending on data volume)
+- Upgrade time: 10 to 30 minutes
+- Verification time: 30 minutes to 1 hour
+- Reserve time: 30 minutes
+
+**Recommended Maintenance Time**: Total 2 to 4 hours
+
+Step 1: Data Backup
+===================
+
+Back up all data before upgrading.
+
+Configuration Data Backup
+--------------------------
+
+1. **Backup from Admin Screen**
+
+   Log in to the admin screen and click "System Info" → "Backup".
+
+   The backup page lists the following configuration data as individual items.
+   Click each row to download it (these are individual files per item, not a single ZIP; there is
+   no bulk-download feature, so download the items you need one at a time).
+
+   - ``fess_basic_config.bulk`` - Configuration indices (19 indices covering crawl settings,
+     scheduler, labels, key matches, roles, web/file authentication, and so on)
+   - ``fess_config.bulk`` - The same 19 indices plus runtime data such as crawling information,
+     failure URLs, job logs, and the thumbnail queue (25 indices in total up to 15.8; 15.10 adds the
+     ``tag_type`` index that holds user tags, for 26)
+   - ``fess_user.bulk`` - Users, roles, and groups
+   - ``system.properties`` - System settings, including general configuration
+   - ``fess.json`` - Index settings (shard count, ``index.knn``, and so on)
+   - ``doc.json`` - Document mapping (field definitions)
+
+   .. note::
+
+      ``fess_config.bulk`` already includes everything in ``fess_basic_config.bulk``. For a
+      configuration backup before upgrading, ``fess_basic_config.bulk``, ``fess_user.bulk``, and
+      ``system.properties`` are sufficient. However, if the source is 15.10 or later and you use user tags, also download ``fess_config.bulk``: the ``tag_type`` index that holds the user tags is not part of ``fess_basic_config.bulk`` (see :doc:`../admin/tagtype-guide`).
+
+   .. note::
+
+      Log data such as search logs and click logs (``search_log.ndjson``, ``click_log.ndjson``,
+      ``favorite_log.ndjson``, ``user_info.ndjson``; 15.10 also offers ``chat_log.ndjson``) can also
+      be downloaded from the same page.
+      They are not needed if you only want to back up the configuration. Note that these
+      ``*.ndjson`` files cannot be restored by uploading them on the backup page (see "Rollback
+      Procedure").
+
+2. **Configuration File Backup**
+
+   ZIP version::
+
+       $ cp /path/to/fess/app/WEB-INF/conf/system.properties /backup/
+       $ cp /path/to/fess/app/WEB-INF/classes/fess_config.properties /backup/
+       $ cp /path/to/fess/bin/fess.in.sh /backup/
+
+   RPM version::
+
+       $ sudo cp /etc/fess/system.properties /backup/
+       $ sudo cp /etc/fess/fess_config.properties /backup/
+       $ sudo cp /etc/sysconfig/fess /backup/
+
+   DEB version::
+
+       $ sudo cp /etc/fess/system.properties /backup/
+       $ sudo cp /etc/fess/fess_config.properties /backup/
+       $ sudo cp /etc/default/fess /backup/
+
+   .. note::
+
+      ``/etc/sysconfig/fess`` (RPM version) and ``/etc/default/fess`` (DEB version) are
+      environment variable files that set values such as ``FESS_PORT``, ``FESS_HEAP_SIZE``,
+      ``SEARCH_ENGINE_HTTP_URL``, and ``FESS_DICTIONARY_PATH``. For the ZIP version, the
+      equivalent settings are in ``bin/fess.in.sh``.
+
+3. **Customized Configuration Files**
+
+   If you have customized configuration files, back up those as well::
+
+       $ cp /path/to/fess/app/WEB-INF/classes/log4j2.xml /backup/
+       $ cp /path/to/fess/lib/classes/tomcat_config.properties /backup/
+
+   .. note::
+
+      ``app/WEB-INF/classes/log4j2.xml`` is the log configuration for the |Fess| main (web)
+      process. Child processes such as the crawler use separate files (for example,
+      ``app/WEB-INF/env/crawler/resources/log4j2.xml``, one each for ``crawler``, ``suggest``,
+      ``thumbnail``, and ``chunk`` — four in total), so back those up too if you have customized
+      them.
+
+Index Data Backup
+-----------------
+
+Back up OpenSearch index data.
+
+Method 1: Use Snapshot Feature (Recommended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Back up the index using OpenSearch snapshot feature.
+
+.. note::
+
+   To register a filesystem (``fs``) repository, you must first specify the backup destination
+   directory in ``path.repo`` in OpenSearch's ``opensearch.yml`` and restart OpenSearch.
+
+1. Configure repository::
+
+       $ curl -X PUT "http://localhost:9200/_snapshot/fess_backup" -H 'Content-Type: application/json' -d'
+       {
+         "type": "fs",
+         "settings": {
+           "location": "/backup/opensearch/snapshots"
+         }
+       }'
+
+2. Create snapshot::
+
+       $ curl -X PUT "http://localhost:9200/_snapshot/fess_backup/snapshot_1?wait_for_completion=true"
+
+3. Verify snapshot::
+
+       $ curl -X GET "http://localhost:9200/_snapshot/fess_backup/snapshot_1"
+
+Method 2: Backup Entire Directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Stop OpenSearch and back up the data directory.
+
+::
+
+    $ sudo systemctl stop opensearch
+    $ sudo tar czf /backup/opensearch-data-$(date +%Y%m%d).tar.gz /var/lib/opensearch/data
+    $ sudo systemctl start opensearch
+
+Docker Version Backup
+---------------------
+
+OpenSearch data is stored in Docker volumes. ``compose-opensearch3.yaml`` defines two volumes:
+``search01_data`` for index data and ``search01_dictionary`` for dictionary files.
+
+.. note::
+
+   The actual volume names are prefixed with the Compose project name (by default, the name of
+   the directory containing the Compose files). Check the exact names with::
+
+       $ docker volume ls
+
+Stop the containers, then back up the volumes. Specify the actual volume name, including the
+prefix, for ``-v`` in ``docker run``::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
+    $ PROJECT=$(basename "$(pwd)")
+    $ docker run --rm -v ${PROJECT}_search01_data:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-data-backup.tar.gz /data
+    $ docker run --rm -v ${PROJECT}_search01_dictionary:/data -v $(pwd):/backup ubuntu tar czf /backup/search01-dictionary-backup.tar.gz /data
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
+
+.. warning::
+
+   If you specify ``-v`` with the unprefixed name ``search01_data``, Docker does not reference the
+   existing volume — it creates a new, empty volume with the same name instead. The command does
+   not report an error, and an archive with empty contents is created, so it can look as though
+   the backup succeeded.
+
+.. note::
+
+   The |Fess| main container (``fess01``) has no dedicated volume of its own, so the two volumes
+   above are the only backup targets. However, general settings changed from the admin UI and
+   plugins installed from the admin UI are stored only inside the container and are lost when the
+   container is recreated. Persist these instead by specifying them via ``FESS_JAVA_OPTS`` or
+   ``FESS_PLUGINS`` in the Compose file.
+
+Step 2: Stop Current Version
+=============================
+
+Stop Fess and OpenSearch.
+
+The ZIP version does not include a stop script. If you started ``bin/fess`` with the
+``-p`` option, stop it using the PID file::
+
+    $ kill $(cat /path/to/fess/fess.pid)
+    $ kill <opensearch_pid>
+
+If you started it without ``-p``, find the process ID and ``kill`` it manually (``-d`` alone does
+not create a PID file).
+
+RPM/DEB version (systemd)::
+
+    $ sudo systemctl stop fess.service
+    $ sudo systemctl stop opensearch.service
+
+Docker version::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
+
+.. warning::
+
+   Make sure |Fess| has stopped before you start Step 3, and do not replace the package or the files
+   of a |Fess| that is still running. After the DEB package of a running 15.8 |Fess| was replaced
+   by the 15.10 one, the search screen answered ``404`` until |Fess| was restarted. For the package
+   versions, check with ``systemctl status fess.service``.
+
+Step 3: Install New Version
+============================
+
+The procedure varies depending on the installation method.
+
+ZIP Version
+------------------
+
+1. Download and extract the new version::
+
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.10.0/fess-15.10.0.zip
+       $ unzip fess-15.10.0.zip
+
+   .. note::
+
+      |Fess| archives are distributed only in ZIP format (``fess-15.10.0.tar.gz`` is not
+      provided).
+
+2. Copy configuration from the old version::
+
+       $ cp /path/to/old-fess/app/WEB-INF/conf/system.properties /path/to/fess-15.10.0/app/WEB-INF/conf/
+       $ cp /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.10.0/app/WEB-INF/classes/
+       $ cp /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.10.0/bin/
+
+   .. warning::
+
+      Copied whole, ``fess_config.properties`` and ``fess.in.sh`` keep their old values, including
+      values whose default changed in 15.10: jobs created afterwards default to Groovy, for example.
+      Before running the last two commands, compare each file with the one in ``fess-15.10.0`` and
+      carry over only the values you changed yourself. See :ref:`upgrade-159-carried-over-config`
+      for what to check.
+
+3. If you have customizations, also copy the following::
+
+       # Tomcat settings (the SAML setting tomcat.sameSiteCookies=none is kept here)
+       $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.10.0/lib/classes/
+       # Installed plugins
+       $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.10.0/app/WEB-INF/plugin/
+       # Static themes you uploaded yourself (one directory per theme; never bootstrap)
+       $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.10.0/app/themes/
+
+   .. warning::
+
+      Without ``tomcat_config.properties`` from the old installation, ``tomcat.sameSiteCookies``
+      silently returns to the default ``lax``, and SAML login stops working (see
+      :ref:`upgrade-159-saml`). The shipped file is the same in 15.8.0 and 15.10, so it can be
+      copied as it is.
+
+   .. warning::
+
+      Do not copy ``log4j2.xml`` over the 15.10 file. The 15.10 file keeps the ``RequestLoggingFilter``
+      logger at ``warn``, and a file copied from 15.8 removes that setting: with the log level at
+      DEBUG, the request headers (including ``Authorization``) and the request parameters (including
+      the password typed on the login form) are then written to the log. Compare the two files with
+      ``diff`` and reapply only the changes you made yourself to the 15.10 file.
+
+   .. warning::
+
+      Do not copy the whole ``app/themes/`` directory. It also holds ``bootstrap``, the theme
+      bundled with |Fess|, and copying it over the 15.10 one replaces the 15.10 search screen with
+      the 15.8 version of the theme. Copy only the directories of themes you created yourself.
+      For a theme published by the |Fess| project, install the build for 15.10 instead, with
+      ``bin/fess-setup install theme <name>`` (see :doc:`fess-setup`).
+
+   .. warning::
+
+      Do not copy JSPs (``app/WEB-INF/view/``) edited via "Design" in the admin UI. The search
+      screen of 15.10 is a static theme and no longer uses those JSPs; see
+      :ref:`upgrade-159-static-theme` for where such changes go now.
+
+   .. note::
+
+      Plugins copied from ``app/WEB-INF/plugin/`` were built for the old version. After copying
+      them, run ``bin/fess-setup upgrade plugins`` in ``fess-15.10.0`` to replace each one with the
+      version built for 15.10; see :ref:`upgrade-plugin-versions`.
+
+4. Verify configuration differences and adjust as necessary
+
+RPM/DEB Version
+---------------
+
+Install the new version package::
+
+    # RPM
+    $ sudo rpm -Uvh fess-15.10.0.rpm
+
+    # DEB
+    $ sudo dpkg -i fess-15.10.0.deb
+
+.. note::
+
+   For the RPM version, the configuration files under ``/etc/fess/*`` are registered as
+   ``%config(noreplace)``, so they are retained across upgrades (the new default files are placed
+   alongside them with a ``.rpmnew`` suffix). If new configuration options have been added,
+   manual adjustment may be necessary. A ``/etc/fess/fess_config.properties`` that you modified
+   keeps its old values in 15.10, just as a file copied in the ZIP procedure does; see
+   :ref:`upgrade-159-carried-over-config`.
+
+.. warning::
+
+   For the DEB version, the files under ``/etc/fess`` (such as ``fess_config.properties`` and
+   ``tomcat_config.properties``) are registered as conffiles, like ``/etc/default/fess``,
+   ``/etc/init.d/fess``, and ``/usr/lib/systemd/system/fess.service``. On the first upgrade from
+   15.8, ``dpkg`` treats them as follows:
+
+   - A file you never edited is replaced with the 15.10 file without a question.
+   - For a file you edited, ``dpkg`` asks. If you keep your file (the default answer, or
+     ``--force-confold``), the 15.10 file is placed beside it as ``<file name>.dpkg-dist``. If you
+     install the new file (``Y`` or ``--force-confnew``), your file is saved as
+     ``<file name>.dpkg-old``.
+   - ``dpkg -i`` and ``apt-get install -y`` stop at the first question when nobody can answer it.
+     For an unattended upgrade, pass ``--force-confold`` (``--force-confdef`` also avoids the
+     questions), for example ``sudo dpkg --force-confold -i fess-15.10.0.deb`` or
+     ``sudo apt-get install -y -o Dpkg::Options::=--force-confold ./fess-15.10.0.deb``.
+
+   Back up ``/etc/fess`` first (Step 1) in any case. A file you keep still has its 15.8 values, so
+   compare it with the ``.dpkg-dist`` file instead of using it as it is (see
+   :ref:`upgrade-159-carried-over-config`). Note that ``/etc/fess/system.properties`` is a
+   runtime-generated file not included in the package, so it is not overwritten.
+
+Docker Version
+--------------
+
+1. Obtain Compose files for the new version::
+
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.10.0/compose/compose.yaml
+       $ wget https://raw.githubusercontent.com/codelibs/docker-fess/v15.10.0/compose/compose-opensearch3.yaml
+
+2. Pull new images::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml pull
+
+.. _upgrade-opensearch:
+
+Step 4: Upgrade OpenSearch
+==========================
+
+|Fess| 15.10 supports OpenSearch 3.9.0. If the OpenSearch you connect to is older than that,
+upgrade it using the following procedure.
+
+.. note::
+
+   This procedure applies when you are managing OpenSearch manually on a ZIP or RPM/DEB
+   installation. For the Docker version, pulling the new image in Step 3 updates OpenSearch and
+   its plugins together, so this step is not required.
+
+.. important::
+
+   Regardless of whether you use chunk-vector search (semantic search), |Fess| 15.10 always
+   includes ``index.knn`` in the search index settings and ``content_chunk_vector`` (a
+   ``knn_vector`` type) in the mapping. Because of this, the OpenSearch you connect to **must
+   have the k-NN plugin installed**.
+
+   - It is bundled with the standard OpenSearch distribution and the Docker version's image.
+   - **It is not included in the minimal distribution, so creating a new index fails and |Fess|
+     cannot start.**
+   - The index settings also always send ``knn.derived_source.enabled``. An older OpenSearch
+     that does not recognize this setting fails to create the index regardless of whether the
+     k-NN plugin is present.
+
+   See "Prerequisites" in :doc:`../config/search-semantic` for details.
+
+.. warning::
+
+   Be careful when performing major version upgrades of OpenSearch.
+   Index compatibility issues may occur.
+   |Fess| 14.x uses the OpenSearch 2.x series, so upgrading from 14.x always falls into this
+   case.
+
+   A snapshot taken on OpenSearch 3.9.0 cannot be restored to OpenSearch 3.8.0 or earlier. Keep the
+   snapshot you took before the upgrade in case you need to roll back.
+
+1. Install the new version of OpenSearch
+
+2. Reinstall plugins::
+
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+
+   .. note::
+
+      The version of these plugins must match the version of OpenSearch you use. |Fess| 15.10
+      supports OpenSearch 3.9.0. Installation fails if the versions do not match.
+
+      The four |Fess| plugins are published on maven.codelibs.org, so they are installed by URL. The
+      ``groupId:artifactId:version`` form of ``opensearch-plugin install`` looks only at Maven
+      Central.
+
+3. Move the dictionary directory under the OpenSearch configuration directory
+
+   OpenSearch 3.8.0 and later refuse to create an index when dictionary files are outside the OpenSearch configuration directory.
+   If, following the earlier instructions, ``configsync.config_path`` points outside the configuration directory, such as ``/var/lib/opensearch/data/config/`` (``/path/to/opensearch/data/config/`` for the ZIP version),
+   |Fess| cannot create its indices and does not start.
+   For the RPM/DEB version, copy the dictionary files to ``/etc/opensearch/dictionary/`` as follows::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+       $ sudo cp -a /var/lib/opensearch/data/config/. /etc/opensearch/dictionary/
+       $ sudo chown -R opensearch:opensearch /etc/opensearch/dictionary
+
+   Then change both ``configsync.config_path`` in ``/etc/opensearch/opensearch.yml`` and ``FESS_DICTIONARY_PATH`` of |Fess| (``/etc/sysconfig/fess`` for the RPM version, ``/etc/default/fess`` for the DEB version) to ``/etc/opensearch/dictionary/``.
+   For the ZIP version, use ``config/dictionary/`` of OpenSearch. For details, see :doc:`install-linux`.
+
+4. Start OpenSearch::
+
+       $ sudo systemctl start opensearch.service
+
+Step 5: Start New Version
+==========================
+
+ZIP version::
+
+    $ cd /path/to/fess-15.10.0
+    $ ./bin/fess -d -p /path/to/fess-15.10.0/fess.pid
+
+.. note::
+
+   Specifying ``-p`` creates a PID file, which lets you stop |Fess| the next time with
+   ``kill $(cat /path/to/fess-15.10.0/fess.pid)``.
+
+RPM/DEB version::
+
+    $ sudo systemctl start opensearch.service
+    $ sudo systemctl start fess.service
+
+Docker version::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+Step 6: Verify Operation
+=========================
+
+1. **Check Logs**
+
+   Verify there are no errors.
+
+   ZIP version::
+
+       $ tail -f /path/to/fess/logs/fess.log
+
+   RPM/DEB version::
+
+       $ sudo tail -f /var/log/fess/fess.log
+
+   Docker version::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+   .. note::
+
+      The same log directory also contains ``fess-crawler.log`` for crawl processing,
+      ``audit.log`` for authentication and admin operations, and ``searchlog.log`` for search
+      requests.
+
+2. **Access Web Interface**
+
+   Access http://localhost:8080/ in a browser.
+
+3. **Log in to Admin Screen**
+
+   Access http://localhost:8080/admin and log in with the administrator account.
+
+4. **Check the Version**
+
+   In the admin UI, click "System Info" → "Config Info" and confirm that ``fess.version``
+   shown under "System Properties" reflects the new version.
+
+5. **Verify Search Operation**
+
+   Execute a search on the search screen and verify results are returned normally.
+
+Step 7: Recreate Index (Recommended)
+=====================================
+
+For major version upgrades, it is recommended to recreate the index.
+
+.. note::
+
+   The steps below re-run the crawl; they do not update the index mapping (field definitions).
+   If you need a re-index that updates the mapping — for example, to newly enable chunk-vector
+   search (semantic search) — separately run "Re-indexing" under "System Info" → "Maintenance" in
+   the admin UI. See :ref:`semantic-search-migration` (in :doc:`../config/search-semantic`) for
+   details.
+
+   If you keep a document index created by 15.8 or earlier, also see
+   :ref:`upgrade-reindex-new-fields`.
+
+.. warning::
+
+   OpenSearch 3.9.0 refuses dictionary entries that 15.8 accepted, such as the same ``mapping``
+   entry saved twice or a ``kuromoji`` token that contains a space. With such an entry, "Re-indexing"
+   does not create the new document index: ``fess.log`` only says ``Failed to create index``, and
+   the old index keeps serving searches. Download the dictionary under "System" → "Dictionary",
+   remove the duplicate or invalid lines, upload it again, and run "Re-indexing" again. See
+   :ref:`upgrade-159-api-requests` for the entries that 15.10 no longer saves.
+
+1. Verify existing crawl schedules
+2. Execute "Default Crawler" from "System" → "Scheduler"
+3. Wait for crawl to complete
+4. Verify search results
+
+.. warning::
+
+   Re-indexing rebuilds the index with the new mapping, so it fails on an OpenSearch without the
+   k-NN plugin. Review the notes in Step 4.
+
+Upgrading from 15.8 to 15.10
+===========================
+
+If you are upgrading from 15.8, the following changes are not backward compatible. If you are
+upgrading from 15.7 or earlier, they apply to you as well: read every section from "Removal of the
+embedded OpenSearch" through "Applying New Fields and Kana Normalization to an Existing Document
+Index" (the embedded OpenSearch, the script engine, the S3 and SSO plugins, the Index Exporter job,
+and so on), and then "15.10-Specific Migration Tasks" at the end of this page.
+
+Removal of the embedded OpenSearch
+----------------------------------
+
+Up to 15.8, starting ``bin/fess`` without setting ``SEARCH_ENGINE_HTTP_URL`` made |Fess| run an
+OpenSearch node inside its own JVM. That configuration is gone in 15.10: the search engine is
+always a separate server.
+
+``bin/fess.in.sh`` now sets ``SEARCH_ENGINE_HTTP_URL=http://localhost:9200`` by default. |Fess|
+refuses to start when no OpenSearch is reachable. ``bin/fess-setup install opensearch`` installs
+one (Linux and Windows only; OpenSearch publishes no macOS build, so use Homebrew or Docker
+there).
+
+|Fess| also needs ``FESS_DICTIONARY_PATH`` to match ``configsync.config_path`` in the
+``opensearch.yml`` of that OpenSearch; without it, |Fess| cannot create its indices. The 15.10
+``bin/fess.in.sh`` (``bin\fess.in.bat`` on Windows) sets it on its own when ``opensearch/`` in the
+|Fess| directory holds exactly one OpenSearch installed by ``bin/fess-setup install opensearch``.
+For any other OpenSearch, set it as described in :doc:`install-linux` or :doc:`install-windows`.
+
+Removed along with it:
+
+- the ``es/`` directory (``es/modules``, ``es/plugins`` and ``es/data``)
+- ``-Dfess.es.dir`` and ``SEARCH_ENGINE_HOME``
+- ``bin/module.xml`` and ``bin/plugin.xml``
+- the fallbacks to the legacy ``elasticsearch.*`` configuration keys
+
+An engine older than OpenSearch 3 also stops startup now, where 15.8 logged an error and carried
+on. Those versions do not implement the ``_shard_doc`` sort that every whole-result-set operation
+relies on, and over HTTP such a request hangs rather than failing.
+
+.. warning::
+
+   Index data from an embedded installation cannot be carried over. Build a new external
+   OpenSearch server, move the settings with the admin Backup page, and re-crawl. The backup
+   covers crawl settings, users and logs; it does **not** contain the crawled documents.
+
+.. note::
+
+   Two things to know when you restore a 15.8 backup onto the new 15.10 server:
+
+   - Jobs are restored only when they are newer than the ones on the server. The bundled jobs that
+     you never edited on 15.8 therefore keep their 15.10 JavaScript version. A job that you edited or
+     created on 15.8 comes back with the script engine it was saved with, which is ``groovy`` for a
+     bundled job, and without the ``fess-script-groovy`` plugin it fails with
+     ``groovy is not found``. Install the plugin, or switch such jobs to JavaScript; both are
+     described in :ref:`upgrade-159-script-engine`.
+   - Passwords and secrets stored in the web authentication, crawling configuration and data store
+     settings are encrypted with ``app.cipher.key``. Set the value of the old installation in the
+     ``fess_config.properties`` of the new server, as described in
+     :ref:`upgrade-159-carried-over-config`; otherwise they cannot be decrypted.
+
+Playwright Crawler Moved to a Plugin
+------------------------------------
+
+The Playwright crawler, and the Node.js executables it runs, are no longer part of the
+distribution. In ``fess-15.8.0.zip`` (457.1 MiB), the Playwright driver bundle that carried the
+Node.js executables took up 204.3 MiB.
+
+If a crawl configuration names the Playwright client, for example with
+``client.crawlerClients=playwright:http://.*`` in its configuration parameters, install both the
+plugin and Node.js. The plugin is also available from the System > Plugin page in the
+administration screen. ``bin/fess.in.sh`` discovers Node.js and sets ``PLAYWRIGHT_NODEJS_PATH``.
+
+::
+
+    $ bin/fess-setup install plugin fess-crawler-playwright
+    $ bin/fess-setup install nodejs
+
+Without the plugin, such a configuration is still crawled, but with the plain HTTP client, so
+text that only JavaScript produces is not indexed. The crawl job still ends successfully and no
+failure URL is recorded. For each crawl, ``fess-crawler.log`` records one warning per crawling
+configuration that names the plugin and the two commands above.
+
+The ``fess-thumbnail-playwright`` plugin, which generates thumbnails of HTML pages with
+Playwright, runs on Node.js as well. If you use it, install Node.js with
+``bin/fess-setup install nodejs``; the same installation serves both plugins.
+
+Nothing is needed if you use neither the Playwright crawler nor the ``fess-thumbnail-playwright``
+plugin.
+
+Google Cloud Storage Moved to a Plugin
+--------------------------------------
+
+The Google Cloud Storage SDK is no longer part of the distribution, so ``gcs://`` crawling
+and the ``gcs`` storage type now come from the ``fess-storage-gcs`` plugin. Install it from the
+System > Plugin page in the administration screen, or with the command below.
+
+::
+
+    $ bin/fess-setup install plugin fess-storage-gcs
+
+``gcs`` also left the shipped ``crawler.file.protocols``, which is now
+``file,smb,smb1,ftp``; the plugin adds it back when it is installed. Until then a file crawl
+configuration whose path begins with ``gcs:`` is logged as a warning and crawls nothing. An
+installation that upgrades keeps its own ``crawler.file.protocols``, so the path is still
+accepted but no crawler client handles it; on a new installation ``gcs:`` is not a configured
+protocol, so the administration screen refuses to save the path and a path saved earlier is
+read as a local file path. The storage page logs a warning as well and shows the failure as an
+error naming the plugin to install, where before it rendered an empty file list.
+
+Nothing is needed if you do not use Google Cloud Storage. Amazon S3 and S3-compatible
+storage such as MinIO moved to a plugin in the same way; see the next section.
+
+Amazon S3 Moved to a Plugin
+---------------------------
+
+The AWS SDK is no longer part of the distribution, so ``s3://`` crawling and the ``s3`` and
+``s3_compat`` storage types now come from the ``fess-storage-s3`` plugin. Install it from the
+System > Plugin page in the administration screen, or with the command below.
+
+::
+
+    $ bin/fess-setup install plugin fess-storage-s3
+
+``s3`` also left the shipped ``crawler.file.protocols``, which is now ``file,smb,smb1,ftp``;
+the plugin adds it back when it is installed. ``storage.type`` still defaults to ``auto``,
+which resolves to S3 when no endpoint is set, so the storage page in the administration screen
+does not work until the plugin is installed even if you never named ``s3`` yourself. Your
+``storage.*`` values are kept, because they live in ``WEB-INF/conf/system.properties``, and an
+existing ``crawler.file.protocols`` is not replaced by the upgrade either.
+
+Nothing is needed if you do not use Amazon S3 or S3-compatible storage such as MinIO.
+
+SSO Authentication Moved to Plugins
+-----------------------------------
+
+None of the four SSO authenticators is part of the distribution any more. Each ``sso.type``
+value now comes from its own plugin, which carries the identity library it needs: ``saml`` from
+``fess-sso-saml``, ``spnego`` from ``fess-sso-spnego``, ``entraid`` (and the legacy ``aad``)
+from ``fess-sso-entraid``, and ``oic`` from ``fess-sso-oidc``. Note the last pair: the plugin is
+named ``fess-sso-oidc`` while the ``sso.type`` value stays ``oic``, the one place where the two
+differ. Install the one you use from the System > Plugin page in the administration screen, or
+with the command below.
+
+::
+
+    $ bin/fess-setup install plugin fess-sso-saml
+
+Your settings are kept, because ``sso.type`` and the ``saml.*``, ``spnego.*``, ``entraid.*``,
+``aad.*`` and ``oic.*`` keys live in ``WEB-INF/conf/system.properties``. "System" → "General" in
+the admin UI also still offers all four types and still shows their settings, because a plugin
+cannot supply a JSP, so nothing on that screen reports a missing plugin.
+
+Until the plugin is installed, a request to ``/sso/`` is redirected back to the login page,
+which reports that the SSO login failed, and no one can log in through SSO. 15.10 records a
+warning in ``fess.log`` naming the component it looked for and the plugin that provides it,
+where up to 15.8 nothing was logged at any level.
+
+The ``oic`` plugin is stricter than the 15.8 authenticator. ``oic.token.server.url`` must be
+HTTPS (``http`` only for ``localhost``, ``127.x.x.x`` and ``::1``), the ``aud`` and ``exp`` claims
+of the ID Token are checked, and ``iss`` is checked when the new ``oic.issuer`` key is set. See
+:doc:`../config/sso-oidc`.
+
+In 15.8, ``oic.token.server.url`` could be an ``http`` URL for any host. In 15.10, ``http`` to a Docker Compose service name (such as ``http://keycloak:8080/...``) or an internal host name is refused, even if it points to the same machine. Login then fails and ``fess.log`` records a warning that starts with ``Failed to process the OpenID Connect callback: oic.token.server.url must be https``. Change the token endpoint to an HTTPS URL before you upgrade.
+
+Also set ``oic.issuer`` to the ``issuer`` value of the OP's Discovery document. Without it, ``iss`` is not checked and a warning is logged at the first login after startup. Setting ``oic.issuer`` does not relax the HTTPS rule.
+
+Nothing is needed if you do not use SSO, that is if ``sso.type`` is ``none`` or unset.
+
+.. _upgrade-159-script-engine:
+
+The Built-in Script Engine Changed from Groovy to JavaScript
+------------------------------------------------------------
+
+Up to 15.8 the built-in script engine was Groovy and ``job.default.script`` defaulted to
+``groovy``. In 15.10 the built-in engine is JavaScript and the default is ``javascript``. Groovy is
+no longer built in: it is provided by the ``fess-script-groovy`` plugin, which has to be installed
+before a ``scriptType`` of ``groovy`` can be resolved.
+
+An upgrade does not change the engine stored with a setting, and a setting saved before 15.10 that
+records no engine counts as ``groovy``. Without the plugin, the following stop working:
+
+- Scheduled jobs saved as ``groovy``. **This includes the jobs that 15.8 created itself:**
+  Default Crawler, Suggest Indexer, Config Reloader, Log Aggregator, Doc Purger and the other
+  bundled jobs are all saved as ``groovy``, and at startup 15.10 only adds the bundled jobs that do
+  not exist yet, so it leaves them as they are. Each of them fails whenever its schedule fires, so
+  Default Crawler no longer crawls. Most bundled jobs have "Logging" turned off, so their failures
+  do not appear in the job log, only as ``Failed to execute job`` warnings in ``fess.log``.
+- Web and file crawling configurations with field scripts (``field.script.<field name>``) in
+  "Config Parameters". Every document of such a configuration fails with a
+  ``ScriptEngineException``, recorded as a failure URL, while the crawl job itself still ends
+  successfully.
+- Data store configurations with a "Script". Values other than a plain parameter name cannot be
+  evaluated; see :doc:`../config/datastore/ds-overview`.
+- Document boost rules. Such a rule boosts nothing.
+- Path mappings whose "Replacement" begins with ``groovy:``. Such a mapping is not applied, and
+  URLs are left unchanged.
+
+After the first start, look in ``fess.log`` for a warning that begins with
+``Settings use the script engine groovy, which is not registered``. |Fess| checks the settings
+above once at startup and lists how many of each kind use an engine that no plugin provides. It
+also names ``job.default.script`` when a ``fess_config.properties`` carried over from 15.8 still
+sets ``groovy``, in which case jobs created after the upgrade use Groovy too (see
+:ref:`upgrade-159-carried-over-config`). Resolve it in one of two ways:
+
+- Install the plugin and restart |Fess|. The stored Groovy scripts then run unchanged, and the
+  warning is no longer logged. The plugin can also be installed from "System" → "Plugins" in the
+  admin UI.
+
+  ::
+
+      $ bin/fess-setup install plugin fess-script-groovy
+
+- Move each setting to JavaScript. First rewrite any syntax that only Groovy accepts, then select
+  JavaScript:
+
+  - Scheduled jobs: under "System" → "Scheduler", set "Execution Method" to ``javascript``. The
+    scripts of the bundled jobs are valid JavaScript as they are, with two exceptions: Thumbnail
+    Purger uses the Groovy ``long`` literal ``1000L``, which JavaScript rejects (write ``1000``),
+    and Index Exporter needs the change described in :ref:`upgrade-159-index-exporter`. A
+    JavaScript array literal is converted to a Java ``String[]`` automatically, so the
+    ``as String[]`` casts of the Groovy form are dropped:
+
+    ::
+
+        return container.getComponent("crawlJob").logLevel("info").webConfigIds(["1", "2"]).fileConfigIds(["1"]).dataConfigIds([]).execute(executor);
+
+  - Web and file crawling configurations: add ``config.script.type=javascript`` to
+    "Config Parameters".
+  - Data store configurations: add ``script_type=javascript`` to "Parameters".
+  - Document boost rules: set "Script Type" to ``javascript``.
+  - Path mappings: begin the "Replacement" with ``javascript:`` instead of ``groovy:``.
+  - ``job.default.script``: set it to ``javascript`` in a ``fess_config.properties`` carried over
+    from 15.8.
+
+``crawler.default.script`` Was Removed
+--------------------------------------
+
+``crawler.default.script`` no longer exists in ``fess_config.properties``. Remove it from your
+configuration; a value left under that name has no effect.
+
+The ``storage`` Crawl Protocol Was Removed
+------------------------------------------
+
+``storage`` is no longer accepted in ``crawler.file.protocols``; the shipped value is
+``file,smb,smb1,ftp``. Use ``s3`` instead, and change any file crawling configuration whose
+path begins with ``storage:`` to an ``s3:`` path. ``s3`` needs the ``fess-storage-s3`` plugin.
+
+.. _upgrade-159-index-exporter:
+
+The Index Exporter Job Names a Removed Package
+----------------------------------------------
+
+15.10 no longer ships the ``org.opensearch`` classes; the query builders that job scripts use now
+live under ``org.codelibs.fesen.opensearch``. The script that 15.8 stored for the Index Exporter
+job names ``org.opensearch.index.query.QueryBuilders``, and the upgrade does not replace it, so
+the job fails even with ``fess-script-groovy`` installed. The job ships disabled and without a
+schedule, so this only matters if you run it. Open it under "System" → "Scheduler" and change the
+package in its script to the one 15.10 uses:
+
+::
+
+    return new org.codelibs.fess.job.IndexExportJob().query(org.codelibs.fesen.opensearch.index.query.QueryBuilders.matchAllQuery()).execute()
+
+Change any script of your own that names ``org.opensearch.index.query`` in the same way. See
+:doc:`../config/admin-index-export` for more query examples.
+
+.. _upgrade-159-carried-over-config:
+
+Configuration Files Carried Over from 15.8
+------------------------------------------
+
+The ZIP procedure in Step 3 copies ``fess_config.properties`` and ``bin/fess.in.sh`` from the old
+installation, and an RPM upgrade keeps a ``/etc/fess/fess_config.properties`` that you modified
+(the 15.10 file is placed next to it as ``fess_config.properties.rpmnew``). A DEB upgrade does the
+same when you keep your version at the question (the 15.10 file is placed next to it as
+``fess_config.properties.dpkg-dist``). Either way, 15.10 then runs with the 15.8 values, including
+those whose shipped value changed in 15.10. Review at least the following keys.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Key
+     - 15.8.0
+     - 15.10
+     - Effect of keeping the 15.8 value
+   * - ``job.default.script``
+     - ``groovy``
+     - ``javascript``
+     - Jobs created under "System" → "Scheduler" default to ``groovy`` and fail without the
+       ``fess-script-groovy`` plugin.
+   * - ``job.template.script``
+     - Groovy form with ``as String[]``
+     - JavaScript form
+     - A job created from a crawling configuration gets a Groovy script.
+   * - ``crawler.file.protocols``
+     - ``file,smb,smb1,ftp,storage,s3,gcs``
+     - ``file,smb,smb1,ftp``
+     - A path beginning with ``s3:`` or ``gcs:`` is still accepted without its plugin and is
+       skipped with a warning when crawled. ``storage`` is no longer supported.
+   * - ``search_engine.http.url``
+     - ``http://localhost:9201``
+     - ``http://localhost:9200``
+     - Used when ``SEARCH_ENGINE_HTTP_URL`` is not set, as in a ``bin/fess.in.sh`` copied from
+       15.8 in which you did not set it. |Fess| then looks for OpenSearch on port 9201, the port
+       of the embedded OpenSearch that 15.10 removed.
+   * - ``jvm.crawler.options``, ``jvm.thumbnail.options``
+     - ``-Djcifs.smb.client.*``, ``-Djcifs.smb1.smb.client.*``
+     - ``-Djcifs.client.*``
+     - The SMB timeouts stay at the jcifs defaults; see :ref:`upgrade-159-jcifs`.
+   * - ``response.headers``
+     - Includes the row ``text/html=Content-Security-Policy: reflected-xss block``
+     - Row removed
+     - The login page, the admin console and the other pages |Fess| renders itself are sent with a
+       ``Content-Security-Policy: reflected-xss block`` header that no browser recognizes, and the
+       browser console logs ``Unrecognized Content-Security-Policy directive 'reflected-xss'``. The
+       header restricts nothing. Remove the row, as described below.
+   * - ``app.encrypt.property.pattern``
+     - ``.*password|.*key|.*token|.*secret``
+     - ``.*password|.*passphrase|.*key|.*token|.*secret``
+     - A parameter whose name ends with ``passphrase`` (for example ``ssh.passphrase`` of a data
+       store configuration) is saved in plain text. A value saved earlier stays in plain text until
+       the setting is saved again with the 15.10 pattern.
+   * - ``index.backup.log.targets``
+     - ``click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - ``chat_log.ndjson,click_log.ndjson,favorite_log.ndjson,search_log.ndjson,user_info.ndjson``
+     - The "System Info" → "Backup" page does not offer ``chat_log.ndjson``.
+   * - ``index.export.exclude.fields``
+     - ``cache``
+     - ``cache,tag``
+     - The ``tag`` field, which holds user tags, is no longer left out of the files that the Index
+       Export job writes.
+   * - ``crawler.default.script``, ``theme.allowed.archive.extensions``,
+       ``theme.assets.cache.max.age``, ``theme.assets.precompressed``,
+       ``rag.chat.message.max.length``, ``supported.uploaded.js.extentions``,
+       ``supported.uploaded.css.extentions``, ``supported.uploaded.media.extentions``,
+       ``supported.uploaded.files``, ``online.help.name.design``
+     - Present
+     - Removed
+     - No effect; remove them.
+
+The shipped ``response.headers`` of 15.0 through 15.8 contains the row
+``text/html=Content-Security-Policy: reflected-xss block``. ``reflected-xss`` was a directive of an
+early draft of Content-Security-Policy that browsers no longer recognize, so the header restricts
+nothing and only adds the console error. 15.10 no longer ships the row (the ``X-XSS-Protection`` and
+``X-Frame-Options`` rows are unchanged), but a ``response.headers`` carried over from 15.8 keeps it.
+Remove only this row from ``response.headers`` in ``fess_config.properties``. The ``\n\`` at the end
+of each row continues the value on the next line, so deleting the whole line leaves the others
+intact::
+
+    text/html=Content-Security-Policy: reflected-xss block\n\
+
+If you set ``response.headers`` with ``-Dfess.config.response.headers`` instead, remove the same
+entry from that value.
+
+A ``bin/fess.in.sh`` copied from 15.8 also lacks two things that the 15.10 file has. It leaves
+``SEARCH_ENGINE_HTTP_URL`` unset unless you set it yourself, where 15.10 sets
+``http://localhost:9200``, and it does not look for the Node.js installed by
+``bin/fess-setup install nodejs``, so the Playwright plugins cannot find Node.js unless you set
+``PLAYWRIGHT_NODEJS_PATH``.
+
+Rather than copying either file whole, start from the file shipped with 15.10 and reapply the values
+you changed. ``diff`` shows them::
+
+    $ diff /path/to/old-fess/app/WEB-INF/classes/fess_config.properties /path/to/fess-15.10.0/app/WEB-INF/classes/fess_config.properties
+    $ diff /path/to/old-fess/bin/fess.in.sh /path/to/fess-15.10.0/bin/fess.in.sh
+
+For an RPM upgrade, compare ``/etc/fess/fess_config.properties`` with
+``/etc/fess/fess_config.properties.rpmnew`` in the same way, and for a DEB upgrade with
+``/etc/fess/fess_config.properties.dpkg-dist``. A ``fess_config.properties`` that you never edited
+is replaced by the 15.10 file on a DEB upgrade (see Step 3), so it starts from the 15.10 values.
+
+``app.cipher.key`` is the one value you must carry over even though 15.10 did not change it. It is
+the key that encrypts the passwords and secrets stored in the parameters of web authentication,
+crawling configurations and data store configurations. If the new installation runs with a
+different key than the one that saved them, because you took the shipped ``fess_config.properties``
+or restored a backup onto a new server, they cannot be decrypted: ``fess-crawler.log`` records a
+``CipherFailureException``, and a crawl that includes such a configuration can index nothing.
+
+.. note::
+
+   |Fess| 15.10 also stores the ``password`` of web and file authentication encrypted with ``app.cipher.key``, so
+   ``fess_basic_config.bulk`` and ``fess_config.bulk`` in a backup contain the encrypted values. When you restore onto
+   another installation, carry the same ``app.cipher.key`` over; with a different key, crawls that use these
+   credentials fail with an error. A backup made before 15.10 holds them in plain text and keeps working (see
+   :doc:`../admin/backup-guide`).
+
+.. _upgrade-159-jcifs:
+
+SMB Timeouts Use the jcifs 3 Property Names
+-------------------------------------------
+
+jcifs, the library |Fess| uses to crawl SMB file servers, renamed its properties in version 3:
+``jcifs.smb.client.*`` became ``jcifs.client.*``, and the separate ``jcifs.smb1.smb.client.*``
+names for SMB1 were folded into the same properties. Up to 15.8, ``jvm.crawler.options`` and
+``jvm.thumbnail.options`` still passed the old names, which jcifs ignores, so SMB crawls ran with
+the jcifs defaults. 15.10 passes the new names:
+
+::
+
+    -Djcifs.client.responseTimeout=30000
+    -Djcifs.client.soTimeout=35000
+    -Djcifs.client.connTimeout=60000
+    -Djcifs.client.sessionTimeout=60000
+
+The connect and session timeouts therefore take effect for the first time and grow from the
+jcifs default of 35 seconds to 60 seconds: a crawl now waits up to 60 seconds for an SMB server
+that does not respond. The response and socket timeouts equal the jcifs defaults, so they do not
+change.
+
+If you changed these timeouts, rename them in both options. Under the old names they had no
+effect in 15.8 either. A ``fess_config.properties`` carried over from 15.8 keeps the old names,
+and with them the jcifs defaults.
+
+Four Properties Without Effect Were Removed
+-------------------------------------------
+
+The following keys no longer exist in ``fess_config.properties``. |Fess| never read them from that
+file, so a value left under these names has no effect, as before.
+
+- ``theme.allowed.archive.extensions``
+- ``theme.assets.cache.max.age``
+- ``theme.assets.precompressed``
+- ``rag.chat.message.max.length``
+
+The limit that ``rag.chat.message.max.length`` sets still works, but it is read as a system
+property: set it in ``app/WEB-INF/conf/system.properties`` or with
+``-Dfess.system.rag.chat.message.max.length``, as described in :doc:`../config/rag-chat`.
+
+.. _upgrade-159-static-theme:
+
+The Search Screen Is Now a Static Theme
+---------------------------------------
+
+The search screen is served by the static theme ``bootstrap``, which is bundled with |Fess|, unless
+another theme is selected. This applies to ``/``, ``/search``, ``/advance``, ``/help``,
+``/profile``, ``/cache``, ``/chat`` and the error pages. Up to 15.8, these pages were JSPs unless a
+default theme was set.
+
+The switch happens on upgrade as well. A 15.8 installation that never set a default theme has no
+``theme.default`` in ``system.properties``, so after the upgrade it shows the static theme; nothing is
+written to the configuration and nothing is logged. There is no setting that brings back the JSP
+search screen. If you had set a default theme in 15.8, that setting is kept; install the 15.10 build
+of the theme (``bin/fess-setup install theme <name>``), because a default that names a theme that is
+not installed falls back to ``bootstrap`` with a warning in ``fess.log``.
+
+If you changed the JSPs, CSS or images of the search screen, through "Page Design" in the admin UI
+or in a JAR theme plugin, those changes no longer show. Make them in a static theme: copy the bundled
+theme and change the copy, as described in :ref:`theme-customize-bundled`, or install a published
+theme from "System" > "Theme" in the admin UI or with ``bin/fess-setup install theme <name>``. A
+per-virtual-host look is now a static theme named after the virtual host; see
+:doc:`../config/security-virtual-host`.
+
+Two more things are gone:
+
+- The per-virtual-host login screen. Up to 15.8, saving "System" > "General" copied JSPs,
+  including the login screen, into ``WEB-INF/view/<virtual host name>/``, where each virtual host
+  could edit its own copy. 15.10 no longer makes these copies. The login screen (``/login/``) is
+  still a JSP, but every virtual host gets the same one from ``WEB-INF/view/admin/login/``. JSPs
+  copied earlier are not used.
+- JAR theme plugins (``fess-theme-*``). Installing one only places it as a generic JAR of type
+  ``jar``; no screen changes. Delete a leftover JAR on the "System" > "Plugin" page or with
+  ``bin/fess-setup remove plugin <name>`` (see :doc:`../dev/theme-development`).
+
+If the JSP search results showed a field of your own in 15.8, add that field to
+``query.additional.api.response.fields`` as well as ``query.additional.response.fields``. The static
+theme gets its results from ``/api/v2/search``. ``query.additional.response.fields`` only adds a field
+to what is fetched from the search engine; the API returns only the fields listed in
+``query.additional.api.response.fields`` (see :doc:`../config/search-advanced`). Change the theme to
+show the field as well.
+
+What Clients See
+~~~~~~~~~~~~~~~~
+
+Errors are now rendered in place, at the URL that was requested and with the real HTTP status. A
+browser (a request whose ``Accept`` header includes ``text/html``) gets the theme's error page; any
+other client gets a one-line ``text/plain`` body (for example ``Not Found.`` for ``404``). Up to 15.8, most errors
+answered with a ``302`` redirect to an ``/error/...`` page that itself returned ``200``. Review
+monitoring, health checks and clients that follow ``Location`` headers or expect ``/error/`` URLs.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Request
+     - Up to 15.8
+     - 15.10
+   * - ``/go/`` with a missing parameter, or for a document that does not exist
+     - ``200``, or ``302`` to ``/error/``
+     - ``400`` or ``404``
+   * - ``/thumbnail/`` with a missing parameter, for an unknown document, or with no thumbnail
+     - ``200`` or ``302``
+     - ``400`` or ``404``
+   * - ``/sso/metadata`` and ``/sso/logout`` when the configured SSO type does not handle them
+     - ``302`` to ``/error/badrequest/``
+     - ``400``
+   * - ``/api/v1/*``, ``/json`` and any unknown URL
+     - ``302`` to ``/error/notfound/``
+     - ``404``
+   * - An uncaught exception, including in the admin API
+     - ``302`` to ``/error/systemerror/``
+     - ``500`` with the body ``System Error.`` (not JSON)
+   * - ``/error/notfound/``, ``/error/badrequest/``, ``/error/systemerror/`` themselves
+     - ``200``
+     - ``404``, ``400``, ``500``
+
+With ``login.required=true``, the search pages no longer redirect an anonymous user. They return
+``200`` with the theme, which asks the user to log in, and the data behind them is refused instead:
+every ``/api/v2/`` endpoint other than ``/health``, ``/auth/*`` and ``/ui/config``, including
+``/api/v2/search``, answers ``401`` until the user logs in. ``/go/``, ``/thumbnail/`` and ``/osdd`` still
+redirect to the login. A check that expects a redirect for an anonymous request to ``/`` has to test
+``/api/v2/search`` for ``401`` instead.
+
+The search screen also searches through ``/api/v2/search``, so a search is logged when that API is
+called, not when ``/search`` is requested. A client that does not run JavaScript receives the page
+without results.
+
+The HTML of the search screen carries ``X-Frame-Options: DENY`` and a ``Content-Security-Policy`` with
+``frame-ancestors 'none'``, so no other page can show it in a frame. The JSP search screen of 15.8 sent
+``X-Frame-Options: SAMEORIGIN`` (the default of ``response.headers``) and could be shown in an ``iframe`` on
+a page of the same origin. If you embedded the search screen in an ``iframe`` of the same origin, set
+``theme.index.frame.ancestors`` in ``fess_config.properties`` (default ``'none'``) to ``'self'``. To embed
+it from another origin, name that origin instead (see :doc:`../dev/theme-development`).
+
+The Page Design Editor Was Removed
+----------------------------------
+
+[System > Page Design] is no longer in the admin UI, so the JSP, CSS and image files of the search
+screen can no longer be edited there. Use a static theme to change how the search screen looks (see
+:ref:`theme-customize-bundled`).
+
+The following keys were removed from ``fess_config.properties`` as well. A value left under these
+names is not used.
+
+- ``supported.uploaded.js.extentions``
+- ``supported.uploaded.css.extentions``
+- ``supported.uploaded.media.extentions``
+- ``supported.uploaded.files``
+- ``online.help.name.design``
+
+The ``admin-design`` and ``admin-design-view`` roles no longer grant anything. A user who has only
+these roles is taken to the search screen instead of the admin UI after logging in.
+
+``api.access.token.required`` Was Removed
+-----------------------------------------
+
+``api.access.token.required`` no longer exists in ``fess_config.properties``. A value left under
+that name, including in a ``fess_config.properties`` carried over from 15.8, has no effect. With
+``true`` it refused every API request from a user who was not logged in. Because the search screen
+now searches through ``/api/v2/search``, it would also have left anonymous users with a search
+screen that shows no results.
+
+An installation that set it to ``true`` now answers API requests from anonymous users with the
+guest roles, as it does the search screen. To keep anonymous users from searching, set
+``login.required=true``. Access tokens work as before: a request with a registered access token is
+given the token's permissions, and a request with an unregistered or expired token is refused.
+
+.. _upgrade-159-api-requests:
+
+Requests the API Now Refuses
+----------------------------
+
+15.10 refuses the following requests, which 15.8 accepted. Check the clients and scripts you wrote for 15.8.
+The admin API answers a refusal with HTTP ``400`` and ``status`` ``1`` in the body.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Request
+     - Up to 15.8
+     - 15.10
+   * - ``/api/v2/search`` with ``facet.field`` or ``facet.query``, and a ``facet.size`` of ``0`` or less, or a ``facet.size`` or ``facet.minDocCount`` that is not an integer
+     - ``200``, but an empty result: ``record_count`` is ``0`` and ``partial`` is ``true``
+     - ``400`` (``invalid_request``). ``facet.size`` must be ``1`` or more
+   * - ``track_total_hits=false``. With ``query.track.total.hits`` set to ``false``, every search is affected
+     - ``200``, but with no results
+     - The search is refused (``/api/v2/search`` answers ``400`` with ``invalid_request``). ``true`` and positive integers work as before
+   * - An entry in the ``mapping`` or ``kuromoji`` dictionary that repeats an existing entry, added or updated through the admin API
+     - Saved. Loading the dictionary then fails, which can make search unavailable
+     - ``400``
+   * - An entry in the ``kuromoji`` dictionary whose ``token`` contains a space, or whose ``segmentation`` and ``reading`` have different numbers of space-separated parts, added or updated through the admin API
+     - Saved. Loading the dictionary fails in the same way
+     - ``400``
+   * - ``DELETE /api/admin/searchlist/doc/{doc_id}`` that deletes nothing: a ``doc_id`` that does not exist, or a value that is not a ``doc_id``, such as the ``_id`` shown in the document list
+     - ``200`` (``status`` ``0``); the document is not deleted
+     - ``400``
+   * - A role or group name in ``roles`` or ``groups`` of a user in the admin API
+     - Saved, but the name does not act as a role. For some names, reading the user fails
+     - ``400``. Give the ID of the role or group (the ``id`` returned by ``GET /api/admin/role/settings`` and ``GET /api/admin/group/settings``)
+   * - A user in the admin API whose password breaks the password policy (for example ``password.min.length``, default ``8``); a create request without a password; a ``confirm_password`` that differs from ``password``
+     - Saved; the user can log in with that password
+     - ``400``
+
+Rows of ``/api/v2/documents/all`` no longer carry ``score``. Up to 15.8 every document had its search score;
+15.10 walks the whole result with a point in time and ``search_after``, which gives no score.
+``/json?type=scroll`` and ``/api/v1/documents/all`` of the legacy API plugins behave the same. A script that
+reads ``score`` has to cope with it being absent.
+
+File uploads of the admin API (the six dictionaries, ``badword``, ``elevateword`` and ``storage``) are
+accepted by ``POST``. The 15.8 documentation told you to use ``PUT``, but a ``multipart/form-data`` ``PUT``
+never delivers the file, so in 15.8 as well as in 15.10 it fails with the validation error that the file is
+required. The ``PUT`` endpoints remain; use ``POST`` for uploads.
+
+``search_engine.type=cloud`` is deprecated
+------------------------------------------
+
+15.10 adds the value ``vanilla`` to ``search_engine.type`` for a plain OpenSearch without the CodeLibs plugins (see :doc:`../config/search-engine-type`). ``cloud`` is now a deprecated alias of ``vanilla``: it keeps working, but |Fess| logs a warning at startup. Change it to ``vanilla`` once the installation runs 15.10. ``aws`` keeps working as before.
+
+* ``vanilla`` requires 15.10. |Fess| 15.8 and earlier do not know the value, so keep ``cloud`` as long as you may still roll back to 15.8.
+* The index definitions of ``aws`` and ``cloud`` now come from ``fess_indices/_vanilla/``. The bundled ``fess_indices/_aws/`` and ``fess_indices/_cloud/`` directories no longer exist, and a ``fess_indices/_aws/`` or ``fess_indices/_cloud/`` directory that you added yourself is no longer read. Move your changes to ``fess_indices/_vanilla/``. Indices that already exist are not changed.
+* The suggest settings that 15.8 stored in the search engine are migrated automatically; you do not have to do anything.
+
+The CSV Data Store Parses Quoted Fields
+---------------------------------------
+
+The ``fess-ds-csv`` plugin of 15.10 interprets quotes by default. A field such as ``"Yamada, Taro"``
+is one column, where the 15.8.0 plugin split it at the comma. After ``bin/fess-setup upgrade plugins``,
+check data store configurations that read CSV files with quoted fields. To keep the 15.8 behavior,
+add ``quote_disabled=true`` to "Parameters"; see :doc:`../config/datastore/ds-csv`, which also
+describes what an unmatched quote does.
+
+.. _upgrade-reindex-new-fields:
+
+Applying New Fields and Kana Normalization to an Existing Document Index
+------------------------------------------------------------------------
+
+At startup 15.10 adds new fields to the configuration, log and user indices. In the document index
+it adds only the ``tag`` field (``keyword``), which holds user tags; the rest of the mapping and
+the analysis settings are not changed. If you keep using a document index created by 15.8 or
+earlier, the following 15.10 changes do not take effect.
+
+- **File owner and last modifier** (``owner``, ``last_modifier``): new fields indexed by file
+  system, SMB and FTP crawls. The existing document index has no definition for them, so the first
+  crawled value maps them dynamically as ``text``, and searches such as ``owner:alice`` or
+  ``facet.field=owner`` do not work as intended.
+- **ETag** (``etag``): the field in which the crawler stores the ETag of a crawled page, which 15.10
+  sends back as ``If-None-Match`` so that an unchanged page is not fetched again. The existing
+  document index has no definition for it either, so it is mapped dynamically as ``text`` instead
+  of the bundled non-indexed ``keyword``. Conditional requests still work with that mapping.
+- **Normalization of kana variants and of dashes written in place of the long vowel mark** (for
+  example, ``サ―バ－`` is treated as the same word as ``サーバー``): the rules live in the analysis
+  settings of the document index and in the ``mapping.txt`` dictionary, so an existing index does
+  not get them.
+
+To apply both, enable "Replace Aliases" and "Reset Dictionaries" under "System Info" → "Maintenance"
+in the admin UI and run "Re-indexing". Re-indexing copies the existing documents into a new index, so
+you do not need to crawl again.
+
+.. warning::
+
+   "Reset Dictionaries" overwrites the dictionaries on the OpenSearch side with the bundled
+   dictionary files. If you have edited synonyms or other dictionaries under "Dictionary" in the
+   admin UI, download them first and apply them again after re-indexing: remove duplicate or
+   invalid entries from the downloaded files (see Step 7), upload them, and then click "Reload"
+   under Reload Document Index in "System Info" → "Maintenance". Until you do, the analyzers of the
+   document index keep using the bundled dictionaries and a restored synonym does not match, however
+   long you wait. A dictionary that applies at index time also needs the documents to be crawled
+   again; see :ref:`dict-apply-changes`.
+
+.. note::
+
+   Files indexed by 15.8 or earlier have no owner or last modifier values. Incremental crawling does
+   not fetch unchanged files again, so to add the values, temporarily disable "Check Last Modified"
+   under "System" → "General" and crawl.
+
+
+15.10-Specific Migration Tasks
+=============================
+
+If you are upgrading from 15.7 or earlier to 15.10, the following tasks may be required depending
+on which features you use.
+
+If You Were Using Semantic Search
+---------------------------------
+
+The ``fess-webapp-semantic-search`` plugin, which provided semantic search in 15.7 and earlier,
+is no longer needed (deprecated) because this functionality is now integrated into the core in
+15.10. You need to remove the plugin, remove ``-Dfess.semantic_search.*`` and
+``-Drank.fusion.searchers=default,semantic``, and detach the old ingest pipeline. For the
+procedure, see :ref:`semantic-search-migration` (in :doc:`../config/search-semantic`).
+
+If You Were Using AI Search Mode (RAG)
+--------------------------------------
+
+Starting with 15.10, AI search mode (RAG) functionality has been split out into plugins such as
+``fess-llm-ollama``, ``fess-llm-openai``, and ``fess-llm-gemini``. Install the plugin that
+corresponds to the provider you use from "System" → "Plugins" in the admin UI. 15.10 also adds
+``fess-llm-bedrock`` for Amazon Bedrock.
+
+If You Were Using SPNEGO (Windows Integrated Authentication)
+------------------------------------------------------------
+
+Starting with 15.10, a SPNEGO login is rejected when the Kerberos realm of the client principal
+differs from the server realm. If your users log in from a child domain of an AD domain tree or
+from a trusted forest, list those realms in ``spnego.allowed.realms``, separated by commas, from
+"System" → "General" in the admin UI or in ``app/WEB-INF/conf/system.properties``. Otherwise
+users who could log in up to 15.7 are rejected with ``Kerberos realm is not allowed``. For
+details, see :doc:`../config/sso-spnego`.
+
+The coded defaults of ``spnego.allow.unsecure.basic`` and ``spnego.allow.localhost`` also changed
+from ``true`` to ``false`` in 15.10. An installation where these keys are absent from
+``app/WEB-INF/conf/system.properties`` inherits the stricter behavior on upgrade. In particular,
+with ``spnego.allow.unsecure.basic=false`` the SPNEGO library only offers Basic authentication for
+requests where ``HttpServletRequest#isSecure()`` returns ``true``, so behind a reverse proxy that
+terminates TLS and forwards plain HTTP, clients that used to fall back to Basic authentication can
+no longer log in. Set ``tomcat.secure=true`` in ``tomcat_config.properties`` in that case; see
+:doc:`../config/sso-spnego` for details.
+
+.. warning::
+
+   A coded default only applies while the key is absent, and "System" → "General" in the admin UI
+   writes every ``spnego.*`` key each time you save. An installation that ever pressed Update on
+   that screen under 15.7 therefore still has ``spnego.allow.unsecure.basic=true`` and
+   ``spnego.allow.localhost=true`` stored, so upgrading to 15.10 does not harden it: the permissive
+   behavior is kept silently, and 15.10 only records a warning in ``fess.log`` when SPNEGO is
+   initialized. Open "System" → "General" in the admin UI (or edit ``system.properties``) and
+   turn both off deliberately. ``spnego.allow.localhost=true`` is the more dangerous of the two,
+   because the SPNEGO library then authenticates same-host requests as the server OS user with no
+   Kerberos verification at all, which is unsafe behind a same-host reverse proxy.
+
+.. _upgrade-159-saml:
+
+If You Were Using SAML Authentication (SSO)
+-------------------------------------------
+
+Starting with 15.10, |Fess| binds every SAML response to the ID of the AuthnRequest it sent, so
+IdP-initiated (unsolicited) SSO no longer works. A login started from a |Fess| tile in an IdP
+portal, such as the Okta dashboard or the Microsoft Entra ID "My Apps" portal, has no AuthnRequest
+to match against and is rejected. It worked up to 15.7 because |Fess| bounced the unmatched
+response back to the IdP and the IdP immediately returned a solicited assertion. If you place a
+tile on the IdP side, point it at the |Fess| ``/sso/`` endpoint so that the login is SP-initiated.
+
+The IdP also returns the assertion as a cross-site POST, so ``tomcat.sameSiteCookies`` in
+``tomcat_config.properties`` must be set to ``none``. With the shipped default ``lax`` the session
+cookie is not sent on that request and the SAML login cannot complete. This file is located in
+``lib/classes/`` for the ZIP package and in ``/etc/fess/`` for the DEB/RPM packages, and |Fess|
+must be restarted after the change. Browsers only accept ``none`` on a cookie that also carries
+the ``Secure`` attribute, so |Fess| must be served over HTTPS. Up to 15.7 the same
+misconfiguration did not produce a clean error but an endless redirect loop back to the IdP, so
+check the setting even on a site that appeared to work; 15.10 fails once instead of looping. For
+details, see :doc:`../config/sso-saml`.
+
+If You Were Using Microsoft Entra ID (Azure AD)
+-----------------------------------------------
+
+Starting with 15.10, the response mode requested from the authorization endpoint defaults to
+``query`` instead of ``form_post``. Up to 15.7 the callback was returned as a cross-site POST,
+and the |Fess| default ``tomcat.sameSiteCookies = lax`` does not send the session cookie with
+such a request, so ``tomcat.sameSiteCookies = none`` was required. If you set ``none`` only for
+that reason, you can restore the default. To keep the previous behaviour, set
+``entraid.response.mode=form_post`` and leave ``tomcat.sameSiteCookies = none`` in place.
+Browsers only accept ``none`` on a cookie that also carries the ``Secure`` attribute, so that
+path requires |Fess| to be served over HTTPS as well.
+
+Starting with 15.10, |Fess| also resolves the user's group and role membership in the background
+after login completes, instead of blocking the login on Microsoft Graph. Until resolution
+finishes — or if it does not fully succeed — the user holds only their own user-level permission
+and whatever ``entraid.default.groups`` and ``entraid.default.roles`` provide. With neither of
+those set, which is the shipped default, a search made in that window returns no documents at all,
+because a crawling configuration created with the shipped defaults grants ``{role}guest`` and a
+logged-in user does not hold that role. The search screen says so while resolution is in progress,
+and says something different if it did not fully succeed — the resolution counts as failed unless
+both the direct membership lookup and the nested group walk succeeded. Resolution is retried
+whenever the access token is renewed, and a later success clears the message, so a failure is not
+final for a session that outlives the token; to retry straight away, log out and log in again. For
+details, see :doc:`../config/sso-entraid`.
+
+One consequence of resolving in the background: until it lands, the user's resolved roles are not
+yet known. An administrator is therefore redirected to the search screen instead of the admin
+dashboard, and opening an administration page during that window returns them to the search
+screen. The window is up to about a second of scheduling delay plus the Microsoft Graph calls
+themselves — one for the direct memberships, then one more for each of those groups to walk the
+nested groups, issued one after another on a cold cache — so it grows with the number of groups
+the user belongs to. Access is only ever refused, never granted, in that window, and it needs no
+configuration to get past: authorization is evaluated again on every request of the same session,
+so once resolution has landed the administration screens open normally, without logging in again.
+
+.. warning::
+
+   Do not shorten that window by putting the |Fess| administrator role in
+   ``entraid.default.roles``. That property is a single global value that |Fess| applies to every
+   Entra ID user at login and re-applies on every later resolution, so it would give every user in
+   the tenant permanent |Fess| administrator rights.
+
+If You Use LDAP / Active Directory
+----------------------------------
+
+From 15.10, the permission name of a group or role is the value of the entry's RDN rather than a
+slice of the DN text. A group whose CN contains a character the DN escapes -- a comma is the
+common one -- therefore gets a different permission name than it did in 15.7.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Group entry DN
+     - Permission name up to 15.7
+     - Permission name in 15.10
+   * - ``CN=Sales\, EMEA,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, EMEA``
+   * - ``CN=Sales\, APAC,CN=Users,...``
+     - ``2Sales``
+     - ``2Sales, APAC``
+
+Up to 15.7 several groups agreeing up to the comma collapsed onto one permission name, so members
+of ``Sales, EMEA`` and ``Sales, APAC`` could read each other's documents and those of the ``Sales``
+group. In 15.10 each gets its own permission name and that cross-group access does not happen.
+
+In exchange, **documents indexed under the old permission name are no longer visible to members of
+that group**. If a crawling configuration's permission setting holds an old permission name, update
+it to the new one and crawl (or reindex) again. If you use no group whose CN contains a comma or
+another escaped character, no permission name changes.
+
+Change to ``ldap.role.search.user.enabled``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Up to 15.7 the permission derived from the user name (``role.search.user.prefix`` followed by the
+user name) was granted even with ``ldap.role.search.user.enabled=false``. From 15.10 the setting
+takes effect and the permission is not granted when it is off.
+
+In a deployment that sets it to ``false``, users lose the permission named after themselves after
+the upgrade, so documents permissioned to an individual user stop matching for that user. To keep
+the previous behaviour, restore the shipped default of ``true``.
+
+If You Changed the /api/v2 Configuration Keys
+------------------------------------------------
+
+In 15.8.0, four configuration keys lost their ``api.v2.`` prefix. Their values, defaults and
+behaviour are unchanged, but **no backward-compatible alias is kept**: a setting left under its
+old name is ignored without any warning, and the shipped default takes effect instead.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Up to 15.7
+     - 15.8.0 and later
+     - Default
+   * - ``api.v2.chat.stream.keepalive.interval.ms``
+     - ``api.chat.stream.keepalive.interval.ms``
+     - ``15000``
+   * - ``api.v2.param.max.length``
+     - ``api.param.max.length``
+     - ``1000``
+   * - ``api.v2.param.max.array.size``
+     - ``api.param.max.array.size``
+     - ``100``
+   * - ``api.v2.click.max.rt``
+     - ``api.click.max.timestamp``
+     - ``9999999999999``
+
+If you set any of these in ``fess_config.properties`` or as a ``-Dfess.config.<key>`` JVM
+argument, rename them. Only an explicit setting is affected; an installation that never changed
+them needs no action.
+
+The first key controls how often a keep-alive frame is sent while ``POST /api/v2/chat/stream``
+is waiting for the model, so AI search mode is where a lost setting becomes visible. The last
+key was renamed for accuracy as well: it bounds the ``rt`` value a click log may carry, which is
+a timestamp rather than a response time.
+
+
+.. _upgrade-plugin-versions:
+
+Updating Plugin Versions
+------------------------
+
+Plugins installed under ``app/WEB-INF/plugin/`` need to be replaced with versions matching your
+|Fess| version. ``bin/fess-setup upgrade plugins`` does this for every installed plugin: it
+installs the version built for this |Fess| and deletes the old one. Restart |Fess| afterwards.
+``bin/fess-setup check`` then reports on OpenSearch, its plugins and the installed |Fess| plugins,
+and exits with code 1 when something is wrong. It does not read ``bin/fess.in.sh``,
+``/etc/sysconfig/fess`` or ``/etc/default/fess``, so when OpenSearch is not at
+``http://localhost:9200``, pass ``--url`` or set ``SEARCH_ENGINE_HTTP_URL`` in the shell that runs
+it; otherwise it reports the engine as unreachable.
+
+::
+
+    $ bin/fess-setup upgrade plugins
+    $ bin/fess-setup check
+
+``upgrade plugins`` only handles plugins that are already installed. Install the plugins that
+replace parts removed from the distribution in 15.10, such as ``fess-script-groovy``, with
+``bin/fess-setup install plugin`` as described in the sections above.
+
+If you specify ``FESS_PLUGINS`` in the Docker version, update the version part, for example to
+``fess-ds-wikipedia:15.10.0``.
+
+Rollback Procedure
+==================
+
+If the upgrade fails, you can rollback with the following procedure.
+
+Step 1: Stop New Version
+-------------------------
+
+::
+
+    $ sudo systemctl stop fess.service
+    $ sudo systemctl stop opensearch.service
+
+Step 2: Restore Old Version
+----------------------------
+
+Restore configuration files and data from backup.
+
+For RPM/DEB version::
+
+    $ sudo rpm -Uvh --oldpackage --nodeps fess-<old-version>.rpm
+
+Or::
+
+    $ sudo dpkg -i fess-<old-version>.deb
+
+.. note::
+
+   ``--nodeps`` is needed for the RPM. The 15.8.0 package requires the ``fess`` and ``opensearch``
+   users and groups, and without it ``rpm`` refuses the downgrade with ``Failed dependencies:
+   group(fess) is needed by fess-15.8.0``.
+
+.. warning::
+
+   The 15.8.0 DEB package does not register ``/etc/fess/*`` as conffiles, so ``dpkg -i`` overwrites
+   the files you edited, such as ``/etc/fess/fess_config.properties``, without keeping a copy. Restore
+   them from the backup you took in Step 1.
+
+Step 3: Restore Data
+---------------------
+
+Restore from snapshot. OpenSearch must be running and |Fess| stopped:
+
+1. Start OpenSearch::
+
+       $ sudo systemctl start opensearch.service
+
+2. A snapshot cannot be restored over an index that exists, so delete every Fess index first,
+   including the ones created after the upgrade (for example by re-indexing), and the ``configsync``
+   index that the OpenSearch plugin creates. If you delete only the indices that are in the
+   snapshot, an index created by re-indexing stays behind, ``fess.search`` points at two indices,
+   and 15.8.0 does not start::
+
+       $ curl "http://localhost:9200/_cat/indices/fess*,configsync?h=index"
+       $ curl -X DELETE "http://localhost:9200/<index name>"
+
+   Run the second command for each index that the first one lists.
+
+3. Restore the snapshot::
+
+       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+
+.. note::
+
+   The dictionary directory must exist as before (``configsync.config_path``, with the dictionary
+   files). On a machine that has lost it, the restore finishes but the indices that use the
+   dictionaries stay red.
+
+Or restore directory from backup (use the name of the archive you created in Step 1)::
+
+    $ sudo systemctl stop opensearch
+    $ sudo rm -rf /var/lib/opensearch/data/*
+    $ sudo tar xzf /backup/opensearch-data-<YYYYMMDD>.tar.gz -C /
+    $ sudo systemctl start opensearch
+
+For the Docker version, revert to the old version's Compose files, then restore the volume
+contents::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
+    $ PROJECT=$(basename "$(pwd)")
+    $ docker run --rm -v ${PROJECT}_search01_data:/data -v $(pwd):/backup ubuntu \
+        sh -c "rm -rf /data/* && tar xzf /backup/search01-data-backup.tar.gz -C /"
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+.. note::
+
+   Configuration data downloaded from the admin screen can be re-imported after starting |Fess|
+   via the upload feature on the "System Info" → "Backup" page. You can upload ``*.bulk`` files,
+   ``*.properties`` files starting with ``system``, ``*.xml`` files starting with ``gsa``,
+   ``*.json`` files starting with ``fess``, and ``*.json`` files starting with ``doc`` — one file
+   per operation. ``*.ndjson`` files such as search logs are not accepted and result in an error.
+
+.. warning::
+
+   Uploading ``fess.json`` or ``doc.json`` overwrites the index definition files bundled with
+   |Fess| itself. If you upload the ``fess.json`` or ``doc.json`` from an older version after
+   upgrading, you lose the new version's index settings and mapping. Do not upload these files
+   except for rollback purposes.
+
+.. note::
+
+   The uploaded ``system.properties`` is loaded into memory only and is not written back to a
+   file, so its contents are lost when |Fess| is restarted. To restore it reliably, place the
+   backed-up file directly in its proper location before starting |Fess| (``app/WEB-INF/conf/``
+   for the ZIP version, ``/etc/fess/`` for the RPM/DEB version).
+
+.. note::
+
+   The import runs asynchronously; the screen only shows that it has started. Check
+   ``fess.log`` to confirm whether it actually succeeded.
+
+Step 4: Start and Verify Service
+---------------------------------
+
+::
+
+    $ sudo systemctl start opensearch.service
+    $ sudo systemctl start fess.service
+
+Verify operation and confirm it has returned to normal.
+
+Frequently Asked Questions
+===========================
+
+Q: Can I upgrade without downtime?
+-----------------------------------
+
+A: Upgrading Fess requires service shutdown. To minimize downtime, consider the following:
+
+- Verify procedures in a test environment first
+- Create backups in advance
+- Secure sufficient maintenance time
+
+Q: Do I need to upgrade OpenSearch too?
+----------------------------------------
+
+A: Each version of |Fess| requires a specific version of OpenSearch.
+|Fess| 15.10 requires OpenSearch 3.9.0.
+The |Fess| OpenSearch plugins such as ``opensearch-analysis-fess`` must exactly match the
+OpenSearch version, so if you upgrade OpenSearch, also update the plugins to the corresponding
+version (3.9.0).
+
+Also, |Fess| 15.10 requires the k-NN plugin and always sends ``knn.derived_source.enabled`` in the
+index settings. With an older OpenSearch, creating a new index fails, so upgrading OpenSearch is
+effectively required. See Step 4 for details.
+
+Q: Do I need to recreate the index?
+------------------------------------
+
+A: For a |Fess| minor version upgrade (15.x → 15.10) where you do not use chunk-vector search, it
+is usually not necessary. The existing index can continue to be used as-is, and settings such as
+``content_chunker.enabled`` remain disabled by default, so behavior does not change.
+
+Recreation and re-indexing are required in the following cases:
+
+- **Newly enabling chunk-vector search (semantic search)**: The existing index does not pick up
+  the new mapping, so re-indexing is required. See :ref:`semantic-search-migration` (in
+  :doc:`../config/search-semantic`) for details.
+- **Upgrading from 14.x**: Because OpenSearch undergoes a major version upgrade from 2.x to 3.x,
+  recreating the index is recommended.
+- **Using owner search or the kana normalization with a document index created by 15.8 or earlier**:
+  a re-index is needed. See :ref:`upgrade-reindex-new-fields` for details.
+
+.. warning::
+
+   Operations that create a new index (including re-indexing) fail on an OpenSearch without the
+   k-NN plugin. Review the notes in Step 4.
+
+Q: Search results are not displayed after upgrade
+--------------------------------------------------
+
+A: Verify the following:
+
+1. Verify OpenSearch is running
+2. Verify indexes exist (``curl http://localhost:9200/_cat/indices``)
+3. Re-run crawl
+
+Next Steps
+==========
+
+After the upgrade is complete:
+
+- :doc:`run` - Verify startup and initial configuration
+- :doc:`security` - Review security configuration
+- :doc:`../config/search-semantic` - Chunk-vector search (semantic search) configuration and migration steps
+- Check release notes for new features

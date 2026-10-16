@@ -1,0 +1,684 @@
+=========
+Allgemein
+=========
+
+Übersicht
+=========
+
+Auf dieser Verwaltungsseite können Sie die Konfiguration von |Fess| verwalten.
+Sie können verschiedene Konfigurationen von |Fess| ändern, ohne |Fess| neu zu starten.
+
+Konfigurationsinhalt
+====================
+
+System
+------
+
+|image0|
+
+JSON-Antwort
+::::::::::::
+
+Gibt an, ob die JSON-API aktiviert werden soll.
+
+Anmeldung erforderlich
+::::::::::::::::::::::
+
+Gibt an, ob eine Anmeldung für die Suchfunktion erforderlich ist.
+
+Anmeldelink anzeigen
+::::::::::::::::::::
+
+Konfiguriert, ob auf dem Suchbildschirm ein Link zur Anmeldeseite angezeigt werden soll.
+
+Doppelte Ergebnisse ausblenden
+:::::::::::::::::::::::::::::::
+
+Konfiguriert, ob das Ausblenden doppelter Ergebnisse aktiviert werden soll.
+
+Ist ``search_engine.type`` auf ``vanilla`` oder ``aws`` gesetzt, wird dieser Eintrag nicht angezeigt, und das Ausblenden bleibt ausgeschaltet (siehe :doc:`../config/search-engine-type`).
+
+Miniaturansicht anzeigen
+::::::::::::::::::::::::
+
+Konfiguriert, ob die Miniaturansicht aktiviert werden soll.
+
+Systemeigenschaften
+:::::::::::::::::::
+
+Konfiguriert die Systemeigenschaften von |Fess|.
+Geben Sie im Format ``key=value`` an, eine pro Zeile.
+
+Standard-Labelwert
+:::::::::::::::::::
+
+Beschreiben Sie den Label-Wert, der standardmäßig zur Suchbedingung hinzugefügt werden soll.
+Um ihn für Rollen oder Gruppen anzugeben, fügen Sie „role:" oder „group:" hinzu, wie z. B. „role:admin=label1".
+
+Standard-Sortierwert
+::::::::::::::::::::
+
+Beschreiben Sie den Sortierwert, der standardmäßig zur Suchbedingung hinzugefügt werden soll.
+Um ihn für Rollen oder Gruppen anzugeben, fügen Sie „role:" oder „group:" hinzu, wie z. B. „role:admin=content_length.desc".
+
+Virtueller Host
+:::::::::::::::
+
+Konfigurieren Sie den virtuellen Host.
+Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/security-virtual-host>`.
+
+Antwort für beliebtes Wort
+::::::::::::::::::::::::::
+
+Gibt an, ob die API für beliebte Wörter aktiviert werden soll.
+
+CSV-Dateikodierung
+:::::::::::::::::::
+
+Geben Sie die Kodierung für heruntergeladene CSV-Dateien an.
+
+Suchparameter anhängen
+::::::::::::::::::::::
+
+Aktivieren Sie dies, wenn Sie Parameter an die Suchergebnisanzeige übergeben möchten.
+
+Suchdatei-Proxy
+:::::::::::::::
+
+Gibt an, ob der Datei-Proxy für Suchergebnisse aktiviert werden soll.
+
+Browser-Gebietsschema verwenden
+::::::::::::::::::::::::::::::::
+
+Gibt an, ob das Browser-Gebietsschema für die Suche verwendet werden soll.
+
+SSO-Typ
+:::::::
+
+Gibt den Typ der Einmalanmeldung (Single Sign-On) an.
+
+- **Keine**: SSO nicht verwenden
+- **OpenID Connect**: OpenID Connect verwenden (erfordert das Plugin ``fess-sso-oidc``)
+- **SAML**: SAML verwenden (erfordert das Plugin ``fess-sso-saml``)
+- **SPNEGO**: SPNEGO verwenden (erfordert das Plugin ``fess-sso-spnego``)
+- **Entra ID**: Microsoft Entra ID verwenden (erfordert das Plugin ``fess-sso-entraid``)
+
+Crawler
+-------
+
+|image1|
+
+Letzte Änderung prüfen
+::::::::::::::::::::::
+
+Aktivieren Sie dies für differenzielles Crawling.
+
+Bei HTTP/HTTPS-URLs wird, wenn der ``Last-Modified``-Wert der HEAD-Antwort keine Entscheidung
+erlaubt (kein Änderungsdatum im Index, kein ``Last-Modified`` in der HEAD-Antwort oder ein anderer
+Status als 200/404), der GET als bedingter GET mit ``If-None-Match`` (dem indexierten ``ETag``)
+und/oder ``If-Modified-Since`` gesendet. Eine mit ``304 Not Modified`` beantwortete Seite wird wie
+eine unveränderte Seite behandelt und nicht erneut abgerufen. Um alles erneut abzurufen, etwa nach
+einer Änderung der Crawl-Einstellungen, deaktivieren Sie diese Einstellung für einen Crawl.
+
+Gleichzeitige Crawler-Konfiguration
+:::::::::::::::::::::::::::::::::::::
+
+Geben Sie die Anzahl der gleichzeitig auszuführenden Crawl-Konfigurationen an.
+
+Benutzer-Agent
+::::::::::::::
+
+Geben Sie den Benutzer-Agent-Namen an, der vom Crawler verwendet wird.
+
+Alte Dokumente löschen
+::::::::::::::::::::::
+
+Geben Sie die Gültigkeitsdauer von Dokumenten in Tagen an. Ein Dokument, das bei einem Crawl registriert oder aktualisiert wird, läuft diese Anzahl von Tagen nach dem Beginn des Crawls ab; wird ein Dokument beim nächsten Crawl erneut gefunden, verlängert sich seine Gültigkeit. Der Doc-Purger-Job des Schedulers (standardmäßig jede Minute ausgeführt) löscht abgelaufene Dokumente aus dem Index.
+
+Der Standardwert ist ``3``; zulässig sind Werte von ``-1`` bis ``1000``. Bei ``-1`` wird für Dokumente, die bei späteren Crawls registriert oder aktualisiert werden, kein Ablaufdatum gesetzt (ein bereits gesetztes Ablaufdatum wird nicht verlängert).
+
+Fehlertypen ignorieren
+::::::::::::::::::::::
+
+Fehler-URLs, die den Schwellenwert überschreiten, werden vom Crawlen ausgeschlossen, aber hier angegebene Ausnahmenamen werden auch dann gecrawlt, wenn sie den Schwellenwert überschreiten.
+
+Fehleranzahlschwelle
+::::::::::::::::::::
+
+Wenn ein zu crawlendes Dokument mehr als die hier angegebene Anzahl in Fehler-URLs aufgezeichnet wurde, wird es beim nächsten Crawl ausgeschlossen.
+
+Protokollierung
+---------------
+
+Suchprotokoll
+:::::::::::::
+
+Gibt an, ob die Suchprotokollierung aktiviert werden soll.
+
+Benutzerprotokoll
+:::::::::::::::::
+
+Gibt an, ob die Benutzerprotokollierung aktiviert werden soll.
+
+Favoritenprotokoll
+::::::::::::::::::
+
+Gibt an, ob die Favoritenprotokollierung aktiviert werden soll.
+
+Alte Suchprotokolle löschen
+:::::::::::::::::::::::::::
+
+Löscht Suchprotokolle, die älter als die angegebene Anzahl von Tagen sind. Der Standardwert ist ``-1``; bei ``-1`` werden die Protokolle nicht gelöscht, sondern unbegrenzt aufbewahrt.
+Klickprotokolle, Favoritenprotokolle und Chat-Protokolle werden nach derselben Anzahl von Tagen gelöscht.
+
+Alte Jobprotokolle löschen
+::::::::::::::::::::::::::
+
+Löscht Jobprotokolle, die älter als die angegebene Anzahl von Tagen sind. Der Standardwert ist ``-1``; bei ``-1`` werden sie nicht gelöscht.
+
+Alte Benutzerprotokolle löschen
+:::::::::::::::::::::::::::::::
+
+Löscht Benutzerprotokolle, die älter als die angegebene Anzahl von Tagen sind. Der Standardwert ist ``-1``; bei ``-1`` werden sie nicht gelöscht.
+
+Bot-Namen zum Löschen von Protokollen
+::::::::::::::::::::::::::::::::::::::
+
+Geben Sie Bot-Namen an, die aus Suchprotokollen ausgeschlossen werden sollen.
+
+Protokollebene
+::::::::::::::
+
+Geben Sie die Protokollebene für fess.log an.
+
+Vorschlagen
+-----------
+
+Vorschläge aus Suchbegriffen
+::::::::::::::::::::::::::::
+
+Gibt an, ob Vorschlagskandidaten aus Suchprotokollen generiert werden sollen.
+
+Vorschläge aus Dokumenten
+:::::::::::::::::::::::::
+
+Gibt an, ob Vorschlagskandidaten aus indizierten Dokumenten generiert werden sollen.
+
+Alte Vorschlagsinformationen löschen
+:::::::::::::::::::::::::::::::::::::
+
+Löscht Vorschlagsdaten, die älter als die angegebene Anzahl von Tagen sind.
+
+LDAP
+----
+
+|image2|
+
+LDAP-URL
+::::::::
+
+Geben Sie die URL des LDAP-Servers an.
+
+Basis-DN
+::::::::
+
+Geben Sie den Basis-Distinguished-Name für die Anmeldung am Suchbildschirm an.
+
+Bind-DN
+:::::::
+
+Geben Sie den Bind-DN des Administrators an.
+
+Passwort
+::::::::
+
+Geben Sie das Passwort für den Bind-DN an.
+
+Benutzer-DN
+:::::::::::
+
+Geben Sie den Distinguished-Name des Benutzers an.
+
+Kontofilter
+:::::::::::
+
+Geben Sie den Common Name oder die UID des Benutzers an.
+
+Gruppenfilter
+:::::::::::::
+
+Geben Sie die Filterbedingung für abzurufende Gruppen an.
+
+memberOf-Attribut
+:::::::::::::::::
+
+Geben Sie den memberOf-Attributnamen an, der auf dem LDAP-Server verfügbar ist.
+Für Active Directory ist es memberOf.
+Für andere LDAP-Server kann es isMemberOf sein.
+
+Sicherheitsauthentifizierung
+::::::::::::::::::::::::::::
+
+Gibt die LDAP-Sicherheitsauthentifizierungsmethode an (z.B. simple).
+
+Initiale Kontextfabrik
+::::::::::::::::::::::
+
+Gibt die LDAP-Klasse der initialen Kontextfabrik an (z.B. com.sun.jndi.ldap.LdapCtxFactory).
+
+OpenID Connect
+--------------
+
+|image3|
+
+Client-ID
+:::::::::
+
+Gibt die Client-ID des OpenID Connect-Anbieters an.
+
+Client-Geheimnis
+::::::::::::::::
+
+Gibt das Client-Geheimnis des OpenID Connect-Anbieters an.
+
+Autorisierungsserver-URL
+::::::::::::::::::::::::
+
+Gibt die URL des Autorisierungsservers für OpenID Connect an.
+
+Token-Server-URL
+::::::::::::::::
+
+Gibt die URL des Token-Servers für OpenID Connect an.
+
+Weiterleitungs-URL
+::::::::::::::::::
+
+Gibt die Weiterleitungs-URL für OpenID Connect an.
+
+Geltungsbereich
+:::::::::::::::
+
+Gibt den Geltungsbereich für OpenID Connect an.
+
+Basis-URL
+:::::::::
+
+Gibt die Basis-URL für OpenID Connect an.
+
+Standardgruppen
+:::::::::::::::
+
+Gibt die Standardgruppen an, die Benutzern bei der OpenID Connect-Authentifizierung zugewiesen werden.
+
+Standardrollen
+::::::::::::::
+
+Gibt die Standardrollen an, die Benutzern bei der OpenID Connect-Authentifizierung zugewiesen werden.
+
+SAML
+----
+
+|image4|
+
+IdP-Entitäts-ID
+:::::::::::::::
+
+Gibt die Entitäts-ID des IdP (Identity Provider) an.
+
+IdP SSO URL
+:::::::::::
+
+Gibt die Single Sign-On-Dienst-URL des IdP an.
+
+IdP SLO URL
+:::::::::::
+
+Gibt die Single Logout-Dienst-URL des IdP an.
+
+IdP X.509-Zertifikat
+::::::::::::::::::::
+
+Gibt das öffentliche X.509-Schlüsselzertifikat für die SAML-Assertion-Signaturverifizierung des IdP an.
+Geben Sie nur den Base64-kodierten Inhalt ohne ``-----BEGIN CERTIFICATE-----`` und ``-----END CERTIFICATE-----`` Zeilen an.
+
+SP-Basis-URL
+::::::::::::
+
+Gibt die Basis-URL des SAML Service Providers an.
+
+SP-Entitäts-ID
+::::::::::::::
+
+Gibt die Entitäts-ID des SP (Service Provider) an.
+Wird automatisch konfiguriert, wenn ``SP-Basis-URL`` gesetzt ist.
+
+SP ACS URL
+::::::::::
+
+Gibt die Assertion Consumer Service (ACS) URL an, die SAML-Assertions empfängt.
+Wird automatisch konfiguriert, wenn ``SP-Basis-URL`` gesetzt ist.
+
+SP SLO URL
+::::::::::
+
+Gibt die Single Logout-Dienst-URL des SP an.
+Wird automatisch konfiguriert, wenn ``SP-Basis-URL`` gesetzt ist.
+
+SP NameID-Format
+::::::::::::::::
+
+Gibt das NameID-Format an, das in SAML-Assertions verwendet wird.
+
+Gruppenattributname
+:::::::::::::::::::
+
+Gibt den Attributnamen zum Abrufen von Gruppen aus der SAML-Antwort an.
+
+Rollenattributname
+::::::::::::::::::
+
+Gibt den Attributnamen zum Abrufen von Rollen aus der SAML-Antwort an.
+
+Standardgruppen
+:::::::::::::::
+
+Gibt die Standardgruppen an, die Benutzern bei der SAML-Authentifizierung zugewiesen werden.
+
+Standardrollen
+::::::::::::::
+
+Gibt die Standardrollen an, die Benutzern bei der SAML-Authentifizierung zugewiesen werden.
+
+SPNEGO
+------
+
+|image5|
+
+.. note::
+   SPNEGO-bezogene Einstellungen werden prozessweit innerhalb der zugrunde liegenden Bibliothek gemeinsam genutzt. Damit Änderungen daran wirksam werden, ist ein Neustart von |Fess| erforderlich.
+
+Krb5-Konfiguration
+::::::::::::::::::
+
+Gibt den Pfad zur Kerberos 5-Konfigurationsdatei an.
+
+Anmeldekonfiguration
+::::::::::::::::::::
+
+Gibt den Pfad zur JAAS-Anmeldekonfigurationsdatei (Java Authentication and Authorization Service) an.
+
+Anmelde-Client-Modul
+::::::::::::::::::::
+
+Gibt den Namen des JAAS-Client-Anmeldemoduls an.
+
+Anmelde-Server-Modul
+::::::::::::::::::::
+
+Gibt den Namen des JAAS-Server-Anmeldemoduls an.
+
+Vorab-Authentifizierung Benutzername
+::::::::::::::::::::::::::::::::::::
+
+Gibt den Benutzernamen für die SPNEGO-Vorab-Authentifizierung an.
+Werden Benutzername und Passwort leer gelassen, wird die keytab-basierte Serveranmeldung verwendet.
+
+Vorab-Authentifizierung Passwort
+::::::::::::::::::::::::::::::::
+
+Gibt das Passwort für die SPNEGO-Vorab-Authentifizierung an.
+
+Basic-Authentifizierung erlauben
+::::::::::::::::::::::::::::::::
+
+Gibt an, ob Basic-Authentifizierung als Fallback erlaubt werden soll.
+
+Unsichere Basic-Authentifizierung erlauben
+::::::::::::::::::::::::::::::::::::::::::
+
+Gibt an, ob Basic-Authentifizierung über unsichere (HTTP) Verbindungen erlaubt werden soll.
+Dies ist standardmäßig deaktiviert, damit Anmeldedaten nicht im Klartext übertragen werden (über HTTPS-Verbindungen wird Basic-Authentifizierung weiterhin angeboten).
+
+NTLM-Aufforderung
+::::::::::::::::::
+
+Gibt an, ob die NTLM-Aufforderung aktiviert werden soll.
+
+Localhost erlauben
+::::::::::::::::::
+
+Gibt an, ob der Zugriff vom Localhost erlaubt werden soll.
+Dies ist aus Sicherheitsgründen standardmäßig deaktiviert, da bei Aktivierung Anfragen vom selben Host ohne Kerberos-Prüfung als Server-Betriebssystembenutzer authentifiziert werden.
+
+Delegation erlauben
+:::::::::::::::::::
+
+Gibt an, ob Kerberos-Delegation erlaubt werden soll.
+
+Logger-Ebene
+::::::::::::
+
+Gibt die Protokollausgabeebene für die SPNEGO-Authentifizierung als numerischen Wert von 0 bis 7 an.
+Wird das Feld leer gelassen oder ein nicht-numerischer Wert angegeben, wird die Protokollebene automatisch ermittelt.
+
+Entra ID
+--------
+
+|image6|
+
+Mandant (ID oder Domäne)
+::::::::::::::::::::::::
+
+Gibt die Mandanten-ID oder Domäne für Microsoft Entra ID an.
+
+Autorität
+:::::::::
+
+Gibt die Autoritäts-URL für Microsoft Entra ID an.
+
+Client-ID
+:::::::::
+
+Gibt die Anwendungs-(Client-)ID für Microsoft Entra ID an.
+
+Client-Geheimnis
+::::::::::::::::
+
+Gibt das Client-Geheimnis für Microsoft Entra ID an.
+
+Antwort-URL
+:::::::::::
+
+Gibt die Antwort-(Weiterleitungs-)URL für Microsoft Entra ID an.
+
+Status-TTL
+::::::::::
+
+Gibt die Gültigkeitsdauer (TTL) des Authentifizierungsstatus an.
+
+Berechtigungsfelder
+:::::::::::::::::::
+
+Gibt die Felder an, aus denen Berechtigungsinformationen von Entra ID abgerufen werden.
+
+Standardgruppen
+:::::::::::::::
+
+Gibt die Standardgruppen an, die Benutzern bei der Entra ID-Authentifizierung zugewiesen werden.
+
+Standardrollen
+::::::::::::::
+
+Gibt die Standardrollen an, die Benutzern bei der Entra ID-Authentifizierung zugewiesen werden.
+
+Domänendienst verwenden
+:::::::::::::::::::::::
+
+Gibt an, ob der Entra ID-Domänendienst verwendet werden soll.
+
+Hinweis
+-------
+
+|image7|
+
+.. note::
+
+   Die Hinweise akzeptieren HTML. Wenn ein Such-Theme einen Hinweis anzeigt, bleiben nur die Tags und Attribute einer Zulassungsliste erhalten: Die Elemente ``<script>`` und ``<style>``, ``<iframe>``, Ereignis-Handler-Attribute wie ``onclick`` sowie Links mit ``javascript:`` werden entfernt, und jedes andere Tag außerhalb der Liste, etwa ``<form>``, verliert sein Markup, behält aber seinen Text. Da das HTML jedem Besucher der Seite angezeigt wird, sollten nur vertrauenswürdige Administratoren diese Felder bearbeiten dürfen.
+
+.. note::
+
+   Die Mitteilung der Anmeldeseite wird ohne diese Filterung so angezeigt, wie sie eingegeben wurde. Lassen Sie auch dieses Feld nur von vertrauenswürdigen Administratoren bearbeiten.
+
+Anmeldeseite
+::::::::::::
+
+Beschreiben Sie die Nachricht, die auf dem Anmeldebildschirm angezeigt werden soll.
+
+Such-Startseite
+:::::::::::::::
+
+Beschreiben Sie die Nachricht, die auf dem Such-Startbildschirm angezeigt werden soll.
+
+Erweiterte Suchseite
+::::::::::::::::::::
+
+Beschreiben Sie die Nachricht, die auf dem erweiterten Suchbildschirm angezeigt werden soll.
+
+Benachrichtigung
+----------------
+
+Benachrichtigungs-E-Mail
+:::::::::::::::::::::::::
+
+Geben Sie die E-Mail-Adresse an, die bei Abschluss des Crawls benachrichtigt werden soll.
+Mehrere Adressen können durch Kommas getrennt angegeben werden. Ein E-Mail-Server ist erforderlich.
+
+Slack Webhook URLs
+:::::::::::::::::
+
+Gibt die Webhook-URL für Slack-Benachrichtigungen an.
+
+Google Chat Webhook URLs
+:::::::::::::::::::::::
+
+Gibt die Webhook-URL für Google Chat-Benachrichtigungen an.
+
+Protokollbenachrichtigung
+:::::::::::::::::::::::::
+
+Gibt an, ob die Protokollbenachrichtigungsfunktion aktiviert werden soll, die automatisch ERROR- und WARN-Protokollereignisse erfasst und Benachrichtigungen sendet.
+Weitere Informationen finden Sie unter :doc:`Protokollbenachrichtigungskonfiguration <../config/admin-log-notification>`.
+
+Protokollbenachrichtigungsebene
+:::::::::::::::::::::::::::::::
+
+Gibt die Protokollebene für Protokollbenachrichtigungen an.
+Protokollereignisse auf der ausgewählten Ebene und darüber werden benachrichtigt.
+
+- **ERROR**: Nur Fehler benachrichtigen (Standard)
+- **WARN**: Warnungen und höher benachrichtigen
+- **INFO**: Informationen und höher benachrichtigen
+- **DEBUG**: Debug und höher benachrichtigen
+- **TRACE**: Alle Protokolle benachrichtigen
+
+Speicher
+--------
+
+Nach der Konfiguration dieser Elemente wird das Menü [System > Speicher] im linken Menü angezeigt.
+Informationen zur Dateiverwaltung finden Sie unter :doc:`Speicher <../admin/storage-guide>`.
+
+Typ
+:::
+
+Geben Sie den Speichertyp an.
+Bei Auswahl von „Automatisch" wird der Speichertyp automatisch anhand des Endpunkts bestimmt.
+
+- **Automatisch**: Automatische Erkennung vom Endpunkt
+- **S3**: Amazon S3 (erfordert das Plugin ``fess-storage-s3``)
+- **GCS**: Google Cloud Storage (erfordert das Plugin ``fess-storage-gcs``)
+
+Bucket
+::::::
+
+Geben Sie den zu verwaltenden Bucket-Namen an.
+
+Endpunkt
+::::::::
+
+Geben Sie die Endpunkt-URL des Speicherservers an.
+
+- S3: Verwendet den AWS-Standard-Endpunkt, wenn leer
+- GCS: Verwendet den Google Cloud-Standard-Endpunkt, wenn leer
+- MinIO usw.: Die Endpunkt-URL des MinIO-Servers
+
+Zugriffsschlüssel
+:::::::::::::::::
+
+Geben Sie den Zugriffsschlüssel für S3 oder S3-kompatiblen Speicher an.
+
+Geheimer Schlüssel
+::::::::::::::::::
+
+Geben Sie den geheimen Schlüssel für S3 oder S3-kompatiblen Speicher an.
+
+Region
+::::::
+
+Geben Sie die S3-Region an (z.B. ap-northeast-1).
+
+Projekt-ID
+::::::::::
+
+Geben Sie die Google Cloud-Projekt-ID für GCS an.
+
+Anmeldedaten-Pfad
+:::::::::::::::::
+
+Geben Sie den Pfad zur Dienstkonto-Anmeldedaten-JSON-Datei für GCS an.
+
+Beispiele
+=========
+
+LDAP-Konfigurationsbeispiele
+-----------------------------
+
+.. tabularcolumns:: |p{4cm}|p{4cm}|p{4cm}|
+.. list-table:: LDAP/Active Directory-Konfiguration
+   :header-rows: 1
+
+   * - Name
+     - Wert (LDAP)
+     - Wert (Active Directory)
+   * - LDAP-URL
+     - ldap://SERVERNAME:389
+     - ldap://SERVERNAME:389
+   * - Basis-DN
+     - cn=Directory Manager
+     - dc=fess,dc=codelibs,dc=org
+   * - Bind-DN
+     - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
+     - manager@fess.codelibs.org
+   * - Benutzer-DN
+     - uid=%s,ou=People,dc=fess,dc=codelibs,dc=org
+     - %s@fess.codelibs.org
+   * - Kontofilter
+     - cn=%s oder uid=%s
+     - (&(objectClass=user)(sAMAccountName=%s))
+   * - Gruppenfilter
+     -
+     - (member:1.2.840.113556.1.4.1941:=%s)
+   * - memberOf
+     - isMemberOf
+     - memberOf
+
+
+.. |image0| image:: ../../../resources/images/en/15.10/admin/general-1.png
+.. |image1| image:: ../../../resources/images/en/15.10/admin/general-2.png
+.. |image2| image:: ../../../resources/images/en/15.10/admin/general-3.png
+.. |image3| image:: ../../../resources/images/en/15.10/admin/general-4.png
+.. |image4| image:: ../../../resources/images/en/15.10/admin/general-5.png
+.. |image5| image:: ../../../resources/images/en/15.10/admin/general-6.png
+.. |image6| image:: ../../../resources/images/en/15.10/admin/general-7.png
+.. |image7| image:: ../../../resources/images/en/15.10/admin/general-8.png
+.. pdf            :height: 940 px

@@ -1,0 +1,207 @@
+======
+主题
+======
+
+概述
+====
+
+主题功能用于管理"静态主题"，即搜索界面外观（HTML / CSS / JavaScript 等静态资源集合）的集合。静态主题以 ZIP 压缩包的形式上传，并解压到服务器上的主题目录（默认值: ``themes`` ，可通过 ``theme.directory.path`` 更改）。每个主题的根目录下需放置描述主题元数据的 ``theme.yml`` 清单文件。
+
+搜索界面始终是静态主题。未设置默认主题时， |Fess| 使用其内置的静态主题 ``bootstrap`` 。内置主题无法删除或替换；如需修改，请以新名称复制后再修改（参见 :ref:`theme-customize-bundled` ）。
+
+.. note::
+   基于 JSP 的主题（ ``fess-theme-*`` JAR 主题插件）已在 15.10 中删除。要更改外观，请使用静态主题（参见 :ref:`upgrade-159-static-theme` ）。
+   执行本页的操作需要 ``admin-theme`` 角色（仅查看时需要 ``admin-theme-view`` 角色）。
+
+获取主题
+========
+
+|Fess| 项目开发的主题以 ZIP 归档的形式公开在 https://maven.codelibs.org/release/org/codelibs/fess/themes/ 之下，路径为 ``<name>/<version>/<name>-<version>.zip``\ ，每个归档旁都有 ``.sha1`` 校验和。
+
+主题的版本表示该主题面向的 |Fess| 系列。 ``15.10.0`` 是面向 |Fess| 15.10 的主题， ``minFessVersion`` 表达的是同一件事。没有表示上限的字段：公开的归档不会再改变，因此无法事后为在更新的 |Fess| 上不再可用的主题补加上限；不为该系列发布，就在知道的那一刻表达了同样的意思。
+
+安装方式有三种。
+
+* 按下文 `从仓库安装`_ 的步骤，在本页从仓库安装。
+* ``bin/fess-setup install theme <name>`` 会下载为当前 |Fess| 构建的主题，与公开的校验和比对后安装。参见 :doc:`../install/fess-setup`\ 。
+* 下载 ZIP，按本页 `上传主题`_ 的步骤上传。
+
+也可以从 `fess-themes <https://github.com/codelibs/fess-themes>`__ 仓库的检出中打包主题，它始终与手中的源码一致。参见 :doc:`../dev/theme-development`\ 。
+
+管理方法
+======
+
+显示方法
+------
+
+要打开已注册主题的列表页面，请单击左侧菜单中的[系统 > 主题]。
+
+主题列表
+------
+
+列表页面显示主题目录中已注册的静态主题。各行显示的项目如下所示。
+
+.. tabularcolumns:: |p{4cm}|p{8cm}|
+.. list-table::
+
+   * - 缩略图
+     - 显示主题目录中的 ``thumbnail.png`` 。若文件不存在则不显示。
+   * - 名称
+     - 主题名称（主题的目录名）。单击可显示详情页面。
+   * - 显示名称
+     - 清单中的 ``displayName`` 。
+   * - 版本
+     - 清单中的 ``version`` 。
+   * - 默认
+     - 若已设置为默认主题，则显示勾选标记。
+   * - 操作
+     - 显示用于删除主题的删除按钮（默认主题不显示此按钮）。
+
+表: 主题列表的项目
+
+
+设置默认主题
+----------
+
+从列表页面上方的下拉菜单中选择主题，然后单击[设为默认]按钮，即可设置应用于搜索界面的默认主题。选择[（无默认）]并保存后，将取消默认主题的指定，重新使用内置的 ``bootstrap`` 主题。设置后主题信息将重新加载并立即生效。
+
+
+从仓库安装
+----------
+
+列表页面还可以安装主题仓库（ ``theme.repositories`` ，默认为 https://maven.codelibs.org/release/org/codelibs/fess/themes/ ）中公开的主题。
+
+* [可用主题] 列出仓库公开的主题及各自的版本。单击某行的 [安装] 即可安装该版本。
+* [按名称安装] 按名称和版本安装主题，无论其是否出现在上述列表中。输入 [名称] 和 [版本] 后单击 [安装]。
+
+ZIP 从仓库下载，与公开的 ``.sha1`` 校验和比对后，以与上传相同的方式安装，因此适用相同的检查。安装后请将该主题设为默认主题以使用它。
+
+
+上传主题
+----------
+
+单击[上传]按钮将打开上传页面。选择主题 ZIP 文件后单击[上传]按钮，即可安装该主题。
+
+* 仅支持上传 ``.zip`` 格式的压缩包。
+* 压缩文件的大小上限默认为 50 MB（ ``theme.upload.max.size`` ）。
+* ZIP 压缩包的根目录下必须包含 ``theme.yml`` 清单文件。
+
+若已存在同名主题，则会被替换。被替换的原主题将作为备份保留一段时间（默认 7 天， ``theme.upload.attic.retention.days`` ）。
+
+若上传的压缩包清单验证失败，或解压后的大小、条目数、压缩率超过服务器上限（防 zip 炸弹），则安装将被拒绝并显示错误消息。
+
+
+theme.yml 清单
+----------
+
+在静态主题的根目录下放置描述主题元数据的 ``theme.yml`` （YAML 格式）。可指定的字段如下所示。
+
+.. tabularcolumns:: |p{3cm}|p{2cm}|p{7cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - 字段
+     - 是否必填
+     - 说明
+   * - ``apiVersion``
+     - 必填
+     - 指定 ``fess.codelibs.org/v1`` 。
+   * - ``kind``
+     - 必填
+     - 指定 ``StaticTheme`` 。
+   * - ``name``
+     - 必填
+     - 主题名称。必须符合 ``^[a-z0-9][a-z0-9_-]{0,63}$`` 模式，且须与主题的目录名一致。
+   * - ``displayName``
+     - 必填
+     - 在界面上显示的名称（最多 4096 个字符）。
+   * - ``version``
+     - 必填
+     - SemVer 格式的版本号（例如: ``1.0.0`` ）。
+   * - ``author``
+     - 可选
+     - 作者。
+   * - ``description``
+     - 可选
+     - 描述。
+   * - ``license``
+     - 可选
+     - 许可证。
+   * - ``homepage``
+     - 可选
+     - 主页 URL。
+   * - ``minFessVersion``
+     - 可选
+     - 支持的最低 |Fess| 版本。
+   * - ``supportedLocales``
+     - 可选
+     - 支持的区域设置。
+   * - ``entry``
+     - 可选
+     - 入口点文件（默认值: ``index.html`` ）。
+   * - ``spaFallback``
+     - 可选
+     - 已弃用，不再读取。自 15.10 起，搜索界面的路径始终返回入口文件。
+
+表: theme.yml 的字段
+
+
+删除主题
+------
+
+可通过列表页面的删除按钮或详情页面的[删除]按钮删除主题。已设置为默认主题的主题无法删除，请在删除前先取消默认主题的指定。被删除的主题将作为备份保留一段时间（默认 7 天， ``theme.upload.attic.retention.days`` ）。
+
+
+重新加载
+------
+
+当直接在服务器上编辑主题目录等情况时，单击[重新加载]按钮，可将磁盘上的主题信息重新加载到内存中。
+
+
+主题详情
+------
+
+在列表页面中单击主题名称，将显示详情页面。在详情页面中，可查看清单的内容（名称、显示名称、版本、是否为默认、状态）。
+
+
+配置属性
+======
+
+与主题功能相关的主要配置可在 ``fess_config.properties`` 中修改。
+
+.. tabularcolumns:: |p{6cm}|p{3cm}|p{5cm}|
+.. list-table::
+   :header-rows: 1
+
+   * - 属性
+     - 默认值
+     - 说明
+   * - ``theme.directory.path``
+     - ``themes``
+     - 存储主题的目录（相对于 Servlet 上下文的相对路径，或绝对路径）。
+   * - ``theme.upload.max.size``
+     - ``52428800``
+     - 可上传 ZIP 的最大大小（字节，约 50 MB）。
+   * - ``theme.upload.max.extracted.size``
+     - ``209715200``
+     - 解压后的最大总大小（字节，约 200 MB）。
+   * - ``theme.upload.max.entries``
+     - ``1000``
+     - ZIP 中可包含的最大条目数。
+   * - ``theme.upload.max.compression.ratio``
+     - ``100``
+     - 单个条目的最大压缩率。
+   * - ``theme.upload.zip.ratio.max``
+     - ``50``
+     - 累计压缩率上限（防 zip 炸弹）。
+   * - ``theme.upload.zip.ratio.check.threshold.bytes``
+     - ``65536``
+     - 开始评估累计压缩率的压缩字节数。
+   * - ``theme.upload.attic.retention.days``
+     - ``7``
+     - 保留已替换或已删除主题备份的天数。
+   * - ``theme.repositories``
+     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
+     - 安装主题所用的仓库 URL（逗号分隔）。
+
+表: 主题功能的配置属性

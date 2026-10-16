@@ -1,0 +1,243 @@
+====================
+fess-setup 命令
+====================
+
+``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 插件所需的 Node.js、 |Fess| 插件以及静态主题。它还可以检查安装状态。
+
+请在 |Fess| 目录中运行。不带参数运行时，会显示命令列表。
+
+::
+
+    $ cd /path/to/fess-15.10.0
+    $ bin/fess-setup <command> [options]
+
+退出码
+======
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - 退出码
+     - 含义
+   * - ``0``
+     - 命令执行成功。
+   * - ``1``
+     - 命令执行失败：例如下载失败、指定的版本不存在、OpenSearch 没有面向当前平台的发行版，或 ``check`` 发现了问题。
+   * - ``2``
+     - 命令行有误：未知的命令，或缺少插件名称等参数。
+
+安装 OpenSearch 和 Node.js
+==========================
+
+install opensearch
+------------------
+
+::
+
+    $ bin/fess-setup install opensearch [--dest <dir>] [--version <version>] [--keep-bundled-plugins]
+
+将此 |Fess| 支持的 OpenSearch 版本下载到 |Fess| 目录下的 ``opensearch/`` 中，安装 |Fess| 所需的 4 个插件（\ ``opensearch-analysis-fess``\ 、\ ``opensearch-analysis-extension``\ 、\ ``opensearch-minhash`` 和 ``opensearch-configsync``\ ），并向其 ``config/opensearch.yml`` 追加以下配置：
+
+- ``configsync.config_path``\ ，其值为该 OpenSearch 的 ``config/dictionary`` 目录
+- ``plugins.security.disabled: true``
+
+此外，还会删除 |Fess| 不使用的内置插件 ``opensearch-security-analytics`` 和 ``opensearch-performance-analyzer``，与 Docker 镜像中的 OpenSearch 配置相同。下载包中不包含的插件会被跳过。
+
+``opensearch.yml`` 中已有的配置不会重复追加；如果该文件中存在任何 ``plugins.security.*`` 配置，则不会追加 ``plugins.security.disabled: true``\ 。OpenSearch 目录已存在时会跳过下载，因此对已有的安装再次运行该命令时，只会追加缺少的配置。
+
+命令会显示追加的每项配置，然后显示 ``bin/fess.in.sh`` 能否自动找到此 OpenSearch。当它是 |Fess| 目录下 ``opensearch/`` 中唯一带有 ``config/dictionary`` 目录的 OpenSearch 时即可找到：此时 ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会将 ``FESS_DICTIONARY_PATH`` 设置为该目录，对于在同一主机上运行的 OpenSearch，无需其他配置。否则，命令会显示需要设置的 ``SEARCH_ENGINE_HTTP_URL`` 和 ``FESS_DICTIONARY_PATH`` 的值，设置方法请参阅 :doc:`install-linux` 或 :doc:`install-windows`\ 。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 选项
+     - 说明
+   * - ``--dest <dir>``
+     - 指定 OpenSearch 的解压目录，以代替 |Fess| 目录下的 ``opensearch/``\ 。\ ``bin/fess.in.sh`` 不会在该目录之外查找 OpenSearch。
+   * - ``--version <version>``
+     - 要安装的 OpenSearch 版本。插件也会以相同版本安装。
+   * - ``--keep-bundled-plugins``
+     - 保留内置插件（\ ``opensearch-security-analytics``\ 、\ ``opensearch-performance-analyzer``\ ），不删除，保持下载包原样。
+
+OpenSearch 仅为 Linux 和 Windows 发布官方发行版。在 macOS 等其他平台上，该命令不会下载任何内容，而是以退出码 ``1`` 结束，并建议使用 Homebrew 安装 OpenSearch 后通过 ``install opensearch-plugins`` 添加插件，或者使用 Docker。
+
+.. warning::
+
+   设置了 ``plugins.security.disabled: true`` 的 OpenSearch 会接受未经认证的请求。除非设置了 ``network.host``\ ，OpenSearch 只在回环地址上监听。在让它监听其他地址之前，请改为配置安全插件；详情请参阅 :doc:`security`\ 。
+
+install opensearch-plugins
+--------------------------
+
+::
+
+    $ bin/fess-setup install opensearch-plugins --opensearch-home <dir> [--version <version>]
+
+向已有的 OpenSearch 安装 |Fess| 所需的 4 个插件，可代替执行 4 次该 OpenSearch 的 ``bin/opensearch-plugin install``\ 。\ ``--opensearch-home`` 为 OpenSearch 的安装目录，必须指定。\ ``--version`` 用于设置插件版本，该版本必须与 OpenSearch 版本一致。
+
+此命令不会修改 ``opensearch.yml``\ 。请按照 :doc:`install-linux` 或 :doc:`install-windows` 的说明，自行添加 ``configsync.config_path`` 等配置。
+
+install nodejs
+--------------
+
+::
+
+    $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
+
+将 Playwright 插件（用于 Playwright 爬虫的 ``fess-crawler-playwright`` 和用于缩略图的 ``fess-thumbnail-playwright``\ ）所需的 Node.js 下载到 |Fess| 目录下的 ``nodejs/`` 中。\ ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会在该位置找到它并设置 ``PLAYWRIGHT_NODEJS_PATH``\ 。使用 ``--dest`` 解压到 |Fess| 目录之外时，命令会改为显示需要添加到 ``bin/fess.in.sh`` 中的 ``PLAYWRIGHT_NODEJS_PATH`` 行。\ ``--version`` 用于选择其他版本的 Node.js。关于 Playwright 爬虫，请参阅 :doc:`../config/crawler-advanced`\ 。
+
+管理插件
+========
+
+以下命令操作 |Fess| 安装中的插件目录 ``app/WEB-INF/plugin``\ 。安装、升级或删除插件后，请重启 |Fess|\ 。也可以在管理界面的「系统 > 插件」页面管理插件；请参阅 :doc:`../admin/plugin-guide`\ 。
+
+``install plugin``\ 、\ ``list plugins``\ 、\ ``list installed``\ 、\ ``upgrade plugins``\ 、\ ``remove plugin`` 和 ``check`` 可以指定 ``--dest <dir>``\ 。它指定用来代替 ``app/WEB-INF/plugin`` 的插件目录，即存放插件 jar 的目录本身，而不是它的上级目录。相对路径相对于执行命令时的当前目录，而不是 |Fess| 目录。 ``install opensearch`` 和 ``install nodejs`` 的 ``--dest`` 则是解压归档的目录。
+
+``install plugin``\ 、\ ``list plugins`` 和 ``upgrade plugins`` 可以指定 ``--repository <url>``\ 。指定后，版本列表、jar 及其校验和都从该单个 Maven 仓库（例如内部镜像）获取，而不使用默认的发布仓库、快照仓库和 GitHub。
+
+``--repository`` 也可以指定以 ``file:///`` 开头的 URL。在无法连接互联网的服务器上，可以将 Maven 仓库的副本放到服务器上，并指定该目录。应指定包含各插件目录（ ``<name>/maven-metadata.xml`` 等）的目录，即与默认仓库的 ``https://maven.codelibs.org/release/org/codelibs/fess/`` 相对应的位置。版本解析和校验和验证与 HTTP 仓库相同。
+
+::
+
+    $ bin/fess-setup install plugin fess-ds-csv --repository file:///opt/maven-repo/org/codelibs/fess/
+
+``http``\ 、\ ``https``\ 、\ ``file`` 以外的协议，或没有协议的 URL，会以一行错误信息被拒绝。
+
+install plugin
+--------------
+
+::
+
+    $ bin/fess-setup install plugin <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
+
+安装一个或多个 |Fess| 插件，例如 ``fess-script-groovy`` 或 ``fess-ds-git``\ 。未指定版本的名称会安装为此 |Fess| 构建的最新版本。\ ``<name>:<version>`` 用于固定该插件的版本，\ ``--version`` 则作为所有未指定版本的名称的版本。新版本安装完成后，将删除同一插件之前安装的版本。
+
+jar 从插件的 GitHub 发布获取；发布中没有对应文件时，则从 Maven 仓库获取，并使用 Maven 仓库公布的 SHA-1 校验和进行校验。\ |Fess| 的开发版还会安装其同一版本系列的快照构建，并优先使用快照构建。
+
+使用示例请参阅 :doc:`../admin/plugin-guide`\ 。
+
+只能安装 |Fess| 会加载的插件类型，即名称以 ``fess-ds-``\ 、\ ``fess-ingest-``\ 、\ ``fess-script-``\ 、\ ``fess-webapp-``\ 、\ ``fess-thumbnail-``\ 、\ ``fess-crawler-``\ 、\ ``fess-llm-``\ 、\ ``fess-storage-`` 或 ``fess-sso-`` 开头的插件，与 ``list plugins`` 显示的相同。指定其他名称（ ``fess-theme-*``\ ，或 ``fess``\ 、\ ``fess-crawler`` 等库）时，不会下载任何内容，而是显示一行错误并以退出码 2 结束。多个名称中只要有一个被拒绝，就不会安装任何插件。静态主题请使用 ``install theme`` 安装。
+
+list plugins
+------------
+
+::
+
+    $ bin/fess-setup list plugins [--repository <url>] [--dest <dir>]
+
+列出为此 |Fess| 发布的插件，并用 ``(installed: <version>)`` 标记已安装的插件。已安装但未在仓库中发布的插件（例如本地构建的 jar）会单独列出。\ |Fess| 的开发版还会列出快照仓库中的插件。
+
+list installed
+--------------
+
+::
+
+    $ bin/fess-setup list installed [--dest <dir>]
+
+列出已安装的插件及其版本，不访问仓库。
+
+upgrade plugins
+---------------
+
+::
+
+    $ bin/fess-setup upgrade plugins [--repository <url>] [--dest <dir>]
+
+将所有已安装的插件以适合此 |Fess| 的版本重新安装。已经是该版本的插件保持不变。\ ``app/WEB-INF/plugin`` 中的插件是为特定的 |Fess| 发布版本构建的，因此请在升级 |Fess| 后运行此命令。
+
+remove plugin
+-------------
+
+::
+
+    $ bin/fess-setup remove plugin <name>... [--dest <dir>]
+
+删除指定插件已安装的 jar。未安装的名称只会给出提示，不影响退出码。
+
+.. _fess-setup-offline:
+
+无法连接互联网的环境
+--------------------
+
+``install plugin`` 、 ``list plugins`` 、 ``upgrade plugins`` 从互联网上的仓库获取插件。管理界面「系统 > 插件」的安装页面也从仓库（ ``plugin.repositories`` ）获取可安装插件的列表，因此在无法连接外部的环境中无法显示该列表。
+
+在这种环境中，请带入插件的 jar 进行安装。
+
+1. 在可以连接互联网的环境中，下载 |Fess| 的 ZIP 包和所需插件的 jar。jar 可以从 ``https://maven.codelibs.org/release/org/codelibs/fess/<name>/<version>/<name>-<version>.jar`` 获取。请选择与此 |Fess| 对应的版本（ |Fess| 15.10 则为 15.10.x）。
+2. 在目标环境中解压 ZIP，并将 jar 放入 ``app/WEB-INF/plugin/``\ 。也可以在 |Fess| 启动后，从管理界面插件安装页面的「本地」选项卡上传（参见 :doc:`../admin/plugin-guide` ）。
+3. 启动 |Fess|\ 。如果在运行中放入了 jar，请重启。
+
+也可以不逐个带入插件的 jar，而是复制 Maven 仓库中所需的部分（ ``org/codelibs/fess/<name>/`` 目录）带入服务器，然后指定 ``--repository file:///...`` 使用 ``install plugin`` 安装。这种情况下同样会验证校验和。
+
+管理主题
+========
+
+这些命令作用于 |Fess| 安装目录下的 ``app/themes``\ 。安装或删除主题后，请重启 |Fess|\ ，或在 [系统 > 主题] 页面点击 [重新加载]。主题也可以从该页面上传，参见 :doc:`../admin/theme-guide`\ 。
+
+``install theme``\ 、\ ``list themes`` 和 ``remove theme`` 也可以同样指定 ``--dest <dir>``\ ，用来指定代替 ``app/themes`` 的主题目录。
+
+主题的版本表示该主题面向的 |Fess| 系列，即 ``15.10.0`` 是面向 |Fess| 15.10 的主题。因此只指定名称而不带版本时，与插件一样会选择为当前 |Fess| 构建的主题。
+
+install theme
+-------------
+
+::
+
+    $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
+
+安装一个或多个静态主题，例如 ``docuforge`` 或 ``voicebox``\ 。不带版本的名称会安装为当前 |Fess| 构建的最新版本。 ``<name>:<version>`` 固定该主题的版本， ``--version`` 适用于所有没有自带版本的名称。
+
+归档会与 Maven 仓库公开的 SHA-1 校验和比对，并解压到 ``app/themes/<name>``\ 。同名主题若已安装，会作为备份保留，保留期与从管理界面替换时相同（默认 7 天， ``theme.upload.attic.retention.days``\ ）。
+
+下载、解压和清单检查都在触碰已安装内容之前完成，因此即使安装失败，已有的主题也会原样保留。 ``theme.yml`` 中名称不符的归档会被拒绝。
+
+list themes
+-----------
+
+::
+
+    $ bin/fess-setup list themes [--repository <url>] [--dest <dir>]
+
+列出为当前 |Fess| 公开的主题，并为已安装的主题标注 ``(installed: <version>)``\ 。已安装但未出现在仓库列表中的主题会单独显示。
+
+该列表读取自仓库的目录索引，索引是定期生成的，因此可能无法读取。此时命令会报告尝试过的 URL，并继续显示已安装的主题：无论索引中是否列出，只要指定名称就可以安装主题。
+
+remove theme
+------------
+
+::
+
+    $ bin/fess-setup remove theme <name>... [--dest <dir>]
+
+从 ``app/themes`` 中删除指定的主题，每个都会在保留期内作为备份保留。未安装的名称会被报告，但不会改变退出码。
+
+如果被删除的主题是默认主题，在选择其他主题之前， |Fess| 会回退到内置的 ``bootstrap`` 主题。
+
+检查安装状态
+============
+
+list
+----
+
+::
+
+    $ bin/fess-setup list
+
+显示 ``install`` 下载的组件（\ ``opensearch`` 和 ``nodejs``\ ）及各自的版本。
+
+check
+-----
+
+::
+
+    $ bin/fess-setup check [--url <engine url>] [--playwright] [--dest <dir>]
+
+检查安装状态，每个检查项输出一行，并标记为 ``OK``\ 、\ ``WARN`` 或 ``FAIL``\ ：
+
+- 搜索引擎：能否连接、版本（各节点报告的版本不一致时为警告）、是否安装了 |Fess| 所需的 4 个插件，以及 ``configsync`` 是否响应。
+- |Fess|\ ：插件目录是否存在且可写、每个已安装的插件（为其他 |Fess| 发布版本构建的插件，以及安装了两个版本的插件，均为失败），以及 |Fess| 目录下的 ``nodejs/`` 中是否安装了 Node.js。
+
+搜索引擎的 URL 为 ``--url``\ ，未指定时为环境变量 ``SEARCH_ENGINE_HTTP_URL``\ ，仍未设置时为 ``http://localhost:9200``\ 。\ ``bin/fess-setup`` 不读取 ``bin/fess.in.sh``\ ，因此当 OpenSearch 位于其他位置时，请指定 ``--url``\ 。缺少 Node.js 时只会报告，但指定 ``--playwright`` 后会视为失败。
+
+没有检查项失败时，即使有警告，命令也以退出码 ``0`` 结束；否则以退出码 ``1`` 结束。

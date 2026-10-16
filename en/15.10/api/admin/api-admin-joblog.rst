@@ -1,0 +1,262 @@
+==========================
+JobLog API
+==========================
+
+Overview
+========
+
+JobLog API is an API for viewing and managing |Fess| job execution logs.
+You can retrieve and delete the execution history, execution results, and error information
+for scheduled jobs and crawl jobs.
+
+Base URL
+========
+
+::
+
+    /api/admin/joblog
+
+Endpoint List
+=============
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 35 50
+
+   * - Method
+     - Path
+     - Description
+   * - GET
+     - /logs
+     - List job logs
+   * - GET
+     - /log/{id}
+     - Get job log
+   * - DELETE
+     - /log/{id}
+     - Delete job log
+
+List Job Logs
+=============
+
+Request
+-------
+
+::
+
+    GET /api/admin/joblog/logs
+
+Parameters
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parameter
+     - Type
+     - Required
+     - Description
+   * - ``size``
+     - Integer
+     - No
+     - Number of items per page (default: 25; can be changed with ``paging.page.size`` in ``fess_config.properties``)
+   * - ``page``
+     - Integer
+     - No
+     - Page number (1-based, default: 1)
+   * - ``id``
+     - String
+     - No
+     - Filter by job log ID (exact match)
+
+These parameters are given in the JSON request body (for example, ``{"size": 50, "page": 1}``). Values given in the URL query string (for example, ``?size=50``) are ignored, so the first 25 items are always returned unless you specify them in the body.
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "logs": [
+          {
+            "id": "joblog_id_1",
+            "job_name": "Default Crawler",
+            "job_status": "ok",
+            "target": "all",
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Job completed successfully",
+            "start_time": "1738116000000",
+            "end_time": "1738118723000"
+          },
+          {
+            "id": "joblog_id_2",
+            "job_name": "Default Crawler",
+            "job_status": "fail",
+            "target": "all",
+            "script_type": "javascript",
+            "script_data": "return container.getComponent(\"crawlJob\").execute();",
+            "script_result": "Error: Connection timeout",
+            "start_time": "1738029600000",
+            "end_time": "1738030215000"
+          }
+        ],
+        "total": 100
+      }
+    }
+
+Response Fields
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Field
+     - Description
+   * - ``id``
+     - Job log ID
+   * - ``job_name``
+     - Job name
+   * - ``job_status``
+     - Job status (``ok``: success, ``fail``: failure, ``running``: in progress)
+   * - ``target``
+     - Execution target (scheduler target name; default is ``all``)
+   * - ``script_type``
+     - Script type (e.g., ``javascript``)
+   * - ``script_data``
+     - Execution script
+   * - ``script_result``
+     - Execution result
+   * - ``start_time``
+     - Start time (epoch milliseconds; returned as a string)
+   * - ``end_time``
+     - End time (epoch milliseconds; returned as a string). Not returned for running jobs.
+
+.. note::
+
+   Each log object in the response also includes an internal ``crud_mode`` field
+   (an integer indicating the CRUD operation mode, always ``0`` for read operations).
+   Clients can safely ignore it.
+
+Get Job Log
+===========
+
+Request
+-------
+
+::
+
+    GET /api/admin/joblog/log/{id}
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "log": {
+          "id": "joblog_id_1",
+          "job_name": "Default Crawler",
+          "job_status": "ok",
+          "target": "all",
+          "script_type": "javascript",
+          "script_data": "return container.getComponent(\"crawlJob\").execute();",
+          "script_result": "Crawl completed successfully.\nDocuments indexed: 1234\nDocuments updated: 567\nDocuments deleted: 12\nErrors: 0",
+          "start_time": "1738116000000",
+          "end_time": "1738118723000"
+        }
+      }
+    }
+
+If no job log exists for the specified ID, an error response is returned with a non-zero
+value in ``status``.
+
+Delete Job Log
+==============
+
+Request
+-------
+
+::
+
+    DELETE /api/admin/joblog/log/{id}
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+If no job log exists for the specified ID, an error response is returned with a non-zero
+value in ``status``.
+
+Usage Examples
+==============
+
+List Job Logs
+-------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 50, "page": 1}'
+
+Extract Failed Jobs Only
+------------------------
+
+.. code-block:: bash
+
+    # Filter failed jobs with jq
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs[] | select(.job_status=="fail")'
+
+Get Job Log
+-----------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Delete Job Log
+--------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/joblog/log/joblog_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Calculate Job Success Rate
+--------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/joblog/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '.response.logs | {total: length, ok: [.[] | select(.job_status=="ok")] | length, fail: [.[] | select(.job_status=="fail")] | length}'
+
+Reference
+=========
+
+- :doc:`api-admin-overview` - Admin API Overview
+- :doc:`api-admin-scheduler` - Scheduler API
+- :doc:`api-admin-crawlinginfo` - Crawl Information API
+- :doc:`../../admin/joblog-guide` - Job Log Management Guide

@@ -1,0 +1,533 @@
+====================
+起動、停止、初期設定
+====================
+
+このページでは、 |Fess| サーバーの起動、停止、および初回セットアップの手順について説明します。
+
+.. important::
+
+   |Fess| を起動する前に、必ず OpenSearch を起動してください。
+   OpenSearch が起動していない場合、 |Fess| は正しく動作しません。
+
+起動方法
+========
+
+インストール方法により、起動手順が異なります。
+
+ZIP 版の場合
+-------------
+
+OpenSearch の起動
+~~~~~~~~~~~~~~~~
+
+::
+
+    $ cd /path/to/opensearch-3.9.0
+    $ ./bin/opensearch
+
+バックグラウンドで起動する場合::
+
+    $ ./bin/opensearch -d
+
+.. note::
+
+   ``bin/fess-setup install opensearch`` で導入した OpenSearch は、 |Fess| のディレクトリの ``opensearch/opensearch-3.9.0`` にあります。
+
+.. important::
+
+   OpenSearch は一般ユーザーで起動してください。 ``root`` で起動すると ``can not run opensearch as root`` と表示して終了します。拒否された起動でも ``config/opensearch.keystore`` などのファイルが ``root`` の所有で残り、次に一般ユーザーで起動すると ``AccessDeniedException`` で失敗します。再度起動する前に、OpenSearch のディレクトリの所有者をそのユーザーに戻してください。例::
+
+       $ sudo chown -R <user> /path/to/opensearch-3.9.0
+
+Fess の起動
+~~~~~~~~~~
+
+::
+
+    $ cd /path/to/fess-15.10.0
+    $ ./bin/fess
+
+バックグラウンドで起動する場合::
+
+    $ ./bin/fess -d
+
+.. note::
+
+   起動には数分かかる場合があります。
+   ``logs/`` ディレクトリのログファイルで起動状況を確認できます。|Fess| 本体のメッセージは
+   ``fess.log``、組み込み Tomcat のメッセージ（起動完了メッセージを含む）は ``server_0.log`` に出力されます。
+
+ZIP 版の場合（Windows）
+---------------------
+
+OpenSearch の起動
+~~~~~~~~~~~~~~~~
+
+1. OpenSearch のインストールディレクトリを開きます
+2. ``bin`` フォルダー内の ``opensearch.bat`` をダブルクリックします
+
+または、コマンドプロンプトから::
+
+    C:\> cd C:\opensearch-3.9.0
+    C:\opensearch-3.9.0> bin\opensearch.bat
+
+Fess の起動
+~~~~~~~~~~
+
+1. Fess のインストールディレクトリを開きます
+2. ``bin`` フォルダー内の ``fess.bat`` をダブルクリックします
+
+または、コマンドプロンプトから::
+
+    C:\> cd C:\fess-15.10.0
+    C:\fess-15.10.0> bin\fess.bat
+
+RPM/DEB 版の場合 (chkconfig)
+--------------------------
+
+OpenSearch の起動::
+
+    $ sudo service opensearch start
+
+Fess の起動::
+
+    $ sudo service fess start
+
+起動状態の確認::
+
+    $ sudo service fess status
+
+RPM/DEB 版の場合 (systemd)
+------------------------
+
+OpenSearch の起動::
+
+    $ sudo systemctl start opensearch.service
+
+Fess の起動::
+
+    $ sudo systemctl start fess.service
+
+起動状態の確認::
+
+    $ sudo systemctl status fess.service
+
+サービスの自動起動を有効化::
+
+    $ sudo systemctl enable opensearch.service
+    $ sudo systemctl enable fess.service
+
+Docker 版の場合
+-------------
+
+.. note::
+
+   ``compose.yaml`` および ``compose-opensearch3.yaml`` は、|Fess| 本体には
+   含まれていません。これらは docker-fess プロジェクト
+   （https://github.com/codelibs/docker-fess）で提供されており、リポジトリを
+   取得した上で ``compose`` ディレクトリ内で以下のコマンドを実行します。
+
+Docker Compose を使用して起動::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+起動状態の確認::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml ps
+
+ログの確認::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+起動の確認
+==========
+
+|Fess| が正常に起動したことを確認します。
+
+ヘルスチェック
+------------
+
+ブラウザーまたは curl コマンドで以下の URL にアクセスします::
+
+    http://localhost:8080/
+
+正常に起動している場合、Fess の検索画面が表示されます。
+
+コマンドラインでの確認::
+
+    $ curl -I http://localhost:8080/
+
+``HTTP/1.1 200 OK`` が返ってくれば、正常に起動しています。
+
+ログの確認
+--------
+
+起動ログを確認して、エラーがないことを確認します。
+
+ZIP 版::
+
+    $ tail -f /path/to/fess-15.10.0/logs/fess.log
+
+RPM/DEB 版::
+
+    $ sudo tail -f /var/log/fess/fess.log
+
+または journalctl を使用::
+
+    $ sudo journalctl -u fess.service -f
+
+Docker 版::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+.. tip::
+
+   正常に起動した場合、以下のような起動完了メッセージがログディレクトリ（ZIP 版は ``logs/``、
+   RPM/DEB 版は ``/var/log/fess/``）の ``server_0.log`` に出力されます。コンソールにも ``fess.log`` にも
+   出力されません::
+
+       ...Booting the Tomcat: port=8080 contextPath=
+       ...
+       Boot successful: url -> http://localhost:8080
+
+ブラウザーでのアクセス
+====================
+
+以下の URL にアクセスして、Web インターフェースを確認します。
+
+検索画面
+--------
+
+**URL**: http://localhost:8080/
+
+Fess の検索画面が表示されます。初期状態では、クロール設定が行われていないため、検索結果は表示されません。
+
+検索画面は |Fess| に同梱の静的テーマ ``bootstrap`` です。見た目を変えるには、管理画面の
+「システム」>「テーマ」または ``bin/fess-setup install theme <name>`` で別のテーマをインストールするか
+（ :doc:`fess-setup` を参照）、同梱のテーマを複製して変更します（ :ref:`theme-customize-bundled` を参照）。
+
+管理画面
+--------
+
+**URL**: http://localhost:8080/admin
+
+デフォルトの管理者アカウント：
+
+- **ユーザー名**: ``admin``
+- **パスワード**: ``admin``
+
+.. warning::
+
+   **セキュリティに関する重要な注意**
+
+   デフォルトのパスワードは必ず変更してください。
+   特に本番環境では、初回ログイン後すぐにパスワードを変更することを強く推奨します。
+
+初回セットアップ
+==============
+
+管理画面にログインしたら、以下の初期設定を行います。
+
+ステップ 1: 管理者パスワードの変更
+-------------------------------
+
+1. 管理画面にログイン（http://localhost:8080/admin）
+2. 左メニューから「ユーザー」→「ユーザー」をクリック
+3. ``admin`` ユーザーをクリック
+4. 「パスワード」フィールドに新しいパスワードを入力
+5. 「パスワード(確認)」フィールドに同じパスワードを再入力
+6. 「更新」ボタンをクリック
+
+.. important::
+
+   パスワードは以下の条件を満たすことを推奨します：
+
+   - 8文字以上（``password.min.length`` で設定される必須の最小文字数）
+   - 英大文字、英小文字、数字、記号を組み合わせる
+   - 推測されにくいもの
+
+   デフォルトで必須となるのは最小文字数（8文字）のみで、文字種の組み合わせは
+   強制されません。文字種の要件は ``password.require.uppercase`` などの設定で
+   有効化できます。
+
+ステップ 2: クロール設定の作成
+---------------------------
+
+検索対象のサイトや ファイルシステムをクロールする設定を作成します。
+
+1. 左メニューから「クローラー」→「ウェブ」をクリック
+2. 「新規作成」ボタンをクリック
+3. 必要な情報を入力：
+
+   - **名前**: クロール設定の名前（例：会社のWebサイト）
+   - **URL**: クロール対象の URL（例：https://www.example.com/）。複数指定する場合は 1 行に 1 URL を記述します
+   - **最大アクセス数**: クロールするドキュメント数の上限（省略可能）
+   - **間隔**: 各アクセス間の待機時間（ミリ秒。デフォルト：``10000``）
+
+   .. note::
+
+      上記以外の項目（ユーザーエージェント、スレッド数、深さなど）は、
+      未入力の場合はデフォルト値が使用されます。
+
+4. 「作成」ボタンをクリック
+
+ステップ 3: クロールの実行
+-----------------------
+
+1. 左メニューから「システム」→「スケジューラ」をクリック
+2. 「Default Crawler」ジョブを開き、「今すぐ開始」ボタンをクリック
+3. クロールが完了するまで待ちます（進行状況はダッシュボードで確認可能）
+
+ステップ 4: 検索の確認
+-------------------
+
+1. 検索画面（http://localhost:8080/）にアクセス
+2. 検索キーワードを入力
+3. 検索結果が表示されることを確認
+
+.. note::
+
+   クロールには時間がかかる場合があります。
+   大規模なサイトの場合、数時間から数日かかることもあります。
+
+その他の推奨設定
+==============
+
+本番環境で運用する場合、以下の設定も検討してください。
+
+主な環境変数による設定
+--------------------
+
+ポート番号、JVM ヒープサイズ、接続先の OpenSearch などは、環境変数で変更できます。
+ZIP 版は ``bin/fess.in.sh``、RPM 版は ``/etc/sysconfig/fess``、DEB 版は
+``/etc/default/fess`` を編集します。変更後は |Fess| の再起動が必要です。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - 環境変数
+     - デフォルト
+     - 説明
+   * - ``FESS_PORT``
+     - ``8080``
+     - |Fess| が待ち受けする HTTP ポート番号。
+   * - ``FESS_HEAP_SIZE``
+     - （未設定）
+     - JVM ヒープサイズ。最小・最大に同じ値を設定します。未設定時は最小 ``256m``・最大 ``2g``\ （ZIP 版（Windows）は最大 ``1g``）、RPM/DEB 版では ``512m`` が使用されます。
+   * - ``SEARCH_ENGINE_HTTP_URL``
+     - ``http://localhost:9200``
+     - 接続先 OpenSearch の URL。ZIP 版では ``bin/fess.in.sh`` が既定でこの値を設定します。OpenSearch を別ポートや別ホストで稼働させる場合は、環境変数として設定するか ``bin/fess.in.sh`` を編集します。RPM/DEB 版ではパッケージの環境設定ファイルで設定されます。
+   * - ``FESS_LOG_LEVEL``
+     - ``warn``
+     - |Fess| のログレベル。
+   * - ``FESS_HEAP_NEWSIZE``
+     - （未設定）
+     - JVM ヒープの新世代領域のサイズ（``-Xmn``）。``256m`` のように指定します。未設定時は JVM が決定します。
+   * - ``FESS_TEMP_PATH``
+     - |Fess| ディレクトリ内の ``temp``\ （RPM/DEB 版は ``/var/tmp/fess``）
+     - 一時ファイルを保存するディレクトリ（組み込み Tomcat の作業ディレクトリを含む）。|Fess| を実行するユーザーが書き込める必要があります。
+   * - ``FESS_CONF_PATH``
+     - （未設定）\ （RPM/DEB 版は ``/etc/fess``）
+     - 設定ファイルを置くディレクトリ。 ``bin/fess`` がこのディレクトリをクラスパスの先頭に追加し、 ``-Dfess.conf.path`` として |Fess| に渡します。 ``lib/classes`` にある ``tomcat_config.properties`` などは、このディレクトリのものが優先されます。ただし、ZIP 版の Web アプリケーションは ``app/WEB-INF/classes`` のファイルを先に参照するため、このディレクトリに置いた ``fess_config.properties`` では ``app/WEB-INF/classes`` の ``fess_config.properties`` の値を上書きできません（クローラーなどの子プロセスは、このディレクトリを ``WEB-INF/classes`` より先に参照します）。ZIP 版で ``fess_config.properties`` を変更するときは ``app/WEB-INF/classes`` のファイルを編集してください。RPM/DEB 版は ``app/WEB-INF/classes`` に ``fess_config.properties`` を含めず、 ``/etc/fess`` のファイルだけを使用します。
+   * - ``FESS_USE_IPV4``
+     - （未設定）
+     - 空でない値を設定すると、JVM は IPv4 スタックだけを使用します（``-Djava.net.preferIPv4Stack=true``）。
+   * - ``FESS_USE_GC_LOGGING``
+     - （未設定）
+     - 空でない値を設定すると、JVM は GC ログをログディレクトリの ``gc-fess.log`` に出力します（64 MB のファイルを最大 5 つ）。
+
+.. note::
+
+   ZIP 版（Windows）の ``bin\fess.in.bat`` が参照する環境変数は、これらのうち
+   ``FESS_HEAP_SIZE``、``FESS_HEAP_NEWSIZE``、``FESS_USE_IPV4``、``FESS_USE_GC_LOGGING``
+   と、表にない次の環境変数です。
+
+   - ``FESS_MIN_MEM``、``FESS_MAX_MEM``: 最小・最大ヒープサイズを個別に指定します（``FESS_HEAP_SIZE`` を設定した場合は無視されます）。
+   - ``FESS_DIRECT_SIZE``: ダイレクトメモリの上限（``-XX:MaxDirectMemorySize``）です。
+   - ``FESS_DICTIONARY_PATH``: OpenSearch の ``config\dictionary`` ディレクトリです。
+   - ``FESS_PROXY_HOST``、``FESS_PROXY_PORT``、``FESS_NON_PROXY_HOSTS``: プロキシの設定です。
+   - ``FESS_JAVA_OPTS``: 設定済みの値の後ろに、``fess.in.bat`` が JVM オプションを追加します。
+   - ``PLAYWRIGHT_NODEJS_PATH``: Playwright プラグインが使用する Node.js の実行ファイルです。
+   - ``JAVA_HOME``: 必須です。
+
+   ``FESS_PORT``、``FESS_LOG_LEVEL``、``FESS_TEMP_PATH``、``FESS_CONF_PATH``、``SEARCH_ENGINE_HTTP_URL``
+   は参照されません。これらの値はファイル内に直接記述されているため、変更する場合は ``bin\fess.in.bat`` を直接編集してください。
+
+メールサーバーの設定
+------------------
+
+障害通知などをメールで受信するには、SMTP サーバーと通知先メールアドレスを設定します。
+
+1. ``fess_env_web.properties`` と ``fess_env_crawler.properties`` の
+   ``mail.smtp.server.main.host.and.port`` に SMTP サーバーのホストとポートを
+   指定します（デフォルト：``localhost:25``）。これらのファイルは、ZIP 版では
+   ``app/WEB-INF/classes/`` に、RPM/DEB 版では ``/etc/fess/`` にあります。
+   |Fess| の Web プロセスが前者を、クロール完了のメールを送信するクローラーが後者を読み、
+   ``fess_env.properties`` は使われません。変更後は |Fess| の再起動が必要です。
+2. 管理画面の左メニューから「システム」→「全般」をクリックします。
+3. 「通知メール」フィールドに通知先のメールアドレスを入力します。
+4. 「更新」ボタンをクリックします。
+5. 「テストメールの送信」ボタンで、メールが正しく送信されるか確認できます。
+
+タイムゾーンの設定
+----------------
+
+|Fess| のタイムゾーンには、サーバー（OS / JVM）のタイムゾーンが使用されます。
+管理画面にタイムゾーンを変更する設定項目はありません。変更する場合は、OS の
+タイムゾーン設定を変更するか、``bin/fess.in.sh``\ （Windows は ``bin\fess.in.bat``）の
+``FESS_JAVA_OPTS`` に JVM オプション ``-Duser.timezone=Asia/Tokyo`` を追加します。
+
+ログレベルの調整
+--------------
+
+本番環境では、ログレベルを調整してディスク使用量を抑えることができます。
+
+|Fess| 全体のログレベルは、環境変数 ``FESS_LOG_LEVEL``\ （デフォルト：``warn``）で
+変更できます。個別のロガーを細かく制御する場合は、設定ファイル
+``app/WEB-INF/classes/log4j2.xml`` を編集します。クロール、サジェスト、サムネイル
+生成は別プロセスで動作するため、これらのログレベルは
+``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml`` で個別に
+設定します。
+
+詳細は :doc:`../admin/index` を参照してください。
+
+停止方法
+========
+
+ZIP 版の場合
+-----------------
+
+Fess の停止
+~~~~~~~~~~
+
+プロセスを kill します::
+
+    $ ps aux | grep fess
+    $ kill <PID>
+
+または、``Ctrl+C`` でコンソールから停止できます（フォアグラウンドで実行している場合）。
+
+OpenSearch の停止::
+
+    $ ps aux | grep opensearch
+    $ kill <PID>
+
+RPM/DEB 版の場合 (chkconfig)
+--------------------------
+
+Fess の停止::
+
+    $ sudo service fess stop
+
+OpenSearch の停止::
+
+    $ sudo service opensearch stop
+
+RPM/DEB 版の場合 (systemd)
+------------------------
+
+Fess の停止::
+
+    $ sudo systemctl stop fess.service
+
+OpenSearch の停止::
+
+    $ sudo systemctl stop opensearch.service
+
+Docker 版の場合
+-------------
+
+コンテナの停止::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
+
+コンテナの停止と削除::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
+
+.. warning::
+
+   ``down`` コマンドでボリュームも削除する場合は ``-v`` オプションを追加します。
+   この場合、すべてのデータが削除されるため注意してください。
+
+再起動方法
+==========
+
+ZIP 版の場合
+-----------------
+
+停止してから起動します。
+
+RPM/DEB 版の場合
+--------------
+
+chkconfig::
+
+    $ sudo service fess restart
+
+systemd::
+
+    $ sudo systemctl restart fess.service
+
+Docker 版の場合
+-------------
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml restart
+
+トラブルシューティング
+====================
+
+起動しない場合
+------------
+
+1. **OpenSearch が起動しているか確認**
+
+   ::
+
+       $ curl http://localhost:9200/
+
+   OpenSearch が起動していない場合、まず OpenSearch を起動してください。
+
+2. **ポート番号の競合を確認**
+
+   ::
+
+       $ sudo ss -tuln | grep 8080
+
+   net-tools が導入されている環境では、``sudo netstat -tuln | grep 8080`` でも同じ内容を確認できます。
+
+   ポート 8080 が既に使用されている場合、ポート番号を変更します。
+
+   - ZIP 版：``bin/fess.in.sh`` の ``FESS_PORT`` を変更
+   - ZIP 版（Windows）：``bin\fess.in.bat`` の ``-Dfess.port=8080`` を直接編集
+   - RPM 版：``/etc/sysconfig/fess`` の ``FESS_PORT`` を変更
+   - DEB 版：``/etc/default/fess`` の ``FESS_PORT`` を変更
+
+3. **ログを確認**
+
+   エラーメッセージを確認して、問題を特定します。
+
+4. **Java のバージョンを確認**
+
+   ::
+
+       $ java -version
+
+   Java 21 以降がインストールされていることを確認してください。
+
+詳細なトラブルシューティングについては、:doc:`troubleshooting` を参照してください。
+
+次のステップ
+==========
+
+|Fess| が正常に起動したら、以下のドキュメントを参照して運用を開始してください：
+
+- :doc:`../admin/index` - クロール設定、検索設定、システム設定の詳細
+- :doc:`security` - 本番環境でのセキュリティ設定
+- :doc:`troubleshooting` - よくある問題と解決方法
+- :doc:`upgrade` - バージョンアップ手順
+- :doc:`uninstall` - アンインストール手順
+

@@ -1,0 +1,544 @@
+=============================
+Startup, Shutdown, and Initial Setup
+=============================
+
+This page describes the procedures for starting, stopping, and initial setup of the |Fess| server.
+
+.. important::
+
+   Before starting |Fess|, you must start OpenSearch.
+   If OpenSearch is not running, |Fess| will not function correctly.
+
+Startup Methods
+===============
+
+The startup procedure varies depending on the installation method.
+
+ZIP Version
+--------------
+
+Start OpenSearch
+~~~~~~~~~~~~~~~~
+
+::
+
+    $ cd /path/to/opensearch-3.9.0
+    $ ./bin/opensearch
+
+To start in the background::
+
+    $ ./bin/opensearch -d
+
+.. note::
+
+   ``bin/fess-setup install opensearch`` puts OpenSearch in ``opensearch/opensearch-3.9.0`` in the
+   |Fess| directory.
+
+.. important::
+
+   Start OpenSearch as a regular user. It refuses to run as ``root`` and exits with
+   ``can not run opensearch as root``. The refused start still leaves files such as
+   ``config/opensearch.keystore`` owned by ``root``, and the next start as a regular user then
+   fails with ``AccessDeniedException``. Give the OpenSearch directory back to that user before
+   starting it again, for example::
+
+       $ sudo chown -R <user> /path/to/opensearch-3.9.0
+
+Start Fess
+~~~~~~~~~~
+
+::
+
+    $ cd /path/to/fess-15.10.0
+    $ ./bin/fess
+
+To start in the background::
+
+    $ ./bin/fess -d
+
+.. note::
+
+   Startup may take several minutes.
+   You can check the startup status in the log files in ``logs/``: ``fess.log`` holds the
+   messages of |Fess| itself, and ``server_0.log`` those of the embedded Tomcat, including the
+   startup-completion message.
+
+ZIP Version (Windows)
+---------------------
+
+Start OpenSearch
+~~~~~~~~~~~~~~~~
+
+1. Open the OpenSearch installation directory
+2. Double-click ``opensearch.bat`` in the ``bin`` folder
+
+Or from Command Prompt::
+
+    C:\> cd C:\opensearch-3.9.0
+    C:\opensearch-3.9.0> bin\opensearch.bat
+
+Start Fess
+~~~~~~~~~~
+
+1. Open the Fess installation directory
+2. Double-click ``fess.bat`` in the ``bin`` folder
+
+Or from Command Prompt::
+
+    C:\> cd C:\fess-15.10.0
+    C:\fess-15.10.0> bin\fess.bat
+
+RPM/DEB Version (chkconfig)
+---------------------------
+
+Start OpenSearch::
+
+    $ sudo service opensearch start
+
+Start Fess::
+
+    $ sudo service fess start
+
+Check startup status::
+
+    $ sudo service fess status
+
+RPM/DEB Version (systemd)
+-------------------------
+
+Start OpenSearch::
+
+    $ sudo systemctl start opensearch.service
+
+Start Fess::
+
+    $ sudo systemctl start fess.service
+
+Check startup status::
+
+    $ sudo systemctl status fess.service
+
+Enable automatic startup::
+
+    $ sudo systemctl enable opensearch.service
+    $ sudo systemctl enable fess.service
+
+Docker Version
+--------------
+
+.. note::
+
+   ``compose.yaml`` and ``compose-opensearch3.yaml`` are not included with
+   |Fess| itself. They are provided by the docker-fess project
+   (https://github.com/codelibs/docker-fess); obtain the repository and run the
+   following commands inside the ``compose`` directory.
+
+Start using Docker Compose::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+Check startup status::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml ps
+
+Check logs::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+Verify Startup
+==============
+
+Verify that |Fess| has started successfully.
+
+Health Check
+------------
+
+Access the following URL using a browser or curl command::
+
+    http://localhost:8080/
+
+If started successfully, the Fess search screen will be displayed.
+
+Check from command line::
+
+    $ curl -I http://localhost:8080/
+
+If ``HTTP/1.1 200 OK`` is returned, it has started successfully.
+
+Check Logs
+----------
+
+Check the startup logs to ensure there are no errors.
+
+ZIP version::
+
+    $ tail -f /path/to/fess-15.10.0/logs/fess.log
+
+RPM/DEB version::
+
+    $ sudo tail -f /var/log/fess/fess.log
+
+Or use journalctl::
+
+    $ sudo journalctl -u fess.service -f
+
+Docker version::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+.. tip::
+
+   When startup completes successfully, a startup-completion message like the
+   following is written to ``server_0.log`` in the log directory (``logs/`` of the ZIP version,
+   ``/var/log/fess/`` of the RPM/DEB version). It is not shown on the console and is not written
+   to ``fess.log``::
+
+       ...Booting the Tomcat: port=8080 contextPath=
+       ...
+       Boot successful: url -> http://localhost:8080
+
+Access via Browser
+==================
+
+Access the following URLs to verify the web interface.
+
+Search Screen
+-------------
+
+**URL**: http://localhost:8080/
+
+The Fess search screen will be displayed. In the initial state, no search results will be displayed because no crawl configuration has been performed.
+
+The search screen is ``bootstrap``, the static theme bundled with |Fess|. To change how it looks,
+install another theme from "System" > "Theme" in the admin screen or with
+``bin/fess-setup install theme <name>`` (see :doc:`fess-setup`), or copy the bundled theme and
+change the copy (see :ref:`theme-customize-bundled`).
+
+Admin Screen
+------------
+
+**URL**: http://localhost:8080/admin
+
+Default administrator account:
+
+- **Username**: ``admin``
+- **Password**: ``admin``
+
+.. warning::
+
+   **Important Security Notice**
+
+   You must change the default password.
+   Especially in production environments, it is strongly recommended to change the password immediately after the first login.
+
+Initial Setup
+=============
+
+After logging into the admin screen, perform the following initial configuration.
+
+Step 1: Change Administrator Password
+--------------------------------------
+
+1. Log in to the admin screen (http://localhost:8080/admin)
+2. Click "User" → "User" from the left menu
+3. Click the ``admin`` user
+4. Enter a new password in the [Password] field
+5. Re-enter the same password in the [Password (Confirm)] field
+6. Click the [Update] button
+
+.. important::
+
+   Passwords should meet the following criteria:
+
+   - 8 characters or more (the required minimum length set by ``password.min.length``)
+   - Combination of uppercase letters, lowercase letters, numbers, and symbols
+   - Not easily guessed
+
+   By default, only the minimum length (8 characters) is required; a combination
+   of character types is not enforced. Character-type requirements can be enabled
+   with settings such as ``password.require.uppercase``.
+
+Step 2: Create Crawl Configuration
+-----------------------------------
+
+Create a configuration to crawl target sites or file systems.
+
+1. Click "Crawler" → "Web" from the left menu
+2. Click the "New" button
+3. Enter required information:
+
+   - **Name**: Name of the crawl configuration (e.g., Company Website)
+   - **URL**: Target URL for crawling (e.g., https://www.example.com/). To specify multiple URLs, enter one URL per line
+   - **Max Access Count**: Maximum number of documents to crawl (optional)
+   - **Interval**: Wait time between accesses (milliseconds; default: ``10000``)
+
+   .. note::
+
+      Other items (such as user agent, number of threads, and depth) use their
+      default values when left blank.
+
+4. Click the "Create" button
+
+Step 3: Execute Crawl
+---------------------
+
+1. Click "System" → "Scheduler" from the left menu
+2. Open the [Default Crawler] job and click the "Start Now" button
+3. Wait for the crawl to complete (progress can be checked on the dashboard)
+
+Step 4: Verify Search
+---------------------
+
+1. Access the search screen (http://localhost:8080/)
+2. Enter a search keyword
+3. Verify that search results are displayed
+
+.. note::
+
+   Crawling may take time.
+   For large-scale sites, it may take from several hours to several days.
+
+Other Recommended Settings
+===========================
+
+For production environments, consider the following settings.
+
+Main Settings via Environment Variables
+---------------------------------------
+
+Settings such as the port number, JVM heap size, and the OpenSearch connection
+URL can be changed via environment variables. Edit ``bin/fess.in.sh`` for the
+ZIP edition, ``/etc/sysconfig/fess`` for the RPM edition, and
+``/etc/default/fess`` for the DEB edition. A restart of |Fess| is required after
+making changes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - Environment Variable
+     - Default
+     - Description
+   * - ``FESS_PORT``
+     - ``8080``
+     - The HTTP port that |Fess| listens on.
+   * - ``FESS_HEAP_SIZE``
+     - (unset)
+     - JVM heap size. Sets the same value for the minimum and maximum. When unset, a minimum of ``256m`` and a maximum of ``2g`` are used (the Windows ZIP edition uses a maximum of ``1g``); the RPM/DEB edition uses ``512m``.
+   * - ``SEARCH_ENGINE_HTTP_URL``
+     - ``http://localhost:9200``
+     - URL of the OpenSearch to connect to. For the ZIP distribution, ``bin/fess.in.sh`` sets this by default. Export the variable, or edit ``bin/fess.in.sh``, when OpenSearch runs on a different port or host. The RPM/DEB edition sets it in the package environment file.
+   * - ``FESS_LOG_LEVEL``
+     - ``warn``
+     - Log level of |Fess|.
+   * - ``FESS_HEAP_NEWSIZE``
+     - (unset)
+     - Size of the young generation of the JVM heap (``-Xmn``), such as ``256m``. When unset, the JVM decides.
+   * - ``FESS_TEMP_PATH``
+     - ``temp`` in the |Fess| directory (RPM/DEB edition: ``/var/tmp/fess``)
+     - Directory for temporary files, including the working directory of the embedded Tomcat. The user that runs |Fess| must be able to write to it.
+   * - ``FESS_CONF_PATH``
+     - (unset) (RPM/DEB edition: ``/etc/fess``)
+     - Directory that holds the configuration files. ``bin/fess`` places it at the front of the class path and passes it to |Fess| as ``-Dfess.conf.path``. For files such as ``tomcat_config.properties`` in ``lib/classes``, the one in this directory takes priority. However, in the ZIP edition the web application reads the files in ``app/WEB-INF/classes`` first, so a ``fess_config.properties`` placed in this directory does not override the values of the ``fess_config.properties`` in ``app/WEB-INF/classes`` (child processes such as the crawler read this directory before ``WEB-INF/classes``). In the ZIP edition, edit the file in ``app/WEB-INF/classes`` to change ``fess_config.properties``. The RPM/DEB edition does not put a ``fess_config.properties`` in ``app/WEB-INF/classes`` and uses only the one in ``/etc/fess``.
+   * - ``FESS_USE_IPV4``
+     - (unset)
+     - With any non-empty value, the JVM uses the IPv4 stack only (``-Djava.net.preferIPv4Stack=true``).
+   * - ``FESS_USE_GC_LOGGING``
+     - (unset)
+     - With any non-empty value, the JVM writes its garbage collection log to ``gc-fess.log`` in the log directory (up to 5 files of 64 MB).
+
+.. note::
+
+   The environment variables that the Windows ZIP edition's ``bin\fess.in.bat`` reads are
+   ``FESS_HEAP_SIZE``, ``FESS_HEAP_NEWSIZE``, ``FESS_USE_IPV4`` and
+   ``FESS_USE_GC_LOGGING`` from the table above, and the following ones that are not in the table.
+
+   - ``FESS_MIN_MEM``, ``FESS_MAX_MEM``: Specify the minimum and maximum heap sizes individually (ignored when ``FESS_HEAP_SIZE`` is set).
+   - ``FESS_DIRECT_SIZE``: Upper limit of direct memory (``-XX:MaxDirectMemorySize``).
+   - ``FESS_DICTIONARY_PATH``: The ``config\dictionary`` directory of OpenSearch.
+   - ``FESS_PROXY_HOST``, ``FESS_PROXY_PORT``, ``FESS_NON_PROXY_HOSTS``: Proxy settings.
+   - ``FESS_JAVA_OPTS``: ``fess.in.bat`` appends these JVM options after the values already set.
+   - ``PLAYWRIGHT_NODEJS_PATH``: The Node.js executable used by the Playwright plugin.
+   - ``JAVA_HOME``: Required.
+
+   ``FESS_PORT``, ``FESS_LOG_LEVEL``, ``FESS_TEMP_PATH``, ``FESS_CONF_PATH`` and ``SEARCH_ENGINE_HTTP_URL``
+   are not read. These values are written directly in the file, so edit ``bin\fess.in.bat`` directly to change them.
+
+Configure Mail Server
+---------------------
+
+To receive failure notifications and similar messages by email, configure the
+SMTP server and the notification recipient address.
+
+1. In ``fess_env_web.properties`` and ``fess_env_crawler.properties``, specify the
+   SMTP server host and port in ``mail.smtp.server.main.host.and.port``
+   (default: ``localhost:25``). The files are in ``app/WEB-INF/classes/`` for the
+   ZIP package and in ``/etc/fess/`` for the RPM/DEB packages. The |Fess| web
+   process reads the first, and the crawler, which sends the crawl completion
+   mail, reads the second; ``fess_env.properties`` is not used. A restart of
+   |Fess| is required after the change.
+2. In the admin UI, click [System] → [General] in the left menu.
+3. Enter the recipient email address in the [Notification Mail] field.
+4. Click the [Update] button.
+5. You can verify that mail is sent correctly with the [Send Test Mail] button.
+
+Configure Time Zone
+-------------------
+
+|Fess| uses the server's (OS / JVM) time zone. There is no setting to change the
+time zone in the admin UI. To change it, change the OS time zone setting, or add
+the JVM option ``-Duser.timezone=Asia/Tokyo`` to ``FESS_JAVA_OPTS`` in
+``bin/fess.in.sh`` (on Windows, ``bin\fess.in.bat``).
+
+Adjust Log Level
+----------------
+
+In production, you can adjust the log level to reduce disk usage.
+
+The overall log level of |Fess| can be changed with the ``FESS_LOG_LEVEL``
+environment variable (default: ``warn``). To control individual loggers in
+detail, edit the config file ``app/WEB-INF/classes/log4j2.xml``. Crawling,
+suggest, and thumbnail generation run as separate processes, so configure their
+log levels individually in
+``app/WEB-INF/env/{crawler,suggest,thumbnail}/resources/log4j2.xml``.
+
+See :doc:`../admin/index` for details.
+
+Shutdown Methods
+================
+
+ZIP Version
+------------------
+
+Stop Fess
+~~~~~~~~~
+
+Kill the process::
+
+    $ ps aux | grep fess
+    $ kill <PID>
+
+Or, stop from the console with ``Ctrl+C`` (if running in the foreground).
+
+Stop OpenSearch::
+
+    $ ps aux | grep opensearch
+    $ kill <PID>
+
+RPM/DEB Version (chkconfig)
+---------------------------
+
+Stop Fess::
+
+    $ sudo service fess stop
+
+Stop OpenSearch::
+
+    $ sudo service opensearch stop
+
+RPM/DEB Version (systemd)
+-------------------------
+
+Stop Fess::
+
+    $ sudo systemctl stop fess.service
+
+Stop OpenSearch::
+
+    $ sudo systemctl stop opensearch.service
+
+Docker Version
+--------------
+
+Stop containers::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
+
+Stop and remove containers::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
+
+.. warning::
+
+   To also delete volumes with the ``down`` command, add the ``-v`` option.
+   In this case, all data will be deleted, so use with caution.
+
+Restart Methods
+===============
+
+ZIP Version
+------------------
+
+Stop and then start.
+
+RPM/DEB Version
+---------------
+
+chkconfig::
+
+    $ sudo service fess restart
+
+systemd::
+
+    $ sudo systemctl restart fess.service
+
+Docker Version
+--------------
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml restart
+
+Troubleshooting
+===============
+
+Won't Start
+-----------
+
+1. **Verify OpenSearch is running**
+
+   ::
+
+       $ curl http://localhost:9200/
+
+   If OpenSearch is not running, start OpenSearch first.
+
+2. **Check for port conflicts**
+
+   ::
+
+       $ sudo ss -tuln | grep 8080
+
+   Where net-tools is installed, ``sudo netstat -tuln | grep 8080`` shows the same information.
+
+   If port 8080 is already in use, change the port number.
+
+   - ZIP edition: change ``FESS_PORT`` in ``bin/fess.in.sh``
+   - ZIP edition (Windows): edit ``-Dfess.port=8080`` directly in ``bin\fess.in.bat``
+   - RPM edition: change ``FESS_PORT`` in ``/etc/sysconfig/fess``
+   - DEB edition: change ``FESS_PORT`` in ``/etc/default/fess``
+
+3. **Check logs**
+
+   Identify the problem from error messages.
+
+4. **Verify Java version**
+
+   ::
+
+       $ java -version
+
+   Verify that Java 21 or later is installed.
+
+For detailed troubleshooting, refer to :doc:`troubleshooting`.
+
+Next Steps
+==========
+
+After |Fess| has started successfully, refer to the following documentation to begin operation:
+
+- :doc:`../admin/index` - Details on crawl configuration, search settings, and system settings
+- :doc:`security` - Security configuration for production environments
+- :doc:`troubleshooting` - Common problems and solutions
+- :doc:`upgrade` - Version upgrade procedures
+- :doc:`uninstall` - Uninstall procedures

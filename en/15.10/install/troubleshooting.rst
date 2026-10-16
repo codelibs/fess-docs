@@ -1,0 +1,595 @@
+===============
+Troubleshooting
+===============
+
+This page describes common problems and solutions during installation, startup, and operation of |Fess|.
+
+Installation Issues
+===================
+
+Java Not Recognized
+-------------------
+
+**Symptoms:**
+
+::
+
+    -bash: java: command not found
+
+Or::
+
+    'java' is not recognized as an internal or external command
+
+**Cause:**
+
+Java is not installed, or the PATH environment variable is not configured correctly.
+
+**Solution:**
+
+1. Verify Java is installed::
+
+       $ which java
+       $ java -version
+
+2. If not installed, install Java 21::
+
+       # Ubuntu/Debian
+       $ sudo apt-get update
+       $ sudo apt-get install openjdk-21-jdk
+
+       # RHEL/CentOS
+       $ sudo yum install java-21-openjdk
+
+   The standard repositories of Debian 12 have no ``openjdk-21-jdk`` package. On Debian 12, install Eclipse Temurin 21 instead, following the instructions for Debian in the `Adoptium installation guide for Linux <https://adoptium.net/installation/linux/>`__.
+
+3. Set JAVA_HOME environment variable::
+
+       $ export JAVA_HOME=/path/to/java
+       $ export PATH=$JAVA_HOME/bin:$PATH
+
+   For persistent configuration, add to ``~/.bashrc`` or ``/etc/profile``.
+
+Plugin Installation Fails
+--------------------------
+
+**Symptoms:**
+
+::
+
+    ERROR: Plugin installation failed
+
+**Causes:**
+
+- Network connection issues
+- Plugin version does not match OpenSearch version
+- Permission issues
+
+**Solution:**
+
+1. Verify OpenSearch version::
+
+       $ /path/to/opensearch/bin/opensearch --version
+
+2. Match plugin version to OpenSearch version::
+
+       $ /path/to/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+
+3. Verify permissions::
+
+       $ sudo /path/to/opensearch/bin/opensearch-plugin install ...
+
+4. For installation through a proxy::
+
+       $ export ES_JAVA_OPTS="-Dhttp.proxyHost=proxy.example.com -Dhttp.proxyPort=8080"
+       $ /path/to/opensearch/bin/opensearch-plugin install ...
+
+Startup Issues
+==============
+
+Fess Won't Start
+----------------
+
+**Symptoms:**
+
+Fess startup command produces an error or exits immediately.
+
+**Verification Items:**
+
+1. **Verify OpenSearch is running**::
+
+       $ curl http://localhost:9200/
+
+   If working correctly, a JSON response will be returned.
+
+   When no OpenSearch answers, |Fess| retries for about a minute and then stops starting up, with
+   the following message on the console and in ``logs/fess.log``::
+
+       The search engine at http://localhost:9200 did not become available within 60221ms. Check that OpenSearch is running and reachable. If there is none yet, run bin/fess-setup install opensearch to set one up.
+
+   Start OpenSearch, or check ``SEARCH_ENGINE_HTTP_URL``. A new ZIP installation has no OpenSearch
+   until one is set up with ``bin/fess-setup install opensearch``; see :doc:`install-linux`.
+
+2. **Check for port conflicts**::
+
+       $ sudo ss -tuln | grep 8080
+
+   If port 8080 is already in use, change the port number in the configuration file.
+
+3. **Check log files**::
+
+       $ tail -f /path/to/fess/logs/fess.log
+
+   Identify the cause from error messages.
+
+4. **Verify Java version**::
+
+       $ java -version
+
+   Verify that Java 21 or later is installed.
+
+5. **Check for insufficient memory**::
+
+       $ free -h
+
+   If memory is insufficient, adjust heap size or increase system memory.
+
+OpenSearch Won't Start
+----------------------
+
+**Symptoms:**
+
+::
+
+    ERROR: bootstrap checks failed
+
+**Cause:**
+
+System configuration does not meet OpenSearch requirements.
+
+**Solution:**
+
+1. **Set vm.max_map_count**::
+
+       $ sudo sysctl -w vm.max_map_count=262144
+
+   For persistent configuration::
+
+       $ echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
+       $ sudo sysctl -p
+
+2. **Increase file descriptor limits**::
+
+       $ sudo vi /etc/security/limits.conf
+
+   Add the following::
+
+       opensearch  -  nofile  65535
+       opensearch  -  nproc   4096
+
+3. **Configure memory locking**::
+
+       $ sudo vi /etc/security/limits.conf
+
+   Add the following::
+
+       opensearch  -  memlock  unlimited
+
+4. Restart OpenSearch::
+
+       $ sudo systemctl restart opensearch
+
+Index Cannot Be Created (Dictionary File Path)
+----------------------------------------------
+
+**Symptoms:**
+
+Accessing |Fess| returns HTTP 404, and the following error is written to ``fess.log``::
+
+    Failed to create index: index=fess, path=fess_indices/fess.json
+    ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt
+
+**Cause:**
+
+OpenSearch 3.8.0 and later refuse to create an index when dictionary files are outside the OpenSearch configuration directory.
+``configsync.config_path`` and ``FESS_DICTIONARY_PATH`` point outside the configuration directory (such as ``data/config/``).
+
+**Solution:**
+
+1. Change ``configsync.config_path`` and ``FESS_DICTIONARY_PATH`` to a directory under the OpenSearch configuration directory.
+
+   - RPM/DEB version: ``/etc/opensearch/dictionary/``
+   - ZIP version: ``/path/to/opensearch-3.9.0/config/dictionary/``
+
+2. If you have existing dictionary files, copy them to the new directory.
+3. Restart OpenSearch, then |Fess|.
+
+For details, see :doc:`install-linux`.
+
+Port Conflict
+-------------
+
+**Symptoms:**
+
+::
+
+    Address already in use
+
+**Solution:**
+
+1. Check ports in use::
+
+       $ sudo ss -tuln | grep 8080
+       $ sudo lsof -i :8080
+
+2. Stop the process using the port, or change Fess port number
+
+    For port number changes, see :doc:Port and Network Settings <../config/setup-port-network>.
+
+Connection Issues
+=================
+
+Fess Cannot Connect to OpenSearch
+----------------------------------
+
+**Symptoms:**
+
+Logs show errors like the following::
+
+    Connection refused
+    or
+    No route to host
+
+**Solution:**
+
+1. **Verify OpenSearch is running**::
+
+       $ curl http://localhost:9200/
+
+2. **Verify connection URL**
+
+   Verify the URL configured in ``fess.in.sh`` or ``fess.in.bat`` is correct::
+
+       SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+
+3. **Check firewall**::
+
+       $ sudo firewall-cmd --list-all
+
+   Verify port 9200 is open.
+
+4. **Verify network connection**
+
+   If OpenSearch is running on a different host::
+
+       $ ping opensearch-host
+       $ telnet opensearch-host 9200
+
+Cannot Access Fess from Browser
+--------------------------------
+
+**Symptoms:**
+
+Cannot access http://localhost:8080/ in browser.
+
+**Solution:**
+
+1. **Verify Fess is running**::
+
+       $ ps aux | grep fess
+
+2. **Try accessing on localhost**::
+
+       $ curl http://localhost:8080/
+
+3. **Check firewall**::
+
+       $ sudo firewall-cmd --list-all
+
+   Verify port 8080 is open.
+
+4. **When accessing from another host**
+
+   Verify Fess is listening beyond localhost::
+
+       $ ss -tuln | grep 8080
+
+   If ``127.0.0.1:8080``, configure to listen on ``0.0.0.0:8080`` or a specific IP address.
+
+Performance Issues
+==================
+
+Slow Search
+-----------
+
+**Causes:**
+
+- Large index size
+- Insufficient memory
+- Slow disk I/O
+- Complex queries
+
+**Solution:**
+
+1. **Increase heap size**
+
+   Start |Fess| with ``FESS_HEAP_SIZE`` passed as an environment variable::
+
+       $ FESS_HEAP_SIZE=4g bin/fess
+
+   To set it in ``bin/fess.in.sh``, write ``FESS_HEAP_SIZE=4g`` **before** the line that determines the heap size (the line that sets the default value of ``FESS_MIN_MEM``). Appending it to the end of the file has no effect because the heap size has already been determined by then. For the RPM/DEB edition, set it in ``/etc/sysconfig/fess`` (``/etc/default/fess`` for DEB).
+
+   Also adjust OpenSearch heap size::
+
+       export OPENSEARCH_JAVA_OPTS="-Xms4g -Xmx4g"
+
+2. **Use SSD**
+
+   If disk I/O is a bottleneck, migrate to SSD.
+
+3. **Enable caching**
+
+   Enable query cache in configuration file.
+
+Slow Crawling
+-------------
+
+**Causes:**
+
+- Long crawl interval
+- Slow target site response
+- Insufficient number of threads
+
+**Solution:**
+
+1. **Adjust crawl interval**
+
+   Shorten the "Interval" in crawl configuration on the admin screen (in milliseconds).
+
+   .. warning::
+
+      If the interval is too short, it may overload the target site. Set an appropriate value.
+
+2. **Increase number of threads**
+
+   Increase the "Number of Threads" of the crawl configuration on the admin screen. The default is 1 for Web crawls and 5 for file system crawls.
+
+3. **Adjust timeout values**
+
+   For sites with slow responses, increase timeout values.
+
+Data Issues
+===========
+
+No Search Results Displayed
+----------------------------
+
+**Causes:**
+
+- Index not created
+- Crawl failed
+- Incorrect search query
+
+**Solution:**
+
+1. **Verify index**::
+
+       $ curl http://localhost:9200/_cat/indices?v
+
+   Verify |Fess| indexes exist.
+
+2. **Check crawl logs**
+
+   Download the crawl log (``fess-crawler.log``) from "System Info" → "Log File" in the admin screen and check it for errors.
+
+3. **Re-run crawl**
+
+   Execute "Default Crawler" from "System" → "Scheduler" in the admin screen.
+
+4. **Simplify search query**
+
+   First search with simple keywords to verify results are returned.
+
+Index Corrupted
+---------------
+
+**Symptoms:**
+
+Errors occur during search or unexpected results are returned.
+
+**Solution:**
+
+1. **Delete and recreate index**
+
+   .. warning::
+
+      Deleting the index will lose all search data. Always create a backup first.
+
+   ::
+
+       $ curl -X DELETE http://localhost:9200/fess*
+
+2. **Restart Fess**
+
+   The indexes are created when |Fess| starts. Immediately after the deletion, the user information index is also lost, so you cannot log in to the admin screen (``/api/v2/health`` keeps returning ``200``). Restarting |Fess| recreates the indexes, the default jobs, and the initial user (``admin``).
+
+3. **Re-run crawl**
+
+   Execute "Default Crawler" from the admin screen to register the documents to be searched again.
+
+Docker-Specific Issues
+======================
+
+Container Won't Start
+---------------------
+
+**Symptoms:**
+
+Container does not start with ``docker compose up``.
+
+**Solution:**
+
+1. **Check logs**::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs
+
+2. **Check for insufficient memory**
+
+   Increase memory allocated to Docker (from Docker Desktop settings).
+
+3. **Check for port conflicts**::
+
+       $ docker ps
+
+   Verify no other containers are using ports 8080 or 9200.
+
+4. **Verify Docker Compose file**
+
+   Check for syntax errors in YAML file::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml config
+
+Container Starts But Cannot Access Fess
+----------------------------------------
+
+**Solution:**
+
+1. **Check container status**::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml ps
+
+2. **Check logs**::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs fess
+
+3. **Verify network settings**::
+
+       $ docker network ls
+       $ docker network inspect <network_name>
+
+Windows-Specific Issues
+=======================
+
+Path Issues
+-----------
+
+**Symptoms:**
+
+Errors occur when paths contain spaces or Japanese characters.
+
+**Solution:**
+
+Install in a directory that does not contain spaces or Japanese characters in the path.
+
+Example::
+
+    C:\opensearch  (recommended)
+    C:\Program Files\opensearch  (not recommended)
+
+Cannot Register as Service
+---------------------------
+
+**Solution:**
+
+Use third-party tools such as NSSM to register as a Windows service.
+
+For details, refer to :doc:`install-windows`.
+
+Other Issues
+============
+
+Change Log Level
+----------------
+
+To check detailed logs, change the log level to DEBUG.
+
+Edit ``log4j2.xml``::
+
+    <Logger name="org.codelibs.fess" level="debug"/>
+
+Reset Database
+--------------
+
+To reset configuration, delete OpenSearch indexes::
+
+    $ curl -X DELETE 'http://localhost:9200/fess_config.*'
+
+.. warning::
+
+   This command will delete all configuration data.
+
+Forgotten Administrator Password
+--------------------------------
+
+If you forgot the administrator password, you can reset it by updating the user document directly in the ``fess_user.user`` index of OpenSearch. The password is stored in the ``password`` field as a hash in the form ``{bcrypt}$2a$...``. The change takes effect without restarting |Fess|.
+
+1. Create the hash of the new password. |Fess| accepts only bcrypt hashes that start with ``$2a$``, so replace the ``$2y$`` printed by ``htpasswd`` (contained in the ``apache2-utils`` or ``httpd-tools`` package) with ``$2a$``. Replace ``NewPassword`` with the new password::
+
+       $ HASH=$(htpasswd -bnBC 10 "" 'NewPassword' | tr -d ':\n' | sed 's/^\$2y/$2a/')
+
+2. Update the password in the document of the admin user. The document ID of the admin user in its initial state is ``YWRtaW4=``::
+
+       $ curl -X POST 'http://localhost:9200/fess_user.user/_update/YWRtaW4=?refresh=true' \
+              -H 'Content-Type: application/json' \
+              -d "{\"doc\":{\"password\":\"{bcrypt}${HASH}\"}}"
+
+   To reset the password of another user, look up the ``_id`` with ``curl 'http://localhost:9200/fess_user.user/_search?q=name:USERNAME'`` and use that ID. If authentication is enabled for OpenSearch, add the credentials to curl.
+
+3. Confirm that you can log in to the admin screen with the new password. If the password remains in your command history, set the password again under [User > User] after logging in.
+
+Support Information
+===================
+
+If problems cannot be resolved, use the following support resources:
+
+Community Support
+-----------------
+
+- **Issues**: https://github.com/codelibs/fess/issues
+
+  When reporting issues, include the following information:
+
+  - Fess version
+  - OpenSearch version
+  - OS and version
+  - Error messages (excerpts from logs)
+  - Reproduction steps
+
+- **Forum**: https://discuss.codelibs.org/
+
+Commercial Support
+------------------
+
+For commercial support needs, please contact N2SM, Inc.:
+
+- **Web**: https://www.n2sm.net/
+
+Collecting Debug Information
+=============================
+
+When reporting issues, collecting the following information is helpful:
+
+1. **Version information** (``bin/fess -v`` is available in 15.10 and later)::
+
+       $ /path/to/fess/bin/fess -v
+       $ /path/to/opensearch/bin/opensearch --version
+       $ java -version
+
+2. **System information**::
+
+       $ uname -a
+       $ cat /etc/os-release
+       $ free -h
+       $ df -h
+
+3. **Log files**::
+
+       $ tar czf fess-logs.tar.gz /path/to/fess/logs/
+
+4. **Configuration files** (after removing sensitive information)::
+
+       $ tar czf fess-config.tar.gz /path/to/fess/app/WEB-INF/conf/
+
+5. **OpenSearch status**::
+
+       $ curl http://localhost:9200/_cluster/health?pretty
+       $ curl http://localhost:9200/_cat/indices?v

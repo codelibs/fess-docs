@@ -1,0 +1,326 @@
+==============================
+OpenID ConnectによるSSO設定
+==============================
+
+概要
+====
+
+|Fess| では、OpenID Connect（OIDC）を使用したシングルサインオン（SSO）認証をサポートしています。
+OpenID ConnectはOAuth 2.0を基盤とした認証プロトコルで、ID Token（JWT）を使用してユーザー認証を行います。
+OpenID Connect認証を使用することで、OIDCプロバイダー（OP）で認証されたユーザー情報を |Fess| に連携できます。
+
+.. note::
+   OpenID Connect認証への対応は ``fess-sso-oidc`` プラグインから提供されます。配布物には
+   同梱されていないため、管理画面の「システム > プラグイン」ページ、または
+   ``bin/fess-setup install plugin fess-sso-oidc`` で導入してください。プラグイン名は
+   ``fess-sso-oidc`` ですが、 ``sso.type`` の値は ``oic`` のままです。
+   導入するまで、 ``sso.type=oic`` を設定しても ``/sso/`` へのリクエストはログインページへ
+   リダイレクトされるだけです。
+
+OpenID Connect認証の仕組み
+--------------------------
+
+OpenID Connect認証では、|Fess| がRelying Party（RP）として動作し、外部のOpenIDプロバイダー（OP）と連携して認証を行います。
+
+1. ユーザーが |Fess| のSSOエンドポイント（``/sso/``）にアクセス
+2. |Fess| がOPの認可エンドポイントにリダイレクト
+3. ユーザーがOPで認証を実行
+4. OPが認可コードを |Fess| にリダイレクト
+5. |Fess| が認可コードを使用してトークンエンドポイントからID Tokenを取得
+6. |Fess| がID Token（JWT）のクレームを検証したうえでユーザー情報を取得し、ユーザーをログイン
+
+.. note::
+   |Fess| は認可コードフロー（Authorization Code Flow）を使用します。ID Tokenは、ブラウザを経由せず、|Fess| とOPの間のバックチャネル（サーバー間通信）でトークンエンドポイントから直接取得されます。
+   |Fess| はID Tokenをデコードしてクレーム（``email`` や ``groups`` など）を取り出してユーザー情報を構成しますが、JWT署名の暗号的な検証は行いません。トークンはトークンエンドポイントからTLS経由で直接受け取るため、OpenID Connect Coreはこれを認めています。そのため、トークンエンドポイントのURL（``oic.token.server.url``）はHTTPSである必要があります（``http`` が使えるのは ``localhost``、``127.x.x.x``、``::1`` のみです）。
+   クレームは次のように検証します。``aud`` に ``oic.client.id`` が含まれていること（``azp`` がある場合は ``oic.client.id`` と一致すること）、``exp`` があり期限切れでないこと（300秒までの時刻のずれは許容します）、``oic.issuer`` を設定した場合は ``iss`` がそれと一致すること。``oic.issuer`` を設定しない場合は ``iss`` を検証せず、起動後の最初のログインで警告をログに出力します。``nonce`` とPKCEは使用しません。
+
+ロールベース検索との連携については、:doc:`security-role` を参照してください。
+
+前提条件
+========
+
+OpenID Connect認証を設定する前に、以下の前提条件を確認してください。
+
+- |Fess| 15.10 以降がインストールされていること
+- OpenID Connect対応のプロバイダー（OP）が利用可能であること
+- |Fess| がHTTPSでアクセス可能であること（本番環境では必須）
+- OP側で |Fess| をクライアント（RP）として登録できる権限があること
+
+対応するプロバイダーの例:
+
+- Microsoft Entra ID（Azure AD）
+- Google Workspace / Google Cloud Identity
+- Okta
+- Keycloak
+- Auth0
+- その他のOpenID Connect対応プロバイダー
+
+基本設定
+========
+
+SSO機能の有効化
+---------------
+
+OpenID Connect認証を有効にするには、``app/WEB-INF/conf/system.properties`` に以下の設定を追加します。
+
+::
+
+    sso.type=oic
+
+.. note::
+   ``sso.type`` および以降で説明する ``oic.*`` の各設定（``oic.issuer`` を除く）は、管理画面の「システム > 全般」ページからも設定・変更できます。
+   管理画面で変更した設定は ``system.properties`` に保存され、再起動後も保持されます。
+   ``oic.issuer`` は ``system.properties`` でのみ設定できます。
+
+プロバイダー設定
+----------------
+
+OPから取得した情報を設定します。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``oic.auth.server.url``
+     - 認可エンドポイントURL
+     - ``https://accounts.google.com/o/oauth2/auth``
+   * - ``oic.token.server.url``
+     - トークンエンドポイントURL
+     - ``https://accounts.google.com/o/oauth2/token``
+   * - ``oic.issuer``
+     - 発行者（issuer）の識別子（省略可）。設定すると、ID Tokenの ``iss`` クレームがこの値と完全に一致する必要があります（末尾のスラッシュも区別されます）
+     - （空文字：``iss`` を検証しない）
+
+.. note::
+   これらのURLと発行者は、OPのDiscoveryエンドポイント（``/.well-known/openid-configuration``）から取得できます。発行者は、その ``issuer`` の値です。
+   トークンエンドポイントのURL（``oic.token.server.url``）はHTTPSである必要があります。 ``http`` が使えるのは、ホストが ``localhost`` （大文字小文字は区別しません）、``127.x.x.x`` の形式のIPv4アドレス、``::1`` のいずれかである場合のみです。ホスト名は書かれたとおりに文字列として比較し、名前解決は行いません。そのため、Docker Composeのサービス名（``http://keycloak:8080/...`` など）や社内のホスト名は、同じマシンを指していても ``http`` では拒否されます。
+
+   この確認の対象はトークンエンドポイントだけで、認可エンドポイント（``oic.auth.server.url``）には行いません。確認はログイン時に行われ、起動時には行われません。 ``oic.issuer`` を設定してもこの規則は緩和されず、``iss`` クレームの検証が有効になるだけです。
+
+クライアント設定
+----------------
+
+OP側で登録したクライアント情報を設定します。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``oic.client.id``
+     - クライアントID
+     - （空文字）
+   * - ``oic.client.secret``
+     - クライアントシークレット
+     - （空文字）
+   * - ``oic.scope``
+     - 要求するスコープ
+     - （空文字）
+
+.. note::
+   スコープには少なくとも ``openid`` を含める必要があります。
+   ユーザーのメールアドレスを取得する場合は ``openid email`` を指定します。
+
+リダイレクトURL設定
+-------------------
+
+認証後のコールバックURLを設定します。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``oic.redirect.url``
+     - リダイレクトURL（コールバックURL）
+     - ``{oic.base.url}/sso/``
+   * - ``oic.base.url``
+     - |Fess| のベースURL
+     - ``http://localhost:8080``
+
+.. note::
+   ``oic.redirect.url`` を省略した場合、``oic.base.url`` から自動的に構成されます。
+   本番環境では、``oic.base.url`` にHTTPSのURLを設定してください。
+
+ユーザー属性設定
+----------------
+
+OIDCで認証されたユーザーに割り当てるデフォルトのグループ・ロールを設定します。
+ユーザーID・グループ・ロールは、それぞれ以下のように決定されます。
+
+- **ユーザーID**: ID Token（JWT）の ``email`` クレームから取得されます。このため、スコープには実質的に ``email`` を含める必要があります（``email`` クレームが取得できない場合、ログインは正しく行われません）。
+- **グループ**: ID Tokenの ``groups`` クレームから取得されます。\ ``groups`` クレームが存在しない場合は ``oic.default.groups`` の値が使用されます。\ ``groups`` クレームが空の配列で送られてきた場合は「存在する」とみなされるため、\ ``oic.default.groups`` は使用されず、グループなしとして扱われます。
+- **ロール**: 常に ``oic.default.roles`` の値が使用されます（ID Tokenのクレームからロールを取得する仕組みはありません）。
+
+.. note::
+   |Fess| は ``groups`` クレームの値をそのまま使用し、ディレクトリへの問い合わせや
+   ネストされたグループ（親グループ）の展開は行いません。
+   親グループが含まれるかどうかは、OP側のクレーム設定だけで決まります。
+   Microsoft Graph APIで親グループを解決する :doc:`sso-entraid` とは動作が異なります。
+   クレームの値はそのまま検索権限になります。OP側でグループのフルパスを出力する設定にしている場合は
+   ``/親グループ/子グループ`` のような値がそのまま権限名になり、グループ名だけを付与した文書とは一致しません。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``oic.default.groups``
+     - デフォルトグループ（カンマ区切り）
+     - （空文字）
+   * - ``oic.default.roles``
+     - デフォルトロール（カンマ区切り）
+     - （空文字）
+
+.. note::
+   ロールベース検索を使用する場合は、ユーザーに適切なグループまたはロールを割り当てる必要があります。
+   詳細は :doc:`security-role` を参照してください。
+
+OP側での設定
+============
+
+OP側で |Fess| をクライアント（RP）として登録する際に、以下の情報を設定します。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 設定項目
+     - 設定値
+   * - アプリケーションの種類
+     - Webアプリケーション
+   * - リダイレクトURI / コールバックURL
+     - ``https://<Fessのホスト>/sso/``
+   * - 許可するスコープ
+     - ``openid`` および必要なスコープ（``email``, ``profile`` など）
+
+OPから取得する情報
+------------------
+
+OPの設定画面またはDiscoveryエンドポイントから以下の情報を取得し、|Fess| の設定に使用します。
+
+- **認可エンドポイント（Authorization Endpoint）**: ユーザー認証を開始するURL
+- **トークンエンドポイント（Token Endpoint）**: トークンを取得するURL
+- **発行者（Issuer）**: 省略可。Discoveryドキュメントの ``issuer`` の値で、``oic.issuer`` に使用します
+- **クライアントID**: OPで発行されたクライアント識別子
+- **クライアントシークレット**: クライアント認証に使用する秘密鍵
+
+.. note::
+   多くのOPでは、Discoveryエンドポイント（``https://<OP>/.well-known/openid-configuration``）から
+   認可エンドポイントとトークンエンドポイントのURLを確認できます。
+
+設定例
+======
+
+最小構成（検証環境向け）
+------------------------
+
+以下は、検証環境で動作確認を行うための最小限の設定例です。
+
+::
+
+    # SSO有効化
+    sso.type=oic
+
+    # プロバイダー設定（OPから取得した値を設定）
+    oic.auth.server.url=https://op.example.com/authorize
+    oic.token.server.url=https://op.example.com/token
+
+    # クライアント設定
+    oic.client.id=your-client-id
+    oic.client.secret=your-client-secret
+    oic.scope=openid email
+
+    # リダイレクトURL（検証環境）
+    oic.redirect.url=http://localhost:8080/sso/
+
+推奨構成（本番環境向け）
+------------------------
+
+以下は、本番環境で使用する際の推奨設定例です。
+
+::
+
+    # SSO有効化
+    sso.type=oic
+
+    # プロバイダー設定
+    oic.auth.server.url=https://op.example.com/authorize
+    oic.token.server.url=https://op.example.com/token
+
+    # 発行者（Discoveryドキュメントの "issuer" の値）
+    oic.issuer=https://op.example.com
+
+    # クライアント設定
+    oic.client.id=your-client-id
+    oic.client.secret=your-client-secret
+    oic.scope=openid email profile
+
+    # ベースURL（本番環境ではHTTPSを使用）
+    oic.base.url=https://fess.example.com
+
+トラブルシューティング
+======================
+
+よくある問題と解決方法
+----------------------
+
+認証後に |Fess| に戻れない
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- OP側のリダイレクトURIが正しく設定されているか確認してください
+- ``oic.redirect.url`` または ``oic.base.url`` の値がOP側の設定と一致しているか確認してください
+- プロトコル（HTTP/HTTPS）が一致しているか確認してください
+
+認証エラーが発生する
+~~~~~~~~~~~~~~~~~~~~
+
+- クライアントIDとクライアントシークレットが正しく設定されているか確認してください
+- スコープに ``openid`` が含まれているか確認してください
+- 認可エンドポイントURLとトークンエンドポイントURLが正しいか確認してください
+- ログインに失敗すると、``fess.log`` に ``Failed to process the OpenID Connect callback:`` で始まる警告が、続けて理由とともに出力されます
+- ``The ID token was not issued for this client``: ID Tokenの ``aud`` が ``oic.client.id`` ではありません。クライアントIDを確認してください
+- ``The ID token has expired``: |Fess| のホストとOPの時計が300秒を超えてずれています。時刻を同期（NTP）してください
+- ``The ID token was not issued by the configured issuer``: ``oic.issuer`` がメッセージに表示された ``iss`` と異なります。Discoveryドキュメントの ``issuer`` の値を正確にコピーしてください
+- ``oic.token.server.url must be https``: HTTPSのトークンエンドポイントURLを指定してください（``http`` が使えるのは ``localhost``、``127.x.x.x``、``::1`` のみです。Docker Composeのサービス名や社内のホスト名への ``http`` も拒否されます）
+
+ユーザー情報が取得できない
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- スコープに必要な権限（``email``, ``profile`` など）が含まれているか確認してください
+- OP側でクライアントに必要なスコープが許可されているか確認してください
+- Microsoft Entra IDでは、ソース属性を変更しない限り ``groups`` クレームの値はグループの ``ObjectId`` （GUID）になるため、
+  グループ名とは一致しません
+- ユーザーが200を超えるグループに所属している場合、Microsoft Entra IDは ``groups`` クレーム自体を送信しません
+  （ネストされたグループもこの上限に数えられます）。このとき |Fess| は ``oic.default.groups`` にフォールバックします
+
+デバッグ設定
+------------
+
+問題を調査する際は、|Fess| のログレベルを調整することで、OpenID Connect関連の詳細なログを出力できます。
+
+``app/WEB-INF/classes/log4j2.xml`` で、以下のロガーを追加してログレベルを変更できます。
+
+::
+
+    <Logger name="org.codelibs.fess.sso.oic" level="DEBUG"/>
+
+.. warning::
+   このロガーをDEBUGにすると、ID Tokenのクレーム（\ ``email`` や ``groups`` など）がログファイルに出力されます。
+   調査が終わったらログレベルを元に戻し、出力されたログの取り扱いに注意してください。
+
+参考情報
+========
+
+- :doc:`security-role` - ロールベース検索の設定について
+- :doc:`sso-saml` - SAML認証によるSSO設定について
+- :doc:`sso-entraid` - Microsoft Entra ID専用のSSO設定について（Entra IDを利用する場合は、汎用のOpenID Connect設定の代わりに専用の設定を利用することもできます）
