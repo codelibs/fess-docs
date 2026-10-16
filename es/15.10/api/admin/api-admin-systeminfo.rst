@@ -1,0 +1,157 @@
+==========================
+API de SystemInfo
+==========================
+
+Visión General
+==============
+
+La API de SystemInfo es para obtener información del sistema de |Fess|.
+Permite verificar las variables de entorno, las propiedades del sistema de Java, las propiedades de configuración de |Fess| y la información para reportes de errores.
+
+URL Base
+========
+
+::
+
+    /api/admin/systeminfo
+
+El acceso a esta API requiere un token de acceso con el permiso ``Radmin-api``.
+Para más detalles sobre la autenticación, consulte :doc:`api-admin-overview`.
+
+Lista de Endpoints
+==================
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 35 50
+
+   * - Método
+     - Ruta
+     - Descripción
+   * - GET
+     - /
+     - Obtener información del sistema
+
+Obtener Información del Sistema
+===============================
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/systeminfo
+
+Este endpoint no acepta parámetros de consulta.
+
+Respuesta
+---------
+
+La respuesta incluye ``version``, que indica la versión del producto, ``status``, que indica el resultado del procesamiento, y los siguientes cuatro grupos de propiedades. Cada grupo de propiedades es un arreglo de objetos que tienen ``label`` y ``value``.
+
+.. code-block:: json
+
+    {
+      "response": {
+        "version": "15.10",
+        "status": 0,
+        "env_props": [
+          {"label": "JAVA_HOME", "value": "/usr/lib/jvm/java-21"},
+          {"label": "FESS_DICTIONARY_PATH", "value": "/var/lib/fess/dict"}
+        ],
+        "system_props": [
+          {"label": "java.version", "value": "21.0.1"},
+          {"label": "java.vendor", "value": "Oracle Corporation"},
+          {"label": "os.name", "value": "Linux"},
+          {"label": "user.dir", "value": "/opt/fess"}
+        ],
+        "fess_props": [
+          {"label": "crawler.document.max.site.length", "value": "100"},
+          {"label": "indexer.thread.dump.enabled", "value": "true"},
+          {"label": "app.cipher.key", "value": "XXXXXXXX"}
+        ],
+        "bug_report_props": [
+          {"label": "os.name", "value": "Linux"},
+          {"label": "java.vm.version", "value": "21.0.1+12"}
+        ]
+      }
+    }
+
+Campos de Respuesta
+~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Campo
+     - Descripción
+   * - ``version``
+     - Versión del producto |Fess| (ejemplo: ``15.10``).
+   * - ``status``
+     - Código que indica el resultado del procesamiento. ``0`` significa finalización exitosa.
+   * - ``env_props``
+     - Lista de variables de entorno (arreglo de ``label`` / ``value``). Se devuelven los valores obtenidos mediante ``System.getenv()``; los elementos sensibles se enmascaran (consulte la nota siguiente).
+   * - ``system_props``
+     - Lista de propiedades del sistema de Java (arreglo de ``label`` / ``value``). Se devuelven los valores obtenidos mediante ``System.getProperties()``; los elementos sensibles se enmascaran (consulte la nota siguiente).
+   * - ``fess_props``
+     - Lista de propiedades de configuración de |Fess| (arreglo de ``label`` / ``value``). Incluye los valores de configuración de ``fess_config.properties`` y las propiedades del sistema establecidas desde la pantalla de administración. Los elementos sensibles son enmascarados (véase la nota a continuación).
+   * - ``bug_report_props``
+     - Lista de información recopilada para reportes de errores (arreglo de ``label`` / ``value``). Incluye las principales propiedades del sistema relacionadas con el SO y el entorno de ejecución de Java (``os.name``, ``os.version``, ``java.vm.version``, etc.) y los valores de propiedades del sistema de |Fess|.
+
+.. note::
+
+   En ``fess_props``, ``env_props`` y ``system_props``, los valores de los siguientes elementos sensibles son enmascarados y se devuelven como ``XXXXXXXX``:
+   ``http.proxy.password``, ``search_engine.password``, ``index.user.initial_password``,
+   ``ldap.admin.security.credentials``, ``spnego.preauth.password``, ``app.cipher.key``,
+   ``content_chunker.embedding.opensearch.password``,
+   y todo elemento cuya clave termine en ``.client.id``, ``.client.secret``, ``.privatekey`` o ``.key.password``,
+   o coincida con ``content_chunker.embedding.*.api.key`` o ``rag.llm.*.api.key``.
+   Una propiedad del sistema llamada ``fess.system.<clave>`` o ``fess.config.<clave>`` (la forma en que se pasa un ajuste como opción ``-D``)
+   se enmascara con la misma regla que ``<clave>``.
+   En ``env_props`` y ``system_props``, el valor de una opción ``-Dclave=valor`` sensible dentro de una cadena más larga
+   (por ejemplo ``FESS_JAVA_OPTS`` o ``JAVA_TOOL_OPTIONS``) también se enmascara, y el resto de la cadena sigue siendo legible.
+
+.. warning::
+
+   Solo se enmascaran las claves indicadas arriba. Si guarda un secreto en una variable de entorno o en una propiedad del sistema de Java
+   con otro nombre (por ejemplo ``DB_PASSWORD``), NO se enmascara: el valor se devuelve tal cual y aparece en la respuesta.
+
+Ejemplos de Uso
+===============
+
+Obtener Información del Sistema
+-------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/systeminfo" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Extraer una Propiedad del Sistema Específica
+--------------------------------------------
+
+.. code-block:: bash
+
+    # Extraer solo el valor de java.version
+    curl -X GET "http://localhost:8080/api/admin/systeminfo" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq -r '.response.system_props[] | select(.label == "java.version") | .value'
+
+Mostrar la Lista de Variables de Entorno
+----------------------------------------
+
+.. code-block:: bash
+
+    # Mostrar las variables de entorno en formato label=value
+    curl -X GET "http://localhost:8080/api/admin/systeminfo" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         | jq -r '.response.env_props[] | "\(.label)=\(.value)"'
+
+Información de Referencia
+=========================
+
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-stats` - API de estadísticas
+- :doc:`api-admin-general` - API de configuración general
+- :doc:`../../admin/systeminfo-guide` - Guía de información del sistema

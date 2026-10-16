@@ -1,0 +1,91 @@
+================
+Hôtes virtuels
+================
+
+À propos des hôtes virtuels
+============================
+
+|Fess| peut différencier les résultats de recherche en fonction du nom d'hôte (valeur de l'en-tête HTTP ``Host``) lors de l'accès.
+Il est possible de publier un seul serveur |Fess| sous plusieurs noms d'hôte et de fournir des cibles de recherche (configurations d'exploration) et des designs de page différents pour chaque nom d'hôte.
+L'écran de recherche peut aussi avoir une apparence différente pour chaque hôte : un thème statique dont le nom correspond au nom de l'hôte virtuel est utilisé pour cet hôte.
+
+La fonctionnalité d'hôte virtuel est désactivée par défaut (non configurée). Suivez les étapes ci-dessous pour la configurer.
+
+Configuration système
+---------------------
+
+Configurez la correspondance entre le nom d'hôte de l'accédant et le nom d'hôte virtuel dans « Hôte virtuel » de :doc:`Guide administrateur > Configuration générale <../admin/general-guide>`. Spécifiez le nom d'hôte virtuel configuré ici dans la configuration de l'exploration.
+
+**Format**
+
+Décrivez un hôte virtuel par ligne selon le format suivant.
+
+::
+
+   nom_en-tête:valeur_en-tête=nom_hôte_virtuel
+
+.. list-table::
+
+   * - *nom_en-tête*
+     - Nom de l'en-tête de requête HTTP utilisé pour la correspondance. En général, spécifiez ``Host``. Dans le cas d'un accès via un proxy inverse, vous pouvez également spécifier ``X-Forwarded-Host``.
+   * - *valeur_en-tête*
+     - Nom d'hôte (et si nécessaire, au format ``nom_hôte:numéro_port``) contenu dans l'en-tête ci-dessus. L'hôte virtuel est appliqué en cas de correspondance exacte (insensible à la casse) avec la valeur de l'en-tête envoyée par le client lors de l'accès.
+   * - *nom_hôte_virtuel*
+     - Nom d'hôte virtuel à spécifier dans la configuration de l'exploration
+
+**Exemple**
+
+::
+
+   Host:abc.example.com=host1
+   Host:192.168.1.123:8080=host2
+
+.. note::
+
+   La correspondance est effectuée par comparaison de chaînes de caractères avec la valeur de l'en-tête de requête, et non par résolution de nom d'hôte (DNS).
+   L'en-tête ``Host`` envoyé par le navigateur ne contient pas le numéro de port lorsque l'accès se fait sur un port standard (80 pour HTTP, 443 pour HTTPS) ; pour tout autre port, le numéro de port est inclus au format ``nom_hôte:numéro_port``.
+   Par conséquent, si vous publiez sur un port non standard, spécifiez le numéro de port explicitement, par exemple ``Host:abc.example.com:8080=host1``.
+
+.. note::
+
+   Seuls les caractères alphanumériques et les tirets bas ( ``a-z`` , ``A-Z`` , ``0-9`` , ``_`` ) peuvent être utilisés dans les noms d'hôtes virtuels.
+   Les autres caractères sont automatiquement supprimés.
+
+   De plus, les noms suivants sont réservés et ne peuvent pas être utilisés comme noms d'hôtes virtuels :
+   ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
+
+Design de page par hôte virtuel
+-------------------------------
+
+Pour doter un hôte virtuel de son propre écran de recherche, installez un thème statique dont le ``name`` dans ``theme.yml`` est le nom de l'hôte virtuel en minuscules (par exemple ``host1``).
+Une requête correspondant à l'hôte virtuel est servie avec ce thème ; toute autre requête est servie avec le thème par défaut.
+Il n'est pas nécessaire de définir ce thème comme thème par défaut. Consultez :ref:`theme-customize-bundled` pour savoir comment créer un thème à partir du thème fourni, et :doc:`../admin/theme-guide` pour savoir comment l'installer.
+
+.. note::
+
+   Depuis |Fess| 15.10, l'enregistrement de la configuration ne génère plus de JSP dans ``WEB-INF/view/nom_hôte_virtuel``.
+   L'écran de connexion (``/login/``) est le même pour tous les hôtes virtuels (``WEB-INF/view/admin/login/``) et ne peut pas être modifié par hôte virtuel.
+   L'apparence de chaque hôte virtuel se modifie avec un thème statique portant le même nom que l'hôte virtuel, comme décrit ci-dessus.
+
+
+Configuration de l'exploration
+-------------------------------
+
+Spécifiez « Hôte virtuel » dans l'une des configurations suivantes : configuration de l'exploration Web, configuration de l'exploration de fichiers ou configuration de l'exploration de banques de données.
+« Hôte virtuel » spécifie l'un des noms d'hôtes virtuels configurés dans la configuration système. Il est également possible de spécifier plusieurs hôtes virtuels pour une même configuration d'exploration (un par ligne).
+
+Pour une recherche effectuée depuis un hôte virtuel, seuls les documents de la configuration d'exploration pour laquelle cet hôte virtuel est spécifié apparaissent dans les résultats de recherche.
+Pour un accès ne correspondant à aucun hôte virtuel (accès normal sans hôte virtuel configuré), aucun filtrage n'est appliqué et tous les résultats de recherche sont affichés normalement.
+
+**Exemple**
+
+.. list-table::
+
+   * - *Hôte virtuel*
+     - ``host1``
+
+
+Tags utilisateur
+----------------
+
+Les tags que les utilisateurs connectés posent sur les résultats de recherche (Mes tags) suivent aussi l'hôte virtuel, lorsque la fonction de tags est activée. Un tag créé sur un hôte virtuel n'est listé et utilisable que sur cet hôte virtuel. Une requête qui ne correspond à aucun hôte virtuel voit tous les tags. Un tag qui a un hôte virtuel n'est posé que sur les documents des paramètres d'exploration qui ont cet hôte virtuel. Pour plus de détails, consultez :doc:`../admin/tagtype-guide` et :doc:`../api/api-tag`.

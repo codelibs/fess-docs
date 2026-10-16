@@ -1,0 +1,546 @@
+==================================
+在 Linux 上安装（详细步骤）
+==================================
+
+本页面说明在 Linux 环境中安装 |Fess| 的步骤。
+支持 ZIP、RPM、DEB 各种包格式。
+
+.. note::
+
+   |Fess| 不包含搜索引擎。需要单独准备 OpenSearch 服务器，
+   下面的步骤将进行构建。
+
+前提条件
+============
+
+- 满足 :doc:`prerequisites` 中描述的系统要求
+- 已安装 Java 21
+- OpenSearch 3.9.0 可用（或新安装）
+
+选择安装方法
+================
+
+在 Linux 环境中，可以从以下安装方法中选择：
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 40 40
+
+   * - 方式
+     - 推荐环境
+     - 特点
+   * - ZIP
+     - 开发环境、需要定制化的环境
+     - 可解压到任意目录
+   * - RPM
+     - RHEL、CentOS、Fedora 系
+     - 可通过 systemd 进行服务管理
+   * - DEB
+     - Debian、Ubuntu 系
+     - 可通过 systemd 进行服务管理
+
+运行 OpenSearch 所需的系统设置
+==================================
+
+为了让 OpenSearch 在 Linux 上稳定运行，需要设置以下内核参数和资源限制。
+这些设置主要在 TAR.GZ 版（手动安装 OpenSearch 的情况）中是必需的。
+在 RPM / DEB 版中，OpenSearch 和 |Fess| 的软件包会通过 systemd 设置文件描述符数量等参数，但由于 ``vm.max_map_count`` 属于主机侧的内核设置，因此无论采用哪种方式都请进行确认。
+
+虚拟内存最大映射数量
+------------------------
+
+由于 OpenSearch 会使用大量内存映射，需要将 ``vm.max_map_count`` 设置为 ``262144`` 以上。
+
+临时设置的情况::
+
+    $ sudo sysctl -w vm.max_map_count=262144
+
+永久设置的情况::
+
+    $ echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
+    $ sudo sysctl -p
+
+文件描述符数量
+------------------
+
+手动运行 OpenSearch 时（TAR.GZ 版），需要将运行 OpenSearch 的用户的文件描述符数量上限设置为 ``65535`` 以上。
+
+在 ``/etc/security/limits.conf`` 中添加以下内容（请将 ``opensearch`` 替换为运行 OpenSearch 的用户名）::
+
+    opensearch  -  nofile  65535
+
+.. note::
+
+   在 RPM / DEB 版中，由于 systemd 的服务定义中已设置文件描述符数量上限，因此不需要进行此设置。
+
+使用 ZIP 版安装
+======================
+
+步骤 1: 安装 OpenSearch
+---------------------------
+
+.. important::
+
+   请以普通用户而非 ``root`` 安装和运行 OpenSearch：OpenSearch 拒绝以 ``root`` 身份启动。下面的 ``bin/fess-setup`` 也请以该用户运行，以使其解压的文件归该用户所有。如果以 ``root`` 启动已经被拒绝，请参阅 :doc:`run`\ 。
+
+.. tip::
+
+   |Fess| 附带的 ``bin/fess-setup`` 可以一条命令完成下面的步骤 1 到 3：将 OpenSearch 下载并解压到 |Fess| 目录下的 ``opensearch/`` 中，安装所需插件，并向其 ``config/opensearch.yml`` 添加 ``configsync.config_path`` 和 ``plugins.security.disabled: true``\ 。请先按照步骤 2 的说明解压 |Fess| 的 ZIP。
+
+   ::
+
+       $ cd /path/to/fess-15.10.0
+       $ bin/fess-setup install opensearch
+
+   ``bin/fess.in.sh`` 会找到以这种方式安装的 OpenSearch 并自动设置 ``FESS_DICTIONARY_PATH``\ ，因此只要 OpenSearch 在同一主机上运行，步骤 2 的「配置 Fess」就无需修改。命令会显示它添加的配置，以及 ``bin/fess.in.sh`` 能否找到该安装。在让 OpenSearch 监听 ``localhost`` 以外的地址之前，请阅读第 3 步中的警告。
+
+   如果想逐步确认，或者要使用已有的 OpenSearch，请按照下面的步骤操作。
+   若只需向已有的 OpenSearch 安装插件，请使用
+   ``bin/fess-setup install opensearch-plugins --opensearch-home /path/to/opensearch``\ 。
+   所有命令请参阅 :doc:`fess-setup`\ 。
+
+.. note::
+
+   OpenSearch 没有官方的 macOS 发行版，因此在 macOS 上 ``bin/fess-setup install opensearch`` 会以错误结束。请使用 Homebrew 安装 OpenSearch 并通过 ``bin/fess-setup install opensearch-plugins`` 添加插件，或者改用 :doc:`install-docker`::
+
+       $ brew install opensearch
+       $ bin/fess-setup install opensearch-plugins --opensearch-home $(brew --prefix opensearch)
+
+   然后按照第 3 步配置该 OpenSearch，并按照步骤 2 的「配置 Fess」设置 ``FESS_DICTIONARY_PATH``\ 。
+
+1. 下载 OpenSearch
+
+   从 `Download OpenSearch <https://opensearch.org/downloads.html>`__ 下载 TAR.GZ 版。
+
+   ::
+
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
+       $ cd opensearch-3.9.0
+
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.tar.gz``）。
+
+   .. note::
+
+      此示例使用 OpenSearch 3.9.0。
+      |Fess| 15.10 支持 OpenSearch 3.9.0。
+
+2. 安装 OpenSearch 插件
+
+   安装 |Fess| 所需的插件。
+
+   ::
+
+       $ cd /path/to/opensearch-3.9.0
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+
+   .. important::
+
+      插件版本必须与 OpenSearch 版本一致。
+      在上述示例中，所有版本都指定为 3.9.0。
+
+      |Fess| 的 4 个插件发布在 maven.codelibs.org 上，因此通过 URL 指定。 ``opensearch-plugin install`` 的 ``groupId:artifactId:version`` 形式只查找 Maven Central。
+
+3. 配置 OpenSearch
+
+   在 ``config/opensearch.yml`` 中添加以下配置。
+
+   ::
+
+       # 配置同步路径（使用绝对路径指定）
+       configsync.config_path: /path/to/opensearch-3.9.0/config/dictionary/
+
+       # 禁用安全插件（仅限开发环境）
+       plugins.security.disabled: true
+
+   .. important::
+
+      ``configsync.config_path`` 请指定 OpenSearch 配置目录（本例中为 ``/path/to/opensearch-3.9.0/config/``\ ）下的目录。
+      从 OpenSearch 3.8.0 开始，如果词典文件位于配置目录之外，OpenSearch 会拒绝创建索引。
+      如果指定 ``/path/to/opensearch-3.9.0/data/config/`` 等配置目录之外的位置，|Fess| 将无法创建索引，也无法启动。
+
+   .. warning::
+
+      **关于安全的重要注意事项**
+
+      ``plugins.security.disabled: true`` 仅应在开发环境或测试环境中使用。
+      在生产环境中，应启用 OpenSearch 的安全插件并进行适当的认证和授权配置。
+      在 OpenSearch 2.12 及更高版本中启用安全插件时，首次启动需要设置管理员密码（环境变量 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD``）。
+      详情请参阅 :doc:`security`。
+
+   .. tip::
+
+      请根据环境调整集群名称和网络设置等其他配置。
+      配置示例::
+
+          cluster.name: fess-cluster
+          node.name: fess-node-1
+          network.host: 0.0.0.0
+          discovery.type: single-node
+
+   .. tip::
+
+      OpenSearch 的堆大小通过 ``config/jvm.options`` 中的 ``-Xms`` / ``-Xmx`` 进行设置。
+      建议将 ``-Xms`` 和 ``-Xmx`` 设置为相同的值，以不超过可用物理内存的一半且低于 32GB 为宜。
+
+步骤 2: 安装 Fess
+---------------------
+
+1. 下载和解压 Fess
+
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 ZIP 版。
+
+   ::
+
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.10.0/fess-15.10.0.zip
+       $ unzip fess-15.10.0.zip
+       $ cd fess-15.10.0
+
+   .. note::
+
+      请选择路径中不包含空格的目录（macOS 上同样如此）。路径中包含空格时，``bin/fess`` 无法启动，并输出 ``Could not find or load main class``\ 。
+
+2. 配置 Fess
+
+   到 OpenSearch 的连接信息位于 ``bin/fess.in.sh`` 中。对于通过 ``bin/fess-setup install opensearch`` 安装到 |Fess| 目录下的 ``opensearch/`` 中、并在同一主机上运行的 OpenSearch，无需修改此文件：\ ``SEARCH_ENGINE_HTTP_URL`` 默认为 ``http://localhost:9200``\ ，\ ``FESS_DICTIONARY_PATH`` 会被设置为该 OpenSearch 的 ``config/dictionary`` 目录。
+
+   在以下任一情况下，请编辑 ``bin/fess.in.sh``\ ：
+
+   - 通过其他方式安装了 OpenSearch，例如按照上面的第 1 到 3 步或使用 Homebrew，或者使用 ``--dest`` 安装到了 |Fess| 目录之外。
+   - |Fess| 目录下的 ``opensearch/`` 中有多个通过 ``bin/fess-setup`` 安装的 OpenSearch，例如两个版本。\ ``bin/fess.in.sh`` 无法判断正在使用哪一个，因此会显示警告，并且不设置 ``FESS_DICTIONARY_PATH``\ 。
+   - OpenSearch 在其他主机或端口上运行。
+
+   ::
+
+       $ vi bin/fess.in.sh
+
+   在文件开头附近，删除 ``FESS_DICTIONARY_PATH`` 行行首的 ``#`` 并设置路径，必要时更改 ``SEARCH_ENGINE_HTTP_URL`` 行中的 URL。
+
+   修改前（默认状态，省略注释行）::
+
+       SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
+       #FESS_DICTIONARY_PATH=/var/lib/opensearch/config/
+
+   修改后::
+
+       SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.9.0/config/dictionary/
+
+   .. note::
+
+      - ``FESS_DICTIONARY_PATH`` 请设置与 OpenSearch 的 ``opensearch.yml`` 中指定的 ``configsync.config_path`` 相同的路径。未设置时，|Fess| 无法创建索引，也无法启动。
+      - 如果 OpenSearch 在其他主机上运行，请将 ``SEARCH_ENGINE_HTTP_URL`` 行中的 URL 更改为该主机。例: ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}``\ 。此时 ``FESS_DICTIONARY_PATH`` 为该服务器的 ``configsync.config_path``\ 。
+      - 也可以不编辑文件，而在启动 |Fess| 的环境中 export 这两个变量。export 的 ``SEARCH_ENGINE_HTTP_URL`` 优先于文件中的 URL；只要文件中的对应行保持注释状态，就会使用 export 的 ``FESS_DICTIONARY_PATH``\ 。
+      - 请勿新增 ``SEARCH_ENGINE_HTTP_URL=...`` 行，而应编辑已有的行。
+
+   .. tip::
+
+      要更改 |Fess| 的堆大小，请编辑 ``bin/fess.in.sh`` 中的 ``FESS_MIN_MEM``\ （默认：``256m``）和 ``FESS_MAX_MEM``\ （默认：``2g``），或设置环境变量 ``FESS_HEAP_SIZE``\ 。
+
+3. 确认安装
+
+   确认配置文件已正确编辑::
+
+       $ grep "SEARCH_ENGINE_HTTP_URL" bin/fess.in.sh
+       $ grep "FESS_DICTIONARY_PATH" bin/fess.in.sh
+
+   OpenSearch 启动后，\ ``bin/fess-setup check`` 会报告能否连接到 OpenSearch、是否安装了 |Fess| 所需的插件，以及 ``configsync`` 是否响应。没有检查项失败时，它以退出码 ``0`` 结束。当 OpenSearch 不在 ``http://localhost:9200`` 时，请指定 ``--url``\ 。
+
+步骤 3: 启动
+----------------
+
+关于启动步骤，请参阅 :doc:`run`。
+
+使用 RPM 版安装
+===================
+
+RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux 发行版。
+
+步骤 1: 安装 OpenSearch
+---------------------------
+
+1. 下载和安装 OpenSearch RPM
+
+   从 `Download OpenSearch <https://opensearch.org/downloads.html>`__ 下载 RPM 包并安装。
+
+   ::
+
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
+
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.rpm``）。
+
+   或者，也可以添加仓库后进行安装。
+   详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__\ 。
+
+2. 安装 OpenSearch 插件
+
+   ::
+
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+
+3. 配置 OpenSearch
+
+   在 ``/etc/opensearch/opensearch.yml`` 中添加以下配置。
+
+   ::
+
+       $ sudo vi /etc/opensearch/opensearch.yml
+
+   要添加的配置::
+
+       configsync.config_path: /etc/opensearch/dictionary/
+       plugins.security.disabled: true
+
+   创建用于存放词典文件的目录::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      ``configsync.config_path`` 请指定 OpenSearch 配置目录 ``/etc/opensearch/`` 下的目录。
+      从 OpenSearch 3.8.0 开始，如果词典文件位于配置目录之外，OpenSearch 会拒绝创建索引。
+      如果指定 ``/var/lib/opensearch/data/config/`` 等配置目录之外的位置，|Fess| 将无法创建索引，也无法启动。
+
+   .. warning::
+
+      在生产环境中不要使用 ``plugins.security.disabled: true``\ 。
+      请参阅 :doc:`security` 进行适当的安全配置。
+
+步骤 2: 安装 Fess
+---------------------
+
+1. 安装 Fess RPM
+
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 RPM 包并安装。
+
+   ::
+
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.10.0/fess-15.10.0.rpm
+       $ sudo rpm -ivh fess-15.10.0.rpm
+
+2. 配置 Fess
+
+   在 RPM 版中，需要编辑环境变量配置文件 ``/etc/sysconfig/fess``\ 。
+   该文件在软件包升级时也会被保留（由于 ``/usr/share/fess/bin/fess.in.sh`` 在升级时会被覆盖，因此请勿直接编辑该文件）。
+
+   ::
+
+       $ sudo vi /etc/sysconfig/fess
+
+   设置到 OpenSearch 的连接信息。\ ``FESS_DICTIONARY_PATH`` 的默认值 ``/var/lib/opensearch/config/`` 与步骤 3 中的 ``configsync.config_path`` 不同，因此请按如下方式进行更改。\ ``SEARCH_ENGINE_HTTP_URL`` 请根据需要进行更改::
+
+       SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
+
+   .. note::
+
+      ``FESS_DICTIONARY_PATH`` 请指定与 ``opensearch.yml`` 中的 ``configsync.config_path`` 相同的路径。
+
+3. 注册和启用服务
+
+   使用 systemd 启用服务（RHEL 8 及更高版本、CentOS 8 及更高版本中 systemd 为标准配置）::
+
+       $ sudo systemctl daemon-reload
+       $ sudo systemctl enable opensearch.service
+       $ sudo systemctl enable fess.service
+
+   .. note::
+
+      由于 |Fess| 的服务依赖于 OpenSearch 的服务，因此需要先启动 OpenSearch。
+
+   .. note::
+
+      在不使用 systemd 的传统环境中，可以使用 ``chkconfig`` 注册 |Fess|::
+
+          $ sudo /sbin/chkconfig --add fess
+
+步骤 3: 启动
+----------------
+
+关于启动步骤，请参阅 :doc:`run`。
+
+使用 DEB 版安装
+===================
+
+DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
+
+步骤 1: 安装 OpenSearch
+---------------------------
+
+1. 下载和安装 OpenSearch DEB
+
+   从 `Download OpenSearch <https://opensearch.org/downloads.html>`__ 下载 DEB 包并安装。
+
+   ::
+
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+
+   在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.9.0-linux-arm64.deb``）。
+
+   或者，也可以添加仓库后进行安装。
+   详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__\ 。
+
+2. 安装 OpenSearch 插件
+
+   ::
+
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+
+3. 配置 OpenSearch
+
+   在 ``/etc/opensearch/opensearch.yml`` 中添加以下配置。
+
+   ::
+
+       $ sudo vi /etc/opensearch/opensearch.yml
+
+   要添加的配置::
+
+       configsync.config_path: /etc/opensearch/dictionary/
+       plugins.security.disabled: true
+
+   创建用于存放词典文件的目录::
+
+       $ sudo install -d -o opensearch -g opensearch -m 0750 /etc/opensearch/dictionary
+
+   .. important::
+
+      ``configsync.config_path`` 请指定 OpenSearch 配置目录 ``/etc/opensearch/`` 下的目录。
+      从 OpenSearch 3.8.0 开始，如果词典文件位于配置目录之外，OpenSearch 会拒绝创建索引。
+      如果指定 ``/var/lib/opensearch/data/config/`` 等配置目录之外的位置，|Fess| 将无法创建索引，也无法启动。
+
+   .. warning::
+
+      在生产环境中不要使用 ``plugins.security.disabled: true``\ 。
+      请参阅 :doc:`security` 进行适当的安全配置。
+
+步骤 2: 安装 Fess
+---------------------
+
+1. 安装 Fess DEB
+
+   从 `下载站点 <https://fess.codelibs.org/zh-cn/downloads.html>`__ 下载 DEB 包并安装。
+
+   ::
+
+       $ wget https://github.com/codelibs/fess/releases/download/fess-15.10.0/fess-15.10.0.deb
+       $ sudo dpkg -i fess-15.10.0.deb
+
+2. 配置 Fess
+
+   在 DEB 版中，需要编辑环境变量配置文件 ``/etc/default/fess``\ 。
+   该文件在软件包升级时也会被保留（由于 ``/usr/share/fess/bin/fess.in.sh`` 在升级时会被覆盖，因此请勿直接编辑该文件）。
+
+   ::
+
+       $ sudo vi /etc/default/fess
+
+   设置到 OpenSearch 的连接信息。\ ``FESS_DICTIONARY_PATH`` 的默认值 ``/var/lib/opensearch/config/`` 与步骤 3 中的 ``configsync.config_path`` 不同，因此请按如下方式进行更改。\ ``SEARCH_ENGINE_HTTP_URL`` 请根据需要进行更改::
+
+       SEARCH_ENGINE_HTTP_URL=http://localhost:9200
+       FESS_DICTIONARY_PATH=/etc/opensearch/dictionary/
+
+   .. note::
+
+      ``FESS_DICTIONARY_PATH`` 请指定与 ``opensearch.yml`` 中的 ``configsync.config_path`` 相同的路径。
+
+3. 注册和启用服务
+
+   使用 systemd 启用服务::
+
+       $ sudo systemctl daemon-reload
+       $ sudo systemctl enable opensearch.service
+       $ sudo systemctl enable fess.service
+
+   .. note::
+
+      由于 |Fess| 的服务依赖于 OpenSearch 的服务，因此需要先启动 OpenSearch。
+
+步骤 3: 启动
+----------------
+
+关于启动步骤，请参阅 :doc:`run`。
+
+安装后的确认
+================
+
+安装完成后，请确认以下内容：
+
+1. **确认配置文件**
+
+   - OpenSearch 的配置文件（opensearch.yml）
+   - |Fess| 的配置文件
+
+     - ZIP 版：``bin/fess.in.sh``
+     - RPM 版：``/etc/sysconfig/fess``
+     - DEB 版：``/etc/default/fess``
+
+2. **目录权限**
+
+   确认配置中指定的目录（``configsync.config_path`` / ``FESS_DICTIONARY_PATH``）存在，并且已设置适当的权限。
+
+   ZIP 版的情况::
+
+       $ ls -ld /path/to/opensearch-3.9.0/config/dictionary/
+
+   RPM/DEB 版的情况::
+
+       $ sudo ls -ld /etc/opensearch/dictionary/
+
+3. **确认内核参数**
+
+   ::
+
+       $ sysctl vm.max_map_count
+
+   确认该值为 ``262144`` 以上。
+
+4. **确认 Java 版本**
+
+   ::
+
+       $ java -version
+
+   确认已安装 Java 21 或更高版本。
+
+下一步
+==========
+
+安装完成后，请参阅以下文档：
+
+- :doc:`run` - |Fess| 的启动和初始设置
+- :doc:`security` - 生产环境的安全配置
+- :doc:`troubleshooting` - 故障排除
+
+常见问题
+============
+
+Q: OpenSearch 的其他版本也能工作吗？
+----------------------------------------
+
+A: |Fess| 依赖于特定版本的 OpenSearch。
+为了确保插件兼容性，强烈建议使用推荐版本（3.9.0）。
+如果使用其他版本，需要适当调整插件版本。
+
+Q: 多个 Fess 实例可以共享同一个 OpenSearch 吗？
+-------------------------------------------------------
+
+A: 可以，但不推荐。建议为每个 Fess 实例准备专用的 OpenSearch 集群。
+如果多个 Fess 实例共享 OpenSearch，请注意索引名称的冲突。
+
+Q: 如何将 OpenSearch 配置为集群？
+-------------------------------------
+
+A: 请参阅 OpenSearch 官方文档 `Cluster formation <https://opensearch.org/docs/latest/tuning-your-cluster/cluster/>`__\ 。
+配置为集群时，需要删除 ``discovery.type: single-node`` 设置并添加适当的集群配置。

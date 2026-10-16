@@ -1,0 +1,91 @@
+============
+Host Virtual
+============
+
+Acerca del Host Virtual
+=======================
+
+|Fess| puede mostrar diferentes resultados de búsqueda según el nombre de host (valor del encabezado HTTP ``Host``) utilizado para acceder al sistema.
+Es posible publicar un único servidor |Fess| con múltiples nombres de host y ofrecer distintos objetivos de búsqueda (configuraciones de rastreo) y diseños de página para cada host virtual.
+La pantalla de búsqueda también puede tener un aspecto distinto para cada host: para ese host se utiliza el tema estático cuyo nombre coincide con el nombre del host virtual.
+
+La función de host virtual está deshabilitada (sin configurar) de forma predeterminada. Siga los pasos a continuación para configurarla.
+
+Configuración del Sistema
+-------------------------
+
+Configure la "Configuración General" en :doc:`Guía del Administrador > Configuración General <../admin/general-guide>` para definir la correspondencia entre el nombre de host de origen del acceso y el nombre del host virtual. El nombre del host virtual configurado aquí se especifica en la configuración de rastreo.
+
+**Formato**
+
+Defina un host virtual por línea con el siguiente formato:
+
+::
+
+   nombre_encabezado:valor_encabezado=nombre_host_virtual
+
+.. list-table::
+
+   * - *nombre_encabezado*
+     - Nombre del encabezado de solicitud HTTP utilizado para la determinación. Normalmente se especifica ``Host``. También puede especificarse ``X-Forwarded-Host`` cuando el acceso se realiza a través de un proxy inverso.
+   * - *valor_encabezado*
+     - Nombre de host (con ``nombre_host:número_puerto`` si es necesario) incluido en el encabezado anterior. Este host virtual se aplica cuando el valor coincide exactamente (sin distinción entre mayúsculas y minúsculas) con el valor del encabezado enviado por el cliente en el momento del acceso.
+   * - *nombre_host_virtual*
+     - Nombre del host virtual que se especifica en la configuración de rastreo
+
+**Ejemplo**
+
+::
+
+   Host:abc.example.com=host1
+   Host:192.168.1.123:8080=host2
+
+.. note::
+
+   La determinación se realiza mediante una comparación de cadenas con el valor del encabezado de solicitud, no mediante la resolución de nombres de host (DNS).
+   El encabezado ``Host`` enviado por el navegador no incluye el número de puerto cuando el acceso se realiza por el puerto estándar (80 para HTTP, 443 para HTTPS); para otros puertos, incluye el número de puerto con el formato ``nombre_host:número_puerto``.
+   Por lo tanto, si publica el servicio en un puerto no estándar, especifique el número de puerto de forma explícita, como en ``Host:abc.example.com:8080=host1``.
+
+.. note::
+
+   Solo se pueden usar caracteres alfanuméricos y guiones bajos ( ``a-z`` , ``A-Z`` , ``0-9`` , ``_`` ) en los nombres de host virtual.
+   Los demás caracteres se eliminan automáticamente.
+
+   Además, los siguientes nombres están reservados y no se pueden usar como nombres de host virtual:
+   ``admin`` , ``common`` , ``error`` , ``login`` , ``profile``
+
+Diseño de página por host virtual
+---------------------------------
+
+Para que un host virtual tenga su propia pantalla de búsqueda, instale un tema estático cuyo ``name`` en ``theme.yml`` sea el nombre del host virtual en minúsculas (por ejemplo ``host1``).
+Las solicitudes que coinciden con el host virtual se sirven con ese tema; cualquier otra solicitud se sirve con el tema predeterminado.
+No es necesario establecer el tema como predeterminado. Consulte :ref:`theme-customize-bundled` para saber cómo crear un tema a partir del tema incluido, y :doc:`../admin/theme-guide` para saber cómo instalarlo.
+
+.. note::
+
+   Desde |Fess| 15.10, al guardar la configuración ya no se generan archivos JSP en ``WEB-INF/view/nombre_host_virtual``.
+   La pantalla de inicio de sesión (``/login/``) es la misma para todos los hosts virtuales (``WEB-INF/view/admin/login/``) y no se puede cambiar por host virtual.
+   El aspecto de cada host virtual se cambia con un tema estático con el mismo nombre que el host virtual, como se describe arriba.
+
+
+Configuración de Rastreo
+------------------------
+
+Especifique el "Host Virtual" en la configuración de rastreo web, la configuración de rastreo de archivos o la configuración de rastreo de almacén de datos.
+Para "Host Virtual", especifique uno de los nombres de host virtual configurados en la configuración del sistema. También es posible especificar múltiples hosts virtuales en una sola configuración de rastreo (uno por línea).
+
+En las búsquedas realizadas desde un host virtual, solo se muestran en los resultados los documentos de la configuración de rastreo que tiene asignado ese host virtual.
+En los accesos que no coinciden con ningún host virtual (acceso normal sin host virtual configurado), este filtrado no se aplica y se muestran todos los resultados de búsqueda de forma habitual.
+
+**Ejemplo**
+
+.. list-table::
+
+   * - *Host Virtual*
+     - ``host1``
+
+
+Etiquetas de usuario
+--------------------
+
+Las etiquetas que los usuarios con sesión iniciada ponen en los resultados de búsqueda (Mis etiquetas) también siguen al host virtual, cuando la función de etiquetas está habilitada. Una etiqueta creada en un host virtual solo se lista y se puede usar en ese host virtual. Una solicitud que no coincide con ningún host virtual ve todas las etiquetas. Una etiqueta que tiene host virtual se pone solo en los documentos de la configuración de rastreo que tiene ese host virtual. Para obtener más información, consulte :doc:`../admin/tagtype-guide` y :doc:`../api/api-tag`.

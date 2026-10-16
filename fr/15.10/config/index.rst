@@ -1,0 +1,103 @@
+Guide de configuration |Fess|
+=============================
+
+Ce guide complet couvre la configuration de |Fess|. Chaque section est organisée par thématique.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Introduction
+
+   intro
+   properties
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Configuration de base
+
+   setup-port-network
+   setup-memory
+   setup-windows-service
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Configuration du crawler
+
+   crawler-basic
+   crawler-advanced
+   crawler-thumbnail
+   crawler-ocr
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Connecteurs Data Store
+
+   datastore/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Configuration des fonctions de recherche
+
+   search-basic
+   search-advanced
+   search-geosearch
+   search-scroll
+   search-form-integration
+   rank-fusion
+   search-semantic
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Configuration de sécurité
+
+   security-role
+   security-virtual-host
+   ldap-integration
+   multitenancy
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Configuration SSO
+
+   sso-saml
+   sso-oidc
+   sso-entraid
+   sso-spnego
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Configuration LLM/Mode de recherche IA
+
+   llm-overview
+   llm-ollama
+   llm-openai
+   llm-gemini
+   llm-bedrock
+   rag-chat
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Scripting
+
+   scripting-overview
+   scripting-javascript
+   scripting-groovy
+   scripting-ognl
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Performance et Operations
+
+   rate-limiting
+   load-control
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Administration système
+
+   admin-logging
+   admin-log-notification
+   admin-index-backup
+   admin-index-export
+   admin-analyzer
+   search-engine-type
+   admin-opensearch-dashboards

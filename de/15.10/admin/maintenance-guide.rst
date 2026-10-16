@@ -1,0 +1,102 @@
+=========
+Wartung
+=========
+
+Übersicht
+=========
+
+Die Wartungsseite wird verwendet, wenn Systemdatenoperationen ausgeführt werden.
+
+|image0|
+
+Bedienung
+=========
+
+Neuindizierung
+--------------
+
+Sie können einen neuen Index aus dem vorhandenen Fess-Index neu erstellen.
+Führen Sie dies aus, wenn Sie das Index-Mapping ändern möchten.
+
+
+Konfigurationsparameter
+-----------------------
+
+Alias aktualisieren
+:::::::::::::::::::
+
+Durch Aktivierung können Sie nach Abschluss der Neuindizierung die Aliasse fess.search und fess.update, die dem vorhandenen Index zugewiesen sind, auf den neuen Index umstellen.
+
+
+Wörterbuch initialisieren
+:::::::::::::::::::::::::
+
+Durch Aktivierung können Sie die Wörterbuchkonfiguration initialisieren.
+
+Ist ``search_engine.type`` auf ``vanilla`` oder ``aws`` gesetzt, wird dieser Eintrag nicht angezeigt.
+
+
+Shard-Anzahl
+::::::::::::
+
+Sie können die OpenSearch-Shard-Anzahl (index.number_of_shards) angeben.
+
+
+Maximale Replikatanzahl
+:::::::::::::::::::::::
+
+Sie können die maximale OpenSearch-Replikatanzahl (index.auto_expand_replicas) angeben.
+
+
+Konfigurationsindex neu erstellen
+----------------------------------
+
+Sie können Konfigurationsindizes (fess_config, fess_user, fess_log) mit den neuesten Mappings neu erstellen.
+Dieser Vorgang wird im Hintergrund ausgeführt. Bitte erstellen Sie vor der Ausführung eine Sicherungskopie Ihrer Konfiguration.
+
+Zielindizes
+:::::::::::
+
+Wählen Sie die neu zu erstellenden Indizes aus. Sie können aus fess_config, fess_user und fess_log wählen.
+
+Standarddaten laden
+:::::::::::::::::::
+
+Durch Aktivierung werden bei der Neuerstellung Standarddaten geladen. Vorhandene Dokumente werden nicht überschrieben.
+
+Dokumentindex neu laden
+-----------------------
+
+Sie können den Dokumentindex neu laden, um die Indexkonfiguration zu übernehmen.
+Auf diesem Weg werden auch Wörterbuchänderungen für die Suche übernommen: Die gespeicherten
+Wörterbücher werden in ihre Dateien in OpenSearch geschrieben, dann wird der Index, auf den der
+Alias ``fess.update`` zeigt, geschlossen und geöffnet. Solange der Index geschlossen ist, kann er
+nicht durchsucht werden. Siehe :ref:`dict-apply-changes`.
+
+Ist ``search_engine.type`` auf ``vanilla`` oder ``aws`` gesetzt, wird diese Funktion nicht angezeigt.
+
+
+Crawler-Index
+-------------
+
+Sie können den fess_crawler-Index (Crawl-Informationen) löschen.
+Führen Sie dies nicht während der Crawler-Ausführung aus.
+
+
+Diagnose
+--------
+
+Sie können eine ZIP-Datei für die Diagnose herunterladen. Die ZIP-Datei enthält im Verzeichnis ``log<yyyyMMddHHmm>/`` die folgenden Dateien.
+
+- ``*.log`` und ``*.log.gz`` aus dem Protokollverzeichnis (``fess.log``, ``fess-crawler.log``, ``audit.log``, ``searchlog.log`` usw.)
+- ``system.properties`` (Systemeinstellungen) und ``fess_config.properties`` (Anwendungseinstellungen)
+- ``fess_basic_config.bulk`` (Inhalt der Konfigurationsindizes, etwa Crawl-Einstellungen, Authentifizierungseinstellungen und Labels; die Zugriffstoken der Admin-API sind nicht enthalten)
+- ``es_cat_*.txt`` und ``es_*.json`` (Ausgabe der ``_cat``-APIs von OpenSearch sowie der Zustand von Cluster, Knoten und Tasks)
+
+In ``system.properties`` und ``fess_config.properties`` werden geheime Werte nach derselben Regel wie in der Ansicht Systeminformationen durch ``XXXXXXXX`` ersetzt. Dazu gehören zum Beispiel der geheime Speicherschlüssel, Webhook-URLs (Slack und Google Chat), SSO-Client-Secrets, API-Schlüssel für LLM und Embedding sowie der Verschlüsselungsschlüssel der Anwendung (``app.cipher.key``). Die Schlüssel bleiben erhalten, sodass weiterhin erkennbar ist, welche Einstellungen vorhanden sind.
+
+.. note::
+
+   Protokolldateien und der Inhalt von ``fess_basic_config.bulk`` werden nicht maskiert. Prüfen Sie den Inhalt, bevor Sie die ZIP-Datei an Dritte weitergeben.
+
+.. |image0| image:: ../../../resources/images/en/15.10/admin/maintenance-1.png

@@ -1,0 +1,93 @@
+===========
+Maintenance
+===========
+
+Overview
+========
+
+Maintenance page provides system tools for managing |Fess|.
+
+|image0|
+
+To display this page, select System Info > Maintenance in a left menu.
+
+
+Operations
+==========
+
+Reindex
+-------
+
+Create new fess.YYMMDD index and copy documents from old fess index.
+
+Update Aliases
+::::::::::::::
+
+Switch fess.search and fess.update aliases after reindexing if enabled.
+
+Reset Dictionaries
+::::::::::::::::::
+
+Select Enabled if using factory default dictionaries.
+
+This item is not shown when ``search_engine.type`` is ``vanilla`` or ``aws``.
+
+The number of shards
+::::::::::::::::::::
+
+Specify the number of shards(index.number_of_shards).
+
+Auto expand replicas
+::::::::::::::::::::
+
+Specify auto-expand the number of replicas(index.auto_expand_replicas).
+
+Rebuild Config Index
+--------------------
+
+You can rebuild configuration indices (fess_config, fess_user, fess_log) with the latest mappings.
+This operation runs in the background. Please back up your configuration before executing.
+
+Target Indices
+::::::::::::::
+
+Select the indices to rebuild. You can choose from fess_config, fess_user, and fess_log.
+
+Load Default Data
+:::::::::::::::::
+
+If enabled, default data will be loaded during the rebuild. Existing documents will not be overwritten.
+
+Reload Doc Index
+----------------
+
+Reload(Close/Open) fess index to apply index settings.
+This is also how dictionary changes are applied to searches: the saved dictionaries are written
+to their files in OpenSearch, then the index that the ``fess.update`` alias points to is closed
+and opened. The index cannot be searched while it is closed. See :ref:`dict-apply-changes`.
+
+This section is not shown when ``search_engine.type`` is ``vanilla`` or ``aws``.
+
+Crawler Indices
+---------------
+
+Remove Crawler index to clear crawling data.
+Do not execute this task when Crawler is running.
+
+Diagnostic
+----------
+
+You can download a diagnostic zip file. The zip contains the following files under the ``log<yyyyMMddHHmm>/`` directory.
+
+- ``*.log`` and ``*.log.gz`` files in the log directory (``fess.log``, ``fess-crawler.log``, ``audit.log``, ``searchlog.log``, and so on)
+- ``system.properties`` (system settings) and ``fess_config.properties`` (application settings)
+- ``fess_basic_config.bulk`` (the contents of the configuration indexes, such as crawl settings, authentication settings, and labels; the access tokens of the admin API are not included)
+- ``es_cat_*.txt`` and ``es_*.json`` (the output of the OpenSearch ``_cat`` APIs and the state of the cluster, nodes, and tasks)
+
+In ``system.properties`` and ``fess_config.properties``, secret values are replaced with ``XXXXXXXX`` by the same rule as the System Info screen. This covers, for example, the storage secret key, webhook URLs (Slack and Google Chat), SSO client secrets, LLM and embedding API keys, and the application cipher key (``app.cipher.key``). The keys are kept, so you can still see which settings exist.
+
+.. note::
+
+   Log files and the contents of ``fess_basic_config.bulk`` are not masked. Check the contents before you send the zip outside your organization.
+
+.. |image0| image:: ../../../resources/images/en/15.10/admin/maintenance-1.png

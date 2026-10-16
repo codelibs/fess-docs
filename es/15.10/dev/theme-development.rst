@@ -1,0 +1,364 @@
+===========================
+Guía de Desarrollo de Temas
+===========================
+
+Visión General
+==============
+
+En |Fess| 15.10, la pantalla de búsqueda es siempre un tema estático.
+Un tema estático es una SPA (Single Page Application, aplicación de
+página única) independiente que utiliza la API ``/api/v2/*``. El tema
+se distribuye como un archivo ZIP, que se sube y se activa desde la
+consola de administración. Cuando no hay ningún tema seleccionado,
+|Fess| utiliza ``bootstrap``, el tema estático incluido con él.
+
+Para cambiar el aspecto de la pantalla de búsqueda, instale otro tema
+(consulte :doc:`../admin/theme-guide`) o cree el suyo propio: la forma
+más rápida es copiar el tema incluido y modificar la copia, como se
+describe en `Personalización del Tema Incluido`_.
+
+.. note::
+
+   Los temas estáticos están disponibles a partir de |Fess| 15.7 y se
+   convirtieron en la pantalla de búsqueda predeterminada en 15.10. Los
+   plugins de tema JAR, que sustituían las JSP de la pantalla de
+   búsqueda, se eliminaron en 15.10; consulte
+   `Plugin de Tema JAR (eliminado en 15.10)`_.
+
+Tema Estático
+=============
+
+Un tema estático es un conjunto de recursos estáticos que incluye el
+manifiesto ``theme.yml`` y el archivo ``index.html``. El propio tema se
+implementa como una aplicación frontend que invoca la API
+``/api/v2/*`` de |Fess|.
+
+Estructura
+----------
+
+Un tema estático tiene la siguiente estructura de directorios.
+
+::
+
+    example/
+    ├── theme.yml          # Manifiesto (obligatorio)
+    ├── index.html         # HTML de entrada de la SPA
+    ├── assets/            # Recursos estáticos como JavaScript y CSS
+    │   └── styles.css
+    ├── i18n/              # Mensajes multilingües (messages.<locale>.json)
+    │   └── messages.en.json
+    ├── help/              # Definiciones de ayuda (<locale>.json)
+    │   └── en.json
+    └── thumbnail.png      # Imagen de vista previa (opcional)
+
+Manifiesto (theme.yml)
+----------------------
+
+``theme.yml`` es el manifiesto obligatorio que debe colocarse en la raíz
+del ZIP. A continuación se muestra un ejemplo de configuración mínima.
+
+.. code-block:: yaml
+
+    apiVersion: fess.codelibs.org/v1
+    kind: StaticTheme
+    name: example
+    displayName: "Example Theme"
+    version: "15.10.0"
+    minFessVersion: "15.10"
+    entry: index.html
+    spaFallback: true
+
+Los campos que se pueden especificar son los siguientes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 12 66
+
+   * - Campo
+     - Obligatorio
+     - Descripción
+   * - ``apiVersion``
+     - Obligatorio
+     - Valor fijo ``fess.codelibs.org/v1``.
+   * - ``kind``
+     - Obligatorio
+     - Valor fijo ``StaticTheme``.
+   * - ``name``
+     - Obligatorio
+     - Nombre del tema. Debe coincidir con
+       ``^[a-z0-9][a-z0-9_-]{0,63}$``. Se utiliza como nombre del
+       directorio del tema que se expande bajo ``themes/`` (al subir el
+       archivo, este se determina automáticamente a partir de
+       ``name``) y como URL de distribución (``/themes/<name>/``).
+   * - ``displayName``
+     - Obligatorio
+     - Nombre que se muestra en la consola de administración.
+   * - ``version``
+     - Obligatorio
+     - Formato de versionado semántico (ejemplo: ``15.10.0``,
+       ``15.10.1-beta.1``). Por convención, ``major.minor`` es la línea de |Fess| a la
+       que está destinado el tema, de modo que la versión por sí sola responde para
+       qué |Fess| es un tema.
+   * - ``author``
+     - Opcional
+     - Nombre del autor.
+   * - ``description``
+     - Opcional
+     - Descripción del tema.
+   * - ``license``
+     - Opcional
+     - Licencia.
+   * - ``homepage``
+     - Opcional
+     - URL de la página de inicio.
+   * - ``minFessVersion``
+     - Opcional
+     - Versión mínima de |Fess| compatible con el tema. Manténgala igual al
+       ``major.minor`` de ``version``. No existe ``maxFessVersion``: consulte
+       `Publicación`_.
+   * - ``supportedLocales``
+     - Opcional
+     - Lista de configuraciones regionales admitidas (ejemplo:
+       ``[en, ja, de]``).
+   * - ``entry``
+     - Opcional
+     - HTML de entrada de la SPA. El valor predeterminado es
+       ``index.html``.
+   * - ``spaFallback``
+     - Opcional
+     - Obsoleto. Se acepta por compatibilidad, pero ya no se lee: desde
+       15.10 el HTML de entrada se sirve siempre para las rutas de la
+       pantalla de búsqueda.
+
+.. note::
+
+   Al subir el archivo desde un ZIP, el nombre del directorio de
+   destino de la expansión se determina automáticamente a partir de
+   ``name``. Si coloca el tema manualmente en el directorio
+   ``themes/``, haga que el nombre del directorio coincida con
+   ``name``. Los temas que no coincidan se ignorarán al volver a
+   escanear.
+
+.. note::
+
+   La miniatura de vista previa se coloca en la raíz del tema con el
+   nombre fijo ``thumbnail.png`` (se muestra en la lista de temas de la
+   consola de administración). Esta imagen no se reconoce mediante un
+   campo del manifiesto, sino por el nombre del archivo. Se recomienda
+   que el tamaño no supere 512 KB y que las dimensiones no superen
+   512×512 píxeles.
+
+Distribución y API
+------------------
+
+- Los temas estáticos se distribuyen bajo ``/themes/<name>/`` (donde
+  ``<name>`` es el ``name`` de ``theme.yml``).
+- Se devuelve el HTML de entrada (por defecto ``index.html``) en cada
+  una de las rutas ``/``, ``/search``, ``/advance``, ``/help``,
+  ``/error``, ``/profile``, ``/cache`` y ``/chat``, y el enrutamiento
+  posterior lo gestiona la SPA. Desde 15.10 esto ocurre sea cual sea el
+  valor de ``spaFallback``; el campo ya no se lee.
+- Los errores también los muestra el tema: cuando una solicitud falla,
+  el navegador recibe el HTML de entrada del tema en la URL solicitada,
+  con el código de estado HTTP real.
+- La consola de administración (``/admin/*``), ``/api/*``, la pantalla
+  de inicio de sesión, etc., quedan fuera del alcance de los temas
+  estáticos y son gestionados por el propio |Fess|.
+- ``{{themePath}}`` en el HTML de entrada se sustituye por
+  ``themes/<name>`` al servir la página. Haga referencia a los archivos
+  del propio tema desde ``index.html`` como
+  ``{{themePath}}/assets/styles.css``, etc. Así el nombre del tema no
+  aparece en la página y el tema carga sus propios archivos con
+  cualquier nombre con el que se instale.
+- El HTML de entrada se sirve con un encabezado
+  ``Content-Security-Policy`` que solo permite scripts, estilos,
+  imágenes y conexiones procedentes del propio |Fess| (se permiten los
+  estilos en línea, pero no los scripts en línea). Por lo tanto, las
+  fuentes o los scripts de una CDN externa no se cargan; inclúyalos en
+  el tema.
+- La ``Content-Security-Policy`` del HTML de entrada contiene
+  ``frame-ancestors 'none'`` y la respuesta incluye también
+  ``X-Frame-Options: DENY``, por lo que la página no se muestra dentro del
+  marco de otra página. El valor de ``frame-ancestors`` se puede cambiar con
+  ``theme.index.frame.ancestors`` en ``fess_config.properties``
+  (predeterminado: ``'none'``). Un valor vacío omite ``frame-ancestors``
+  (``X-Frame-Options: DENY`` se sigue enviando). Con
+  ``frame-ancestors 'none'``, los navegadores basados en WebKit, como Safari,
+  dejan en blanco los marcos que un tema muestra desde una URL ``blob:``
+  (la vista previa de un PDF o la copia en caché). Deje el valor vacío para
+  mostrarlos.
+- La SPA del tema obtiene datos como los resultados de búsqueda y el
+  chat a través de la API ``/api/v2/*``.
+
+Empaquetado
+-----------
+
+Si utiliza ``scripts/package.sh`` del repositorio `fess-themes
+<https://github.com/codelibs/fess-themes>`__, puede empaquetar el tema
+en un ZIP para su distribución.
+
+::
+
+    ./scripts/package.sh example
+
+Se genera ``dist/example-<version>.zip`` (donde ``<version>`` es el
+``version`` de ``theme.yml``).
+
+.. note::
+
+   ``theme.yml`` debe colocarse en la raíz del ZIP. Si se coloca en un
+   subdirectorio, no se reconocerá al subirlo.
+
+Publicación
+-----------
+
+Los temas que desarrolla el proyecto |Fess| se publican en
+https://maven.codelibs.org/release/org/codelibs/fess/themes/ , en
+``<name>/<version>/<name>-<version>.zip`` con un ``.sha1`` al lado y un
+``maven-metadata.xml`` por tema que lista las versiones publicadas.
+``bin/fess-setup install theme <name>`` lee esos metadatos para elegir la versión construida para
+el |Fess| en ejecución.
+
+Versione un tema según la línea de |Fess| a la que está destinado y suba la versión siempre que
+cambie lo que entrega el archivo. Una versión publicada no se sobrescribe nunca, así que un cambio
+que conserve su versión sencillamente no se distribuye.
+
+Por lo mismo no hay en el manifiesto ningún campo de límite superior. Como un archivo publicado no
+cambia nunca, no podría añadirse más tarde un límite para un tema que deja de funcionar en un
+|Fess| más nuevo. No publicar ese tema para la línea nueva dice lo mismo, en el momento en que se
+sabe.
+
+.. note::
+
+   Enumere las versiones publicadas a partir de ``maven-metadata.xml`` y no de un listado de
+   directorio. El índice de directorio se genera periódicamente, de modo que un tema recién
+   publicado puede leerse por sus metadatos antes de aparecer en ningún listado.
+
+Instalación y Activación
+------------------------
+
+1. Abra «Sistema» → «Tema» (``/admin/theme/``) en la consola de
+   administración.
+2. Suba el archivo ZIP creado. Un tema publicado también puede instalarse desde la
+   línea de comandos con ``bin/fess-setup install theme <name>``; consulte
+   :doc:`../install/fess-setup`.
+3. En la página de la lista, seleccione el tema deseado en el menú
+   desplegable «Tema predeterminado» y pulse el botón «Establecer» para
+   activarlo.
+
+El mecanismo de activación es el siguiente.
+
+- Al pulsar el botón «Establecer», el nombre del tema seleccionado se
+  guarda en la propiedad del sistema ``theme.default`` y se convierte
+  en el tema predeterminado de todo el sistema.
+- Si el nombre del tema coincide con la clave de un host virtual, el
+  tema solo se aplica al acceder a ese host virtual. Esto permite
+  cambiar de tema según el host virtual.
+- Si actualiza directamente el directorio ``themes/`` en el disco,
+  puede volver a escanearlo con «Recargar».
+
+.. note::
+
+   La subida del ZIP tiene límites como el tamaño del archivo, el
+   tamaño total tras la expansión y el número de entradas, que se
+   pueden ajustar mediante las propiedades ``theme.*`` de
+   ``fess_config.properties`` (por ejemplo, ``theme.upload.max.size``
+   tiene un valor predeterminado de 50MB y ``theme.directory.path``
+   tiene un valor predeterminado de ``themes``). Durante la expansión
+   se realizan comprobaciones para prevenir ataques de tipo ZIP Slip y
+   zip bomb.
+
+.. _theme-customize-bundled:
+
+Personalización del Tema Incluido
+---------------------------------
+
+El tema incluido ``bootstrap`` se encuentra en ``app/themes/bootstrap/``
+de la instalación de |Fess| (``/usr/share/fess/app/themes/bootstrap/``
+en los paquetes RPM/DEB). No lo edite directamente: una actualización
+lo reemplaza, y el nombre ``bootstrap`` está reservado para él, por lo
+que no se puede eliminar ni reemplazar mediante una subida. En su
+lugar, cópielo con otro nombre.
+
+1. Copie el directorio, por ejemplo a ``mytheme``::
+
+       $ cp -r app/themes/bootstrap /tmp/mytheme
+
+2. En ``theme.yml``, cambie ``name`` a ``mytheme`` y cambie
+   ``displayName``. ``name`` debe coincidir con el nombre del
+   directorio.
+
+3. Deje ``index.html`` como está. El ``index.html`` incluido hace
+   referencia a sus propios archivos, como la hoja de estilos, los
+   logotipos y el script, como ``{{themePath}}/assets/...``, y |Fess|
+   sustituye ``{{themePath}}`` por ``themes/<name>`` (el ``name`` de
+   ``theme.yml``) al servir la página. Por eso basta con cambiar el nombre
+   para que la copia cargue sus propios archivos. Si añade un archivo al
+   que hace referencia ``index.html``, escriba también su URL como
+   ``{{themePath}}/assets/...``.
+
+4. Realice sus cambios:
+
+   - Colores y diseño: ``assets/styles.css``.
+   - Logotipos: ``assets/logo-head.png`` (encabezado) y
+     ``assets/logo.png`` (página inicial de búsqueda).
+   - Textos, como el pie de página (``footer.copyright_org``): los
+     archivos ``i18n/messages.<locale>.json``, uno por idioma.
+   - Estructura de la página: ``index.html``.
+
+5. Empaquete el directorio como un ZIP con ``theme.yml`` en su raíz y
+   súbalo en «Sistema» → «Tema» de la consola de administración::
+
+       $ cd /tmp/mytheme && zip -r ../mytheme.zip .
+
+   Como alternativa, coloque el directorio en ``app/themes/`` y pulse
+   «Recargar» en la misma página.
+
+6. Seleccione ``mytheme`` como tema predeterminado en esa página.
+
+.. note::
+
+   Después de cada actualización de |Fess|, sustituya la copia por una
+   nueva copia del tema incluido y vuelva a aplicar sus cambios, ya que
+   el tema incluido sigue la API ``/api/v2/*`` de su versión de |Fess|.
+
+Plugin de Tema JAR (eliminado en 15.10)
+======================================
+
+El tipo de plugin de tema JAR, que empaquetaba JSP, CSS e imágenes en un
+JAR ``fess-theme-*`` y los aplicaba como el tema con el mismo nombre que
+la clave del host virtual, se eliminó en |Fess| 15.10. 15.10 no expande
+los temas JAR ni los utiliza en ninguna pantalla.
+
+- Si lo instala desde «Sistema» → «Plugin» en la consola de
+  administración, solo se coloca en ``app/WEB-INF/plugin/`` como un JAR
+  de propósito general del tipo ``jar`` y no cambia ninguna pantalla.
+  Un ``fess-theme-*.jar`` que haya quedado de una versión anterior se
+  muestra de la misma manera y se puede eliminar desde esa pantalla o
+  con ``bin/fess-setup remove plugin <name>``.
+- ``bin/fess-setup`` no muestra ``fess-theme-*`` en la lista ni lo
+  instala.
+
+Traslade a un tema estático los cambios que hacía con un tema JAR.
+
+- Para los colores, el diseño y el logotipo de la pantalla de búsqueda,
+  copie el tema incluido y modifíquelo (consulte
+  `Personalización del Tema Incluido`_).
+- Si cambiaba el aspecto por host virtual, instale un tema estático con
+  el mismo nombre que el host virtual (consulte
+  :doc:`../config/security-virtual-host`).
+- La pantalla de inicio de sesión (``/login/``) es la misma para todos
+  los hosts virtuales y no se puede cambiar con un tema.
+
+Ejemplos de Temas Existentes
+============================
+
+- `fess-themes <https://github.com/codelibs/fess-themes>`__ -
+  Colección de temas estáticos (incluye varios temas estáticos como
+  ``codesearch`` y ``docsearch``)
+
+Información de Referencia
+=========================
+
+- :doc:`plugin-architecture` - Arquitectura de plugins
+- :doc:`../admin/plugin-guide` - Instalación de plugins

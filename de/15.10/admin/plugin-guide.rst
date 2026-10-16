@@ -1,0 +1,64 @@
+=========
+Plug-ins
+=========
+
+Übersicht
+=========
+
+Die Plug-in-Konfigurationsseite verwaltet Plug-ins.
+
+Verwaltung
+==========
+
+Anzeige
+-------
+
+Um die Übersichtsseite der installierten Plug-ins zu öffnen, klicken Sie im linken Menü auf [System > Plugin].
+
+|image0|
+
+Klicken Sie zum Deinstallieren auf die Schaltfläche „Löschen".
+
+Installation
+------------
+
+Um ein neues Plug-in zu installieren, klicken Sie auf die Schaltfläche „Installieren".
+
+|image1|
+
+Wählen Sie im Dropdown-Menü auf der Registerkarte „Remote" das zu installierende Plug-in aus und klicken Sie auf die Schaltfläche „Installieren", um die Installation zu starten.
+Das Dropdown-Menü listet die Plug-ins aus den Plug-in-Repositorys (``plugin.repositories``) auf. Sind diese nicht erreichbar, wird „Keine verfügbaren Plugins gefunden." angezeigt.
+
+Um eine vorhandene JAR-Datei zu installieren, wählen Sie sie auf der Registerkarte „Lokal" unter „Jar-Datei" aus und klicken Sie auf die Schaltfläche „Installieren". Es werden nur Dateien mit der Endung ``.jar`` akzeptiert.
+Lassen Sie dabei das Dropdown-Menü auf der Registerkarte „Remote" auf dem ersten Eintrag (``-``); ist dort ein anderes Plug-in ausgewählt, wird stattdessen dieses installiert.
+Wie Sie Plug-ins ohne Internetzugang installieren, lesen Sie unter :ref:`fess-setup-offline`.
+
+Starten Sie |Fess| nach der Installation eines Plug-ins neu.
+
+Installation über die Befehlszeile
+==================================
+
+``bin/fess-setup`` installiert Plug-ins über die Befehlszeile.
+
+::
+
+    $ bin/fess-setup install plugin fess-script-groovy
+
+Ohne Versionsangabe wird die neueste für dieses |Fess| gebaute Version aus dem Repository gewählt, sodass bei jedem Aufruf eine andere Version installiert werden kann. Um sie festzulegen, geben Sie die Version durch einen Doppelpunkt getrennt hinter dem Plug-in-Namen an.
+
+::
+
+    $ bin/fess-setup install plugin fess-script-groovy:15.10.0 fess-ds-git:15.10.0
+
+Plug-ins werden einzeln veröffentlicht, daher haben gemeinsam installierte Plug-ins nicht zwangsläufig dieselbe Version. Geben Sie die Version je Plug-in an. Für ein Plug-in ohne eigene Versionsangabe wird der Wert von ``--version`` verwendet.
+
+::
+
+    $ bin/fess-setup install plugin fess-script-groovy fess-ds-git:15.10.1 --version 15.10.0
+
+Die zuvor installierte Version eines Plug-ins wird gelöscht, nachdem die neue installiert wurde. Eine nicht vorhandene Version beendet den Befehl mit dem Exit-Code 1, sodass ein Build-Schritt wie ein Dockerfile fehlschlägt, statt ohne das Plug-in fortzufahren.
+
+``bin/fess-setup list plugins`` zeigt die für dieses |Fess| veröffentlichten Plug-ins und welche davon installiert sind, ``list installed`` zeigt die installierten Plug-ins, ohne das Repository abzufragen, ``upgrade plugins`` installiert jedes installierte Plug-in in der Version neu, die zu diesem |Fess| passt, und ``remove plugin`` löscht ein Plug-in. Starten Sie |Fess| neu, nachdem Sie Plug-ins installiert, aktualisiert oder entfernt haben. Alle Befehle und Optionen finden Sie unter :doc:`../install/fess-setup`.
+
+.. |image0| image:: ../../../resources/images/en/15.10/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/en/15.10/admin/plugin-2.png

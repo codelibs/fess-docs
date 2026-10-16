@@ -1,0 +1,331 @@
+==========================================
+Configuración de SSO con OpenID Connect
+==========================================
+
+Descripción general
+===================
+
+|Fess| soporta autenticación Single Sign-On (SSO) utilizando OpenID Connect (OIDC).
+OpenID Connect es un protocolo de autenticación basado en OAuth 2.0 que utiliza ID Tokens (JWT) para la autenticación de usuarios.
+Al utilizar autenticación OpenID Connect, la información del usuario autenticada por un OpenID Provider (OP) puede integrarse con |Fess|.
+
+.. note::
+   La compatibilidad con la autenticación OpenID Connect proviene del plugin ``fess-sso-oidc``,
+   que no forma parte de la distribución. Instálelo desde la página **Sistema > Plugin** de la
+   pantalla de administración o con ``bin/fess-setup install plugin fess-sso-oidc``. El plugin
+   se llama ``fess-sso-oidc`` mientras que el valor de ``sso.type`` sigue siendo ``oic``.
+   Hasta entonces, con ``sso.type=oic`` toda petición a ``/sso/`` solo se redirige de vuelta a
+   la página de inicio de sesión.
+
+Cómo funciona la autenticación OpenID Connect
+----------------------------------------------
+
+En la autenticación OpenID Connect, |Fess| opera como Relying Party (RP) y colabora con un OpenID Provider (OP) externo para la autenticación.
+
+1. El usuario accede al endpoint SSO de |Fess| (``/sso/``)
+2. |Fess| redirige al endpoint de autorización del OP
+3. El usuario se autentica en el OP
+4. El OP redirige el código de autorización a |Fess|
+5. |Fess| utiliza el código de autorización para obtener un ID Token del endpoint de token
+6. |Fess| comprueba los claims del ID Token (JWT), obtiene la información del usuario e inicia sesión del usuario
+
+.. note::
+   |Fess| utiliza el flujo de código de autorización (Authorization Code Flow). El ID Token se obtiene directamente desde el endpoint de token a través de un canal de retaguardia (comunicación servidor a servidor) entre |Fess| y el OP, sin pasar por el navegador.
+   |Fess| decodifica el ID Token y extrae los claims (como ``email`` y ``groups``) para construir la información del usuario, pero no realiza la verificación criptográfica de la firma JWT. OpenID Connect Core lo permite porque el token se recibe directamente del endpoint de token a través de TLS, por lo que la URL del endpoint de token (``oic.token.server.url``) debe ser HTTPS. ``http`` solo se acepta para ``localhost``, ``127.x.x.x`` y ``::1``.
+   |Fess| sí comprueba los claims: ``aud`` debe contener ``oic.client.id`` (y ``azp``, si está presente, debe ser igual a este valor), ``exp`` debe estar presente y no haber expirado (se tolera un desfase horario de hasta 300 segundos), y el claim ``iss`` debe ser igual a ``oic.issuer`` cuando esa clave está definida. Sin ``oic.issuer``, ``iss`` no se comprueba y se registra una advertencia en el primer inicio de sesión tras cada arranque. ``nonce`` y PKCE no se utilizan.
+
+Para la integración con búsqueda basada en roles, consulte :doc:`security-role`.
+
+Prerrequisitos
+==============
+
+Antes de configurar la autenticación OpenID Connect, verifique los siguientes prerrequisitos:
+
+- |Fess| 15.10 o superior está instalado
+- Un proveedor compatible con OpenID Connect (OP) está disponible
+- |Fess| es accesible a través de HTTPS (requerido para entornos de producción)
+- Tiene permiso para registrar |Fess| como cliente (RP) en el lado del OP
+
+Ejemplos de proveedores soportados:
+
+- Microsoft Entra ID (Azure AD)
+- Google Workspace / Google Cloud Identity
+- Okta
+- Keycloak
+- Auth0
+- Otros proveedores compatibles con OpenID Connect
+
+Configuración básica
+====================
+
+Habilitar SSO
+-------------
+
+Para habilitar la autenticación OpenID Connect, agregue la siguiente configuración en ``app/WEB-INF/conf/system.properties``:
+
+::
+
+    sso.type=oic
+
+.. note::
+   Los ajustes de ``sso.type`` y los de ``oic.*`` descritos a continuación, excepto ``oic.issuer``, también pueden configurarse y modificarse desde la página "Sistema > General" de la pantalla de administración.
+   Los cambios realizados en la pantalla de administración se guardan en ``system.properties`` y se conservan tras el reinicio.
+   ``oic.issuer`` solo puede definirse en ``system.properties``.
+
+Configuración del proveedor
+---------------------------
+
+Configure la información obtenida de su OP.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripción
+     - Por defecto
+   * - ``oic.auth.server.url``
+     - URL del endpoint de autorización
+     - ``https://accounts.google.com/o/oauth2/auth``
+   * - ``oic.token.server.url``
+     - URL del endpoint de token
+     - ``https://accounts.google.com/o/oauth2/token``
+   * - ``oic.issuer``
+     - Identificador del emisor (opcional). Si se define, el claim ``iss`` del ID Token debe ser exactamente igual a este valor (una barra final cuenta)
+     - (vacío: no se comprueba ``iss``)
+
+.. note::
+   Estas URLs y el emisor se pueden obtener del endpoint Discovery del OP (``/.well-known/openid-configuration``); el emisor es su valor ``issuer``.
+
+   La URL del endpoint de token (``oic.token.server.url``) debe ser HTTPS. ``http`` solo se acepta cuando el host es ``localhost`` (sin distinguir mayúsculas y minúsculas), una dirección IPv4 con la forma ``127.x.x.x`` o ``::1``. El host se compara tal como está escrito y nunca se resuelve, por lo que un nombre de servicio de Docker Compose (como ``http://keycloak:8080/...``) o un nombre de host interno se rechaza con ``http`` aunque apunte a la misma máquina.
+
+   Solo se comprueba el endpoint de token, no el endpoint de autorización (``oic.auth.server.url``). La comprobación se realiza en el inicio de sesión, no al arrancar. Definir ``oic.issuer`` no relaja esta regla; solo activa la comprobación del claim ``iss``.
+
+Configuración del cliente
+-------------------------
+
+Configure la información del cliente registrada con el OP.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripción
+     - Por defecto
+   * - ``oic.client.id``
+     - ID de cliente
+     - (vacío)
+   * - ``oic.client.secret``
+     - Secreto del cliente
+     - (vacío)
+   * - ``oic.scope``
+     - Scopes solicitados
+     - (vacío)
+
+.. note::
+   El scope debe incluir al menos ``openid``.
+   Para recuperar la dirección de correo electrónico del usuario, especifique ``openid email``.
+
+Configuración de URL de redirección
+------------------------------------
+
+Configure la URL de callback después de la autenticación.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripción
+     - Por defecto
+   * - ``oic.redirect.url``
+     - URL de redirección (URL de callback)
+     - ``{oic.base.url}/sso/``
+   * - ``oic.base.url``
+     - URL base de |Fess|
+     - ``http://localhost:8080``
+
+.. note::
+   Si ``oic.redirect.url`` se omite, se construye automáticamente a partir de ``oic.base.url``.
+   Para entornos de producción, configure ``oic.base.url`` con una URL HTTPS.
+
+Configuración de atributos de usuario
+--------------------------------------
+
+Configure los grupos y roles por defecto que se asignarán a los usuarios autenticados con OIDC.
+El ID de usuario, los grupos y los roles se determinan de la siguiente manera:
+
+- **ID de usuario**: se obtiene del claim ``email`` del ID Token (JWT). Por este motivo, en la práctica es necesario incluir ``email`` en el scope (si no se puede obtener el claim ``email``, el inicio de sesión no funcionará correctamente).
+- **Grupos**: se obtienen del claim ``groups`` del ID Token. Si el claim ``groups`` no existe, se utiliza el valor de ``oic.default.groups``. Un array ``groups`` vacío se considera presente, por lo que no se utiliza ``oic.default.groups`` y el usuario se trata como si no tuviera grupos.
+- **Roles**: siempre se utiliza el valor de ``oic.default.roles`` (no existe mecanismo para obtener roles desde los claims del ID Token).
+
+.. note::
+   |Fess| utiliza directamente los valores del claim ``groups``: no realiza ninguna consulta al
+   directorio ni expande los grupos anidados (transitivos). Por lo tanto, que aparezcan los grupos
+   padre depende únicamente de la configuración de claims del OP, a diferencia de
+   :doc:`sso-entraid`, donde |Fess| resuelve los grupos padre mediante la API de Microsoft Graph.
+   El valor del claim se convierte literalmente en el permiso de búsqueda. Si el OP está configurado
+   para emitir rutas de grupo completas, envía valores como ``/padre/hijo``, que no coinciden con los
+   documentos etiquetados solo con el nombre del grupo.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripción
+     - Por defecto
+   * - ``oic.default.groups``
+     - Grupos por defecto (separados por comas)
+     - (vacío)
+   * - ``oic.default.roles``
+     - Roles por defecto (separados por comas)
+     - (vacío)
+
+.. note::
+   Si utiliza búsqueda basada en roles, debe asignar los grupos o roles apropiados al usuario.
+   Para más detalles, consulte :doc:`security-role`.
+
+Configuración del lado del OP
+==============================
+
+Al registrar |Fess| como cliente (RP) en el lado del OP, configure la siguiente información:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Configuración
+     - Valor
+   * - Tipo de aplicación
+     - Aplicación web
+   * - URI de redirección / URL de callback
+     - ``https://<Host de Fess>/sso/``
+   * - Scopes permitidos
+     - ``openid`` y scopes requeridos (``email``, ``profile``, etc.)
+
+Información a obtener del OP
+-----------------------------
+
+Obtenga la siguiente información de la pantalla de configuración o endpoint Discovery del OP para usar en la configuración de |Fess|:
+
+- **Endpoint de autorización (Authorization Endpoint)**: URL para iniciar la autenticación del usuario
+- **Endpoint de token (Token Endpoint)**: URL para obtener tokens
+- **Issuer** (opcional): valor ``issuer`` del documento Discovery, utilizado para ``oic.issuer``
+- **ID de cliente**: Identificador de cliente emitido por el OP
+- **Secreto del cliente**: Clave secreta utilizada para la autenticación del cliente
+
+.. note::
+   La mayoría de los OP le permiten verificar las URLs de los endpoints de autorización y token desde el
+   endpoint Discovery (``https://<OP>/.well-known/openid-configuration``).
+
+Ejemplos de configuración
+=========================
+
+Configuración mínima (para pruebas)
+-------------------------------------
+
+El siguiente es un ejemplo de configuración mínima para verificación en un entorno de pruebas.
+
+::
+
+    # Habilitar SSO
+    sso.type=oic
+
+    # Configuración del proveedor (establecer valores obtenidos del OP)
+    oic.auth.server.url=https://op.example.com/authorize
+    oic.token.server.url=https://op.example.com/token
+
+    # Configuración del cliente
+    oic.client.id=your-client-id
+    oic.client.secret=your-client-secret
+    oic.scope=openid email
+
+    # URL de redirección (entorno de pruebas)
+    oic.redirect.url=http://localhost:8080/sso/
+
+Configuración recomendada (para producción)
+--------------------------------------------
+
+El siguiente es un ejemplo de configuración recomendada para entornos de producción.
+
+::
+
+    # Habilitar SSO
+    sso.type=oic
+
+    # Configuración del proveedor
+    oic.auth.server.url=https://op.example.com/authorize
+    oic.token.server.url=https://op.example.com/token
+
+    # Issuer (el valor "issuer" del documento Discovery)
+    oic.issuer=https://op.example.com
+
+    # Configuración del cliente
+    oic.client.id=your-client-id
+    oic.client.secret=your-client-secret
+    oic.scope=openid email profile
+
+    # URL base (usar HTTPS para producción)
+    oic.base.url=https://fess.example.com
+
+Solución de problemas
+=====================
+
+Problemas comunes y soluciones
+--------------------------------
+
+No se puede regresar a |Fess| después de la autenticación
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Verifique que la URI de redirección esté configurada correctamente en el lado del OP
+- Asegúrese de que el valor de ``oic.redirect.url`` o ``oic.base.url`` coincida con la configuración del OP
+- Verifique que el protocolo (HTTP/HTTPS) coincida
+
+Ocurren errores de autenticación
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Verifique que el ID de cliente y el secreto del cliente estén configurados correctamente
+- Asegúrese de que el scope incluya ``openid``
+- Verifique que la URL del endpoint de autorización y la URL del endpoint de token sean correctas
+- Si el inicio de sesión falla, ``fess.log`` contiene una advertencia ``Failed to process the OpenID Connect callback:`` seguida del motivo
+- ``The ID token was not issued for this client``: el claim ``aud`` del ID Token no es ``oic.client.id``; verifique el ID de cliente
+- ``The ID token has expired``: los relojes del host de |Fess| y del OP difieren en más de 300 segundos; sincronice la hora (NTP)
+- ``The ID token was not issued by the configured issuer``: ``oic.issuer`` difiere del ``iss`` que muestra el mensaje; copie exactamente el valor ``issuer`` del documento Discovery
+- ``oic.token.server.url must be https``: utilice una URL de endpoint de token HTTPS (``http`` solo funciona con ``localhost``, ``127.x.x.x`` y ``::1``; ``http`` hacia el nombre de un servicio de Docker Compose o un nombre de host interno también se rechaza)
+
+No se puede recuperar información del usuario
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Asegúrese de que el scope incluya los permisos requeridos (``email``, ``profile``, etc.)
+- Verifique que los scopes requeridos estén permitidos para el cliente en el lado del OP
+- Con Microsoft Entra ID, el claim ``groups`` contiene los ``ObjectId`` (GUID) de los grupos salvo
+  que se seleccione otro atributo de origen, por lo que los valores no coincidirán con los nombres
+  de grupo
+- Microsoft Entra ID omite por completo el claim ``groups`` cuando el usuario pertenece a más de
+  200 grupos (los grupos anidados cuentan para este límite), y entonces |Fess| recurre a
+  ``oic.default.groups``
+
+Configuración de depuración
+-----------------------------
+
+Para investigar problemas, puede mostrar logs detallados relacionados con OpenID Connect ajustando el nivel de log de |Fess|.
+
+En ``app/WEB-INF/classes/log4j2.xml``, puede agregar el siguiente logger para cambiar el nivel de log:
+
+::
+
+    <Logger name="org.codelibs.fess.sso.oic" level="DEBUG"/>
+
+.. warning::
+   Con este logger en DEBUG, los claims del ID Token (como ``email`` y ``groups``) se escriben en el
+   archivo de log. Restaure el nivel de log cuando termine la investigación y trate la salida del log
+   en consecuencia.
+
+Referencia
+==========
+
+- :doc:`security-role` - Configuración de búsqueda basada en roles
+- :doc:`sso-saml` - Configuración de SSO con autenticación SAML
+- :doc:`sso-entraid` - Configuración de SSO específica para Microsoft Entra ID (si utiliza Entra ID, también puede usar la configuración dedicada en lugar de la configuración genérica de OpenID Connect)

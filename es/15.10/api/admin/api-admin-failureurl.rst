@@ -1,0 +1,331 @@
+==========================
+API de FailureUrl
+==========================
+
+Visión General
+==============
+
+La API de FailureUrl es para gestionar las URLs de rastreo fallidas de |Fess|.
+Permite operaciones como obtener la lista de URLs que tuvieron errores durante el rastreo, obtenerlas individualmente y eliminarlas.
+
+URL Base
+========
+
+::
+
+    /api/admin/failureurl
+
+Lista de Endpoints
+==================
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 35 50
+
+   * - Método
+     - Ruta
+     - Descripción
+   * - GET
+     - /logs
+     - Obtener lista de URLs fallidas
+   * - GET
+     - /log/{id}
+     - Obtener URL fallida
+   * - DELETE
+     - /log/{id}
+     - Eliminar URL fallida
+   * - DELETE
+     - /all
+     - Eliminar todas las URLs fallidas
+
+Obtener Lista de URLs Fallidas
+==============================
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/failureurl/logs
+
+Parámetros
+~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 15 50
+
+   * - Parámetro
+     - Tipo
+     - Requerido
+     - Descripción
+   * - ``size``
+     - Integer
+     - No
+     - Número de elementos por página (predeterminado: 25; se puede cambiar con ``paging.page.size`` en ``fess_config.properties``)
+   * - ``page``
+     - Integer
+     - No
+     - Número de página (comienza en 1, predeterminado: 1)
+   * - ``url``
+     - String
+     - No
+     - Filtro por URL (se admiten comodines ``*`` ``?``)
+   * - ``error_count_min``
+     - Integer
+     - No
+     - Límite inferior del número de errores (mayor o igual al valor especificado)
+   * - ``error_count_max``
+     - Integer
+     - No
+     - Límite superior del número de errores (menor o igual al valor especificado)
+   * - ``error_name``
+     - String
+     - No
+     - Filtro por nombre de error (coincidencia con comodín sobre el nombre de clase completamente calificado almacenado; se admiten ``*`` ``?``)
+
+Estos parámetros se indican en el cuerpo de la solicitud JSON (por ejemplo, ``{"size": 50, "page": 1}``). Los valores indicados en la cadena de consulta de la URL (por ejemplo, ``?size=50``) se ignoran, por lo que, si no se indican en el cuerpo, siempre se devuelven los primeros 25 elementos.
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "logs": [
+          {
+            "id": "failure_id_1",
+            "url": "https://example.com/broken-page",
+            "thread_name": "Crawler-1",
+            "error_name": "java.net.ConnectException",
+            "error_log": "Connection refused: connect",
+            "error_count": "3",
+            "last_access_time": "1738144800000",
+            "config_id": "webConfig_id_1"
+          },
+          {
+            "id": "failure_id_2",
+            "url": "https://example.com/not-found",
+            "thread_name": "Crawler-2",
+            "error_name": "org.codelibs.fess.exception.ContentNotFoundException",
+            "error_log": "Not found: https://example.com/not-found",
+            "error_count": "1",
+            "last_access_time": "1738143000000",
+            "config_id": "webConfig_id_1"
+          }
+        ],
+        "total": 45
+      }
+    }
+
+Campos de Respuesta
+~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Campo
+     - Descripción
+   * - ``id``
+     - ID de URL fallida
+   * - ``url``
+     - URL que falló
+   * - ``thread_name``
+     - Nombre del hilo
+   * - ``error_name``
+     - Nombre del error (nombre de clase completamente calificado de la excepción ocurrida; por ejemplo, ``java.net.ConnectException``)
+   * - ``error_log``
+     - Registro de error (mensaje de la excepción o traza de pila)
+   * - ``error_count``
+     - Número de ocurrencias del error (valor numérico representado como cadena)
+   * - ``last_access_time``
+     - Hora del último acceso (milisegundos epoch representados como cadena)
+   * - ``config_id``
+     - ID de configuración de rastreo
+
+.. note::
+
+   Todos los campos de respuesta se devuelven como cadenas (JSON string). ``error_count`` es un valor numérico representado como cadena y ``last_access_time`` son milisegundos epoch representados como cadena.
+
+Obtener URL Fallida
+===================
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/failureurl/log/{id}
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "log": {
+          "id": "failure_id_1",
+          "url": "https://example.com/broken-page",
+          "thread_name": "Crawler-1",
+          "error_name": "java.net.ConnectException",
+          "error_log": "Connection refused: connect",
+          "error_count": "3",
+          "last_access_time": "1738144800000",
+          "config_id": "webConfig_id_1"
+        }
+      }
+    }
+
+Eliminar URL Fallida
+====================
+
+Solicitud
+---------
+
+::
+
+    DELETE /api/admin/failureurl/log/{id}
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Eliminar Todas las URLs Fallidas
+================================
+
+Elimina todas las URLs fallidas. No tiene parámetros.
+
+Solicitud
+---------
+
+::
+
+    DELETE /api/admin/failureurl/all
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0
+      }
+    }
+
+Tipos de Error
+==============
+
+``error_name`` almacena el nombre de clase completamente calificado de la excepción ocurrida durante el rastreo, tal como fue capturado. No es una enumeración fija; puede aparecer cualquier nombre de clase dependiendo de la excepción que se haya producido. A continuación se muestran ejemplos representativos.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Nombre de Error (ejemplo)
+     - Descripción
+   * - ``java.net.ConnectException``
+     - Conexión rechazada (no se puede conectar al servidor)
+   * - ``java.net.UnknownHostException``
+     - No se pudo resolver el nombre de host (error de DNS)
+   * - ``java.net.SocketTimeoutException``
+     - Tiempo de espera de conexión o lectura agotado
+   * - ``javax.net.ssl.SSLException``
+     - Error en el protocolo de enlace SSL/TLS o en el certificado
+   * - ``java.io.IOException``
+     - Error de entrada/salida
+   * - ``org.codelibs.fess.exception.ContentNotFoundException``
+     - URL que devolvió un código de estado HTTP configurado en ``crawler.failure.url.status.codes`` (predeterminado: 401, 403, 404, 410)
+   * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
+     - El contenido superó la longitud máxima
+
+Ejemplos de Uso
+===============
+
+Obtener Lista de URLs Fallidas
+------------------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 100, "page": 1}'
+
+Filtrar por Número de Errores
+-----------------------------
+
+.. code-block:: bash
+
+    # Obtener solo URLs con 3 o mas errores
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_count_min": 3}'
+
+Filtrar por Nombre de Error
+---------------------------
+
+.. code-block:: bash
+
+    # error_name almacena el nombre de clase completamente calificado, por lo que debe especificarse con un comodin
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"error_name": "*ConnectException"}'
+
+Obtener URL Fallida
+-------------------
+
+.. code-block:: bash
+
+    curl -X GET "http://localhost:8080/api/admin/failureurl/log/failure_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Eliminar URL Fallida
+--------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/failureurl/log/failure_id_1" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Eliminar Todas las URLs Fallidas
+--------------------------------
+
+.. code-block:: bash
+
+    curl -X DELETE "http://localhost:8080/api/admin/failureurl/all" \
+         -H "Authorization: Bearer YOUR_TOKEN"
+
+Agregación por Tipo de Error
+----------------------------
+
+.. code-block:: bash
+
+    # Contar por tipo de error
+    curl -X GET "http://localhost:8080/api/admin/failureurl/logs" \
+         -H "Authorization: Bearer YOUR_TOKEN" \
+         -H "Content-Type: application/json" \
+         -d '{"size": 1000}' | \
+         jq '[.response.logs[].error_name] | group_by(.) | map({error: .[0], count: length})'
+
+Información de Referencia
+=========================
+
+- :doc:`api-admin-overview` - Visión general de Admin API
+- :doc:`api-admin-crawlinginfo` - API de información de rastreo
+- :doc:`api-admin-joblog` - API de registro de trabajos
+- :doc:`../../admin/failureurl-guide` - Guía de gestión de URLs fallidas
