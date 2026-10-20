@@ -508,6 +508,9 @@ Límite de tasa
   * - crawler.metadata.content.excludes
     - Campos de metadatos que se excluyen del contenido del documento.
     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+  * - crawler.metadata.content.image.includes
+    - Campos de metadatos que se añaden al contenido de un documento de imagen (image/\*). El resto de los metadatos de una imagen, como su tamaño y los ajustes de la cámara, no se añade.
+    - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
   * - crawler.metadata.name.mapping
     - Mapeo de los nombres de metadatos del documento.
     - | ``title=title:string``

@@ -508,6 +508,9 @@ one, fill in ``properties.po`` beside this file.
   * - crawler.metadata.content.excludes
     - 要从文档内容中排除的元数据字段。
     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+  * - crawler.metadata.content.image.includes
+    - 添加到图像文档（image/\*）内容中的元数据字段。图像的其他元数据（如尺寸和相机设置）不会添加。
+    - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
   * - crawler.metadata.name.mapping
     - 文档元数据名称的映射。
     - | ``title=title:string``
