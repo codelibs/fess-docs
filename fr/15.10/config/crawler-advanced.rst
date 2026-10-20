@@ -371,13 +371,15 @@ Exemple de configuration
 ::
 
     # Métadonnées à exclure
-    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*
+    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
     # Mappage des noms de métadonnées
     crawler.metadata.name.mapping=\
         title=title:string\n\
         Title=title:string\n\
         dc:title=title:string
+
+Les noms de métadonnées qui commencent par ``tk:``, ``X-TIKA:`` ou ``zip:`` sont supprimés par |Fess| avant d'atteindre le document, qu'ils figurent ou non dans ``crawler.metadata.content.excludes``. Ils ne peuvent donc pas être utilisés dans ``crawler.metadata.name.mapping`` ni dans des scripts. Tika 4 a aussi renommé de nombreux autres noms de métadonnées ; pour l'effet sur ``crawler.metadata.name.mapping``, consultez :ref:`upgrade-1510-tika-metadata`.
 
 Configuration du robot d'indexation HTML
 ========================================

@@ -307,7 +307,7 @@ OpenSearch의 인덱스와는 별도로 다음 설정 파일도 백업하십시�
      - 썸네일 이미지(필요시)
 
 .. note::
-   RPM/DEB 패키지 버전에서는 ``/etc/fess/`` 디렉터리에 ``fess_config.properties`` 외에도 ``fess_env_crawler.properties`` 등의 ``fess_env_*.properties`` 나 ``tika.xml`` 과 같은 설정 파일도 저장되어 있습니다. ``/etc/fess/`` 디렉터리 전체를 백업하는 것을 권장합니다. ``system.properties`` 는 관리 화면의 「시스템 > 일반」에서 설정을 저장할 때 ``/etc/fess/system.properties`` 로 생성·업데이트됩니다.
+   RPM/DEB 패키지 버전에서는 ``/etc/fess/`` 디렉터리에 ``fess_config.properties`` 외에도 ``fess_env_crawler.properties`` 등의 ``fess_env_*.properties`` 와 같은 설정 파일도 저장되어 있습니다. ``/etc/fess/`` 디렉터리 전체를 백업하는 것을 권장합니다. ``system.properties`` 는 관리 화면의 「시스템 > 일반」에서 설정을 저장할 때 ``/etc/fess/system.properties`` 로 생성·업데이트됩니다.
 
 설정 파일 백업 예시
 ----------------------------

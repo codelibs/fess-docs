@@ -507,7 +507,7 @@ Index
     - ``cpu``
   * - crawler.metadata.content.excludes
     - Champs de métadonnées à exclure du contenu du document.
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
   * - crawler.metadata.name.mapping
     - Mappage des noms de métadonnées du document.
     - | ``title=title:string``

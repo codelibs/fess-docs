@@ -371,13 +371,15 @@ Configuration Example
 ::
 
     # Metadata to exclude
-    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*
+    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
     # Metadata name mapping
     crawler.metadata.name.mapping=\
         title=title:string\n\
         Title=title:string\n\
         dc:title=title:string
+
+Metadata names that start with ``tk:``, ``X-TIKA:`` or ``zip:`` are removed by |Fess| before they reach the document, whether or not they are listed in ``crawler.metadata.content.excludes``. They therefore cannot be used in ``crawler.metadata.name.mapping`` or in scripts. Tika 4 also renamed many other metadata names; for the effect on ``crawler.metadata.name.mapping``, see :ref:`upgrade-1510-tika-metadata`.
 
 HTML Crawler Settings
 =====================

@@ -307,7 +307,7 @@
      - 缩略图（按需备份）
 
 .. note::
-   RPM/DEB 软件包版中，``/etc/fess/`` 目录除 ``fess_config.properties`` 外，还存放有 ``fess_env_crawler.properties`` 等 ``fess_env_*.properties`` 文件以及 ``tika.xml`` 等配置文件。建议备份整个 ``/etc/fess/`` 目录。\ ``system.properties`` 在管理界面的"系统 > 通用"中保存设置时，将以 ``/etc/fess/system.properties`` 的形式创建或更新。
+   RPM/DEB 软件包版中，``/etc/fess/`` 目录除 ``fess_config.properties`` 外，还存放有 ``fess_env_crawler.properties`` 等 ``fess_env_*.properties`` 配置文件。建议备份整个 ``/etc/fess/`` 目录。\ ``system.properties`` 在管理界面的"系统 > 通用"中保存设置时，将以 ``/etc/fess/system.properties`` 的形式创建或更新。
 
 配置文件备份示例
 ----------------------------

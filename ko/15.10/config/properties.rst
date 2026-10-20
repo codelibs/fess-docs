@@ -507,7 +507,7 @@ one, fill in ``properties.po`` beside this file.
     - ``cpu``
   * - crawler.metadata.content.excludes
     - 문서 콘텐츠에서 제외할 메타데이터 필드.
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
   * - crawler.metadata.name.mapping
     - 문서 메타데이터 이름의 매핑.
     - | ``title=title:string``

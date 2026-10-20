@@ -507,7 +507,7 @@ Límite de tasa
     - ``cpu``
   * - crawler.metadata.content.excludes
     - Campos de metadatos que se excluyen del contenido del documento.
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
   * - crawler.metadata.name.mapping
     - Mapeo de los nombres de metadatos del documento.
     - | ``title=title:string``
