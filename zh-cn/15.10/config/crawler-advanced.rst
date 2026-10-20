@@ -371,13 +371,15 @@ robots.txt 配置
 ::
 
     # 排除的元数据
-    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*
+    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
     # 元数据名称映射
     crawler.metadata.name.mapping=\
         title=title:string\n\
         Title=title:string\n\
         dc:title=title:string
+
+以 ``tk:``、``X-TIKA:`` 或 ``zip:`` 开头的元数据名称，无论是否列在 ``crawler.metadata.content.excludes`` 中，都会在到达文档之前被 |Fess| 删除，因此无法在 ``crawler.metadata.name.mapping`` 或脚本中使用。Tika 4 还更改了许多其他元数据名称，对 ``crawler.metadata.name.mapping`` 的影响请参阅 :ref:`upgrade-1510-tika-metadata`。
 
 HTML 爬虫配置
 ===================

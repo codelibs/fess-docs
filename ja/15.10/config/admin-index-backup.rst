@@ -307,7 +307,7 @@ OpenSearch のインデックスとは別に、以下の設定ファイルもバ
      - サムネイル画像（必要に応じて）
 
 .. note::
-   RPM/DEB パッケージ版では、 ``/etc/fess/`` ディレクトリに ``fess_config.properties`` のほか、 ``fess_env_crawler.properties`` などの ``fess_env_*.properties`` や ``tika.xml`` といった設定ファイルも格納されています。\ ``/etc/fess/`` ディレクトリ全体をバックアップすることを推奨します。\ ``system.properties`` は、管理画面の「システム > 全般」で設定を保存した際に ``/etc/fess/system.properties`` として作成・更新されます。
+   RPM/DEB パッケージ版では、 ``/etc/fess/`` ディレクトリに ``fess_config.properties`` のほか、 ``fess_env_crawler.properties`` などの ``fess_env_*.properties`` といった設定ファイルも格納されています。\ ``/etc/fess/`` ディレクトリ全体をバックアップすることを推奨します。\ ``system.properties`` は、管理画面の「システム > 全般」で設定を保存した際に ``/etc/fess/system.properties`` として作成・更新されます。
 
 設定ファイルのバックアップ例
 ----------------------------

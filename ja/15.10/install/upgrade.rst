@@ -549,6 +549,63 @@ Docker 版::
    再インデクシングでは新しいマッピングでインデックスが作り直されるため、k-NN プラグインの
    ない OpenSearch では失敗します。ステップ 4 の注意事項を確認してください。
 
+15.9 から 15.10 へのアップグレード
+==================================
+
+このセクションの変更は、15.10 へのすべてのアップグレードに関係します。15.8 以前からアップグレードする場合は、続く「15.8 から 15.10 へのアップグレード」も読んでください。
+
+.. _upgrade-1510-tika:
+
+Apache Tika 4 と ``tika.xml``
+-----------------------------
+
+15.9.0 は Apache Tika 3.3.2 を使用していましたが、15.10 は Apache Tika 4.1.0 を使用します。
+Tika 4 には XML 形式の設定ファイルがないため、|Fess| 15.10 は Tika のパーサーをコード内で構築し、``tika.xml`` を読み込みません。
+15.10 の ZIP 版、RPM/DEB 版、Docker イメージには、このファイルは含まれません。
+
+``tika.xml`` に記述した ``parser-exclude`` などの設定は適用されなくなり、除外していたパーサーは再び動作します。
+以前のバージョンの ``tika.xml`` が設定ディレクトリに残っている場合、|Fess| はそのファイルを無視し、起動時に ``fess.log`` へ警告を出力します。ファイルを削除してください。
+
+- ZIP 版: ``app/WEB-INF/conf/tika.xml``
+- RPM/DEB 版: ``/etc/fess/tika.xml``
+
+.. _upgrade-1510-tika-metadata:
+
+メタデータ名
+------------
+
+Tika 4 では、多くのメタデータ名が変更されました。たとえば、``pdf:charsPerPage`` は ``pdf:chars-per-page`` に、``access_permission:*`` は ``access-permission:*`` に、``Message:*`` は ``message:*`` になりました。
+Tika の ``LegacyKeyMigrationFilter`` が対応しているメタデータ名は、|Fess| が Tika 3 の名前に戻します。そのため、それらの名前を使った ``crawler.metadata.name.mapping`` の設定はそのまま動作します。
+このフィルターが変換しないメタデータ名は、Tika 4 の名前のまま渡されます。たとえば、Excel ファイルの ``protected`` は ``msoffice:excel:protected-worksheet`` になりました。このような名前を ``crawler.metadata.name.mapping`` で使っている場合は、Tika 4 の名前に変更してください。
+
+Tika 4 で新たに加わったメタデータは、ほかのメタデータと同じように扱われ、``crawler.metadata.content.excludes`` に名前が一致しない限りコンテンツに追加されます。
+
+例外は、Tika が内部の管理用に使う ``tk:``、``X-TIKA:``、``zip:`` で始まる名前です（Tika 3 の ``X-TIKA:Parsed-By`` は ``tk:parsed-by`` になりました）。|Fess| はこれらの名前をドキュメントに渡す前に削除します。Tika 3 の名前には戻されず、``crawler.metadata.content.excludes`` に指定があるかどうかにかかわらずコンテンツにも追加されません。``crawler.metadata.name.mapping`` で ``X-TIKA:*`` や ``tk:*`` の名前をマッピングしている場合や、スクリプトで使っている場合、これらの値は取得できなくなります。
+
+クロール設定の Tesseract と PDF のプロパティファイル
+----------------------------------------------------
+
+クロール設定で ``config.tika.tesseract.config`` または ``config.tika.pdf.config`` を指定している場合は、Tika 4 でプロパティの名前変更や削除があったため、そのプロパティファイルを確認してください。
+適用できないキーがあると、|Fess| はキーごとに ``fess-crawler.log`` へ警告を出力し、そのキーを無視します。
+
+- Tesseract のファイルの ``timeoutSeconds`` は ``timeoutMillis`` になりました。|Fess| は ``timeoutSeconds`` を ``timeoutMillis``\ （値を 1000 倍）に変換しますが、今後は ``timeoutMillis`` にミリ秒で記述してください。``crawler.document.ocr.timeout`` は引き続き秒単位です。
+- PDF のファイルの ``ocrStrategy``、``ocrDPI``、``ocrImageType``、``ocrImageFormatName``、``ocrImageQuality``、``ocrRenderingStrategy``、``accessChecker``、``renderer`` などのプロパティは、Tika 4 の ``PDFParserConfig`` から削除されました。|Fess| はこれらを無視し、``fess-crawler.log`` に警告を出力します。この場合、PDF の OCR は Tika 4 の既定の動作（自動）に従います。つまり、``tesseract`` が使用でき、|Fess| で OCR が有効なときに、テキストの少ないページに対して OCR が実行されます。
+- ``tesseract`` の場所は ``tika.xml`` では設定できなくなり、Tesseract のファイルの ``tesseractPath``、``tessdataPath``、``imageMagickPath`` も効果がありません。``tesseract``（および使用する場合は ImageMagick）は、クローラープロセスの ``PATH`` から見つかる必要があります。
+
+文字エンコーディングの判定
+--------------------------
+
+Tika 4 がテキストファイルについて報告する文字エンコーディング名は、15.9 と異なる場合があります。たとえば、Shift_JIS は ``windows-31j``、ISO-8859-1 は ``windows-1252``、EUC-JP は ``x-eucJP-Open`` と報告されます。
+
+プラグイン開発者向けの変更
+--------------------------
+
+次の変更は、``fess-crawler`` のクラスを使うプラグインに影響します。そのようなプラグインは 15.10 向けに再ビルドしてください（:ref:`upgrade-plugin-versions` を参照）。
+
+- ``ExtractData`` は Tika のインターフェース（``TikaCoreProperties``、``HttpHeaders`` など）を実装しなくなりました。文字列定数 ``CONTENT_TYPE`` と ``CONTENT_ENCODING`` は ``ExtractData`` 自身が定義します。``RESOURCE_NAME_KEY`` は従来どおり ``"resourceName"`` です。
+- ``TikaExtractor.setTikaConfig`` と、``fess.xml`` の ``tikaConfig`` コンポーネントを削除しました。
+- ログレベルが ``debug`` のとき、``CrawlJob`` はクローラーに ``-Dorg.apache.tika.service.error.warn=true`` を渡さなくなりました。Tika 4 がこの値を読まないためです。
+
 15.8 から 15.10 へのアップグレード
 =================================
 

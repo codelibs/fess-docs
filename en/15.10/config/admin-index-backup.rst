@@ -307,7 +307,7 @@ Files to Back Up
      - Thumbnail images (as needed)
 
 .. note::
-   In the RPM/DEB package installation, the ``/etc/fess/`` directory contains not only ``fess_config.properties`` but also other configuration files such as ``fess_env_crawler.properties`` and other ``fess_env_*.properties`` files, as well as ``tika.xml``. It is recommended to back up the entire ``/etc/fess/`` directory. The ``system.properties`` file is created and updated as ``/etc/fess/system.properties`` when settings are saved in the administration screen under "System > General".
+   In the RPM/DEB package installation, the ``/etc/fess/`` directory contains not only ``fess_config.properties`` but also other configuration files such as ``fess_env_crawler.properties`` and other ``fess_env_*.properties`` files. It is recommended to back up the entire ``/etc/fess/`` directory. The ``system.properties`` file is created and updated as ``/etc/fess/system.properties`` when settings are saved in the administration screen under "System > General".
 
 Configuration File Backup Example
 ----------------------------------

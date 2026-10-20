@@ -307,7 +307,7 @@ Zu sichernde Dateien
      - Vorschaubilder (bei Bedarf)
 
 .. note::
-   Bei der RPM/DEB-Paketversion befinden sich im Verzeichnis ``/etc/fess/`` neben ``fess_config.properties`` auch Konfigurationsdateien wie ``fess_env_crawler.properties`` und weitere ``fess_env_*.properties``-Dateien sowie ``tika.xml``. Es wird empfohlen, das gesamte Verzeichnis ``/etc/fess/`` zu sichern. Die Datei ``system.properties`` wird als ``/etc/fess/system.properties`` erstellt bzw. aktualisiert, wenn Einstellungen unter "System > Allgemein" in der Verwaltungsoberfläche gespeichert werden.
+   Bei der RPM/DEB-Paketversion befinden sich im Verzeichnis ``/etc/fess/`` neben ``fess_config.properties`` auch Konfigurationsdateien wie ``fess_env_crawler.properties`` und weitere ``fess_env_*.properties``-Dateien. Es wird empfohlen, das gesamte Verzeichnis ``/etc/fess/`` zu sichern. Die Datei ``system.properties`` wird als ``/etc/fess/system.properties`` erstellt bzw. aktualisiert, wenn Einstellungen unter "System > Allgemein" in der Verwaltungsoberfläche gespeichert werden.
 
 Beispiel für das Backup von Konfigurationsdateien
 ---------------------------------------------------

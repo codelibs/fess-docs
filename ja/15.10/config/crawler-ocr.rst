@@ -42,6 +42,8 @@ Tesseract のインストール
 |Fess| を実行するホストに Tesseract をインストールします。
 日本語の文字を認識するには、日本語の学習データ（traineddata）も必要です。
 
+``tesseract`` コマンド（および使用する場合は ImageMagick）は、|Fess| のクローラープロセスの ``PATH`` から見つかる必要があります。``tesseract`` のパスは ``tika.xml`` では設定できなくなりました（|Fess| 15.10 は ``tika.xml`` を読み込みません）。
+
 Debian / Ubuntu::
 
     $ sudo apt-get install tesseract-ocr tesseract-ocr-jpn
@@ -151,12 +153,17 @@ Docker 環境で OCR を使うには、|Fess| のイメージに Tesseract を�
 - RPM/DEB 版: ``/etc/fess/``
 
 ``tesseract.properties`` には、Tika の ``TesseractOCRConfig`` のプロパティを記述します。
-確実に反映されるのは ``language`` や ``timeoutSeconds`` などの単純なキーです。
+確実に反映されるのは ``language`` や ``timeoutMillis`` などの単純なキーです。
 
 ::
 
     language=jpn
-    timeoutSeconds=300
+    timeoutMillis=300000
+
+``timeoutMillis`` の単位はミリ秒です（グローバル設定の ``crawler.document.ocr.timeout`` は秒単位です）。
+Tika 3 の ``timeoutSeconds`` キーは、|Fess| が ``timeoutMillis``\ （値を 1000 倍）に変換し、``fess-crawler.log`` に警告を出力します。
+``TesseractOCRConfig`` に設定できないキーは、同じログに警告を出力したうえで無視されます。
+``tesseractPath``、``tessdataPath``、``imageMagickPath`` は、このファイルでは効果がありません。
 
 この指定は、このクロール設定について、上記のグローバル設定より優先されます。
 
@@ -172,21 +179,11 @@ Docker 環境で OCR を使うには、|Fess| のイメージに Tesseract を�
 アップグレード時の注意
 ======================
 
-15.8 以前の同梱の ``tika.xml`` は、``org.apache.tika.parser.ocr.TesseractOCRParser`` を除外していました。
-15.10 からは、同梱の ``tika.xml`` はこのパーサーを除外しません。
+15.8 以前の同梱の ``tika.xml`` は ``org.apache.tika.parser.ocr.TesseractOCRParser`` を除外していたため、``crawler.document.ocr.enabled=true`` を指定しても OCR は無効のままでした。
+15.9 の ``tika.xml`` は、このパーサーを除外していません。
+15.10 は XML 形式の設定ファイルを持たない Apache Tika 4 を使用します。|Fess| は ``tika.xml`` を同梱せず、読み込みもしません。OCR は ``crawler.document.ocr.enabled`` で有効になります。クロール設定の Tesseract プロパティファイルで ``skipOcr=true`` を指定した場合、``tesseract`` コマンドがない場合、OCR の設定が不正な場合も、OCR は無効のままです。
 
-``tika.xml`` をカスタマイズして使い続けている場合は、次の行を削除してください。
-
-::
-
-    <parser-exclude class="org.apache.tika.parser.ocr.TesseractOCRParser"/>
-
-この行が残っていると、``crawler.document.ocr.enabled=true`` を指定しても OCR は無効のままです。
-
-``tika.xml`` の場所は次のとおりです。
-
-- ZIP 版: ``app/WEB-INF/conf/tika.xml``
-- RPM/DEB 版: ``/etc/fess/tika.xml``
+以前のバージョンから残った ``tika.xml`` や、クロール設定のプロパティファイルについては、:ref:`upgrade-1510-tika` を参照してください。
 
 動作確認
 ========
@@ -199,5 +196,4 @@ Docker 環境で OCR を使うには、|Fess| のイメージに Tesseract を�
 
 - ``tesseract --list-langs`` で、使用する言語が表示される
 - ``crawler.document.ocr.enabled`` が ``true`` になっている
-- ``tika.xml`` に ``TesseractOCRParser`` の除外が残っていない
 - クロール時の ``fess-crawler.log`` に ``OCR is enabled`` が出力されている（``Tesseract OCR is not available`` の警告が出る場合は、|Fess| から Tesseract を利用できていません）

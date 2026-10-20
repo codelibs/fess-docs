@@ -42,6 +42,8 @@ OCR 的对象
 在运行 |Fess| 的主机上安装 Tesseract。
 要识别日文文字，还需要日文的训练数据（traineddata）。
 
+``tesseract`` 命令（以及使用时的 ImageMagick）必须能在 |Fess| 爬虫进程的 ``PATH`` 中找到。``tesseract`` 的路径不能再在 ``tika.xml`` 中设置，因为 |Fess| 15.10 不会读取该文件。
+
 Debian / Ubuntu::
 
     $ sudo apt-get install tesseract-ocr tesseract-ocr-jpn
@@ -151,12 +153,17 @@ RHEL / Rocky Linux / AlmaLinux（请先启用 EPEL）::
 - RPM/DEB 版: ``/etc/fess/``
 
 在 ``tesseract.properties`` 中编写 Tika 的 ``TesseractOCRConfig`` 属性。
-能够可靠生效的只有 ``language`` 和 ``timeoutSeconds`` 等简单的键。
+能够可靠生效的只有 ``language`` 和 ``timeoutMillis`` 等简单的键。
 
 ::
 
     language=jpn
-    timeoutSeconds=300
+    timeoutMillis=300000
+
+``timeoutMillis`` 的单位是毫秒（全局设置 ``crawler.document.ocr.timeout`` 的单位是秒）。
+Tika 3 的 ``timeoutSeconds`` 键会由 |Fess| 转换为 ``timeoutMillis``\ （数值乘以 1000），并在 ``fess-crawler.log`` 中输出警告。
+``TesseractOCRConfig`` 无法设置的键会被忽略，并在同一日志中输出警告。
+``tesseractPath``、``tessdataPath`` 和 ``imageMagickPath`` 在此文件中不起作用。
 
 对于该爬取配置，此设置优先于上述全局设置。
 
@@ -172,21 +179,11 @@ RHEL / Rocky Linux / AlmaLinux（请先启用 EPEL）::
 升级注意事项
 ============
 
-15.8 及更早版本中自带的 ``tika.xml`` 排除了 ``org.apache.tika.parser.ocr.TesseractOCRParser``。
-从 15.10 起，自带的 ``tika.xml`` 不再排除该解析器。
+15.8 及更早版本中自带的 ``tika.xml`` 排除了 ``org.apache.tika.parser.ocr.TesseractOCRParser``，因此即使指定了 ``crawler.document.ocr.enabled=true``，OCR 仍然保持禁用。
+15.9 的 ``tika.xml`` 不再排除该解析器。
+15.10 使用没有 XML 配置文件的 Apache Tika 4。|Fess| 不再自带 ``tika.xml``，也不会读取它。OCR 通过 ``crawler.document.ocr.enabled`` 启用。如果爬取配置的 Tesseract 属性文件中指定了 ``skipOcr=true``、不存在 ``tesseract`` 命令，或者 OCR 设置无效，OCR 也会保持禁用。
 
-如果您一直在使用自定义的 ``tika.xml``，请删除以下行。
-
-::
-
-    <parser-exclude class="org.apache.tika.parser.ocr.TesseractOCRParser"/>
-
-如果保留此行，即使指定了 ``crawler.document.ocr.enabled=true``，OCR 仍然保持禁用。
-
-``tika.xml`` 的位置如下。
-
-- ZIP 版: ``app/WEB-INF/conf/tika.xml``
-- RPM/DEB 版: ``/etc/fess/tika.xml``
+对于以前版本遗留的 ``tika.xml`` 以及爬取配置中的属性文件，请参阅 :ref:`upgrade-1510-tika`。
 
 确认运行
 ========
@@ -199,5 +196,4 @@ RHEL / Rocky Linux / AlmaLinux（请先启用 EPEL）::
 
 - ``tesseract --list-langs`` 中显示所使用的语言
 - ``crawler.document.ocr.enabled`` 为 ``true``
-- ``tika.xml`` 中没有残留对 ``TesseractOCRParser`` 的排除
 - 爬取时的 ``fess-crawler.log`` 中输出了 ``OCR is enabled`` （如果输出 ``Tesseract OCR is not available`` 警告，则表示 |Fess| 无法使用 Tesseract）

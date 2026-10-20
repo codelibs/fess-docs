@@ -507,7 +507,7 @@ one, fill in ``properties.po`` beside this file.
     - ``cpu``
   * - crawler.metadata.content.excludes
     - 要从文档内容中排除的元数据字段。
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
   * - crawler.metadata.name.mapping
     - 文档元数据名称的映射。
     - | ``title=title:string``

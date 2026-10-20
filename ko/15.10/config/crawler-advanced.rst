@@ -371,13 +371,15 @@ robots.txt 설정
 ::
 
     # 제외할 메타데이터
-    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*
+    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
     # 메타데이터 이름 매핑
     crawler.metadata.name.mapping=\
         title=title:string\n\
         Title=title:string\n\
         dc:title=title:string
+
+``tk:``, ``X-TIKA:``, ``zip:`` 중 하나로 시작하는 메타데이터 이름은 ``crawler.metadata.content.excludes``\ 에 지정되어 있는지와 관계없이 문서에 전달되기 전에 |Fess|\ 가 제거합니다. 따라서 ``crawler.metadata.name.mapping``\ 이나 스크립트에서 사용할 수 없습니다. Tika 4에서는 이 밖에도 많은 메타데이터 이름이 변경되었습니다. ``crawler.metadata.name.mapping``\ 에 미치는 영향은 다음을 참조하십시오: :ref:`upgrade-1510-tika-metadata`
 
 HTML 크롤러 설정
 ===================

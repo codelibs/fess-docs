@@ -42,6 +42,8 @@ Installing Tesseract
 Install Tesseract on the host where |Fess| runs.
 To recognize Japanese text, you also need the Japanese trained data (traineddata).
 
+The ``tesseract`` command (and ImageMagick, if you use it) must be found on the ``PATH`` of the |Fess| crawler process. The path of ``tesseract`` can no longer be set in ``tika.xml``, which |Fess| 15.10 does not read.
+
 Debian / Ubuntu::
 
     $ sudo apt-get install tesseract-ocr tesseract-ocr-jpn
@@ -151,12 +153,17 @@ Place the file in the |Fess| configuration directory, which is on the crawler's 
 - RPM/DEB package: ``/etc/fess/``
 
 In ``tesseract.properties``, write Tika ``TesseractOCRConfig`` properties.
-Only simple keys such as ``language`` and ``timeoutSeconds`` are reliably applied.
+Only simple keys such as ``language`` and ``timeoutMillis`` are reliably applied.
 
 ::
 
     language=jpn
-    timeoutSeconds=300
+    timeoutMillis=300000
+
+``timeoutMillis`` is in milliseconds (the global ``crawler.document.ocr.timeout`` is in seconds).
+|Fess| converts the ``timeoutSeconds`` key of Tika 3 into ``timeoutMillis`` (the value multiplied by 1000) and writes a warning to ``fess-crawler.log``.
+A key that ``TesseractOCRConfig`` cannot set is ignored, with a warning in the same log.
+``tesseractPath``, ``tessdataPath`` and ``imageMagickPath`` have no effect in this file.
 
 For that crawl configuration, this takes precedence over the global settings above.
 
@@ -172,21 +179,11 @@ Operational Notes
 Upgrade Notes
 =============
 
-Up to 15.8, the bundled ``tika.xml`` excluded ``org.apache.tika.parser.ocr.TesseractOCRParser``.
-From 15.10, the bundled ``tika.xml`` no longer excludes this parser.
+Up to 15.8, the bundled ``tika.xml`` excluded ``org.apache.tika.parser.ocr.TesseractOCRParser``, so OCR stayed off even with ``crawler.document.ocr.enabled=true``.
+The ``tika.xml`` of 15.9 no longer excluded it.
+15.10 uses Apache Tika 4, which has no XML configuration file. |Fess| no longer ships ``tika.xml`` and does not read it. OCR is enabled by ``crawler.document.ocr.enabled``. It also stays off if the Tesseract properties file of the crawl configuration sets ``skipOcr=true``, if there is no ``tesseract`` command, or if the OCR settings are invalid.
 
-If you kept a customized ``tika.xml``, remove the following line:
-
-::
-
-    <parser-exclude class="org.apache.tika.parser.ocr.TesseractOCRParser"/>
-
-If this line remains, OCR stays off even with ``crawler.document.ocr.enabled=true``.
-
-The location of ``tika.xml`` is as follows:
-
-- ZIP package: ``app/WEB-INF/conf/tika.xml``
-- RPM/DEB package: ``/etc/fess/tika.xml``
+For a ``tika.xml`` left from an earlier version and for the properties file of a crawl configuration, see :ref:`upgrade-1510-tika`.
 
 Verifying OCR
 =============
@@ -199,5 +196,4 @@ If the image does not appear, check the following:
 
 - ``tesseract --list-langs`` lists the language you use
 - ``crawler.document.ocr.enabled`` is ``true``
-- ``tika.xml`` does not still exclude ``TesseractOCRParser``
 - ``fess-crawler.log`` of the crawl shows ``OCR is enabled`` (a ``Tesseract OCR is not available`` warning means that |Fess| cannot use Tesseract)

@@ -568,6 +568,63 @@ Para actualizaciones de versión principal, se recomienda recrear el índice.
    Dado que la reindexación reconstruye el índice con el nuevo mapeo, fallará en un OpenSearch
    sin el plugin k-NN. Consulte las notas del Paso 4.
 
+Actualización de 15.9 a 15.10
+=============================
+
+Los cambios de esta sección afectan a toda actualización a la versión 15.10. Si actualiza desde la versión 15.8 o anterior, lea también a continuación la sección "Actualización de 15.8 a 15.10".
+
+.. _upgrade-1510-tika:
+
+Apache Tika 4 y ``tika.xml``
+----------------------------
+
+La versión 15.9.0 usaba Apache Tika 3.3.2; la versión 15.10 usa Apache Tika 4.1.0.
+Tika 4 no tiene archivo de configuración XML, por lo que |Fess| 15.10 construye el analizador de Tika en el código y ya no lee ``tika.xml``.
+Los paquetes ZIP y RPM/DEB y las imágenes de Docker de la versión 15.10 no contienen este archivo.
+
+Los ajustes que hizo en ``tika.xml``, como ``parser-exclude``, ya no se aplican: un analizador que excluyó allí vuelve a ejecutarse.
+Si en el directorio de configuración queda un ``tika.xml`` de una versión anterior, |Fess| lo ignora y escribe una advertencia en ``fess.log`` al iniciarse. Elimine el archivo.
+
+- Paquete ZIP: ``app/WEB-INF/conf/tika.xml``
+- Paquete RPM/DEB: ``/etc/fess/tika.xml``
+
+.. _upgrade-1510-tika-metadata:
+
+Nombres de metadatos
+--------------------
+
+Tika 4 cambió el nombre de muchos metadatos. Por ejemplo, ``pdf:charsPerPage`` es ahora ``pdf:chars-per-page``, ``access_permission:*`` es ahora ``access-permission:*`` y ``Message:*`` es ahora ``message:*``.
+|Fess| devuelve a los nombres de Tika 3 los nombres que conoce el ``LegacyKeyMigrationFilter`` de Tika, de modo que una entrada de ``crawler.metadata.name.mapping`` que use uno de esos nombres sigue funcionando.
+Un nombre que el filtro no convierte se transmite con su nombre de Tika 4. Por ejemplo, ``protected`` de un archivo Excel es ahora ``msoffice:excel:protected-worksheet``. Si una entrada de ``crawler.metadata.name.mapping`` usa un nombre así, cámbielo por el nombre de Tika 4.
+
+Los metadatos que Tika 4 añade se tratan como los demás: se añaden al contenido salvo que ``crawler.metadata.content.excludes`` coincida con su nombre.
+
+La excepción son los nombres que empiezan por ``tk:``, ``X-TIKA:`` o ``zip:``, que Tika usa para su gestión interna (``X-TIKA:Parsed-By`` de Tika 3 es ahora ``tk:parsed-by``). |Fess| los elimina antes de que lleguen al documento. No se restablecen a los nombres de Tika 3 y no se añaden al contenido, figuren o no en ``crawler.metadata.content.excludes``. Si asigna nombres ``X-TIKA:*`` o ``tk:*`` en ``crawler.metadata.name.mapping`` o los usa en un script, ya no obtendrá esos valores.
+
+Archivos de propiedades de Tesseract y PDF de una configuración de rastreo
+--------------------------------------------------------------------------
+
+Si una configuración de rastreo define ``config.tika.tesseract.config`` o ``config.tika.pdf.config``, revise los archivos de propiedades, porque Tika 4 cambió el nombre de algunas propiedades o las eliminó.
+Por cada clave que no puede aplicar, |Fess| escribe una advertencia en ``fess-crawler.log`` e ignora la clave.
+
+- ``timeoutSeconds`` del archivo de Tesseract pasó a ser ``timeoutMillis``. |Fess| convierte ``timeoutSeconds`` en ``timeoutMillis`` (el valor multiplicado por 1000), pero a partir de ahora escriba ``timeoutMillis`` en milisegundos. ``crawler.document.ocr.timeout`` sigue expresándose en segundos.
+- Propiedades del archivo PDF como ``ocrStrategy``, ``ocrDPI``, ``ocrImageType``, ``ocrImageFormatName``, ``ocrImageQuality``, ``ocrRenderingStrategy``, ``accessChecker`` y ``renderer`` se eliminaron de ``PDFParserConfig`` de Tika 4. |Fess| las ignora y escribe una advertencia en ``fess-crawler.log``. El OCR de los PDF sigue entonces el comportamiento predeterminado de Tika 4: automático, es decir, las páginas con poco texto pasan por el OCR cuando ``tesseract`` está disponible y el OCR está activado en |Fess|.
+- La ubicación de ``tesseract`` ya no se puede definir en ``tika.xml``, y ``tesseractPath``, ``tessdataPath`` y ``imageMagickPath`` no tienen efecto en el archivo de Tesseract. El comando ``tesseract`` (e ImageMagick, si lo usa) debe encontrarse en el ``PATH`` del proceso del rastreador.
+
+Detección de la codificación de caracteres
+------------------------------------------
+
+Los nombres de codificación de caracteres que Tika 4 informa para los archivos de texto pueden diferir de los de la versión 15.9. Por ejemplo, Shift_JIS se informa como ``windows-31j``, ISO-8859-1 como ``windows-1252`` y EUC-JP como ``x-eucJP-Open``.
+
+Cambios para desarrolladores de plugins
+---------------------------------------
+
+Los cambios siguientes afectan a los plugins que usan clases de ``fess-crawler``. Recompile un plugin así para la versión 15.10 (consulte :ref:`upgrade-plugin-versions`).
+
+- ``ExtractData`` ya no implementa las interfaces de Tika (``TikaCoreProperties``, ``HttpHeaders``, etc.). Las constantes de tipo cadena ``CONTENT_TYPE`` y ``CONTENT_ENCODING`` las declara ahora ``ExtractData``. ``RESOURCE_NAME_KEY`` sigue siendo ``"resourceName"``.
+- Se eliminaron ``TikaExtractor.setTikaConfig`` y el componente ``tikaConfig`` de ``fess.xml``.
+- Con el nivel de registro ``debug``, ``CrawlJob`` ya no pasa ``-Dorg.apache.tika.service.error.warn=true`` al rastreador, porque Tika 4 no lee esa propiedad.
+
 Actualización de 15.8 a 15.10
 ============================
 

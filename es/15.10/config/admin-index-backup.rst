@@ -307,7 +307,7 @@ Archivos a Respaldar
      - Imágenes de miniaturas (según sea necesario)
 
 .. note::
-   En la versión de paquete RPM/DEB, el directorio ``/etc/fess/`` contiene, además de ``fess_config.properties``, otros archivos de configuración como ``fess_env_crawler.properties`` y otros archivos ``fess_env_*.properties``, así como ``tika.xml``. Se recomienda respaldar el directorio ``/etc/fess/`` completo. El archivo ``system.properties`` se crea y actualiza como ``/etc/fess/system.properties`` cuando se guarda la configuración en "Sistema > General" de la pantalla de administración.
+   En la versión de paquete RPM/DEB, el directorio ``/etc/fess/`` contiene, además de ``fess_config.properties``, otros archivos de configuración como ``fess_env_crawler.properties`` y otros archivos ``fess_env_*.properties``. Se recomienda respaldar el directorio ``/etc/fess/`` completo. El archivo ``system.properties`` se crea y actualiza como ``/etc/fess/system.properties`` cuando se guarda la configuración en "Sistema > General" de la pantalla de administración.
 
 Ejemplo de Respaldo de Archivos de Configuración
 --------------------------------------------------

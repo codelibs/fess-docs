@@ -307,7 +307,7 @@ Fichiers à sauvegarder
      - Images miniatures (si nécessaire)
 
 .. note::
-   Pour la version paquet RPM/DEB, le répertoire ``/etc/fess/`` contient, en plus de ``fess_config.properties``, des fichiers de configuration tels que ``fess_env_crawler.properties`` et d'autres fichiers ``fess_env_*.properties``, ainsi que ``tika.xml``. Il est recommandé de sauvegarder l'intégralité du répertoire ``/etc/fess/``. Le fichier ``system.properties`` est créé ou mis à jour sous ``/etc/fess/system.properties`` lorsque vous enregistrez les paramètres depuis la section « Système > Général » de l'interface d'administration.
+   Pour la version paquet RPM/DEB, le répertoire ``/etc/fess/`` contient, en plus de ``fess_config.properties``, des fichiers de configuration tels que ``fess_env_crawler.properties`` et d'autres fichiers ``fess_env_*.properties``. Il est recommandé de sauvegarder l'intégralité du répertoire ``/etc/fess/``. Le fichier ``system.properties`` est créé ou mis à jour sous ``/etc/fess/system.properties`` lorsque vous enregistrez les paramètres depuis la section « Système > Général » de l'interface d'administration.
 
 Exemple de sauvegarde des fichiers de configuration
 -----------------------------------------------------
