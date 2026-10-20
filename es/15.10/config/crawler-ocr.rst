@@ -11,7 +11,7 @@ El analizador OCR de Tesseract de Tika se incluye en |Fess|. Al activarlo, |Fess
 El OCR se ejecuta cuando se cumplen las dos condiciones siguientes:
 
 - El comando ``tesseract`` está instalado en el host donde se ejecuta el proceso del rastreador de |Fess|
-- El OCR está activado en |Fess|
+- El OCR está activado en |Fess|, para todas las configuraciones de rastreo (``crawler.document.ocr.enabled``) o para una sola configuración de rastreo (véase más abajo)
 
 El OCR está desactivado de forma predeterminada.
 Si ``tesseract`` no está instalado, |Fess| omite el OCR. No se produce ningún error.
@@ -158,6 +158,7 @@ Solo se aplican de forma fiable las claves simples, como ``language`` y ``timeou
 ::
 
     language=jpn
+    preserveInterwordSpacing=true
     timeoutMillis=300000
 
 ``timeoutMillis`` se expresa en milisegundos (el ajuste global ``crawler.document.ocr.timeout`` se expresa en segundos).
@@ -165,7 +166,14 @@ Solo se aplican de forma fiable las claves simples, como ``language`` y ``timeou
 Una clave que ``TesseractOCRConfig`` no puede establecer se ignora, con una advertencia en el mismo registro.
 ``tesseractPath``, ``tessdataPath`` y ``imageMagickPath`` no tienen efecto en este archivo.
 
-Para esa configuración de rastreo, esto tiene prioridad sobre los ajustes globales descritos arriba.
+El archivo no se combina con los ajustes globales: una propiedad que el archivo no establece tiene el valor predeterminado de Tika, no el valor de ``crawler.document.ocr.*``. El valor predeterminado de ``language`` es ``eng``, el de ``timeoutMillis`` es ``120000`` y el de ``preserveInterwordSpacing`` es ``false``.
+Escriba siempre ``language`` cuando indique este archivo.
+Si reconoce japonés, chino o coreano, escriba también ``preserveInterwordSpacing=true``, que |Fess| establece para los ajustes globales. Sin él, Tesseract inserta un espacio entre los caracteres (por ejemplo, ``請 求 書``) y una búsqueda de ``請求書`` no encuentra el documento.
+
+Indicar ``config.tika.tesseract.config`` también activa o desactiva el OCR para esa configuración de rastreo:
+
+- El OCR se ejecuta para la configuración de rastreo aunque ``crawler.document.ocr.enabled`` sea ``false``. Esto se aplica a las imágenes, a las imágenes incrustadas en documentos y a los PDF escaneados. El comando ``tesseract`` sigue siendo necesario.
+- Para desactivar el OCR en la configuración de rastreo aunque ``crawler.document.ocr.enabled`` sea ``true``, escriba ``skipOcr=true`` en el archivo.
 
 Notas operativas
 ================

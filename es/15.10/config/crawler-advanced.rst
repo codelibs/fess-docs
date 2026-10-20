@@ -361,6 +361,9 @@ Configuración de Metadatos
    * - ``crawler.metadata.content.excludes``
      - Metadatos a excluir
      - ``resourceName,X-Parsed-By...``
+   * - ``crawler.metadata.content.image.includes``
+     - Metadatos que se añaden al contenido de una imagen
+     - ``dc:title,dc:description...``
    * - ``crawler.metadata.name.mapping``
      - Mapeo de nombres de metadatos
      - ``title=title:string...``
@@ -373,6 +376,9 @@ Ejemplo de Configuración
     # Metadatos a excluir
     crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
+    # Metadatos que se añaden al contenido de una imagen (image/*)
+    crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
+
     # Mapeo de nombres de metadatos
     crawler.metadata.name.mapping=\
         title=title:string\n\
@@ -380,6 +386,8 @@ Ejemplo de Configuración
         dc:title=title:string
 
 Los nombres de metadatos que empiezan por ``tk:``, ``X-TIKA:`` o ``zip:`` los elimina |Fess| antes de que lleguen al documento, figuren o no en ``crawler.metadata.content.excludes``. Por tanto, no se pueden usar en ``crawler.metadata.name.mapping`` ni en scripts. Tika 4 también cambió el nombre de muchos otros metadatos; para su efecto en ``crawler.metadata.name.mapping``, consulte :ref:`upgrade-1510-tika-metadata`.
+
+Los metadatos de un documento cuyo tipo MIME es ``image/*`` se añaden al contenido solo si su nombre coincide con ``crawler.metadata.content.image.includes``, porque el resto de los metadatos de una imagen (su tamaño, su perfil de color y los ajustes de la cámara) no sirve para una búsqueda. De forma predeterminada son el título, la descripción, el autor, las palabras clave, los comentarios, los derechos de autor y los nombres de lugar de EXIF, XMP e IPTC, las propiedades del Explorador de Windows y los fragmentos de texto de un PNG. El resto de los metadatos se sigue extrayendo, por lo que se puede usar en ``crawler.metadata.name.mapping`` y en scripts. ``crawler.metadata.content.excludes`` también se aplica a los nombres que coinciden con la lista.
 
 Configuración del Rastreador HTML
 ==================================

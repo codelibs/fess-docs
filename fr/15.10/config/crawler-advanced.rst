@@ -361,6 +361,9 @@ Configuration des métadonnées
    * - ``crawler.metadata.content.excludes``
      - Métadonnées à exclure
      - ``resourceName,X-Parsed-By...``
+   * - ``crawler.metadata.content.image.includes``
+     - Métadonnées ajoutées au contenu d'une image
+     - ``dc:title,dc:description...``
    * - ``crawler.metadata.name.mapping``
      - Mappage des noms de métadonnées
      - ``title=title:string...``
@@ -373,6 +376,9 @@ Exemple de configuration
     # Métadonnées à exclure
     crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
+    # Métadonnées ajoutées au contenu d'une image (image/*)
+    crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
+
     # Mappage des noms de métadonnées
     crawler.metadata.name.mapping=\
         title=title:string\n\
@@ -380,6 +386,8 @@ Exemple de configuration
         dc:title=title:string
 
 Les noms de métadonnées qui commencent par ``tk:``, ``X-TIKA:`` ou ``zip:`` sont supprimés par |Fess| avant d'atteindre le document, qu'ils figurent ou non dans ``crawler.metadata.content.excludes``. Ils ne peuvent donc pas être utilisés dans ``crawler.metadata.name.mapping`` ni dans des scripts. Tika 4 a aussi renommé de nombreux autres noms de métadonnées ; pour l'effet sur ``crawler.metadata.name.mapping``, consultez :ref:`upgrade-1510-tika-metadata`.
+
+Les métadonnées d'un document dont le type MIME est ``image/*`` ne sont ajoutées au contenu que si leur nom correspond à ``crawler.metadata.content.image.includes``, car les autres métadonnées d'une image (sa taille, son profil colorimétrique et les réglages de l'appareil photo) ne servent à rien pour une recherche. Par défaut, ce sont le titre, la description, le créateur, les mots-clés, les commentaires, le copyright et les noms de lieux d'EXIF, XMP et IPTC, les propriétés de l'Explorateur Windows et les segments de texte d'un PNG. Les autres métadonnées sont toujours extraites ; elles peuvent donc être utilisées dans ``crawler.metadata.name.mapping`` et dans les scripts. ``crawler.metadata.content.excludes`` s'applique aussi aux noms que la liste retient.
 
 Configuration du robot d'indexation HTML
 ========================================

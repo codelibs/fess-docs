@@ -11,7 +11,7 @@ Der Tesseract-OCR-Parser von Tika ist in |Fess| enthalten. Wenn Sie ihn aktivier
 OCR wird ausgeführt, wenn beide der folgenden Bedingungen erfüllt sind:
 
 - Der Befehl ``tesseract`` ist auf dem Host installiert, auf dem der Crawler-Prozess von |Fess| läuft
-- OCR ist in |Fess| aktiviert
+- OCR ist in |Fess| aktiviert, entweder für alle Crawl-Konfigurationen (``crawler.document.ocr.enabled``) oder für eine einzelne Crawl-Konfiguration (siehe unten)
 
 OCR ist standardmäßig deaktiviert.
 Ist ``tesseract`` nicht installiert, überspringt |Fess| die OCR. Es tritt kein Fehler auf.
@@ -158,6 +158,7 @@ Zuverlässig angewendet werden nur einfache Schlüssel wie ``language`` und ``ti
 ::
 
     language=jpn
+    preserveInterwordSpacing=true
     timeoutMillis=300000
 
 ``timeoutMillis`` ist in Millisekunden angegeben (die globale Einstellung ``crawler.document.ocr.timeout`` ist in Sekunden angegeben).
@@ -165,7 +166,14 @@ Den Schlüssel ``timeoutSeconds`` von Tika 3 wandelt |Fess| in ``timeoutMillis``
 Ein Schlüssel, den ``TesseractOCRConfig`` nicht setzen kann, wird ignoriert; |Fess| schreibt dafür eine Warnung in dieselbe Logdatei.
 ``tesseractPath``, ``tessdataPath`` und ``imageMagickPath`` haben in dieser Datei keine Wirkung.
 
-Für diese Crawl-Konfiguration hat dies Vorrang vor den oben beschriebenen globalen Einstellungen.
+Die Datei wird nicht mit den globalen Einstellungen zusammengeführt: Eine Eigenschaft, die in der Datei nicht gesetzt ist, hat den Standardwert von Tika und nicht den Wert von ``crawler.document.ocr.*``. Der Standardwert von ``language`` ist ``eng``, der von ``timeoutMillis`` ist ``120000`` und der von ``preserveInterwordSpacing`` ist ``false``.
+Schreiben Sie ``language`` immer in diese Datei.
+Wenn Sie Japanisch, Chinesisch oder Koreanisch erkennen, schreiben Sie auch ``preserveInterwordSpacing=true``; für die globalen Einstellungen setzt |Fess| diesen Wert. Ohne ihn setzt Tesseract ein Leerzeichen zwischen die Zeichen (zum Beispiel ``請 求 書``), und eine Suche nach ``請求書`` findet das Dokument nicht.
+
+Die Angabe von ``config.tika.tesseract.config`` schaltet außerdem OCR für diese Crawl-Konfiguration ein oder aus:
+
+- OCR läuft für die Crawl-Konfiguration auch dann, wenn ``crawler.document.ocr.enabled`` auf ``false`` steht. Das gilt für Bilder, für in Dokumente eingebettete Bilder und für gescannte PDFs. Der Befehl ``tesseract`` ist weiterhin erforderlich.
+- Um OCR für die Crawl-Konfiguration auszuschalten, obwohl ``crawler.document.ocr.enabled`` auf ``true`` steht, schreiben Sie ``skipOcr=true`` in die Datei.
 
 Betriebshinweise
 ================
