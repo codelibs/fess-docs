@@ -361,6 +361,9 @@ robots.txt 설정
    * - ``crawler.metadata.content.excludes``
      - 제외할 메타데이터
      - ``resourceName,X-Parsed-By...``
+   * - ``crawler.metadata.content.image.includes``
+     - 이미지의 콘텐츠에 추가할 메타데이터
+     - ``dc:title,dc:description...``
    * - ``crawler.metadata.name.mapping``
      - 메타데이터 이름 매핑
      - ``title=title:string...``
@@ -373,6 +376,9 @@ robots.txt 설정
     # 제외할 메타데이터
     crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
+    # 이미지(image/*)의 콘텐츠에 추가할 메타데이터
+    crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
+
     # 메타데이터 이름 매핑
     crawler.metadata.name.mapping=\
         title=title:string\n\
@@ -380,6 +386,8 @@ robots.txt 설정
         dc:title=title:string
 
 ``tk:``, ``X-TIKA:``, ``zip:`` 중 하나로 시작하는 메타데이터 이름은 ``crawler.metadata.content.excludes``\ 에 지정되어 있는지와 관계없이 문서에 전달되기 전에 |Fess|\ 가 제거합니다. 따라서 ``crawler.metadata.name.mapping``\ 이나 스크립트에서 사용할 수 없습니다. Tika 4에서는 이 밖에도 많은 메타데이터 이름이 변경되었습니다. ``crawler.metadata.name.mapping``\ 에 미치는 영향은 다음을 참조하십시오: :ref:`upgrade-1510-tika-metadata`
+
+MIME 타입이 ``image/*``\ 인 문서에서는 이름이 ``crawler.metadata.content.image.includes``\ 와 일치하는 메타데이터만 콘텐츠에 추가합니다. 이미지의 나머지 메타데이터(크기, 컬러 프로파일, 카메라 설정 등)는 검색에 도움이 되지 않기 때문입니다. 기본적으로는 EXIF, XMP, IPTC의 제목, 설명, 작성자, 키워드, 코멘트, 저작권, 지명과 Windows 탐색기 속성, PNG의 텍스트 청크가 대상입니다. 나머지 메타데이터도 추출은 되므로 ``crawler.metadata.name.mapping``\ 이나 스크립트에서 사용할 수 있습니다. 이 목록과 일치하는 이름에도 ``crawler.metadata.content.excludes``\ 가 적용됩니다.
 
 HTML 크롤러 설정
 ===================

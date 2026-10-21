@@ -508,6 +508,9 @@ Index
   * - crawler.metadata.content.excludes
     - Metadatenfelder, die vom Dokumentinhalt ausgeschlossen werden.
     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+  * - crawler.metadata.content.image.includes
+    - Metadatenfelder, die dem Inhalt eines Bilddokuments (image/\*) hinzugefügt werden. Die übrigen Metadaten eines Bildes, etwa Größe und Kameraeinstellungen, werden nicht hinzugefügt.
+    - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
   * - crawler.metadata.name.mapping
     - Zuordnung für Dokument-Metadatennamen.
     - | ``title=title:string``

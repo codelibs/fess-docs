@@ -11,7 +11,7 @@ Tika 的 Tesseract OCR 解析器已包含在 |Fess| 中。启用后，可以识�
 满足以下两个条件时，将执行 OCR。
 
 - 运行 |Fess| 爬虫进程的主机上已安装 ``tesseract`` 命令
-- |Fess| 中已启用 OCR
+- |Fess| 中已启用 OCR（对所有爬取配置的 ``crawler.document.ocr.enabled``，或对单个爬取配置的指定，见下文）
 
 OCR 默认处于禁用状态。
 如果未安装 ``tesseract``，|Fess| 会跳过 OCR，不会报错。
@@ -158,6 +158,7 @@ RHEL / Rocky Linux / AlmaLinux（请先启用 EPEL）::
 ::
 
     language=jpn
+    preserveInterwordSpacing=true
     timeoutMillis=300000
 
 ``timeoutMillis`` 的单位是毫秒（全局设置 ``crawler.document.ocr.timeout`` 的单位是秒）。
@@ -165,7 +166,14 @@ Tika 3 的 ``timeoutSeconds`` 键会由 |Fess| 转换为 ``timeoutMillis``\ （�
 ``TesseractOCRConfig`` 无法设置的键会被忽略，并在同一日志中输出警告。
 ``tesseractPath``、``tessdataPath`` 和 ``imageMagickPath`` 在此文件中不起作用。
 
-对于该爬取配置，此设置优先于上述全局设置。
+该文件不会与全局设置合并：文件中未写的属性使用 Tika 的默认值，而不是 ``crawler.document.ocr.*`` 的值。``language`` 的默认值是 ``eng``，``timeoutMillis`` 的默认值是 ``120000``，``preserveInterwordSpacing`` 的默认值是 ``false``。
+指定该文件时，请务必写上 ``language``。
+识别日语、中文或韩语时，还要写上 ``preserveInterwordSpacing=true``，|Fess| 在全局设置中会将其设为 ``true``。不写的话，Tesseract 会在字符之间插入空格（例如 ``請 求 書``），用 ``請求書`` 搜索就找不到该文档。
+
+指定 ``config.tika.tesseract.config`` 后，该爬取配置是否执行 OCR 也会随之改变：
+
+- 即使 ``crawler.document.ocr.enabled`` 为 ``false``，该爬取配置也会执行 OCR。对象包括图像、嵌入文档中的图像以及扫描版 PDF。仍然需要 ``tesseract`` 命令。
+- 即使 ``crawler.document.ocr.enabled`` 为 ``true``，如果不希望该爬取配置执行 OCR，请在文件中写上 ``skipOcr=true``。
 
 运维注意事项
 ============

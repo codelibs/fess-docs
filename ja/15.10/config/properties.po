@@ -354,6 +354,9 @@ msgstr "ホットスレッド監視の種類（例: cpu）。"
 msgid "Metadata fields to exclude from document content."
 msgstr "ドキュメントのコンテンツから除外するメタデータフィールド。"
 
+msgid "Metadata fields to add to the content of an image document (image/*). Other metadata of an image, such as its size and camera settings, is not added."
+msgstr "画像ドキュメント（image/*）のコンテンツに追加するメタデータのフィールド。サイズやカメラの設定など、画像のそれ以外のメタデータは追加されません。"
+
 msgid "Mapping for document metadata names."
 msgstr "ドキュメントのメタデータ名のマッピング。"
 

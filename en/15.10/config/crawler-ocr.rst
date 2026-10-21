@@ -11,7 +11,7 @@ Tika's Tesseract OCR parser is bundled with |Fess|. When you enable it, |Fess| r
 OCR runs when both of the following conditions are met:
 
 - The ``tesseract`` command is installed on the host where the |Fess| crawler process runs
-- OCR is enabled in |Fess|
+- OCR is enabled in |Fess|, for all crawl configurations (``crawler.document.ocr.enabled``) or for one crawl configuration (see below)
 
 OCR is disabled by default.
 If ``tesseract`` is not installed, |Fess| skips OCR. No error occurs.
@@ -158,6 +158,7 @@ Only simple keys such as ``language`` and ``timeoutMillis`` are reliably applied
 ::
 
     language=jpn
+    preserveInterwordSpacing=true
     timeoutMillis=300000
 
 ``timeoutMillis`` is in milliseconds (the global ``crawler.document.ocr.timeout`` is in seconds).
@@ -165,7 +166,14 @@ Only simple keys such as ``language`` and ``timeoutMillis`` are reliably applied
 A key that ``TesseractOCRConfig`` cannot set is ignored, with a warning in the same log.
 ``tesseractPath``, ``tessdataPath`` and ``imageMagickPath`` have no effect in this file.
 
-For that crawl configuration, this takes precedence over the global settings above.
+The file is not merged with the global settings: a property that the file does not set has the default of Tika, not the value of ``crawler.document.ocr.*``. The default of ``language`` is ``eng``, that of ``timeoutMillis`` is ``120000`` and that of ``preserveInterwordSpacing`` is ``false``.
+Write ``language`` every time you give this file.
+When you recognize Japanese, Chinese or Korean, also write ``preserveInterwordSpacing=true``, which |Fess| sets for the global settings. Without it, Tesseract puts a space between the characters (for example, ``請 求 書``), and a search for ``請求書`` does not find the document.
+
+Giving ``config.tika.tesseract.config`` also switches OCR on or off for that crawl configuration:
+
+- OCR runs for the crawl configuration even when ``crawler.document.ocr.enabled`` is ``false``. This applies to images, to images embedded in documents and to scanned PDFs. The ``tesseract`` command is still required.
+- To turn OCR off for the crawl configuration even when ``crawler.document.ocr.enabled`` is ``true``, write ``skipOcr=true`` in the file.
 
 Operational Notes
 =================

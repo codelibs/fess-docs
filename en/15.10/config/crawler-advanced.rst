@@ -361,6 +361,9 @@ Metadata Settings
    * - ``crawler.metadata.content.excludes``
      - Metadata to exclude
      - ``resourceName,X-Parsed-By...``
+   * - ``crawler.metadata.content.image.includes``
+     - Metadata to add to the content of an image
+     - ``dc:title,dc:description...``
    * - ``crawler.metadata.name.mapping``
      - Metadata name mapping
      - ``title=title:string...``
@@ -373,6 +376,9 @@ Configuration Example
     # Metadata to exclude
     crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
+    # Metadata to add to the content of an image (image/*)
+    crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
+
     # Metadata name mapping
     crawler.metadata.name.mapping=\
         title=title:string\n\
@@ -380,6 +386,8 @@ Configuration Example
         dc:title=title:string
 
 Metadata names that start with ``tk:``, ``X-TIKA:`` or ``zip:`` are removed by |Fess| before they reach the document, whether or not they are listed in ``crawler.metadata.content.excludes``. They therefore cannot be used in ``crawler.metadata.name.mapping`` or in scripts. Tika 4 also renamed many other metadata names; for the effect on ``crawler.metadata.name.mapping``, see :ref:`upgrade-1510-tika-metadata`.
+
+The metadata of a document whose MIME type is ``image/*`` is added to the content only if its name matches ``crawler.metadata.content.image.includes``, because the other metadata of an image (its size, color profile and camera settings) is of no use for a search. By default, these are the title, description, creator, keywords, comments, copyright and place names of EXIF, XMP and IPTC, the Windows Explorer properties, and the text chunks of a PNG. The other metadata is still extracted, so it can be used in ``crawler.metadata.name.mapping`` and in scripts. ``crawler.metadata.content.excludes`` also applies to the names that the list matches.
 
 HTML Crawler Settings
 =====================

@@ -361,6 +361,9 @@ robots.txt 設定
    * - ``crawler.metadata.content.excludes``
      - 除外するメタデータ
      - ``resourceName,X-Parsed-By...``
+   * - ``crawler.metadata.content.image.includes``
+     - 画像のコンテンツに追加するメタデータ
+     - ``dc:title,dc:description...``
    * - ``crawler.metadata.name.mapping``
      - メタデータ名のマッピング
      - ``title=title:string...``
@@ -373,6 +376,9 @@ robots.txt 設定
     # 除外するメタデータ
     crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
+    # 画像（image/*）のコンテンツに追加するメタデータ
+    crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
+
     # メタデータ名のマッピング
     crawler.metadata.name.mapping=\
         title=title:string\n\
@@ -380,6 +386,8 @@ robots.txt 設定
         dc:title=title:string
 
 ``tk:``、``X-TIKA:``、``zip:`` で始まるメタデータ名は、``crawler.metadata.content.excludes`` に指定があるかどうかにかかわらず、ドキュメントに渡される前に |Fess| によって削除されます。そのため、``crawler.metadata.name.mapping`` やスクリプトでは使用できません。Tika 4 ではほかにも多くのメタデータ名が変更されました。``crawler.metadata.name.mapping`` への影響については :ref:`upgrade-1510-tika-metadata` を参照してください。
+
+MIME タイプが ``image/*`` のドキュメントでは、メタデータの名前が ``crawler.metadata.content.image.includes`` に一致するものだけをコンテンツに追加します。画像のそれ以外のメタデータ（サイズ、カラープロファイル、カメラの設定など）は検索に役立たないためです。デフォルトでは、EXIF、XMP、IPTC のタイトル、説明、作成者、キーワード、コメント、著作権、地名と、Windows エクスプローラーのプロパティ、PNG のテキストチャンクが対象です。それ以外のメタデータも抽出はされるため、``crawler.metadata.name.mapping`` やスクリプトで使えます。このリストに一致する名前にも ``crawler.metadata.content.excludes`` は適用されます。
 
 HTML クローラー設定
 ===================

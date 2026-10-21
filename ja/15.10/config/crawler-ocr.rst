@@ -11,7 +11,7 @@ Tika の Tesseract OCR パーサーは |Fess| に同梱されており、これ�
 OCR は次の 2 つの条件がそろったときに実行されます。
 
 - |Fess| のクローラープロセスが動作するホストに ``tesseract`` コマンドがインストールされている
-- |Fess| で OCR が有効になっている
+- |Fess| で OCR が有効になっている（すべてのクロール設定に対する ``crawler.document.ocr.enabled``、または 1 つのクロール設定に対する指定。後述）
 
 OCR はデフォルトでは無効です。
 ``tesseract`` がインストールされていない場合、|Fess| は OCR をスキップします。エラーにはなりません。
@@ -158,6 +158,7 @@ Docker 環境で OCR を使うには、|Fess| のイメージに Tesseract を�
 ::
 
     language=jpn
+    preserveInterwordSpacing=true
     timeoutMillis=300000
 
 ``timeoutMillis`` の単位はミリ秒です（グローバル設定の ``crawler.document.ocr.timeout`` は秒単位です）。
@@ -165,7 +166,14 @@ Tika 3 の ``timeoutSeconds`` キーは、|Fess| が ``timeoutMillis``\ （値�
 ``TesseractOCRConfig`` に設定できないキーは、同じログに警告を出力したうえで無視されます。
 ``tesseractPath``、``tessdataPath``、``imageMagickPath`` は、このファイルでは効果がありません。
 
-この指定は、このクロール設定について、上記のグローバル設定より優先されます。
+このファイルはグローバル設定とマージされません。ファイルに書かなかったプロパティは、``crawler.document.ocr.*`` の値ではなく Tika のデフォルト値になります。``language`` のデフォルトは ``eng``、``timeoutMillis`` のデフォルトは ``120000``、``preserveInterwordSpacing`` のデフォルトは ``false`` です。
+このファイルを指定するときは、必ず ``language`` を書いてください。
+日本語、中国語、韓国語を認識する場合は、``preserveInterwordSpacing=true`` も書いてください。グローバル設定では |Fess| がこれを ``true`` にしています。書かないと Tesseract が文字と文字の間に空白を入れ（例: ``請 求 書``）、``請求書`` で検索してもヒットしません。
+
+``config.tika.tesseract.config`` を指定すると、そのクロール設定の OCR の実行有無も切り替わります。
+
+- ``crawler.document.ocr.enabled`` が ``false`` でも、そのクロール設定では OCR が実行されます。画像、ドキュメントに埋め込まれた画像、スキャンした PDF が対象です。``tesseract`` コマンドは必要です。
+- ``crawler.document.ocr.enabled`` が ``true`` でも、そのクロール設定で OCR を実行しない場合は、ファイルに ``skipOcr=true`` を書きます。
 
 運用上の注意
 ============

@@ -590,6 +590,15 @@ Metadata that Tika 4 newly adds is handled like any other metadata: it is added 
 
 The exception is the names that start with ``tk:``, ``X-TIKA:`` or ``zip:``, which Tika uses for its own bookkeeping (``X-TIKA:Parsed-By`` of Tika 3 is now ``tk:parsed-by``). |Fess| removes them before they reach the document. They are not restored to the Tika 3 names, and they are not added to the content, whether or not ``crawler.metadata.content.excludes`` lists them. If you map ``X-TIKA:*`` or ``tk:*`` names in ``crawler.metadata.name.mapping`` or use them in a script, you no longer get these values.
 
+Metadata of Images in the Content
+---------------------------------
+
+Up to 15.9, all the metadata of an image file (PNG, JPEG, TIFF, GIF, BMP, etc.) was added to the content, so the content of an image was a list of values about its pixels, its color profile and its camera settings.
+In 15.10, only the metadata whose name matches ``crawler.metadata.content.image.includes`` is added to the content of a document whose MIME type is ``image/*``. By default, these are the title, description, creator, keywords, comments, copyright and place names of EXIF, XMP and IPTC, the Windows Explorer properties, and the text chunks of a PNG.
+The other metadata is still extracted, so it can be used in ``crawler.metadata.name.mapping`` and in scripts. ``crawler.metadata.content.excludes`` also applies to the names that the list matches.
+
+The content of an image that was indexed before the upgrade does not change until the image is crawled again.
+
 Tesseract and PDF Properties Files of a Crawl Configuration
 -----------------------------------------------------------
 

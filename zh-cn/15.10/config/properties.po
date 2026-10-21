@@ -354,6 +354,9 @@ msgstr "hot thread 监控的类型（例如 cpu）。"
 msgid "Metadata fields to exclude from document content."
 msgstr "要从文档内容中排除的元数据字段。"
 
+msgid "Metadata fields to add to the content of an image document (image/*). Other metadata of an image, such as its size and camera settings, is not added."
+msgstr "添加到图像文档（image/*）内容中的元数据字段。图像的其他元数据（如尺寸和相机设置）不会添加。"
+
 msgid "Mapping for document metadata names."
 msgstr "文档元数据名称的映射。"
 

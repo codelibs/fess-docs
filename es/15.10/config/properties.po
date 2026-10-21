@@ -354,6 +354,9 @@ msgstr "Tipo de monitoreo de hot threads (p. ej., cpu)."
 msgid "Metadata fields to exclude from document content."
 msgstr "Campos de metadatos que se excluyen del contenido del documento."
 
+msgid "Metadata fields to add to the content of an image document (image/*). Other metadata of an image, such as its size and camera settings, is not added."
+msgstr "Campos de metadatos que se añaden al contenido de un documento de imagen (image/*). El resto de los metadatos de una imagen, como su tamaño y los ajustes de la cámara, no se añade."
+
 msgid "Mapping for document metadata names."
 msgstr "Mapeo de los nombres de metadatos del documento."
 

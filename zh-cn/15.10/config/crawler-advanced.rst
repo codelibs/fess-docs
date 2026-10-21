@@ -361,6 +361,9 @@ robots.txt 配置
    * - ``crawler.metadata.content.excludes``
      - 排除的元数据
      - ``resourceName,X-Parsed-By...``
+   * - ``crawler.metadata.content.image.includes``
+     - 添加到图像内容中的元数据
+     - ``dc:title,dc:description...``
    * - ``crawler.metadata.name.mapping``
      - 元数据名称映射
      - ``title=title:string...``
@@ -373,6 +376,9 @@ robots.txt 配置
     # 排除的元数据
     crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
 
+    # 添加到图像（image/*）内容中的元数据
+    crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
+
     # 元数据名称映射
     crawler.metadata.name.mapping=\
         title=title:string\n\
@@ -380,6 +386,8 @@ robots.txt 配置
         dc:title=title:string
 
 以 ``tk:``、``X-TIKA:`` 或 ``zip:`` 开头的元数据名称，无论是否列在 ``crawler.metadata.content.excludes`` 中，都会在到达文档之前被 |Fess| 删除，因此无法在 ``crawler.metadata.name.mapping`` 或脚本中使用。Tika 4 还更改了许多其他元数据名称，对 ``crawler.metadata.name.mapping`` 的影响请参阅 :ref:`upgrade-1510-tika-metadata`。
+
+对于 MIME 类型为 ``image/*`` 的文档，只有名称与 ``crawler.metadata.content.image.includes`` 匹配的元数据才会添加到内容中，因为图像的其他元数据（尺寸、色彩配置文件、相机设置等）对搜索没有用处。默认情况下，包括 EXIF、XMP、IPTC 的标题、说明、作者、关键字、注释、版权和地名，以及 Windows 资源管理器的属性和 PNG 的文本块。其他元数据仍会被提取，因此可以用于 ``crawler.metadata.name.mapping`` 和脚本。``crawler.metadata.content.excludes`` 同样适用于与该列表匹配的名称。
 
 HTML 爬虫配置
 ===================

@@ -354,6 +354,9 @@ msgstr "핫 스레드 모니터링의 타입(예: cpu)."
 msgid "Metadata fields to exclude from document content."
 msgstr "문서 콘텐츠에서 제외할 메타데이터 필드."
 
+msgid "Metadata fields to add to the content of an image document (image/*). Other metadata of an image, such as its size and camera settings, is not added."
+msgstr "이미지 문서(image/*)의 콘텐츠에 추가할 메타데이터 필드. 크기나 카메라 설정 등 이미지의 나머지 메타데이터는 추가되지 않습니다."
+
 msgid "Mapping for document metadata names."
 msgstr "문서 메타데이터 이름의 매핑."
 

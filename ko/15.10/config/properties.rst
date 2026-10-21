@@ -508,6 +508,9 @@ one, fill in ``properties.po`` beside this file.
   * - crawler.metadata.content.excludes
     - 문서 콘텐츠에서 제외할 메타데이터 필드.
     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+  * - crawler.metadata.content.image.includes
+    - 이미지 문서(image/\*)의 콘텐츠에 추가할 메타데이터 필드. 크기나 카메라 설정 등 이미지의 나머지 메타데이터는 추가되지 않습니다.
+    - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
   * - crawler.metadata.name.mapping
     - 문서 메타데이터 이름의 매핑.
     - | ``title=title:string``

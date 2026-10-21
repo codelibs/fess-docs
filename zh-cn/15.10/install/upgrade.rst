@@ -570,6 +570,15 @@ Tika 4 新增的元数据与其他元数据一样处理，只要名称不匹配 
 
 例外是以 ``tk:``、``X-TIKA:`` 或 ``zip:`` 开头的名称，Tika 将它们用于内部管理（Tika 3 的 ``X-TIKA:Parsed-By`` 现在是 ``tk:parsed-by``）。|Fess| 会在这些名称到达文档之前将其删除。它们不会被还原为 Tika 3 的名称，无论是否列在 ``crawler.metadata.content.excludes`` 中，也都不会添加到内容中。如果在 ``crawler.metadata.name.mapping`` 中映射了 ``X-TIKA:*`` 或 ``tk:*`` 名称，或者在脚本中使用了它们，将无法再获得这些值。
 
+内容中的图像元数据
+------------------
+
+15.9 及之前，图像文件（PNG、JPEG、TIFF、GIF、BMP 等）的所有元数据都会添加到内容中，因此图像的内容是一串关于像素、色彩配置文件和相机设置的数值。
+15.10 中，对于 MIME 类型为 ``image/*`` 的文档，只有名称与 ``crawler.metadata.content.image.includes`` 匹配的元数据才会添加到内容中。默认情况下，包括 EXIF、XMP、IPTC 的标题、说明、作者、关键字、注释、版权和地名，以及 Windows 资源管理器的属性和 PNG 的文本块。
+其他元数据仍会被提取，因此可以用于 ``crawler.metadata.name.mapping`` 和脚本。``crawler.metadata.content.excludes`` 同样适用于与该列表匹配的名称。
+
+升级之前已建立索引的图像，其内容在重新爬取该图像之前不会改变。
+
 爬取配置的 Tesseract 和 PDF 属性文件
 ------------------------------------
 

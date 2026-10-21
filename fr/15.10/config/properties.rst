@@ -508,6 +508,9 @@ Index
   * - crawler.metadata.content.excludes
     - Champs de métadonnées à exclure du contenu du document.
     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+  * - crawler.metadata.content.image.includes
+    - Champs de métadonnées ajoutés au contenu d'un document image (image/\*). Les autres métadonnées d'une image, comme sa taille et les réglages de l'appareil photo, ne sont pas ajoutées.
+    - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
   * - crawler.metadata.name.mapping
     - Mappage des noms de métadonnées du document.
     - | ``title=title:string``
