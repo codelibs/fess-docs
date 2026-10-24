@@ -522,6 +522,18 @@ Add the following to "Configuration Parameters" in the crawl configuration on th
     client.proxyUsername=proxyuser
     client.proxyPassword=proxypass
 
+**SOCKS5 proxy (15.10 and later):**
+
+::
+
+    client.socksProxyHost=socks.example.com
+    client.socksProxyPort=1080
+
+- Set both ``client.socksProxyHost`` and ``client.socksProxyPort``. If only one of them is set, the crawler connects directly without a proxy.
+- The SOCKS proxy is used without authentication.
+- The crawler resolves the host name of the site itself and gives the proxy an IP address, so a host name that only the proxy side can resolve fails to connect.
+- The setting applies to the default HTTP client (HttpClient 5). 15.9 and earlier ignore these keys and connect directly.
+
 **Exclude specific hosts from proxy:**
 
 Hosts to exclude from proxy are not set in the crawl configuration parameters, but via JVM system properties.

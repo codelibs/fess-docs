@@ -59,7 +59,7 @@ Trennen Sie die Wörter daher durch Leerzeichen und geben Sie eine großzügige 
     "全文 検索"~5
     "大阪 おいしい"~10
 
-Eine Zeichenfolge ohne Leerzeichen (zum Beispiel ``"大阪おいしい"~10``) funktioniert als Näherungssuche zwischen den Wörtern möglicherweise nicht wie erwartet, da sie in den allgemeinen Feldern als eine zusammenhängende Zeichenfolge abgeglichen wird. Trennen Sie die Wörter daher durch Leerzeichen. Der Abstand lässt sich nicht exakt in eine Zeichenanzahl umrechnen. Beginnen Sie daher mit einer großzügigen Zahl und grenzen Sie sie anhand der Ergebnisse ein.
+Eine Zeichenfolge ohne Leerzeichen (zum Beispiel ``"大阪おいしい"~10``) funktionierte in den allgemeinen Feldern bis 15.9 nicht als Näherungssuche und konnte keine Dokumente liefern. In 15.10 findet ``"大阪おいしい"~10`` dieselben Dokumente wie ``"大阪 おいしい"~10``. Es wird weiterhin empfohlen, die Wörter durch Leerzeichen zu trennen. Der Abstand lässt sich nicht exakt in eine Zeichenanzahl umrechnen. Beginnen Sie daher mit einer großzügigen Zahl und grenzen Sie sie anhand der Ergebnisse ein.
 
 Siehe auch
 ============

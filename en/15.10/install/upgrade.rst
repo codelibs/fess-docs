@@ -574,7 +574,7 @@ The ZIP and RPM/DEB packages and the Docker images of 15.10 do not contain the f
 Settings you made in ``tika.xml``, such as ``parser-exclude``, are no longer applied: a parser you excluded there runs again.
 If a ``tika.xml`` from an earlier version is in the configuration directory, |Fess| ignores it and writes a warning to ``fess.log`` at startup. Delete the file.
 
-- ZIP package: ``app/WEB-INF/conf/tika.xml``
+- ZIP package: in the ZIP of 15.9 and earlier the file is ``app/WEB-INF/classes/tika.xml``. The startup warning of 15.10 checks both ``app/WEB-INF/classes`` and ``app/WEB-INF/conf``
 - RPM/DEB package: ``/etc/fess/tika.xml``
 
 .. _upgrade-1510-tika-metadata:
@@ -631,6 +631,17 @@ If you write ``(deny)`` followed by a space in the permission field of a crawl c
 15.10 removes the space after ``(deny)`` and ``(allow)`` before storing, and saving the setting again keeps a deny as a deny. A ``(deny)`` line that has none of ``{user}``, ``{group}`` or ``{role}`` is not stored.
 
 A setting saved in 15.9 or earlier is not repaired automatically. Check the permission field of every crawl configuration that uses ``(deny)``, write the line again in the form ``(deny){user}name``, save it, and crawl again.
+
+Other Behavior Changes
+----------------------
+
+These changes can affect scripts, reverse-proxy settings and monitoring that worked with 15.9.
+
+- **Client address in audit.log and the search log.** The address is decided by the same rule as the rate limits (see :doc:`../config/rate-limiting`): ``X-Forwarded-For`` is read only when the connection comes from an address listed in ``rate.limit.trusted.proxies`` (default ``127.0.0.1,::1``), and the address recorded is the last one in the chain that is not one of your own proxies. 15.9 recorded the first ``X-Forwarded-For`` line as the caller sent it, whoever the caller was. Behind a reverse proxy that is not listed in ``rate.limit.trusted.proxies``, the logs now show the proxy's address; add the proxy to the list to keep recording the original client.
+- **Control characters in audit.log.** In the LTSV format, every control character, and the Unicode line separators NEL, LS and PS, in a field is replaced by a space (a tab by an underscore), so a typed user name cannot start a second record. 15.9 replaced only CR and LF.
+- **Default encryption key.** When ``app.cipher.key`` in ``fess_config.properties`` still has the shipped value, 15.10 writes a warning to ``fess.log`` at startup (once, by the web application process only). Set your own value before you start using |Fess|; changing it later makes values encrypted with the old key unreadable.
+- **View-only administrators.** A user who holds only ``admin-searchlist-view`` or ``admin-crawlinginfo-view`` can no longer delete all documents or all crawling information; the edit role (``admin-searchlist``, ``admin-crawlinginfo``) is required.
+- **Quoted words.** A single word in double quotes, such as ``"less"``, is searched as an exact phrase and no longer returns documents that only contain a similar word such as ``fess``.
 
 Changes for Plugin Developers
 -----------------------------
