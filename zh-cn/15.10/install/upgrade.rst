@@ -1144,7 +1144,7 @@ API 现在会拒绝的请求
      - ``400`` 。 ``message`` 给出原因；缺少插件时会指出需要安装的插件
    * - 在登录表单（ ``POST /login/login`` ）上，短时间内从同一 IP 地址，或从同一 IP 地址针对同一用户重复登录失败
      - 无限制
-     - 超过按 IP 或按 IP 与用户组合的上限（ ``theme.api.login.rate.limit.per.ip.per.minute`` 、 ``theme.api.login.rate.limit.per.user.per.minute`` ）后，来自该 IP 地址（按用户上限时为来自该 IP 地址的该用户）的登录，即使凭据正确，也会在 ``theme.api.login.lockout.seconds`` 秒内被拒绝。响应与凭据错误时相同，均为登录错误。上限和锁定与 ``/api/v2/auth/login`` 共用（参见 :doc:`../api/api-auth` ）
+     - 超过按 IP 或按 IP 与用户组合的上限（ ``theme.api.login.rate.limit.per.ip.per.minute`` 、 ``theme.api.login.rate.limit.per.user.per.minute`` ）后，来自该 IP 地址（按用户上限时为来自该 IP 地址的该用户）的登录，即使凭据正确，也会在 ``theme.api.login.lockout.seconds`` 秒内被拒绝。响应与凭据错误时相同，均为登录错误。上限和锁定与 ``/api/v2/auth/login`` 共用（参见 :doc:`../api/api-auth` ）在地址未列入 ``rate.limit.trusted.proxies`` 的反向代理之后，所有客户端会被算作同一个地址，因此连续失败可能使所有用户无法登录。请将代理的地址添加到 ``rate.limit.trusted.proxies`` （当 ``X-Forwarded-For`` 来自不受信任的对端时， ``fess.log`` 中会输出一次警告）。
 
 ``/api/v2/documents/all`` 的每一行不再带有 ``score`` 。15.8 及之前，每个文档都带有搜索得分；15.10 使用 point in time 和 ``search_after`` 获取全部结果，因此不会产生得分。旧 API 插件的 ``/json?type=scroll`` 和 ``/api/v1/documents/all`` 也是如此。读取 ``score`` 的脚本需要能够处理该值不存在的情况。
 

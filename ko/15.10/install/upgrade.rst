@@ -1211,7 +1211,7 @@ API 가 거부하게 된 요청
      - ``400``. ``message`` 에 원인이 담기며, 플러그인이 없는 경우에는 설치할 플러그인이 표시됨
    * - 로그인 폼(``POST /login/login``)에서 같은 IP 주소로부터, 또는 같은 IP 주소에서 같은 사용자에 대해 짧은 시간에 로그인 실패를 반복
      - 제한 없음
-     - IP 단위 또는 IP 와 사용자의 조합 단위 상한(``theme.api.login.rate.limit.per.ip.per.minute``, ``theme.api.login.rate.limit.per.user.per.minute``)을 초과하면, 해당 IP 주소(사용자 단위 상한의 경우 해당 IP 주소로부터의 해당 사용자)로부터의 로그인은 올바른 자격증명이라도 ``theme.api.login.lockout.seconds`` 초 동안 거부됨. 응답은 자격증명이 잘못되었을 때와 같은 로그인 오류. 상한과 잠금은 ``/api/v2/auth/login`` 과 공유됨(:doc:`../api/api-auth` 참조)
+     - IP 단위 또는 IP 와 사용자의 조합 단위 상한(``theme.api.login.rate.limit.per.ip.per.minute``, ``theme.api.login.rate.limit.per.user.per.minute``)을 초과하면, 해당 IP 주소(사용자 단위 상한의 경우 해당 IP 주소로부터의 해당 사용자)로부터의 로그인은 올바른 자격증명이라도 ``theme.api.login.lockout.seconds`` 초 동안 거부됨. 응답은 자격증명이 잘못되었을 때와 같은 로그인 오류. 상한과 잠금은 ``/api/v2/auth/login`` 과 공유됨(:doc:`../api/api-auth` 참조) 주소가 ``rate.limit.trusted.proxies`` 에 없는 리버스 프록시 뒤에서는 모든 클라이언트가 하나의 주소로 집계되어, 실패가 반복되면 모든 사용자가 로그인할 수 없게 될 수 있음. 프록시 주소를 ``rate.limit.trusted.proxies`` 에 추가할 것(신뢰되지 않은 피어에서 ``X-Forwarded-For`` 가 도착하면 ``fess.log`` 에 경고가 한 번 출력됨).
 
 ``/api/v2/documents/all`` 의 각 행에서 ``score`` 가 없어졌습니다. 15.8 까지는 각 문서에 검색 점수가 붙었지만, 15.10 는 전체 결과를 point in
 time 과 ``search_after`` 로 가져오므로 점수가 붙지 않습니다. 구 API 플러그인의 ``/json?type=scroll`` 과 ``/api/v1/documents/all`` 도

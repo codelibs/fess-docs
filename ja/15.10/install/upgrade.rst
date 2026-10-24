@@ -1216,7 +1216,7 @@ API が拒否するようになったリクエスト
      - ``400`` 。 ``message`` に原因が入り、プラグインがない場合は導入するプラグインが示されます
    * - ログインフォーム（ ``POST /login/login`` ）で、同じ IP アドレスから、または同じ IP アドレスから同じユーザーに対して、ログインを短時間に繰り返し失敗する
      - 制限なし
-     - IP 単位または IP とユーザーの組ごとの上限（ ``theme.api.login.rate.limit.per.ip.per.minute`` ・ ``theme.api.login.rate.limit.per.user.per.minute`` ）を超えると、その IP アドレス（ユーザー単位の上限の場合は、その IP アドレスからのそのユーザー）からのログインは、正しい資格情報でも ``theme.api.login.lockout.seconds`` 秒間拒否されます。応答は資格情報が誤っているときと同じログインエラーです。上限とロックアウトは ``/api/v2/auth/login`` と共有されます（ :doc:`../api/api-auth` を参照）
+     - IP 単位または IP とユーザーの組ごとの上限（ ``theme.api.login.rate.limit.per.ip.per.minute`` ・ ``theme.api.login.rate.limit.per.user.per.minute`` ）を超えると、その IP アドレス（ユーザー単位の上限の場合は、その IP アドレスからのそのユーザー）からのログインは、正しい資格情報でも ``theme.api.login.lockout.seconds`` 秒間拒否されます。応答は資格情報が誤っているときと同じログインエラーです。上限とロックアウトは ``/api/v2/auth/login`` と共有されます（ :doc:`../api/api-auth` を参照）リバースプロキシの背後で、そのアドレスが ``rate.limit.trusted.proxies`` に含まれていない場合、すべてのクライアントが 1 つのアドレスとして数えられ、失敗が続くと全ユーザーがログインできなくなります。プロキシのアドレスを ``rate.limit.trusted.proxies`` に追加してください（ ``X-Forwarded-For`` が信頼されないピアから届くと、 ``fess.log`` に警告が一度出力されます）。
 
 ``/api/v2/documents/all`` の各行から ``score`` がなくなりました。15.8 では各文書に検索スコアが付いていましたが、
 15.10 は全件の取得を point in time と ``search_after`` で行うため、スコアは付きません。旧 API プラグインの
