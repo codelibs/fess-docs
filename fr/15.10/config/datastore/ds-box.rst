@@ -548,7 +548,13 @@ Pour attribuer un rôle fixe à tous les fichiers, spécifiez-le comme suit :
 
 ::
 
-    role="{role}box-users"
+    role="Rbox-users"
+
+.. note::
+   La valeur de ``role`` dans le script est indexée telle quelle. Indiquez le rôle de
+   recherche (``R`` + nom du rôle, ``2`` + nom du groupe, ``1`` + nom de l'utilisateur) et non
+   la notation ``{role}nom`` du champ « Autorisations ». Une chaîne est traitée comme un seul
+   rôle et n'est pas découpée aux virgules ni aux points-virgules.
 
 Informations de référence
 =========================
