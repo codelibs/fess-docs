@@ -516,6 +516,18 @@ URL は次のバッチに回ります。キュー全体が 1 つのバッチに�
     client.proxyUsername=proxyuser
     client.proxyPassword=proxypass
 
+**SOCKS5 プロキシ (15.10 以降):**
+
+::
+
+    client.socksProxyHost=socks.example.com
+    client.socksProxyPort=1080
+
+- ``client.socksProxyHost`` と ``client.socksProxyPort`` の両方を指定してください。片方だけでは、プロキシを使わずに直接接続します。
+- SOCKS プロキシは認証なしで使用します。
+- サイトのホスト名はクローラーが名前解決し、プロキシには IP アドレスを渡します。そのため、プロキシ側でしか名前解決できないホスト名は接続に失敗します。
+- 既定の HTTP クライアント (HttpClient 5) に適用されます。15.9 以前はこれらのキーを無視し、直接接続します。
+
 **特定のホストをプロキシから除外:**
 
 プロキシから除外するホストは、クロール設定の設定パラメーターではなく、JVMシステムプロパティで設定します。

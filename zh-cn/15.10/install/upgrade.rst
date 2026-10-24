@@ -554,7 +554,7 @@ Tika 4 没有 XML 配置文件，因此 |Fess| 15.10 在代码中构建 Tika 解
 在 ``tika.xml`` 中编写的 ``parser-exclude`` 等设置将不再生效，被排除的解析器会重新运行。
 如果配置目录中残留有以前版本的 ``tika.xml``，|Fess| 会忽略该文件，并在启动时向 ``fess.log`` 输出警告。请删除该文件。
 
-- ZIP 版: ``app/WEB-INF/conf/tika.xml``
+- ZIP 版: 在 15.9 及更早的 ZIP 版中，该文件位于 ``app/WEB-INF/classes/tika.xml``。15.10 启动时的警告会同时检查 ``app/WEB-INF/classes`` 和 ``app/WEB-INF/conf``
 - RPM/DEB 版: ``/etc/fess/tika.xml``
 
 .. _upgrade-1510-tika-metadata:
@@ -611,6 +611,11 @@ Tika 4 为文本文件报告的字符编码名称可能与 15.9 不同。例如�
 15.10 会在保存前去掉 ``(deny)`` 和 ``(allow)`` 后面的空格，再次保存后拒绝仍然是拒绝。不含 ``{user}``、``{group}`` 或 ``{role}`` 的 ``(deny)`` 行不会被保存。
 
 在 15.9 或更早版本中保存的设置不会自动修复。请检查每个使用 ``(deny)`` 的爬取配置的权限字段，按 ``(deny){user}name`` 的形式重新书写并保存，然后重新爬取。
+
+audit.log 中的控制字符
+----------------------
+
+在 LTSV 格式中，字段值中的所有控制字符以及 Unicode 行分隔符（NEL、LS、PS）都会被替换为空格（制表符替换为下划线），因此输入的用户名无法开始第二条记录。15.9 只替换 CR 和 LF。
 
 面向插件开发者的变更
 --------------------

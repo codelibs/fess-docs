@@ -59,7 +59,7 @@ Séparez donc les mots par des espaces et indiquez un nombre généreux.
     "全文 検索"~5
     "大阪 おいしい"~10
 
-Une chaîne sans espaces (par exemple ``"大阪おいしい"~10``) peut ne pas fonctionner comme prévu en tant que recherche de proximité entre les mots, car dans les champs généraux elle est comparée comme une seule chaîne continue. Séparez les mots par des espaces. La distance ne peut pas être convertie exactement en nombre de caractères ; commencez donc par un nombre généreux, puis affinez-le en vérifiant les résultats.
+Une chaîne sans espaces (par exemple ``"大阪おいしい"~10``) ne fonctionnait pas comme recherche de proximité dans les champs généraux jusqu'à la version 15.9 et pouvait ne renvoyer aucun document. Dans la version 15.10, ``"大阪おいしい"~10`` correspond aux mêmes documents que ``"大阪 おいしい"~10``. Il reste recommandé de séparer les mots par des espaces. La distance ne peut pas être convertie exactement en nombre de caractères ; commencez donc par un nombre généreux, puis affinez-le en vérifiant les résultats.
 
 Voir aussi
 ============

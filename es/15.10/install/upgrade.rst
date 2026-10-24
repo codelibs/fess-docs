@@ -585,7 +585,7 @@ Los paquetes ZIP y RPM/DEB y las imágenes de Docker de la versión 15.10 no con
 Los ajustes que hizo en ``tika.xml``, como ``parser-exclude``, ya no se aplican: un analizador que excluyó allí vuelve a ejecutarse.
 Si en el directorio de configuración queda un ``tika.xml`` de una versión anterior, |Fess| lo ignora y escribe una advertencia en ``fess.log`` al iniciarse. Elimine el archivo.
 
-- Paquete ZIP: ``app/WEB-INF/conf/tika.xml``
+- Paquete ZIP: en el ZIP de la versión 15.9 y anteriores, el archivo está en ``app/WEB-INF/classes/tika.xml``. La advertencia de inicio de la versión 15.10 comprueba tanto ``app/WEB-INF/classes`` como ``app/WEB-INF/conf``
 - Paquete RPM/DEB: ``/etc/fess/tika.xml``
 
 .. _upgrade-1510-tika-metadata:
@@ -642,6 +642,11 @@ Si escribe ``(deny)`` seguido de un espacio en el campo de permisos de una confi
 La versión 15.10 elimina el espacio después de ``(deny)`` y ``(allow)`` antes de guardar, y guardar de nuevo mantiene una denegación como denegación. Una línea ``(deny)`` que no tenga ``{user}``, ``{group}`` ni ``{role}`` no se guarda.
 
 Un ajuste guardado en la versión 15.9 o anterior no se repara automáticamente. Revise el campo de permisos de cada configuración de rastreo que use ``(deny)``, escriba de nuevo la línea con el formato ``(deny){user}name``, guárdela y vuelva a rastrear.
+
+Caracteres de control en audit.log
+----------------------------------
+
+En el formato LTSV, todo carácter de control de un campo, y los separadores de línea Unicode NEL, LS y PS, se sustituye por un espacio (un tabulador por un guion bajo), de modo que un nombre de usuario escrito no pueda iniciar un segundo registro. La versión 15.9 solo sustituía CR y LF.
 
 Cambios para desarrolladores de plugins
 ---------------------------------------

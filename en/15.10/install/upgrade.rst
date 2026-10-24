@@ -574,7 +574,7 @@ The ZIP and RPM/DEB packages and the Docker images of 15.10 do not contain the f
 Settings you made in ``tika.xml``, such as ``parser-exclude``, are no longer applied: a parser you excluded there runs again.
 If a ``tika.xml`` from an earlier version is in the configuration directory, |Fess| ignores it and writes a warning to ``fess.log`` at startup. Delete the file.
 
-- ZIP package: ``app/WEB-INF/conf/tika.xml``
+- ZIP package: in the ZIP of 15.9 and earlier the file is ``app/WEB-INF/classes/tika.xml``. The startup warning of 15.10 checks both ``app/WEB-INF/classes`` and ``app/WEB-INF/conf``
 - RPM/DEB package: ``/etc/fess/tika.xml``
 
 .. _upgrade-1510-tika-metadata:
@@ -631,6 +631,11 @@ If you write ``(deny)`` followed by a space in the permission field of a crawl c
 15.10 removes the space after ``(deny)`` and ``(allow)`` before storing, and saving the setting again keeps a deny as a deny. A ``(deny)`` line that has none of ``{user}``, ``{group}`` or ``{role}`` is not stored.
 
 A setting saved in 15.9 or earlier is not repaired automatically. Check the permission field of every crawl configuration that uses ``(deny)``, write the line again in the form ``(deny){user}name``, save it, and crawl again.
+
+Control Characters in audit.log
+-------------------------------
+
+In the LTSV format, every control character, and the Unicode line separators NEL, LS and PS, in a field is replaced by a space (a tab by an underscore), so a typed user name cannot start a second record. 15.9 replaced only CR and LF.
 
 Changes for Plugin Developers
 -----------------------------
