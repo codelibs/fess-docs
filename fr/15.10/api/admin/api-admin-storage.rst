@@ -10,7 +10,7 @@ Elle permet de lister les fichiers et répertoires dans le stockage, ainsi que d
 
 .. note::
 
-   Cette API n'est utilisable que si un plugin fournissant le client de stockage est installé : ``fess-storage-s3`` pour Amazon S3 et les stockages compatibles S3, ou ``fess-storage-gcs`` pour Google Cloud Storage. Les plugins ne sont pas inclus dans la distribution. Sans l'un d'eux, il n'existe aucun client pour le ``storage.type`` configuré et les requêtes échouent. Installez le plugin depuis la page « Système » > « Plugin » de l'écran d'administration ou avec ``bin/fess-setup install plugin fess-storage-s3`` (``fess-storage-gcs`` pour GCS).
+   Cette API n'est utilisable que si un plugin fournissant le client de stockage est installé : ``fess-storage-s3`` pour Amazon S3 et les stockages compatibles S3, ou ``fess-storage-gcs`` pour Google Cloud Storage. Les plugins ne sont pas inclus dans la distribution. Sans l'un d'eux, il n'existe aucun client pour le ``storage.type`` configuré et les requêtes échouent. Par exemple, ``GET /api/admin/storage/list`` ne renvoie pas une liste vide mais une erreur avec HTTP ``400`` (``status`` vaut ``1``), dont le ``message`` contient ``No storage client is registered as ...`` (après le préfixe « Storage Access Error ») et indique le plugin à installer. Installez le plugin depuis la page « Système » > « Plugin » de l'écran d'administration ou avec ``bin/fess-setup install plugin fess-storage-s3`` (``fess-storage-gcs`` pour GCS).
 
 URL de base
 ===========
@@ -227,7 +227,7 @@ Les principaux cas d'erreur sont les suivants.
    * - Endpoint
      - Principaux cas d'erreur
    * - Obtention de la liste des fichiers et répertoires
-     - Lorsque le nombre d'éléments récupérés dépasse la limite maximale
+     - Lorsque le nombre d'éléments récupérés dépasse la limite maximale, ou lorsque le stockage est inaccessible (y compris lorsqu'aucun plugin de client de stockage n'est installé)
    * - Téléchargement d'un fichier
      - Lorsque l'``id`` est invalide ou que le téléchargement échoue
    * - Suppression d'un fichier

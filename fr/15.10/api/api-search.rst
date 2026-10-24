@@ -291,6 +291,8 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
      - La méthode HTTP n'est pas autorisée.
    * - 500 Internal Server Error
      - Une erreur interne s'est produite sur le serveur.
+   * - 503 Service Unavailable
+     - Le moteur de recherche n'a pas pu prendre la requête en charge : il est injoignable ou a refusé la requête faute de capacité. ``error.code`` vaut ``service_unavailable`` et un en-tête ``Retry-After`` indique le nombre de secondes à attendre (``5``). La requête elle-même est correcte : réessayez après une courte attente.
 
 Tableau : Réponses d'erreur
 

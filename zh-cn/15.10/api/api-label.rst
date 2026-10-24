@@ -90,6 +90,8 @@ HTTP 方法            GET
 
    * - 状态码
      - 说明
+   * - 400 Bad Request
+     - 指定了无法解码的请求参数（例如 ``?q=%ff`` ）时。 ``error.code`` 为 ``invalid_request`` 。
    * - 401 Unauthorized
      - 需要认证时（登录必需设置有效且调用方为匿名，或请求携带了未注册或已过期的访问令牌）。 ``error.code`` 为 ``auth_required``\ 。
    * - 405 Method Not Allowed

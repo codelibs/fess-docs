@@ -104,6 +104,8 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
      - Description
    * - 200 OK
      - Le cluster est ``GREEN`` ou ``YELLOW`` et joignable. L'enveloppe de succès contient ``engine``.
+   * - 400 Bad Request
+     - Un paramètre de requête impossible à décoder (par exemple ``?q=%ff``) a été fourni. ``error.code`` vaut ``invalid_request``.
    * - 405 Method Not Allowed
      - La méthode HTTP n'est pas autorisée.
    * - 503 Service Unavailable

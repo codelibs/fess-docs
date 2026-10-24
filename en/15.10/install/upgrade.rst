@@ -1212,6 +1212,18 @@ The admin API answers a refusal with HTTP ``400`` and ``status`` ``1`` in the bo
    * - A user in the admin API whose password breaks the password policy (for example ``password.min.length``, default ``8``); a create request without a password; a ``confirm_password`` that differs from ``password``
      - Saved; the user can log in with that password
      - ``400``
+   * - ``GET /api/admin/log/file/{id}`` with a name that is not allowed for a log file (for example one that does not end with ``.log`` or ``.log.gz``), or with a file that is not in the log directory
+     - A name that is not allowed: ``200`` with an empty response
+     - ``400``
+   * - An entry in the ``mapping`` dictionary without ``output``, added or updated through the admin API
+     - ``200`` (``id`` is ``0``); nothing is saved
+     - ``400``
+   * - ``GET /api/admin/storage/list`` when the storage cannot be accessed, including when no storage client plugin is installed
+     - ``200`` (``status`` ``0``) with an empty list
+     - ``400``. ``message`` gives the cause and, when the plugin is missing, names the plugin to install
+   * - Repeated failed logins on the login form (``POST /login/login``) from one IP address, or for one user from one IP address, within a short time
+     - No limit
+     - Above the per-address or per-user limit (``theme.api.login.rate.limit.per.ip.per.minute``, ``theme.api.login.rate.limit.per.user.per.minute``), further logins from that address (for the per-user limit: for that user from that address) are refused for ``theme.api.login.lockout.seconds`` seconds, even with correct credentials. The response is the same login error as for wrong credentials. The limits and the lockout are shared with ``/api/v2/auth/login`` (see :doc:`../api/api-auth`) Behind a reverse proxy whose address is not in ``rate.limit.trusted.proxies``, all clients are counted as one address, so repeated failures can lock every user out. Add the proxy's address to ``rate.limit.trusted.proxies`` (a warning is logged once to ``fess.log`` when ``X-Forwarded-For`` arrives from an untrusted peer).
 
 Rows of ``/api/v2/documents/all`` no longer carry ``score``. Up to 15.8 every document had its search score;
 15.10 walks the whole result with a point in time and ``search_after``, which gives no score.
@@ -1222,6 +1234,15 @@ File uploads of the admin API (the six dictionaries, ``badword``, ``elevateword`
 accepted by ``POST``. The 15.8 documentation told you to use ``PUT``, but a ``multipart/form-data`` ``PUT``
 never delivers the file, so in 15.8 as well as in 15.10 it fails with the validation error that the file is
 required. The ``PUT`` endpoints remain; use ``POST`` for uploads.
+
+The following changes are not refusals, but can affect scripts and clients of the API and the admin UI.
+
+- The ``GET`` requests of the ``webauth`` and ``fileauth`` admin APIs (``/api/admin/webauth/settings``, ``/api/admin/webauth/setting/{id}`` and the same under ``fileauth``) no longer return the stored password. A ``PUT`` that omits the password or sends it blank keeps the stored password; a password that is not blank replaces it.
+- A logged-in user is identified by the session, not by a ``userCode`` parameter or cookie that the request carries (for example for the favorite API). Anonymous users still use the parameter and the cookie.
+- "Delete all" on the search list and crawling info screens of the admin UI needs the edit role (``admin-searchlist``, ``admin-crawlinginfo``). The request of a user who has only the view role (the role with the ``-view`` suffix) is refused.
+- If you enabled ``parameterKey``, ``headerKey`` or ``cookieKey`` in the ``roleQueryHelper`` component of ``fess.xml`` but set no ``cipher``, and the encryption flag (``encryptedParameterValue``, ``encryptedHeaderValue`` or ``encryptedCookieValue``) is still ``true``, the default, 15.8 read the value as unencrypted role information. 15.10 ignores the value and logs a warning once. Set a ``cipher`` if the values are encrypted, or set the flag to ``false`` if they are meant to arrive unencrypted.
+- A request whose ``Content-Type`` names a character set that the JVM does not know (for example ``charset=nope``) is handled like a request without a character set. ``/api/v2/search`` used to answer ``500`` (``internal_error``) for it.
+- When an upload or download through the admin API fails for the ``kuromoji``, ``mapping``, ``stemmeroverride`` or ``synonym`` dictionary, the message now names that dictionary. In 15.8 it said "protwords file" for every one of them.
 
 ``search_engine.type=cloud`` is deprecated
 ------------------------------------------

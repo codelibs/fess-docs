@@ -10,7 +10,7 @@ Storage API는 |Fess| 의 오브젝트 스토리지를 관리하기 위한 API�
 
 .. note::
 
-   이 API 는 스토리지 클라이언트를 제공하는 플러그인이 설치되어 있어야 사용할 수 있습니다. Amazon S3 와 S3 호환 스토리지는 ``fess-storage-s3`` , Google Cloud Storage 는 ``fess-storage-gcs`` 입니다. 플러그인은 배포본에 포함되어 있지 않습니다. 설치되어 있지 않으면 설정된 ``storage.type`` 에 대응하는 클라이언트가 없어 요청이 실패합니다. 관리 화면의 「시스템 > 플러그인」 페이지 또는 ``bin/fess-setup install plugin fess-storage-s3`` (GCS 의 경우 ``fess-storage-gcs`` )로 설치하십시오.
+   이 API 는 스토리지 클라이언트를 제공하는 플러그인이 설치되어 있어야 사용할 수 있습니다. Amazon S3 와 S3 호환 스토리지는 ``fess-storage-s3`` , Google Cloud Storage 는 ``fess-storage-gcs`` 입니다. 플러그인은 배포본에 포함되어 있지 않습니다. 설치되어 있지 않으면 설정된 ``storage.type`` 에 대응하는 클라이언트가 없어 요청이 실패합니다. 예를 들어 ``GET /api/admin/storage/list`` 는 빈 목록이 아니라 HTTP ``400`` (``status`` 는 ``1``)의 오류를 반환하며, ``message`` 에는 ("Storage Access Error" 접두어 뒤에) ``No storage client is registered as ...`` 가 포함되며, 설치해야 할 플러그인을 알려 줍니다. 관리 화면의 「시스템 > 플러그인」 페이지 또는 ``bin/fess-setup install plugin fess-storage-s3`` (GCS 의 경우 ``fess-storage-gcs`` )로 설치하십시오.
 
 기본 URL
 ============
@@ -228,7 +228,7 @@ Storage API를 포함한 Admin API의 모든 엔드포인트에는 액세스 토
    * - 엔드포인트
      - 오류가 발생하는 주요 케이스
    * - 파일·디렉터리 목록 조회
-     - 조회 건수가 상한을 초과한 경우
+     - 조회 건수가 상한을 초과한 경우, 또는 스토리지에 접근할 수 없는 경우(스토리지 클라이언트 플러그인이 설치되어 있지 않은 경우 포함)
    * - 파일 다운로드
      - ``id`` 가 잘못된 경우, 또는 다운로드에 실패한 경우
    * - 파일 삭제

@@ -1200,6 +1200,18 @@ API 가 거부하게 된 요청
    * - 관리 API 로 사용자에게 비밀번호 정책(``password.min.length`` 의 기본값 ``8`` 등)에 어긋나는 비밀번호를 설정, 생성 시 비밀번호를 생략, 또는 ``password`` 와 일치하지 않는 ``confirm_password`` 를 전송
      - 저장되며, 그 비밀번호로 로그인할 수 있습니다
      - ``400``
+   * - ``GET /api/admin/log/file/{id}`` 에 로그 파일로 허용되지 않는 이름(``.log`` 또는 ``.log.gz`` 로 끝나지 않는 이름 등)이나 로그 디렉터리에 없는 파일을 지정
+     - 허용되지 않는 이름은 ``200`` 으로 빈 응답
+     - ``400``
+   * - 관리 API 로 ``mapping`` 사전에 ``output`` 을 생략한 항목을 등록·갱신
+     - ``200`` (``id`` 는 ``0``). 아무것도 저장되지 않음
+     - ``400``
+   * - 스토리지에 접근할 수 없을 때의 ``GET /api/admin/storage/list`` (스토리지 클라이언트 플러그인이 설치되어 있지 않은 경우 포함)
+     - ``200`` (``status`` 는 ``0``). 빈 목록
+     - ``400``. ``message`` 에 원인이 담기며, 플러그인이 없는 경우에는 설치할 플러그인이 표시됨
+   * - 로그인 폼(``POST /login/login``)에서 같은 IP 주소로부터, 또는 같은 IP 주소에서 같은 사용자에 대해 짧은 시간에 로그인 실패를 반복
+     - 제한 없음
+     - IP 단위 또는 IP 와 사용자의 조합 단위 상한(``theme.api.login.rate.limit.per.ip.per.minute``, ``theme.api.login.rate.limit.per.user.per.minute``)을 초과하면, 해당 IP 주소(사용자 단위 상한의 경우 해당 IP 주소로부터의 해당 사용자)로부터의 로그인은 올바른 자격증명이라도 ``theme.api.login.lockout.seconds`` 초 동안 거부됨. 응답은 자격증명이 잘못되었을 때와 같은 로그인 오류. 상한과 잠금은 ``/api/v2/auth/login`` 과 공유됨(:doc:`../api/api-auth` 참조) 주소가 ``rate.limit.trusted.proxies`` 에 없는 리버스 프록시 뒤에서는 모든 클라이언트가 하나의 주소로 집계되어, 실패가 반복되면 모든 사용자가 로그인할 수 없게 될 수 있음. 프록시 주소를 ``rate.limit.trusted.proxies`` 에 추가할 것(신뢰되지 않은 피어에서 ``X-Forwarded-For`` 가 도착하면 ``fess.log`` 에 경고가 한 번 출력됨).
 
 ``/api/v2/documents/all`` 의 각 행에서 ``score`` 가 없어졌습니다. 15.8 까지는 각 문서에 검색 점수가 붙었지만, 15.10 는 전체 결과를 point in
 time 과 ``search_after`` 로 가져오므로 점수가 붙지 않습니다. 구 API 플러그인의 ``/json?type=scroll`` 과 ``/api/v1/documents/all`` 도
@@ -1208,6 +1220,15 @@ time 과 ``search_after`` 로 가져오므로 점수가 붙지 않습니다. 구
 관리 API 의 파일 업로드(사전 6종, ``badword``, ``elevateword``, ``storage``)는 ``POST`` 로 받습니다. 15.8 의 문서는 ``PUT`` 을
 안내했지만, ``multipart/form-data`` 의 ``PUT`` 으로는 파일이 전달되지 않아 15.8 에서도 15.10 에서도 파일이 필요하다는 검증 오류가 됩니다. ``PUT``
 엔드포인트는 남아 있지만, 업로드에는 ``POST`` 를 사용하십시오.
+
+다음 변경은 요청 거부는 아니지만, API 나 관리 화면을 사용하는 스크립트와 클라이언트에 영향을 줄 수 있습니다.
+
+- 관리 API 의 ``webauth`` ·``fileauth`` 조회(``/api/admin/webauth/settings`` ·``/api/admin/webauth/setting/{id}`` 와 ``fileauth`` 의 같은 엔드포인트)는 저장된 비밀번호를 더 이상 반환하지 않습니다. ``PUT`` 에서 비밀번호를 생략하거나 비워 두면 저장된 비밀번호가 유지됩니다. 비어 있지 않은 비밀번호를 보내면 교체됩니다.
+- 로그인한 사용자는 요청에 포함된 ``userCode`` 파라미터나 쿠키가 아니라 세션으로 식별됩니다(즐겨찾기 API 등). 익명 사용자는 종전대로 파라미터와 쿠키를 사용합니다.
+- 관리 화면의 「검색 목록」과 「크롤 정보」의 「모두 삭제」에는 편집 역할(``admin-searchlist`` ·``admin-crawlinginfo``)이 필요합니다. 조회 역할(``-view`` 가 붙은 역할)만 가진 사용자의 요청은 거부됩니다.
+- ``fess.xml`` 의 ``roleQueryHelper`` 에서 ``parameterKey`` ·``headerKey`` ·``cookieKey`` 를 활성화했지만 ``cipher`` 를 설정하지 않았고, 값 암호화 플래그(``encryptedParameterValue`` ·``encryptedHeaderValue`` ·``encryptedCookieValue``)가 기본값 ``true`` 그대로인 경우, 15.8 은 값을 암호화되지 않은 역할 정보로 읽었습니다. 15.10 은 그 값을 무시하고 경고를 한 번 로그에 출력합니다. 값을 암호화하여 사용한다면 ``cipher`` 를 설정하고, 암호화되지 않은 값을 받을 의도라면 플래그를 ``false`` 로 설정하십시오.
+- ``Content-Type`` 에 JVM 이 인식하지 못하는 문자 인코딩(``charset=nope`` 등)을 지정한 요청은 문자 인코딩 지정이 없는 것으로 처리됩니다. 이전에는 ``/api/v2/search`` 가 ``500`` (``internal_error``)을 반환했습니다.
+- ``kuromoji`` ·``mapping`` ·``stemmeroverride`` ·``synonym`` 사전을 업로드·다운로드하는 관리 API 가 실패했을 때의 메시지에 해당 사전 종류가 표시됩니다. 15.8 에서는 어느 사전이든 「protwords file」이라고 표시되었습니다.
 
 ``search_engine.type`` 의 ``cloud`` 는 사용 중단 예정
 -----------------------------------------------------

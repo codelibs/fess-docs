@@ -10,7 +10,7 @@ Permite obtener el listado de archivos y directorios en el almacenamiento, así 
 
 .. note::
 
-   Esta API solo puede utilizarse si está instalado un plugin que proporcione el cliente de almacenamiento: ``fess-storage-s3`` para Amazon S3 y almacenamiento compatible con S3, o ``fess-storage-gcs`` para Google Cloud Storage. Los plugins no se incluyen en la distribución. Sin uno de ellos no hay cliente para el ``storage.type`` configurado y las solicitudes fallan. Instale el plugin en la página "Sistema" > "Plugin" de la pantalla de administración o con ``bin/fess-setup install plugin fess-storage-s3`` (``fess-storage-gcs`` para GCS).
+   Esta API solo puede utilizarse si está instalado un plugin que proporcione el cliente de almacenamiento: ``fess-storage-s3`` para Amazon S3 y almacenamiento compatible con S3, o ``fess-storage-gcs`` para Google Cloud Storage. Los plugins no se incluyen en la distribución. Sin uno de ellos no hay cliente para el ``storage.type`` configurado y las solicitudes fallan. Por ejemplo, ``GET /api/admin/storage/list`` no devuelve una lista vacía, sino un error con HTTP ``400`` (``status`` es ``1``), cuyo ``message`` contiene ``No storage client is registered as ...`` (después del prefijo «Storage Access Error») e indica el plugin que debe instalarse. Instale el plugin en la página "Sistema" > "Plugin" de la pantalla de administración o con ``bin/fess-setup install plugin fess-storage-s3`` (``fess-storage-gcs`` para GCS).
 
 URL Base
 ========
@@ -228,7 +228,7 @@ Los principales casos de error son los siguientes.
    * - Endpoint
      - Principales casos en que se produce un error
    * - Obtener listado de archivos y directorios
-     - Cuando el número de elementos supera el límite
+     - Cuando el número de elementos supera el límite, o cuando no se puede acceder al almacenamiento (incluido el caso en que no hay instalado ningún plugin de cliente de almacenamiento)
    * - Descargar un archivo
      - Cuando el ``id`` es inválido o la descarga falla
    * - Eliminar un archivo

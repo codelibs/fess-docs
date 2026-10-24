@@ -406,6 +406,8 @@ filetype_options
 
    * - ステータスコード
      - 説明
+   * - 400 Bad Request
+     - デコードできないリクエストパラメーター（ ``?q=%ff`` など）が指定された場合。 ``error.code`` は ``invalid_request`` です。
    * - 405 Method Not Allowed
      - サポートされていない HTTP メソッドが指定された場合。
    * - 500 Internal Server Error

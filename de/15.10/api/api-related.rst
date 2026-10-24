@@ -78,6 +78,8 @@ Fehlerantwort
 
    * - Statuscode
      - Beschreibung
+   * - 400 Bad Request
+     - Wenn ein Anfrageparameter angegeben wurde, der sich nicht dekodieren lässt (zum Beispiel ``?q=%ff``). ``error.code`` ist ``invalid_request``.
    * - 401 Unauthorized
      - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht-Einstellung aktiviert und anonymer Aufrufer). ``error.code`` ist ``auth_required``.
    * - 405 Method Not Allowed
@@ -152,6 +154,8 @@ Fehlerantwort
 
    * - Statuscode
      - Beschreibung
+   * - 400 Bad Request
+     - Wenn ein Anfrageparameter angegeben wurde, der sich nicht dekodieren lässt (zum Beispiel ``?q=%ff``). ``error.code`` ist ``invalid_request``.
    * - 401 Unauthorized
      - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht-Einstellung aktiviert und anonymer Aufrufer). ``error.code`` ist ``auth_required``.
    * - 405 Method Not Allowed

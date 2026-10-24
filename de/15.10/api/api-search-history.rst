@@ -104,6 +104,8 @@ Fehlerantwort
      - Wenn die HTTP-Methode nicht zulässig ist.
    * - 500 Internal Server Error
      - Wenn ein interner Serverfehler auftritt.
+   * - 503 Service Unavailable
+     - Wenn die Suchmaschine die Anfrage nicht entgegennehmen konnte: Sie ist nicht erreichbar oder hat die Anfrage wegen fehlender Kapazität abgelehnt. ``error.code`` ist ``service_unavailable``, und ein ``Retry-After``-Header nennt die Wartezeit in Sekunden (``5``). Die Anfrage selbst ist in Ordnung; versuchen Sie es nach kurzer Wartezeit erneut.
 
 Tabelle: Fehlerantwort
 

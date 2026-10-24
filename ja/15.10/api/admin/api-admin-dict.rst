@@ -422,7 +422,7 @@ Dict APIは、|Fess| の辞書を管理するためのAPIです。
      - ``token`` （必須）、 ``segmentation`` （必須）、 ``reading`` （必須）、 ``pos`` （必須）
      - ``kuromojiFile``
    * - ``mapping``
-     - ``inputs`` （必須）、 ``output``
+     - ``inputs`` （必須）、 ``output`` （必須）
      - ``charMappingFile``
    * - ``protwords``
      - ``input`` （必須）
