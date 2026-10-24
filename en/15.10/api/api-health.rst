@@ -104,6 +104,8 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
      - Description
    * - 200 OK
      - Cluster is ``GREEN`` or ``YELLOW`` and reachable. The success envelope contains ``engine``.
+   * - 400 Bad Request
+     - A request parameter that cannot be decoded (for example ``?q=%ff``) was given. ``error.code`` is ``invalid_request``.
    * - 405 Method Not Allowed
      - The HTTP method is not allowed.
    * - 503 Service Unavailable

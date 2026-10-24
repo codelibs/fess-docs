@@ -127,3 +127,5 @@ Si la API de sugerencias falla, se devuelve el sobre de error común. Consulte :
      - Cuando se especifica un método HTTP no admitido. La cabecera ``Allow`` indica ``GET``.
    * - 500 Internal Server Error
      - Cuando se produce un error interno del servidor.
+   * - 503 Service Unavailable
+     - Cuando el motor de búsqueda no ha podido atender la solicitud: no está accesible o la ha rechazado por falta de capacidad. ``error.code`` es ``service_unavailable`` y un encabezado ``Retry-After`` indica los segundos que hay que esperar (``5``). La solicitud en sí es correcta, así que vuelva a intentarlo tras una breve espera.

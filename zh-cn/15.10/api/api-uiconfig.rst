@@ -406,6 +406,8 @@ filetype_options
 
    * - 状态码
      - 说明
+   * - 400 Bad Request
+     - 指定了无法解码的请求参数（例如 ``?q=%ff`` ）时。 ``error.code`` 为 ``invalid_request`` 。
    * - 405 Method Not Allowed
      - 指定了不支持的 HTTP 方法时。
    * - 500 Internal Server Error

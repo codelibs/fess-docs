@@ -406,6 +406,8 @@ Error Response
 
    * - Status Code
      - Description
+   * - 400 Bad Request
+     - A request parameter that cannot be decoded (for example ``?q=%ff``) was given. ``error.code`` is ``invalid_request``.
    * - 405 Method Not Allowed
      - An unsupported HTTP method was specified.
    * - 500 Internal Server Error

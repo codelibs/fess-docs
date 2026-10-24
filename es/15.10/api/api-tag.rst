@@ -404,6 +404,8 @@ etiquetas devuelven los siguientes estados HTTP.
      - Cuando el ``Content-Type`` no es compatible.
    * - 500 Internal Server Error
      - Cuando se produce un error interno del servidor.
+   * - 503 Service Unavailable
+     - Cuando el motor de búsqueda no ha podido atender la solicitud: no está accesible o la ha rechazado por falta de capacidad. ``error.code`` es ``service_unavailable`` y un encabezado ``Retry-After`` indica los segundos que hay que esperar (``5``). La solicitud en sí es correcta, así que vuelva a intentarlo tras una breve espera.
 
 Tabla: Respuesta de error
 

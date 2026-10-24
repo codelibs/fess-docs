@@ -94,6 +94,8 @@ HTTP 方法           GET
      - HTTP 方法不被允许时。
    * - 500 Internal Server Error
      - 发生服务器内部错误时。
+   * - 503 Service Unavailable
+     - 搜索引擎无法处理该请求时（无法连接，或因处理能力不足而拒绝了请求）。 ``error.code`` 为 ``service_unavailable`` ，并附带指示等待秒数（ ``5`` ）的 ``Retry-After`` 头。请求本身没有问题，请稍等片刻后重试。
 
 表: 错误响应
 

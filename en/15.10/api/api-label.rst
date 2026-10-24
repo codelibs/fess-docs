@@ -90,6 +90,8 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
 
    * - Status Code
      - Description
+   * - 400 Bad Request
+     - A request parameter that cannot be decoded (for example ``?q=%ff``) was given. ``error.code`` is ``invalid_request``.
    * - 401 Unauthorized
      - Authentication is required (the login-required setting is enabled with an anonymous caller, or the request carries an access token that is not registered or has expired). ``error.code`` is ``auth_required``.
    * - 405 Method Not Allowed

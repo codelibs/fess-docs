@@ -422,7 +422,7 @@ The fields of the request body and response for creating and updating dictionary
      - ``token`` (required), ``segmentation`` (required), ``reading`` (required), ``pos`` (required)
      - ``kuromojiFile``
    * - ``mapping``
-     - ``inputs`` (required), ``output``
+     - ``inputs`` (required), ``output`` (required)
      - ``charMappingFile``
    * - ``protwords``
      - ``input`` (required)

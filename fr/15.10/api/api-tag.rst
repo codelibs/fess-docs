@@ -399,6 +399,8 @@ statuts HTTP suivants.
      - Lorsque le ``Content-Type`` n'est pas pris en charge.
    * - 500 Internal Server Error
      - Lorsqu'une erreur interne du serveur se produit.
+   * - 503 Service Unavailable
+     - Le moteur de recherche n'a pas pu prendre la requête en charge : il est injoignable ou a refusé la requête faute de capacité. ``error.code`` vaut ``service_unavailable`` et un en-tête ``Retry-After`` indique le nombre de secondes à attendre (``5``). La requête elle-même est correcte : réessayez après une courte attente.
 
 Tableau : Réponses d'erreur
 

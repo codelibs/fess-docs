@@ -10,7 +10,7 @@ Sie können Dateien und Verzeichnisse im Speicher auflisten sowie Dateien herunt
 
 .. note::
 
-   Diese API lässt sich nur verwenden, wenn ein Plugin installiert ist, das den Speicher-Client bereitstellt: ``fess-storage-s3`` für Amazon S3 und S3-kompatiblen Speicher oder ``fess-storage-gcs`` für Google Cloud Storage. Die Plugins sind nicht in der Distribution enthalten. Ohne eines gibt es keinen Client für den konfigurierten ``storage.type``, und die Anfragen schlagen fehl. Installieren Sie das Plugin auf der Seite „System“ > „Plugin“ der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-storage-s3`` (für GCS ``fess-storage-gcs``).
+   Diese API lässt sich nur verwenden, wenn ein Plugin installiert ist, das den Speicher-Client bereitstellt: ``fess-storage-s3`` für Amazon S3 und S3-kompatiblen Speicher oder ``fess-storage-gcs`` für Google Cloud Storage. Die Plugins sind nicht in der Distribution enthalten. Ohne eines gibt es keinen Client für den konfigurierten ``storage.type``, und die Anfragen schlagen fehl. ``GET /api/admin/storage/list`` liefert zum Beispiel keine leere Liste, sondern einen Fehler mit HTTP ``400`` (``status`` ist ``1``), dessen ``message`` den Text ``No storage client is registered as ...`` (nach dem Präfix „Storage Access Error“) enthält und das zu installierende Plugin nennt. Installieren Sie das Plugin auf der Seite „System“ > „Plugin“ der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-storage-s3`` (für GCS ``fess-storage-gcs``).
 
 Basis-URL
 =========
@@ -228,7 +228,7 @@ Die häufigsten Fehlerfälle sind wie folgt.
    * - Endpunkt
      - Häufige Fehlerursachen
    * - Dateien und Verzeichnisse auflisten
-     - Wenn die Anzahl der abgerufenen Einträge das Limit überschreitet
+     - Wenn die Anzahl der abgerufenen Einträge das Limit überschreitet oder wenn auf den Speicher nicht zugegriffen werden kann (auch wenn kein Plugin für den Speicher-Client installiert ist)
    * - Datei herunterladen
      - Wenn ``id`` ungültig ist oder der Download fehlschlägt
    * - Datei löschen

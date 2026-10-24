@@ -10,7 +10,7 @@ You can list files and directories in storage, and download, delete, and upload 
 
 .. note::
 
-   This API can be used only when a plugin that provides the storage client is installed: ``fess-storage-s3`` for Amazon S3 and S3-compatible storage, or ``fess-storage-gcs`` for Google Cloud Storage. The plugins are not bundled with the distribution. Without one, there is no client for the configured ``storage.type`` and the requests fail. Install the plugin on the "System" > "Plugin" page of the admin UI or with ``bin/fess-setup install plugin fess-storage-s3`` (``fess-storage-gcs`` for GCS).
+   This API can be used only when a plugin that provides the storage client is installed: ``fess-storage-s3`` for Amazon S3 and S3-compatible storage, or ``fess-storage-gcs`` for Google Cloud Storage. The plugins are not bundled with the distribution. Without one, there is no client for the configured ``storage.type`` and the requests fail. For example, ``GET /api/admin/storage/list`` does not return an empty list but an error with HTTP ``400`` (``status`` is ``1``), whose ``message`` contains ``No storage client is registered as ...`` (after the "Storage Access Error" prefix) and names the plugin to install. Install the plugin on the "System" > "Plugin" page of the admin UI or with ``bin/fess-setup install plugin fess-storage-s3`` (``fess-storage-gcs`` for GCS).
 
 Base URL
 ========
@@ -228,7 +228,7 @@ The main error cases are as follows.
    * - Endpoint
      - Main cases where an error occurs
    * - List Files and Directories
-     - When the number of retrieved items exceeds the limit
+     - When the number of retrieved items exceeds the limit, or when the storage cannot be accessed (including when no storage client plugin is installed)
    * - Download a File
      - When ``id`` is invalid, or when the download fails
    * - Delete a File

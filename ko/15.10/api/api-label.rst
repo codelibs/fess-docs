@@ -90,6 +90,8 @@ curl 명령으로 요청 예:
 
    * - 상태 코드
      - 설명
+   * - 400 Bad Request
+     - 디코딩할 수 없는 요청 파라미터 (예: ``?q=%ff``)가 지정된 경우. ``error.code`` 는 ``invalid_request`` 입니다.
    * - 401 Unauthorized
      - 인증이 필요한 경우 (로그인 필수 설정이 활성화되어 있고 익명 호출자이거나, 등록되지 않았거나 만료된 액세스 토큰이 포함된 요청). ``error.code`` 는 ``auth_required`` 입니다.
    * - 405 Method Not Allowed

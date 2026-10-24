@@ -110,7 +110,11 @@ Downloads the contents of the specified log file.
 For ``{id}``, specify the ``id`` (the file name encoded with Base64 URL encoding) returned by the file list retrieval as-is.
 The response is returned as an ``application/octet-stream`` stream.
 For security, only names ending with ``.log`` or ``.log.gz`` are accepted, and names containing path manipulation sequences such as ``..`` are rejected.
-If you specify a non-existent file name or a name that is not permitted as a log file, an empty response is returned.
+If you specify a non-existent file name, a name that is not permitted as a log file, or an ``id`` that is not valid Base64, a validation error is returned (HTTP ``400``, with ``status`` set to ``1`` in the response body).
+
+.. note::
+
+   The ``id`` is URL-safe Base64 (using ``-`` and ``_``). An ``id`` in the standard alphabet (``+`` and ``/``) is also accepted, but to avoid ambiguity when it is placed in a URL, use the ``id`` returned by the file list retrieval as-is.
 
 Request
 -------
@@ -123,6 +127,8 @@ Response
 --------
 
 A binary stream of the log file (``Content-Type: application/octet-stream``).
+
+If no log file with the specified name is found, an error response with HTTP ``400`` and ``status`` set to ``1`` in the response body is returned (not an empty response).
 
 Usage Examples
 ==============

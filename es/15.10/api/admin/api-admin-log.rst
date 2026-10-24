@@ -109,7 +109,11 @@ Descarga el contenido del archivo de registro especificado.
 En ``{id}`` se especifica el ``id`` devuelto en la lista (el valor del nombre de archivo codificado en Base64 URL) tal cual.
 La respuesta se devuelve como un flujo ``application/octet-stream``.
 Por razones de seguridad, solo se aceptan nombres que terminen en ``.log`` o ``.log.gz``; los nombres que contienen operaciones de ruta como ``..`` no son aceptados.
-Si se especifica un nombre de archivo inexistente o un nombre no permitido como archivo de registro, se devuelve una respuesta vacía.
+Si se especifica un nombre de archivo inexistente, un nombre no permitido como archivo de registro o un ``id`` que no es Base64 válido, se devuelve un error de validación (HTTP ``400``, con ``status`` igual a ``1`` en el cuerpo de la respuesta).
+
+.. note::
+
+   El ``id`` es Base64 seguro para URL (con ``-`` y ``_``). También se acepta un ``id`` con el alfabeto estándar (``+`` y ``/``), pero para evitar ambigüedades al colocarlo en una URL, use tal cual el ``id`` devuelto en la lista.
 
 Solicitud
 ---------
@@ -122,6 +126,8 @@ Respuesta
 ---------
 
 Flujo binario del archivo de registro (``Content-Type: application/octet-stream``).
+
+Si no se encuentra ningún archivo de registro con el nombre especificado, se devuelve una respuesta de error con HTTP ``400`` y ``status`` igual a ``1`` en el cuerpo de la respuesta (no una respuesta vacía).
 
 Ejemplos de Uso
 ===============

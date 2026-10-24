@@ -96,5 +96,7 @@ HTTP 메서드          GET
      - HTTP 메서드가 허용되지 않는 경우.
    * - 500 Internal Server Error
      - 서버 내부 오류가 발생한 경우.
+   * - 503 Service Unavailable
+     - 검색 엔진이 요청을 처리하지 못한 경우 (연결할 수 없거나 처리 능력 부족으로 요청을 거부한 경우). ``error.code`` 는 ``service_unavailable`` 이며, 기다려야 할 초 수 (``5`` ) 를 나타내는 ``Retry-After`` 헤더가 붙습니다. 요청 자체에는 문제가 없으므로 잠시 후 다시 시도하십시오.
 
 표: 오류 응답

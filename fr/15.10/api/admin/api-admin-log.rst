@@ -111,7 +111,11 @@ Télécharge le contenu du fichier journal spécifié.
 Pour ``{id}``, indiquez tel quel l'``id`` retourné lors de l'obtention de la liste (la valeur du nom de fichier encodée en Base64 URL).
 La réponse est renvoyée sous forme de flux ``application/octet-stream``.
 Pour des raisons de sécurité, seuls les noms se terminant par ``.log`` ou ``.log.gz`` sont acceptés ; les noms contenant des séquences de manipulation de chemin telles que ``..`` sont rejetés.
-Si vous spécifiez un nom de fichier inexistant ou un nom non autorisé en tant que fichier journal, une réponse vide est renvoyée.
+Si vous spécifiez un nom de fichier inexistant, un nom non autorisé en tant que fichier journal ou un ``id`` qui n'est pas du Base64 valide, une erreur de validation est renvoyée (HTTP ``400``, avec ``status`` égal à ``1`` dans le corps de la réponse).
+
+.. note::
+
+   L'``id`` est du Base64 compatible URL (utilisant ``-`` et ``_``). Un ``id`` utilisant l'alphabet standard (``+`` et ``/``) est également accepté, mais pour éviter toute ambiguïté lorsqu'il est placé dans une URL, utilisez tel quel l'``id`` retourné lors de l'obtention de la liste.
 
 Requête
 -------
@@ -124,6 +128,8 @@ Réponse
 -------
 
 Flux binaire du fichier journal (``Content-Type: application/octet-stream``).
+
+Si aucun fichier journal portant le nom spécifié n'est trouvé, une réponse d'erreur avec HTTP ``400`` et ``status`` égal à ``1`` dans le corps de la réponse est renvoyée (et non une réponse vide).
 
 Exemples d'utilisation
 ======================
