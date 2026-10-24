@@ -224,6 +224,11 @@ Vous pouvez exclure certaines adresses IP de la limitation de débit ou les bloq
    Si vous utilisez un reverse proxy, configurez l'adresse IP du proxy dans ``rate.limit.trusted.proxies``.
    Seules les requêtes provenant de proxies de confiance permettent d'obtenir l'IP client
    via les en-têtes X-Forwarded-For et X-Real-IP.
+   Lorsque X-Forwarded-For est réparti sur plusieurs lignes d'en-tête (par exemple lorsqu'un proxy ajoute sa
+   propre ligne, comme le fait ``option forwardfor`` de HAProxy), la version 15.10 et les suivantes joignent
+   toutes les lignes dans l'ordre de réception, lisent la chaîne de droite à gauche et utilisent comme IP du
+   client la première adresse qui n'est pas un proxy de confiance. Jusqu'à la version 15.9, seule la première
+   ligne, celle envoyée par le client, était lue.
 
 Surveillance et alertes
 ==============

@@ -183,8 +183,8 @@ Außerdem werden protokollrelative Pfade (führendes ``//``) und Pfade mit ASCII
 
    Die Rate-Limits für Anmeldung und Passwortänderung können mit folgenden Eigenschaften konfiguriert werden (Standardwerte in Klammern):
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximale Anzahl von Versuchen pro Minute und IP-Adresse. Gilt nur für ``/auth/login``.
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximale Anzahl von Versuchen pro Minute und Benutzer. Gilt sowohl für ``/auth/login`` als auch für ``/auth/password``.
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximale Anzahl von Versuchen pro Minute und IP-Adresse. Gilt für ``/auth/login`` und, ab 15.10, für das Anmeldeformular der Anmeldeseite (``/login/``).
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximale Anzahl von Versuchen pro Minute und Benutzer. Gilt für ``/auth/login`` und ``/auth/password`` sowie, ab 15.10, für das Anmeldeformular der Anmeldeseite (abgelehnte Passwörter werden gezählt).
    - ``theme.api.login.lockout.seconds`` (``900``): Sperrungsdauer (in Sekunden) nach Überschreitung des Limits. Wird als Wert des ``Retry-After``-Headers zurückgegeben.
 
 Anfrage-Body (LoginRequest)

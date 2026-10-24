@@ -203,6 +203,9 @@ robots.txt 按照 RFC 9309 解释。 ``Allow:`` 和 ``Disallow:`` 以最长匹�
 .. note::
    使用反向代理时，请将代理的IP地址设置在 ``rate.limit.trusted.proxies`` 中。
    仅从信任的代理发出的请求，才会从X-Forwarded-For和X-Real-IP头获取客户端IP。
+   当 X-Forwarded-For 被拆分为多个头部行时（例如代理像 HAProxy 的 ``option forwardfor`` 那样添加自己的一行），
+   15.10 及以后版本会按接收顺序连接所有行，从右向左读取，并将第一个不是信任代理的地址作为客户端IP。
+   15.9 及之前只读取第一行，即客户端发送的那一行。
 
 监控与告警
 ==============

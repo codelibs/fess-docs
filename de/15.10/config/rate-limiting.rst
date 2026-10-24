@@ -220,6 +220,11 @@ Sie können bestimmte IP-Adressen vom Rate-Limiting ausschließen oder blockiere
    Bei Verwendung eines Reverse-Proxys setzen Sie ``rate.limit.trusted.proxies`` auf
    die IP-Adresse des Proxys. Nur bei Anfragen von vertrauenswürdigen Proxys wird die
    Client-IP aus den X-Forwarded-For- und X-Real-IP-Headern ermittelt.
+   Ist X-Forwarded-For auf mehrere Header-Zeilen verteilt (zum Beispiel, wenn ein Proxy eine eigene
+   Zeile hinzufügt, wie es ``option forwardfor`` von HAProxy tut), verbindet 15.10 und neuer alle Zeilen
+   in der empfangenen Reihenfolge, liest die Kette von rechts und verwendet die erste Adresse, die kein
+   vertrauenswürdiger Proxy ist, als Client-IP. Bis 15.9 wurde nur die erste Zeile gelesen, also die vom
+   Client gesendete.
 
 Überwachung und Warnungen
 ==========================

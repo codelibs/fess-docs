@@ -213,6 +213,10 @@ robots.txt 처리 자체를 비활성화하려면 ``client.robotsTxtEnabled=fals
    리버스 프록시를 사용하는 경우 ``rate.limit.trusted.proxies``\ 에
    프록시의 IP 주소를 설정하세요. 신뢰하는 프록시에서의 요청만
    X-Forwarded-For 및 X-Real-IP 헤더에서 클라이언트 IP를 취득합니다.
+   X-Forwarded-For가 여러 헤더 행으로 나뉘어 있는 경우(예: HAProxy의 ``option forwardfor`` 처럼 프록시가
+   자신의 행을 추가하는 경우) 15.10 이후에서는 모든 행을 받은 순서대로 이어 오른쪽부터 읽고, 신뢰하는
+   프록시가 아닌 첫 번째 주소를 클라이언트 IP로 사용합니다. 15.9까지는 클라이언트가 보낸 첫 번째 행만
+   읽었습니다.
 
 모니터링과 알림
 ==============

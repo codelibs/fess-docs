@@ -183,8 +183,8 @@ HTTPメソッド         POST
 
    ログインとパスワード変更のレート制限は、以下のプロパティで設定できます（かっこ内は既定値）。
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` （ ``10`` ）: IP アドレス単位の毎分あたりの試行回数上限。 ``/auth/login`` のみに適用されます。
-   - ``theme.api.login.rate.limit.per.user.per.minute`` （ ``5`` ）: ユーザー単位の毎分あたりの試行回数上限。 ``/auth/login`` と ``/auth/password`` の両方に適用されます。
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` （ ``10`` ）: IP アドレス単位の毎分あたりの試行回数上限。 ``/auth/login`` と、ログイン画面（``/login/``）のログインフォームに適用されます（フォームへの適用は 15.10 から）。
+   - ``theme.api.login.rate.limit.per.user.per.minute`` （ ``5`` ）: ユーザー単位の毎分あたりの試行回数上限。 ``/auth/login`` と ``/auth/password`` に加え、15.10 からはログイン画面のログインフォームにも適用されます（パスワードを間違えた回数を数えます）。
    - ``theme.api.login.lockout.seconds`` （ ``900`` ）: 上限を超えた後のロックアウト時間（秒）。 ``Retry-After`` ヘッダーの値として返されます。
 
 リクエストボディ (LoginRequest)

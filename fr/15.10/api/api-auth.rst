@@ -183,8 +183,8 @@ De plus, les chemins relatifs aux protocoles (commençant par ``//``) et les che
 
    Les limites de débit pour la connexion et le changement de mot de passe peuvent être configurées avec les propriétés suivantes (valeurs par défaut entre parenthèses) :
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``) : Nombre maximal de tentatives par minute par adresse IP. S'applique uniquement à ``/auth/login``.
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``) : Nombre maximal de tentatives par minute par utilisateur. S'applique à la fois à ``/auth/login`` et à ``/auth/password``.
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``) : Nombre maximal de tentatives par minute par adresse IP. S'applique à ``/auth/login`` et, depuis la version 15.10, au formulaire de connexion de la page de connexion (``/login/``).
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``) : Nombre maximal de tentatives par minute par utilisateur. S'applique à ``/auth/login`` et ``/auth/password`` et, depuis la version 15.10, au formulaire de connexion de la page de connexion (les mots de passe refusés sont comptés).
    - ``theme.api.login.lockout.seconds`` (``900``) : Durée de verrouillage (en secondes) après dépassement de la limite. Retournée comme valeur de l'en-tête ``Retry-After``.
 
 Corps de la requête (LoginRequest)

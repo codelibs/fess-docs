@@ -183,8 +183,8 @@ HTTP 메서드          POST
 
    로그인 및 비밀번호 변경의 속도 제한은 다음 프로퍼티로 설정할 수 있습니다 (괄호 안은 기본값).
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): IP 주소 단위의 분당 최대 시도 횟수. ``/auth/login`` 에만 적용됩니다.
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 사용자 단위의 분당 최대 시도 횟수. ``/auth/login`` 과 ``/auth/password`` 양쪽에 적용됩니다.
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): IP 주소 단위의 분당 최대 시도 횟수. ``/auth/login`` 과 15.10부터는 로그인 페이지(``/login/``)의 로그인 폼에 적용됩니다.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 사용자 단위의 분당 최대 시도 횟수. ``/auth/login`` 과 ``/auth/password`` 양쪽에 적용되며, 15.10부터는 로그인 페이지의 로그인 폼에도 적용됩니다(거부된 비밀번호를 셉니다).
    - ``theme.api.login.lockout.seconds`` (``900``): 상한 초과 후의 잠금 시간 (초). ``Retry-After`` 헤더의 값으로 반환됩니다.
 
 요청 본문 (LoginRequest)
