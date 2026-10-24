@@ -221,6 +221,11 @@ Puede excluir direcciones IP específicas del límite de tasa o bloquearlas.
    Si está usando un proxy inverso, configure la dirección IP del proxy en ``rate.limit.trusted.proxies``.
    Solo se obtendrá la IP del cliente de los encabezados X-Forwarded-For y X-Real-IP
    cuando la solicitud provenga de un proxy confiable.
+   Si X-Forwarded-For está repartido en varias líneas de encabezado (por ejemplo, cuando un proxy añade
+   una línea propia, como hace ``option forwardfor`` de HAProxy), la versión 15.10 y posteriores unen todas
+   las líneas en el orden recibido, leen la cadena de derecha a izquierda y usan como IP del cliente la
+   primera dirección que no es un proxy confiable. Hasta la versión 15.9 solo se leía la primera línea,
+   que es la enviada por el cliente.
 
 Monitoreo y alertas
 ===================

@@ -625,6 +625,24 @@ Detección de la codificación de caracteres
 
 Los nombres de codificación de caracteres que Tika 4 informa para los archivos de texto pueden diferir de los de la versión 15.9. Por ejemplo, Shift_JIS se informa como ``windows-31j``, ISO-8859-1 como ``windows-1252`` y EUC-JP como ``x-eucJP-Open``.
 
+Límite de intentos del formulario de inicio de sesión
+-----------------------------------------------------
+
+En la versión 15.9, los límites de ``theme.api.login.rate.limit.*`` se aplicaban únicamente a ``/api/v2/auth/login`` y no al formulario de inicio de sesión de la página de inicio de sesión (``/login/``).
+En la versión 15.10, el formulario usa los mismos límites y los mismos contadores. Cuando los inicios de sesión fallidos desde la misma dirección IP llegan a 10 por minuto, o la contraseña del mismo nombre de usuario es rechazada 5 veces desde la misma dirección IP, se rechazan los inicios de sesión desde esa dirección IP, o desde esa combinación de dirección IP y nombre de usuario, durante ``theme.api.login.lockout.seconds`` (900 segundos de forma predeterminada).
+Mientras está bloqueado, ni siquiera la contraseña correcta permite iniciar sesión, y la página muestra el mismo mensaje que para una contraseña incorrecta. Un inicio de sesión correcto devuelve el cupo que usó el intento.
+Tenga en cuenta el límite en los scripts que puedan enviar una contraseña incorrecta y en los sitios donde muchos usuarios comparten una dirección IP.
+
+Si un proxy inverso añade ``X-Forwarded-For`` como una línea de encabezado propia (por ejemplo, ``option forwardfor`` de HAProxy), la versión 15.10 lee todas las líneas y usa como IP del cliente la primera dirección, empezando por la derecha, que no es un proxy confiable (consulte :doc:`../config/rate-limiting`). Hasta la versión 15.9 solo se leía la primera línea, la enviada por el cliente, por lo que un cliente podía elegir la dirección que usaba el límite.
+
+(deny) en el campo de permisos de una configuración de rastreo
+--------------------------------------------------------------
+
+Si escribe ``(deny)`` seguido de un espacio en el campo de permisos de una configuración de rastreo o de un ajuste similar, por ejemplo ``(deny) {user}name``, la versión 15.9 no lo guardaba como una denegación: guardaba el texto con el espacio tal cual. Si luego se abría esa configuración en la pantalla de administración y se guardaba, se convertía en una autorización (``{user}name``).
+La versión 15.10 elimina el espacio después de ``(deny)`` y ``(allow)`` antes de guardar, y guardar de nuevo mantiene una denegación como denegación. Una línea ``(deny)`` que no tenga ``{user}``, ``{group}`` ni ``{role}`` no se guarda.
+
+Un ajuste guardado en la versión 15.9 o anterior no se repara automáticamente. Revise el campo de permisos de cada configuración de rastreo que use ``(deny)``, escriba de nuevo la línea con el formato ``(deny){user}name``, guárdela y vuelva a rastrear.
+
 Cambios para desarrolladores de plugins
 ---------------------------------------
 

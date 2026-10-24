@@ -220,6 +220,11 @@ You can exclude specific IP addresses from rate limiting or block them.
    When using a reverse proxy, set the proxy's IP address in ``rate.limit.trusted.proxies``.
    Client IPs are resolved from X-Forwarded-For and X-Real-IP headers only for requests
    coming from trusted proxies.
+   When X-Forwarded-For is split over several header lines (for example when a proxy adds
+   a line of its own, as HAProxy's ``option forwardfor`` does), 15.10 and later join all the
+   lines in the order received, read the chain from the right, and use the first address that
+   is not a trusted proxy as the client IP. Up to 15.9 only the first line, which is the one
+   the client sent, was read.
 
 Monitoring and Alerts
 =====================

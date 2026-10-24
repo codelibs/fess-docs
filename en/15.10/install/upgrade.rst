@@ -614,6 +614,24 @@ Character Encoding Detection
 
 The character set names that Tika 4 reports for text files can differ from 15.9. For example, Shift_JIS is reported as ``windows-31j``, ISO-8859-1 as ``windows-1252``, and EUC-JP as ``x-eucJP-Open``.
 
+Login Form Rate Limit
+---------------------
+
+In 15.9 the limits of ``theme.api.login.rate.limit.*`` applied only to ``/api/v2/auth/login`` and not to the login form of the login page (``/login/``).
+In 15.10 the login form uses the same limits and the same counters. When failed logins from the same IP address reach 10 per minute, or the password of the same user name is rejected 5 times from the same IP address, logins from that IP address, or from that combination of IP address and user name, are refused for ``theme.api.login.lockout.seconds`` (900 seconds by default).
+While refused, even the correct password does not log in, and the page shows the same message as for a wrong password. A successful login gives back the slot that the attempt used.
+Take the limit into account for scripts that may send a wrong password and for sites where many users share one IP address.
+
+When a reverse proxy adds ``X-Forwarded-For`` as a header line of its own (for example HAProxy's ``option forwardfor``), 15.10 reads all the lines and uses the first address from the right that is not a trusted proxy as the client IP (see :doc:`../config/rate-limiting`). Up to 15.9 only the first line, which is the one the client sent, was read, so a client could choose the address that the rate limit used.
+
+(deny) in the Permission Field of a Crawl Configuration
+-------------------------------------------------------
+
+If you write ``(deny)`` followed by a space in the permission field of a crawl configuration or a similar setting, such as ``(deny) {user}name``, 15.9 did not store it as a deny: it stored the text with the space as it was. Opening such a configuration in the admin screen and saving it then turned it into an allow (``{user}name``).
+15.10 removes the space after ``(deny)`` and ``(allow)`` before storing, and saving the setting again keeps a deny as a deny. A ``(deny)`` line that has none of ``{user}``, ``{group}`` or ``{role}`` is not stored.
+
+A setting saved in 15.9 or earlier is not repaired automatically. Check the permission field of every crawl configuration that uses ``(deny)``, write the line again in the form ``(deny){user}name``, save it, and crawl again.
+
 Changes for Plugin Developers
 -----------------------------
 

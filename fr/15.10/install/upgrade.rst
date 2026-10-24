@@ -631,6 +631,24 @@ Détection de l'encodage des caractères
 
 Les noms d'encodage des caractères que Tika 4 indique pour les fichiers texte peuvent différer de ceux de la version 15.9. Par exemple, Shift_JIS est indiqué comme ``windows-31j``, ISO-8859-1 comme ``windows-1252`` et EUC-JP comme ``x-eucJP-Open``.
 
+Limite de tentatives du formulaire de connexion
+-----------------------------------------------
+
+Dans la version 15.9, les limites de ``theme.api.login.rate.limit.*`` ne s'appliquaient qu'à ``/api/v2/auth/login`` et non au formulaire de connexion de la page de connexion (``/login/``).
+Dans la version 15.10, le formulaire utilise les mêmes limites et les mêmes compteurs. Lorsque les connexions échouées depuis la même adresse IP atteignent 10 par minute, ou que le mot de passe du même nom d'utilisateur est refusé 5 fois depuis la même adresse IP, les connexions depuis cette adresse IP, ou depuis cette combinaison d'adresse IP et de nom d'utilisateur, sont refusées pendant ``theme.api.login.lockout.seconds`` (900 secondes par défaut).
+Pendant le blocage, même le bon mot de passe ne permet pas de se connecter, et la page affiche le même message que pour un mot de passe erroné. Une connexion réussie rend la place que la tentative a utilisée.
+Tenez compte de cette limite pour les scripts susceptibles d'envoyer un mot de passe erroné et pour les sites où de nombreux utilisateurs partagent une même adresse IP.
+
+Lorsqu'un reverse proxy ajoute ``X-Forwarded-For`` comme ligne d'en-tête distincte (par exemple ``option forwardfor`` de HAProxy), la version 15.10 lit toutes les lignes et utilise comme IP du client la première adresse, en partant de la droite, qui n'est pas un proxy de confiance (voir :doc:`../config/rate-limiting`). Jusqu'à la version 15.9, seule la première ligne, celle envoyée par le client, était lue ; un client pouvait donc choisir l'adresse utilisée par la limite.
+
+(deny) dans le champ des permissions d'une configuration d'exploration
+----------------------------------------------------------------------
+
+Si vous écrivez ``(deny)`` suivi d'une espace dans le champ des permissions d'une configuration d'exploration ou d'un paramètre similaire, par exemple ``(deny) {user}name``, la version 15.9 ne l'enregistrait pas comme un refus : elle enregistrait le texte avec l'espace tel quel. Ouvrir cette configuration dans l'écran d'administration puis l'enregistrer la transformait en autorisation (``{user}name``).
+La version 15.10 supprime l'espace après ``(deny)`` et ``(allow)`` avant l'enregistrement, et un nouvel enregistrement conserve un refus comme refus. Une ligne ``(deny)`` qui ne contient ni ``{user}``, ni ``{group}``, ni ``{role}`` n'est pas enregistrée.
+
+Un paramètre enregistré dans la version 15.9 ou une version antérieure n'est pas réparé automatiquement. Vérifiez le champ des permissions de chaque configuration d'exploration qui utilise ``(deny)``, réécrivez la ligne sous la forme ``(deny){user}name``, enregistrez-la, puis relancez l'exploration.
+
 Modifications pour les développeurs de plugins
 ----------------------------------------------
 

@@ -183,8 +183,8 @@ Additionally, protocol-relative paths (starting with ``//``) and paths containin
 
    The rate limits for login and password change can be configured with the following properties (defaults in parentheses):
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximum number of attempts per minute per IP address. Applies only to ``/auth/login``.
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximum number of attempts per minute per user. Applies to both ``/auth/login`` and ``/auth/password``.
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximum number of attempts per minute per IP address. Applies to ``/auth/login`` and, from 15.10, to the login form of the login page (``/login/``).
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximum number of attempts per minute per user. Applies to ``/auth/login`` and ``/auth/password``, and, from 15.10, to the login form of the login page (rejected passwords are counted).
    - ``theme.api.login.lockout.seconds`` (``900``): Lockout duration (in seconds) after the limit is exceeded. Returned as the value of the ``Retry-After`` header.
 
 Request Body (LoginRequest)
