@@ -591,7 +591,7 @@ Les paquets ZIP et RPM/DEB ainsi que les images Docker de la version 15.10 ne co
 Les paramètres que vous aviez saisis dans ``tika.xml``, tels que ``parser-exclude``, ne sont plus appliqués : un analyseur que vous y aviez exclu s'exécute de nouveau.
 Si un fichier ``tika.xml`` d'une version antérieure se trouve dans le répertoire de configuration, |Fess| l'ignore et écrit un avertissement dans ``fess.log`` au démarrage. Supprimez ce fichier.
 
-- Paquet ZIP : ``app/WEB-INF/conf/tika.xml``
+- Paquet ZIP : dans le ZIP de la version 15.9 et des versions antérieures, le fichier se trouve dans ``app/WEB-INF/classes/tika.xml``. L'avertissement au démarrage de la version 15.10 vérifie à la fois ``app/WEB-INF/classes`` et ``app/WEB-INF/conf``
 - Paquet RPM/DEB : ``/etc/fess/tika.xml``
 
 .. _upgrade-1510-tika-metadata:
@@ -648,6 +648,17 @@ Si vous écrivez ``(deny)`` suivi d'une espace dans le champ des permissions d'u
 La version 15.10 supprime l'espace après ``(deny)`` et ``(allow)`` avant l'enregistrement, et un nouvel enregistrement conserve un refus comme refus. Une ligne ``(deny)`` qui ne contient ni ``{user}``, ni ``{group}``, ni ``{role}`` n'est pas enregistrée.
 
 Un paramètre enregistré dans la version 15.9 ou une version antérieure n'est pas réparé automatiquement. Vérifiez le champ des permissions de chaque configuration d'exploration qui utilise ``(deny)``, réécrivez la ligne sous la forme ``(deny){user}name``, enregistrez-la, puis relancez l'exploration.
+
+Autres changements de comportement
+----------------------------------
+
+Ces modifications peuvent affecter les scripts, la configuration du proxy inverse et la supervision qui fonctionnaient avec la version 15.9.
+
+- **Adresse du client dans audit.log et le journal de recherche.** L'adresse est déterminée par la même règle que les limites de débit (voir :doc:`../config/rate-limiting`) : ``X-Forwarded-For`` n'est lu que si la connexion provient d'une adresse figurant dans ``rate.limit.trusted.proxies`` (valeur par défaut ``127.0.0.1,::1``), et l'adresse enregistrée est la dernière de la chaîne qui n'appartient pas à vos propres proxys. La version 15.9 enregistrait la première ligne ``X-Forwarded-For`` telle que l'appelant l'avait envoyée, quel que soit l'appelant. Derrière un proxy inverse qui ne figure pas dans ``rate.limit.trusted.proxies``, les journaux affichent désormais l'adresse du proxy ; ajoutez le proxy à la liste pour continuer à enregistrer le client d'origine.
+- **Caractères de contrôle dans audit.log.** Au format LTSV, tout caractère de contrôle d'un champ, ainsi que les séparateurs de ligne Unicode NEL, LS et PS, est remplacé par une espace (une tabulation par un trait de soulignement), de sorte qu'un nom d'utilisateur saisi ne puisse pas commencer un second enregistrement. La version 15.9 ne remplaçait que CR et LF.
+- **Clé de chiffrement par défaut.** Si ``app.cipher.key`` dans ``fess_config.properties`` a encore la valeur fournie, la version 15.10 écrit un avertissement dans ``fess.log`` au démarrage (une seule fois, par le seul processus de l'application web). Définissez votre propre valeur avant de commencer à utiliser |Fess| ; la modifier plus tard rend illisibles les valeurs chiffrées avec l'ancienne clé.
+- **Administrateurs en lecture seule.** Un utilisateur qui ne possède que ``admin-searchlist-view`` ou ``admin-crawlinginfo-view`` ne peut plus supprimer tous les documents ni toutes les informations d'exploration ; le rôle d'édition (``admin-searchlist``, ``admin-crawlinginfo``) est requis.
+- **Mots entre guillemets.** Un mot unique entre guillemets doubles, tel que ``"less"``, est recherché comme une expression exacte et ne renvoie plus les documents qui contiennent seulement un mot voisin tel que ``fess``.
 
 Modifications pour les développeurs de plugins
 ----------------------------------------------

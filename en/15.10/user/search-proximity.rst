@@ -59,7 +59,7 @@ Because of this, separate the words with spaces and specify a generous number.
     "全文 検索"~5
     "大阪 おいしい"~10
 
-A string without spaces (for example, ``"大阪おいしい"~10``) may not work as a proximity search between the words as expected, because on the general fields it is matched as one continuous string. Separate the words with spaces. The distance cannot be converted exactly into a number of characters, so start with a generous number and narrow it down while checking the results.
+A string without spaces (for example, ``"大阪おいしい"~10``) did not work as a proximity search on the general fields up to 15.9 and could return no documents. In 15.10, ``"大阪おいしい"~10`` matches the same documents as ``"大阪 おいしい"~10``. Separating the words with spaces is still recommended. The distance cannot be converted exactly into a number of characters, so start with a generous number and narrow it down while checking the results.
 
 Related Topics
 ----------------

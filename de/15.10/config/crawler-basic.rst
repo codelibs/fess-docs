@@ -531,6 +531,18 @@ Fügen Sie in der Verwaltungsoberfläche in der Crawl-Konfiguration unter „Kon
     client.proxyUsername=proxyuser
     client.proxyPassword=proxypass
 
+**SOCKS5-Proxy (ab 15.10):**
+
+::
+
+    client.socksProxyHost=socks.example.com
+    client.socksProxyPort=1080
+
+- Setzen Sie sowohl ``client.socksProxyHost`` als auch ``client.socksProxyPort``. Ist nur einer der beiden Werte gesetzt, verbindet sich der Crawler direkt ohne Proxy.
+- Der SOCKS-Proxy wird ohne Authentifizierung verwendet.
+- Der Crawler löst den Hostnamen der Site selbst auf und übergibt dem Proxy eine IP-Adresse. Ein Hostname, der nur auf der Proxy-Seite aufgelöst werden kann, führt daher zu einem Verbindungsfehler.
+- Die Einstellung gilt für den Standard-HTTP-Client (HttpClient 5). 15.9 und früher ignorieren diese Schlüssel und verbinden sich direkt.
+
 **Bestimmte Hosts vom Proxy ausschließen:**
 
 Hosts, die vom Proxy ausgeschlossen werden sollen, werden nicht in den Konfigurationsparametern der Crawl-Konfiguration, sondern über JVM-Systemeigenschaften konfiguriert.
