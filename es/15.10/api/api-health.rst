@@ -104,6 +104,8 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
      - Descripción
    * - 200 OK
      - Cuando el clúster está en estado ``GREEN`` o ``YELLOW`` y es accesible. El sobre de éxito incluye ``engine``.
+   * - 400 Bad Request
+     - Cuando se ha indicado un parámetro de la solicitud que no se puede decodificar (por ejemplo, ``?q=%ff``). El ``error.code`` es ``invalid_request``.
    * - 405 Method Not Allowed
      - Cuando el método HTTP no está permitido.
    * - 503 Service Unavailable

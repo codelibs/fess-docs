@@ -1290,6 +1290,18 @@ le corps.
    * - Un utilisateur de l'API d'administration dont le mot de passe enfreint la politique de mot de passe (par exemple ``password.min.length``, ``8`` par défaut) ; une création sans mot de passe ; un ``confirm_password`` différent de ``password``
      - Enregistré ; l'utilisateur peut se connecter avec ce mot de passe
      - ``400``
+   * - ``GET /api/admin/log/file/{id}`` avec un nom non autorisé pour un fichier journal (par exemple ne se terminant pas par ``.log`` ou ``.log.gz``), ou avec un fichier qui ne se trouve pas dans le répertoire des journaux
+     - Nom non autorisé : ``200`` avec une réponse vide
+     - ``400``
+   * - Une entrée du dictionnaire ``mapping`` sans ``output``, ajoutée ou mise à jour via l'API d'administration
+     - ``200`` (``id`` vaut ``0``) ; rien n'est enregistré
+     - ``400``
+   * - ``GET /api/admin/storage/list`` lorsque le stockage est inaccessible, y compris lorsqu'aucun plugin de client de stockage n'est installé
+     - ``200`` (``status`` ``0``) avec une liste vide
+     - ``400``. ``message`` indique la cause et, si le plugin est absent, le plugin à installer
+   * - Connexions échouées répétées sur le formulaire de connexion (``POST /login/login``) en peu de temps, depuis une même adresse IP ou pour un même utilisateur depuis une même adresse IP
+     - Aucune limite
+     - Au-delà de la limite par adresse ou par utilisateur (``theme.api.login.rate.limit.per.ip.per.minute``, ``theme.api.login.rate.limit.per.user.per.minute``), les connexions suivantes depuis cette adresse (pour la limite par utilisateur : de cet utilisateur depuis cette adresse) sont refusées pendant ``theme.api.login.lockout.seconds`` secondes, même avec des identifiants corrects. La réponse est la même erreur de connexion qu'avec des identifiants erronés. Les limites et le verrouillage sont partagés avec ``/api/v2/auth/login`` (voir :doc:`../api/api-auth`) Derrière un proxy inverse dont l'adresse ne figure pas dans ``rate.limit.trusted.proxies``, tous les clients sont comptés comme une seule adresse, de sorte que des échecs répétés peuvent verrouiller tous les utilisateurs. Ajoutez l'adresse du proxy à ``rate.limit.trusted.proxies`` (un avertissement est consigné une seule fois dans ``fess.log`` lorsque ``X-Forwarded-For`` provient d'un pair non approuvé).
 
 Les lignes de ``/api/v2/documents/all`` ne portent plus ``score``. Jusqu'à la 15.8, chaque document avait
 son score de recherche ; la 15.10 parcourt tout le résultat avec un point in time et ``search_after``, ce qui
@@ -1301,6 +1313,15 @@ Les envois de fichiers de l'API d'administration (les six dictionnaires, ``badwo
 ``multipart/form-data`` ne transmet jamais le fichier : en 15.8 comme en 15.10, il échoue avec l'erreur de
 validation indiquant que le fichier est obligatoire. Les points de terminaison ``PUT`` subsistent ; utilisez
 ``POST`` pour les envois.
+
+Les modifications suivantes ne sont pas des refus, mais peuvent affecter les scripts et les clients de l'API et de l'écran d'administration.
+
+- Les requêtes ``GET`` des API d'administration ``webauth`` et ``fileauth`` (``/api/admin/webauth/settings``, ``/api/admin/webauth/setting/{id}`` et les mêmes points d'accès sous ``fileauth``) ne renvoient plus le mot de passe enregistré. Un ``PUT`` qui omet le mot de passe ou l'envoie vide conserve le mot de passe enregistré ; un mot de passe non vide le remplace.
+- Un utilisateur connecté est identifié par la session, et non par un paramètre ``userCode`` ou un cookie que porte la requête (par exemple pour l'API des favoris). Les utilisateurs anonymes continuent d'utiliser le paramètre et le cookie.
+- « Tout supprimer » sur les écrans « Liste de recherche » et « Informations d'exploration » de l'écran d'administration exige le rôle d'édition (``admin-searchlist``, ``admin-crawlinginfo``). La requête d'un utilisateur qui n'a que le rôle de consultation (le rôle portant le suffixe ``-view``) est refusée.
+- Si vous avez activé ``parameterKey``, ``headerKey`` ou ``cookieKey`` dans le composant ``roleQueryHelper`` de ``fess.xml`` sans définir de ``cipher``, et que l'indicateur de chiffrement (``encryptedParameterValue``, ``encryptedHeaderValue`` ou ``encryptedCookieValue``) est resté à ``true``, sa valeur par défaut, la 15.8 lisait la valeur comme une information de rôle non chiffrée. La 15.10 ignore la valeur et écrit un avertissement une seule fois dans le journal. Définissez un ``cipher`` si les valeurs sont chiffrées, ou mettez l'indicateur à ``false`` si elles doivent arriver non chiffrées.
+- Une requête dont le ``Content-Type`` indique un jeu de caractères inconnu de la JVM (par exemple ``charset=nope``) est traitée comme une requête sans jeu de caractères. Auparavant, ``/api/v2/search`` répondait ``500`` (``internal_error``).
+- Lorsqu'un envoi ou un téléchargement via l'API d'administration échoue pour le dictionnaire ``kuromoji``, ``mapping``, ``stemmeroverride`` ou ``synonym``, le message nomme désormais ce dictionnaire. En 15.8, il indiquait « protwords file » pour chacun d'eux.
 
 ``search_engine.type=cloud`` est obsolète
 -----------------------------------------

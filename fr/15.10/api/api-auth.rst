@@ -145,6 +145,8 @@ Réponse d'erreur
 
    * - Code de statut
      - Description
+   * - 400 Bad Request
+     - Un paramètre de requête impossible à décoder (par exemple ``?q=%ff``) a été fourni. ``error.code`` vaut ``invalid_request``.
    * - 405 Method Not Allowed
      - Une méthode HTTP non prise en charge a été spécifiée.
    * - 500 Internal Server Error
@@ -162,7 +164,7 @@ Point de terminaison  ``/api/v2/auth/login``
 ====================  ====================================================
 
 Se connecte avec un nom d'utilisateur et un mot de passe.
-En cas de succès, l'identifiant de session du servlet est renouvelé, un nouveau jeton CSRF est émis, et les buckets de limite de débit de l'IP appelante et de l'utilisateur cible sont réinitialisés.
+En cas de succès, l'identifiant de session du servlet est renouvelé, un nouveau jeton CSRF est émis. De plus, l'enregistrement des tentatives échouées antérieures pour la même combinaison d'IP appelante et de nom d'utilisateur (le bucket par utilisateur) est réinitialisé. Le bucket par IP n'est pas réinitialisé, car il compte aussi les tentatives visant d'autres utilisateurs depuis la même IP ; seul l'emplacement consommé par cette tentative est restitué.
 
 La limitation de débit est appliquée selon deux axes : par IP appelante et par utilisateur. Lorsque la limite par IP est dépassée, ``429 Too Many Requests`` est retourné accompagné d'un en-tête ``Retry-After`` (en secondes). Lorsque la limite par utilisateur est dépassée, le même ``401 Unauthorized`` que pour des informations d'identification invalides est retourné (sans en-tête ``Retry-After``), afin que l'état du compteur ne puisse pas être déduit de l'extérieur.
 
@@ -183,9 +185,13 @@ De plus, les chemins relatifs aux protocoles (commençant par ``//``) et les che
 
    Les limites de débit pour la connexion et le changement de mot de passe peuvent être configurées avec les propriétés suivantes (valeurs par défaut entre parenthèses) :
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``) : Nombre maximal de tentatives par minute par adresse IP. S'applique à ``/auth/login`` et, depuis la version 15.10, au formulaire de connexion de la page de connexion (``/login/``).
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``) : Nombre maximal de tentatives par minute par utilisateur. S'applique à ``/auth/login`` et ``/auth/password`` et, depuis la version 15.10, au formulaire de connexion de la page de connexion (les mots de passe refusés sont comptés).
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``) : Nombre maximal de tentatives par minute par adresse IP. S'applique à la fois à ``/auth/login`` et au formulaire de connexion ``POST /login/login``, qui partagent le même bucket.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``) : Nombre maximal de tentatives par minute par utilisateur. S'applique à ``/auth/login`` et ``POST /login/login`` (qui partagent un bucket pour chaque combinaison d'IP appelante et de nom d'utilisateur) ainsi qu'à ``/auth/password``.
    - ``theme.api.login.lockout.seconds`` (``900``) : Durée de verrouillage (en secondes) après dépassement de la limite. Retournée comme valeur de l'en-tête ``Retry-After``.
+
+   Le formulaire de connexion (``POST /login/login``) partage les buckets et le verrouillage avec ``/auth/login`` : les échecs sur le formulaire comptent donc pour la limite de ``/auth/login`` et inversement. Lorsque la limite est dépassée sur le formulaire, elle est traitée comme une erreur de connexion ordinaire et non comme un ``429``.
+
+   Derrière un proxy inverse absent de ``rate.limit.trusted.proxies`` (valeur par défaut ``127.0.0.1,::1``), tous les clients sont traités comme une seule adresse IP (celle du proxy). Des échecs de connexion répétés peuvent alors verrouiller tous les utilisateurs pendant la durée du verrouillage. Ajoutez l'adresse du proxy à ``rate.limit.trusted.proxies`` afin que l'IP réelle du client soit prise dans ``X-Forwarded-For``.
 
 Corps de la requête (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,12 +290,16 @@ Réponse d'erreur
      - La requête est incorrecte (corps trop grand ou ``Content-Type`` non pris en charge inclus).
    * - 401 Unauthorized
      - Les informations d'authentification sont incorrectes.
+   * - 403 Forbidden
+     - La requête a été bloquée comme inter-sites : son en-tête ``Origin`` (ou ``Referer``) désigne une origine non autorisée. C'est le contrôle de base que passe toute requête modifiant l'état ; il est distinct du jeton CSRF, dont la connexion n'a pas besoin.
    * - 405 Method Not Allowed
      - Une méthode HTTP non prise en charge a été spécifiée.
    * - 429 Too Many Requests
      - Limite de débit dépassée. L'en-tête ``Retry-After`` indique le nombre de secondes d'attente.
    * - 500 Internal Server Error
      - Une erreur interne s'est produite sur le serveur.
+   * - 503 Service Unavailable
+     - Le moteur de recherche n'a pas pu prendre la requête en charge : il est injoignable ou a refusé la requête faute de capacité. ``error.code`` vaut ``service_unavailable`` et un en-tête ``Retry-After`` indique le nombre de secondes à attendre (``5``). La requête elle-même est correcte : réessayez après une courte attente.
 
 Déconnexion
 ===========
@@ -344,6 +354,8 @@ Réponse d'erreur
 
    * - Code de statut
      - Description
+   * - 400 Bad Request
+     - Un paramètre de requête impossible à décoder (par exemple ``?q=%ff``) a été fourni. ``error.code`` vaut ``invalid_request``.
    * - 403 Forbidden
      - Jeton CSRF manquant ou expiré.
    * - 405 Method Not Allowed
@@ -456,3 +468,5 @@ Réponse d'erreur
      - Limite de débit dépassée.
    * - 500 Internal Server Error
      - Une erreur interne s'est produite sur le serveur.
+   * - 503 Service Unavailable
+     - Le moteur de recherche n'a pas pu prendre la requête en charge : il est injoignable ou a refusé la requête faute de capacité. ``error.code`` vaut ``service_unavailable`` et un en-tête ``Retry-After`` indique le nombre de secondes à attendre (``5``). La requête elle-même est correcte : réessayez après une courte attente.

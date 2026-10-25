@@ -145,6 +145,8 @@ HTTP 메서드          GET
 
    * - 상태 코드
      - 설명
+   * - 400 Bad Request
+     - 디코딩할 수 없는 요청 파라미터 (예: ``?q=%ff``)가 지정된 경우. ``error.code`` 는 ``invalid_request`` 입니다.
    * - 405 Method Not Allowed
      - 지원되지 않는 HTTP 메서드가 지정된 경우.
    * - 500 Internal Server Error
@@ -162,7 +164,7 @@ HTTP 메서드          POST
 ==================  ====================================================
 
 사용자 이름과 비밀번호로 로그인합니다.
-로그인 성공 시에는 서블릿의 세션 ID 가 교체되고, 새 CSRF 토큰이 발급되며, 호출 원 IP 와 대상 사용자의 속도 제한 버킷이 초기화됩니다.
+로그인 성공 시에는 서블릿의 세션 ID 가 교체되고, 새 CSRF 토큰이 발급됩니다. 또한 같은 호출 원 IP 와 사용자 이름의 조합으로 그때까지 실패한 시도의 기록 (사용자 단위 버킷) 이 초기화됩니다. IP 단위 버킷은 같은 IP 에서 다른 사용자를 대상으로 한 시도도 세고 있으므로 초기화되지 않으며, 이 시도가 소비한 1회분만 반환됩니다.
 
 속도 제한은 호출 원 IP 단위와 사용자 단위의 2계통으로 적용됩니다. IP 단위의 상한을 초과한 경우 ``429 Too Many Requests`` 를 반환하고 ``Retry-After`` 헤더 (초) 가 부여됩니다. 사용자 단위의 상한을 초과한 경우 카운터 상태가 외부에서 추측되지 않도록, 자격증명이 올바르지 않은 경우와 동일한 ``401 Unauthorized`` 가 ( ``Retry-After`` 헤더 없이) 반환됩니다.
 
@@ -183,9 +185,13 @@ HTTP 메서드          POST
 
    로그인 및 비밀번호 변경의 속도 제한은 다음 프로퍼티로 설정할 수 있습니다 (괄호 안은 기본값).
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): IP 주소 단위의 분당 최대 시도 횟수. ``/auth/login`` 과 15.10부터는 로그인 페이지(``/login/``)의 로그인 폼에 적용됩니다.
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 사용자 단위의 분당 최대 시도 횟수. ``/auth/login`` 과 ``/auth/password`` 양쪽에 적용되며, 15.10부터는 로그인 페이지의 로그인 폼에도 적용됩니다(거부된 비밀번호를 셉니다).
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): IP 주소 단위의 분당 최대 시도 횟수. ``/auth/login`` 과 로그인 폼의 ``POST /login/login`` 양쪽에 적용되며, 두 엔드포인트는 같은 버킷을 공유합니다.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 사용자 단위의 분당 최대 시도 횟수. ``/auth/login`` 과 ``POST /login/login`` (호출 원 IP 와 사용자 이름의 조합마다 같은 버킷을 공유), 그리고 ``/auth/password`` 에 적용됩니다.
    - ``theme.api.login.lockout.seconds`` (``900``): 상한 초과 후의 잠금 시간 (초). ``Retry-After`` 헤더의 값으로 반환됩니다.
+
+   로그인 폼 (``POST /login/login``) 은 ``/auth/login`` 과 같은 버킷과 잠금을 공유하므로, 폼에서의 실패도 ``/auth/login`` 의 상한에 포함되며 그 반대도 마찬가지입니다. 폼에서 상한을 초과한 경우에는 ``429`` 가 아니라 일반적인 로그인 오류로 처리됩니다.
+
+   ``rate.limit.trusted.proxies`` (기본값 ``127.0.0.1,::1``) 에 포함되지 않은 리버스 프록시 뒤에서는 모든 클라이언트가 하나의 IP 주소 (프록시의 주소) 로 취급됩니다. 그 때문에 로그인 실패가 계속되면 잠금 시간 동안 모든 사용자가 로그인할 수 없게 될 수 있습니다. 프록시의 주소를 ``rate.limit.trusted.proxies`` 에 추가하여 ``X-Forwarded-For`` 에서 실제 클라이언트 IP 가 사용되도록 하십시오.
 
 요청 본문 (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,12 +290,16 @@ Content-Type 은 ``application/json`` (문자 인코딩 UTF-8) 입니다. 요청
      - 요청이 잘못된 경우 (과도한 요청 본문이나 비지원 ``Content-Type`` 포함).
    * - 401 Unauthorized
      - 자격증명이 올바르지 않은 경우.
+   * - 403 Forbidden
+     - 요청이 크로스 사이트로 차단된 경우 (``Origin`` 또는 ``Referer`` 헤더가 허용되지 않는 오리진을 나타냄). 상태를 변경하는 모든 요청이 거치는 기본 검사이며, 로그인에 필요하지 않은 CSRF 토큰과는 별개입니다.
    * - 405 Method Not Allowed
      - 지원되지 않는 HTTP 메서드가 지정된 경우.
    * - 429 Too Many Requests
      - 속도 제한을 초과한 경우. ``Retry-After`` 헤더에 대기해야 할 초 단위 시간이 표시됩니다.
    * - 500 Internal Server Error
      - 서버 내부 오류가 발생한 경우.
+   * - 503 Service Unavailable
+     - 검색 엔진이 요청을 처리하지 못한 경우 (연결할 수 없거나 처리 능력 부족으로 요청을 거부한 경우). ``error.code`` 는 ``service_unavailable`` 이며, 기다려야 할 초 수 (``5`` ) 를 나타내는 ``Retry-After`` 헤더가 붙습니다. 요청 자체에는 문제가 없으므로 잠시 후 다시 시도하십시오.
 
 로그아웃
 ========
@@ -344,6 +354,8 @@ HTTP 메서드          POST
 
    * - 상태 코드
      - 설명
+   * - 400 Bad Request
+     - 디코딩할 수 없는 요청 파라미터 (예: ``?q=%ff``)가 지정된 경우. ``error.code`` 는 ``invalid_request`` 입니다.
    * - 403 Forbidden
      - CSRF 토큰이 누락·만료된 경우.
    * - 405 Method Not Allowed
@@ -456,3 +468,5 @@ Content-Type 은 ``application/json`` (문자 인코딩 UTF-8) 입니다. 요청
      - 속도 제한을 초과한 경우.
    * - 500 Internal Server Error
      - 서버 내부 오류가 발생한 경우.
+   * - 503 Service Unavailable
+     - 검색 엔진이 요청을 처리하지 못한 경우 (연결할 수 없거나 처리 능력 부족으로 요청을 거부한 경우). ``error.code`` 는 ``service_unavailable`` 이며, 기다려야 할 초 수 (``5`` ) 를 나타내는 ``Retry-After`` 헤더가 붙습니다. 요청 자체에는 문제가 없으므로 잠시 후 다시 시도하십시오.

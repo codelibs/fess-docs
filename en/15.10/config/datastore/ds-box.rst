@@ -547,7 +547,13 @@ To assign a fixed role to all files, specify it as follows:
 
 ::
 
-    role="{role}box-users"
+    role="Rbox-users"
+
+.. note::
+   The value of ``role`` in the script is indexed as it is. Write the search role
+   (``R`` + role name, ``2`` + group name, ``1`` + user name), not the ``{role}name``
+   notation used in the "Permissions" field. A string is treated as a single role and
+   is not split at commas or semicolons.
 
 Reference Information
 =====================

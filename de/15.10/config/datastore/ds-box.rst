@@ -539,7 +539,13 @@ Um allen Dateien eine feste Rolle zuzuweisen, geben Sie diese wie folgt an:
 
 ::
 
-    role="{role}box-users"
+    role="Rbox-users"
+
+.. note::
+   Der Wert von ``role`` im Skript wird unverändert indexiert. Geben Sie die Suchrolle an
+   (``R`` + Rollenname, ``2`` + Gruppenname, ``1`` + Benutzername), nicht die Schreibweise
+   ``{role}name`` aus dem Feld „Berechtigungen“. Eine Zeichenkette gilt als einzelne Rolle
+   und wird nicht an Kommas oder Semikolons getrennt.
 
 Weiterführende Informationen
 ============================

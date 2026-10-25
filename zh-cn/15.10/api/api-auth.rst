@@ -145,6 +145,8 @@ HTTP 方法            GET
 
    * - 状态码
      - 说明
+   * - 400 Bad Request
+     - 指定了无法解码的请求参数（例如 ``?q=%ff`` ）时。 ``error.code`` 为 ``invalid_request`` 。
    * - 405 Method Not Allowed
      - 指定了不支持的 HTTP 方法时。
    * - 500 Internal Server Error
@@ -162,7 +164,7 @@ HTTP 方法            POST
 ==================  ====================================================
 
 使用用户名和密码登录。
-登录成功时，Servlet 会话 ID 将轮换，颁发新的 CSRF 令牌，并清除调用方 IP 和目标用户的速率限制桶。
+登录成功时，Servlet 会话 ID 将轮换，颁发新的 CSRF 令牌。同时，同一调用方 IP 与用户名组合此前失败尝试的记录（用户单位的桶）会被清除。IP 单位的桶不会被清除，因为它也统计来自同一 IP 针对其他用户的尝试；仅归还本次尝试所占用的一次配额。
 
 速率限制分为两个维度：调用方 IP 单位和用户单位。超过 IP 单位限制时，返回 ``429 Too Many Requests`` 并附带 ``Retry-After`` 头（单位秒）。超过用户单位限制时，为防止外部推测计数器状态，返回与凭据不正确相同的 ``401 Unauthorized``\ （不附带 ``Retry-After`` 头）。
 
@@ -183,9 +185,13 @@ HTTP 方法            POST
 
    登录和密码修改的速率限制可通过以下属性进行配置（括号内为默认值）：
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): 每个 IP 地址每分钟的最大尝试次数。适用于 ``/auth/login``\ ，从 15.10 起也适用于登录页面（``/login/``）的登录表单。
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 每个用户每分钟的最大尝试次数。适用于 ``/auth/login`` 和 ``/auth/password``\ ，从 15.10 起也适用于登录页面的登录表单（统计被拒绝的密码）。
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): 每个 IP 地址每分钟的最大尝试次数。同时适用于 ``/auth/login`` 和登录表单 ``POST /login/login``\ ，两者共用同一个桶。
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 每个用户每分钟的最大尝试次数。适用于 ``/auth/login`` 和 ``POST /login/login``\ （每个调用方 IP 与用户名的组合共用同一个桶）以及 ``/auth/password``\ 。
    - ``theme.api.login.lockout.seconds`` (``900``): 超过限制后的锁定时长（秒）。作为 ``Retry-After`` 头的值返回。
+
+   登录表单（ ``POST /login/login`` ）与 ``/auth/login`` 共用同一组桶和锁定，因此表单上的失败也会计入 ``/auth/login`` 的上限，反之亦然。在表单上超过上限时，不会返回 ``429``\ ，而是作为普通的登录错误处理。
+
+   在未列入 ``rate.limit.trusted.proxies``\ （默认值 ``127.0.0.1,::1``\ ）的反向代理之后，所有客户端都会被视为同一个 IP 地址（代理的地址）。因此，持续的登录失败可能导致所有用户在锁定时长内都无法登录。请将代理的地址添加到 ``rate.limit.trusted.proxies``\ ，以便从 ``X-Forwarded-For`` 获取真实的客户端 IP。
 
 请求体 (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~
@@ -284,12 +290,16 @@ Content-Type 为 ``application/json``\ （字符集 UTF-8）。请求体大小�
      - 请求不合法时（包括过大的请求体或不支持的 ``Content-Type``\ ）。
    * - 401 Unauthorized
      - 认证信息不正确时。
+   * - 403 Forbidden
+     - 请求因跨站而被拦截时（ ``Origin`` 或 ``Referer`` 头指向不允许的来源）。这是所有会改变状态的请求都要通过的基本检查，与登录不需要的 CSRF 令牌无关。
    * - 405 Method Not Allowed
      - 指定了不支持的 HTTP 方法时。
    * - 429 Too Many Requests
      - 超过速率限制时。\ ``Retry-After`` 头中会指示需要等待的秒数。
    * - 500 Internal Server Error
      - 发生服务器内部错误时。
+   * - 503 Service Unavailable
+     - 搜索引擎无法处理该请求时（无法连接，或因处理能力不足而拒绝了请求）。 ``error.code`` 为 ``service_unavailable`` ，并附带指示等待秒数（ ``5`` ）的 ``Retry-After`` 头。请求本身没有问题，请稍等片刻后重试。
 
 注销
 ====
@@ -344,6 +354,8 @@ HTTP 方法            POST
 
    * - 状态码
      - 说明
+   * - 400 Bad Request
+     - 指定了无法解码的请求参数（例如 ``?q=%ff`` ）时。 ``error.code`` 为 ``invalid_request`` 。
    * - 403 Forbidden
      - CSRF 令牌缺失或过期时。
    * - 405 Method Not Allowed
@@ -456,3 +468,5 @@ Content-Type 为 ``application/json``\ （字符集 UTF-8）。请求体大小�
      - 超过速率限制时。
    * - 500 Internal Server Error
      - 发生服务器内部错误时。
+   * - 503 Service Unavailable
+     - 搜索引擎无法处理该请求时（无法连接，或因处理能力不足而拒绝了请求）。 ``error.code`` 为 ``service_unavailable`` ，并附带指示等待秒数（ ``5`` ）的 ``Retry-After`` 头。请求本身没有问题，请稍等片刻后重试。

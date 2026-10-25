@@ -110,7 +110,11 @@ Lädt den Inhalt der angegebenen Protokolldatei herunter.
 Für ``{id}`` wird die beim Auflisten erhaltene ``id`` (der mit Base64-URL-Kodierung codierte Dateiname) unverändert angegeben.
 Die Antwort wird als Stream vom Typ ``application/octet-stream`` zurückgegeben.
 Aus Sicherheitsgründen werden nur Namen akzeptiert, die auf ``.log`` oder ``.log.gz`` enden; Namen mit Pfadmanipulationssequenzen wie ``..`` werden abgelehnt.
-Wird ein nicht existierender Dateiname oder ein als Protokolldatei nicht zulässiger Name angegeben, wird eine leere Antwort zurückgegeben.
+Wird ein nicht existierender Dateiname, ein als Protokolldatei nicht zulässiger Name oder eine ``id`` angegeben, die kein gültiges Base64 ist, wird ein Validierungsfehler zurückgegeben (HTTP ``400``, ``status`` im Antwort-Body ist ``1``).
+
+.. note::
+
+   Die ``id`` ist URL-sicheres Base64 (mit ``-`` und ``_``). Eine ``id`` im Standardalphabet (``+`` und ``/``) wird ebenfalls akzeptiert; um Mehrdeutigkeiten beim Einfügen in eine URL zu vermeiden, verwenden Sie jedoch die beim Auflisten erhaltene ``id`` unverändert.
 
 Request
 -------
@@ -123,6 +127,8 @@ Response
 --------
 
 Binärer Stream der Protokolldatei (``Content-Type: application/octet-stream``).
+
+Wird keine Protokolldatei mit dem angegebenen Namen gefunden, wird eine Fehlerantwort mit HTTP ``400`` und ``status`` ``1`` im Antwort-Body zurückgegeben (keine leere Antwort).
 
 Verwendungsbeispiele
 ====================

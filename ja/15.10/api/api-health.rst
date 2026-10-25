@@ -104,6 +104,8 @@ curl コマンドでのリクエスト例:
      - 説明
    * - 200 OK
      - クラスターが ``GREEN`` / ``YELLOW`` で到達可能な場合。成功エンベロープに ``engine`` が含まれます。
+   * - 400 Bad Request
+     - デコードできないリクエストパラメーター（ ``?q=%ff`` など）が指定された場合。 ``error.code`` は ``invalid_request`` です。
    * - 405 Method Not Allowed
      - HTTP メソッドが許可されていない場合。
    * - 503 Service Unavailable
