@@ -562,6 +562,31 @@ Upgrading from 15.9 to 15.10
 
 The changes in this section apply to every upgrade to 15.10. If you are upgrading from 15.8 or earlier, also read the section "Upgrading from 15.8 to 15.10" that follows.
 
+.. _upgrade-1510-client-ip:
+
+Client IP Address Recorded in Logs
+----------------------------------
+
+Up to 15.9, the ``ip`` field of the audit log and the ``clientIp`` field of the search log recorded the value of the request's ``X-Forwarded-For`` header as is, regardless of where the request came from. If it held several addresses, all of them were recorded, and a client could send any value.
+15.10 determines the address by the same rules as rate limiting (:doc:`../config/rate-limiting`). Only when the source of the request is in ``rate.limit.trusted.proxies`` (default ``127.0.0.1,::1``) does it use ``X-Forwarded-For`` (all lines, if it is split across several header lines) and ``X-Real-IP``. ``X-Forwarded-For`` is read from the right, and the first address that is not a trusted proxy is recorded. Otherwise the address of the source is recorded. These rules also apply when ``rate.limit.enabled`` is ``false``.
+
+Behind a reverse proxy that is not in ``rate.limit.trusted.proxies``, every request is recorded with the address of the proxy. To record the address of the original client, add the address of the proxy to ``rate.limit.trusted.proxies``.
+
+.. _upgrade-1510-cipher-key:
+
+Warning for ``app.cipher.key``
+------------------------------
+
+If ``app.cipher.key`` is blank or still the value shipped in ``fess_config.properties`` (``___change__me___``), 15.10 writes a warning to ``fess.log`` at startup. Job processes such as the crawler do not write it.
+The key encrypts values such as the passwords stored in crawl configurations and data store configurations, and the shipped value is public. |Fess| does not change the key by itself. Changing it makes values encrypted with the previous key impossible to decrypt, so set it before you start operating.
+
+Other Behavior Changes
+----------------------
+
+- "Delete all" in the "Search" and "Crawling Info" screens of the admin UI requires the edit role (``admin-searchlist``, ``admin-crawlinginfo``). Up to 15.9, only the button was hidden: requests from a user who had only a view role (a role with the ``-view`` suffix) were still accepted.
+- The converted text (``output``) of a mapping dictionary item is required. Up to 15.9, the admin UI and the admin API accepted an item without it and stored nothing.
+- In a search, a single word in double quotes (such as ``"less"``) matches only that word. Up to 15.9, a word at least ``query.boost.fuzzy.min.length`` (default ``4``) long also got fuzzy match conditions, so documents containing ``fess`` also matched ``"less"``. Unquoted words and words with a field specified (such as ``content:"less"``) are unchanged.
+
 .. _upgrade-1510-tika:
 
 Apache Tika 4 and ``tika.xml``

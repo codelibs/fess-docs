@@ -168,7 +168,7 @@ All properties configurable in ``app/WEB-INF/classes/fess_config.properties``.
      - IP addresses to block (comma-separated)
      - (empty)
    * - ``rate.limit.trusted.proxies``
-     - Trusted proxy IPs (for X-Forwarded-For/X-Real-IP resolution)
+     - Trusted proxy IPs (for X-Forwarded-For/X-Real-IP resolution; also used for the client IP in the audit log and search log)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
      - Cleanup interval (number of requests, reserved)
@@ -180,6 +180,16 @@ All properties configurable in ``app/WEB-INF/classes/fess_config.properties``.
    are cleaned up automatically based on the internal cache expiration
    (``rate.limit.window.ms`` and ``rate.limit.block.duration.ms``),
    so this value is not used.
+
+Login Rate Limit
+================
+
+Login has its own rate limit, separate from the one above, configured with ``theme.api.login.*``.
+From 15.10, ``/api/v2/auth/login`` and the login form on the login screen (``/login/``) share the same limit and lockout.
+Each attempt consumes one slot of the per-minute quota of the client IP (default ``10``), and the slot is returned when the login succeeds.
+When attempts from the same IP address exceed the limit, that IP address is locked out for ``theme.api.login.lockout.seconds`` (default ``900``) seconds, and during that time even correct credentials cannot log in.
+As a result, if more attempts than the limit (for example, simultaneous logins) come from the same IP address before one succeeds, that address is locked out.
+See :doc:`../api/api-auth` for details.
 
 Advanced Rate Limiting Configuration
 =====================================

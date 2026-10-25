@@ -172,7 +172,7 @@ Toutes les propriétés configurables dans ``app/WEB-INF/classes/fess_config.pro
      - Adresses IP à bloquer (séparées par des virgules)
      - (vide)
    * - ``rate.limit.trusted.proxies``
-     - IP de proxies de confiance (pour obtenir l'IP client via X-Forwarded-For/X-Real-IP)
+     - IP de proxies de confiance (pour obtenir l'IP client via X-Forwarded-For/X-Real-IP ; également utilisées pour l'IP client du journal d'audit et du journal de recherche)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
      - Intervalle de nettoyage (nombre de requêtes, réservé)
@@ -184,6 +184,16 @@ Toutes les propriétés configurables dans ``app/WEB-INF/classes/fess_config.pro
    sont nettoyés automatiquement en fonction de l'expiration du cache interne
    (``rate.limit.window.ms`` et ``rate.limit.block.duration.ms``),
    de sorte que cette valeur n'est pas utilisée.
+
+Limitation des tentatives de connexion
+======================================
+
+La connexion dispose de sa propre limitation, distincte de la précédente et configurée avec ``theme.api.login.*``.
+Depuis la 15.10, ``/api/v2/auth/login`` et le formulaire de connexion de l'écran de connexion (``/login/``) partagent la même limite et le même verrouillage.
+Chaque tentative consomme une place du quota par minute de l'IP client (valeur par défaut ``10``), et cette place est restituée lorsque la connexion réussit.
+Lorsque les tentatives d'une même adresse IP dépassent la limite, cette adresse IP est verrouillée pendant ``theme.api.login.lockout.seconds`` (valeur par défaut ``900``) secondes, et même des identifiants corrects ne permettent pas de se connecter pendant ce temps.
+Par conséquent, si une même adresse IP effectue plus de tentatives que la limite (par exemple des connexions simultanées) avant qu'une seule réussisse, cette adresse est verrouillée.
+Voir :doc:`../api/api-auth` pour plus de détails.
 
 Configuration avancée de limitation de débit
 ====================

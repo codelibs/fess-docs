@@ -169,7 +169,7 @@ Alle in ``app/WEB-INF/classes/fess_config.properties`` konfigurierbaren Eigensch
      - Blockierte IP-Adressen (kommagetrennt)
      - (leer)
    * - ``rate.limit.trusted.proxies``
-     - Vertrauenswürdige Proxy-IPs (für X-Forwarded-For/X-Real-IP)
+     - Vertrauenswürdige Proxy-IPs (für X-Forwarded-For/X-Real-IP; auch für die Client-IP im Audit-Protokoll und im Suchprotokoll)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
      - Bereinigungsintervall (Anfragenzahl, reserviert)
@@ -180,6 +180,16 @@ Alle in ``app/WEB-INF/classes/fess_config.properties`` konfigurierbaren Eigensch
    In der aktuellen Implementierung werden die Anfragezähler und die Informationen zu blockierten IPs
    automatisch auf Basis des internen Cache-Ablaufs (``rate.limit.window.ms`` und
    ``rate.limit.block.duration.ms``) bereinigt, sodass dieser Wert nicht verwendet wird.
+
+Begrenzung der Anmeldeversuche
+==============================
+
+Für die Anmeldung gibt es eine eigene Begrenzung, die unabhängig von der obigen ist und mit ``theme.api.login.*`` konfiguriert wird.
+Ab 15.10 teilen sich ``/api/v2/auth/login`` und das Anmeldeformular der Anmeldeseite (``/login/``) dieselbe Begrenzung und Sperrung.
+Jeder Versuch verbraucht einen Platz im Minutenkontingent der Client-IP (Standardwert ``10``); bei erfolgreicher Anmeldung wird der Platz zurückgegeben.
+Überschreiten die Versuche von derselben IP-Adresse das Limit, wird diese IP-Adresse für ``theme.api.login.lockout.seconds`` (Standardwert ``900``) Sekunden gesperrt, und in dieser Zeit ist auch mit korrekten Zugangsdaten keine Anmeldung möglich.
+Kommen daher von derselben IP-Adresse mehr Versuche als erlaubt (etwa gleichzeitige Anmeldungen), bevor einer erfolgreich ist, wird diese Adresse gesperrt.
+Einzelheiten finden Sie unter :doc:`../api/api-auth`.
 
 Erweiterte Rate-Limiting-Konfiguration
 ======================================

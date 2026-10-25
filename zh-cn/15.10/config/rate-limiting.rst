@@ -155,7 +155,7 @@ robots.txt 按照 RFC 9309 解释。 ``Allow:`` 和 ``Disallow:`` 以最长匹�
      - 要阻止的IP地址（逗号分隔）
      - （空）
    * - ``rate.limit.trusted.proxies``
-     - 信任的代理IP（从X-Forwarded-For/X-Real-IP获取客户端IP）
+     - 信任的代理IP（从X-Forwarded-For/X-Real-IP获取客户端IP，也用于审计日志和搜索日志中的客户端IP）
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
      - 清理间隔（请求数，预留）
@@ -164,6 +164,16 @@ robots.txt 按照 RFC 9309 解释。 ``Allow:`` 和 ``Disallow:`` 以最长匹�
 .. note::
    ``rate.limit.cleanup.interval`` 是为将来使用而预留的设置项。
    在当前实现中，请求计数器和被阻止的IP信息会根据内部缓存过期时间（``rate.limit.window.ms`` 和 ``rate.limit.block.duration.ms``）自动清理，因此该值不会被使用。
+
+登录次数限制
+============
+
+登录除上述限制外，还有通过 ``theme.api.login.*`` 设置的单独的次数限制。
+从 15.10 起，``/api/v2/auth/login`` 与登录页面（``/login/``）的登录表单共用同一限制和锁定。
+每次尝试会占用该客户端IP每分钟限额（默认值为 ``10``）中的一个名额，登录成功后会归还。
+同一IP地址的尝试超过上限时，该IP地址将被锁定 ``theme.api.login.lockout.seconds`` （默认值为 ``900``）秒，在此期间即使使用正确的凭据也无法登录。
+因此，如果同一IP地址在成功之前出现超过上限的尝试（例如同时登录），该地址将被锁定。
+详情请参阅 :doc:`../api/api-auth`。
 
 高级速率限制设置
 ====================

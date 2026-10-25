@@ -579,6 +579,31 @@ Mise à niveau de 15.9 vers 15.10
 
 Les modifications de cette section concernent toute mise à niveau vers 15.10. Si vous venez de la version 15.8 ou d'une version antérieure, lisez aussi la section « Mise à niveau de 15.8 vers 15.10 » qui suit.
 
+.. _upgrade-1510-client-ip:
+
+Adresse IP du client enregistrée dans les journaux
+--------------------------------------------------
+
+Jusqu'à la 15.9, le champ ``ip`` du journal d'audit et le champ ``clientIp`` du journal de recherche enregistraient telle quelle la valeur de l'en-tête ``X-Forwarded-For`` de la requête, quelle que soit l'origine de celle-ci. Si l'en-tête contenait plusieurs adresses, toutes étaient enregistrées, et un client pouvait envoyer n'importe quelle valeur.
+La 15.10 détermine l'adresse selon les mêmes règles que la limitation de débit (:doc:`../config/rate-limiting`). ``X-Forwarded-For`` (toutes les lignes, s'il est réparti sur plusieurs lignes d'en-tête) et ``X-Real-IP`` ne sont utilisés que si la source de la requête figure dans ``rate.limit.trusted.proxies`` (valeur par défaut ``127.0.0.1,::1``). ``X-Forwarded-For`` est lu à partir de la droite, et la première adresse qui n'est pas celle d'un proxy de confiance est enregistrée. Sinon, l'adresse de la source est enregistrée. Ces règles s'appliquent même si ``rate.limit.enabled`` vaut ``false``.
+
+Derrière un reverse proxy absent de ``rate.limit.trusted.proxies``, toutes les requêtes sont enregistrées avec l'adresse du proxy. Pour enregistrer l'adresse du client d'origine, ajoutez l'adresse du proxy à ``rate.limit.trusted.proxies``.
+
+.. _upgrade-1510-cipher-key:
+
+Avertissement sur ``app.cipher.key``
+------------------------------------
+
+Si ``app.cipher.key`` est vide ou conserve la valeur fournie dans ``fess_config.properties`` (``___change__me___``), la 15.10 écrit un avertissement dans ``fess.log`` au démarrage. Les processus de tâches tels que le crawler n'en écrivent pas.
+Cette clé chiffre des valeurs telles que les mots de passe enregistrés dans les configurations de crawl et de magasin de données, et la valeur fournie est publique. |Fess| ne modifie pas la clé automatiquement. Après modification, les valeurs chiffrées avec l'ancienne clé ne peuvent plus être déchiffrées ; définissez-la donc avant la mise en exploitation.
+
+Autres changements de comportement
+----------------------------------
+
+- « Tout supprimer » dans les écrans « Rechercher » et « Informations sur l'exploration » de l'interface d'administration requiert le rôle d'édition (``admin-searchlist``, ``admin-crawlinginfo``). Jusqu'à la 15.9, seul le bouton était masqué : les requêtes d'un utilisateur ne possédant qu'un rôle de consultation (un rôle portant le suffixe ``-view``) étaient tout de même acceptées.
+- Le texte converti (``output``) d'une entrée du dictionnaire de mappage est obligatoire. Jusqu'à la 15.9, l'interface d'administration et l'API d'administration acceptaient une entrée sans ce champ et n'enregistraient rien.
+- Dans une recherche, un mot unique entre guillemets doubles (tel que ``"less"``) ne correspond qu'à ce mot. Jusqu'à la 15.9, un mot d'au moins ``query.boost.fuzzy.min.length`` (valeur par défaut ``4``) caractères recevait aussi des conditions de correspondance approximative, de sorte que les documents contenant ``fess`` correspondaient aussi à ``"less"``. Les mots sans guillemets et les mots dont le champ est précisé (tels que ``content:"less"``) ne changent pas.
+
 .. _upgrade-1510-tika:
 
 Apache Tika 4 et ``tika.xml``
