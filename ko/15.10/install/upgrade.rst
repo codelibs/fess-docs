@@ -708,6 +708,12 @@ cipher가 없을 때 요청으로 전달되는 롤
 - ``TikaExtractor.setTikaConfig`` 와 ``fess.xml`` 의 ``tikaConfig`` 컴포넌트가 삭제되었습니다.
 - 로그 레벨이 ``debug`` 일 때 ``CrawlJob`` 은 크롤러에 ``-Dorg.apache.tika.service.error.warn=true`` 를 전달하지 않습니다. Tika 4가 이 값을 읽지 않기 때문입니다.
 
+15.10 의 ``WEB-INF/lib`` 에는 15.9 에 포함되어 있던 다음 라이브러리도 더 이상 들어 있지 않습니다. 이 라이브러리들은 Tika 3 의 모듈이 가져오던 것이며, 15.10 이 사용하는 Tika 4 의 모듈은 이를 의존하지 않습니다. 15.10 의 WAR 에 있는 어떤 클래스도 이 라이브러리를 참조하지 않습니다.
+
+- 더 이상 들어 있지 않은 라이브러리는 JAXB(``jakarta.xml.bind-api``, ``jaxb-core``, ``jaxb-runtime``, ``txw2``, ``istack-commons-runtime``)와 ``jempbox``, ``xmpbox``, ``juniversalchardet`` 입니다. ``jakarta.activation-api`` 와 ``angus-activation`` 은 그대로 포함됩니다.
+- 플러그인이 이 라이브러리의 클래스를 사용한다면 라이브러리를 플러그인의 JAR 에 포함시키십시오(예: Maven Shade Plugin 사용). 플러그인은 WAR 가 제공하는 클래스에는 의존할 수 있지만 다른 플러그인의 클래스에는 의존할 수 없으며, 15.10 의 WAR 는 더 이상 이 클래스를 제공하지 않습니다. ``WEB-INF/lib`` 의 클래스가 ``WEB-INF/plugin`` 의 클래스보다 먼저 해석되므로, WAR 에 없는 라이브러리를 포함해도 중복되지 않습니다.
+- 플러그인이 영향을 받는지는 필요한 클래스가 15.10 의 ``WEB-INF/lib`` JAR 에 있는지로 확인할 수 있습니다. 제거된 클래스를 사용하는 처리는 실행 시 예를 들어 ``NoClassDefFoundError`` 로 실패하며, 이 클래스를 사용하지 않는 처리는 영향을 받지 않습니다.
+
 15.9용으로 빌드된 플러그인
 --------------------------
 

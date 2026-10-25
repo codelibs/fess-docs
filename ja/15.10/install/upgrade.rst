@@ -708,6 +708,12 @@ cipher を設定していない場合のリクエストのロール
 - ``TikaExtractor.setTikaConfig`` と、``fess.xml`` の ``tikaConfig`` コンポーネントを削除しました。
 - ログレベルが ``debug`` のとき、``CrawlJob`` はクローラーに ``-Dorg.apache.tika.service.error.warn=true`` を渡さなくなりました。Tika 4 がこの値を読まないためです。
 
+15.10 の ``WEB-INF/lib`` には、15.9 に含まれていた次のライブラリも含まれなくなりました。これらは Tika 3 のモジュールが引き込んでいたもので、15.10 が使う Tika 4 のモジュールは依存していません。15.10 の WAR のクラスはこれらを参照していません。
+
+- 含まれなくなったライブラリは、JAXB（``jakarta.xml.bind-api``、``jaxb-core``、``jaxb-runtime``、``txw2``、``istack-commons-runtime``）、``jempbox``、``xmpbox``、``juniversalchardet`` です。``jakarta.activation-api`` と ``angus-activation`` は引き続き含まれます。
+- プラグインがこれらのライブラリのクラスを使う場合は、ライブラリをプラグインの JAR に含めてください（たとえば Maven Shade Plugin で同梱します）。プラグインは WAR が提供するクラスには依存できますが、他のプラグインのクラスには依存できず、15.10 の WAR はこれらを提供しません。``WEB-INF/lib`` のクラスは ``WEB-INF/plugin`` のクラスより先に解決されるため、WAR に無いライブラリを同梱しても重複しません。
+- プラグインが影響を受けるかどうかは、必要とするクラスが 15.10 の ``WEB-INF/lib`` の JAR に含まれているかで確認できます。削除されたクラスを使う処理は、たとえば ``NoClassDefFoundError`` で実行時に失敗します。これらのクラスを使わない処理には影響しません。
+
 15.9 向けにビルドされたプラグイン
 ---------------------------------
 

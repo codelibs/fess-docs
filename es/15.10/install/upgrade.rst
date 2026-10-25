@@ -729,6 +729,12 @@ Los cambios siguientes afectan a los plugins que usan clases de ``fess-crawler``
 - Se eliminaron ``TikaExtractor.setTikaConfig`` y el componente ``tikaConfig`` de ``fess.xml``.
 - Con el nivel de registro ``debug``, ``CrawlJob`` ya no pasa ``-Dorg.apache.tika.service.error.warn=true`` al rastreador, porque Tika 4 no lee esa propiedad.
 
+El ``WEB-INF/lib`` de la versión 15.10 tampoco contiene ya las bibliotecas siguientes, que la versión 15.9 incluía. Las aportaban los módulos de Tika 3; los módulos de Tika 4 que usa la versión 15.10 no dependen de ellas. Ninguna clase del WAR de la versión 15.10 hace referencia a ellas.
+
+- Las bibliotecas retiradas son JAXB (``jakarta.xml.bind-api``, ``jaxb-core``, ``jaxb-runtime``, ``txw2`` e ``istack-commons-runtime``), ``jempbox``, ``xmpbox`` y ``juniversalchardet``. ``jakarta.activation-api`` y ``angus-activation`` se siguen incluyendo.
+- Si su plugin usa clases de estas bibliotecas, inclúyalas en el JAR del plugin (por ejemplo, con el Maven Shade Plugin). Un plugin puede depender de las clases que proporciona el WAR, pero no de las de otro plugin, y el WAR de la versión 15.10 ya no proporciona estas. Las clases de ``WEB-INF/lib`` se resuelven antes que las de ``WEB-INF/plugin``, por lo que incluir una biblioteca que el WAR no contiene no genera duplicados.
+- Para saber si un plugin está afectado, compruebe si las clases que necesita están en los JAR de ``WEB-INF/lib`` de la versión 15.10. Un procesamiento que use una clase retirada falla en tiempo de ejecución, por ejemplo con ``NoClassDefFoundError``; los que no usan esas clases no se ven afectados.
+
 Plugins compilados para la versión 15.9
 ---------------------------------------
 
