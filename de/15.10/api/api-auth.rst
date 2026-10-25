@@ -145,6 +145,8 @@ Fehlerantwort
 
    * - Statuscode
      - Beschreibung
+   * - 400 Bad Request
+     - Wenn ein Anfrageparameter angegeben wurde, der sich nicht dekodieren lässt (zum Beispiel ``?q=%ff``). ``error.code`` ist ``invalid_request``.
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde.
    * - 500 Internal Server Error
@@ -162,7 +164,7 @@ Endpunkt             ``/api/v2/auth/login``
 ==================  ====================================================
 
 Meldet den Benutzer mit Benutzername und Passwort an.
-Bei erfolgreicher Anmeldung wird die Servlet-Sitzungs-ID rotiert, ein neues CSRF-Token ausgestellt und die Rate-Limit-Buckets der aufrufenden IP und des Zielbenutzers geleert.
+Bei erfolgreicher Anmeldung wird die Servlet-Sitzungs-ID rotiert, ein neues CSRF-Token ausgestellt. Außerdem wird die Aufzeichnung früherer fehlgeschlagener Versuche für dieselbe Kombination aus aufrufender IP und Benutzername (der Bucket pro Benutzer) geleert. Der Bucket pro IP wird nicht geleert, da er auch Versuche gegen andere Benutzer von derselben IP zählt; zurückgegeben wird nur der eine Platz, den dieser Versuch belegt hat.
 
 Das Rate-Limiting erfolgt nach zwei Dimensionen: pro aufrufender IP und pro Benutzer. Bei Überschreitung des IP-seitigen Limits wird ``429 Too Many Requests`` zusammen mit einem ``Retry-After``-Header (in Sekunden) zurückgegeben. Bei Überschreitung des benutzerseitigen Limits wird – um den Zählerzustand von außen nicht erkennbar zu machen – dieselbe ``401 Unauthorized``-Antwort wie bei ungültigen Anmeldedaten zurückgegeben (ohne ``Retry-After``-Header).
 
@@ -183,9 +185,13 @@ Außerdem werden protokollrelative Pfade (führendes ``//``) und Pfade mit ASCII
 
    Die Rate-Limits für Anmeldung und Passwortänderung können mit folgenden Eigenschaften konfiguriert werden (Standardwerte in Klammern):
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximale Anzahl von Versuchen pro Minute und IP-Adresse. Gilt für ``/auth/login`` und, ab 15.10, für das Anmeldeformular der Anmeldeseite (``/login/``).
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximale Anzahl von Versuchen pro Minute und Benutzer. Gilt für ``/auth/login`` und ``/auth/password`` sowie, ab 15.10, für das Anmeldeformular der Anmeldeseite (abgelehnte Passwörter werden gezählt).
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximale Anzahl von Versuchen pro Minute und IP-Adresse. Gilt sowohl für ``/auth/login`` als auch für das Anmeldeformular ``POST /login/login``; beide teilen sich denselben Bucket.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximale Anzahl von Versuchen pro Minute und Benutzer. Gilt für ``/auth/login`` und ``POST /login/login`` (diese teilen sich je Kombination aus aufrufender IP und Benutzername einen Bucket) sowie für ``/auth/password``.
    - ``theme.api.login.lockout.seconds`` (``900``): Sperrungsdauer (in Sekunden) nach Überschreitung des Limits. Wird als Wert des ``Retry-After``-Headers zurückgegeben.
+
+   Das Anmeldeformular (``POST /login/login``) teilt sich die Buckets und die Sperrung mit ``/auth/login``; Fehlversuche am Formular zählen daher zum Limit von ``/auth/login`` und umgekehrt. Wird das Limit am Formular überschritten, wird dies als gewöhnlicher Anmeldefehler behandelt und nicht mit ``429`` beantwortet.
+
+   Hinter einem Reverse-Proxy, der nicht in ``rate.limit.trusted.proxies`` (Standard ``127.0.0.1,::1``) aufgeführt ist, werden alle Clients als eine einzige IP-Adresse (die des Proxys) behandelt. Wiederholte fehlgeschlagene Anmeldungen können dann für die Dauer der Sperrung alle Benutzer aussperren. Tragen Sie die Adresse des Proxys in ``rate.limit.trusted.proxies`` ein, damit die tatsächliche Client-IP aus ``X-Forwarded-For`` übernommen wird.
 
 Anfrage-Body (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,12 +290,16 @@ Fehlerantwort
      - Wenn die Anfrage ungültig ist (einschließlich übermäßig großer Request-Bodys und nicht unterstützter ``Content-Type``-Werte).
    * - 401 Unauthorized
      - Wenn die Anmeldedaten ungültig sind.
+   * - 403 Forbidden
+     - Wenn die Anfrage als Cross-Site-Anfrage blockiert wurde: Der Header ``Origin`` (oder ``Referer``) nennt einen nicht zulässigen Origin. Dies ist die grundlegende Prüfung, die jede zustandsändernde Anfrage durchläuft, und ist vom CSRF-Token getrennt, das die Anmeldung nicht benötigt.
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde.
    * - 429 Too Many Requests
      - Wenn das Rate-Limit überschritten wurde. Der ``Retry-After``-Header gibt die Wartezeit in Sekunden an.
    * - 500 Internal Server Error
      - Wenn ein interner Serverfehler auftritt.
+   * - 503 Service Unavailable
+     - Wenn die Suchmaschine die Anfrage nicht entgegennehmen konnte: Sie ist nicht erreichbar oder hat die Anfrage wegen fehlender Kapazität abgelehnt. ``error.code`` ist ``service_unavailable``, und ein ``Retry-After``-Header nennt die Wartezeit in Sekunden (``5``). Die Anfrage selbst ist in Ordnung; versuchen Sie es nach kurzer Wartezeit erneut.
 
 Abmelden
 ========
@@ -344,6 +354,8 @@ Fehlerantwort
 
    * - Statuscode
      - Beschreibung
+   * - 400 Bad Request
+     - Wenn ein Anfrageparameter angegeben wurde, der sich nicht dekodieren lässt (zum Beispiel ``?q=%ff``). ``error.code`` ist ``invalid_request``.
    * - 403 Forbidden
      - Wenn der CSRF-Token fehlt oder abgelaufen ist.
    * - 405 Method Not Allowed
@@ -456,3 +468,5 @@ Fehlerantwort
      - Wenn das Rate-Limit überschritten wurde.
    * - 500 Internal Server Error
      - Wenn ein interner Serverfehler auftritt.
+   * - 503 Service Unavailable
+     - Wenn die Suchmaschine die Anfrage nicht entgegennehmen konnte: Sie ist nicht erreichbar oder hat die Anfrage wegen fehlender Kapazität abgelehnt. ``error.code`` ist ``service_unavailable``, und ein ``Retry-After``-Header nennt die Wartezeit in Sekunden (``5``). Die Anfrage selbst ist in Ordnung; versuchen Sie es nach kurzer Wartezeit erneut.

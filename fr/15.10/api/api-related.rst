@@ -78,6 +78,8 @@ Réponse d'erreur
 
    * - Code de statut
      - Description
+   * - 400 Bad Request
+     - Un paramètre de requête impossible à décoder (par exemple ``?q=%ff``) a été fourni. ``error.code`` vaut ``invalid_request``.
    * - 401 Unauthorized
      - Authentification requise (connexion obligatoire activée avec un appelant anonyme). ``error.code`` vaut ``auth_required``.
    * - 405 Method Not Allowed
@@ -152,6 +154,8 @@ Réponse d'erreur
 
    * - Code de statut
      - Description
+   * - 400 Bad Request
+     - Un paramètre de requête impossible à décoder (par exemple ``?q=%ff``) a été fourni. ``error.code`` vaut ``invalid_request``.
    * - 401 Unauthorized
      - Authentification requise (connexion obligatoire activée avec un appelant anonyme). ``error.code`` vaut ``auth_required``.
    * - 405 Method Not Allowed

@@ -421,7 +421,7 @@ Los campos del cuerpo de la solicitud de creación y actualización de elementos
      - ``token`` (requerido), ``segmentation`` (requerido), ``reading`` (requerido), ``pos`` (requerido)
      - ``kuromojiFile``
    * - ``mapping``
-     - ``inputs`` (requerido), ``output``
+     - ``inputs`` (requerido), ``output`` (requerido)
      - ``charMappingFile``
    * - ``protwords``
      - ``input`` (requerido)

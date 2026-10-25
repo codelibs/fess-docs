@@ -406,6 +406,8 @@ Réponse d'erreur
 
    * - Code de statut
      - Description
+   * - 400 Bad Request
+     - Un paramètre de requête impossible à décoder (par exemple ``?q=%ff``) a été fourni. ``error.code`` vaut ``invalid_request``.
    * - 405 Method Not Allowed
      - Une méthode HTTP non prise en charge a été spécifiée.
    * - 500 Internal Server Error

@@ -145,6 +145,8 @@ Error Response
 
    * - Status Code
      - Description
+   * - 400 Bad Request
+     - A request parameter that cannot be decoded (for example ``?q=%ff``) was given. ``error.code`` is ``invalid_request``.
    * - 405 Method Not Allowed
      - An unsupported HTTP method was specified.
    * - 500 Internal Server Error
@@ -162,7 +164,7 @@ Endpoint            ``/api/v2/auth/login``
 ==================  ====================================================
 
 Logs in with a username and password.
-On successful login, the servlet session ID is rotated, a new CSRF token is issued, and the rate-limit buckets for the caller's IP and the target user are cleared.
+On successful login, the servlet session ID is rotated, and a new CSRF token is issued. In addition, the record of earlier failed attempts for the same caller IP and username (the per-user bucket) is cleared. The per-IP bucket is not cleared, because it also counts attempts made at other users from the same IP; only the one slot consumed by this attempt is given back.
 
 Rate limiting is applied along two axes: per caller IP and per user. When the per-IP limit is exceeded, ``429 Too Many Requests`` is returned together with a ``Retry-After`` header (in seconds). When the per-user limit is exceeded, the same ``401 Unauthorized`` as for invalid credentials is returned (without a ``Retry-After`` header), so that the state of the counter cannot be inferred from outside.
 
@@ -183,9 +185,13 @@ Additionally, protocol-relative paths (starting with ``//``) and paths containin
 
    The rate limits for login and password change can be configured with the following properties (defaults in parentheses):
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximum number of attempts per minute per IP address. Applies to ``/auth/login`` and, from 15.10, to the login form of the login page (``/login/``).
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximum number of attempts per minute per user. Applies to ``/auth/login`` and ``/auth/password``, and, from 15.10, to the login form of the login page (rejected passwords are counted).
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximum number of attempts per minute per IP address. Applies to both ``/auth/login`` and the login form ``POST /login/login``, which share the same bucket.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximum number of attempts per minute per user. Applies to ``/auth/login`` and ``POST /login/login`` (which share one bucket for each pair of caller IP and username) and to ``/auth/password``.
    - ``theme.api.login.lockout.seconds`` (``900``): Lockout duration (in seconds) after the limit is exceeded. Returned as the value of the ``Retry-After`` header.
+
+   The login form (``POST /login/login``) shares the buckets and the lockout with ``/auth/login``, so failures on the form count toward the ``/auth/login`` limit and vice versa. When the limit is exceeded on the form, it is handled as an ordinary login error instead of ``429``.
+
+   Behind a reverse proxy that is not listed in ``rate.limit.trusted.proxies`` (default ``127.0.0.1,::1``), all clients are treated as one IP address (the proxy's address). Repeated failed logins can then lock out every user for the duration of the lockout. Add the proxy's address to ``rate.limit.trusted.proxies`` so that the actual client IP is taken from ``X-Forwarded-For``.
 
 Request Body (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,12 +290,16 @@ Error Response
      - The request is invalid (including oversized request body or unsupported ``Content-Type``).
    * - 401 Unauthorized
      - The credentials are invalid.
+   * - 403 Forbidden
+     - The request was blocked as cross-site: its ``Origin`` (or ``Referer``) header names an origin that is not allowed. This is the baseline check that every state-changing request passes, and is separate from the CSRF token, which login does not need.
    * - 405 Method Not Allowed
      - An unsupported HTTP method was specified.
    * - 429 Too Many Requests
      - The rate limit was exceeded. The ``Retry-After`` header indicates the number of seconds to wait.
    * - 500 Internal Server Error
      - An internal server error occurred.
+   * - 503 Service Unavailable
+     - The search engine could not take the request: it is not reachable, or it refused the request for lack of capacity. ``error.code`` is ``service_unavailable``, and a ``Retry-After`` header gives the number of seconds to wait (``5``). The request itself is fine, so retry after a short wait.
 
 Logout
 ======
@@ -344,6 +354,8 @@ Error Response
 
    * - Status Code
      - Description
+   * - 400 Bad Request
+     - A request parameter that cannot be decoded (for example ``?q=%ff``) was given. ``error.code`` is ``invalid_request``.
    * - 403 Forbidden
      - The CSRF token is missing or expired.
    * - 405 Method Not Allowed
@@ -456,3 +468,5 @@ Error Response
      - The rate limit was exceeded.
    * - 500 Internal Server Error
      - An internal server error occurred.
+   * - 503 Service Unavailable
+     - The search engine could not take the request: it is not reachable, or it refused the request for lack of capacity. ``error.code`` is ``service_unavailable``, and a ``Retry-After`` header gives the number of seconds to wait (``5``). The request itself is fine, so retry after a short wait.

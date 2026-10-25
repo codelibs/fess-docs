@@ -104,6 +104,8 @@ curl 명령으로 요청 예:
      - 설명
    * - 200 OK
      - 클러스터가 ``GREEN`` / ``YELLOW`` 이며 도달 가능한 경우. 성공 엔벨로프에 ``engine`` 이 포함됩니다.
+   * - 400 Bad Request
+     - 디코딩할 수 없는 요청 파라미터 (예: ``?q=%ff``)가 지정된 경우. ``error.code`` 는 ``invalid_request`` 입니다.
    * - 405 Method Not Allowed
      - HTTP 메서드가 허용되지 않는 경우.
    * - 503 Service Unavailable

@@ -145,6 +145,8 @@ Respuesta de error
 
    * - Código de estado
      - Descripción
+   * - 400 Bad Request
+     - Cuando se ha indicado un parámetro de la solicitud que no se puede decodificar (por ejemplo, ``?q=%ff``). El ``error.code`` es ``invalid_request``.
    * - 405 Method Not Allowed
      - Cuando se especifica un método HTTP no admitido.
    * - 500 Internal Server Error
@@ -162,7 +164,7 @@ Endpoint            ``/api/v2/auth/login``
 ==================  ====================================================
 
 Inicia sesión con nombre de usuario y contraseña.
-Cuando el inicio de sesión es exitoso, se rota el ID de sesión del servlet, se emite un nuevo token CSRF y se borran los cubos de límite de velocidad para la IP del cliente y el usuario objetivo.
+Cuando el inicio de sesión es exitoso, se rota el ID de sesión del servlet, se emite un nuevo token CSRF. Además, se borra el registro de los intentos fallidos anteriores para la misma combinación de IP del cliente y nombre de usuario (el cubo por usuario). El cubo por IP no se borra, porque también cuenta los intentos realizados contra otros usuarios desde la misma IP; solo se devuelve la plaza que consumió este intento.
 
 El límite de velocidad se aplica en dos ejes: por IP del cliente y por usuario. Cuando se supera el límite por IP, se devuelve ``429 Too Many Requests`` junto con una cabecera ``Retry-After`` (en segundos). Cuando se supera el límite por usuario, se devuelve el mismo ``401 Unauthorized`` que para credenciales inválidas (sin cabecera ``Retry-After``), de modo que el estado del contador no pueda inferirse desde el exterior.
 
@@ -183,9 +185,13 @@ Además, las rutas relativas al protocolo (que comienzan con ``//``) y las que c
 
    Los límites de velocidad para el inicio de sesión y el cambio de contraseña pueden configurarse con las siguientes propiedades (valor predeterminado entre paréntesis):
 
-   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Número máximo de intentos por minuto por dirección IP. Se aplica a ``/auth/login`` y, desde la versión 15.10, al formulario de inicio de sesión de la página de inicio de sesión (``/login/``).
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Número máximo de intentos por minuto por usuario. Se aplica a ``/auth/login`` y ``/auth/password`` y, desde la versión 15.10, al formulario de inicio de sesión de la página de inicio de sesión (se cuentan las contraseñas rechazadas).
+   - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Número máximo de intentos por minuto por dirección IP. Se aplica tanto a ``/auth/login`` como al formulario de inicio de sesión ``POST /login/login``, que comparten el mismo cubo.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Número máximo de intentos por minuto por usuario. Se aplica a ``/auth/login`` y ``POST /login/login`` (que comparten un cubo por cada combinación de IP del cliente y nombre de usuario) y a ``/auth/password``.
    - ``theme.api.login.lockout.seconds`` (``900``): Duración del bloqueo (en segundos) una vez superado el límite. Se devuelve como valor de la cabecera ``Retry-After``.
+
+   El formulario de inicio de sesión (``POST /login/login``) comparte los cubos y el bloqueo con ``/auth/login``, por lo que los fallos en el formulario cuentan para el límite de ``/auth/login`` y viceversa. Cuando se supera el límite en el formulario, se trata como un error de inicio de sesión normal en lugar de ``429``.
+
+   Detrás de un proxy inverso que no figura en ``rate.limit.trusted.proxies`` (valor predeterminado ``127.0.0.1,::1``), todos los clientes se tratan como una única dirección IP (la del proxy). Los inicios de sesión fallidos repetidos pueden entonces bloquear a todos los usuarios durante el tiempo de bloqueo. Añada la dirección del proxy a ``rate.limit.trusted.proxies`` para que la IP real del cliente se tome de ``X-Forwarded-For``.
 
 Cuerpo de la solicitud (LoginRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -284,12 +290,16 @@ Respuesta de error
      - Cuando la solicitud no es válida (incluye cuerpo de solicitud excesivo y ``Content-Type`` no admitido).
    * - 401 Unauthorized
      - Cuando las credenciales son inválidas.
+   * - 403 Forbidden
+     - Cuando la solicitud se ha bloqueado por ser de origen cruzado: su encabezado ``Origin`` (o ``Referer``) indica un origen no permitido. Es la comprobación básica que supera toda solicitud que modifica el estado y es independiente del token CSRF, que el inicio de sesión no necesita.
    * - 405 Method Not Allowed
      - Cuando se especifica un método HTTP no admitido.
    * - 429 Too Many Requests
      - Cuando se supera el límite de velocidad. La cabecera ``Retry-After`` indica los segundos que se deben esperar.
    * - 500 Internal Server Error
      - Cuando se produce un error interno del servidor.
+   * - 503 Service Unavailable
+     - Cuando el motor de búsqueda no ha podido atender la solicitud: no está accesible o la ha rechazado por falta de capacidad. ``error.code`` es ``service_unavailable`` y un encabezado ``Retry-After`` indica los segundos que hay que esperar (``5``). La solicitud en sí es correcta, así que vuelva a intentarlo tras una breve espera.
 
 Cierre de sesión
 ================
@@ -344,6 +354,8 @@ Respuesta de error
 
    * - Código de estado
      - Descripción
+   * - 400 Bad Request
+     - Cuando se ha indicado un parámetro de la solicitud que no se puede decodificar (por ejemplo, ``?q=%ff``). El ``error.code`` es ``invalid_request``.
    * - 403 Forbidden
      - Cuando el token CSRF está ausente o ha expirado.
    * - 405 Method Not Allowed
@@ -456,3 +468,5 @@ Respuesta de error
      - Cuando se supera el límite de velocidad.
    * - 500 Internal Server Error
      - Cuando se produce un error interno del servidor.
+   * - 503 Service Unavailable
+     - Cuando el motor de búsqueda no ha podido atender la solicitud: no está accesible o la ha rechazado por falta de capacidad. ``error.code`` es ``service_unavailable`` y un encabezado ``Retry-After`` indica los segundos que hay que esperar (``5``). La solicitud en sí es correcta, así que vuelva a intentarlo tras una breve espera.

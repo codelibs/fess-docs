@@ -1290,6 +1290,18 @@ Sie für 15.8 geschrieben haben. Die Admin-API beantwortet eine Ablehnung mit HT
    * - Ein Benutzer in der Admin-API, dessen Passwort die Passwortrichtlinie verletzt (etwa ``password.min.length``, Standard ``8``); eine Anlage ohne Passwort; ein ``confirm_password``, das von ``password`` abweicht
      - Wird gespeichert; der Benutzer kann sich mit diesem Passwort anmelden
      - ``400``
+   * - ``GET /api/admin/log/file/{id}`` mit einem Namen, der für eine Protokolldatei nicht zulässig ist (etwa ohne die Endung ``.log`` oder ``.log.gz``), oder mit einer Datei, die nicht im Protokollverzeichnis liegt
+     - Nicht zulässiger Name: ``200`` mit leerer Antwort
+     - ``400``
+   * - Ein Eintrag im Wörterbuch ``mapping`` ohne ``output``, über die Admin-API angelegt oder aktualisiert
+     - ``200`` (``id`` ist ``0``); es wird nichts gespeichert
+     - ``400``
+   * - ``GET /api/admin/storage/list``, wenn auf den Speicher nicht zugegriffen werden kann, auch wenn kein Plugin für den Speicher-Client installiert ist
+     - ``200`` (``status`` ``0``) mit leerer Liste
+     - ``400``. ``message`` nennt die Ursache und, falls das Plugin fehlt, das zu installierende Plugin
+   * - Wiederholte fehlgeschlagene Anmeldungen am Anmeldeformular (``POST /login/login``) innerhalb kurzer Zeit von einer IP-Adresse oder für einen Benutzer von einer IP-Adresse
+     - Keine Begrenzung
+     - Oberhalb des Limits pro Adresse oder pro Benutzer (``theme.api.login.rate.limit.per.ip.per.minute``, ``theme.api.login.rate.limit.per.user.per.minute``) werden weitere Anmeldungen von dieser Adresse (beim Limit pro Benutzer: für diesen Benutzer von dieser Adresse) ``theme.api.login.lockout.seconds`` Sekunden lang abgelehnt, auch mit korrekten Anmeldedaten. Die Antwort ist dieselbe Anmeldefehlermeldung wie bei falschen Anmeldedaten. Limits und Sperrung werden mit ``/api/v2/auth/login`` geteilt (siehe :doc:`../api/api-auth`) Hinter einem Reverse-Proxy, dessen Adresse nicht in ``rate.limit.trusted.proxies`` steht, werden alle Clients als eine Adresse gezählt, sodass wiederholte Fehlversuche alle Benutzer aussperren können. Tragen Sie die Adresse des Proxys in ``rate.limit.trusted.proxies`` ein (kommt ``X-Forwarded-For`` von einem nicht vertrauenswürdigen Peer, wird einmalig eine Warnung in ``fess.log`` geschrieben).
 
 Die Zeilen von ``/api/v2/documents/all`` enthalten kein ``score`` mehr. Bis 15.8 hatte jedes Dokument seinen
 Suchscore; 15.10 durchläuft das gesamte Ergebnis mit einem Point in Time und ``search_after``, wodurch kein
@@ -1301,6 +1313,15 @@ per ``POST`` entgegengenommen. Die Dokumentation von 15.8 empfahl ``PUT``, doch 
 ``multipart/form-data`` liefert die Datei nie an, sodass es in 15.8 wie in 15.10 mit dem Validierungsfehler
 fehlschlägt, dass die Datei erforderlich ist. Die ``PUT``-Endpunkte bleiben bestehen; verwenden Sie für
 Uploads ``POST``.
+
+Die folgenden Änderungen sind keine Ablehnungen, können aber Skripte und Clients der API und der Administrationsoberfläche betreffen.
+
+- Die ``GET``-Anfragen der Admin-APIs ``webauth`` und ``fileauth`` (``/api/admin/webauth/settings``, ``/api/admin/webauth/setting/{id}`` und dieselben Endpunkte unter ``fileauth``) liefern das gespeicherte Passwort nicht mehr zurück. Ein ``PUT`` ohne Passwort oder mit leerem Passwort behält das gespeicherte Passwort; ein nicht leeres Passwort ersetzt es.
+- Ein angemeldeter Benutzer wird anhand der Sitzung erkannt, nicht anhand eines ``userCode``-Parameters oder -Cookies, den die Anfrage mitbringt (zum Beispiel bei der Favoriten-API). Anonyme Benutzer verwenden weiterhin den Parameter und das Cookie.
+- „Alle löschen“ in den Bildschirmen „Suchliste“ und „Crawl-Informationen“ der Administrationsoberfläche erfordert die Bearbeitungsrolle (``admin-searchlist``, ``admin-crawlinginfo``). Die Anfrage eines Benutzers, der nur die Leserolle besitzt (die Rolle mit dem Suffix ``-view``), wird abgelehnt.
+- Haben Sie in der Komponente ``roleQueryHelper`` der Datei ``fess.xml`` ``parameterKey``, ``headerKey`` oder ``cookieKey`` aktiviert, aber keinen ``cipher`` gesetzt, und steht das Verschlüsselungs-Flag (``encryptedParameterValue``, ``encryptedHeaderValue`` oder ``encryptedCookieValue``) noch auf dem Standardwert ``true``, hat 15.8 den Wert als unverschlüsselte Rolleninformation gelesen. 15.10 ignoriert den Wert und schreibt einmalig eine Warnung ins Log. Setzen Sie einen ``cipher``, wenn die Werte verschlüsselt sind, oder setzen Sie das Flag auf ``false``, wenn sie unverschlüsselt eintreffen sollen.
+- Eine Anfrage, deren ``Content-Type`` einen der JVM unbekannten Zeichensatz nennt (zum Beispiel ``charset=nope``), wird wie eine Anfrage ohne Zeichensatz behandelt. ``/api/v2/search`` antwortete darauf bisher mit ``500`` (``internal_error``).
+- Schlägt ein Upload oder Download über die Admin-API für das Wörterbuch ``kuromoji``, ``mapping``, ``stemmeroverride`` oder ``synonym`` fehl, nennt die Meldung jetzt dieses Wörterbuch. In 15.8 stand bei allen „protwords file“.
 
 ``search_engine.type=cloud`` ist veraltet
 -----------------------------------------

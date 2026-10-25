@@ -406,6 +406,8 @@ Fehlerantwort
 
    * - Statuscode
      - Beschreibung
+   * - 400 Bad Request
+     - Wenn ein Anfrageparameter angegeben wurde, der sich nicht dekodieren lässt (zum Beispiel ``?q=%ff``). ``error.code`` ist ``invalid_request``.
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde.
    * - 500 Internal Server Error

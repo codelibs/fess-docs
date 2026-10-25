@@ -104,6 +104,8 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
      - Beschreibung
    * - 200 OK
      - Cluster ist ``GREEN`` oder ``YELLOW`` und erreichbar. Der Erfolgs-Envelope enthält ``engine``.
+   * - 400 Bad Request
+     - Wenn ein Anfrageparameter angegeben wurde, der sich nicht dekodieren lässt (zum Beispiel ``?q=%ff``). ``error.code`` ist ``invalid_request``.
    * - 405 Method Not Allowed
      - Wenn die HTTP-Methode nicht erlaubt ist.
    * - 503 Service Unavailable

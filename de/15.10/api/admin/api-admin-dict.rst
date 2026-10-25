@@ -422,7 +422,7 @@ Die Felder im Request-Body zum Erstellen/Aktualisieren von Wörterbucheinträgen
      - ``token`` (erforderlich), ``segmentation`` (erforderlich), ``reading`` (erforderlich), ``pos`` (erforderlich)
      - ``kuromojiFile``
    * - ``mapping``
-     - ``inputs`` (erforderlich), ``output``
+     - ``inputs`` (erforderlich), ``output`` (erforderlich)
      - ``charMappingFile``
    * - ``protwords``
      - ``input`` (erforderlich)

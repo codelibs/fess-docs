@@ -104,6 +104,8 @@ HTTP 方法            GET
      - 说明
    * - 200 OK
      - 集群为 ``GREEN`` / ``YELLOW`` 且可达时。成功信封中包含 ``engine``\ 。
+   * - 400 Bad Request
+     - 指定了无法解码的请求参数（例如 ``?q=%ff`` ）时。 ``error.code`` 为 ``invalid_request`` 。
    * - 405 Method Not Allowed
      - 不允许使用该 HTTP 方法时。
    * - 503 Service Unavailable

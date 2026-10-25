@@ -406,6 +406,8 @@ filetype_options
 
    * - 상태 코드
      - 설명
+   * - 400 Bad Request
+     - 디코딩할 수 없는 요청 파라미터 (예: ``?q=%ff``)가 지정된 경우. ``error.code`` 는 ``invalid_request`` 입니다.
    * - 405 Method Not Allowed
      - 지원되지 않는 HTTP 메서드가 지정된 경우.
    * - 500 Internal Server Error

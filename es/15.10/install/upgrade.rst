@@ -1283,6 +1283,18 @@ cuerpo.
    * - Un usuario de la API de administración cuya contraseña incumple la política de contraseñas (por ejemplo ``password.min.length``, por defecto ``8``); una creación sin contraseña; un ``confirm_password`` distinto de ``password``
      - Se guarda; el usuario puede iniciar sesión con esa contraseña
      - ``400``
+   * - ``GET /api/admin/log/file/{id}`` con un nombre no permitido para un archivo de registro (por ejemplo, que no termine en ``.log`` o ``.log.gz``), o con un archivo que no está en el directorio de registros
+     - Nombre no permitido: ``200`` con respuesta vacía
+     - ``400``
+   * - Una entrada del diccionario ``mapping`` sin ``output``, creada o actualizada mediante la API de administración
+     - ``200`` (``id`` es ``0``); no se guarda nada
+     - ``400``
+   * - ``GET /api/admin/storage/list`` cuando no se puede acceder al almacenamiento, incluido el caso en que no hay instalado ningún plugin de cliente de almacenamiento
+     - ``200`` (``status`` ``0``) con una lista vacía
+     - ``400``. ``message`` indica la causa y, si falta el plugin, el plugin que debe instalarse
+   * - Inicios de sesión fallidos repetidos en el formulario de inicio de sesión (``POST /login/login``) en poco tiempo, desde una misma dirección IP o para un mismo usuario desde una misma dirección IP
+     - Sin límite
+     - Al superar el límite por dirección o por usuario (``theme.api.login.rate.limit.per.ip.per.minute``, ``theme.api.login.rate.limit.per.user.per.minute``), los inicios de sesión posteriores desde esa dirección (con el límite por usuario: de ese usuario desde esa dirección) se rechazan durante ``theme.api.login.lockout.seconds`` segundos, incluso con credenciales correctas. La respuesta es el mismo error de inicio de sesión que con credenciales incorrectas. Los límites y el bloqueo se comparten con ``/api/v2/auth/login`` (consulte :doc:`../api/api-auth`) Detrás de un proxy inverso cuya dirección no figura en ``rate.limit.trusted.proxies``, todos los clientes se cuentan como una sola dirección, por lo que los fallos repetidos pueden bloquear a todos los usuarios. Añada la dirección del proxy a ``rate.limit.trusted.proxies`` (cuando ``X-Forwarded-For`` llega de un par no confiable, se registra una advertencia una sola vez en ``fess.log``).
 
 Las filas de ``/api/v2/documents/all`` ya no llevan ``score``. Hasta la 15.8 cada documento tenía su
 puntuación de búsqueda; la 15.10 recorre todo el resultado con un point in time y ``search_after``, que no
@@ -1294,6 +1306,15 @@ Las subidas de archivos de la API de administración (los seis diccionarios, ``b
 ``multipart/form-data`` nunca entrega el archivo, así que tanto en la 15.8 como en la 15.10 falla con el
 error de validación de que el archivo es obligatorio. Los endpoints ``PUT`` siguen existiendo; utilice
 ``POST`` para las subidas.
+
+Los siguientes cambios no son rechazos, pero pueden afectar a los scripts y clientes de la API y de la pantalla de administración.
+
+- Las solicitudes ``GET`` de las API de administración ``webauth`` y ``fileauth`` (``/api/admin/webauth/settings``, ``/api/admin/webauth/setting/{id}`` y los mismos endpoints de ``fileauth``) ya no devuelven la contraseña almacenada. Un ``PUT`` que omite la contraseña o la envía en blanco conserva la contraseña almacenada; una contraseña no vacía la sustituye.
+- Un usuario con sesión iniciada se identifica por la sesión, no por un parámetro ``userCode`` ni una cookie que acompañe a la solicitud (por ejemplo, en la API de favoritos). Los usuarios anónimos siguen usando el parámetro y la cookie.
+- «Eliminar todo» en las pantallas «Lista de búsqueda» e «Información de rastreo» de la pantalla de administración requiere el rol de edición (``admin-searchlist``, ``admin-crawlinginfo``). La solicitud de un usuario que solo tiene el rol de visualización (el rol con el sufijo ``-view``) se rechaza.
+- Si activó ``parameterKey``, ``headerKey`` o ``cookieKey`` en el componente ``roleQueryHelper`` de ``fess.xml`` pero no configuró ningún ``cipher``, y el indicador de cifrado (``encryptedParameterValue``, ``encryptedHeaderValue`` o ``encryptedCookieValue``) sigue en ``true``, su valor predeterminado, la 15.8 leía el valor como información de roles sin cifrar. La 15.10 ignora el valor y registra una advertencia una sola vez. Configure un ``cipher`` si los valores están cifrados, o ponga el indicador en ``false`` si deben llegar sin cifrar.
+- Una solicitud cuyo ``Content-Type`` indica un juego de caracteres que la JVM no conoce (por ejemplo, ``charset=nope``) se trata como una solicitud sin juego de caracteres. Antes, ``/api/v2/search`` respondía ``500`` (``internal_error``).
+- Cuando falla una carga o descarga mediante la API de administración del diccionario ``kuromoji``, ``mapping``, ``stemmeroverride`` o ``synonym``, el mensaje ahora nombra ese diccionario. En la 15.8 decía «protwords file» en todos ellos.
 
 ``search_engine.type=cloud`` está obsoleto
 ------------------------------------------

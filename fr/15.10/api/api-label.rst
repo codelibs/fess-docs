@@ -90,6 +90,8 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
 
    * - Code de statut
      - Description
+   * - 400 Bad Request
+     - Un paramètre de requête impossible à décoder (par exemple ``?q=%ff``) a été fourni. ``error.code`` vaut ``invalid_request``.
    * - 401 Unauthorized
      - Authentification requise (connexion obligatoire activée avec un appelant anonyme, ou requête portant un jeton d'accès non enregistré ou expiré). ``error.code`` vaut ``auth_required``.
    * - 405 Method Not Allowed

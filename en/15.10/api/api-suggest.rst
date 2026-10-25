@@ -127,3 +127,5 @@ When the Suggest API fails, a common error envelope is returned. For details on 
      - An unsupported HTTP method was specified. The ``Allow`` header indicates ``GET``.
    * - 500 Internal Server Error
      - An internal server error occurred.
+   * - 503 Service Unavailable
+     - The search engine could not take the request: it is not reachable, or it refused the request for lack of capacity. ``error.code`` is ``service_unavailable``, and a ``Retry-After`` header gives the number of seconds to wait (``5``). The request itself is fine, so retry after a short wait.
