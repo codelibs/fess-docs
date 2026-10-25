@@ -55,6 +55,9 @@ Chemins à crawler
 
 Les chemins correspondant à l'expression régulière (format Java) spécifiée dans cet élément seront ciblés par le crawler |Fess|.
 
+.. note::
+   Le motif est appliqué au chemin complet de chaque chemin visité par le crawler, y compris le chemin de départ et les sous-répertoires. Si vous ne spécifiez que des extensions de fichier comme ``.*\.(md|rst|adoc)$``, le chemin de départ et les sous-répertoires ne correspondent pas au motif, le crawler n'atteint pas les fichiers et rien n'est crawlé. Pour limiter les documents par extension, spécifiez le même motif dans « Chemins à indexer » (les répertoires sont toujours parcourus et seuls les fichiers correspondants sont ciblés pour la recherche). N'utilisez « Chemins à crawler » qu'avec des motifs qui correspondent aussi au chemin de départ et aux sous-répertoires.
+
 Chemins exclus du crawl
 :::::::::::::::::::::::
 

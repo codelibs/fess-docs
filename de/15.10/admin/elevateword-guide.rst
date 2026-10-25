@@ -44,6 +44,7 @@ Berechtigung
 
 Legen Sie Rolleninformationen für das Wort fest.
 Nur Benutzer mit der festgelegten Rolle können das Wort in den Vorschlägen sehen.
+Für Benutzerebene geben Sie {user}Benutzername an, für Rollenebene {role}Rollenname und für Gruppenebene {group}Gruppenname.
 
 Label
 :::::
@@ -55,6 +56,9 @@ Boost-Wert
 ::::::::::
 
 Legen Sie einen Boost-Wert für das Wort fest.
+
+.. note::
+   Registrierte, bearbeitete oder gelöschte zusätzliche Wörter (auch per CSV-Upload) werden nicht sofort auf die Vorschläge angewendet. Sie werden übernommen, wenn der Job „Suggest Indexer" läuft, der den Vorschlagsindex neu aufbaut (standardmäßig täglich um 12:00 Uhr). Um sie sofort zu übernehmen, klicken Sie unter [System > Scheduler] auf „Suggest Indexer" und dann auf die Schaltfläche „Jetzt starten".
 
 Konfiguration löschen
 ---------------------
@@ -78,8 +82,8 @@ Ab Zeile 2 werden die zusätzlichen Wörter aufgeführt.
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
 
 Upload
 ======
@@ -96,8 +100,11 @@ Ab Zeile 2 beschreiben Sie die zusätzlichen Wörter.
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
+
+.. note::
+   Geben Sie in der Spalte „Permissions" jeden Wert mit ``{role}``, ``{user}`` oder ``{group}`` an, etwa ``{role}role1`` (mehrere Werte durch Kommas trennen). Ein Wert ohne Präfix wie ``role1`` wird nicht als Rolle behandelt, und das Wort wird Benutzern mit dieser Rolle nicht vorgeschlagen.
 
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/elevateword-1.png

@@ -55,6 +55,9 @@ Rutas a rastrear
 
 Las rutas que coincidan con la expresión regular (formato Java) especificada en este elemento serán objeto del rastreador de |Fess|.
 
+.. note::
+   El patrón se aplica a la ruta completa de cada ruta que visita el rastreador, incluidas la ruta de inicio y los subdirectorios. Si especifica solo extensiones de archivo como ``.*\.(md|rst|adoc)$``, la ruta de inicio y los subdirectorios no coinciden con el patrón, el rastreador no llega a los archivos y no se rastrea nada. Para limitar los documentos por extensión, especifique el mismo patrón en "Rutas a buscar" (los directorios se siguen recorriendo y solo los archivos que coinciden son objeto de búsqueda). Use "Rutas a rastrear" únicamente con patrones que también coincidan con la ruta de inicio y los subdirectorios.
+
 Rutas excluidas del rastreo
 ::::::::::::::::::::::::::::
 

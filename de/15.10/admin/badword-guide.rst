@@ -37,6 +37,9 @@ Schlechtes Wort
 Registrieren Sie unerwünschte Wörter.
 Wörter, die hier registriert sind, werden nicht in den Vorschlägen angezeigt.
 
+.. note::
+   Ein registriertes unerwünschtes Wort wird nicht sofort auf die Vorschläge angewendet. Es wird aus den vorhandenen Vorschlagskandidaten entfernt, wenn der Job „Suggest Indexer" läuft, der den Vorschlagsindex neu aufbaut (standardmäßig täglich um 12:00 Uhr). Um es sofort anzuwenden, klicken Sie unter [System > Scheduler] auf „Suggest Indexer" und dann auf die Schaltfläche „Jetzt starten". Dasselbe gilt für Wörter, die per CSV-Upload registriert wurden.
+
 Konfiguration löschen
 ---------------------
 

@@ -267,8 +267,8 @@ Mejores Prácticas
 
    Consulte la documentación oficial de OpenSearch y realice la configuración óptima según su entorno.
 
-Configuración de Memoria para Procesamiento de Sugerencias y Miniaturas
-========================================================================
+Configuración de Memoria para Procesamiento de Sugerencias, Chunks y Miniaturas
+===============================================================================
 
 Proceso de Generación de Sugerencias
 -------------------------------------
@@ -282,6 +282,22 @@ Por defecto se utiliza la siguiente configuración:
 - Heap inicial: 128MB
 - Heap máximo: 256MB
 - Metaspace máximo: 128MB
+
+Proceso de Generación de Chunks de Contenido
+--------------------------------------------
+
+La configuración de memoria para el procesamiento de chunks de contenido (generación de vectores para la búsqueda semántica) se configura en ``jvm.chunk.options``.
+
+Al igual que en el rastreador, este ajuste contiene todas las opciones predeterminadas, así que cambie solo la línea ``-Xmx1g`` y conserve las demás.
+
+Por defecto se utiliza la siguiente configuración:
+
+- Heap inicial: 128MB
+- Heap máximo: 1GB
+- Metaspace máximo: 128MB
+
+.. note::
+   Con corpus grandes es necesario aumentar el heap máximo. Consulte :doc:`search-semantic` para más detalles.
 
 Proceso de Generación de Miniaturas
 ------------------------------------

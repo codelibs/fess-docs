@@ -268,8 +268,8 @@ Best Practices
 
    Refer to the official OpenSearch documentation for optimal settings based on your environment.
 
-Suggest and Thumbnail Processing Memory Configuration
-======================================================
+Suggest, Chunk and Thumbnail Processing Memory Configuration
+============================================================
 
 Suggest Generation Process
 ---------------------------
@@ -283,6 +283,22 @@ The following settings are used by default:
 - Initial heap: 128MB
 - Maximum heap: 256MB
 - Maximum Metaspace: 128MB
+
+Content Chunk Generation Process
+--------------------------------
+
+Memory configuration for content chunk (vector generation for semantic search) processing is set in ``jvm.chunk.options``.
+
+Like the crawler's, this setting holds all the default options, so change only the ``-Xmx1g`` line and keep the others.
+
+The following settings are used by default:
+
+- Initial heap: 128MB
+- Maximum heap: 1GB
+- Maximum Metaspace: 128MB
+
+.. note::
+   For large corpora, increase the maximum heap. See :doc:`search-semantic` for details.
 
 Thumbnail Generation Process
 -----------------------------

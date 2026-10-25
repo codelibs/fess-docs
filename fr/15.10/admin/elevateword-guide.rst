@@ -44,6 +44,7 @@ Permission
 
 Configure les informations de rôle pour le mot.
 La suggestion n'est affichée que pour les utilisateurs ayant le rôle configuré.
+La spécification par utilisateur est {user}nom_utilisateur, par rôle {role}nom_rôle, par groupe {group}nom_groupe.
 
 Étiquette
 :::::::::
@@ -55,6 +56,9 @@ Valeur de boost
 :::::::::::::::
 
 Configure la valeur de boost pour le mot.
+
+.. note::
+   Les mots que vous enregistrez, modifiez ou supprimez (y compris par téléversement d'un fichier CSV) ne sont pas appliqués immédiatement aux suggestions. Ils sont pris en compte lorsque la tâche « Suggest Indexer », qui reconstruit l'index de suggestions, s'exécute (par défaut tous les jours à 12:00). Pour les appliquer tout de suite, cliquez sur « Suggest Indexer » dans [Système > Planificateur], puis sur le bouton « Démarrer maintenant ».
 
 Suppression de configuration
 ----------------------------
@@ -78,8 +82,8 @@ Les mots ajoutés sont listés à partir de la deuxième ligne.
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
 
 Téléversement
 =============
@@ -96,8 +100,11 @@ Décrivez les mots ajoutés à partir de la deuxième ligne.
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
+
+.. note::
+   Dans la colonne Permissions, indiquez chaque valeur avec ``{role}``, ``{user}`` ou ``{group}``, par exemple ``{role}role1`` (séparez plusieurs valeurs par des virgules). Une valeur sans préfixe, comme ``role1``, n'est pas traitée comme un rôle et le mot n'est pas suggéré aux utilisateurs qui ont ce rôle.
 
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/elevateword-1.png

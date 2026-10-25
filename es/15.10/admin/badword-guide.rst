@@ -37,6 +37,9 @@ Palabra no deseada
 Registre palabras prohibidas.
 Las palabras registradas aquí no se mostrarán en las sugerencias.
 
+.. note::
+   Una palabra no deseada registrada no se aplica de inmediato a las sugerencias. Se elimina de los candidatos de sugerencia existentes cuando se ejecuta el trabajo "Suggest Indexer", que reconstruye el índice de sugerencias (por defecto se ejecuta todos los días a las 12:00). Para aplicarla de inmediato, haga clic en "Suggest Indexer" en [Sistema > Programador] y luego haga clic en el botón "Iniciar ahora". Lo mismo se aplica a las palabras registradas mediante la carga de un archivo CSV.
+
 Eliminar configuración
 ----------------------
 

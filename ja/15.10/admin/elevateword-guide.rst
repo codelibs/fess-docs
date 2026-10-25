@@ -44,6 +44,7 @@
 
 ワードにロール情報を設定します。
 設定したロールを持っているユーザーしかサジェストに表示されません。
+ユーザー単位の指定は{user}ユーザー名、ロール単位の指定は{role}ロール名、グループ単位の指定は{group}グループ名で指定します。
 
 ラベル
 :::::
@@ -55,6 +56,9 @@
 ::::::::
 
 ワードにブースト値を設定します。
+
+.. note::
+   登録・編集・削除した追加ワード（CSV のアップロードを含む）は、すぐにはサジェストに反映されません。サジェストのインデックスを作り直す「Suggest Indexer」ジョブが実行されたときに反映されます（既定では毎日 12:00 に実行されます）。すぐに反映するには、 [システム > スケジューラ] で「Suggest Indexer」をクリックし、「今すぐ開始」ボタンをクリックします。
 
 設定の削除
 --------
@@ -78,8 +82,8 @@ CSVの内容
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
 
 アップロード
 =========
@@ -96,8 +100,11 @@ CSVの内容
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
+
+.. note::
+   パーミッション列には ``{role}role1`` のように ``{role}`` 、 ``{user}`` 、 ``{group}`` のいずれかを付けて指定します（複数指定するときはカンマ区切り）。 ``role1`` のように接頭辞のない値を指定すると、ロールとして扱われず、そのロールを持つユーザーにはサジェストされません。
 
 
 .. |image0| image:: ../../../resources/images/ja/15.10/admin/elevateword-1.png

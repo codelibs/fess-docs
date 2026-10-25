@@ -34,6 +34,9 @@ Bad Word
 
 Word to exclude it from Suggest.
 
+.. note::
+   A registered bad word is not applied to Suggest immediately. It is removed from the existing suggest candidates when the "Suggest Indexer" job, which rebuilds the suggest index, runs (by default it runs every day at 12:00). To apply it right away, click "Suggest Indexer" in [System > Scheduler] and click the Start Now button. The same applies to words registered by uploading a CSV file.
+
 Delete Configuration
 --------------------
 

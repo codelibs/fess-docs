@@ -64,6 +64,9 @@
     index.export.exclude.fields=cache,boost,role
     index.export.scroll.size=200
 
+.. note::
+   既定の ``/var/lib/fess/export`` は RPM/DEB パッケージのディレクトリです。ZIP 版を一般ユーザーで実行する場合は書き込めないため、 ``index.export.path`` を |Fess| を実行するユーザーが書き込めるディレクトリに変更してください。ディレクトリを作成できない、または書き込めない場合、ジョブは ``Cannot write to the index export directory: index.export.path=...`` のエラーで失敗します。
+
 ジョブの有効化
 ==============
 
@@ -193,7 +196,7 @@ JSON フォーマットの場合、各ファイルは除外されていない全
 ストレージの考慮事項
 --------------------
 
-- ``index.export.path`` には、|Fess| を実行するユーザーが書き込めるディレクトリを指定する（既定の ``/var/lib/fess/export`` は RPM/DEB 版のディレクトリで、ZIP 版を一般ユーザーで実行する場合は書き込めません。書き込めない場合は、エクスポートファイルが作成されず、ドキュメントごとの警告が ``fess.log`` に出力されます）
+- ``index.export.path`` には、|Fess| を実行するユーザーが書き込めるディレクトリを指定する（既定の ``/var/lib/fess/export`` は RPM/DEB 版のディレクトリで、ZIP 版を一般ユーザーで実行する場合は書き込めません。書き込めない場合は、ジョブが ``Cannot write to the index export directory`` のエラーで失敗し、エクスポートファイルは作成されません）
 - エクスポートディレクトリに十分なディスク容量を確保
 - 大量のドキュメントセットには専用ストレージの使用を検討
 - 定期エクスポートを実行する場合は古いエクスポートの定期的なクリーンアップを実装

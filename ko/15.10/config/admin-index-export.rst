@@ -64,6 +64,9 @@
     index.export.exclude.fields=cache,boost,role
     index.export.scroll.size=200
 
+.. note::
+   기본값 ``/var/lib/fess/export`` 는 RPM/DEB 패키지의 디렉토리입니다. ZIP 버전을 일반 사용자로 실행하는 경우 쓸 수 없으므로, ``index.export.path`` 를 |Fess| 를 실행하는 사용자가 쓸 수 있는 디렉토리로 변경하십시오. 디렉토리를 생성할 수 없거나 쓸 수 없는 경우 작업이 ``Cannot write to the index export directory: index.export.path=...`` 오류로 실패합니다.
+
 작업 활성화
 ===========
 
@@ -193,7 +196,7 @@ JSON 형식의 경우 각 파일은 제외되지 않은 모든 필드를 포함�
 스토리지 고려 사항
 ------------------
 
-- ``index.export.path`` 에는 |Fess| 를 실행하는 사용자가 쓸 수 있는 디렉토리를 지정(기본값인 ``/var/lib/fess/export`` 는 RPM/DEB 버전의 디렉토리이며, ZIP 버전을 일반 사용자로 실행하는 경우 쓸 수 없습니다. 쓸 수 없는 경우 내보내기 파일이 생성되지 않으며, 문서별 경고가 ``fess.log`` 에 출력됩니다)
+- ``index.export.path`` 에는 |Fess| 를 실행하는 사용자가 쓸 수 있는 디렉토리를 지정(기본값인 ``/var/lib/fess/export`` 는 RPM/DEB 버전의 디렉토리이며, ZIP 버전을 일반 사용자로 실행하는 경우 쓸 수 없습니다. 쓸 수 없는 경우 작업이 ``Cannot write to the index export directory`` 오류로 실패하며 내보내기 파일이 생성되지 않습니다)
 - 내보내기 디렉토리에 충분한 디스크 공간 확보
 - 대규모 문서 세트에는 전용 스토리지 사용 고려
 - 정기 내보내기를 실행하는 경우 이전 내보내기의 정기적인 정리 구현
