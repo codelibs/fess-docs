@@ -566,7 +566,7 @@ NSSM などのサードパーティツールを使用して、Windows サービ�
 
 問題を報告する際に、以下の情報を収集しておくと役立ちます：
 
-1. **バージョン情報**\ （ ``bin/fess -v`` は 15.10 以降で使用できます）::
+1. **バージョン情報**\ （ ``bin/fess -v`` は 15.9 以降で使用できます）::
 
        $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version

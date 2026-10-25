@@ -10,10 +10,10 @@ and register them in the |Fess| index.
 
 This feature requires the ``fess-ds-gsuite`` plugin.
 
-Changes in 15.10
+Changes in 15.9
 ===============
 
-The connector was substantially reworked in |Fess| 15.10. Read this section before
+The connector was substantially reworked in |Fess| 15.9. Read this section before
 upgrading an existing data store configuration.
 
 .. warning::
@@ -246,7 +246,7 @@ Advanced Parameters
    * - ``exclude_pattern``
      - Regex pattern for URLs to exclude
    * - ``refresh_token_interval``
-     - Ignored since 15.10. Access tokens are refreshed by the authentication library. An existing setting keeps working and a warning is logged.
+     - Ignored since 15.9. Access tokens are refreshed by the authentication library. An existing setting keeps working and a warning is logged.
 
 .. note::
 
@@ -528,7 +528,7 @@ Access https://admin.google.com/:
    The delegation entry lists the scopes explicitly, so upgrading from an earlier version
    requires updating it. The default scope narrowed from
    ``https://www.googleapis.com/auth/drive`` to
-   ``https://www.googleapis.com/auth/drive.readonly`` in 15.10, and the scopes granted here
+   ``https://www.googleapis.com/auth/drive.readonly`` in 15.9, and the scopes granted here
    must match the ``scopes`` parameter of the data store configuration.
 
 Credential Configuration
@@ -624,7 +624,7 @@ To narrow the users down, add an Admin SDK query:
 Keep the Previous Behaviour
 ---------------------------
 
-``crawl_target=legacy`` keeps the pre-15.10 traversal, in which only the files explicitly
+``crawl_target=legacy`` keeps the pre-15.9 traversal, in which only the files explicitly
 shared with the service account are found. ``impersonate_user`` is not required.
 
 Parameters:
@@ -699,7 +699,7 @@ The Crawl Fails to Start
    add that scope to ``scopes`` and to the domain-wide delegation entry.
 
 This is the expected outcome of upgrading an existing configuration unchanged. See
-`Changes in 15.10`_.
+`Changes in 15.9`_.
 
 Authentication Error
 --------------------
@@ -732,7 +732,7 @@ Domain-wide Delegation Error
 
    - Is the Client ID registered correctly?
    - Are the OAuth scopes correct? The delegation entry lists them explicitly, so the
-     scope narrowing introduced in 15.10 requires updating it.
+     scope narrowing introduced in 15.9 requires updating it.
 
 2. Verify domain-wide delegation is enabled for the service account
 3. Verify that the account named by ``impersonate_user`` is a domain administrator when

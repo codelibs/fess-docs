@@ -313,7 +313,7 @@ OpenSearch 하이라이터에 전달할 값을 지정합니다.
        수행되지 않습니다.
 
 CSV, JSON, 데이터베이스에서 읽은 값은 스크립트가 변환하지 않는 한 문자열이므로, 정렬이나 범위
-검색에 사용할 값은 변환하십시오. 15.10 에서 만든 데이터 스토어 설정의 기본값인 JavaScript 엔진
+검색에 사용할 값은 변환하십시오. 15.9 에서 만든 데이터 스토어 설정의 기본값인 JavaScript 엔진
 ( ``script_type=javascript`` )에서는 다음과 같습니다::
 
     url="https://example.com/product/" + id

@@ -56,8 +56,8 @@ Geben Sie die Skriptausführungsumgebung an. Sie können zwischen ``javascript``
 (Standard für neue Jobs, festgelegt über die Eigenschaft ``job.default.script``)
 und ``groovy`` (erfordert das Plugin ``fess-script-groovy``) wählen.
 
-Vor 15.10 wurde ein Job unabhängig vom hier gespeicherten Wert immer in der
-Standard-Skriptsprache des Produkts ausgeführt. Ab 15.10 wird dieser Wert tatsächlich
+Vor 15.9 wurde ein Job unabhängig vom hier gespeicherten Wert immer in der
+Standard-Skriptsprache des Produkts ausgeführt. Ab 15.9 wird dieser Wert tatsächlich
 verwendet, sodass jeder Job in einer anderen Skriptsprache laufen kann.
 
 Skript

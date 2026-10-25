@@ -566,7 +566,7 @@ Windows 特有的问题
 
 报告问题时，收集以下信息会有所帮助：
 
-1. **版本信息**\ （``bin/fess -v`` 从 15.10 起可用）::
+1. **版本信息**\ （``bin/fess -v`` 从 15.9 起可用）::
 
        $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version

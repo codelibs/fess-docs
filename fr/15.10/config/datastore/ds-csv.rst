@@ -100,7 +100,7 @@ Fichiers multiples :
 .. note::
 
    Le traitement des guillemets (quotes) et le traitement des échappements sont **activés par
-   défaut** dans |Fess| 15.10. Les fichiers CSV conformes à la RFC 4180 (champs entre guillemets
+   défaut** dans |Fess| 15.9. Les fichiers CSV conformes à la RFC 4180 (champs entre guillemets
    pouvant contenir des délimiteurs ou des sauts de ligne) sont analysés correctement sans qu'il
    soit nécessaire de spécifier le moindre paramètre.
    Pour savoir comment revenir au comportement précédent (désactiver le traitement des guillemets)
@@ -247,7 +247,7 @@ CSV standard (conforme RFC 4180)
 Désactivation du traitement des guillemets et des échappements
 -----------------------------------------------------------------
 
-Le traitement des guillemets et des échappements est activé par défaut dans |Fess| 15.10. Le
+Le traitement des guillemets et des échappements est activé par défaut dans |Fess| 15.9. Le
 caractère de guillemet par défaut est le guillemet double ``"``, et le caractère d'échappement par
 défaut est le même que le caractère de guillemet (échappé en le doublant, conformément à la RFC
 4180) ; les fichiers CSV standard conformes à la RFC 4180 peuvent ainsi être analysés tels quels,
@@ -807,7 +807,7 @@ Exemples d'utilisation avancée des scripts
 ==========================================
 
 Les exemples ci-dessous utilisent le moteur JavaScript (``script_type=javascript``), qu'une
-configuration Data Store créée en 15.10 utilise par défaut.
+configuration Data Store créée en 15.9 utilise par défaut.
 
 Traitement des données
 -----------------------

@@ -229,7 +229,7 @@ features
      - 此 |Fess| 构建版本是否已达到 EOL。
    * - ``development_mode``
      - boolean
-     - 始终为 ``false``\ 。该字段原本表示正在使用内置（开发用）搜索引擎，而该配置已在 15.10 中移除。
+     - 始终为 ``false``\ 。该字段原本表示正在使用内置（开发用）搜索引擎，而该配置已在 15.9 中移除。
    * - ``search_log_enabled``
      - boolean
      - 搜索日志是否启用。

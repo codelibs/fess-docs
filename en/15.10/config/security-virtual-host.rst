@@ -63,7 +63,7 @@ The theme does not have to be set as the default. See :ref:`theme-customize-bund
 
 .. note::
 
-   Since |Fess| 15.10, saving the configuration no longer generates JSPs under ``WEB-INF/view/virtual_host_name``.
+   Since |Fess| 15.9, saving the configuration no longer generates JSPs under ``WEB-INF/view/virtual_host_name``.
    The login screen (``/login/``) is the same page for every virtual host (``WEB-INF/view/admin/login/``) and cannot be changed per virtual host.
    To give a virtual host its own look, use a theme named after the virtual host, as described above.
 

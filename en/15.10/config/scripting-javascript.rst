@@ -5,7 +5,7 @@ JavaScript Scripting Guide
 Overview
 ========
 
-JavaScript is the default scripting language for |Fess| starting with 15.10.
+JavaScript is the default scripting language for |Fess| starting with 15.9.
 It runs on Sai (a Nashorn fork by CodeLibs that |Fess| already uses for its DI XML
 expressions), and scripts are executed as ECMAScript 6. Its identifier is
 ``javascript``, and it can also be specified using the aliases ``js`` and ``sai``.

@@ -9,10 +9,10 @@ Der Google Workspace-Konnektor bietet die Funktionalität, Dateien aus Google Dr
 
 Für diese Funktion ist das Plugin ``fess-ds-gsuite`` erforderlich.
 
-Änderungen in 15.10
+Änderungen in 15.9
 ==================
 
-Der Konnektor wurde in |Fess| 15.10 grundlegend überarbeitet. Lesen Sie diesen Abschnitt,
+Der Konnektor wurde in |Fess| 15.9 grundlegend überarbeitet. Lesen Sie diesen Abschnitt,
 bevor Sie eine bestehende Datenspeicher-Konfiguration aktualisieren.
 
 .. warning::
@@ -249,7 +249,7 @@ Erweiterte Parameter
    * - ``exclude_pattern``
      - Regulärer Ausdruck für auszuschließende URLs
    * - ``refresh_token_interval``
-     - Wird seit 15.10 ignoriert. Zugriffstoken werden von der Authentifizierungsbibliothek erneuert. Eine bestehende Einstellung funktioniert weiter, und es wird eine Warnung protokolliert.
+     - Wird seit 15.9 ignoriert. Zugriffstoken werden von der Authentifizierungsbibliothek erneuert. Eine bestehende Einstellung funktioniert weiter, und es wird eine Warnung protokolliert.
 
 .. note::
 
@@ -540,7 +540,7 @@ Besuchen Sie https://admin.google.com/:
 
    Der Delegierungseintrag listet die Bereiche ausdrücklich auf, daher muss er beim
    Aktualisieren von einer früheren Version angepasst werden. Der Standardbereich wurde in
-   15.10 von ``https://www.googleapis.com/auth/drive`` auf
+   15.9 von ``https://www.googleapis.com/auth/drive`` auf
    ``https://www.googleapis.com/auth/drive.readonly`` eingeschränkt, und die hier erteilten
    Bereiche müssen zum Parameter ``scopes`` der Datenspeicher-Konfiguration passen.
 
@@ -637,7 +637,7 @@ Um die Benutzer einzugrenzen, fügen Sie eine Admin SDK-Abfrage hinzu:
 Das bisherige Verhalten beibehalten
 -----------------------------------
 
-``crawl_target=legacy`` behält den Durchlauf von vor 15.10 bei, bei dem nur die
+``crawl_target=legacy`` behält den Durchlauf von vor 15.9 bei, bei dem nur die
 ausdrücklich für das Dienstkonto freigegebenen Dateien gefunden werden.
 ``impersonate_user`` ist nicht erforderlich.
 
@@ -714,7 +714,7 @@ Der Crawl startet nicht
    Fügen Sie diesen Bereich zu ``scopes`` und zum Eintrag der Domain-weiten Delegierung hinzu.
 
 Beim unveränderten Aktualisieren einer bestehenden Konfiguration ist dies das erwartete
-Ergebnis. Siehe `Änderungen in 15.10`_.
+Ergebnis. Siehe `Änderungen in 15.9`_.
 
 Authentifizierungsfehler
 ------------------------
@@ -747,7 +747,7 @@ Fehler bei Domain-weiter Delegierung
 
    - Ist die Client-ID korrekt registriert?
    - Sind die OAuth-Bereiche korrekt? Der Delegierungseintrag listet sie ausdrücklich auf,
-     daher erfordert die in 15.10 eingeführte Einschränkung eine Anpassung.
+     daher erfordert die in 15.9 eingeführte Einschränkung eine Anpassung.
 
 2. Überprüfen Sie, ob die Domain-weite Delegierung beim Dienstkonto aktiviert ist
 3. Überprüfen Sie, ob das unter ``impersonate_user`` genannte Konto ein

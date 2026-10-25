@@ -27,7 +27,7 @@ La configuration détaillée du robot d'indexation s'effectue dans les fichiers 
 Script par défaut
 --------------------
 
-La propriété ``crawler.default.script`` a été supprimée dans |Fess| 15.10, et chaque règle de boost de document sélectionne désormais son propre type de script sur l'écran :doc:`../admin/boostdoc-guide`.
+La propriété ``crawler.default.script`` a été supprimée dans |Fess| 15.9, et chaque règle de boost de document sélectionne désormais son propre type de script sur l'écran :doc:`../admin/boostdoc-guide`.
 
 Pool de threads HTTP
 --------------------
@@ -1184,7 +1184,7 @@ pour certains sites, indiquez-les comme suit.
        npx playwright install --with-deps
 
 .. note::
-   Depuis la 15.10, l'exécutable Node.js qu'utilise Playwright ne fait plus partie
+   Depuis la 15.9, l'exécutable Node.js qu'utilise Playwright ne fait plus partie
    du paquet |Fess| non plus. Installez-le avec la commande ci-dessous ;
    ``bin/fess.in.sh`` le détecte et transmet ``PLAYWRIGHT_NODEJS_PATH`` au
    processus du robot d'indexation.
@@ -1373,7 +1373,7 @@ l'indexation et le volume de données transféré.
    choisissez parmi les types que l'on peut spécifier sans risque indiqués
    ci-dessus.
 
-Changements dans 15.10
+Changements dans 15.8
 ---------------------
 
 Lors d'une mise à niveau depuis la version 15.7 ou antérieure, le

@@ -11,7 +11,7 @@ Utilizando las API, puede usar |Fess| como servidor de búsqueda desde sistemas 
 
 .. note::
 
-   En |Fess| 15.10, la API ha sido renovada a la versión **v2**. La API de búsqueda
+   En |Fess| 15.7, la API ha sido renovada a la versión **v2**. La API de búsqueda
    JSON y la API de chat de ``/api/v1`` han sido eliminadas e integradas en ``/api/v2``.
    Los clientes que utilizaban ``/api/v1`` deben migrar a ``/api/v2``.
 

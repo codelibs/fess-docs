@@ -316,7 +316,7 @@ Jede Verwendung benötigt das passende:
 
 Ein aus CSV, JSON oder einer Datenbank gelesener Wert ist eine Zeichenkette, sofern das Skript ihn
 nicht umwandelt; wandeln Sie also die Werte um, nach denen Sie sortieren oder per Bereich suchen
-möchten. Mit der JavaScript-Engine, dem Standard für in 15.10 erstellte
+möchten. Mit der JavaScript-Engine, dem Standard für in 15.9 erstellte
 Datenspeicher-Konfigurationen (``script_type=javascript``)::
 
     url="https://example.com/product/" + id

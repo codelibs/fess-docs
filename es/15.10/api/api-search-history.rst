@@ -114,5 +114,5 @@ En el tema incluido
 En el tema incluido ``bootstrap``, un usuario que ha iniciado sesión ve sus búsquedas recientes en la
 lista de sugerencias al hacer clic en el cuadro de búsqueda vacío o pulsar la flecha hacia abajo en
 él. Al elegir una entrada se vuelve a ejecutar la misma búsqueda, incluidas condiciones como las
-etiquetas. Los registros de búsqueda anteriores a |Fess| 15.10 no guardan las condiciones y no se
+etiquetas. Los registros de búsqueda anteriores a |Fess| 15.9 no guardan las condiciones y no se
 muestran.

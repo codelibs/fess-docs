@@ -10,10 +10,10 @@ depuis Google Drive (anciennement G Suite) et de les enregistrer dans l'index |F
 
 Cette fonctionnalité nécessite le plugin ``fess-ds-gsuite``.
 
-Modifications dans la version 15.10
+Modifications dans la version 15.9
 ==================================
 
-Le connecteur a été profondément remanié dans |Fess| 15.10. Lisez cette section avant de
+Le connecteur a été profondément remanié dans |Fess| 15.9. Lisez cette section avant de
 mettre à niveau une configuration de data store existante.
 
 .. warning::
@@ -249,7 +249,7 @@ Paramètres avancés
    * - ``exclude_pattern``
      - Expression régulière des URL à exclure de l'indexation
    * - ``refresh_token_interval``
-     - Ignoré depuis la version 15.10. Les jetons d'accès sont renouvelés par la bibliothèque d'authentification. Un réglage existant continue de fonctionner et un avertissement est journalisé.
+     - Ignoré depuis la version 15.9. Les jetons d'accès sont renouvelés par la bibliothèque d'authentification. Un réglage existant continue de fonctionner et un avertissement est journalisé.
 
 .. note::
 
@@ -538,7 +538,7 @@ Accédez à https://admin.google.com/ :
    L'entrée de délégation énumère explicitement les scopes : une mise à niveau depuis une
    version antérieure impose donc de la mettre à jour. Le scope par défaut est passé de
    ``https://www.googleapis.com/auth/drive`` à
-   ``https://www.googleapis.com/auth/drive.readonly`` en 15.10, et les scopes accordés ici
+   ``https://www.googleapis.com/auth/drive.readonly`` en 15.9, et les scopes accordés ici
    doivent correspondre au paramètre ``scopes`` de la configuration du data store.
 
 Configuration des identifiants
@@ -634,7 +634,7 @@ Pour restreindre les utilisateurs, ajoutez une requête Admin SDK :
 Conserver le comportement précédent
 -----------------------------------
 
-``crawl_target=legacy`` conserve le parcours antérieur à la version 15.10, dans lequel seuls
+``crawl_target=legacy`` conserve le parcours antérieur à la version 15.9, dans lequel seuls
 les fichiers explicitement partagés avec le compte de service sont trouvés.
 ``impersonate_user`` n'est pas requis.
 
@@ -711,7 +711,7 @@ Le crawl ne démarre pas
    ajoutez ce scope à ``scopes`` et à l'entrée de délégation à l'échelle du domaine.
 
 C'est le résultat attendu lorsqu'une configuration existante est mise à niveau sans
-modification. Voir `Modifications dans la version 15.10`_.
+modification. Voir `Modifications dans la version 15.9`_.
 
 Erreur d'authentification
 -------------------------
@@ -744,7 +744,7 @@ Erreur de délégation à l'échelle du domaine
 
    - L'ID client est-il correctement enregistré ?
    - Les scopes OAuth sont-ils corrects ? L'entrée de délégation les énumère explicitement,
-     la restriction introduite en 15.10 impose donc de la mettre à jour.
+     la restriction introduite en 15.9 impose donc de la mettre à jour.
 
 2. Vérifier si la délégation à l'échelle du domaine est activée sur le compte de service
 3. Vérifier que le compte désigné par ``impersonate_user`` est administrateur du domaine

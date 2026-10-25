@@ -10,17 +10,17 @@ Sie läuft auf der Java Virtual Machine (JVM) und ermöglicht es Ihnen,
 bei hoher Kompatibilität mit Java Skripte mit einer prägnanteren Syntax zu schreiben.
 
 .. important::
-   Ab |Fess| 15.10 wird Groovy als ``fess-script-groovy``-Plugin bereitgestellt, und
+   Ab |Fess| 15.9 wird Groovy als ``fess-script-groovy``-Plugin bereitgestellt, und
    **das Plugin ist nicht Teil der Distribution**. Installieren Sie es über die Seite
    **System > Plugin** in der Administrationsoberfläche oder mit
    ``bin/fess-setup install plugin fess-script-groovy``. Für eine manuelle Installation
    legen Sie die entsprechende JAR-Datei (Beispiel: ``fess-script-groovy-15.10.0.jar``)
    im Verzeichnis ``app/WEB-INF/plugin/`` ab und starten |Fess| nach der Installation neu.
 
-   Die Standard-Skriptsprache ist ab |Fess| 15.10 JavaScript. Eine Skript-Konfiguration
-   ohne hinterlegten Skripttyp wird als Groovy behandelt, sodass eine vor 15.10 erstellte
+   Die Standard-Skriptsprache ist ab |Fess| 15.9 JavaScript. Eine Skript-Konfiguration
+   ohne hinterlegten Skripttyp wird als Groovy behandelt, sodass eine vor 15.9 erstellte
    Konfiguration mit ihrem Groovy-Skript nach dem Upgrade unverändert weiterläuft. Wenn
-   Sie ab 15.10 eine neue Konfiguration mit Groovy anlegen, setzen Sie den Skripttyp
+   Sie ab 15.9 eine neue Konfiguration mit Groovy anlegen, setzen Sie den Skripttyp
    explizit auf ``groovy``. Für JavaScript siehe :doc:`scripting-javascript`.
 
 Grundlegende Syntax

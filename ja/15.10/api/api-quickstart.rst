@@ -281,7 +281,7 @@ APIバージョン対応表
 
 .. note::
 
-   |Fess| 15.10 で、従来の ``/api/v1`` の JSON 検索 API およびチャット API は廃止されました。
+   |Fess| 15.7 で、従来の ``/api/v1`` の JSON 検索 API およびチャット API は廃止されました。
    ``/api/v1`` を利用していたクライアントは ``/api/v2`` へ移行してください。
    バージョン間の詳細な差異については、`リリースノート <https://github.com/codelibs/fess/releases>`__ を参照してください。
 

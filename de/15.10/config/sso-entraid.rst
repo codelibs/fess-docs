@@ -30,7 +30,7 @@ Bei der Entra ID-Authentifizierung fungiert |Fess| als OAuth 2.0/OpenID Connect-
 7. Im Hintergrund verwendet |Fess| die Microsoft Graph API, um die Gruppen- und Rolleninformationen des Benutzers abzurufen, und wendet sie nach Abschluss der Auflösung auf die rollenbasierte Suche an
 
 .. note::
-   Ab |Fess| 15.10 wird die Autorisierungsantwort in Schritt 4 als GET-Anfrage zurückgegeben, da
+   Ab |Fess| 15.8 wird die Autorisierungsantwort in Schritt 4 als GET-Anfrage zurückgegeben, da
    |Fess| beim Autorisierungsendpunkt ``response_mode=query`` anfordert. Bis 15.7 erfolgte dies
    über einen websiteübergreifenden POST, bei dem der ausgelieferte Standardwert
    ``tomcat.sameSiteCookies = lax`` das Sitzungscookie nicht mitsendet; deshalb war
@@ -251,7 +251,7 @@ Konfigurieren der API-Berechtigungen
 
 .. note::
    |Fess| fordert beim Token-Abruf den Scope ``https://graph.microsoft.com/.default`` an.
-   Ab 15.10 wird zusätzlich ``openid profile offline_access https://graph.microsoft.com/.default`` an den Autorisierungsendpunkt gesendet, sodass die Zustimmung für denselben Umfang eingeholt wird.
+   Ab 15.8 wird zusätzlich ``openid profile offline_access https://graph.microsoft.com/.default`` an den Autorisierungsendpunkt gesendet, sodass die Zustimmung für denselben Umfang eingeholt wird.
    Das bedeutet, dass alle in der App-Registrierung konfigurierten und genehmigten Zugriffsberechtigungen verwendet werden.
    Um Gruppeninformationen abzurufen, müssen daher die oben genannten Berechtigungen zur App-Registrierung hinzugefügt und die Administratorzustimmung erteilt werden.
 

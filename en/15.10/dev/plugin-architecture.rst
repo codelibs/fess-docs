@@ -53,7 +53,7 @@ Plugin Types
 
 .. note::
 
-   The ``fess-theme-*`` (JAR theme) type, which supplied JSPs, was removed in 15.10.
+   The ``fess-theme-*`` (JAR theme) type, which supplied JSPs, was removed in 15.9.
    Change the look of the search screen with a theme, not a plugin
    (see :doc:`theme-development`).
 

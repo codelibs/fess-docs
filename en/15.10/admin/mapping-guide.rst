@@ -54,7 +54,7 @@ Bundled Mapping Dictionaries
 
 The default ``mapping.txt`` is used to analyze search fields such as ``title`` and ``content``. It
 folds hiragana, small kana and half-width katakana into full-width katakana, so that りんご, リンゴ
-and ﾘﾝｺﾞ match each other. In |Fess| 15.10, it also folds the following spellings:
+and ﾘﾝｺﾞ match each other. In |Fess| 15.9, it also folds the following spellings:
 
 - ゐ and ゑ (to イ and エ), small kana such as ゎ, ゕ, ゖ, ヮ, ヵ, ヶ and ㇰ-ㇿ, and ゝ and ゞ (to ヽ and ヾ)
 - ヴ, ヴャ, ヴュ and ヴョ, hiragana ゔ, half-width ｳﾞ, and ウ or う followed by a combining voiced

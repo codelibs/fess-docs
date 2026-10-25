@@ -209,7 +209,7 @@ Default administrator account:
 Enabling AI Search Mode (LLM Plugin)
 ====================================
 
-Starting with |Fess| 15.10, the AI Search Mode (RAG Chat) feature has been separated into ``fess-llm-*`` plugins.
+Starting with |Fess| 15.6, the AI Search Mode (RAG Chat) feature has been separated into ``fess-llm-*`` plugins.
 The official `docker-fess <https://github.com/codelibs/docker-fess>`__ repository includes overlay files for the major LLM providers.
 
 .. list-table::
@@ -336,7 +336,7 @@ Main environment variables:
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch HTTP endpoint (default in ``compose.yaml``: ``http://search01:9200``)
    * - ``SEARCH_ENGINE_TYPE``
-     - The type of search engine (``default``, ``vanilla`` or ``aws``). ``vanilla`` requires a Fess 15.10 or later image; use ``cloud`` with older images (see :doc:`../config/search-engine-type`). On the 15.8 images, only the ``-noble`` variant passes it to Fess.
+     - The type of search engine (``default``, ``vanilla`` or ``aws``). ``vanilla`` requires a Fess 15.9 or later image; use ``cloud`` with older images (see :doc:`../config/search-engine-type`). On the 15.8 images, only the ``-noble`` variant passes it to Fess.
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - Credentials for connecting to an OpenSearch instance with authentication enabled
    * - ``FESS_DICTIONARY_PATH``
@@ -458,7 +458,7 @@ The ``docker-fess`` repository also includes Compose files and directories for o
    * - ``compose-minio.yaml``
      - Adds MinIO (object storage) and uses it as the storage destination for Fess's storage feature
    * - ``vanilla/``
-     - A configuration that combines Fess with a plain OpenSearch that does not include the CodeLibs plugins (``SEARCH_ENGINE_TYPE=vanilla``, which requires a Fess 15.10 or later image; use ``cloud`` with older images). Some features, such as dictionary management, are unavailable (see :doc:`../config/search-engine-type`)
+     - A configuration that combines Fess with a plain OpenSearch that does not include the CodeLibs plugins (``SEARCH_ENGINE_TYPE=vanilla``, which requires a Fess 15.9 or later image; use ``cloud`` with older images). Some features, such as dictionary management, are unavailable (see :doc:`../config/search-engine-type`)
    * - ``snapshot/``
      - A configuration that uses development (snapshot) images (including cluster configurations and combinations with Elasticsearch 8)
    * - ``multi-instance/``

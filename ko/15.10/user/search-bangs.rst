@@ -19,7 +19,7 @@
    * - ``airplane !unknown``
      - |Fess| 에서의 일반 검색 (``!`` 는 NOT을 뜻합니다. :doc:`search-not` 참조)
 
-뱅은 ``fess-webapp-bangs`` 플러그인이 제공하며, |Fess| 15.10 이상이 필요합니다. 관리 화면의 [시스템 > 플러그인] 또는 ``bin/fess-setup install plugin fess-webapp-bangs`` 로 설치하고(:doc:`../admin/plugin-guide` 참조) |Fess| 를 재시작합니다.
+뱅은 ``fess-webapp-bangs`` 플러그인이 제공하며, |Fess| 15.9 이상이 필요합니다. 관리 화면의 [시스템 > 플러그인] 또는 ``bin/fess-setup install plugin fess-webapp-bangs`` 로 설치하고(:doc:`../admin/plugin-guide` 참조) |Fess| 를 재시작합니다.
 
 뱅으로 인식되는 조건
 ====================

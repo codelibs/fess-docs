@@ -268,7 +268,7 @@ JSON对象的顶层字段在脚本中可作为 **无前缀的变量**
 
 .. note::
 
-   在 |Fess| 15.10 中，内置脚本引擎变为JavaScript。
+   在 |Fess| 15.9 中，内置脚本引擎变为JavaScript。
    Groovy作为 ``fess-script-groovy`` 插件提供。
    要使用的引擎通过数据存储的参数 ``script_type`` 指定
    （如 ``script_type=javascript`` ）。省略时使用 ``groovy`` 。

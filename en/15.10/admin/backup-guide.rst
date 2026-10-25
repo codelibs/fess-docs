@@ -104,10 +104,10 @@ as they are. Documents without an ``updatedTime`` are always written.
 
 .. note::
 
-   |Fess| 15.10 stores the ``password`` of web and file authentication encrypted with the application cipher key
+   |Fess| 15.9 stores the ``password`` of web and file authentication encrypted with the application cipher key
    (``app.cipher.key`` in ``fess_config.properties``), so ``fess_basic_config.bulk`` and ``fess_config.bulk`` contain
    the encrypted values. When you restore a backup onto another installation, carry the same ``app.cipher.key``
-   over. With a different key, crawls that use these credentials fail with an error. A backup made before 15.10 holds
+   over. With a different key, crawls that use these credentials fail with an error. A backup made before 15.9 holds
    them in plain text and keeps working.
 
    Other values in a ``*.bulk`` file are not encrypted, so keep these files as sensitive files.

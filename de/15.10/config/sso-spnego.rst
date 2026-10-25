@@ -240,7 +240,7 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    unter ``/etc/fess/``; nach einer Änderung muss |Fess| neu gestartet werden.
 
 .. warning::
-   In |Fess| 15.10 wird eine Anmeldung standardmäßig abgelehnt, wenn sich die Realm des
+   In |Fess| 15.8 wird eine Anmeldung standardmäßig abgelehnt, wenn sich die Realm des
    Client-Principals von der Realm des Servers unterscheidet. Melden sich Benutzer aus einer
    untergeordneten Domäne einer AD-Domänenstruktur oder aus einer vertrauten Gesamtstruktur an,
    tragen Sie diese Realms kommagetrennt in ``spnego.allowed.realms`` ein. Andernfalls werden

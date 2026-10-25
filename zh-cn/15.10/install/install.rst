@@ -174,7 +174,7 @@ OpenSearch
 
 .. note::
 
-   如果使用的 OpenSearch 无法安装这些插件（例如托管服务），请将 ``search_engine.type`` 指定为 ``vanilla`` （\ |Fess| 15.10 及更高版本）。此时词典管理等部分功能不可用。详情请参阅 :doc:`../config/search-engine-type` 。
+   如果使用的 OpenSearch 无法安装这些插件（例如托管服务），请将 ``search_engine.type`` 指定为 ``vanilla`` （\ |Fess| 15.9 及更高版本）。此时词典管理等部分功能不可用。详情请参阅 :doc:`../config/search-engine-type` 。
 
 Java (Docker 版除外)
 -------------------

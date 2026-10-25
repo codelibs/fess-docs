@@ -102,11 +102,11 @@ siempre se escriben.
 
 .. note::
 
-   |Fess| 15.10 guarda el ``password`` de la autenticación web y de archivos cifrado con la clave de cifrado de la
+   |Fess| 15.9 guarda el ``password`` de la autenticación web y de archivos cifrado con la clave de cifrado de la
    aplicación (``app.cipher.key`` de ``fess_config.properties``), por lo que ``fess_basic_config.bulk`` y
    ``fess_config.bulk`` contienen los valores cifrados. Al restaurar una copia de seguridad en otra instalación,
    traslade la misma ``app.cipher.key``. Con una clave distinta, los rastreos que usan estas credenciales fallan con un
-   error. Una copia de seguridad creada antes de 15.10 las contiene en texto sin cifrar y sigue funcionando.
+   error. Una copia de seguridad creada antes de 15.9 las contiene en texto sin cifrar y sigue funcionando.
 
    Los demás valores de un archivo ``*.bulk`` no están cifrados, así que conserve estos archivos como archivos
    confidenciales.

@@ -100,7 +100,7 @@ Múltiples archivos:
 .. note::
 
    El procesamiento de comillas (quote) y el procesamiento de escape están **habilitados de
-   forma predeterminada** en |Fess| 15.10. Los CSV (compatibles con RFC 4180) con caracteres
+   forma predeterminada** en |Fess| 15.9. Los CSV (compatibles con RFC 4180) con caracteres
    separadores o saltos de línea dentro de campos entrecomillados se analizan correctamente sin
    necesidad de especificar ningún parámetro.
    Para saber cómo volver al comportamiento anterior (deshabilitar el procesamiento de comillas)
@@ -247,7 +247,7 @@ Deshabilitación del procesamiento de comillas y escape
 --------------------------------------------------------
 
 El procesamiento de comillas y el procesamiento de escape están habilitados de forma
-predeterminada en |Fess| 15.10. El carácter de comillas predeterminado es comillas dobles ``"``,
+predeterminada en |Fess| 15.9. El carácter de comillas predeterminado es comillas dobles ``"``,
 y el carácter de escape predeterminado es el mismo que el de comillas (escapado duplicándolo,
 según RFC 4180); los CSV estándar compatibles con RFC 4180 pueden analizarse tal cual, sin
 necesidad de ningún parámetro.
@@ -802,7 +802,7 @@ Ejemplos avanzados de scripts
 ==============================
 
 Los ejemplos siguientes utilizan el motor JavaScript (``script_type=javascript``), que es el que
-usa de forma predeterminada una configuración de Data Store creada en 15.10.
+usa de forma predeterminada una configuración de Data Store creada en 15.9.
 
 Procesamiento de datos
 -----------------------

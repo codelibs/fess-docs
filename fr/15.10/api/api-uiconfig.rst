@@ -229,7 +229,7 @@ Tous les champs sont obligatoires.
      - Indique si ce build de |Fess| a atteint sa fin de vie (EOL).
    * - ``development_mode``
      - boolean
-     - Toujours ``false``. Ce champ indiquait que le moteur de recherche intégré (mode développement) était utilisé, une configuration supprimée en 15.10.
+     - Toujours ``false``. Ce champ indiquait que le moteur de recherche intégré (mode développement) était utilisé, une configuration supprimée en 15.9.
    * - ``search_log_enabled``
      - boolean
      - Indique si les journaux de recherche sont activés.

@@ -231,7 +231,7 @@ Der folgende Parameter wird von ``AbstractDataStore`` vererbt und steht in allen
        eingebaute Skript-Engine, und die Anlegemaske einer neuen Data-Store-Konfiguration ist mit
        ``script_type=javascript`` vorbelegt. ``groovy`` steht weiterhin über das Plugin
        ``fess-script-groovy`` zur Verfügung. Eine Konfiguration ohne hinterlegten ``script_type``
-       wird als Groovy behandelt, sodass eine vor 15.10 erstellte Konfiguration unverändert
+       wird als Groovy behandelt, sodass eine vor 15.9 erstellte Konfiguration unverändert
        weiterläuft. Siehe :doc:`../scripting-overview` für Details.
 
 Fehlerbehebung

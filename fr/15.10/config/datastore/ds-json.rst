@@ -289,7 +289,7 @@ Champs disponibles
 
 .. note::
 
-   Dans |Fess| 15.10, le moteur de script intégré est devenu JavaScript.
+   Dans |Fess| 15.9, le moteur de script intégré est devenu JavaScript.
    Groovy est fourni sous forme de plugin ``fess-script-groovy``.
    Le moteur à utiliser est indiqué via le paramètre de la configuration Data Store
    ``script_type`` (par exemple ``script_type=javascript``). Si ce paramètre est omis,

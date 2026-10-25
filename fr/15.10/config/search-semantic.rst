@@ -5,7 +5,7 @@ Recherche sémantique (chunking de contenu + recherche vectorielle)
 Aperçu
 ======
 
-Dans |Fess| 15.10, la **fonctionnalité de chunking de contenu** — qui découpe le corps des
+Dans |Fess| 15.8, la **fonctionnalité de chunking de contenu** — qui découpe le corps des
 documents en chunks et génère puis stocke un vecteur d'embedding pour chaque chunk — a été
 intégrée au cœur du produit. Les vecteurs générés sont utilisés à deux fins :
 
@@ -810,7 +810,7 @@ Si vous utilisiez le plugin fess-webapp-semantic-search
 ------------------------------------------------------------
 
 Le plugin ``fess-webapp-semantic-search``, qui fournissait la recherche sémantique dans |Fess|
-15.7 et versions antérieures, a été intégré au cœur en 15.10 et est désormais **inutile
+15.7 et versions antérieures, a été intégré au cœur en 15.8 et est désormais **inutile
 (obsolète)**. En plus des étapes décrites dans *Utilisateurs existants souhaitant activer la
 recherche vectorielle* ci-dessus, vous devez également effectuer ce qui suit.
 

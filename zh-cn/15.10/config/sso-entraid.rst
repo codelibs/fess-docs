@@ -28,7 +28,7 @@ Entra ID认证的工作原理
 7. |Fess| 在后台使用Microsoft Graph API获取用户的组和角色信息，解析完成后应用于基于角色的搜索
 
 .. note::
-   |Fess| 15.10 及以后版本会向授权端点请求 ``response_mode=query``\ ，因此步骤4的授权响应以GET方式返回。
+   |Fess| 15.8 及以后版本会向授权端点请求 ``response_mode=query``\ ，因此步骤4的授权响应以GET方式返回。
    15.7 及之前版本以跨站POST方式返回，而 |Fess| 的默认值 ``tomcat.sameSiteCookies = lax``
    在该情况下不会发送会话Cookie，因此需要将其改为 ``tomcat.sameSiteCookies = none`` 作为规避方法。
    如果您仅出于该原因设置了 ``none``\ ，现在可以恢复为默认值。
@@ -237,7 +237,7 @@ Entra ID侧配置
 
 .. note::
    |Fess| 在获取令牌时会请求 ``https://graph.microsoft.com/.default`` 作用域。
-   15.10 及以后版本还会向授权端点发送 ``openid profile offline_access https://graph.microsoft.com/.default``\ ，以便针对同一组权限请求同意。
+   15.8 及以后版本还会向授权端点发送 ``openid profile offline_access https://graph.microsoft.com/.default``\ ，以便针对同一组权限请求同意。
    这意味着将使用在应用注册中配置并已授予同意的所有访问权限。
    因此，若要获取组信息，必须将上述权限添加到应用注册中，并授予管理员同意。
 

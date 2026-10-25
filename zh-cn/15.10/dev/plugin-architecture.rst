@@ -52,7 +52,7 @@
 
 .. note::
 
-   提供 JSP 的 ``fess-theme-*`` （JAR 主题）种类已在 15.10 中删除。
+   提供 JSP 的 ``fess-theme-*`` （JAR 主题）种类已在 15.9 中删除。
    搜索界面的外观不是通过插件，而是通过主题来更改（参见 :doc:`theme-development` ）。
 
 插件结构

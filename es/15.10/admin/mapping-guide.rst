@@ -54,7 +54,7 @@ Diccionarios de mapeo incluidos
 
 El ``mapping.txt`` predeterminado se usa al analizar campos de búsqueda como ``title`` y
 ``content``. Unifica hiragana, kana pequeños y katakana de ancho medio en katakana de ancho completo,
-de modo que りんご, リンゴ y ﾘﾝｺﾞ coinciden entre sí. En |Fess| 15.10 también unifica las siguientes
+de modo que りんご, リンゴ y ﾘﾝｺﾞ coinciden entre sí. En |Fess| 15.9 también unifica las siguientes
 grafías:
 
 - ゐ y ゑ (a イ y エ), kana pequeños como ゎ, ゕ, ゖ, ヮ, ヵ, ヶ y ㇰ-ㇿ, y ゝ y ゞ (a ヽ y ヾ)

@@ -199,7 +199,7 @@ propio |Fess|, el archivo de sustitución será ``fess+systemHelper.xml``
    Esto debe sincronizarse en cada versión de |Fess|. Si el archivo
    sigue llamando a un método que se eliminó del núcleo, la
    inicialización de esa definición de componente falla con
-   ``BeanMethodNotFoundException``. Por ejemplo, en 15.10 se eliminó
+   ``BeanMethodNotFoundException``. Por ejemplo, en 15.9 se eliminó
    ``addDesignJspFileName`` de ``systemHelper``, por lo que un archivo
    de sustitución que lo llame falla. Este coste de mantenimiento es la
    razón por la que se recomienda la adición en lugar de la sustitución.
@@ -324,7 +324,7 @@ referencia para el desarrollo:
      - Bangs al estilo de DuckDuckGo (``!g``) que envían una búsqueda a otro sitio
    * - ``fess-webapp-semantic-search``
      - Búsqueda neuronal/búsqueda vectorial (obsoleto; reemplazado por la integración en el
-       núcleo en la 15.10)
+       núcleo en la 15.8)
    * - ``fess-webapp-multimodal``
      - Búsqueda multimodal (imágenes y texto)
 

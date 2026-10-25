@@ -10,7 +10,7 @@ La fonctionnalité de thèmes permet de gérer les thèmes, c'est-à-dire des en
 L'écran de recherche est toujours un thème. Lorsqu'aucun thème par défaut n'est défini, |Fess| utilise ``bootstrap``, le thème fourni avec lui. Le thème fourni ne peut être ni supprimé ni remplacé ; pour le modifier, copiez-le sous un nouveau nom (voir :ref:`theme-customize-bundled`).
 
 .. note::
-   Les thèmes basés sur JSP (plugins de thème JAR ``fess-theme-*``) ont été supprimés en 15.10. Pour modifier l'apparence, utilisez un thème (voir :ref:`upgrade-159-static-theme`).
+   Les thèmes basés sur JSP (plugins de thème JAR ``fess-theme-*``) ont été supprimés en 15.9. Pour modifier l'apparence, utilisez un thème (voir :ref:`upgrade-159-static-theme`).
    Pour effectuer les opérations décrites sur cette page, le rôle ``admin-theme`` est requis (le rôle ``admin-theme-view`` suffit pour la consultation seule).
 
 Obtenir un thème
@@ -152,7 +152,7 @@ Manifeste theme.yml
      - Fichier servant de point d'entrée (par défaut : ``index.html``).
    * - ``spaFallback``
      - Optionnel
-     - Obsolète et n'est plus lu. Depuis la version 15.10, le fichier d'entrée est toujours servi pour les chemins de l'écran de recherche.
+     - Obsolète et n'est plus lu. Depuis la version 15.9, le fichier d'entrée est toujours servi pour les chemins de l'écran de recherche.
 
 Tableau : Champs du fichier theme.yml
 

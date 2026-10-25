@@ -115,4 +115,4 @@ Dans le thème fourni
 Dans le thème fourni ``bootstrap``, un utilisateur connecté voit ses recherches récentes dans la liste
 de suggestions lorsqu'il clique dans la zone de recherche vide ou y appuie sur la flèche vers le bas.
 Choisir une entrée relance la même recherche, conditions comme les étiquettes comprises. Les journaux
-de recherche enregistrés avant |Fess| 15.10 ne contiennent pas de conditions et ne sont pas listés.
+de recherche enregistrés avant |Fess| 15.9 ne contiennent pas de conditions et ne sont pas listés.

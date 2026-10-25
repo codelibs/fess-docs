@@ -5,7 +5,7 @@ Guía de Desarrollo de Temas
 Visión General
 ==============
 
-En |Fess| 15.10, la pantalla de búsqueda es siempre un tema.
+En |Fess| 15.9, la pantalla de búsqueda es siempre un tema.
 Un tema es una SPA (Single Page Application, aplicación de
 página única) independiente que utiliza la API ``/api/v2/*``. El tema
 se distribuye como un archivo ZIP, que se sube y se activa desde la
@@ -20,10 +20,10 @@ describe en `Personalización del Tema Incluido`_.
 .. note::
 
    Los temas distribuidos como ZIP están disponibles a partir de |Fess| 15.7 y se
-   convirtieron en la pantalla de búsqueda predeterminada en 15.10. Los
+   convirtieron en la pantalla de búsqueda predeterminada en 15.9. Los
    plugins de tema JAR, que sustituían las JSP de la pantalla de
-   búsqueda, se eliminaron en 15.10; consulte
-   `Plugin de Tema JAR (eliminado en 15.10)`_.
+   búsqueda, se eliminaron en 15.9; consulte
+   `Plugin de Tema JAR (eliminado en 15.9)`_.
 
 Qué es un tema
 ==============
@@ -127,7 +127,7 @@ Los campos que se pueden especificar son los siguientes.
    * - ``spaFallback``
      - Opcional
      - Obsoleto. Se acepta por compatibilidad, pero ya no se lee: desde
-       15.10 el HTML de entrada se sirve siempre para las rutas de la
+       15.9 el HTML de entrada se sirve siempre para las rutas de la
        pantalla de búsqueda.
 
 .. note::
@@ -156,7 +156,7 @@ Distribución y API
 - Se devuelve el HTML de entrada (por defecto ``index.html``) en cada
   una de las rutas ``/``, ``/search``, ``/advance``, ``/help``,
   ``/error``, ``/profile``, ``/cache`` y ``/chat``, y el enrutamiento
-  posterior lo gestiona la SPA. Desde 15.10 esto ocurre sea cual sea el
+  posterior lo gestiona la SPA. Desde 15.9 esto ocurre sea cual sea el
   valor de ``spaFallback``; el campo ya no se lee.
 - Los errores también los muestra el tema: cuando una solicitud falla,
   el navegador recibe el HTML de entrada del tema en la URL solicitada,
@@ -321,12 +321,12 @@ lugar, cópielo con otro nombre.
    nueva copia del tema incluido y vuelva a aplicar sus cambios, ya que
    el tema incluido sigue la API ``/api/v2/*`` de su versión de |Fess|.
 
-Plugin de Tema JAR (eliminado en 15.10)
+Plugin de Tema JAR (eliminado en 15.9)
 ======================================
 
 El tipo de plugin de tema JAR, que empaquetaba JSP, CSS e imágenes en un
 JAR ``fess-theme-*`` y los aplicaba como el tema con el mismo nombre que
-la clave del host virtual, se eliminó en |Fess| 15.10. 15.10 no expande
+la clave del host virtual, se eliminó en |Fess| 15.9. 15.9 no expande
 los temas JAR ni los utiliza en ninguna pantalla.
 
 - Si lo instala desde «Sistema» → «Plugin» en la consola de

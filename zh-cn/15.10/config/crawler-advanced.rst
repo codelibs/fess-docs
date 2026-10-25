@@ -27,7 +27,7 @@
 默认脚本
 --------------------
 
-``crawler.default.script`` 属性已在 |Fess| 15.10 中移除，文档提升的每条规则现在可在 :doc:`../admin/boostdoc-guide` 页面单独选择脚本类型。
+``crawler.default.script`` 属性已在 |Fess| 15.9 中移除，文档提升的每条规则现在可在 :doc:`../admin/boostdoc-guide` 页面单独选择脚本类型。
 
 HTTP 线程池
 ------------------
@@ -1176,7 +1176,7 @@ HTML，因此正文不会被索引。使用 Playwright 爬虫可以先用无头�
        npx playwright install --with-deps
 
 .. note::
-   从 15.10 起，Playwright 使用的 Node.js 可执行文件同样不再包含在 |Fess| 的软件包中。
+   从 15.9 起，Playwright 使用的 Node.js 可执行文件同样不再包含在 |Fess| 的软件包中。
    请使用以下命令安装。``bin/fess.in.sh`` 会检测安装位置，并将
    ``PLAYWRIGHT_NODEJS_PATH`` 传递给爬虫进程。
 
@@ -1349,7 +1349,7 @@ HTML，因此正文不会被索引。使用 Playwright 爬虫可以先用无头�
    使用 Playwright 也就失去了意义。对于仅以服务器端渲染为对象的爬取虽然有效，
    但通常请从上述可以安全指定的类型中选择。
 
-15.10 中的变更
+15.8 中的变更
 -------------
 
 从 15.7 及更早版本升级时，Playwright 爬虫的行为发生了以下变化。

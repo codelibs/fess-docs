@@ -174,7 +174,7 @@ Verwendet OpenSearch als Suchmaschine.
 
 .. note::
 
-   Wenn Sie ein OpenSearch verwenden, in dem sich diese Plugins nicht installieren lassen, etwa einen verwalteten Dienst, setzen Sie ``search_engine.type`` auf ``vanilla`` (ab |Fess| 15.10). Einige Funktionen wie die Wörterbuchverwaltung stehen dann nicht zur Verfügung. Siehe :doc:`../config/search-engine-type`.
+   Wenn Sie ein OpenSearch verwenden, in dem sich diese Plugins nicht installieren lassen, etwa einen verwalteten Dienst, setzen Sie ``search_engine.type`` auf ``vanilla`` (ab |Fess| 15.9). Einige Funktionen wie die Wörterbuchverwaltung stehen dann nicht zur Verfügung. Siehe :doc:`../config/search-engine-type`.
 
 Java (außer Docker-Version)
 ----------------------------

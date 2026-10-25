@@ -310,7 +310,7 @@ OpenSearch 会根据该字段首次被索引的值来创建定义：
      - ``query.additional.search.fields`` 。未列在其中的字段根本不会作为范围进行搜索。
 
 从 CSV、JSON 或数据库读取的值，除非在脚本中进行转换，否则都是字符串，因此请转换要用于排序或
-范围搜索的值。使用 JavaScript 引擎（在 15.10 中创建的数据存储配置的默认引擎，
+范围搜索的值。使用 JavaScript 引擎（在 15.9 中创建的数据存储配置的默认引擎，
 ``script_type=javascript`` ）时::
 
     url="https://example.com/product/" + id

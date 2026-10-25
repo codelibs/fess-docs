@@ -102,11 +102,11 @@ Version gelieferten geplanten Jobs (``updatedTime`` 0) bleiben unverändert. Dok
 
 .. note::
 
-   |Fess| 15.10 speichert das ``password`` der Web- und Datei-Authentifizierung mit dem Anwendungsschlüssel
+   |Fess| 15.9 speichert das ``password`` der Web- und Datei-Authentifizierung mit dem Anwendungsschlüssel
    (``app.cipher.key`` in ``fess_config.properties``) verschlüsselt, sodass ``fess_basic_config.bulk`` und
    ``fess_config.bulk`` die verschlüsselten Werte enthalten. Übernehmen Sie beim Wiederherstellen einer Sicherung auf
    einer anderen Installation denselben ``app.cipher.key``. Mit einem anderen Schlüssel schlagen Crawls, die diese
-   Zugangsdaten verwenden, mit einem Fehler fehl. Eine Sicherung, die vor 15.10 erstellt wurde, enthält sie im
+   Zugangsdaten verwenden, mit einem Fehler fehl. Eine Sicherung, die vor 15.9 erstellt wurde, enthält sie im
    Klartext und funktioniert weiterhin.
 
    Andere Werte in einer ``*.bulk``-Datei sind nicht verschlüsselt. Bewahren Sie diese Dateien daher als sensible

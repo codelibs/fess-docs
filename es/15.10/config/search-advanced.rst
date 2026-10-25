@@ -316,7 +316,7 @@ Cada uso necesita el adecuado:
 
 Un valor leído de CSV, JSON o una base de datos es una cadena salvo que el script lo convierta, así
 que convierta los valores por los que desee ordenar o buscar por rango. Con el motor JavaScript, el
-predeterminado para las configuraciones de almacén de datos creadas en 15.10
+predeterminado para las configuraciones de almacén de datos creadas en 15.9
 (``script_type=javascript``)::
 
     url="https://example.com/product/" + id

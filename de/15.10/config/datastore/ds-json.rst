@@ -297,7 +297,7 @@ Verfügbare Felder
 
 .. note::
 
-   In |Fess| 15.10 ist JavaScript die eingebaute Skript-Engine. Groovy wird als
+   In |Fess| 15.9 ist JavaScript die eingebaute Skript-Engine. Groovy wird als
    Plugin ``fess-script-groovy`` bereitgestellt. Welche Engine verwendet wird, geben
    Sie über den Datenspeicher-Parameter ``script_type`` an (z. B.
    ``script_type=javascript``). Wird der Parameter weggelassen, wird ``groovy``

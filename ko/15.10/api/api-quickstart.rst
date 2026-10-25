@@ -278,7 +278,7 @@ API 버전 대응표
 
 .. note::
 
-   |Fess| 15.10 에서 기존의 ``/api/v1`` JSON 검색 API 및 채팅 API 는 폐지되었습니다.
+   |Fess| 15.7 에서 기존의 ``/api/v1`` JSON 검색 API 및 채팅 API 는 폐지되었습니다.
    ``/api/v1`` 을 사용하던 클라이언트는 ``/api/v2`` 로 마이그레이션하십시오.
    버전 간 자세한 차이에 대해서는 `릴리스 노트 <https://github.com/codelibs/fess/releases>`__ 를 참조하십시오.
 

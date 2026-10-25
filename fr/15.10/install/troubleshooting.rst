@@ -569,7 +569,7 @@ Collecte d'informations de débogage
 
 Lors du signalement d'un problème, il est utile de collecter les informations suivantes :
 
-1. **Informations de version** (``bin/fess -v`` est disponible à partir de la 15.10) ::
+1. **Informations de version** (``bin/fess -v`` est disponible à partir de la 15.9) ::
 
        $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version

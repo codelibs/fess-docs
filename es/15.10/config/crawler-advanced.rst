@@ -27,7 +27,7 @@ La configuración avanzada del rastreador se realiza en los siguientes archivos:
 Script Predeterminado
 ---------------------
 
-La propiedad ``crawler.default.script`` se eliminó en |Fess| 15.10, y cada regla de impulso de documento ahora selecciona su propio tipo de script en la pantalla :doc:`../admin/boostdoc-guide`.
+La propiedad ``crawler.default.script`` se eliminó en |Fess| 15.9, y cada regla de impulso de documento ahora selecciona su propio tipo de script en la pantalla :doc:`../admin/boostdoc-guide`.
 
 Pool de Hilos HTTP
 ------------------
@@ -1184,7 +1184,7 @@ sitios, especifíquelos de la siguiente manera.
        npx playwright install --with-deps
 
 .. note::
-   Desde 15.10, el ejecutable de Node.js que utiliza Playwright tampoco forma parte
+   Desde 15.9, el ejecutable de Node.js que utiliza Playwright tampoco forma parte
    del paquete de |Fess|. Instálelo con la orden siguiente; ``bin/fess.in.sh`` lo
    detecta y pasa ``PLAYWRIGHT_NODEJS_PATH`` al proceso del rastreador.
 
@@ -1372,7 +1372,7 @@ el rastreo como el volumen de datos transferidos.
    normalmente debe elegir entre los tipos que se pueden especificar de
    forma segura indicados anteriormente.
 
-Cambios en 15.10
+Cambios en 15.8
 ---------------
 
 Al actualizar desde la versión 15.7 o anterior, el comportamiento del

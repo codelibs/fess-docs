@@ -281,7 +281,7 @@ Tabla de compatibilidad de versiones de la API
 
 .. note::
 
-   En |Fess| 15.10, la API de búsqueda JSON y la API de chat de ``/api/v1`` han sido eliminadas.
+   En |Fess| 15.7, la API de búsqueda JSON y la API de chat de ``/api/v1`` han sido eliminadas.
    Los clientes que utilizaban ``/api/v1`` deben migrar a ``/api/v2``.
    Para diferencias detalladas entre versiones, consulte las `Notas de la versión <https://github.com/codelibs/fess/releases>`__.
 

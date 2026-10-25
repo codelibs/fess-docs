@@ -29,7 +29,7 @@ Entra ID 인증에서는 |Fess| 가 OAuth 2.0/OpenID Connect의 클라이언트�
 7. 백그라운드에서 |Fess| 가 Microsoft Graph API를 사용하여 사용자의 그룹 및 역할 정보를 취득하고, 완료되면 역할 기반 검색에 적용
 
 .. note::
-   |Fess| 15.10 이상에서는 인가 엔드포인트에 ``response_mode=query`` 를 요청하므로, 4번의 인가
+   |Fess| 15.8 이상에서는 인가 엔드포인트에 ``response_mode=query`` 를 요청하므로, 4번의 인가
    응답은 GET으로 반환됩니다. 15.7 이전에는 크로스 사이트 POST로 반환되었고, |Fess| 의 기본값인
    ``tomcat.sameSiteCookies = lax`` 에서는 세션 쿠키가 전송되지 않기 때문에
    ``tomcat.sameSiteCookies = none`` 으로 변경하는 우회 방법이 필요했습니다.
@@ -242,7 +242,7 @@ API 접근 권한 설정
 
 .. note::
    |Fess| 는 토큰 취득 시 ``https://graph.microsoft.com/.default`` 스코프를 요청합니다.
-   15.10 이상에서는 인가 엔드포인트에도 ``openid profile offline_access https://graph.microsoft.com/.default``
+   15.8 이상에서는 인가 엔드포인트에도 ``openid profile offline_access https://graph.microsoft.com/.default``
    를 요청하여 동일한 범위의 동의를 요구합니다.
    이는 앱 등록에서 구성 및 동의된 모든 접근 권한이 사용됨을 의미합니다.
    따라서 그룹 정보를 취득하려면 위의 접근 권한을 앱 등록에 추가하고

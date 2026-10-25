@@ -5,7 +5,7 @@ Guide de développement des thèmes
 Aperçu
 ======
 
-Dans |Fess| 15.10, l'écran de recherche est toujours un thème. Un
+Dans |Fess| 15.9, l'écran de recherche est toujours un thème. Un
 thème est une SPA (Single Page Application, application monopage)
 indépendante qui utilise l'API ``/api/v2/*``. Les thèmes sont distribués sous
 forme de fichiers ZIP, téléversés puis activés depuis l'écran
@@ -20,9 +20,9 @@ copier le thème fourni et de modifier la copie, comme décrit dans
 .. note::
 
    Les thèmes distribués au format ZIP sont disponibles à partir de |Fess| 15.7 et sont
-   devenus l'écran de recherche par défaut en 15.10. Les plugins de thème JAR,
+   devenus l'écran de recherche par défaut en 15.9. Les plugins de thème JAR,
    qui remplaçaient les JSP de l'écran de recherche, ont été supprimés en
-   15.10 ; voir `Plugin de thème JAR (supprimé en 15.10)`_.
+   15.9 ; voir `Plugin de thème JAR (supprimé en 15.9)`_.
 
 Qu'est-ce qu'un thème
 =====================
@@ -122,7 +122,7 @@ Les champs pouvant être spécifiés sont les suivants.
    * - ``spaFallback``
      - Facultatif
      - Obsolète. Accepté pour des raisons de compatibilité mais n'est plus
-       lu : depuis la version 15.10, le HTML d'entrée est toujours servi pour
+       lu : depuis la version 15.9, le HTML d'entrée est toujours servi pour
        les chemins de l'écran de recherche.
 
 .. note::
@@ -149,7 +149,7 @@ Diffusion et API
 - Le HTML d'entrée (par défaut ``index.html``) est renvoyé pour chacun des
   chemins ``/``, ``/search``, ``/advance``, ``/help``, ``/error``,
   ``/profile``, ``/cache`` et ``/chat``, et le routage ultérieur est assuré
-  par la SPA. Depuis la version 15.10, c'est le cas quelle que soit la valeur
+  par la SPA. Depuis la version 15.9, c'est le cas quelle que soit la valeur
   de ``spaFallback`` ; ce champ n'est plus lu.
 - Les erreurs sont également rendues par le thème : lorsqu'une requête
   échoue, le navigateur reçoit le HTML d'entrée du thème à l'URL demandée,
@@ -316,13 +316,13 @@ nom.
    copie du thème fourni et réappliquez vos modifications, car le thème
    fourni suit l'API ``/api/v2/*`` de sa version de |Fess|.
 
-Plugin de thème JAR (supprimé en 15.10)
+Plugin de thème JAR (supprimé en 15.9)
 ======================================
 
 Le type de plugin de thème JAR, qui regroupait des JSP, du CSS et des
 images dans un JAR ``fess-theme-*`` et les appliquait comme le thème
 portant le même nom que la clé de l'hôte virtuel, a été supprimé dans
-|Fess| 15.10. 15.10 ne déploie plus les thèmes JAR et ne les utilise pour
+|Fess| 15.9. 15.9 ne déploie plus les thèmes JAR et ne les utilise pour
 aucun écran.
 
 - Si vous en installez un depuis « Système » → « Plugin » dans l'écran

@@ -29,7 +29,7 @@ En la autenticación de Entra ID, |Fess| opera como un cliente OAuth 2.0/OpenID 
 7. En segundo plano, |Fess| utiliza la API de Microsoft Graph para recuperar la información de grupo y rol del usuario, y la aplica a la búsqueda basada en roles en cuanto finaliza la resolución
 
 .. note::
-   A partir de |Fess| 15.10, la respuesta de autorización del paso 4 se devuelve como una solicitud
+   A partir de |Fess| 15.8, la respuesta de autorización del paso 4 se devuelve como una solicitud
    GET, ya que |Fess| solicita ``response_mode=query`` al endpoint de autorización. Hasta la
    versión 15.7 se devolvía mediante un POST entre sitios, y el valor por defecto incluido
    ``tomcat.sameSiteCookies = lax`` no envía la cookie de sesión en ese caso, por lo que era
@@ -248,7 +248,7 @@ Configurar permisos de API
 
 .. note::
    |Fess| solicita el ámbito ``https://graph.microsoft.com/.default`` al adquirir un token.
-   Desde la versión 15.10, también se envía ``openid profile offline_access https://graph.microsoft.com/.default`` al endpoint de autorización, de modo que el consentimiento se solicita para el mismo conjunto.
+   Desde la versión 15.8, también se envía ``openid profile offline_access https://graph.microsoft.com/.default`` al endpoint de autorización, de modo que el consentimiento se solicita para el mismo conjunto.
    Esto significa que se utilizan todos los permisos de acceso configurados y para los que se ha dado consentimiento en el registro de la aplicación.
    Por lo tanto, para recuperar información de grupos, debe agregar los permisos indicados anteriormente al registro de la aplicación y otorgar el consentimiento del administrador.
 

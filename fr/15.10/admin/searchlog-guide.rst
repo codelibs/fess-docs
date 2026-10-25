@@ -58,7 +58,7 @@ Onglets
 .. note::
 
    Les métriques de clics par requête et les requêtes sans clic ne comptent que les clics enregistrés
-   depuis que le mot recherché est enregistré avec les clics (|Fess| 15.10 et ultérieur). Le total des
+   depuis que le mot recherché est enregistré avec les clics (|Fess| 15.9 et ultérieur). Le total des
    clics et le taux de clics incluent les clics plus anciens. Certaines valeurs, comme le nombre
    d'utilisateurs, sont approximatives.
 

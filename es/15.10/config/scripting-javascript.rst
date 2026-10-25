@@ -5,7 +5,7 @@ Guía de scripting JavaScript
 Descripción general
 ===================
 
-JavaScript es el lenguaje de scripting predeterminado de |Fess| a partir de la versión 15.10.
+JavaScript es el lenguaje de scripting predeterminado de |Fess| a partir de la versión 15.9.
 Se ejecuta sobre Sai (un fork de Nashorn desarrollado por CodeLibs, que |Fess| ya utiliza
 para las expresiones de sus XML de DI), y los scripts se ejecutan como ECMAScript 6.
 Su identificador es ``javascript``, y también puede indicarse mediante los alias

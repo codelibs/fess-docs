@@ -232,7 +232,7 @@ Parámetros comunes disponibles para todos los conectores de almacén de datos:
        almacén de datos viene rellenada con ``script_type=javascript``. ``groovy`` sigue estando
        disponible a través del complemento ``fess-script-groovy``. Una configuración que no tiene
        registrado un ``script_type`` se trata como Groovy, por lo que una configuración creada
-       antes de 15.10 sigue funcionando sin cambios. Consulte :doc:`../scripting-overview` para
+       antes de 15.9 sigue funcionando sin cambios. Consulte :doc:`../scripting-overview` para
        más detalles.
 
 Solución de Problemas

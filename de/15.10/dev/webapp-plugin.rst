@@ -196,7 +196,7 @@ die Ersetzungsdatei ``fess+systemHelper.xml`` (nicht
    müssen mit jedem |Fess|-Release synchronisiert werden. Ruft die Datei
    weiterhin eine Methode auf, die aus dem Kern entfernt wurde, schlägt die
    Initialisierung der Komponentendefinition mit einer
-   ``BeanMethodNotFoundException`` fehl. So wurde in 15.10
+   ``BeanMethodNotFoundException`` fehl. So wurde in 15.9
    ``addDesignJspFileName`` aus ``systemHelper`` entfernt; eine
    Ersetzungsdatei, die sie noch aufruft, schlägt fehl. Dieser
    Wartungsaufwand ist der Grund, warum das Hinzufügen dem Ersetzen
@@ -319,7 +319,7 @@ Sie sind als Referenz für die Entwicklung auf
    * - ``fess-webapp-bangs``
      - Bangs im Stil von DuckDuckGo (``!g``), die eine Suche an eine andere Website senden
    * - ``fess-webapp-semantic-search``
-     - Neuronale Suche/Vektorsuche (veraltet; abgelöst durch die Kernintegration in 15.10)
+     - Neuronale Suche/Vektorsuche (veraltet; abgelöst durch die Kernintegration in 15.8)
    * - ``fess-webapp-multimodal``
      - Multimodale Suche (Bild und Text)
 

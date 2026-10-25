@@ -77,7 +77,7 @@ Backup der Konfigurationsdaten
      Key-Matches, Rollen, Web-/Datei-Authentifizierung usw., 19 Indizes)
    - ``fess_config.bulk`` - zusätzlich zu den oben genannten 19 Indizes Laufzeitdaten wie
      Crawl-Informationen, fehlgeschlagene URLs, Job-Protokolle und Thumbnail-Warteschlange,
-     insgesamt 25 Indizes bis 15.8; 15.10 ergänzt den Index ``tag_type``, der die Benutzer-Tags
+     insgesamt 25 Indizes bis 15.8; 15.9 ergänzt den Index ``tag_type``, der die Benutzer-Tags
      enthält, sodass es 26 sind
    - ``fess_user.bulk`` - Benutzer, Rollen und Gruppen
    - ``system.properties`` - Systemeinstellungen einschließlich der allgemeinen Einstellungen
@@ -88,12 +88,12 @@ Backup der Konfigurationsdaten
 
       ``fess_config.bulk`` enthält bereits alle Daten aus ``fess_basic_config.bulk``. Als
       Konfigurationssicherung vor dem Upgrade genügen daher ``fess_basic_config.bulk``,
-      ``fess_user.bulk`` und ``system.properties``. Stammt die Sicherung von 15.10 oder neuer und werden Benutzer-Tags verwendet, laden Sie zusätzlich ``fess_config.bulk`` herunter, da der Index ``tag_type`` mit den Benutzer-Tags nicht in ``fess_basic_config.bulk`` enthalten ist (siehe :doc:`../admin/tagtype-guide`).
+      ``fess_user.bulk`` und ``system.properties``. Stammt die Sicherung von 15.9 oder neuer und werden Benutzer-Tags verwendet, laden Sie zusätzlich ``fess_config.bulk`` herunter, da der Index ``tag_type`` mit den Benutzer-Tags nicht in ``fess_basic_config.bulk`` enthalten ist (siehe :doc:`../admin/tagtype-guide`).
 
    .. note::
 
       Protokolldaten wie Suchanfragenprotokolle und Klickprotokolle (``search_log.ndjson``, ``click_log.ndjson``,
-      ``favorite_log.ndjson``, ``user_info.ndjson``; 15.10 bietet zusätzlich ``chat_log.ndjson`` an)
+      ``favorite_log.ndjson``, ``user_info.ndjson``; 15.9 bietet zusätzlich ``chat_log.ndjson`` an)
       können ebenfalls von derselben Seite heruntergeladen werden.
       Falls nur die Konfiguration gesichert wird, ist dies nicht erforderlich. Diese ``*.ndjson``-Dateien
       können außerdem nicht über die Sicherungsseite hochgeladen und wiederhergestellt werden
@@ -280,7 +280,7 @@ ZIP-Version
    .. warning::
 
       Unverändert kopiert behalten ``fess_config.properties`` und ``fess.in.sh`` ihre alten Werte,
-      auch solche, deren Standardwert sich in 15.10 geändert hat: Danach angelegte Jobs verwenden
+      auch solche, deren Standardwert sich in 15.9 geändert hat: Danach angelegte Jobs verwenden
       zum Beispiel standardmäßig Groovy. Vergleichen Sie jede Datei vor den letzten beiden Befehlen
       mit der Datei in ``fess-15.10.0`` und übernehmen Sie nur die Werte, die Sie selbst geändert
       haben. Was zu prüfen ist, beschreibt :ref:`upgrade-159-carried-over-config`.
@@ -702,13 +702,13 @@ Ersetzen Sie die Plugins trotzdem durch die Versionen von 15.10 (siehe :ref:`upg
 Behalten Sie insbesondere nicht die 15.9.0-jars von ``fess-storage-s3`` und ``fess-storage-gcs``. Diese Plugins von 15.9.0 geben keinen Fehler zurück, wenn das Auflisten des Speichers fehlschlägt. Ist der Speicher nicht erreichbar, sind die Zugangsdaten falsch oder existiert der Bucket nicht, antwortet ``/api/admin/storage/list`` der Admin-API daher weiterhin mit einer erfolgreichen, leeren Liste, ``{"items":[],"status":0}``. Die Plugins von 15.10 lösen den Fehler als Ausnahme aus, und 15.10 macht daraus eine Fehlerantwort. Bleiben die alten jars installiert, greift diese Verbesserung von 15.10 nicht.
 
 Upgrade von 15.8 auf 15.10
-=========================
+==========================
 
 Wenn Sie von 15.8 aktualisieren, sind die folgenden Änderungen nicht abwärtskompatibel. Wenn Sie von
 15.7 oder früher aktualisieren, gelten sie ebenfalls für Sie: Lesen Sie alle Abschnitte von
 „Entfernung des eingebetteten OpenSearch" bis „Neue Felder und Kana-Normalisierung auf einen
 vorhandenen Dokumentindex anwenden" (das eingebettete OpenSearch, die Skript-Engine, die S3- und
-SSO-Plugins, der Job Index Exporter und so weiter) und danach „Migrationsaufgaben speziell für 15.10"
+SSO-Plugins, der Job Index Exporter und so weiter) und danach „Migrationsaufgaben je nach Funktion"
 am Ende dieser Seite.
 
 Entfernung des eingebetteten OpenSearch
@@ -1110,11 +1110,11 @@ einschließt, kann nichts indexieren.
 
 .. note::
 
-   |Fess| 15.10 speichert auch das ``password`` der Web- und Datei-Authentifizierung mit ``app.cipher.key``
+   |Fess| 15.9 speichert auch das ``password`` der Web- und Datei-Authentifizierung mit ``app.cipher.key``
    verschlüsselt, sodass ``fess_basic_config.bulk`` und ``fess_config.bulk`` einer Sicherung die verschlüsselten Werte
    enthalten. Übernehmen Sie beim Wiederherstellen auf einer anderen Installation denselben ``app.cipher.key``; mit
    einem anderen Schlüssel schlagen Crawls, die diese Zugangsdaten verwenden, mit einem Fehler fehl. Eine Sicherung,
-   die vor 15.10 erstellt wurde, enthält sie im Klartext und funktioniert weiterhin (siehe
+   die vor 15.9 erstellt wurde, enthält sie im Klartext und funktioniert weiterhin (siehe
    :doc:`../admin/backup-guide`).
 
 .. _upgrade-159-jcifs:
@@ -1367,9 +1367,9 @@ Die folgenden Änderungen sind keine Ablehnungen, können aber Skripte und Clien
 ``search_engine.type=cloud`` ist veraltet
 -----------------------------------------
 
-Mit 15.10 erhält ``search_engine.type`` den Wert ``vanilla`` für ein reines OpenSearch ohne die CodeLibs-Plugins (siehe :doc:`../config/search-engine-type`). ``cloud`` ist jetzt ein veralteter Alias für ``vanilla``: Er funktioniert weiterhin, aber |Fess| schreibt beim Start eine Warnung ins Log. Ändern Sie den Wert auf ``vanilla``, sobald die Installation mit 15.10 läuft. ``aws`` funktioniert unverändert weiter.
+Mit 15.9 erhält ``search_engine.type`` den Wert ``vanilla`` für ein reines OpenSearch ohne die CodeLibs-Plugins (siehe :doc:`../config/search-engine-type`). ``cloud`` ist jetzt ein veralteter Alias für ``vanilla``: Er funktioniert weiterhin, aber |Fess| schreibt beim Start eine Warnung ins Log. Ändern Sie den Wert auf ``vanilla``, sobald die Installation mit 15.10 läuft. ``aws`` funktioniert unverändert weiter.
 
-* ``vanilla`` erfordert 15.10. |Fess| 15.8 und früher kennen den Wert nicht; behalten Sie daher ``cloud`` bei, solange Sie noch auf 15.8 zurückgehen können.
+* ``vanilla`` erfordert 15.9. |Fess| 15.8 und früher kennen den Wert nicht; behalten Sie daher ``cloud`` bei, solange Sie noch auf 15.8 zurückgehen können.
 * Die Indexdefinitionen von ``aws`` und ``cloud`` stammen jetzt aus ``fess_indices/_vanilla/``. Die mitgelieferten Verzeichnisse ``fess_indices/_aws/`` und ``fess_indices/_cloud/`` gibt es nicht mehr, und ein von Ihnen selbst angelegtes Verzeichnis ``fess_indices/_aws/`` oder ``fess_indices/_cloud/`` wird nicht mehr gelesen. Übernehmen Sie Ihre Änderungen nach ``fess_indices/_vanilla/``. Bereits vorhandene Indizes werden nicht verändert.
 * Die Suggest-Einstellungen, die 15.8 in der Suchmaschine gespeichert hat, werden automatisch migriert; Sie müssen nichts tun.
 
@@ -1433,8 +1433,8 @@ ist nicht nötig.
    crawlen Sie, um die Werte zu ergänzen.
 
 
-Migrationsaufgaben speziell für 15.10
-====================================
+Migrationsaufgaben je nach Funktion
+===================================
 
 Wenn Sie von 15.7 oder früher auf 15.10 aktualisieren, sind je nach genutzten Funktionen die
 folgenden Arbeiten erforderlich.
@@ -1443,7 +1443,7 @@ Falls Sie die semantische Suche genutzt haben
 ---------------------------------------------
 
 Das Plugin ``fess-webapp-semantic-search``, das bis 15.7 die semantische Suche bereitstellte, wurde
-in 15.10 in den Kern integriert und ist daher nicht mehr erforderlich (veraltet). Sie müssen das
+in 15.8 in den Kern integriert und ist daher nicht mehr erforderlich (veraltet). Sie müssen das
 Plugin entfernen, ``-Dfess.semantic_search.*`` sowie ``-Drank.fusion.searchers=default,semantic``
 löschen und die alte Ingest-Pipeline lösen (detach). Das Vorgehen ist unter
 :ref:`semantic-search-migration` (:doc:`../config/search-semantic`) beschrieben.
@@ -1451,15 +1451,15 @@ löschen und die alte Ingest-Pipeline lösen (detach). Das Vorgehen ist unter
 Falls Sie den KI-Suchmodus (RAG-Chat) genutzt haben
 ---------------------------------------------------
 
-Ab 15.10 wurde die Funktion des KI-Suchmodus (RAG-Chat) in separate Plugins wie ``fess-llm-ollama``,
+Ab 15.6 wurde die Funktion des KI-Suchmodus (RAG-Chat) in separate Plugins wie ``fess-llm-ollama``,
 ``fess-llm-openai`` und ``fess-llm-gemini`` ausgelagert. Installieren Sie das zu Ihrem verwendeten
-Anbieter passende Plugin über die Verwaltungsseite unter „System" → „Plugins". 15.10 fügt außerdem
+Anbieter passende Plugin über die Verwaltungsseite unter „System" → „Plugins". 15.9 fügt außerdem
 ``fess-llm-bedrock`` für Amazon Bedrock hinzu.
 
 Falls Sie SPNEGO (Windows-integrierte Authentifizierung) genutzt haben
 ----------------------------------------------------------------------
 
-Ab 15.10 wird eine SPNEGO-Anmeldung abgelehnt, wenn sich die Kerberos-Realm des Client-Principals
+Ab 15.8 wird eine SPNEGO-Anmeldung abgelehnt, wenn sich die Kerberos-Realm des Client-Principals
 von der Realm des Servers unterscheidet. Melden sich Ihre Benutzer aus einer untergeordneten
 Domäne einer AD-Domänenstruktur oder aus einer vertrauten Gesamtstruktur an, tragen Sie diese
 Realms kommagetrennt in ``spnego.allowed.realms`` ein, entweder über die Verwaltungsseite unter
@@ -1467,7 +1467,7 @@ Realms kommagetrennt in ``spnego.allowed.realms`` ein, entweder über die Verwal
 Benutzer, die sich bis 15.7 anmelden konnten, mit ``Kerberos realm is not allowed`` abgewiesen.
 Einzelheiten finden Sie unter :doc:`../config/sso-spnego`.
 
-Außerdem wurden in 15.10 die im Code hinterlegten Standardwerte von
+Außerdem wurden in 15.8 die im Code hinterlegten Standardwerte von
 ``spnego.allow.unsecure.basic`` und ``spnego.allow.localhost`` von ``true`` auf ``false``
 geändert. Eine Installation, in der diese Schlüssel in ``app/WEB-INF/conf/system.properties``
 fehlen, übernimmt mit dem Upgrade das strengere Verhalten. Insbesondere bietet die
@@ -1499,7 +1499,7 @@ unter :doc:`../config/sso-spnego`.
 Falls Sie SAML-Authentifizierung (SSO) genutzt haben
 ----------------------------------------------------
 
-Ab 15.10 bindet |Fess| jede SAML-Antwort an die ID der von ihm gesendeten AuthnRequest, sodass
+Ab 15.8 bindet |Fess| jede SAML-Antwort an die ID der von ihm gesendeten AuthnRequest, sodass
 IdP-initiiertes (unaufgefordertes) SSO nicht mehr funktioniert. Eine Anmeldung, die von einer
 |Fess|-Kachel in einem IdP-Portal wie dem Okta-Dashboard oder dem Portal „Meine Apps" von
 Microsoft Entra ID aus gestartet wird, hat keine zugehörige AuthnRequest und wird abgelehnt. Bis
@@ -1523,7 +1523,7 @@ laufen. Einzelheiten finden Sie unter :doc:`../config/sso-saml`.
 Falls Sie Microsoft Entra ID (Azure AD) genutzt haben
 -----------------------------------------------------
 
-Ab 15.10 lautet der Standardwert des beim Autorisierungsendpunkt angeforderten Response-Modus
+Ab 15.8 lautet der Standardwert des beim Autorisierungsendpunkt angeforderten Response-Modus
 ``query`` statt ``form_post``. Bis 15.7 wurde der Callback als websiteübergreifender POST
 zurückgegeben, und beim |Fess|-Standardwert ``tomcat.sameSiteCookies = lax`` wird das
 Sitzungscookie dabei nicht mitgesendet, sodass ``tomcat.sameSiteCookies = none`` erforderlich
@@ -1533,7 +1533,7 @@ zurückkehren. Um das bisherige Verhalten beizubehalten, setzen Sie
 akzeptieren ``none`` nur bei einem Cookie, das auch das Attribut ``Secure`` trägt; auch dieser Weg
 setzt daher voraus, dass |Fess| über HTTPS bereitgestellt wird.
 
-Ab 15.10 löst |Fess| außerdem die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund
+Ab 15.8 löst |Fess| außerdem die Gruppen- und Rollenmitgliedschaft des Benutzers im Hintergrund
 auf, nachdem die Anmeldung abgeschlossen ist, statt die Anmeldung auf Microsoft Graph warten zu
 lassen. Bis die Auflösung abgeschlossen ist — oder wenn sie nicht vollständig gelingt — besitzt
 der Benutzer nur seine eigene benutzerbezogene Berechtigung sowie das, was
@@ -1572,7 +1572,7 @@ Auflösung ohne erneute Anmeldung normal öffnen lassen.
 Bei Verwendung von LDAP / Active Directory
 ------------------------------------------
 
-Ab 15.10 ist der Berechtigungsname einer Gruppe oder Rolle der Wert des RDN des Eintrags und nicht
+Ab 15.8 ist der Berechtigungsname einer Gruppe oder Rolle der Wert des RDN des Eintrags und nicht
 mehr ein Ausschnitt des DN-Textes. Eine Gruppe, deren CN ein im DN maskiertes Zeichen enthält --
 üblicherweise ein Komma --, erhält daher einen anderen Berechtigungsnamen als in 15.7.
 
@@ -1604,7 +1604,7 @@ maskiertes Zeichen enthält, ändert sich kein Berechtigungsname.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Bis 15.7 wurde die aus dem Benutzernamen abgeleitete Berechtigung (``role.search.user.prefix``
-gefolgt vom Benutzernamen) auch bei ``ldap.role.search.user.enabled=false`` vergeben. Ab 15.10 wird
+gefolgt vom Benutzernamen) auch bei ``ldap.role.search.user.enabled=false`` vergeben. Ab 15.8 wird
 die Einstellung wirksam, und die Berechtigung wird bei ``false`` nicht mehr vergeben.
 
 In einer Installation, die sie auf ``false`` setzt, verlieren Benutzer nach dem Upgrade die nach
@@ -1669,7 +1669,7 @@ ausführt, sonst meldet es die Suchmaschine als nicht erreichbar.
     $ bin/fess-setup upgrade plugins
     $ bin/fess-setup check
 
-``upgrade plugins`` berücksichtigt nur bereits installierte Plugins. Plugins, die in 15.10 aus der
+``upgrade plugins`` berücksichtigt nur bereits installierte Plugins. Plugins, die in 15.9 aus der
 Distribution entfernte Teile ersetzen, etwa ``fess-script-groovy``, installieren Sie wie in den
 obigen Abschnitten beschrieben mit ``bin/fess-setup install plugin``.
 

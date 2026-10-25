@@ -7,7 +7,7 @@ Overview
 
 **Hybrid search** in |Fess| combines traditional keyword search (BM25) with **semantic (vector) search** and merges the two result sets with **Rank Fusion** to produce more accurate, more relevant rankings. Rank Fusion integrates the results of multiple searchers into a single optimized ranking.
 
-In |Fess| 15.10, semantic search (content chunking + vector search) is provided as a core
+In |Fess| 15.8, semantic search (content chunking + vector search) is provided as a core
 feature. Once you enable it, the semantic searcher is registered with Rank Fusion automatically.
 See :doc:`search-semantic` for how to configure it.
 
@@ -147,7 +147,7 @@ This property behaves as follows:
    you may have been told to set this property to
    ``-Drank.fusion.searchers=default,semantic``. That plugin registered its searcher under the
    name ``semantic``, which is a **different searcher** from the core-integrated searcher's name,
-   ``semantic_chunk``, introduced in 15.10. If you carry that 15.7-era setting forward into 15.10
+   ``semantic_chunk``, introduced in 15.8. If you carry that 15.7-era setting forward into 15.10
    as-is, the allowlist never includes ``semantic_chunk``, so the core-integrated semantic search
    (content chunking + vector search) **does not work at all** — |Fess| silently keeps returning
    ordinary keyword search results (a warning is logged at startup, but the per-request exclusion

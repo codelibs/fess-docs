@@ -55,7 +55,7 @@ siguientes:
 
 .. note::
 
-   El tipo ``fess-theme-*`` (tema JAR), que proporcionaba JSP, se eliminó en 15.10.
+   El tipo ``fess-theme-*`` (tema JAR), que proporcionaba JSP, se eliminó en 15.9.
    El aspecto de la pantalla de búsqueda se cambia con un tema, no con un plugin
    (consulte :doc:`theme-development`).
 

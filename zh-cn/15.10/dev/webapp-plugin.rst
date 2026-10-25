@@ -175,7 +175,7 @@ Web应用插件中最重要的一点，是在 JAR 清单文件中添加
    核心定义所进行的所有 ``<postConstruct>``\ （例如 ``app.xml`` 中的
    ``queryHelper``）。这些内容需要随 |Fess| 的每次发布进行同步。如果继续
    调用已从核心中删除的方法，该组件定义将因 ``BeanMethodNotFoundException``
-   而初始化失败。例如，15.10 删除了 ``systemHelper`` 的
+   而初始化失败。例如，15.9 删除了 ``systemHelper`` 的
    ``addDesignJspFileName``\ ，因此调用它的替换文件会失败。这一维护成本，
    正是相比替换更推荐使用添加方式的原因。
 
@@ -291,7 +291,7 @@ Web应用插件无法添加 JSP 视图。这是因为 JSP 视图存放在 |Fess|
    * - ``fess-webapp-bangs``
      - DuckDuckGo 风格的 bang（``!g``），把搜索发送到其他网站
    * - ``fess-webapp-semantic-search``
-     - 神经搜索/向量搜索（已弃用；已被 15.10 中的核心集成功能取代）
+     - 神经搜索/向量搜索（已弃用；已被 15.8 中的核心集成功能取代）
    * - ``fess-webapp-multimodal``
      - 多模态（图像、文本）搜索
 

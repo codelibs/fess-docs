@@ -226,7 +226,7 @@
      - 인덱스 필드 매핑에 사용하는 스크립트 엔진 종류. JavaScript가 |Fess| 에 내장된 스크립트
        엔진이며, 데이터스토어 설정의 신규 작성 화면에는 ``script_type=javascript`` 가 미리
        입력됩니다. ``groovy`` 는 ``fess-script-groovy`` 플러그인을 통해 계속 사용할 수 있습니다.
-       ``script_type`` 이 기록되어 있지 않은 설정은 Groovy로 취급되므로, 15.10 이전에 작성된
+       ``script_type`` 이 기록되어 있지 않은 설정은 Groovy로 취급되므로, 15.9 이전에 작성된
        설정은 그대로 동작합니다. 자세한 내용은 :doc:`../scripting-overview` 를 참조하세요.
 
 문제 해결

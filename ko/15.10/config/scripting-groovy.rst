@@ -10,17 +10,17 @@ Java 가상 머신(JVM) 위에서 동작하며, Java와의 높은 호환성을 �
 더 간결한 구문으로 스크립트를 작성할 수 있습니다.
 
 .. important::
-   |Fess| 15.10부터 Groovy는 ``fess-script-groovy`` 플러그인으로 제공되며,
+   |Fess| 15.9부터 Groovy는 ``fess-script-groovy`` 플러그인으로 제공되며,
    **플러그인은 배포물에 동봉되지 않습니다**. 관리 화면의 「시스템 > 플러그인」
    페이지에서 설치하거나 ``bin/fess-setup install plugin fess-script-groovy`` 를
    실행하세요. 수동으로 설치할 경우, 해당하는 JAR 파일(예:
    ``fess-script-groovy-15.10.0.jar`` )을 ``app/WEB-INF/plugin/``\ 에 배치하고
    설치 후 |Fess|\ 를 재시작합니다.
 
-   |Fess| 15.10부터 기본 스크립트 언어는 JavaScript입니다. 스크립트 설정에
-   스크립트 타입이 기록되어 있지 않은 경우에는 Groovy로 취급되므로, 15.10 이전에
+   |Fess| 15.9부터 기본 스크립트 언어는 JavaScript입니다. 스크립트 설정에
+   스크립트 타입이 기록되어 있지 않은 경우에는 Groovy로 취급되므로, 15.9 이전에
    작성된 설정은 Groovy 구문의 스크립트를 유지한 채 업그레이드 후에도 그대로
-   동작합니다. 15.10 이후에 Groovy를 사용하는 새 설정을 작성할 경우에는 스크립트
+   동작합니다. 15.9 이후에 Groovy를 사용하는 새 설정을 작성할 경우에는 스크립트
    타입으로 명시적으로 ``groovy``\ 를 지정하세요. JavaScript에 대해서는
    :doc:`scripting-javascript`\ 를 참조하세요.
 

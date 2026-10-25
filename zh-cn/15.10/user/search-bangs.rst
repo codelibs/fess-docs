@@ -19,7 +19,7 @@ Bang 会把搜索发送到其他网站，而不是在 |Fess| 中搜索。它的�
    * - ``airplane !unknown``
      - |Fess| 中的普通检索（``!`` 表示 NOT，请参阅 :doc:`search-not`）
 
-Bang 由 ``fess-webapp-bangs`` 插件提供，需要 |Fess| 15.10 或更高版本。请在管理界面的[系统 > 插件]中，或使用 ``bin/fess-setup install plugin fess-webapp-bangs`` 安装（请参阅 :doc:`../admin/plugin-guide`），然后重启 |Fess|。
+Bang 由 ``fess-webapp-bangs`` 插件提供，需要 |Fess| 15.9 或更高版本。请在管理界面的[系统 > 插件]中，或使用 ``bin/fess-setup install plugin fess-webapp-bangs`` 安装（请参阅 :doc:`../admin/plugin-guide`），然后重启 |Fess|。
 
 Bang 的识别条件
 ===============

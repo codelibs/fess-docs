@@ -41,9 +41,9 @@ Unterstützte Skriptsprachen
 .. note::
    Eine Skript-Konfiguration ohne hinterlegten Skripttyp wird als Groovy behandelt.
    Dies ist keine vorübergehende Übergangsmaßnahme, sondern dauerhaftes Verhalten:
-   Eine vor 15.10 erstellte Konfiguration behält ihr Groovy-Skript, ohne dass ein
+   Eine vor 15.9 erstellte Konfiguration behält ihr Groovy-Skript, ohne dass ein
    Skripttyp hinterlegt ist — genau dieses Standardverhalten sorgt dafür, dass sie
-   nach einem Upgrade unverändert weiterläuft. Eine ab 15.10 neu erstellte Konfiguration
+   nach einem Upgrade unverändert weiterläuft. Eine ab 15.9 neu erstellte Konfiguration
    erhält den Skripttyp ``javascript`` explizit hinterlegt.
 
    Sofern nicht anders angegeben, sind die Skriptbeispiele in dieser Dokumentation in

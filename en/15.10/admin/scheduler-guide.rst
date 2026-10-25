@@ -56,8 +56,8 @@ Specifies the script execution environment. You can select ``javascript`` (the
 default for new jobs, determined by the ``job.default.script`` property) or
 ``groovy`` (requires the ``fess-script-groovy`` plugin).
 
-Before 15.10, the job always ran using the product's default scripting language,
-regardless of the value stored here. From 15.10 onward this value is actually used,
+Before 15.9, the job always ran using the product's default scripting language,
+regardless of the value stored here. From 15.9 onward this value is actually used,
 so each job can run in a different scripting language.
 
 Script

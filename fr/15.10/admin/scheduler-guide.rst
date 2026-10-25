@@ -56,8 +56,8 @@ Spécifie l'environnement d'exécution du script. Vous pouvez choisir ``javascri
 (valeur par défaut pour les nouvelles tâches, déterminée par la propriété
 ``job.default.script``) ou ``groovy`` (nécessite le plugin ``fess-script-groovy``).
 
-Avant la 15.10, la tâche s'exécutait toujours dans le langage de script par défaut du
-produit, quelle que soit la valeur enregistrée ici. À partir de la 15.10, cette valeur
+Avant la 15.9, la tâche s'exécutait toujours dans le langage de script par défaut du
+produit, quelle que soit la valeur enregistrée ici. À partir de la 15.9, cette valeur
 est réellement utilisée, ce qui permet à chaque tâche de s'exécuter dans un langage de
 script différent.
 

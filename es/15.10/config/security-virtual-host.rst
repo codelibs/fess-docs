@@ -63,7 +63,7 @@ No es necesario establecer el tema como predeterminado. Consulte :ref:`theme-cus
 
 .. note::
 
-   Desde |Fess| 15.10, al guardar la configuración ya no se generan archivos JSP en ``WEB-INF/view/nombre_host_virtual``.
+   Desde |Fess| 15.9, al guardar la configuración ya no se generan archivos JSP en ``WEB-INF/view/nombre_host_virtual``.
    La pantalla de inicio de sesión (``/login/``) es la misma para todos los hosts virtuales (``WEB-INF/view/admin/login/``) y no se puede cambiar por host virtual.
    El aspecto de cada host virtual se cambia con un tema con el mismo nombre que el host virtual, como se describe arriba.
 

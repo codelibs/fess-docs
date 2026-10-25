@@ -98,7 +98,7 @@ Mehrere Dateien:
 
 .. note::
 
-   Die Anführungszeichen- (Quote-) Verarbeitung und die Escape-Verarbeitung sind in |Fess| 15.10
+   Die Anführungszeichen- (Quote-) Verarbeitung und die Escape-Verarbeitung sind in |Fess| 15.9
    standardmäßig **aktiviert**. CSV-Dateien (RFC 4180-konform), bei denen Felder in
    Anführungszeichen eingeschlossen sind und Trennzeichen oder Zeilenumbrüche enthalten, werden
    ohne zusätzliche Parameter korrekt verarbeitet.
@@ -245,7 +245,7 @@ Standard-CSV (RFC 4180-konform)
 Deaktivierung der Anführungszeichen- und Escape-Verarbeitung
 -------------------------------------------------------------
 
-Die Anführungszeichen- und Escape-Verarbeitung ist in |Fess| 15.10 standardmäßig aktiviert.
+Die Anführungszeichen- und Escape-Verarbeitung ist in |Fess| 15.9 standardmäßig aktiviert.
 Als Anführungszeichen wird standardmäßig das doppelte Anführungszeichen ``"`` verwendet, als
 Escape-Zeichen standardmäßig dasselbe Zeichen wie das Anführungszeichen (gemäß RFC 4180 durch
 Verdopplung escaped); Standard-RFC-4180-CSV-Dateien lassen sich so ohne zusätzliche Parameter
@@ -800,7 +800,7 @@ Erweiterte Skript-Beispiele
 ============================
 
 Die folgenden Beispiele verwenden die JavaScript-Engine (``script_type=javascript``), die eine in
-15.10 erstellte Datenspeicher-Konfiguration standardmäßig verwendet.
+15.9 erstellte Datenspeicher-Konfiguration standardmäßig verwendet.
 
 Datenverarbeitung
 -----------------
