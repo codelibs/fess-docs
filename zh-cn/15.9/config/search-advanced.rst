@@ -367,7 +367,7 @@ OpenSearch 会根据该字段首次被索引的值来创建定义：
 
 .. note::
 
-   |Fess| 内置的搜索界面（静态主题 ``bootstrap`` ）只显示 ``label`` 分面（以及
+   |Fess| 内置的搜索界面（主题 ``bootstrap`` ）只显示 ``label`` 分面（以及
    ``query.facet.queries`` 的分面查询），其排序菜单也只提供标准字段。其他字段的分面可通过 API
    或自己的主题使用。范围搜索以及在搜索框中写成 ``sort:price.desc`` 的排序，在搜索界面上同样可用。
 

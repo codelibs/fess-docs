@@ -7,7 +7,7 @@ Acerca del Host Virtual
 
 |Fess| puede mostrar diferentes resultados de búsqueda según el nombre de host (valor del encabezado HTTP ``Host``) utilizado para acceder al sistema.
 Es posible publicar un único servidor |Fess| con múltiples nombres de host y ofrecer distintos objetivos de búsqueda (configuraciones de rastreo) y diseños de página para cada host virtual.
-La pantalla de búsqueda también puede tener un aspecto distinto para cada host: para ese host se utiliza el tema estático cuyo nombre coincide con el nombre del host virtual.
+La pantalla de búsqueda también puede tener un aspecto distinto para cada host: para ese host se utiliza el tema cuyo nombre coincide con el nombre del host virtual.
 
 La función de host virtual está deshabilitada (sin configurar) de forma predeterminada. Siga los pasos a continuación para configurarla.
 
@@ -57,7 +57,7 @@ Defina un host virtual por línea con el siguiente formato:
 Diseño de página por host virtual
 ---------------------------------
 
-Para que un host virtual tenga su propia pantalla de búsqueda, instale un tema estático cuyo ``name`` en ``theme.yml`` sea el nombre del host virtual en minúsculas (por ejemplo ``host1``).
+Para que un host virtual tenga su propia pantalla de búsqueda, instale un tema cuyo ``name`` en ``theme.yml`` sea el nombre del host virtual en minúsculas (por ejemplo ``host1``).
 Las solicitudes que coinciden con el host virtual se sirven con ese tema; cualquier otra solicitud se sirve con el tema predeterminado.
 No es necesario establecer el tema como predeterminado. Consulte :ref:`theme-customize-bundled` para saber cómo crear un tema a partir del tema incluido, y :doc:`../admin/theme-guide` para saber cómo instalarlo.
 
@@ -65,7 +65,7 @@ No es necesario establecer el tema como predeterminado. Consulte :ref:`theme-cus
 
    Desde |Fess| 15.9, al guardar la configuración ya no se generan archivos JSP en ``WEB-INF/view/nombre_host_virtual``.
    La pantalla de inicio de sesión (``/login/``) es la misma para todos los hosts virtuales (``WEB-INF/view/admin/login/``) y no se puede cambiar por host virtual.
-   El aspecto de cada host virtual se cambia con un tema estático con el mismo nombre que el host virtual, como se describe arriba.
+   El aspecto de cada host virtual se cambia con un tema con el mismo nombre que el host virtual, como se describe arriba.
 
 
 Configuración de Rastreo

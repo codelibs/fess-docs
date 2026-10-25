@@ -191,7 +191,7 @@ Once startup is complete, access the following URLs:
 - **Search screen**: http://localhost:8080/
 - **Admin screen**: http://localhost:8080/admin
 
-The search screen is ``bootstrap``, the static theme bundled with |Fess|. To change how it looks,
+The search screen is ``bootstrap``, the theme bundled with |Fess|. To change how it looks,
 see :doc:`../admin/theme-guide`.
 
 Default administrator account:

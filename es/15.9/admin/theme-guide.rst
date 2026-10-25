@@ -5,12 +5,12 @@ Tema
 Descripción general
 ====================
 
-La función de temas gestiona los «temas estáticos», que agrupan el aspecto visual de la pantalla de búsqueda (conjunto de activos estáticos como HTML, CSS y JavaScript). Los temas estáticos se suben como archivos ZIP y se extraen en el directorio de temas del servidor (predeterminado: ``themes``, modificable con ``theme.directory.path``). En la raíz de cada tema debe colocarse el manifiesto ``theme.yml``, que describe los metadatos del tema.
+La función de temas gestiona los temas, que agrupan el aspecto visual de la pantalla de búsqueda (conjunto de activos estáticos como HTML, CSS y JavaScript). Los temas se suben como archivos ZIP y se extraen en el directorio de temas del servidor (predeterminado: ``themes``, modificable con ``theme.directory.path``). En la raíz de cada tema debe colocarse el manifiesto ``theme.yml``, que describe los metadatos del tema.
 
-La pantalla de búsqueda es siempre un tema estático. Cuando no hay ningún tema predeterminado configurado, |Fess| utiliza ``bootstrap``, el tema estático incluido con él. El tema incluido no se puede eliminar ni reemplazar; para modificarlo, cópielo con otro nombre (consulte :ref:`theme-customize-bundled`).
+La pantalla de búsqueda es siempre un tema. Cuando no hay ningún tema predeterminado configurado, |Fess| utiliza ``bootstrap``, el tema incluido con él. El tema incluido no se puede eliminar ni reemplazar; para modificarlo, cópielo con otro nombre (consulte :ref:`theme-customize-bundled`).
 
 .. note::
-   Los temas basados en JSP (plugins de tema JAR ``fess-theme-*``) se eliminaron en 15.9. Para cambiar el aspecto, utilice un tema estático (consulte :ref:`upgrade-159-static-theme`).
+   Los temas basados en JSP (plugins de tema JAR ``fess-theme-*``) se eliminaron en 15.9. Para cambiar el aspecto, utilice un tema (consulte :ref:`upgrade-159-static-theme`).
    Para realizar las operaciones de esta página se requiere el rol ``admin-theme`` (o el rol ``admin-theme-view`` si solo se necesita acceso de lectura).
 
 Obtención de un tema
@@ -49,7 +49,7 @@ Para abrir la página de lista de temas registrados, haga clic en [Sistema > Tem
 Lista de temas
 --------------
 
-La página de lista muestra los temas estáticos registrados en el directorio de temas. Las columnas que aparecen en cada fila son las siguientes.
+La página de lista muestra los temas registrados en el directorio de temas. Las columnas que aparecen en cada fila son las siguientes.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -104,7 +104,7 @@ Si el archivo subido no supera la validación del manifiesto, o si el tamaño ex
 Manifiesto theme.yml
 ---------------------
 
-En la raíz del tema estático debe colocarse el archivo ``theme.yml`` (formato YAML) con los metadatos del tema. Los campos disponibles son los siguientes.
+En la raíz del tema debe colocarse el archivo ``theme.yml`` (formato YAML) con los metadatos del tema. Los campos disponibles son los siguientes.
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{7cm}|
 .. list-table::

@@ -2,7 +2,7 @@
 fess-setup コマンド
 ====================
 
-``bin/fess-setup`` （Windows では ``bin\fess-setup.bat`` ）は、 |Fess| の ZIP パッケージに同梱されているコマンドです。 |Fess| に必要でありながら配布物に含まれていないもの、つまり |Fess| が必要とするプラグインを入れた OpenSearch、Playwright 系プラグインが使う Node.js、 |Fess| のプラグイン、静的テーマを導入します。インストール状態の診断もできます。
+``bin/fess-setup`` （Windows では ``bin\fess-setup.bat`` ）は、 |Fess| の ZIP パッケージに同梱されているコマンドです。 |Fess| に必要でありながら配布物に含まれていないもの、つまり |Fess| が必要とするプラグインを入れた OpenSearch、Playwright 系プラグインが使う Node.js、 |Fess| のプラグイン、テーマを導入します。インストール状態の診断もできます。
 
 |Fess| のディレクトリで実行します。引数を付けずに実行すると、コマンドの一覧を表示します。
 
@@ -117,7 +117,7 @@ jar はプラグインの GitHub リリースから取得し、リリースに�
 
 使用例は :doc:`../admin/plugin-guide` を参照してください。
 
-導入できるのは、 |Fess| が読み込む種類のプラグイン（名前が ``fess-ds-`` 、 ``fess-ingest-`` 、 ``fess-script-`` 、 ``fess-webapp-`` 、 ``fess-thumbnail-`` 、 ``fess-crawler-`` 、 ``fess-llm-`` 、 ``fess-storage-`` 、 ``fess-sso-`` で始まるもの）だけです。 ``list plugins`` に表示されるものと同じです。それ以外の名前（ ``fess-theme-*`` 、 ``fess`` 、 ``fess-crawler`` などのライブラリ）を指定すると、何もダウンロードせずに 1 行のエラーを表示し、終了コード 2 で終了します。複数の名前のうち 1 つでも該当すると、どれも導入しません。静的テーマは ``install theme`` で導入してください。
+導入できるのは、 |Fess| が読み込む種類のプラグイン（名前が ``fess-ds-`` 、 ``fess-ingest-`` 、 ``fess-script-`` 、 ``fess-webapp-`` 、 ``fess-thumbnail-`` 、 ``fess-crawler-`` 、 ``fess-llm-`` 、 ``fess-storage-`` 、 ``fess-sso-`` で始まるもの）だけです。 ``list plugins`` に表示されるものと同じです。それ以外の名前（ ``fess-theme-*`` 、 ``fess`` 、 ``fess-crawler`` などのライブラリ）を指定すると、何もダウンロードせずに 1 行のエラーを表示し、終了コード 2 で終了します。複数の名前のうち 1 つでも該当すると、どれも導入しません。テーマは ``install theme`` で導入してください。
 
 list plugins
 ------------
@@ -186,7 +186,7 @@ install theme
 
     $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
-``docuforge`` や ``voicebox`` などの静的テーマをインストールします。バージョンを付けない名前は、この |Fess| 用に作られた最新のものをインストールします。 ``<name>:<version>`` はそのテーマのバージョンを固定し、 ``--version`` は自分のバージョンを持たないすべての名前に適用されます。
+``docuforge`` や ``voicebox`` などのテーマをインストールします。バージョンを付けない名前は、この |Fess| 用に作られた最新のものをインストールします。 ``<name>:<version>`` はそのテーマのバージョンを固定し、 ``--version`` は自分のバージョンを持たないすべての名前に適用されます。
 
 アーカイブは Maven リポジトリが公開している SHA-1 チェックサムと照合され、 ``app/themes/<name>`` に展開されます。同じ名前ですでにインストールされているテーマは、管理画面から置き換えた場合と同じ期間バックアップとして保持されます（既定 7 日、 ``theme.upload.attic.retention.days`` ）。
 

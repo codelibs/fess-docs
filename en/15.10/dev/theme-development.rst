@@ -5,11 +5,10 @@ Theme Development Guide
 Overview
 ========
 
-In |Fess| 15.10, the search screen is always a static theme. A static
-theme is an independent SPA (Single Page Application) that uses the
+In |Fess| 15.10, the search screen is always a theme. A theme is an independent SPA (Single Page Application) that uses the
 ``/api/v2/*`` API. Themes are distributed as ZIP files, uploaded
 through the admin console, and enabled there. When no theme is
-selected, |Fess| uses ``bootstrap``, the static theme bundled with it.
+selected, |Fess| uses ``bootstrap``, the theme bundled with it.
 
 To change how the search screen looks, either install another theme
 (see :doc:`../admin/theme-guide`) or make your own: the quickest way
@@ -18,22 +17,22 @@ is to copy the bundled theme and change the copy, as described in
 
 .. note::
 
-   Static themes are available in |Fess| 15.7 and later, and became the
+   ZIP-packaged themes are available in |Fess| 15.7 and later, and became the
    default search screen in 15.10. JAR theme plugins, which replaced the
    JSPs of the search screen, were removed in 15.10; see
    `JAR Theme Plugin (Removed in 15.10)`_.
 
-Static Theme
-============
+What Is a Theme
+===============
 
-A static theme is a collection of static resources that includes a
+A theme is a collection of static resources that includes a
 ``theme.yml`` manifest and ``index.html``. Implement the theme itself
 as a front-end application that calls the |Fess| ``/api/v2/*`` API.
 
 Structure
 ---------
 
-A static theme has the following directory structure.
+A theme has the following directory structure.
 
 ::
 
@@ -140,7 +139,7 @@ The fields that can be specified are as follows.
 Serving and API
 ---------------
 
-- A static theme is served under ``/themes/<name>/`` (``<name>`` is
+- A theme is served under ``/themes/<name>/`` (``<name>`` is
   the ``name`` in ``theme.yml``).
 - The entry HTML (``index.html`` by default) is returned for the paths
   ``/``, ``/search``, ``/advance``, ``/help``, ``/error``, ``/profile``,
@@ -151,7 +150,7 @@ Serving and API
   browser receives the theme's entry HTML at the requested URL, with the
   real HTTP status.
 - The admin console (``/admin/*``), ``/api/*``, the login screen, and
-  similar are not covered by the static theme and are handled by the
+  similar are not covered by the theme and are handled by the
   |Fess| core.
 - ``{{themePath}}`` in the entry HTML is replaced with ``themes/<name>``
   when the page is served. Refer to the theme's own files from
@@ -311,11 +310,11 @@ applied them as the theme named after a virtual host key, was removed in |Fess| 
   deleted on that page or with ``bin/fess-setup remove plugin <name>``.
 - ``bin/fess-setup`` neither lists nor installs ``fess-theme-*``.
 
-Move the changes you made in a JAR theme to a static theme:
+Move the changes you made in a JAR theme to a theme:
 
 - For the colors, layout and logo of the search screen, copy the bundled theme and change
   the copy (see `Customizing the Bundled Theme`_).
-- If you changed the look per virtual host, install a static theme named after the
+- If you changed the look per virtual host, install a theme named after the
   virtual host (see :doc:`../config/security-virtual-host`).
 - The login screen (``/login/``) is the same for every virtual host. A theme cannot
   change it.
@@ -324,7 +323,7 @@ Examples of Existing Themes
 ============================
 
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ - A
-  collection of static themes (includes multiple static themes such as
+  collection of themes (includes multiple themes such as
   ``codesearch`` and ``docsearch``)
 
 Reference

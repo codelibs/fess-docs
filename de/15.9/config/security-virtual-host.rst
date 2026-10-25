@@ -7,7 +7,7 @@ Virtueller Host
 
 |Fess| kann Suchergebnisse basierend auf dem Hostnamen (dem Wert des HTTP-``Host``-Headers) differenzieren, mit dem auf |Fess| zugegriffen wird.
 Ein einzelner |Fess|-Server kann unter mehreren Hostnamen veröffentlicht werden, wobei je nach Hostname unterschiedliche Suchziele (Crawl-Konfigurationen) und Seitendesigns bereitgestellt werden können.
-Auch der Suchbildschirm kann für jeden Host anders aussehen: Für einen Host wird das statische Theme verwendet, dessen Name mit dem virtuellen Hostnamen übereinstimmt.
+Auch der Suchbildschirm kann für jeden Host anders aussehen: Für einen Host wird das Theme verwendet, dessen Name mit dem virtuellen Hostnamen übereinstimmt.
 
 Die Funktion für virtuelle Hosts ist standardmäßig deaktiviert (nicht konfiguriert). Die Einrichtung erfolgt mit den folgenden Schritten.
 
@@ -57,7 +57,7 @@ Tragen Sie einen virtuellen Host pro Zeile im folgenden Format ein:
 Seitendesign pro virtuellem Host
 --------------------------------
 
-Um einem virtuellen Host einen eigenen Suchbildschirm zu geben, installieren Sie ein statisches Theme, dessen ``name`` in ``theme.yml`` der virtuelle Hostname in Kleinbuchstaben ist (zum Beispiel ``host1``).
+Um einem virtuellen Host einen eigenen Suchbildschirm zu geben, installieren Sie ein Theme, dessen ``name`` in ``theme.yml`` der virtuelle Hostname in Kleinbuchstaben ist (zum Beispiel ``host1``).
 Eine Anfrage, die dem virtuellen Host entspricht, wird mit diesem Theme ausgeliefert; jede andere Anfrage mit dem Standardtheme.
 Das Theme muss nicht als Standard festgelegt werden. Wie Sie ein Theme aus dem mitgelieferten erstellen, lesen Sie unter :ref:`theme-customize-bundled`; wie Sie es installieren, unter :doc:`../admin/theme-guide`.
 
@@ -65,7 +65,7 @@ Das Theme muss nicht als Standard festgelegt werden. Wie Sie ein Theme aus dem m
 
    Seit |Fess| 15.9 werden beim Speichern der Konfiguration keine JSPs mehr unter ``WEB-INF/view/VirtuellerHostname`` generiert.
    Der Anmeldebildschirm (``/login/``) ist für alle virtuellen Hosts derselbe (``WEB-INF/view/admin/login/``) und kann nicht pro virtuellem Host geändert werden.
-   Ein eigenes Aussehen pro virtuellem Host erhalten Sie, wie oben beschrieben, mit einem statischen Theme, das nach dem virtuellen Host benannt ist.
+   Ein eigenes Aussehen pro virtuellem Host erhalten Sie, wie oben beschrieben, mit einem Theme, das nach dem virtuellen Host benannt ist.
 
 
 Crawl-Konfiguration

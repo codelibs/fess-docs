@@ -121,7 +121,7 @@ Themes anwenden
 
 Wenden Sie verschiedene Themes für jeden virtuellen Host an:
 
-1. Erstellen Sie ein statisches Theme, dessen Name der Schlüssel des virtuellen Hosts in Kleinbuchstaben
+1. Erstellen Sie ein Theme, dessen Name der Schlüssel des virtuellen Hosts in Kleinbuchstaben
    ist, zum Beispiel ``tenant1`` (siehe :ref:`theme-customize-bundled`)
 2. Installieren Sie es unter „System" → „Theme"
 

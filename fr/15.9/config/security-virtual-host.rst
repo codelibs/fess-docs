@@ -7,7 +7,7 @@ Hôtes virtuels
 
 |Fess| peut différencier les résultats de recherche en fonction du nom d'hôte (valeur de l'en-tête HTTP ``Host``) lors de l'accès.
 Il est possible de publier un seul serveur |Fess| sous plusieurs noms d'hôte et de fournir des cibles de recherche (configurations d'exploration) et des designs de page différents pour chaque nom d'hôte.
-L'écran de recherche peut aussi avoir une apparence différente pour chaque hôte : un thème statique dont le nom correspond au nom de l'hôte virtuel est utilisé pour cet hôte.
+L'écran de recherche peut aussi avoir une apparence différente pour chaque hôte : un thème dont le nom correspond au nom de l'hôte virtuel est utilisé pour cet hôte.
 
 La fonctionnalité d'hôte virtuel est désactivée par défaut (non configurée). Suivez les étapes ci-dessous pour la configurer.
 
@@ -57,7 +57,7 @@ Décrivez un hôte virtuel par ligne selon le format suivant.
 Design de page par hôte virtuel
 -------------------------------
 
-Pour doter un hôte virtuel de son propre écran de recherche, installez un thème statique dont le ``name`` dans ``theme.yml`` est le nom de l'hôte virtuel en minuscules (par exemple ``host1``).
+Pour doter un hôte virtuel de son propre écran de recherche, installez un thème dont le ``name`` dans ``theme.yml`` est le nom de l'hôte virtuel en minuscules (par exemple ``host1``).
 Une requête correspondant à l'hôte virtuel est servie avec ce thème ; toute autre requête est servie avec le thème par défaut.
 Il n'est pas nécessaire de définir ce thème comme thème par défaut. Consultez :ref:`theme-customize-bundled` pour savoir comment créer un thème à partir du thème fourni, et :doc:`../admin/theme-guide` pour savoir comment l'installer.
 
@@ -65,7 +65,7 @@ Il n'est pas nécessaire de définir ce thème comme thème par défaut. Consult
 
    Depuis |Fess| 15.9, l'enregistrement de la configuration ne génère plus de JSP dans ``WEB-INF/view/nom_hôte_virtuel``.
    L'écran de connexion (``/login/``) est le même pour tous les hôtes virtuels (``WEB-INF/view/admin/login/``) et ne peut pas être modifié par hôte virtuel.
-   L'apparence de chaque hôte virtuel se modifie avec un thème statique portant le même nom que l'hôte virtuel, comme décrit ci-dessus.
+   L'apparence de chaque hôte virtuel se modifie avec un thème portant le même nom que l'hôte virtuel, comme décrit ci-dessus.
 
 
 Configuration de l'exploration

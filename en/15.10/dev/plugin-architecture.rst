@@ -54,7 +54,7 @@ Plugin Types
 .. note::
 
    The ``fess-theme-*`` (JAR theme) type, which supplied JSPs, was removed in 15.10.
-   Change the look of the search screen with a static theme, not a plugin
+   Change the look of the search screen with a theme, not a plugin
    (see :doc:`theme-development`).
 
 Plugin Structure

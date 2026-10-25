@@ -5,12 +5,12 @@ Theme
 Overview
 ========
 
-The Theme feature manages "static themes" — a bundled set of static assets (HTML / CSS / JavaScript, etc.) that define the appearance of the search interface. A static theme is uploaded as a ZIP archive and extracted into the theme directory on the server (default: ``themes``, configurable via ``theme.directory.path``). Each theme root must contain a ``theme.yml`` manifest that describes the theme's metadata.
+The Theme feature manages themes — a bundled set of static assets (HTML / CSS / JavaScript, etc.) that define the appearance of the search interface. A theme is uploaded as a ZIP archive and extracted into the theme directory on the server (default: ``themes``, configurable via ``theme.directory.path``). Each theme root must contain a ``theme.yml`` manifest that describes the theme's metadata.
 
-The search interface is always a static theme. When no default theme is set, |Fess| uses ``bootstrap``, the static theme bundled with it. The bundled theme cannot be deleted or replaced; to change it, copy it under a new name (see :ref:`theme-customize-bundled`).
+The search interface is always a theme. When no default theme is set, |Fess| uses ``bootstrap``, the theme bundled with it. The bundled theme cannot be deleted or replaced; to change it, copy it under a new name (see :ref:`theme-customize-bundled`).
 
 .. note::
-   JSP-based themes (``fess-theme-*`` JAR theme plugins) were removed in 15.9. Use a static theme to change the look (see :ref:`upgrade-159-static-theme`).
+   JSP-based themes (``fess-theme-*`` JAR theme plugins) were removed in 15.9. Use a theme to change the look (see :ref:`upgrade-159-static-theme`).
    The ``admin-theme`` role is required to perform operations on this page (the ``admin-theme-view`` role is sufficient for read-only access).
 
 Obtaining a Theme
@@ -48,7 +48,7 @@ To open the registered theme list page shown below, click [System > Theme] in th
 Theme List
 ----------
 
-The list page displays the static themes registered in the theme directory. The columns shown for each entry are as follows.
+The list page displays the themes registered in the theme directory. The columns shown for each entry are as follows.
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -103,7 +103,7 @@ If the uploaded archive fails manifest validation, or if the extracted size, ent
 theme.yml Manifest
 ------------------
 
-Place a ``theme.yml`` file (YAML format) at the root of the static theme to describe the theme's metadata. The available fields are as follows.
+Place a ``theme.yml`` file (YAML format) at the root of the theme to describe the theme's metadata. The available fields are as follows.
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{7cm}|
 .. list-table::

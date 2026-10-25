@@ -4,7 +4,7 @@ fess-setup Command
 
 ``bin/fess-setup`` (``bin\fess-setup.bat`` on Windows) is included with the |Fess| ZIP package.
 It installs what |Fess| needs but does not bundle: OpenSearch with the plugins |Fess| requires,
-Node.js for the Playwright plugins, |Fess| plugins, and static themes. It also reports on an
+Node.js for the Playwright plugins, |Fess| plugins, and themes. It also reports on an
 installation.
 
 Run it from the |Fess| directory. Without arguments, it prints the list of commands.
@@ -168,7 +168,7 @@ Only the plugin types that |Fess| loads can be installed: names that start with 
 ``fess-llm-``, ``fess-storage-`` or ``fess-sso-``, the same ones ``list plugins`` shows. Any other name
 (``fess-theme-*``, or a library such as ``fess`` or ``fess-crawler``) is refused with a one-line error
 and exit code 2 before anything is downloaded. If one of several names is refused, none of them is
-installed. Install a static theme with ``install theme``.
+installed. Install a theme with ``install theme``.
 
 list plugins
 ------------
@@ -257,7 +257,7 @@ install theme
 
     $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
-Installs one or more static themes, for example ``docuforge`` or ``voicebox``. A name without a
+Installs one or more themes, for example ``docuforge`` or ``voicebox``. A name without a
 version installs the newest one built for this |Fess|. ``<name>:<version>`` pins the version of
 that theme, and ``--version`` is the version for every name that has none of its own.
 

@@ -282,7 +282,7 @@ Les plugins d'application Web ne peuvent pas ajouter de vues JSP. En effet,
 les vues JSP sont placées dans ``WEB-INF/view/`` du WAR de |Fess|
 lui-même, alors que le JAR du plugin est monté dans le classpath
 (``WEB-INF/classes``). Pour modifier le design de l'écran de recherche,
-utilisez un thème statique. Le thème statique personnalise le design
+utilisez un thème. Le thème personnalise le design
 (HTML/CSS/JavaScript) de l'écran de recherche. Reportez-vous à
 :doc:`theme-development`.
 

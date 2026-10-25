@@ -253,7 +253,7 @@ REST API的添加（fess_api++.xml）
 
 Web应用插件无法添加 JSP 视图。这是因为 JSP 视图存放在 |Fess| 本体 WAR 的
 ``WEB-INF/view/`` 中，而插件 JAR 是挂载到类路径（``WEB-INF/classes``）
-上的。如果需要修改搜索界面的设计，请使用静态主题。静态主题用于自定义
+上的。如果需要修改搜索界面的设计，请使用主题。主题用于自定义
 搜索界面的设计（HTML/CSS/JavaScript）。请参考 :doc:`theme-development`。
 
 构建与安装

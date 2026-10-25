@@ -127,7 +127,7 @@ Aplicación de tema
 
 Aplicar un tema diferente para cada host virtual:
 
-1. Crear un tema estático cuyo nombre sea la clave del host virtual en minúsculas, por ejemplo ``tenant1``
+1. Crear un tema cuyo nombre sea la clave del host virtual en minúsculas, por ejemplo ``tenant1``
    (consulte :ref:`theme-customize-bundled`)
 2. Instalarlo en "Sistema" -> "Tema"
 

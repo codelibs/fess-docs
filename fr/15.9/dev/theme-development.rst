@@ -5,12 +5,12 @@ Guide de développement des thèmes
 Aperçu
 ======
 
-Dans |Fess| 15.9, l'écran de recherche est toujours un thème statique. Un
-thème statique est une SPA (Single Page Application, application monopage)
+Dans |Fess| 15.9, l'écran de recherche est toujours un thème. Un
+thème est une SPA (Single Page Application, application monopage)
 indépendante qui utilise l'API ``/api/v2/*``. Les thèmes sont distribués sous
 forme de fichiers ZIP, téléversés puis activés depuis l'écran
 d'administration. Lorsqu'aucun thème n'est sélectionné, |Fess| utilise
-``bootstrap``, le thème statique fourni avec lui.
+``bootstrap``, le thème fourni avec lui.
 
 Pour modifier l'apparence de l'écran de recherche, installez un autre thème
 (voir :doc:`../admin/theme-guide`) ou créez le vôtre : le plus rapide est de
@@ -19,22 +19,22 @@ copier le thème fourni et de modifier la copie, comme décrit dans
 
 .. note::
 
-   Les thèmes statiques sont disponibles à partir de |Fess| 15.7 et sont
+   Les thèmes distribués au format ZIP sont disponibles à partir de |Fess| 15.7 et sont
    devenus l'écran de recherche par défaut en 15.9. Les plugins de thème JAR,
    qui remplaçaient les JSP de l'écran de recherche, ont été supprimés en
    15.9 ; voir `Plugin de thème JAR (supprimé en 15.9)`_.
 
-Thème statique
-==============
+Qu'est-ce qu'un thème
+=====================
 
-Un thème statique est un ensemble de ressources statiques comprenant le
+Un thème est un ensemble de ressources statiques comprenant le
 manifeste ``theme.yml`` et ``index.html``. Le thème lui-même est implémenté
 comme une application front-end qui appelle l'API ``/api/v2/*`` de |Fess|.
 
 Structure
 ---------
 
-Un thème statique adopte la structure de répertoires suivante.
+Un thème adopte la structure de répertoires suivante.
 
 ::
 
@@ -144,7 +144,7 @@ Les champs pouvant être spécifiés sont les suivants.
 Diffusion et API
 -----------------
 
-- Un thème statique est diffusé sous ``/themes/<name>/`` (``<name>``
+- Un thème est diffusé sous ``/themes/<name>/`` (``<name>``
   correspond au ``name`` défini dans ``theme.yml``).
 - Le HTML d'entrée (par défaut ``index.html``) est renvoyé pour chacun des
   chemins ``/``, ``/search``, ``/advance``, ``/help``, ``/error``,
@@ -155,7 +155,7 @@ Diffusion et API
   échoue, le navigateur reçoit le HTML d'entrée du thème à l'URL demandée,
   avec le véritable statut HTTP.
 - L'écran d'administration (``/admin/*``), ``/api/*``, l'écran de connexion,
-  etc. ne sont pas concernés par le thème statique et sont traités par le
+  etc. ne sont pas concernés par le thème et sont traités par le
   cœur de |Fess|.
 - ``{{themePath}}`` dans le HTML d'entrée est remplacé par
   ``themes/<name>`` lorsque la page est servie. Faites référence aux
@@ -334,14 +334,13 @@ aucun écran.
 - ``bin/fess-setup`` n'affiche pas ``fess-theme-*`` dans ses listes et ne
   l'installe pas.
 
-Reportez dans un thème statique les modifications que vous faisiez avec
+Reportez dans un thème les modifications que vous faisiez avec
 un thème JAR.
 
 - Pour les couleurs, la mise en page et le logo de l'écran de recherche,
   copiez le thème fourni et modifiez-le (voir
   `Personnalisation du thème fourni`_).
-- Si vous changiez l'apparence par hôte virtuel, installez un thème
-  statique portant le même nom que l'hôte virtuel (voir
+- Si vous changiez l'apparence par hôte virtuel, installez un thème portant le même nom que l'hôte virtuel (voir
   :doc:`../config/security-virtual-host`).
 - L'écran de connexion (``/login/``) est le même pour tous les hôtes
   virtuels et ne peut pas être modifié par un thème.
@@ -350,7 +349,7 @@ Exemples de thèmes existants
 =============================
 
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ - Collection de
-  thèmes statiques (regroupe plusieurs thèmes statiques tels que
+  thèmes (regroupe plusieurs thèmes tels que
   ``codesearch`` et ``docsearch``)
 
 Informations complémentaires

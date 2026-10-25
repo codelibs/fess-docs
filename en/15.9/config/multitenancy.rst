@@ -127,7 +127,7 @@ Applying Themes
 
 Apply different themes for each virtual host:
 
-1. Create a static theme whose name is the virtual host key in lowercase, for example ``tenant1``
+1. Create a theme whose name is the virtual host key in lowercase, for example ``tenant1``
    (see :ref:`theme-customize-bundled`)
 2. Install it under "System" -> "Theme"
 

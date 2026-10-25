@@ -287,7 +287,7 @@ ZIP 版
        $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # インストール済みプラグイン
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # 自分でアップロードした静的テーマ（テーマごとのディレクトリ。bootstrap は除く）
+       # 自分でアップロードしたテーマ（テーマごとのディレクトリ。bootstrap は除く）
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
@@ -316,7 +316,7 @@ ZIP 版
    .. warning::
 
       管理画面「デザイン」で編集した JSP（``app/WEB-INF/view/``）はコピーしないでください。
-      15.9 の検索画面は静的テーマで、これらの JSP を使いません。変更内容の移し先は
+      15.9 の検索画面はテーマで、これらの JSP を使いません。変更内容の移し先は
       :ref:`upgrade-159-static-theme` を参照してください。
 
    .. note::
@@ -974,25 +974,25 @@ jcifs の既定値のままになります。
 
 .. _upgrade-159-static-theme:
 
-検索画面は静的テーマに
+検索画面はテーマに
 ----------------------
 
-別のテーマを選んでいない限り、検索画面は |Fess| に同梱の静的テーマ ``bootstrap`` で表示されます。
+別のテーマを選んでいない限り、検索画面は |Fess| に同梱のテーマ ``bootstrap`` で表示されます。
 対象は ``/`` 、 ``/search`` 、 ``/advance`` 、 ``/help`` 、 ``/profile`` 、 ``/cache`` 、 ``/chat`` と
 エラーページです。15.8 までは、既定のテーマを設定していなければ、これらのページは JSP でした。
 
 この切り替えはアップグレードでも起こります。既定のテーマを設定したことのない 15.8 の環境では
-``system.properties`` に ``theme.default`` が無いため、アップグレード後は静的テーマで表示されます。
+``system.properties`` に ``theme.default`` が無いため、アップグレード後はテーマで表示されます。
 設定ファイルには何も書き込まれず、ログにも何も出ません。JSP の検索画面に戻す設定はありません。
 15.8 で既定のテーマを設定していた場合、その設定は引き継がれます。そのテーマは 15.9 向けのビルドを
 インストールしてください（ ``bin/fess-setup install theme <name>`` ）。インストールされていないテーマを
 既定に指定していると、 ``fess.log`` に警告を出して ``bootstrap`` で表示します。
 
 管理画面の「ページのデザイン」や JAR テーマプラグインで検索画面の JSP、CSS、画像を変更していた場合、
-その変更は表示されなくなります。変更は静的テーマで行ってください。同梱のテーマを複製して変更するか
+その変更は表示されなくなります。変更はテーマで行ってください。同梱のテーマを複製して変更するか
 （ :ref:`theme-customize-bundled` を参照）、公開されているテーマを管理画面の「システム」>「テーマ」または
 ``bin/fess-setup install theme <name>`` でインストールします。仮想ホストごとの見た目は、仮想ホスト名と
-同じ名前の静的テーマで変えます（ :doc:`../config/security-virtual-host` を参照）。
+同じ名前のテーマで変えます（ :doc:`../config/security-virtual-host` を参照）。
 
 次の 2 つも無くなりました。
 
@@ -1005,7 +1005,7 @@ jcifs の既定値のままになります。
   ``bin/fess-setup remove plugin <name>`` で削除できます（ :doc:`../dev/theme-development` を参照）。
 
 15.8 で JSP の検索結果に独自のフィールドを表示していた場合は、 ``query.additional.response.fields``
-に加えて ``query.additional.api.response.fields`` にも同じフィールドを追加してください。静的テーマは
+に加えて ``query.additional.api.response.fields`` にも同じフィールドを追加してください。テーマは
 検索結果を ``/api/v2/search`` から取得します。 ``query.additional.response.fields`` は検索エンジンから
 取得するフィールドを追加するだけで、この API が応答に含めるのは ``query.additional.api.response.fields``
 に列挙されたフィールドだけです（ :doc:`../config/search-advanced` を参照）。そのフィールドを表示するように
@@ -1068,7 +1068,7 @@ jcifs の既定値のままになります。
 ------------------------------------
 
 管理画面の [システム > ページのデザイン] を削除しました。検索画面の JSP、CSS、画像を管理画面から
-編集することはできません。検索画面の見た目は静的テーマで変更してください（ :ref:`theme-customize-bundled`
+編集することはできません。検索画面の見た目はテーマで変更してください（ :ref:`theme-customize-bundled`
 を参照）。
 
 次のキーも ``fess_config.properties`` から削除しました。この名前で残した値は使われません。

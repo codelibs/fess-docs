@@ -274,7 +274,7 @@ Customizing the Search Screen
 Web App plugins cannot add JSP views. JSP views are located under
 ``WEB-INF/view/`` in the |Fess| core WAR, while plugin JARs are mounted
 onto the classpath (``WEB-INF/classes``). To change the design of the
-search screen, use a static theme, which customizes the design
+search screen, use a theme, which customizes the design
 (HTML/CSS/JavaScript) of the search screen. See :doc:`theme-development`.
 
 Build and Installation

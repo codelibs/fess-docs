@@ -4,7 +4,7 @@ Commande fess-setup
 
 ``bin/fess-setup`` (``bin\fess-setup.bat`` sous Windows) est fourni avec le package ZIP de |Fess|.
 Il installe ce dont |Fess| a besoin sans l'intégrer : OpenSearch avec les plugins requis par
-|Fess|, Node.js pour les plugins Playwright, les plugins |Fess| et les thèmes statiques. Il établit également un diagnostic
+|Fess|, Node.js pour les plugins Playwright, les plugins |Fess| et les thèmes. Il établit également un diagnostic
 d'une installation.
 
 Exécutez-le depuis le répertoire de |Fess|. Sans argument, il affiche la liste des commandes.
@@ -177,8 +177,7 @@ Seuls les types de plugins que |Fess| charge peuvent être installés : les noms
 ``fess-crawler-``, ``fess-llm-``, ``fess-storage-`` ou ``fess-sso-``, c'est-à-dire ceux qu'affiche
 ``list plugins``. Tout autre nom (``fess-theme-*``, ou une bibliothèque comme ``fess`` ou
 ``fess-crawler``) est refusé avec une erreur d'une ligne et le code de sortie 2, avant tout
-téléchargement. Si l'un de plusieurs noms est refusé, aucun n'est installé. Installez un thème
-statique avec ``install theme``.
+téléchargement. Si l'un de plusieurs noms est refusé, aucun n'est installé. Installez un thème avec ``install theme``.
 
 list plugins
 ------------
@@ -269,7 +268,7 @@ install theme
 
     $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
-Installe un ou plusieurs thèmes statiques, par exemple ``docuforge`` ou ``voicebox``. Un nom sans
+Installe un ou plusieurs thèmes, par exemple ``docuforge`` ou ``voicebox``. Un nom sans
 version installe la plus récente construite pour ce |Fess|. ``<name>:<version>`` fige la version
 de ce thème, et ``--version`` s'applique à tous les noms qui n'en portent pas.
 

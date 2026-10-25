@@ -378,7 +378,7 @@ Danach lassen sich die Felder über die Such-API verwenden::
 
 .. note::
 
-   Die mit |Fess| mitgelieferte Suchoberfläche (das statische Theme ``bootstrap``) zeigt nur die
+   Die mit |Fess| mitgelieferte Suchoberfläche (das Theme ``bootstrap``) zeigt nur die
    Facette ``label`` an (sowie die Facettenabfragen von ``query.facet.queries``), und ihr
    Sortiermenü bietet nur die Standardfelder. Facetten auf anderen Feldern stehen über die API
    oder in einem eigenen Theme zur Verfügung. Eine Bereichssuche und eine im Suchfeld als

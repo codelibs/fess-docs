@@ -5,12 +5,12 @@ Thème
 Présentation
 ============
 
-La fonctionnalité de thèmes permet de gérer les « thèmes statiques », c'est-à-dire des ensembles d'éléments statiques (HTML / CSS / JavaScript, etc.) qui définissent l'apparence de l'écran de recherche. Un thème statique est téléversé sous forme d'archive ZIP, puis décompressé dans le répertoire de thèmes sur le serveur (par défaut : ``themes``, modifiable via ``theme.directory.path``). À la racine de chaque thème doit se trouver un manifeste ``theme.yml`` décrivant les métadonnées du thème.
+La fonctionnalité de thèmes permet de gérer les thèmes, c'est-à-dire des ensembles d'éléments statiques (HTML / CSS / JavaScript, etc.) qui définissent l'apparence de l'écran de recherche. Un thème est téléversé sous forme d'archive ZIP, puis décompressé dans le répertoire de thèmes sur le serveur (par défaut : ``themes``, modifiable via ``theme.directory.path``). À la racine de chaque thème doit se trouver un manifeste ``theme.yml`` décrivant les métadonnées du thème.
 
-L'écran de recherche est toujours un thème statique. Lorsqu'aucun thème par défaut n'est défini, |Fess| utilise ``bootstrap``, le thème statique fourni avec lui. Le thème fourni ne peut être ni supprimé ni remplacé ; pour le modifier, copiez-le sous un nouveau nom (voir :ref:`theme-customize-bundled`).
+L'écran de recherche est toujours un thème. Lorsqu'aucun thème par défaut n'est défini, |Fess| utilise ``bootstrap``, le thème fourni avec lui. Le thème fourni ne peut être ni supprimé ni remplacé ; pour le modifier, copiez-le sous un nouveau nom (voir :ref:`theme-customize-bundled`).
 
 .. note::
-   Les thèmes basés sur JSP (plugins de thème JAR ``fess-theme-*``) ont été supprimés en 15.10. Pour modifier l'apparence, utilisez un thème statique (voir :ref:`upgrade-159-static-theme`).
+   Les thèmes basés sur JSP (plugins de thème JAR ``fess-theme-*``) ont été supprimés en 15.10. Pour modifier l'apparence, utilisez un thème (voir :ref:`upgrade-159-static-theme`).
    Pour effectuer les opérations décrites sur cette page, le rôle ``admin-theme`` est requis (le rôle ``admin-theme-view`` suffit pour la consultation seule).
 
 Obtenir un thème
@@ -50,7 +50,7 @@ Pour ouvrir la page de liste des thèmes enregistrés, cliquez sur [Système > T
 Liste des thèmes
 ----------------
 
-La page de liste affiche les thèmes statiques enregistrés dans le répertoire de thèmes. Les colonnes affichées pour chaque ligne sont les suivantes :
+La page de liste affiche les thèmes enregistrés dans le répertoire de thèmes. Les colonnes affichées pour chaque ligne sont les suivantes :
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -105,7 +105,7 @@ Si l'archive téléversée échoue à la validation du manifeste, ou si la taill
 Manifeste theme.yml
 --------------------
 
-À la racine d'un thème statique doit se trouver un fichier ``theme.yml`` (au format YAML) décrivant les métadonnées du thème. Les champs disponibles sont les suivants :
+À la racine d'un thème doit se trouver un fichier ``theme.yml`` (au format YAML) décrivant les métadonnées du thème. Les champs disponibles sont les suivants :
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{7cm}|
 .. list-table::

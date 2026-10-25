@@ -285,7 +285,7 @@ ZIP 版
        $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # 已安装的插件
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # 自己上传的静态主题（每个主题一个目录；不要复制 bootstrap）
+       # 自己上传的主题（每个主题一个目录；不要复制 bootstrap）
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
@@ -311,7 +311,7 @@ ZIP 版
    .. warning::
 
       请不要复制在管理页面「页面设计」中编辑过的 JSP（``app/WEB-INF/view/``）。15.9 的搜索
-      界面是静态主题，不再使用这些 JSP；此类修改现在应放在何处，请参阅
+      界面是主题，不再使用这些 JSP；此类修改现在应放在何处，请参阅
       :ref:`upgrade-159-static-theme` 。
 
    .. note::
@@ -925,23 +925,23 @@ SMB 爬取一直以 jcifs 的默认值运行。15.9 传递新名称：
 
 .. _upgrade-159-static-theme:
 
-搜索界面现已改为静态主题
+搜索界面现已改为主题
 ------------------------
 
-除非选择了其他主题，搜索界面由 |Fess| 内置的静态主题 ``bootstrap`` 提供。这适用于 ``/``、
+除非选择了其他主题，搜索界面由 |Fess| 内置的主题 ``bootstrap`` 提供。这适用于 ``/``、
 ``/search``、``/advance``、``/help``、``/profile``、``/cache``、``/chat`` 以及错误页面。在 15.8
 及之前的版本中，除非设置了默认主题，这些页面都是 JSP。
 
 升级时同样会进行切换。从未设置过默认主题的 15.8 环境， ``system.properties`` 中没有
-``theme.default`` ，因此升级后会显示静态主题；不会向配置写入任何内容，也不会输出任何日志。
+``theme.default`` ，因此升级后会显示主题；不会向配置写入任何内容，也不会输出任何日志。
 没有可以恢复 JSP 搜索界面的设置。如果在 15.8 中设置了默认主题，该设置会被保留；请安装该主题
 面向 15.9 的构建（ ``bin/fess-setup install theme <name>`` ），因为若默认主题指定的是未安装的
 主题，将回退到 ``bootstrap`` ，并在 ``fess.log`` 中输出警告。
 
 如果通过管理界面的「页面设计」或 JAR 主题插件修改过搜索界面的 JSP、CSS 或图片，这些修改将
-不再显示。请在静态主题中进行修改：按照 :ref:`theme-customize-bundled` 的说明复制内置主题并
+不再显示。请在主题中进行修改：按照 :ref:`theme-customize-bundled` 的说明复制内置主题并
 修改副本，或者从管理界面的「系统」→「主题」或使用 ``bin/fess-setup install theme <name>``
-安装已发布的主题。按虚拟主机区分的外观现在是以虚拟主机命名的静态主题；参阅
+安装已发布的主题。按虚拟主机区分的外观现在是以虚拟主机命名的主题；参阅
 :doc:`../config/security-virtual-host` 。
 
 以下两项也已不再提供。
@@ -955,7 +955,7 @@ SMB 爬取一直以 jcifs 的默认值运行。15.9 传递新名称：
   ``bin/fess-setup remove plugin <name>`` 删除（参见 :doc:`../dev/theme-development` ）。
 
 如果在 15.8 中曾在 JSP 的搜索结果中显示自定义字段，除了 ``query.additional.response.fields``
-之外，还请在 ``query.additional.api.response.fields`` 中添加相同的字段。静态主题从
+之外，还请在 ``query.additional.api.response.fields`` 中添加相同的字段。主题从
 ``/api/v2/search`` 获取搜索结果。 ``query.additional.response.fields`` 只是增加从搜索引擎
 获取的字段，而该 API 在响应中只包含 ``query.additional.api.response.fields`` 中列出的字段
 （参见 :doc:`../config/search-advanced` ）。另外，请修改主题以显示该字段。
@@ -1009,7 +1009,7 @@ SMB 爬取一直以 jcifs 的默认值运行。15.9 传递新名称：
 ----------------------------
 
 删除了管理界面中的 [系统 > 页面设计]。无法再从管理界面编辑搜索界面的 JSP、CSS 和图片。
-如需更改搜索界面的外观，请使用静态主题（参见 :ref:`theme-customize-bundled`）。
+如需更改搜索界面的外观，请使用主题（参见 :ref:`theme-customize-bundled`）。
 
 以下键也已从 ``fess_config.properties`` 中删除。以这些名称保留的值不会被使用。
 

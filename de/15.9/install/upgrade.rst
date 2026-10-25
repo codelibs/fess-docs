@@ -291,7 +291,7 @@ ZIP-Version
        $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # Installierte Plugins
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # Selbst hochgeladene statische Themes (ein Verzeichnis pro Theme; nie bootstrap)
+       # Selbst hochgeladene Themes (ein Verzeichnis pro Theme; nie bootstrap)
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
@@ -323,7 +323,7 @@ ZIP-Version
    .. warning::
 
       Kopieren Sie keine JSPs (``app/WEB-INF/view/``), die Sie über „Design" in der
-      Verwaltungsseite bearbeitet haben. Die Suchoberfläche von 15.9 ist ein statisches Theme und
+      Verwaltungsseite bearbeitet haben. Die Suchoberfläche von 15.9 ist ein Theme und
       verwendet diese JSPs nicht mehr; wohin solche Änderungen jetzt gehören, beschreibt
       :ref:`upgrade-159-static-theme`.
 
@@ -1031,17 +1031,17 @@ Systemeigenschaft gelesen: Setzen Sie sie in ``app/WEB-INF/conf/system.propertie
 
 .. _upgrade-159-static-theme:
 
-Die Suchoberfläche ist jetzt ein statisches Theme
+Die Suchoberfläche ist jetzt ein Theme
 -------------------------------------------------
 
-Die Suchoberfläche wird vom statischen Theme ``bootstrap`` ausgeliefert, das mit |Fess| mitgeliefert
+Die Suchoberfläche wird vom Theme ``bootstrap`` ausgeliefert, das mit |Fess| mitgeliefert
 wird, sofern kein anderes Theme ausgewählt ist. Das gilt für ``/``, ``/search``, ``/advance``,
 ``/help``, ``/profile``, ``/cache``, ``/chat`` und die Fehlerseiten. Bis 15.8 waren diese Seiten
 JSPs, sofern kein Standard-Theme festgelegt war.
 
 Die Umstellung erfolgt auch beim Upgrade. Eine 15.8-Installation, die nie ein Standard-Theme
 festgelegt hat, hat kein ``theme.default`` in ``system.properties`` und zeigt daher nach dem Upgrade
-das statische Theme; dabei wird nichts in die Konfiguration geschrieben und nichts protokolliert. Es
+das Theme; dabei wird nichts in die Konfiguration geschrieben und nichts protokolliert. Es
 gibt keine Einstellung, die die JSP-Suchoberfläche zurückbringt. Wenn Sie in 15.8 ein Standard-Theme
 festgelegt hatten, bleibt diese Einstellung erhalten; installieren Sie die 15.9-Version des Themes
 (``bin/fess-setup install theme <name>``), denn ein Standard, der ein nicht installiertes Theme nennt,
@@ -1049,11 +1049,11 @@ fällt mit einer Warnung in ``fess.log`` auf ``bootstrap`` zurück.
 
 Wenn Sie die JSPs, CSS oder Bilder der Suchoberfläche geändert haben, über „Seitengestaltung" in der
 Verwaltungsoberfläche oder in einem JAR-Theme-Plugin, sind diese Änderungen nicht mehr sichtbar.
-Nehmen Sie sie in einem statischen Theme vor: Kopieren Sie das mitgelieferte Theme und ändern Sie
+Nehmen Sie sie in einem Theme vor: Kopieren Sie das mitgelieferte Theme und ändern Sie
 die Kopie, wie unter :ref:`theme-customize-bundled` beschrieben, oder installieren Sie ein
 veröffentlichtes Theme über „System" → „Theme" in der Verwaltungsoberfläche oder mit
 ``bin/fess-setup install theme <name>``. Ein eigenes Aussehen pro virtuellem Host ist jetzt ein
-statisches Theme, das nach dem virtuellen Host benannt ist; siehe
+Theme, das nach dem virtuellen Host benannt ist; siehe
 :doc:`../config/security-virtual-host`.
 
 Zwei weitere Dinge entfallen:
@@ -1070,7 +1070,7 @@ Zwei weitere Dinge entfallen:
 
 Wenn die JSP-Suchergebnisse in 15.8 ein eigenes Feld anzeigten, fügen Sie dieses Feld zusätzlich zu
 ``query.additional.response.fields`` auch zu ``query.additional.api.response.fields`` hinzu. Das
-statische Theme bezieht seine Ergebnisse von ``/api/v2/search``. ``query.additional.response.fields``
+Theme bezieht seine Ergebnisse von ``/api/v2/search``. ``query.additional.response.fields``
 fügt ein Feld nur zu den aus der Suchmaschine abgerufenen Feldern hinzu; die API gibt nur die Felder
 zurück, die in ``query.additional.api.response.fields`` aufgeführt sind (siehe
 :doc:`../config/search-advanced`). Ändern Sie außerdem das Theme so, dass es das Feld anzeigt.
@@ -1136,7 +1136,7 @@ Die Seitengestaltung wurde entfernt
 
 [System > Seitengestaltung] ist nicht mehr Teil der Verwaltungsoberfläche. JSP-, CSS- und
 Bilddateien der Suchoberfläche lassen sich dort nicht mehr bearbeiten. Um das Aussehen der
-Suchoberfläche zu ändern, verwenden Sie ein statisches Theme (siehe :ref:`theme-customize-bundled`).
+Suchoberfläche zu ändern, verwenden Sie ein Theme (siehe :ref:`theme-customize-bundled`).
 
 Außerdem wurden die folgenden Schlüssel aus ``fess_config.properties`` entfernt. Ein unter diesen
 Namen verbliebener Wert wird nicht verwendet.
