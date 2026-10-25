@@ -292,7 +292,7 @@ Versión ZIP
        $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # Plugins instalados
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # Temas estáticos que haya subido usted (un directorio por tema; nunca bootstrap)
+       # Temas que haya subido usted (un directorio por tema; nunca bootstrap)
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
@@ -322,7 +322,7 @@ Versión ZIP
    .. warning::
 
       No copie los JSP editados desde "Diseño" en la pantalla de administración
-      (``app/WEB-INF/view/``). La pantalla de búsqueda de 15.9 es un tema estático y ya no utiliza
+      (``app/WEB-INF/view/``). La pantalla de búsqueda de 15.9 es un tema y ya no utiliza
       esos JSP; consulte :ref:`upgrade-159-static-theme` para saber dónde van ahora esos cambios.
 
    .. note::
@@ -1024,17 +1024,17 @@ propiedad del sistema: defínalo en ``app/WEB-INF/conf/system.properties`` o con
 
 .. _upgrade-159-static-theme:
 
-La pantalla de búsqueda es ahora un tema estático
+La pantalla de búsqueda es ahora un tema
 -------------------------------------------------
 
-La pantalla de búsqueda la sirve el tema estático ``bootstrap``, incluido con |Fess|, salvo que se
+La pantalla de búsqueda la sirve el tema ``bootstrap``, incluido con |Fess|, salvo que se
 seleccione otro tema. Esto se aplica a ``/``, ``/search``, ``/advance``, ``/help``, ``/profile``,
 ``/cache``, ``/chat`` y a las páginas de error. Hasta 15.8, estas páginas eran JSP salvo que se
 hubiera configurado un tema predeterminado.
 
 El cambio también se produce al actualizar. Una instalación 15.8 que nunca configuró un tema
 predeterminado no tiene ``theme.default`` en ``system.properties``, así que después de la
-actualización muestra el tema estático; no se escribe nada en la configuración ni se registra nada.
+actualización muestra el tema; no se escribe nada en la configuración ni se registra nada.
 No existe ninguna configuración que recupere la pantalla de búsqueda JSP. Si había configurado un
 tema predeterminado en 15.8, esa configuración se conserva; instale la versión para 15.9 del tema
 (``bin/fess-setup install theme <name>``), porque un tema predeterminado que nombra un tema no
@@ -1042,10 +1042,10 @@ instalado recurre a ``bootstrap`` con una advertencia en ``fess.log``.
 
 Si modificó los JSP, el CSS o las imágenes de la pantalla de búsqueda, mediante "Diseño de página"
 en la pantalla de administración o en un plugin de tema JAR, esos cambios ya no se muestran.
-Aplíquelos en un tema estático: copie el tema incluido y modifique la copia, como se describe en
+Aplíquelos en un tema: copie el tema incluido y modifique la copia, como se describe en
 :ref:`theme-customize-bundled`, o instale un tema publicado desde "Sistema" > "Tema" en la pantalla
 de administración o con ``bin/fess-setup install theme <name>``. Un aspecto distinto por host
-virtual es ahora un tema estático con el nombre del host virtual; consulte
+virtual es ahora un tema con el nombre del host virtual; consulte
 :doc:`../config/security-virtual-host`.
 
 También desaparecieron estas dos funciones:
@@ -1061,8 +1061,7 @@ También desaparecieron estas dos funciones:
   :doc:`../dev/theme-development`).
 
 Si en 15.8 mostraba campos propios en los resultados de búsqueda JSP, añada los mismos campos a
-``query.additional.api.response.fields`` además de a ``query.additional.response.fields``. El tema
-estático obtiene los resultados de búsqueda de ``/api/v2/search``. ``query.additional.response.fields``
+``query.additional.api.response.fields`` además de a ``query.additional.response.fields``. El tema obtiene los resultados de búsqueda de ``/api/v2/search``. ``query.additional.response.fields``
 solo añade los campos que se obtienen del motor de búsqueda, y esta API incluye en la respuesta únicamente
 los campos enumerados en ``query.additional.api.response.fields`` (consulte :doc:`../config/search-advanced`).
 Modifique también el tema para que muestre esos campos.
@@ -1128,7 +1127,7 @@ Se ha eliminado el editor de diseño de página
 
 [Sistema > Diseño de página] ya no forma parte de la pantalla de administración, por lo que los
 archivos JSP, CSS e imágenes de la pantalla de búsqueda ya no se pueden editar desde allí. Para
-cambiar el aspecto de la pantalla de búsqueda, utilice un tema estático (consulte
+cambiar el aspecto de la pantalla de búsqueda, utilice un tema (consulte
 :ref:`theme-customize-bundled`).
 
 También se han eliminado las siguientes claves de ``fess_config.properties``. Un valor que

@@ -4,7 +4,7 @@ Der Befehl fess-setup
 
 ``bin/fess-setup`` (unter Windows ``bin\fess-setup.bat``) liegt dem ZIP-Paket von |Fess| bei.
 Es installiert, was |Fess| benötigt, aber nicht mitliefert: OpenSearch mit den von |Fess|
-benötigten Plugins, Node.js für die Playwright-Plugins, |Fess|-Plugins und statische Themes. Außerdem prüft es eine
+benötigten Plugins, Node.js für die Playwright-Plugins, |Fess|-Plugins und Themes. Außerdem prüft es eine
 Installation.
 
 Führen Sie es im |Fess|-Verzeichnis aus. Ohne Argumente gibt es die Liste der Befehle aus.
@@ -182,7 +182,7 @@ Installiert werden können nur die Plugin-Typen, die |Fess| lädt: Namen, die mi
 ``fess-llm-``, ``fess-storage-`` oder ``fess-sso-`` beginnen, also dieselben, die ``list plugins``
 anzeigt. Jeder andere Name (``fess-theme-*`` oder eine Bibliothek wie ``fess`` oder ``fess-crawler``)
 wird vor jedem Download mit einer einzeiligen Fehlermeldung und Exit-Code 2 abgelehnt. Wird einer von
-mehreren Namen abgelehnt, wird keiner installiert. Ein statisches Theme installieren Sie mit
+mehreren Namen abgelehnt, wird keiner installiert. Ein Theme installieren Sie mit
 ``install theme``.
 
 list plugins
@@ -273,7 +273,7 @@ install theme
 
     $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
-Installiert ein oder mehrere statische Themes, zum Beispiel ``docuforge`` oder ``voicebox``. Ein
+Installiert ein oder mehrere Themes, zum Beispiel ``docuforge`` oder ``voicebox``. Ein
 Name ohne Version installiert die neueste für dieses |Fess| gebaute Version. ``<name>:<version>``
 legt die Version dieses Themes fest, und ``--version`` gilt für jeden Namen, der keine eigene hat.
 

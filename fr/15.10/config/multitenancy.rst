@@ -129,7 +129,7 @@ Application de thèmes
 
 Appliquer différents thèmes par hôte virtuel :
 
-1. Créez un thème statique dont le nom est la clé de l'hôte virtuel en minuscules, par exemple ``tenant1``
+1. Créez un thème dont le nom est la clé de l'hôte virtuel en minuscules, par exemple ``tenant1``
    (voir :ref:`theme-customize-bundled`)
 2. Installez-le dans « Système » → « Thème »
 

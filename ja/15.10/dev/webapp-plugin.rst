@@ -260,7 +260,7 @@ REST APIの追加(fess_api++.xml)
 Web アプリプラグインは JSP ビューを追加できません。JSP ビューは |Fess| 本体の WAR の
 ``WEB-INF/view/`` に配置されており、プラグイン JAR はクラスパス
 (``WEB-INF/classes``)にマウントされるためです。検索画面のデザインを変更する場合は、
-静的テーマを使用します。静的テーマは検索画面のデザイン(HTML/CSS/JavaScript)を
+テーマを使用します。テーマは検索画面のデザイン(HTML/CSS/JavaScript)を
 カスタマイズします。:doc:`theme-development` を参照してください。
 
 ビルドとインストール

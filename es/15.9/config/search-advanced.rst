@@ -376,7 +376,7 @@ Después, los campos se pueden utilizar a través de la API de búsqueda::
 
 .. note::
 
-   La pantalla de búsqueda incluida con |Fess| (el tema estático ``bootstrap``) solo muestra la
+   La pantalla de búsqueda incluida con |Fess| (el tema ``bootstrap``) solo muestra la
    faceta ``label`` (y las consultas de faceta de ``query.facet.queries``), y su menú de ordenación
    solo ofrece los campos estándar. Las facetas sobre otros campos están disponibles a través de la
    API o en un tema propio. Una búsqueda por rango, y una ordenación escrita en el cuadro de búsqueda

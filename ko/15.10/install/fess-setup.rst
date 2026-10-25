@@ -2,7 +2,7 @@
 fess-setup 명령
 ====================
 
-``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 플러그인이 사용하는 Node.js, |Fess| 플러그인, 정적 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다.
+``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 플러그인이 사용하는 Node.js, |Fess| 플러그인, 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다.
 
 |Fess| 디렉터리에서 실행합니다. 인수 없이 실행하면 명령 목록을 표시합니다.
 
@@ -117,7 +117,7 @@ jar 는 플러그인의 GitHub 릴리스에서 가져오며, 릴리스에 해당
 
 사용 예는 :doc:`../admin/plugin-guide` 를 참조하십시오.
 
-설치할 수 있는 것은 |Fess| 가 읽어 들이는 종류의 플러그인(이름이 ``fess-ds-`` , ``fess-ingest-`` , ``fess-script-`` , ``fess-webapp-`` , ``fess-thumbnail-`` , ``fess-crawler-`` , ``fess-llm-`` , ``fess-storage-`` , ``fess-sso-`` 로 시작하는 것)뿐입니다. ``list plugins`` 에 표시되는 것과 같습니다. 그 밖의 이름( ``fess-theme-*`` , ``fess`` , ``fess-crawler`` 등의 라이브러리)을 지정하면 아무것도 다운로드하지 않고 한 줄의 오류를 표시한 후 종료 코드 2로 종료합니다. 여러 이름 중 하나라도 해당하면 아무것도 설치하지 않습니다. 정적 테마는 ``install theme`` 으로 설치하십시오.
+설치할 수 있는 것은 |Fess| 가 읽어 들이는 종류의 플러그인(이름이 ``fess-ds-`` , ``fess-ingest-`` , ``fess-script-`` , ``fess-webapp-`` , ``fess-thumbnail-`` , ``fess-crawler-`` , ``fess-llm-`` , ``fess-storage-`` , ``fess-sso-`` 로 시작하는 것)뿐입니다. ``list plugins`` 에 표시되는 것과 같습니다. 그 밖의 이름( ``fess-theme-*`` , ``fess`` , ``fess-crawler`` 등의 라이브러리)을 지정하면 아무것도 다운로드하지 않고 한 줄의 오류를 표시한 후 종료 코드 2로 종료합니다. 여러 이름 중 하나라도 해당하면 아무것도 설치하지 않습니다. 테마는 ``install theme`` 으로 설치하십시오.
 
 list plugins
 ------------
@@ -186,7 +186,7 @@ install theme
 
     $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
-``docuforge`` 나 ``voicebox`` 같은 정적 테마를 설치합니다. 버전이 없는 이름은 이 |Fess| 용으로 만들어진 최신 버전을 설치합니다. ``<name>:<version>`` 은 그 테마의 버전을 고정하고, ``--version`` 은 자체 버전이 없는 모든 이름에 적용됩니다.
+``docuforge`` 나 ``voicebox`` 같은 테마를 설치합니다. 버전이 없는 이름은 이 |Fess| 용으로 만들어진 최신 버전을 설치합니다. ``<name>:<version>`` 은 그 테마의 버전을 고정하고, ``--version`` 은 자체 버전이 없는 모든 이름에 적용됩니다.
 
 아카이브는 Maven 저장소가 공개한 SHA-1 체크섬과 대조된 뒤 ``app/themes/<name>`` 에 전개됩니다. 같은 이름으로 이미 설치된 테마는 관리 화면에서 교체한 경우와 같은 기간 동안 백업으로 보관됩니다(기본 7일, ``theme.upload.attic.retention.days`` ).
 

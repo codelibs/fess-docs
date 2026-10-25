@@ -282,7 +282,7 @@ Los plugins de aplicación web no pueden añadir vistas JSP. Esto se debe
 a que las vistas JSP se ubican en ``WEB-INF/view/`` del WAR del propio
 |Fess|, mientras que el JAR del plugin se monta en el classpath
 (``WEB-INF/classes``). Si desea modificar el diseño de la pantalla de
-búsqueda, utilice un tema estático. El tema estático personaliza el
+búsqueda, utilice un tema. El tema personaliza el
 diseño de la pantalla de búsqueda (HTML/CSS/JavaScript). Consulte
 :doc:`theme-development`.
 

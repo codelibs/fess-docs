@@ -7,7 +7,7 @@ Virtual Host
 About Virtual Host
 ==================
 
-You can differentiate search results based on the hostname (URL's host part) when accessing Fess. A static theme whose name matches the virtual host name is used for that host, so you can also customize the design.
+You can differentiate search results based on the hostname (URL's host part) when accessing Fess. A theme whose name matches the virtual host name is used for that host, so you can also customize the design.
 
 System Configuration
 --------------------
@@ -36,7 +36,7 @@ Configure the "Virtual Host" in the :doc:`Administrator's Guide > General Settin
    Host:abc.example.com:8080=host1
    Host:192.168.1.123:8080=host2
 
-To customize the page design for a virtual host, install a static theme whose name is the virtual host name in lowercase. See :doc:`security-virtual-host` for details.
+To customize the page design for a virtual host, install a theme whose name is the virtual host name in lowercase. See :doc:`security-virtual-host` for details.
 
 
 Crawl Configuration

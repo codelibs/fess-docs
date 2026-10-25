@@ -2,7 +2,7 @@
 fess-setup 命令
 ====================
 
-``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 插件所需的 Node.js、 |Fess| 插件以及静态主题。它还可以检查安装状态。
+``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 插件所需的 Node.js、 |Fess| 插件以及主题。它还可以检查安装状态。
 
 请在 |Fess| 目录中运行。不带参数运行时，会显示命令列表。
 
@@ -117,7 +117,7 @@ jar 从插件的 GitHub 发布获取；发布中没有对应文件时，则从 M
 
 使用示例请参阅 :doc:`../admin/plugin-guide`\ 。
 
-只能安装 |Fess| 会加载的插件类型，即名称以 ``fess-ds-``\ 、\ ``fess-ingest-``\ 、\ ``fess-script-``\ 、\ ``fess-webapp-``\ 、\ ``fess-thumbnail-``\ 、\ ``fess-crawler-``\ 、\ ``fess-llm-``\ 、\ ``fess-storage-`` 或 ``fess-sso-`` 开头的插件，与 ``list plugins`` 显示的相同。指定其他名称（ ``fess-theme-*``\ ，或 ``fess``\ 、\ ``fess-crawler`` 等库）时，不会下载任何内容，而是显示一行错误并以退出码 2 结束。多个名称中只要有一个被拒绝，就不会安装任何插件。静态主题请使用 ``install theme`` 安装。
+只能安装 |Fess| 会加载的插件类型，即名称以 ``fess-ds-``\ 、\ ``fess-ingest-``\ 、\ ``fess-script-``\ 、\ ``fess-webapp-``\ 、\ ``fess-thumbnail-``\ 、\ ``fess-crawler-``\ 、\ ``fess-llm-``\ 、\ ``fess-storage-`` 或 ``fess-sso-`` 开头的插件，与 ``list plugins`` 显示的相同。指定其他名称（ ``fess-theme-*``\ ，或 ``fess``\ 、\ ``fess-crawler`` 等库）时，不会下载任何内容，而是显示一行错误并以退出码 2 结束。多个名称中只要有一个被拒绝，就不会安装任何插件。主题请使用 ``install theme`` 安装。
 
 list plugins
 ------------
@@ -186,7 +186,7 @@ install theme
 
     $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
-安装一个或多个静态主题，例如 ``docuforge`` 或 ``voicebox``\ 。不带版本的名称会安装为当前 |Fess| 构建的最新版本。 ``<name>:<version>`` 固定该主题的版本， ``--version`` 适用于所有没有自带版本的名称。
+安装一个或多个主题，例如 ``docuforge`` 或 ``voicebox``\ 。不带版本的名称会安装为当前 |Fess| 构建的最新版本。 ``<name>:<version>`` 固定该主题的版本， ``--version`` 适用于所有没有自带版本的名称。
 
 归档会与 Maven 仓库公开的 SHA-1 校验和比对，并解压到 ``app/themes/<name>``\ 。同名主题若已安装，会作为备份保留，保留期与从管理界面替换时相同（默认 7 天， ``theme.upload.attic.retention.days``\ ）。
 

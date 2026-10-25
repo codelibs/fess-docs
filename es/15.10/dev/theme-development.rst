@@ -5,12 +5,12 @@ Guía de Desarrollo de Temas
 Visión General
 ==============
 
-En |Fess| 15.10, la pantalla de búsqueda es siempre un tema estático.
-Un tema estático es una SPA (Single Page Application, aplicación de
+En |Fess| 15.10, la pantalla de búsqueda es siempre un tema.
+Un tema es una SPA (Single Page Application, aplicación de
 página única) independiente que utiliza la API ``/api/v2/*``. El tema
 se distribuye como un archivo ZIP, que se sube y se activa desde la
 consola de administración. Cuando no hay ningún tema seleccionado,
-|Fess| utiliza ``bootstrap``, el tema estático incluido con él.
+|Fess| utiliza ``bootstrap``, el tema incluido con él.
 
 Para cambiar el aspecto de la pantalla de búsqueda, instale otro tema
 (consulte :doc:`../admin/theme-guide`) o cree el suyo propio: la forma
@@ -19,16 +19,16 @@ describe en `Personalización del Tema Incluido`_.
 
 .. note::
 
-   Los temas estáticos están disponibles a partir de |Fess| 15.7 y se
+   Los temas distribuidos como ZIP están disponibles a partir de |Fess| 15.7 y se
    convirtieron en la pantalla de búsqueda predeterminada en 15.10. Los
    plugins de tema JAR, que sustituían las JSP de la pantalla de
    búsqueda, se eliminaron en 15.10; consulte
    `Plugin de Tema JAR (eliminado en 15.10)`_.
 
-Tema Estático
-=============
+Qué es un tema
+==============
 
-Un tema estático es un conjunto de recursos estáticos que incluye el
+Un tema es un conjunto de recursos estáticos que incluye el
 manifiesto ``theme.yml`` y el archivo ``index.html``. El propio tema se
 implementa como una aplicación frontend que invoca la API
 ``/api/v2/*`` de |Fess|.
@@ -36,7 +36,7 @@ implementa como una aplicación frontend que invoca la API
 Estructura
 ----------
 
-Un tema estático tiene la siguiente estructura de directorios.
+Un tema tiene la siguiente estructura de directorios.
 
 ::
 
@@ -151,7 +151,7 @@ Los campos que se pueden especificar son los siguientes.
 Distribución y API
 ------------------
 
-- Los temas estáticos se distribuyen bajo ``/themes/<name>/`` (donde
+- Los temas se distribuyen bajo ``/themes/<name>/`` (donde
   ``<name>`` es el ``name`` de ``theme.yml``).
 - Se devuelve el HTML de entrada (por defecto ``index.html``) en cada
   una de las rutas ``/``, ``/search``, ``/advance``, ``/help``,
@@ -162,8 +162,7 @@ Distribución y API
   el navegador recibe el HTML de entrada del tema en la URL solicitada,
   con el código de estado HTTP real.
 - La consola de administración (``/admin/*``), ``/api/*``, la pantalla
-  de inicio de sesión, etc., quedan fuera del alcance de los temas
-  estáticos y son gestionados por el propio |Fess|.
+  de inicio de sesión, etc., quedan fuera del alcance de los temas y son gestionados por el propio |Fess|.
 - ``{{themePath}}`` en el HTML de entrada se sustituye por
   ``themes/<name>`` al servir la página. Haga referencia a los archivos
   del propio tema desde ``index.html`` como
@@ -339,12 +338,12 @@ los temas JAR ni los utiliza en ninguna pantalla.
 - ``bin/fess-setup`` no muestra ``fess-theme-*`` en la lista ni lo
   instala.
 
-Traslade a un tema estático los cambios que hacía con un tema JAR.
+Traslade a un tema los cambios que hacía con un tema JAR.
 
 - Para los colores, el diseño y el logotipo de la pantalla de búsqueda,
   copie el tema incluido y modifíquelo (consulte
   `Personalización del Tema Incluido`_).
-- Si cambiaba el aspecto por host virtual, instale un tema estático con
+- Si cambiaba el aspecto por host virtual, instale un tema con
   el mismo nombre que el host virtual (consulte
   :doc:`../config/security-virtual-host`).
 - La pantalla de inicio de sesión (``/login/``) es la misma para todos
@@ -354,7 +353,7 @@ Ejemplos de Temas Existentes
 ============================
 
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ -
-  Colección de temas estáticos (incluye varios temas estáticos como
+  Colección de temas (incluye varios temas como
   ``codesearch`` y ``docsearch``)
 
 Información de Referencia

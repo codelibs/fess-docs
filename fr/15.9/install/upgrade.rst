@@ -293,7 +293,7 @@ Version ZIP
        $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.9.0/lib/classes/
        # Plugins installés
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.9.0/app/WEB-INF/plugin/
-       # Thèmes statiques que vous avez téléversés vous-même (un répertoire par thème ; jamais bootstrap)
+       # Thèmes que vous avez téléversés vous-même (un répertoire par thème ; jamais bootstrap)
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.9.0/app/themes/
 
    .. warning::
@@ -325,7 +325,7 @@ Version ZIP
    .. warning::
 
       Ne copiez pas les JSP (``app/WEB-INF/view/``) modifiés depuis l'écran d'administration
-      « Design ». L'écran de recherche de la 15.9 est un thème statique et n'utilise plus ces JSP ;
+      « Design ». L'écran de recherche de la 15.9 est un thème et n'utilise plus ces JSP ;
       voir :ref:`upgrade-159-static-theme` pour savoir où ces modifications doivent désormais être
       faites.
 
@@ -1035,17 +1035,17 @@ propriété système : définissez-la dans ``app/WEB-INF/conf/system.properties`
 
 .. _upgrade-159-static-theme:
 
-L'écran de recherche est désormais un thème statique
+L'écran de recherche est désormais un thème
 ----------------------------------------------------
 
-L'écran de recherche est servi par le thème statique ``bootstrap``, fourni avec |Fess|, sauf si un
+L'écran de recherche est servi par le thème ``bootstrap``, fourni avec |Fess|, sauf si un
 autre thème est sélectionné. Cela s'applique à ``/``, ``/search``, ``/advance``, ``/help``,
 ``/profile``, ``/cache``, ``/chat`` et aux pages d'erreur. Jusqu'à la 15.8, ces pages étaient des
 JSP, sauf si un thème par défaut était défini.
 
 Le basculement a également lieu lors de la mise à niveau. Une installation 15.8 qui n'a jamais
 défini de thème par défaut n'a pas de ``theme.default`` dans ``system.properties`` : après la mise
-à niveau, elle affiche donc le thème statique ; rien n'est écrit dans la configuration et rien
+à niveau, elle affiche donc le thème ; rien n'est écrit dans la configuration et rien
 n'est journalisé. Aucun paramètre ne permet de revenir à l'écran de recherche JSP. Si vous aviez
 défini un thème par défaut en 15.8, ce paramètre est conservé ; installez la version 15.9 du thème
 (``bin/fess-setup install theme <name>``), car un thème par défaut qui désigne un thème non
@@ -1053,10 +1053,10 @@ installé se rabat sur ``bootstrap``, avec un avertissement dans ``fess.log``.
 
 Si vous avez modifié les JSP, le CSS ou les images de l'écran de recherche, via « Conception de la
 page » dans l'écran d'administration ou dans un plugin de thème JAR, ces modifications ne
-s'affichent plus. Reportez-les dans un thème statique : copiez le thème fourni et modifiez la
+s'affichent plus. Reportez-les dans un thème : copiez le thème fourni et modifiez la
 copie, comme décrit dans :ref:`theme-customize-bundled`, ou installez un thème publié depuis
 « Système » → « Thème » dans l'écran d'administration ou avec
-``bin/fess-setup install theme <name>``. Une apparence propre à un hôte virtuel est désormais un thème statique portant le nom de
+``bin/fess-setup install theme <name>``. Une apparence propre à un hôte virtuel est désormais un thème portant le nom de
 cet hôte virtuel ; voir :doc:`../config/security-virtual-host`.
 
 Ces deux fonctionnalités ont également disparu :
@@ -1073,7 +1073,7 @@ Ces deux fonctionnalités ont également disparu :
 
 Si, en 15.8, vous affichiez vos propres champs dans les résultats de recherche JSP, ajoutez les mêmes
 champs à ``query.additional.api.response.fields`` en plus de ``query.additional.response.fields``.
-Le thème statique obtient les résultats de recherche depuis ``/api/v2/search``.
+Le thème obtient les résultats de recherche depuis ``/api/v2/search``.
 ``query.additional.response.fields`` ajoute seulement les champs récupérés depuis le moteur de
 recherche, et cette API n'inclut dans sa réponse que les champs listés dans
 ``query.additional.api.response.fields`` (voir :doc:`../config/search-advanced`). Modifiez aussi le
@@ -1140,7 +1140,7 @@ L'éditeur de conception de page a été supprimé
 
 [Système > Conception de la page] ne fait plus partie de l'écran d'administration : les fichiers
 JSP, CSS et images de l'écran de recherche ne peuvent plus y être modifiés. Pour changer
-l'apparence de l'écran de recherche, utilisez un thème statique (voir :ref:`theme-customize-bundled`).
+l'apparence de l'écran de recherche, utilisez un thème (voir :ref:`theme-customize-bundled`).
 
 Les clés suivantes ont également été supprimées de ``fess_config.properties``. Une valeur laissée
 sous ces noms n'est pas utilisée.

@@ -264,7 +264,7 @@ REST API 추가(fess_api++.xml)
 웹앱 플러그인은 JSP 뷰를 추가할 수 없습니다. JSP 뷰는 |Fess| 본체 WAR 의
 ``WEB-INF/view/`` 에 배치되어 있으며, 플러그인 JAR 는 클래스패스
 (``WEB-INF/classes``)에 마운트되기 때문입니다. 검색 화면의 디자인을
-변경하려면 정적 테마를 사용합니다. 정적 테마는 검색 화면의 디자인
+변경하려면 테마를 사용합니다. 테마는 검색 화면의 디자인
 (HTML/CSS/JavaScript)을 커스터마이즈합니다. :doc:`theme-development` 를
 참조하십시오.
 

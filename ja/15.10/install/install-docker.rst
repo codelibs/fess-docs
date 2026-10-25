@@ -191,7 +191,7 @@ HTML ページのサムネイルは、どのイメージでもページ内の画
 - **検索画面**: http://localhost:8080/
 - **管理画面**: http://localhost:8080/admin
 
-検索画面は |Fess| に同梱の静的テーマ ``bootstrap`` です。見た目の変え方は :doc:`../admin/theme-guide` を
+検索画面は |Fess| に同梱のテーマ ``bootstrap`` です。見た目の変え方は :doc:`../admin/theme-guide` を
 参照してください。
 
 デフォルトの管理者アカウント：

@@ -376,7 +376,7 @@ The fields can then be used through the search API::
 
 .. note::
 
-   The search screen bundled with |Fess| (the static theme ``bootstrap``) draws only the ``label``
+   The search screen bundled with |Fess| (the theme ``bootstrap``) draws only the ``label``
    facet (and the facet queries of ``query.facet.queries``), and its sort menu offers only the
    standard fields. Facets on other fields are available through the API or in a theme of your
    own. A range search, and a sort written in the search box as ``sort:price.desc``, work on the

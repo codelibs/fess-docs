@@ -54,7 +54,7 @@ Artefaktnamens (``PluginHelper.ArtifactType``). Die wichtigsten Typen sind:
 .. note::
 
    Der Typ ``fess-theme-*`` (JAR-Theme), der JSPs bereitstellte, wurde in 15.10 entfernt.
-   Das Aussehen der Suchoberfläche ändern Sie mit einem statischen Theme, nicht mit
+   Das Aussehen der Suchoberfläche ändern Sie mit einem Theme, nicht mit
    einem Plugin (siehe :doc:`theme-development`).
 
 Plugin-Struktur

@@ -4,7 +4,7 @@ Comando fess-setup
 
 ``bin/fess-setup`` (``bin\fess-setup.bat`` en Windows) se incluye con el paquete ZIP de |Fess|.
 Instala lo que |Fess| necesita pero no incluye: OpenSearch con los plugins que requiere |Fess|,
-Node.js para los plugins de Playwright, los plugins de |Fess| y los temas estáticos. También informa sobre el estado
+Node.js para los plugins de Playwright, los plugins de |Fess| y los temas. También informa sobre el estado
 de una instalación.
 
 Ejecútelo desde el directorio de |Fess|. Sin argumentos, muestra la lista de comandos.
@@ -176,7 +176,7 @@ Solo se pueden instalar los tipos de plugin que |Fess| carga: nombres que empiez
 ``fess-llm-``, ``fess-storage-`` o ``fess-sso-``, los mismos que muestra ``list plugins``. Cualquier
 otro nombre (``fess-theme-*`` o una biblioteca como ``fess`` o ``fess-crawler``) se rechaza con un error
 de una línea y el código de salida 2 antes de descargar nada. Si se rechaza uno de varios nombres, no
-se instala ninguno. Instale un tema estático con ``install theme``.
+se instala ninguno. Instale un tema con ``install theme``.
 
 list plugins
 ------------
@@ -266,7 +266,7 @@ install theme
 
     $ bin/fess-setup install theme <name>[:<version>]... [--version <version>] [--repository <url>] [--dest <dir>]
 
-Instala uno o varios temas estáticos, por ejemplo ``docuforge`` o ``voicebox``. Un nombre sin
+Instala uno o varios temas, por ejemplo ``docuforge`` o ``voicebox``. Un nombre sin
 versión instala la más reciente construida para este |Fess|. ``<name>:<version>`` fija la versión
 de ese tema, y ``--version`` es la versión para todos los nombres que no lleven una propia.
 

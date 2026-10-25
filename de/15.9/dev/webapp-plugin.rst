@@ -279,8 +279,7 @@ Anpassung der Suchoberfläche
 Webanwendungs-Plugins können keine JSP-Views hinzufügen. JSP-Views befinden
 sich unter ``WEB-INF/view/`` im WAR des |Fess|-Kerns, während das
 Plugin-JAR in den Klassenpfad (``WEB-INF/classes``) gemountet wird. Wenn
-Sie das Design der Suchoberfläche ändern möchten, nutzen Sie ein statisches
-Theme. Es passt das Design der Suchoberfläche (HTML/CSS/JavaScript) an.
+Sie das Design der Suchoberfläche ändern möchten, nutzen Sie ein Theme. Es passt das Design der Suchoberfläche (HTML/CSS/JavaScript) an.
 Siehe :doc:`theme-development`.
 
 Build und Installation

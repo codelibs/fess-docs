@@ -56,7 +56,7 @@ suivants :
 .. note::
 
    Le type ``fess-theme-*`` (thème JAR), qui fournissait des JSP, a été supprimé en 15.10.
-   L'apparence de l'écran de recherche se modifie avec un thème statique, et non avec un
+   L'apparence de l'écran de recherche se modifie avec un thème, et non avec un
    plugin (voir :doc:`theme-development`).
 
 Structure d'un plugin

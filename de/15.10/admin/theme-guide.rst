@@ -5,12 +5,12 @@ Theme
 Übersicht
 =========
 
-Die Theme-Funktion verwaltet „statische Themes" – Pakete aus statischen Assets (HTML / CSS / JavaScript usw.), die das Erscheinungsbild des Suchbildschirms bestimmen. Statische Themes werden als ZIP-Archiv hochgeladen und in das Theme-Verzeichnis auf dem Server entpackt (Standard: ``themes``, änderbar über ``theme.directory.path``). Im Stammverzeichnis jedes Themes muss sich das ``theme.yml``-Manifest mit den Theme-Metadaten befinden.
+Die Theme-Funktion verwaltet Themes – Pakete aus statischen Assets (HTML / CSS / JavaScript usw.), die das Erscheinungsbild des Suchbildschirms bestimmen. Themes werden als ZIP-Archiv hochgeladen und in das Theme-Verzeichnis auf dem Server entpackt (Standard: ``themes``, änderbar über ``theme.directory.path``). Im Stammverzeichnis jedes Themes muss sich das ``theme.yml``-Manifest mit den Theme-Metadaten befinden.
 
-Der Suchbildschirm ist immer ein statisches Theme. Ist kein Standardtheme festgelegt, verwendet |Fess| ``bootstrap``, das mitgelieferte statische Theme. Das mitgelieferte Theme kann weder gelöscht noch ersetzt werden; um es zu ändern, kopieren Sie es unter einem neuen Namen (siehe :ref:`theme-customize-bundled`).
+Der Suchbildschirm ist immer ein Theme. Ist kein Standardtheme festgelegt, verwendet |Fess| ``bootstrap``, das mitgelieferte Theme. Das mitgelieferte Theme kann weder gelöscht noch ersetzt werden; um es zu ändern, kopieren Sie es unter einem neuen Namen (siehe :ref:`theme-customize-bundled`).
 
 .. note::
-   JSP-basierte Themes (``fess-theme-*``-JAR-Theme-Plugins) wurden in 15.10 entfernt. Verwenden Sie ein statisches Theme, um das Aussehen zu ändern (siehe :ref:`upgrade-159-static-theme`).
+   JSP-basierte Themes (``fess-theme-*``-JAR-Theme-Plugins) wurden in 15.10 entfernt. Verwenden Sie ein Theme, um das Aussehen zu ändern (siehe :ref:`upgrade-159-static-theme`).
    Für die hier beschriebenen Operationen ist die Rolle ``admin-theme`` erforderlich (für reinen Lesezugriff genügt die Rolle ``admin-theme-view``).
 
 Ein Theme beziehen
@@ -49,7 +49,7 @@ Um die Übersichtsseite der registrierten Themes zu öffnen, klicken Sie im link
 Themenliste
 -----------
 
-Die Übersichtsseite zeigt alle im Theme-Verzeichnis registrierten statischen Themes an. Folgende Spalten werden pro Eintrag angezeigt:
+Die Übersichtsseite zeigt alle im Theme-Verzeichnis registrierten Themes an. Folgende Spalten werden pro Eintrag angezeigt:
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -105,7 +105,7 @@ Falls das hochgeladene Archiv die Manifest-Validierung nicht besteht oder die Gr
 theme.yml-Manifest
 ------------------
 
-Im Stammverzeichnis eines statischen Themes muss die Datei ``theme.yml`` (YAML-Format) mit den Theme-Metadaten vorhanden sein. Folgende Felder können angegeben werden:
+Im Stammverzeichnis eines Themes muss die Datei ``theme.yml`` (YAML-Format) mit den Theme-Metadaten vorhanden sein. Folgende Felder können angegeben werden:
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{7cm}|
 .. list-table::

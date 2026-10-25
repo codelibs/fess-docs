@@ -7,7 +7,7 @@ About Virtual Host
 
 |Fess| can serve different search results depending on the hostname (the value of the HTTP ``Host`` header) used to access it.
 A single |Fess| server can be published under multiple hostnames, providing a different set of crawl targets and page design for each hostname.
-The search screen can also look different for each host: a static theme whose name matches the virtual host name is used for that host.
+The search screen can also look different for each host: a theme whose name matches the virtual host name is used for that host.
 
 The virtual host feature is disabled (unconfigured) by default. Configure it using the steps below.
 
@@ -57,7 +57,7 @@ Specify one virtual host per line using the following format.
 Page Design per Virtual Host
 -----------------------------
 
-To give a virtual host its own search screen, install a static theme whose ``name`` in ``theme.yml`` is the virtual host name in lowercase (for example ``host1``).
+To give a virtual host its own search screen, install a theme whose ``name`` in ``theme.yml`` is the virtual host name in lowercase (for example ``host1``).
 A request that matches the virtual host is served with that theme; any other request is served with the default theme.
 The theme does not have to be set as the default. See :ref:`theme-customize-bundled` for how to create a theme from the bundled one, and :doc:`../admin/theme-guide` for how to install it.
 
@@ -65,7 +65,7 @@ The theme does not have to be set as the default. See :ref:`theme-customize-bund
 
    Since |Fess| 15.10, saving the configuration no longer generates JSPs under ``WEB-INF/view/virtual_host_name``.
    The login screen (``/login/``) is the same page for every virtual host (``WEB-INF/view/admin/login/``) and cannot be changed per virtual host.
-   To give a virtual host its own look, use a static theme named after the virtual host, as described above.
+   To give a virtual host its own look, use a theme named after the virtual host, as described above.
 
 
 Crawl Configuration

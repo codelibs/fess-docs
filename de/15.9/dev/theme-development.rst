@@ -5,12 +5,12 @@ Theme-Entwicklungsleitfaden
 Übersicht
 =========
 
-In |Fess| 15.9 ist die Suchoberfläche immer ein statisches Theme. Ein
-statisches Theme ist eine eigenständige SPA (Single-Page-Anwendung),
+In |Fess| 15.9 ist die Suchoberfläche immer ein Theme. Ein
+Theme ist eine eigenständige SPA (Single-Page-Anwendung),
 die die ``/api/v2/*`` API nutzt. Themes werden als ZIP-Dateien
 verteilt, über die Administrationsoberfläche hochgeladen und dort
 aktiviert. Ist kein Theme ausgewählt, verwendet |Fess| ``bootstrap``,
-das mitgelieferte statische Theme.
+das mitgelieferte Theme.
 
 Um das Aussehen der Suchoberfläche zu ändern, installieren Sie entweder
 ein anderes Theme (siehe :doc:`../admin/theme-guide`) oder erstellen ein
@@ -19,15 +19,15 @@ die Kopie, wie unter `Mitgeliefertes Theme anpassen`_ beschrieben.
 
 .. note::
 
-   Statische Themes stehen ab |Fess| 15.7 zur Verfügung und wurden in
+   Als ZIP verteilte Themes stehen ab |Fess| 15.7 zur Verfügung und wurden in
    15.9 zur Standard-Suchoberfläche. JAR-Theme-Plugins, die die JSPs
    der Suchoberfläche ersetzten, wurden in 15.9 entfernt; siehe
    `JAR-Theme-Plugin (in 15.9 entfernt)`_.
 
-Statisches Theme
-================
+Was ein Theme ist
+=================
 
-Ein statisches Theme ist eine Sammlung statischer Ressourcen, die das
+Ein Theme ist eine Sammlung statischer Ressourcen, die das
 ``theme.yml``-Manifest und ``index.html`` enthält. Das Theme selbst
 wird als Frontend-Anwendung implementiert, die die ``/api/v2/*`` API
 von |Fess| aufruft.
@@ -35,7 +35,7 @@ von |Fess| aufruft.
 Struktur
 --------
 
-Ein statisches Theme hat die folgende Verzeichnisstruktur.
+Ein Theme hat die folgende Verzeichnisstruktur.
 
 ::
 
@@ -147,7 +147,7 @@ Die folgenden Felder können angegeben werden.
 Auslieferung und API
 ---------------------
 
-- Statische Themes werden unter ``/themes/<name>/`` ausgeliefert
+- Themes werden unter ``/themes/<name>/`` ausgeliefert
   (``<name>`` ist der Wert von ``name`` in ``theme.yml``).
 - Für die Pfade ``/``, ``/search``, ``/advance``, ``/help``,
   ``/error``, ``/profile``, ``/cache`` und ``/chat`` wird jeweils das
@@ -159,7 +159,7 @@ Auslieferung und API
   erhält ein Browser das Einstiegs-HTML des Themes unter der
   angeforderten URL, mit dem tatsächlichen HTTP-Status.
 - Die Administrationsoberfläche (``/admin/*``), ``/api/*``, die
-  Anmeldeseite und Ähnliches fallen nicht unter das statische Theme und
+  Anmeldeseite und Ähnliches fallen nicht unter das Theme und
   werden vom |Fess|-Kern selbst verarbeitet.
 - ``{{themePath}}`` im Einstiegs-HTML wird bei der Auslieferung durch
   ``themes/<name>`` ersetzt. Verweisen Sie in ``index.html`` auf die
@@ -337,12 +337,11 @@ und sie als das nach dem Schlüssel eines virtuellen Hosts benannte Theme anwend
   ``bin/fess-setup remove plugin <name>`` gelöscht werden.
 - ``bin/fess-setup`` listet ``fess-theme-*`` weder auf noch installiert es sie.
 
-Übertragen Sie die Änderungen aus einem JAR-Theme in ein statisches Theme:
+Übertragen Sie die Änderungen aus einem JAR-Theme in ein Theme:
 
 - Für Farben, Layout und Logo der Suchoberfläche kopieren Sie das mitgelieferte Theme und
   ändern die Kopie (siehe `Mitgeliefertes Theme anpassen`_).
-- Wenn Sie das Aussehen pro virtuellem Host geändert haben, installieren Sie ein statisches
-  Theme, das nach dem virtuellen Host benannt ist (siehe :doc:`../config/security-virtual-host`).
+- Wenn Sie das Aussehen pro virtuellem Host geändert haben, installieren Sie ein Theme, das nach dem virtuellen Host benannt ist (siehe :doc:`../config/security-virtual-host`).
 - Der Anmeldebildschirm (``/login/``) ist für alle virtuellen Hosts derselbe. Ein Theme
   kann ihn nicht ändern.
 
@@ -350,7 +349,7 @@ Beispiele für vorhandene Themes
 ===================================
 
 - `fess-themes <https://github.com/codelibs/fess-themes>`__ - Sammlung
-  statischer Themes (enthält mehrere statische Themes wie
+  Themes (enthält mehrere Themes wie
   ``codesearch`` und ``docsearch``)
 
 Referenzinformationen

@@ -5,12 +5,12 @@
 概述
 ====
 
-主题功能用于管理"静态主题"，即搜索界面外观（HTML / CSS / JavaScript 等静态资源集合）的集合。静态主题以 ZIP 压缩包的形式上传，并解压到服务器上的主题目录（默认值: ``themes`` ，可通过 ``theme.directory.path`` 更改）。每个主题的根目录下需放置描述主题元数据的 ``theme.yml`` 清单文件。
+主题功能用于管理主题，即搜索界面外观（HTML / CSS / JavaScript 等静态资源集合）的集合。主题以 ZIP 压缩包的形式上传，并解压到服务器上的主题目录（默认值: ``themes`` ，可通过 ``theme.directory.path`` 更改）。每个主题的根目录下需放置描述主题元数据的 ``theme.yml`` 清单文件。
 
-搜索界面始终是静态主题。未设置默认主题时， |Fess| 使用其内置的静态主题 ``bootstrap`` 。内置主题无法删除或替换；如需修改，请以新名称复制后再修改（参见 :ref:`theme-customize-bundled` ）。
+搜索界面始终是主题。未设置默认主题时， |Fess| 使用其内置的主题 ``bootstrap`` 。内置主题无法删除或替换；如需修改，请以新名称复制后再修改（参见 :ref:`theme-customize-bundled` ）。
 
 .. note::
-   基于 JSP 的主题（ ``fess-theme-*`` JAR 主题插件）已在 15.10 中删除。要更改外观，请使用静态主题（参见 :ref:`upgrade-159-static-theme` ）。
+   基于 JSP 的主题（ ``fess-theme-*`` JAR 主题插件）已在 15.10 中删除。要更改外观，请使用主题（参见 :ref:`upgrade-159-static-theme` ）。
    执行本页的操作需要 ``admin-theme`` 角色（仅查看时需要 ``admin-theme-view`` 角色）。
 
 获取主题
@@ -39,7 +39,7 @@
 主题列表
 ------
 
-列表页面显示主题目录中已注册的静态主题。各行显示的项目如下所示。
+列表页面显示主题目录中已注册的主题。各行显示的项目如下所示。
 
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
@@ -94,7 +94,7 @@ ZIP 从仓库下载，与公开的 ``.sha1`` 校验和比对后，以与上传�
 theme.yml 清单
 ----------
 
-在静态主题的根目录下放置描述主题元数据的 ``theme.yml`` （YAML 格式）。可指定的字段如下所示。
+在主题的根目录下放置描述主题元数据的 ``theme.yml`` （YAML 格式）。可指定的字段如下所示。
 
 .. tabularcolumns:: |p{3cm}|p{2cm}|p{7cm}|
 .. list-table::

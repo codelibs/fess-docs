@@ -384,7 +384,7 @@ Les champs peuvent alors être utilisés via l'API de recherche :
 
 .. note::
 
-   L'écran de recherche fourni avec |Fess| (le thème statique ``bootstrap``) n'affiche que la
+   L'écran de recherche fourni avec |Fess| (le thème ``bootstrap``) n'affiche que la
    facette ``label`` (et les requêtes de facettes de ``query.facet.queries``), et son menu de tri ne
    propose que les champs standard. Les facettes sur d'autres champs sont disponibles via l'API ou
    dans votre propre thème. Une recherche par plage, ainsi qu'un tri écrit dans la zone de

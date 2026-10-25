@@ -287,7 +287,7 @@ ZIP 버전
        $ cp /path/to/old-fess/lib/classes/tomcat_config.properties /path/to/fess-15.10.0/lib/classes/
        # 설치된 플러그인
        $ cp -r /path/to/old-fess/app/WEB-INF/plugin/. /path/to/fess-15.10.0/app/WEB-INF/plugin/
-       # 직접 업로드한 정적 테마(테마마다 하나의 디렉터리. bootstrap 은 제외)
+       # 직접 업로드한 테마(테마마다 하나의 디렉터리. bootstrap 은 제외)
        $ cp -r /path/to/old-fess/app/themes/<your-theme> /path/to/fess-15.10.0/app/themes/
 
    .. warning::
@@ -316,7 +316,7 @@ ZIP 버전
    .. warning::
 
       관리 화면 「디자인」에서 편집한 JSP(``app/WEB-INF/view/``)는 복사하지 마십시오. 15.10 의 검색
-      화면은 정적 테마이며 더 이상 이 JSP들을 사용하지 않습니다. 이러한 변경을 이제 어디에서 하는지는
+      화면은 테마이며 더 이상 이 JSP들을 사용하지 않습니다. 이러한 변경을 이제 어디에서 하는지는
       :ref:`upgrade-159-static-theme` 를 참조하십시오.
 
    .. note::
@@ -1066,25 +1066,25 @@ jcifs 의 기본값으로 동작했습니다. 15.10 는 새 이름을 전달합�
 
 .. _upgrade-159-static-theme:
 
-검색 화면이 정적 테마로 변경됨
+검색 화면이 테마로 변경됨
 ------------------------------
 
-다른 테마를 선택하지 않는 한, 검색 화면은 |Fess| 에 번들된 정적 테마 ``bootstrap`` 으로 제공됩니다.
+다른 테마를 선택하지 않는 한, 검색 화면은 |Fess| 에 번들된 테마 ``bootstrap`` 으로 제공됩니다.
 이는 ``/``, ``/search``, ``/advance``, ``/help``, ``/profile``, ``/cache``, ``/chat`` 및 오류
 페이지에 적용됩니다. 15.8 까지는 기본 테마를 설정하지 않으면 이 페이지들은 JSP 였습니다.
 
 이 전환은 업그레이드 시에도 일어납니다. 기본 테마를 한 번도 설정하지 않은 15.8 환경에는
-``system.properties`` 에 ``theme.default`` 가 없으므로, 업그레이드 후에는 정적 테마가 표시됩니다.
+``system.properties`` 에 ``theme.default`` 가 없으므로, 업그레이드 후에는 테마가 표시됩니다.
 설정에 아무것도 기록되지 않으며 로그도 출력되지 않습니다. JSP 검색 화면으로 되돌리는 설정은
 없습니다. 15.8 에서 기본 테마를 설정했다면 그 설정은 유지됩니다. 해당 테마의 15.10 용 빌드를
 설치하십시오( ``bin/fess-setup install theme <name>`` ). 설치되지 않은 테마를 지정한 기본값은
 ``fess.log`` 에 경고를 남기고 ``bootstrap`` 으로 대체되기 때문입니다.
 
 관리 화면의 「페이지 디자인」이나 JAR 테마 플러그인으로 검색 화면의 JSP, CSS, 이미지를 변경했다면
-그 변경은 더 이상 표시되지 않습니다. 정적 테마에서 변경하십시오. :ref:`theme-customize-bundled` 에
+그 변경은 더 이상 표시되지 않습니다. 테마에서 변경하십시오. :ref:`theme-customize-bundled` 에
 설명된 대로 번들 테마를 복사하여 그 복사본을 변경하거나, 관리 화면의 「시스템」 > 「테마」 또는
 ``bin/fess-setup install theme <name>`` 으로 공개된 테마를 설치합니다. 가상 호스트별 외관은 이제
-가상 호스트 이름을 딴 정적 테마로 제공됩니다. :doc:`../config/security-virtual-host` 를
+가상 호스트 이름을 딴 테마로 제공됩니다. :doc:`../config/security-virtual-host` 를
 참조하십시오.
 
 다음 2가지도 없어졌습니다.
@@ -1099,7 +1099,7 @@ jcifs 의 기본값으로 동작했습니다. 15.10 는 새 이름을 전달합�
   ``bin/fess-setup remove plugin <name>`` 으로 삭제할 수 있습니다( :doc:`../dev/theme-development` 참조).
 
 15.8 에서 JSP 검색 결과에 독자적인 필드를 표시하고 있었다면, ``query.additional.response.fields``
-에 더해 ``query.additional.api.response.fields`` 에도 같은 필드를 추가하십시오. 정적 테마는
+에 더해 ``query.additional.api.response.fields`` 에도 같은 필드를 추가하십시오. 테마는
 검색 결과를 ``/api/v2/search`` 에서 가져옵니다. ``query.additional.response.fields`` 는 검색 엔진에서
 가져오는 필드를 추가할 뿐이며, 이 API 가 응답에 포함하는 것은 ``query.additional.api.response.fields``
 에 나열된 필드뿐입니다( :doc:`../config/search-advanced` 참조). 그 필드를 표시하도록 테마도
@@ -1161,7 +1161,7 @@ API 가 호출될 때 로그에 기록됩니다. JavaScript 를 실행하지 않
 ----------------------------------
 
 관리 화면의 [시스템 > 페이지 디자인] 을 삭제했습니다. 검색 화면의 JSP, CSS, 이미지를 관리 화면에서
-편집할 수 없습니다. 검색 화면의 모양은 정적 테마로 변경하십시오 (:ref:`theme-customize-bundled`
+편집할 수 없습니다. 검색 화면의 모양은 테마로 변경하십시오 (:ref:`theme-customize-bundled`
 참조).
 
 다음 키도 ``fess_config.properties`` 에서 삭제되었습니다. 이 이름으로 남겨 둔 값은 사용되지 않습니다.
