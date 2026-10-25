@@ -169,7 +169,7 @@ Todas las propiedades configurables en ``app/WEB-INF/classes/fess_config.propert
      - Direcciones IP a bloquear (separadas por comas)
      - (vacío)
    * - ``rate.limit.trusted.proxies``
-     - IPs de proxies confiables (para obtener X-Forwarded-For/X-Real-IP)
+     - IPs de proxies confiables (para obtener X-Forwarded-For/X-Real-IP; también se utilizan para la IP del cliente en el registro de auditoría y en el registro de búsqueda)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
      - Intervalo de limpieza (número de solicitudes, reservado)
@@ -181,6 +181,16 @@ Todas las propiedades configurables en ``app/WEB-INF/classes/fess_config.propert
    se limpian automáticamente en función de la expiración de la caché interna
    (``rate.limit.window.ms`` y ``rate.limit.block.duration.ms``),
    por lo que este valor no se utiliza.
+
+Límite de intentos de inicio de sesión
+======================================
+
+El inicio de sesión tiene su propio límite, independiente del anterior y configurado con ``theme.api.login.*``.
+Desde 15.10, ``/api/v2/auth/login`` y el formulario de inicio de sesión de la pantalla de inicio de sesión (``/login/``) comparten el mismo límite y el mismo bloqueo.
+Cada intento consume una plaza de la cuota por minuto de la IP del cliente (valor predeterminado ``10``), y la plaza se devuelve cuando el inicio de sesión tiene éxito.
+Cuando los intentos desde la misma dirección IP superan el límite, esa dirección IP queda bloqueada durante ``theme.api.login.lockout.seconds`` (valor predeterminado ``900``) segundos, y durante ese tiempo no se puede iniciar sesión ni siquiera con credenciales correctas.
+Por ello, si desde la misma dirección IP se hacen más intentos que el límite (por ejemplo, inicios de sesión simultáneos) antes de que alguno tenga éxito, esa dirección queda bloqueada.
+Consulte :doc:`../api/api-auth` para más detalles.
 
 Configuración avanzada de límite de tasa
 ========================================

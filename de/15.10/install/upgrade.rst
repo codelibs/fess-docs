@@ -576,6 +576,31 @@ Upgrade von 15.9 auf 15.10
 
 Die Änderungen in diesem Abschnitt betreffen jedes Upgrade auf 15.10. Wenn Sie von 15.8 oder früher aktualisieren, lesen Sie im Anschluss auch den Abschnitt „Upgrade von 15.8 auf 15.10“.
 
+.. _upgrade-1510-client-ip:
+
+In den Protokollen erfasste Client-IP-Adresse
+---------------------------------------------
+
+Bis 15.9 enthielten das Feld ``ip`` des Audit-Protokolls und das Feld ``clientIp`` des Suchprotokolls den Wert des Request-Headers ``X-Forwarded-For`` unverändert, unabhängig davon, woher die Anfrage kam. Enthielt der Header mehrere Adressen, wurden alle erfasst, und ein Client konnte beliebige Werte senden.
+15.10 bestimmt die Adresse nach denselben Regeln wie das Rate-Limiting (:doc:`../config/rate-limiting`). Nur wenn die Quelle der Anfrage in ``rate.limit.trusted.proxies`` (Standardwert ``127.0.0.1,::1``) enthalten ist, werden ``X-Forwarded-For`` (bei mehreren Header-Zeilen alle Zeilen) und ``X-Real-IP`` verwendet. ``X-Forwarded-For`` wird von rechts gelesen, und die erste Adresse, die kein vertrauenswürdiger Proxy ist, wird erfasst. Andernfalls wird die Adresse der Quelle erfasst. Diese Regeln gelten auch, wenn ``rate.limit.enabled`` auf ``false`` steht.
+
+Hinter einem Reverse-Proxy, der nicht in ``rate.limit.trusted.proxies`` steht, werden alle Anfragen mit der Adresse des Proxys erfasst. Um die Adresse des ursprünglichen Clients zu erfassen, fügen Sie die Adresse des Proxys zu ``rate.limit.trusted.proxies`` hinzu.
+
+.. _upgrade-1510-cipher-key:
+
+Warnung zu ``app.cipher.key``
+-----------------------------
+
+Ist ``app.cipher.key`` leer oder noch der in ``fess_config.properties`` mitgelieferte Wert (``___change__me___``), schreibt 15.10 beim Start eine Warnung in ``fess.log``. Job-Prozesse wie der Crawler schreiben sie nicht.
+Der Schlüssel verschlüsselt Werte wie die in Crawl-Konfigurationen und Datenspeicher-Konfigurationen gespeicherten Passwörter, und der mitgelieferte Wert ist öffentlich bekannt. |Fess| ändert den Schlüssel nicht selbstständig. Nach einer Änderung lassen sich mit dem früheren Schlüssel verschlüsselte Werte nicht mehr entschlüsseln. Legen Sie ihn daher fest, bevor Sie den Betrieb aufnehmen.
+
+Weitere Verhaltensänderungen
+----------------------------
+
+- „Alle löschen“ in den Bildschirmen „Suche“ und „Crawling-Informationen“ der Administrationsoberfläche erfordert die Bearbeitungsrolle (``admin-searchlist``, ``admin-crawlinginfo``). Bis 15.9 war nur die Schaltfläche ausgeblendet: Anfragen von Benutzern, die nur eine Leserolle (eine Rolle mit der Endung ``-view``) hatten, wurden dennoch angenommen.
+- Der Zieltext (``output``) eines Eintrags im Zuordnungswörterbuch ist erforderlich. Bis 15.9 nahmen die Administrationsoberfläche und die Administrations-API einen Eintrag ohne ihn an und speicherten nichts.
+- Bei der Suche trifft ein einzelnes Wort in doppelten Anführungszeichen (etwa ``"less"``) nur auf dieses Wort zu. Bis 15.9 erhielt ein Wort mit mindestens ``query.boost.fuzzy.min.length`` (Standardwert ``4``) Zeichen zusätzlich Bedingungen für unscharfe Treffer, sodass Dokumente mit ``fess`` auch auf ``"less"`` passten. Wörter ohne Anführungszeichen und Wörter mit angegebenem Feld (etwa ``content:"less"``) sind unverändert.
+
 .. _upgrade-1510-tika:
 
 Apache Tika 4 und ``tika.xml``

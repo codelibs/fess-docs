@@ -162,7 +162,7 @@ robots.txt 처리 자체를 비활성화하려면 ``client.robotsTxtEnabled=fals
      - 블록할 IP 주소(쉼표 구분)
      - (비어 있음)
    * - ``rate.limit.trusted.proxies``
-     - 신뢰하는 프록시 IP(X-Forwarded-For/X-Real-IP 취득원)
+     - 신뢰하는 프록시 IP(X-Forwarded-For/X-Real-IP 취득원. 감사 로그와 검색 로그의 클라이언트 IP에도 사용됩니다)
      - ``127.0.0.1,::1``
    * - ``rate.limit.cleanup.interval``
      - 클린업 간격(요청 수, 예약됨)
@@ -173,6 +173,16 @@ robots.txt 처리 자체를 비활성화하려면 ``client.robotsTxtEnabled=fals
    현재 구현에서는 요청 카운터 및 블록 IP 정보가 내부 캐시의
    유효 기간(``rate.limit.window.ms`` 및 ``rate.limit.block.duration.ms``)에
    따라 자동으로 클린업되므로, 이 설정값은 사용되지 않습니다.
+
+로그인 횟수 제한
+================
+
+로그인에는 위의 제한과는 별도로 ``theme.api.login.*`` 으로 설정하는 횟수 제한이 있습니다.
+15.10부터 ``/api/v2/auth/login`` 과 로그인 화면(``/login/``)의 로그인 폼은 같은 제한과 잠금을 공유합니다.
+각 시도는 클라이언트 IP별 분당 한도(기본값 ``10``) 중 하나를 소비하며, 로그인에 성공하면 되돌려집니다.
+같은 IP 주소에서의 시도가 상한을 넘으면 그 IP 주소는 ``theme.api.login.lockout.seconds`` (기본값 ``900``)초 동안 잠기며, 그동안에는 올바른 인증 정보로도 로그인할 수 없습니다.
+따라서 같은 IP 주소에서 성공하기 전에 상한을 넘는 수의 시도(동시 로그인 등)가 있으면 잠깁니다.
+자세한 내용은 :doc:`../api/api-auth` 를 참조하십시오.
 
 고급 속도 제한 설정
 ====================

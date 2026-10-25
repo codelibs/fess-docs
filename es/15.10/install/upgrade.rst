@@ -573,6 +573,31 @@ Actualización de 15.9 a 15.10
 
 Los cambios de esta sección afectan a toda actualización a la versión 15.10. Si actualiza desde la versión 15.8 o anterior, lea también a continuación la sección "Actualización de 15.8 a 15.10".
 
+.. _upgrade-1510-client-ip:
+
+Dirección IP del cliente en los registros
+-----------------------------------------
+
+Hasta 15.9, el campo ``ip`` del registro de auditoría y el campo ``clientIp`` del registro de búsqueda guardaban tal cual el valor de la cabecera ``X-Forwarded-For`` de la solicitud, con independencia del origen de esta. Si la cabecera contenía varias direcciones, se guardaban todas, y un cliente podía enviar cualquier valor.
+15.10 determina la dirección con las mismas reglas que el límite de tasa (:doc:`../config/rate-limiting`). Solo cuando el origen de la solicitud figura en ``rate.limit.trusted.proxies`` (valor predeterminado ``127.0.0.1,::1``) se utilizan ``X-Forwarded-For`` (todas las líneas, si está repartido en varias líneas de cabecera) y ``X-Real-IP``. ``X-Forwarded-For`` se lee de derecha a izquierda y se guarda la primera dirección que no es un proxy de confianza. En caso contrario, se guarda la dirección del origen. Estas reglas se aplican también cuando ``rate.limit.enabled`` es ``false``.
+
+Detrás de un proxy inverso que no figura en ``rate.limit.trusted.proxies``, todas las solicitudes se guardan con la dirección del proxy. Para guardar la dirección del cliente original, añada la dirección del proxy a ``rate.limit.trusted.proxies``.
+
+.. _upgrade-1510-cipher-key:
+
+Advertencia sobre ``app.cipher.key``
+------------------------------------
+
+Si ``app.cipher.key`` está vacío o conserva el valor incluido en ``fess_config.properties`` (``___change__me___``), 15.10 escribe una advertencia en ``fess.log`` al iniciarse. Los procesos de trabajos, como el rastreador, no la escriben.
+Esta clave cifra valores como las contraseñas guardadas en las configuraciones de rastreo y de almacén de datos, y el valor incluido es público. |Fess| no cambia la clave por sí mismo. Si la cambia, los valores cifrados con la clave anterior ya no se podrán descifrar, por lo que debe definirla antes de poner el sistema en producción.
+
+Otros cambios de comportamiento
+-------------------------------
+
+- «Eliminar todo» en las pantallas «Búsqueda» e «Información de rastreo» de la interfaz de administración requiere el rol de edición (``admin-searchlist``, ``admin-crawlinginfo``). Hasta 15.9, solo se ocultaba el botón: las solicitudes de un usuario que solo tenía un rol de visualización (un rol con el sufijo ``-view``) se aceptaban igualmente.
+- El texto convertido (``output``) de una entrada del diccionario de mapeo es obligatorio. Hasta 15.9, la interfaz de administración y la API de administración aceptaban una entrada sin él y no guardaban nada.
+- En una búsqueda, una sola palabra entre comillas dobles (como ``"less"``) coincide únicamente con esa palabra. Hasta 15.9, una palabra de al menos ``query.boost.fuzzy.min.length`` (valor predeterminado ``4``) caracteres recibía además condiciones de coincidencia aproximada, de modo que los documentos que contenían ``fess`` también coincidían con ``"less"``. Las palabras sin comillas y las palabras con un campo especificado (como ``content:"less"``) no cambian.
+
 .. _upgrade-1510-tika:
 
 Apache Tika 4 y ``tika.xml``
