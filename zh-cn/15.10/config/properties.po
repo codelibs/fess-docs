@@ -2073,8 +2073,8 @@ msgstr "内存中缓冲的事件的最大数量。"
 msgid "Interval (seconds) for the notification job cycle, used in notification messages."
 msgstr "通知作业周期的间隔（秒），用于通知消息中。"
 
-msgid "Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
-msgstr "静态主题系统（参见 docs/superpowers/specs/2026-05-21-fess-static-theme-design.md）"
+msgid "Theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
+msgstr "主题系统（参见 docs/superpowers/specs/2026-05-21-fess-static-theme-design.md）"
 
 msgid "Maximum size (bytes) of an uploaded theme archive."
 msgstr "上传的主题归档文件的最大大小（字节）。"
@@ -2097,11 +2097,11 @@ msgstr "应用累计 zip 压缩比检查之前读取的压缩字节数；更小�
 msgid "Retention (days) for a replaced theme directory before the cleanup sweep removes it."
 msgstr "被替换的主题目录在清理扫描将其删除之前的保留时间（天）。"
 
-msgid "Repository URLs (comma separated) that static themes are downloaded from."
-msgstr "下载静态主题的仓库 URL（逗号分隔）。"
+msgid "Repository URLs (comma separated) that themes are downloaded from."
+msgstr "下载主题的仓库 URL（逗号分隔）。"
 
-msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
-msgstr "静态主题的 HTML 页面的 Content-Security-Policy 中 frame-ancestors 指令的值：允许将这些页面嵌入框架的来源。默认值 'none' 表示任何页面都不能嵌入它们。WebKit（Safari）会将 frame-ancestors 应用于主题的文件预览和缓存视图所使用的 blob: 框架，因此当该值为 'none' 时，它会将这些框架显示为空白。将该值留空可去掉该指令；无论哪种情况都会发送 X-Frame-Options: DENY，并使这些页面在所有浏览器中都无法出现在框架内（遵循 frame-ancestors 的浏览器会忽略该头）。"
+msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
+msgstr "主题的 HTML 页面的 Content-Security-Policy 中 frame-ancestors 指令的值：允许将这些页面嵌入框架的来源。默认值 'none' 表示任何页面都不能嵌入它们。WebKit（Safari）会将 frame-ancestors 应用于主题的文件预览和缓存视图所使用的 blob: 框架，因此当该值为 'none' 时，它会将这些框架显示为空白。将该值留空可去掉该指令；无论哪种情况都会发送 X-Frame-Options: DENY，并使这些页面在所有浏览器中都无法出现在框架内（遵循 frame-ancestors 的浏览器会忽略该头）。"
 
 msgid "Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-* headers, then from the servlet request."
 msgstr "可选：此 Fess 实例的规范外部来源（逗号/换行分隔），例如 https://fess.example.com。设置后，这些来源在 v2 CSRF Origin 检查中被视为同源，且不会信任转发头。建议用于未列在 rate.limit.trusted.proxies 中的反向代理之后。为空时，目标来源将先根据受信任代理的 X-Forwarded-* 头重建，然后再根据 Servlet 请求重建。"

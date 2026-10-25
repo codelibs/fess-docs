@@ -2429,7 +2429,7 @@ Web
     - Intervall (Sekunden) für den Zyklus des Benachrichtigungs-Jobs, das in Benachrichtigungsmeldungen verwendet wird.
     - ``300``
   * - theme.directory.path
-    - Statisches Theme-System (siehe docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)
+    - Theme-System (siehe docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)
     - ``themes``
   * - theme.upload.max.size
     - Maximale Größe (Bytes) eines hochgeladenen Theme-Archivs.
@@ -2453,10 +2453,10 @@ Web
     - Aufbewahrung (Tage) für ein ersetztes Theme-Verzeichnis, bevor der Bereinigungslauf es entfernt.
     - ``7``
   * - theme.repositories
-    - Repository-URLs (kommagetrennt), von denen statische Themes heruntergeladen werden.
+    - Repository-URLs (kommagetrennt), von denen Themes heruntergeladen werden.
     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
   * - theme.index.frame.ancestors
-    - Wert der Direktive frame-ancestors in der Content-Security-Policy der HTML-Seiten des statischen Themes: die Origins, die sie in einem Frame einbetten dürfen. Der Standardwert 'none' erlaubt keiner Seite, sie einzubetten. WebKit (Safari) wendet frame-ancestors auf die blob:-Frames an, die die Dateivorschau und die Cache-Ansicht eines Themes verwenden, und zeigt sie daher leer an, solange der Wert 'none' ist. Lassen Sie den Wert leer, um die Direktive wegzulassen; X-Frame-Options: DENY wird in jedem Fall gesendet und hält die Seiten dann in jedem Browser aus Frames fern (ein Browser, der frame-ancestors berücksichtigt, ignoriert diesen Header).
+    - Wert der Direktive frame-ancestors in der Content-Security-Policy der HTML-Seiten des Themes: die Origins, die sie in einem Frame einbetten dürfen. Der Standardwert 'none' erlaubt keiner Seite, sie einzubetten. WebKit (Safari) wendet frame-ancestors auf die blob:-Frames an, die die Dateivorschau und die Cache-Ansicht eines Themes verwenden, und zeigt sie daher leer an, solange der Wert 'none' ist. Lassen Sie den Wert leer, um die Direktive wegzulassen; X-Frame-Options: DENY wird in jedem Fall gesendet und hält die Seiten dann in jedem Browser aus Frames fern (ein Browser, der frame-ancestors berücksichtigt, ignoriert diesen Header).
     - ``'none'``
   * - theme.api.csrf.server.origins
     - Optional: kanonische externe(r) Origin(s) dieser Fess-Instanz (durch Komma/Zeilenumbruch getrennt), z. B. https://fess.example.com. Wenn gesetzt, werden diese für die v2-CSRF-Origin-Prüfung als Same-Origin behandelt, OHNE weitergeleiteten Headern zu vertrauen. Empfohlen hinter Reverse Proxies, die nicht in rate.limit.trusted.proxies aufgeführt sind. Wenn leer, wird der Ziel-Origin aus den X-Forwarded-\*-Headern vertrauenswürdiger Proxies rekonstruiert, dann aus der Servlet-Anfrage.

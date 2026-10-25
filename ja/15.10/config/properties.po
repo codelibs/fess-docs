@@ -2073,8 +2073,8 @@ msgstr "メモリ上にバッファするイベントの最大数。"
 msgid "Interval (seconds) for the notification job cycle, used in notification messages."
 msgstr "通知ジョブのサイクルの間隔（秒）。通知メッセージで使用されます。"
 
-msgid "Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
-msgstr "静的テーマシステム（docs/superpowers/specs/2026-05-21-fess-static-theme-design.mdを参照）"
+msgid "Theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
+msgstr "テーマシステム（docs/superpowers/specs/2026-05-21-fess-static-theme-design.mdを参照）"
 
 msgid "Maximum size (bytes) of an uploaded theme archive."
 msgstr "アップロードされたテーマアーカイブの最大サイズ（バイト）。"
@@ -2097,11 +2097,11 @@ msgstr "累積zip比のチェックが適用されるまでに読み込む圧縮
 msgid "Retention (days) for a replaced theme directory before the cleanup sweep removes it."
 msgstr "置き換えられたテーマディレクトリを、クリーンアップ処理が削除するまで保持する期間（日）。"
 
-msgid "Repository URLs (comma separated) that static themes are downloaded from."
-msgstr "静的テーマのダウンロード元のリポジトリURL（カンマ区切り）。"
+msgid "Repository URLs (comma separated) that themes are downloaded from."
+msgstr "テーマのダウンロード元のリポジトリURL（カンマ区切り）。"
 
-msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
-msgstr "静的テーマのHTMLページのContent-Security-Policyにおけるframe-ancestorsディレクティブの値。これらをフレームに埋め込むことができるオリジンです。デフォルトの'none'は、どのページにも埋め込みを許可しません。WebKit（Safari）は、テーマのファイルプレビューとキャッシュ表示が使用するblob:フレームにもframe-ancestorsを適用するため、値が'none'の間はそれらが空白で表示されます。ディレクティブを削除するには値を空のままにします。どちらの場合もX-Frame-Options: DENYが送信され、すべてのブラウザーでページがフレームに入らないようにします（frame-ancestorsを尊重するブラウザーはそのヘッダーを無視します）。"
+msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
+msgstr "テーマのHTMLページのContent-Security-Policyにおけるframe-ancestorsディレクティブの値。これらをフレームに埋め込むことができるオリジンです。デフォルトの'none'は、どのページにも埋め込みを許可しません。WebKit（Safari）は、テーマのファイルプレビューとキャッシュ表示が使用するblob:フレームにもframe-ancestorsを適用するため、値が'none'の間はそれらが空白で表示されます。ディレクティブを削除するには値を空のままにします。どちらの場合もX-Frame-Options: DENYが送信され、すべてのブラウザーでページがフレームに入らないようにします（frame-ancestorsを尊重するブラウザーはそのヘッダーを無視します）。"
 
 msgid "Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-* headers, then from the servlet request."
 msgstr "任意: このFessインスタンスの正規の外部オリジン（カンマ/改行区切り）。例: https://fess.example.com。設定すると、これらはv2のCSRF Originチェックで、転送ヘッダーを信頼せずに同一オリジンとして扱われます。rate.limit.trusted.proxiesに記載されていないリバースプロキシの背後での利用を推奨します。空の場合、ターゲットオリジンは、信頼するプロキシのX-Forwarded-*ヘッダーから、次にサーブレットリクエストから再構築されます。"

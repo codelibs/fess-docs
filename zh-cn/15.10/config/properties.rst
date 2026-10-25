@@ -2429,7 +2429,7 @@ Web
     - 通知作业周期的间隔（秒），用于通知消息中。
     - ``300``
   * - theme.directory.path
-    - 静态主题系统（参见 docs/superpowers/specs/2026-05-21-fess-static-theme-design.md）
+    - 主题系统（参见 docs/superpowers/specs/2026-05-21-fess-static-theme-design.md）
     - ``themes``
   * - theme.upload.max.size
     - 上传的主题归档文件的最大大小（字节）。
@@ -2453,10 +2453,10 @@ Web
     - 被替换的主题目录在清理扫描将其删除之前的保留时间（天）。
     - ``7``
   * - theme.repositories
-    - 下载静态主题的仓库 URL（逗号分隔）。
+    - 下载主题的仓库 URL（逗号分隔）。
     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
   * - theme.index.frame.ancestors
-    - 静态主题的 HTML 页面的 Content-Security-Policy 中 frame-ancestors 指令的值：允许将这些页面嵌入框架的来源。默认值 'none' 表示任何页面都不能嵌入它们。WebKit（Safari）会将 frame-ancestors 应用于主题的文件预览和缓存视图所使用的 blob: 框架，因此当该值为 'none' 时，它会将这些框架显示为空白。将该值留空可去掉该指令；无论哪种情况都会发送 X-Frame-Options: DENY，并使这些页面在所有浏览器中都无法出现在框架内（遵循 frame-ancestors 的浏览器会忽略该头）。
+    - 主题的 HTML 页面的 Content-Security-Policy 中 frame-ancestors 指令的值：允许将这些页面嵌入框架的来源。默认值 'none' 表示任何页面都不能嵌入它们。WebKit（Safari）会将 frame-ancestors 应用于主题的文件预览和缓存视图所使用的 blob: 框架，因此当该值为 'none' 时，它会将这些框架显示为空白。将该值留空可去掉该指令；无论哪种情况都会发送 X-Frame-Options: DENY，并使这些页面在所有浏览器中都无法出现在框架内（遵循 frame-ancestors 的浏览器会忽略该头）。
     - ``'none'``
   * - theme.api.csrf.server.origins
     - 可选：此 Fess 实例的规范外部来源（逗号/换行分隔），例如 https://fess.example.com。设置后，这些来源在 v2 CSRF Origin 检查中被视为同源，且不会信任转发头。建议用于未列在 rate.limit.trusted.proxies 中的反向代理之后。为空时，目标来源将先根据受信任代理的 X-Forwarded-\* 头重建，然后再根据 Servlet 请求重建。

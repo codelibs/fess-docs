@@ -2429,7 +2429,7 @@ one, fill in ``properties.po`` beside this file.
     - 통지 작업 주기의 간격(초)이며, 통지 메시지에 사용됩니다.
     - ``300``
   * - theme.directory.path
-    - 정적 테마 시스템(docs/superpowers/specs/2026-05-21-fess-static-theme-design.md 참조)
+    - 테마 시스템(docs/superpowers/specs/2026-05-21-fess-static-theme-design.md 참조)
     - ``themes``
   * - theme.upload.max.size
     - 업로드한 테마 아카이브의 최대 크기(바이트).
@@ -2453,10 +2453,10 @@ one, fill in ``properties.po`` beside this file.
     - 교체된 테마 디렉터리를 클린업 스윕이 삭제하기 전까지의 보존 기간(일).
     - ``7``
   * - theme.repositories
-    - 정적 테마를 다운로드하는 저장소 URL(쉼표 구분).
+    - 테마를 다운로드하는 저장소 URL(쉼표 구분).
     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
   * - theme.index.frame.ancestors
-    - 정적 테마의 HTML 페이지에 붙는 Content-Security-Policy의 frame-ancestors 디렉티브 값으로, 해당 페이지를 프레임에 포함할 수 있는 오리진입니다. 기본값 'none'은 어떤 페이지도 이를 포함할 수 없게 합니다. WebKit(Safari)은 테마의 파일 미리보기와 캐시 보기가 사용하는 blob: 프레임에도 frame-ancestors를 적용하므로, 값이 'none'인 동안은 이들이 빈 화면으로 표시됩니다. 디렉티브를 제거하려면 값을 비워 두십시오. X-Frame-Options: DENY는 어느 쪽이든 전송되며 모든 브라우저에서 해당 페이지가 프레임에 들어가지 않게 합니다(frame-ancestors를 따르는 브라우저는 그 헤더를 무시합니다).
+    - 테마의 HTML 페이지에 붙는 Content-Security-Policy의 frame-ancestors 디렉티브 값으로, 해당 페이지를 프레임에 포함할 수 있는 오리진입니다. 기본값 'none'은 어떤 페이지도 이를 포함할 수 없게 합니다. WebKit(Safari)은 테마의 파일 미리보기와 캐시 보기가 사용하는 blob: 프레임에도 frame-ancestors를 적용하므로, 값이 'none'인 동안은 이들이 빈 화면으로 표시됩니다. 디렉티브를 제거하려면 값을 비워 두십시오. X-Frame-Options: DENY는 어느 쪽이든 전송되며 모든 브라우저에서 해당 페이지가 프레임에 들어가지 않게 합니다(frame-ancestors를 따르는 브라우저는 그 헤더를 무시합니다).
     - ``'none'``
   * - theme.api.csrf.server.origins
     - 선택 사항: 이 Fess 인스턴스의 표준 외부 오리진(쉼표/줄바꿈 구분)입니다. 예: https://fess.example.com. 설정하면 전달된 헤더를 신뢰하지 않고 v2 CSRF Origin 검사에서 이들을 동일 오리진으로 취급합니다. rate.limit.trusted.proxies 에 등록되지 않은 리버스 프록시 뒤에서 사용하기를 권장합니다. 비어 있으면 신뢰하는 프록시의 X-Forwarded-\* 헤더에서, 그다음으로 서블릿 요청에서 대상 오리진을 재구성합니다.

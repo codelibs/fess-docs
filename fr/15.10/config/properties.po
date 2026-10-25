@@ -2073,8 +2073,8 @@ msgstr "Nombre maximum d'événements à mettre en tampon en mémoire."
 msgid "Interval (seconds) for the notification job cycle, used in notification messages."
 msgstr "Intervalle (secondes) du cycle du job de notification, utilisé dans les messages de notification."
 
-msgid "Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
-msgstr "Système de thèmes statiques (voir docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
+msgid "Theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
+msgstr "Système de thèmes (voir docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)"
 
 msgid "Maximum size (bytes) of an uploaded theme archive."
 msgstr "Taille maximale (octets) d'une archive de thème téléversée."
@@ -2097,11 +2097,11 @@ msgstr "Octets compressés lus avant que la vérification du rapport zip cumulé
 msgid "Retention (days) for a replaced theme directory before the cleanup sweep removes it."
 msgstr "Durée de conservation (jours) d'un répertoire de thème remplacé avant que le nettoyage ne le supprime."
 
-msgid "Repository URLs (comma separated) that static themes are downloaded from."
-msgstr "URL de dépôts (séparées par des virgules) depuis lesquels les thèmes statiques sont téléchargés."
+msgid "Repository URLs (comma separated) that themes are downloaded from."
+msgstr "URL de dépôts (séparées par des virgules) depuis lesquels les thèmes sont téléchargés."
 
-msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
-msgstr "Valeur de la directive frame-ancestors dans le Content-Security-Policy des pages HTML du thème statique : les origines qui peuvent les intégrer dans un frame. La valeur par défaut 'none' empêche toute page de les intégrer. WebKit (Safari) applique frame-ancestors aux frames blob: qu'utilisent l'aperçu de fichier et l'affichage du cache d'un thème, et les affiche donc vides tant que la valeur est 'none'. Laissez la valeur vide pour supprimer la directive ; X-Frame-Options: DENY est envoyé dans tous les cas et garde alors les pages hors des frames dans tous les navigateurs (un navigateur qui respecte frame-ancestors ignore cet en-tête)."
+msgid "Value of the frame-ancestors directive in the Content-Security-Policy of the theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header)."
+msgstr "Valeur de la directive frame-ancestors dans le Content-Security-Policy des pages HTML du thème : les origines qui peuvent les intégrer dans un frame. La valeur par défaut 'none' empêche toute page de les intégrer. WebKit (Safari) applique frame-ancestors aux frames blob: qu'utilisent l'aperçu de fichier et l'affichage du cache d'un thème, et les affiche donc vides tant que la valeur est 'none'. Laissez la valeur vide pour supprimer la directive ; X-Frame-Options: DENY est envoyé dans tous les cas et garde alors les pages hors des frames dans tous les navigateurs (un navigateur qui respecte frame-ancestors ignore cet en-tête)."
 
 msgid "Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-* headers, then from the servlet request."
 msgstr "Facultatif : origine(s) externe(s) canonique(s) de cette instance Fess (séparées par des virgules ou des sauts de ligne), par exemple https://fess.example.com. Lorsqu'elles sont définies, elles sont traitées comme de même origine pour la vérification CSRF Origin de l'API v2 SANS faire confiance aux en-têtes transmis (forwarded). Recommandé derrière des reverse proxies qui ne figurent pas dans rate.limit.trusted.proxies. Lorsque la valeur est vide, l'origine cible est reconstruite à partir des en-têtes X-Forwarded-* du proxy de confiance, puis à partir de la requête servlet."
