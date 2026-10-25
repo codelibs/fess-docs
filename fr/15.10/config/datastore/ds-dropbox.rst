@@ -79,6 +79,12 @@ Liste des paramètres
    * - ``basic_plan``
      - Non
      - ``true`` pour les comptes individuels, ``false`` pour les comptes d'équipe (défaut : ``false``)
+   * - ``proxy_host``
+     - Non
+     - Nom d'hôte du proxy HTTP par lequel passer pour se connecter à Dropbox. S'il n'est pas défini, Dropbox est accédé directement. Les paramètres de proxy de la JVM (comme ``-Dhttps.proxyHost``) ne sont pas utilisés car le SDK Dropbox les ignore ; définissez donc ce paramètre dans un environnement qui n'accède à l'extérieur que par un proxy. Il s'applique aux magasins de données Dropbox et Dropbox Paper. Il n'existe pas de paramètre pour l'authentification auprès du proxy
+   * - ``proxy_port``
+     - Si ``proxy_host`` est défini
+     - Port du proxy HTTP. Si ``proxy_host`` est défini et que cette valeur est absente ou n'est pas un nombre, le magasin de données échoue avec une erreur
    * - ``max_size``
      - Non
      - Taille maximale des fichiers pour l'indexation en octets (défaut : ``10000000``)

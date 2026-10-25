@@ -147,6 +147,9 @@ OpenID Connect认证的工作原理
    如果省略 ``oic.redirect.url``，它将从 ``oic.base.url`` 自动构建。
    对于生产环境，请将 ``oic.base.url`` 设置为HTTPS的URL。
 
+.. warning::
+   “省略”是指该键根本不存在。在管理画面的“系统 > 全局”页面中将 ``oic.redirect.url`` 留空保存时，该键会被删除，因此会使用 ``{oic.base.url}/sso/``。相反，在 ``system.properties`` 中手写 ``oic.redirect.url=``\ （仅值为空）则不是省略，而是空值，授权请求会带上一个没有值的 ``redirect_uri`` 参数。它与在OP中注册的重定向URI不一致，因此会被OP拒绝，导致无法登录。请指定一个值，或删除该行。
+
 用户属性配置
 ------------
 

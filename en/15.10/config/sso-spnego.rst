@@ -269,6 +269,28 @@ The following settings can be added as needed.
    ``spnego.logger.level`` controls the log level of the SPNEGO library's internal logger (a ``java.util.logging`` logger named ``Spnego``).
    When not set, the level is determined automatically based on the |Fess| log level.
 
+Limit on Failed Basic Authentication
+------------------------------------
+
+The Basic authentication fallback sends a typed password to the directory from ``/sso/``, which anyone can reach without logging in, so |Fess| 15.10 limits it.
+The limits and the lockout are those of the login form and ``/api/v2/auth/login`` (see :doc:`rate-limiting`), and the counter of the client IP address is shared with them, so alternating between the endpoints does not give more attempts from one address.
+The settings are in ``fess_config.properties`` (defaults in parentheses):
+
+- ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Basic requests per minute from one client IP address. Every request that carries a Basic ``Authorization`` header uses one slot, and a successful login gives it back.
+- ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): passwords rejected per minute for one combination of client IP address and account. When that many have been rejected, further Basic requests for that account from that IP address are refused. A successful login clears the count.
+- ``theme.api.login.lockout.seconds`` (``900``): how long the client IP address, or the combination of IP address and account, stays locked out once a limit is exceeded.
+
+While locked out, a Basic request is refused before the password is checked, so even the correct password does not log in.
+The browser is sent to the login page with the SSO login error, and a warning is written to ``fess.log`` when the lockout starts.
+
+The account is counted by its name alone, ignoring case, a ``@REALM`` suffix and a ``DOMAIN\`` prefix: ``alice``, ``ALICE``, ``alice@EXAMPLE.COM`` and ``EXAMPLE\alice`` count as one account, so writing the name differently does not give a new allowance.
+As the count is also per IP address, nobody can lock a user out from another address.
+A user name longer than 100 characters is refused.
+A login that fails because the KDC cannot be reached counts as a rejected password.
+Requests without a Basic header, such as the Negotiate exchange, are not counted.
+
+Behind a reverse proxy whose address is not in ``rate.limit.trusted.proxies``, all clients count as one IP address, so repeated failures can lock out every user (see :doc:`rate-limiting`).
+
 LDAP Configuration
 ==================
 
@@ -455,9 +477,12 @@ Raise the limit in ``tomcat_config.properties``.
 Authentication fails after the service account password is changed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The server credential is obtained once on the first login and cached for the lifetime of the process.
+The server credential is obtained on the first login and, as long as no ``spnego.*`` setting changes, cached for the lifetime of the process.
 Restart |Fess| after changing the service account password in AD or replacing the keytab.
-A restart is likewise required after changing any ``spnego.*`` setting.
+A change to a ``spnego.*`` setting does not need a restart, whether it is saved on the admin screen or made by editing ``system.properties``.
+|Fess| compares the settings at every login, and after a change it builds SPNEGO again from the new values at the next login.
+A handshake that is in progress during the rebuild can fail once; the browser then tries again.
+Only the settings are compared, so replacing a keytab, or editing the contents of ``krb5.conf`` or the login configuration file without changing a setting, still needs a restart, as described above.
 
 Debug Settings
 --------------

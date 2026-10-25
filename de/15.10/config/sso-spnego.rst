@@ -275,6 +275,28 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    ``spnego.logger.level`` steuert den Protokollierungsgrad des internen Loggers der SPNEGO-Bibliothek (``java.util.logging``-Logger mit dem Namen ``Spnego``).
    Wenn nicht gesetzt, wird er automatisch entsprechend dem Protokollierungsgrad von |Fess| bestimmt.
 
+Begrenzung fehlgeschlagener Basic-Authentifizierung
+---------------------------------------------------
+
+Der Fallback auf die Basic-Authentifizierung sendet ein eingegebenes Passwort von ``/sso/``, das ohne Anmeldung für jeden erreichbar ist, an das Verzeichnis. |Fess| 15.10 begrenzt ihn daher.
+Es gelten die Grenzen und die Sperrdauer des Anmeldeformulars und von ``/api/v2/auth/login`` (siehe :doc:`rate-limiting`), und der Zähler je Client-IP-Adresse wird mit ihnen geteilt. Der Wechsel zwischen den Endpunkten verschafft von derselben Adresse aus also keine zusätzlichen Versuche.
+Die Einstellungen stehen in ``fess_config.properties`` (Standardwerte in Klammern):
+
+- ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Basic-Anfragen pro Minute von einer Client-IP-Adresse. Jede Anfrage mit einem Basic-``Authorization``-Header verbraucht einen Platz, den eine erfolgreiche Anmeldung zurückgibt.
+- ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): pro Minute abgelehnte Passwörter für eine Kombination aus Client-IP-Adresse und Konto. Sind so viele abgelehnt worden, werden weitere Basic-Anfragen für dieses Konto von dieser IP-Adresse abgelehnt. Eine erfolgreiche Anmeldung setzt den Zähler zurück.
+- ``theme.api.login.lockout.seconds`` (``900``): wie lange die Client-IP-Adresse bzw. die Kombination aus IP-Adresse und Konto gesperrt bleibt, nachdem eine Grenze überschritten wurde.
+
+Während der Sperre wird eine Basic-Anfrage abgelehnt, bevor das Passwort geprüft wird. Auch das richtige Passwort meldet dann nicht an.
+Der Browser wird mit der SSO-Anmeldefehlermeldung zur Anmeldeseite geleitet, und beim Beginn der Sperre wird eine Warnung in ``fess.log`` geschrieben.
+
+Das Konto wird allein nach seinem Namen gezählt, unabhängig von Groß-/Kleinschreibung, einem Suffix ``@REALM`` und einem Präfix ``DOMAIN\``: ``alice``, ``ALICE``, ``alice@EXAMPLE.COM`` und ``EXAMPLE\alice`` zählen als ein Konto. Eine andere Schreibweise des Namens verschafft also keine neuen Versuche.
+Da auch pro IP-Adresse gezählt wird, kann niemand einen Benutzer von einer anderen Adresse aus sperren.
+Ein Benutzername mit mehr als 100 Zeichen wird abgelehnt.
+Eine Anmeldung, die fehlschlägt, weil der KDC nicht erreichbar ist, zählt als abgelehntes Passwort.
+Anfragen ohne Basic-Header, etwa der Negotiate-Austausch, werden nicht gezählt.
+
+Hinter einem Reverse-Proxy, dessen Adresse nicht in ``rate.limit.trusted.proxies`` steht, zählen alle Clients als eine IP-Adresse, sodass wiederholte Fehlversuche alle Benutzer sperren können (siehe :doc:`rate-limiting`).
+
 LDAP-Konfiguration
 ==================
 
@@ -462,11 +484,13 @@ Erhöhen Sie das Limit in ``tomcat_config.properties``.
 Nach Änderung des Dienstkonto-Kennworts schlägt die Authentifizierung fehl
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Die Server-Anmeldeinformationen werden einmalig bei der ersten Anmeldung ermittelt und für die
-Laufzeit des Prozesses zwischengespeichert.
+Die Server-Anmeldeinformationen werden bei der ersten Anmeldung ermittelt und, solange sich keine
+``spnego.*``-Einstellung ändert, für die Laufzeit des Prozesses zwischengespeichert.
 Starten Sie |Fess| neu, nachdem Sie das Kennwort des Dienstkontos in AD geändert oder die
-Keytab-Datei ersetzt haben. Ebenso ist nach einer Änderung von ``spnego.*``-Einstellungen ein
-Neustart erforderlich.
+Keytab-Datei ersetzt haben. Eine Änderung einer ``spnego.*``-Einstellung erfordert dagegen keinen Neustart, egal ob sie auf der Administrationsseite gespeichert oder durch Bearbeiten von ``system.properties`` vorgenommen wird.
+|Fess| vergleicht die Einstellungen bei jeder Anmeldung und baut SPNEGO nach einer Änderung bei der nächsten Anmeldung mit den neuen Werten neu auf.
+Ein Handshake, der während des Neuaufbaus läuft, kann einmal fehlschlagen; der Browser versucht es dann erneut.
+Verglichen werden nur die Einstellungen. Wenn Sie eine Keytab-Datei ersetzen oder nur den Inhalt von ``krb5.conf`` oder der Anmeldekonfigurationsdatei bearbeiten, ohne eine Einstellung zu ändern, ist daher weiterhin ein Neustart erforderlich, wie oben beschrieben.
 
 Debug-Einstellungen
 --------------------

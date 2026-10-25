@@ -656,6 +656,13 @@ Détection de l'encodage des caractères
 
 Les noms d'encodage des caractères que Tika 4 indique pour les fichiers texte peuvent différer de ceux de la version 15.9. Par exemple, Shift_JIS est indiqué comme ``windows-31j``, ISO-8859-1 comme ``windows-1252`` et EUC-JP comme ``x-eucJP-Open``.
 
+``Content-Length`` n'est plus ajouté au contenu
+-----------------------------------------------
+
+Les versions 15.8.0 et 15.9.0 ajoutaient la valeur de la métadonnée ``Content-Length`` au contenu d'un document. Pour un fichier texte brut, la valeur était ``0`` : le contenu indexé se terminait donc par un espace et ``0``.
+La version 15.10 n'ajoute pas ``Content-Length`` au contenu, que ``crawler.metadata.content.excludes`` le mentionne ou non. La valeur est toujours extraite et reste donc utilisable dans ``crawler.metadata.name.mapping`` et dans les scripts.
+Le contenu d'un document indexé avant la mise à niveau ne change qu'à la prochaine exploration de ce document.
+
 Limite de tentatives du formulaire de connexion
 -----------------------------------------------
 
@@ -687,6 +694,15 @@ Les modifications suivantes concernent les plugins qui utilisent des classes de 
 - ``ExtractData`` n'implémente plus les interfaces de Tika (``TikaCoreProperties``, ``HttpHeaders``, etc.). Les constantes de type chaîne ``CONTENT_TYPE`` et ``CONTENT_ENCODING`` sont déclarées par ``ExtractData`` lui-même. ``RESOURCE_NAME_KEY`` vaut toujours ``"resourceName"``.
 - ``TikaExtractor.setTikaConfig`` et le composant ``tikaConfig`` de ``fess.xml`` ont été supprimés.
 - Au niveau de journalisation ``debug``, ``CrawlJob`` ne transmet plus ``-Dorg.apache.tika.service.error.warn=true`` au crawler, car Tika 4 ne lit plus cette propriété.
+
+Plugins construits pour la version 15.9
+---------------------------------------
+
+Des plugins construits pour la version 15.9.0 ont pu être installés, démarrés et utilisés pour explorer sur le war de la version 15.10 sans être reconstruits. Il s'agit du résultat d'une vérification et non d'une garantie de compatibilité, et un plugin qui utilise des classes de ``fess-crawler`` doit toujours être reconstruit, comme indiqué dans « Modifications pour les développeurs de plugins ».
+
+Remplacez malgré tout les plugins par les versions de la 15.10 (voir :ref:`upgrade-plugin-versions`). ``bin/fess-setup check`` signale le jar d'un plugin de la 15.9.0 comme FAIL (« construit pour une autre version ») et renvoie à ``upgrade plugins``.
+
+En particulier, ne conservez pas les jar de la 15.9.0 de ``fess-storage-s3`` et ``fess-storage-gcs``. Ces plugins de la 15.9.0 ne renvoient pas d'erreur lorsque la liste du stockage échoue. Lorsque le stockage est injoignable, que les identifiants sont erronés ou que le bucket n'existe pas, ``/api/admin/storage/list`` de l'API d'administration répond donc quand même par une liste vide réussie, ``{"items":[],"status":0}``. Les plugins de la 15.10 lèvent l'échec sous forme d'exception, et la 15.10 en fait une réponse d'erreur. Si les anciens jar restent en place, cette amélioration de la 15.10 n'a aucun effet.
 
 Mise à niveau de 15.8 vers 15.10
 ===============================

@@ -653,6 +653,13 @@ Erkennung der Zeichenkodierung
 
 Die Namen der Zeichenkodierung, die Tika 4 für Textdateien meldet, können von 15.9 abweichen. So meldet Tika 4 Shift_JIS als ``windows-31j``, ISO-8859-1 als ``windows-1252`` und EUC-JP als ``x-eucJP-Open``.
 
+``Content-Length`` wird dem Inhalt nicht mehr hinzugefügt
+---------------------------------------------------------
+
+15.8.0 und 15.9.0 haben den Wert des Metadatums ``Content-Length`` dem Inhalt eines Dokuments hinzugefügt. Bei einer Nur-Text-Datei war der Wert ``0``, sodass der indizierte Inhalt mit einem Leerzeichen und ``0`` endete.
+15.10 fügt ``Content-Length`` dem Inhalt nicht hinzu, unabhängig davon, ob ``crawler.metadata.content.excludes`` es aufführt. Der Wert wird weiterhin extrahiert und kann daher in ``crawler.metadata.name.mapping`` und in Skripten verwendet werden.
+Der Inhalt eines Dokuments, das vor dem Upgrade indiziert wurde, ändert sich erst, wenn das Dokument erneut gecrawlt wird.
+
 Ratenbegrenzung des Anmeldeformulars
 ------------------------------------
 
@@ -684,6 +691,15 @@ Die folgenden Änderungen betreffen Plugins, die Klassen von ``fess-crawler`` ve
 - ``ExtractData`` implementiert die Tika-Schnittstellen (``TikaCoreProperties``, ``HttpHeaders`` usw.) nicht mehr. Die String-Konstanten ``CONTENT_TYPE`` und ``CONTENT_ENCODING`` deklariert ``ExtractData`` selbst. ``RESOURCE_NAME_KEY`` ist weiterhin ``"resourceName"``.
 - ``TikaExtractor.setTikaConfig`` und die Komponente ``tikaConfig`` in ``fess.xml`` wurden entfernt.
 - Bei der Log-Stufe ``debug`` übergibt ``CrawlJob`` dem Crawler nicht mehr ``-Dorg.apache.tika.service.error.warn=true``, weil Tika 4 diese Eigenschaft nicht liest.
+
+Für 15.9 gebaute Plugins
+------------------------
+
+Für 15.9.0 gebaute Plugins ließen sich mit der 15.10-war-Datei ohne Neubau installieren, starten und zum Crawlen verwenden. Das ist das Ergebnis einer Prüfung, keine Kompatibilitätsgarantie, und ein Plugin, das Klassen von ``fess-crawler`` verwendet, muss weiterhin neu gebaut werden, wie unter „Änderungen für Plugin-Entwickler" beschrieben.
+
+Ersetzen Sie die Plugins trotzdem durch die Versionen von 15.10 (siehe :ref:`upgrade-plugin-versions`). ``bin/fess-setup check`` meldet eine Plugin-jar von 15.9.0 als FAIL („für ein anderes Release gebaut") und verweist auf ``upgrade plugins``.
+
+Behalten Sie insbesondere nicht die 15.9.0-jars von ``fess-storage-s3`` und ``fess-storage-gcs``. Diese Plugins von 15.9.0 geben keinen Fehler zurück, wenn das Auflisten des Speichers fehlschlägt. Ist der Speicher nicht erreichbar, sind die Zugangsdaten falsch oder existiert der Bucket nicht, antwortet ``/api/admin/storage/list`` der Admin-API daher weiterhin mit einer erfolgreichen, leeren Liste, ``{"items":[],"status":0}``. Die Plugins von 15.10 lösen den Fehler als Ausnahme aus, und 15.10 macht daraus eine Fehlerantwort. Bleiben die alten jars installiert, greift diese Verbesserung von 15.10 nicht.
 
 Upgrade von 15.8 auf 15.10
 =========================

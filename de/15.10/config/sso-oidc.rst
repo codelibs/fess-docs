@@ -151,6 +151,12 @@ Konfigurieren Sie die Callback-URL nach der Authentifizierung.
    Wenn ``oic.redirect.url`` weggelassen wird, wird sie automatisch aus ``oic.base.url`` erstellt.
    Für Produktionsumgebungen setzen Sie ``oic.base.url`` auf eine HTTPS-URL.
 
+.. warning::
+   „Weggelassen" bedeutet, dass der Schlüssel gar nicht existiert. Speichern Sie ``oic.redirect.url`` auf der Administrationsseite „System > Allgemein" leer, wird der Schlüssel entfernt, und ``{oic.base.url}/sso/`` wird verwendet.
+   Eine von Hand in ``system.properties`` geschriebene Zeile ``oic.redirect.url=`` (nur der Wert ist leer) ist dagegen keine weggelassene Einstellung, sondern ein leerer Wert: Die Autorisierungsanfrage enthält dann einen Parameter ``redirect_uri`` ohne Wert.
+   Er stimmt nicht mit dem beim OP registrierten Redirect-URI überein, sodass der OP ihn ablehnt und die Anmeldung fehlschlägt.
+   Geben Sie entweder einen Wert an oder entfernen Sie die Zeile.
+
 Benutzerattribut-Konfiguration
 -------------------------------
 

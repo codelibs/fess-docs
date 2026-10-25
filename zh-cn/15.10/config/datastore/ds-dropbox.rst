@@ -79,6 +79,12 @@ Dropbox连接器提供从Dropbox云存储获取文件并
    * - ``basic_plan``
      - 否
      - 个人账户时为 ``true``，团队账户时为 ``false``\ （默认：``false``）
+   * - ``proxy_host``
+     - 否
+     - 连接Dropbox时所经过的HTTP代理的主机名。未设置时直接连接Dropbox。Dropbox SDK不使用JVM的代理设置（如 ``-Dhttps.proxyHost``），因此在只能通过代理连接外部的环境中请设置此参数。它同时适用于Dropbox和Dropbox Paper数据存储。没有用于代理认证的参数
+   * - ``proxy_port``
+     - 设置 ``proxy_host`` 时
+     - HTTP代理的端口号。设置了 ``proxy_host`` 但缺少此值或其不是数字时，数据存储会报错失败
    * - ``max_size``
      - 否
      - 索引对象的最大文件大小（字节）（默认：``10000000``）
