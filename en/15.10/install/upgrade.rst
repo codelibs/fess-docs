@@ -572,6 +572,8 @@ Up to 15.9, the ``ip`` field of the audit log and the ``clientIp`` field of the 
 
 Behind a reverse proxy that is not in ``rate.limit.trusted.proxies``, every request is recorded with the address of the proxy. To record the address of the original client, add the address of the proxy to ``rate.limit.trusted.proxies``.
 
+If a request from an address that is not in ``rate.limit.trusted.proxies`` carries ``X-Forwarded-For`` or ``X-Real-IP``, 15.10 writes a warning to ``fess.log`` that names the address of the source and ``rate.limit.trusted.proxies``. The warning is written once after startup, not for every request, so it names only the first such address, and it does not contain the value of the header. The header is still ignored, so nothing changes except the log. Because the login form uses the same limits (see "Login Form Rate Limit" below), every client behind such a proxy is counted as one address, and once the failed logins reach the limit, logins from all of them are refused. If you see the warning, add the address of the proxy to ``rate.limit.trusted.proxies``.
+
 .. _upgrade-1510-cipher-key:
 
 Warning for ``app.cipher.key``
@@ -586,6 +588,9 @@ Other Behavior Changes
 - "Delete all" in the "Search" and "Crawling Info" screens of the admin UI requires the edit role (``admin-searchlist``, ``admin-crawlinginfo``). Up to 15.9, only the button was hidden: requests from a user who had only a view role (a role with the ``-view`` suffix) were still accepted.
 - The converted text (``output``) of a mapping dictionary item is required. Up to 15.9, the admin UI and the admin API accepted an item without it and stored nothing.
 - In a search, a single word in double quotes (such as ``"less"``) matches only that word. Up to 15.9, a word at least ``query.boost.fuzzy.min.length`` (default ``4``) long also got fuzzy match conditions, so documents containing ``fess`` also matched ``"less"``. Unquoted words and words with a field specified (such as ``content:"less"``) are unchanged.
+- ``suggest.popular.word.cache.expire`` is read as seconds, as ``fess_config.properties`` and :doc:`../config/properties` describe. Up to 15.9 the value was used as minutes, so the default ``60`` kept popular words cached for 60 minutes; in 15.10 it is 60 seconds. To keep the longer cache, set a larger value in seconds (``3600`` for 60 minutes). The cache is also cleared after every run of the suggest job.
+- Looking up a document by its document ID now applies the virtual host filter, as a search does. Up to 15.9, ``/api/v2/cache/{docId}``, the ``/go/`` redirect, thumbnails, the favorite endpoints and the other lookups by document ID applied only the role filter, so when the roles matched they also answered for a document of another virtual host. In 15.10 such a document is treated as not found. As in a search, a document that has no virtual host value is not returned when a virtual host is resolved for the request. Nothing changes for a request with no virtual host resolved (the default host).
+- The suggest job no longer takes words from a document that search hides. It skips a document that has no ``role`` value and a document that has a denied entry (a value that starts with ``role.search.denied.prefix`` (default ``D``) followed by the prefix of a user, group or role, that is ``D1``, ``D2`` or ``DR`` by default). Up to 15.9, the words of such documents were suggested to everyone. A document that has both allowed and denied entries is skipped as a whole, because a suggest request cannot express a denial for one user. Suggest entries already created from such documents expire through the usual purge of old suggest data.
 
 .. _upgrade-1510-tika:
 
@@ -668,6 +673,41 @@ Control Characters in audit.log
 -------------------------------
 
 In the LTSV format, every control character, and the Unicode line separators NEL, LS and PS, in a field is replaced by a space (a tab by an underscore), so a typed user name cannot start a second record. 15.9 replaced only CR and LF.
+
+Roles of Files Read from ACLs
+-----------------------------
+
+For a crawl of a local file system (``file:`` URLs) whose files have ACLs, such as NTFS, with ``file.role.from.file`` left at the default ``true``, 15.9 turned every ACL entry of a file into a role that may read the document, whatever the type or the permissions of the entry. A user who was denied reading, or who was granted only write access, therefore became a reader of the indexed document.
+
+15.10 looks at the type and the permissions of each entry:
+
+- An ALLOW entry that includes read data (``READ_DATA``) gives the user or group the role, as before.
+- A DENY entry that includes ``READ_DATA`` gives a denied role: the role with ``role.search.denied.prefix`` (default ``D``) in front of it, the same prefix that SMB crawls use. Search hides the document from that user or group.
+- AUDIT and ALARM entries, and entries that do not include ``READ_DATA``, are ignored.
+
+The roles read from POSIX permissions (owner and group) are unchanged.
+
+A document keeps the roles it was indexed with until it is crawled again. To apply the new rules to the documents you already have, run the file crawl again.
+
+LDAP Role Organizational Units and Nested Groups
+------------------------------------------------
+
+When |Fess| resolves the permissions of an LDAP / Active Directory user (see :doc:`../config/ldap-integration`), the DN of a group entry decides whether it is a role (permission prefix ``role.search.role.prefix``, default ``R``) or a group (``role.search.group.prefix``, default ``2``). Up to 15.9, an entry was a role when its DN contained the text ``ou=role`` anywhere, so an entry under ``OU=Roles-Requests`` or ``OU=RoleOwners`` was a role, too.
+
+15.10 parses the DN and treats an entry as a role only when one of its ``ou`` components is exactly ``Role`` or ``Roles`` (case-insensitive). Every other entry is a group, and so is an entry whose DN cannot be parsed.
+
+The entries under an OU such as ``OU=Roles-Requests`` therefore get the permission name of a group instead of that of a role (``2name`` instead of ``Rname``), and documents whose permissions hold the old name no longer match the users of those groups. If you relied on such an OU, move the entries into ``OU=Role`` or ``OU=Roles``, or update the permission settings that use the old names, and crawl (or reindex) again.
+
+When ``ldap.group.filter`` is set (it is blank by default), |Fess| uses it to look up the groups that contain the groups of the user (nested groups). Up to 15.9, the DNs of the user's groups were put into that filter without escaping. A DN with an escaped character, such as the comma of ``CN=Sales\, EMEA,...``, did not match, so the nested groups of such a group were silently missing, and a DN that contained characters special to LDAP filters changed the filter. 15.10 escapes the DNs (RFC 4515). The nested groups of such groups are now found, so the users concerned get the permissions of those groups, too.
+
+Roles Sent in a Request Without a Cipher
+----------------------------------------
+
+|Fess| can read the roles of a user from a request parameter, header or cookie when the ``roleQueryHelper`` component in ``fess.xml`` sets ``parameterKey``, ``headerKey`` or ``cookieKey``. Each value is expected to be encrypted unless ``encryptedParameterValue``, ``encryptedHeaderValue`` or ``encryptedCookieValue`` is set to ``false`` (all three default to ``true``).
+
+Up to 15.9, a value that was expected to be encrypted was read as plain text when no ``cipher`` was set, so any client could send a role list. 15.10 ignores such a value and writes a warning to ``fess.log`` once after startup. A value whose flag is ``false`` is still read as it is, and a value is still decrypted when a ``cipher`` is set.
+
+If your ``roleQueryHelper`` sets one of the keys without a ``cipher``, set a ``cipher`` and send encrypted values, or set the flag to ``false`` for the values you send unencrypted. The shipped ``fess.xml`` has these settings commented out, so a default installation is not affected.
 
 Changes for Plugin Developers
 -----------------------------
