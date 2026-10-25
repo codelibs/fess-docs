@@ -2429,7 +2429,7 @@ Web
     - Interval (seconds) for the notification job cycle, used in notification messages.
     - ``300``
   * - theme.directory.path
-    - Static theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)
+    - Theme system (see docs/superpowers/specs/2026-05-21-fess-static-theme-design.md)
     - ``themes``
   * - theme.upload.max.size
     - Maximum size (bytes) of an uploaded theme archive.
@@ -2453,10 +2453,10 @@ Web
     - Retention (days) for a replaced theme directory before the cleanup sweep removes it.
     - ``7``
   * - theme.repositories
-    - Repository URLs (comma separated) that static themes are downloaded from.
+    - Repository URLs (comma separated) that themes are downloaded from.
     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
   * - theme.index.frame.ancestors
-    - Value of the frame-ancestors directive in the Content-Security-Policy of the static theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header).
+    - Value of the frame-ancestors directive in the Content-Security-Policy of the theme's HTML pages: the origins that may embed them in a frame. The default 'none' lets no page embed them. WebKit (Safari) applies frame-ancestors to the blob: frames that the file preview and the cache view of a theme use, so it shows them blank while the value is 'none'. Leave the value empty to drop the directive; X-Frame-Options: DENY is sent either way and then keeps the pages out of frames in every browser (a browser that honors frame-ancestors ignores that header).
     - ``'none'``
   * - theme.api.csrf.server.origins
     - Optional: canonical external origin(s) of this Fess instance (comma/newline separated), e.g. https://fess.example.com. When set, these are treated as same-origin for the v2 CSRF Origin check WITHOUT trusting forwarded headers. Recommended behind reverse proxies that are not listed in rate.limit.trusted.proxies. When empty, the target origin is reconstructed from trusted-proxy X-Forwarded-\* headers, then from the servlet request.

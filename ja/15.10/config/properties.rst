@@ -2429,7 +2429,7 @@ Web
     - 通知ジョブのサイクルの間隔（秒）。通知メッセージで使用されます。
     - ``300``
   * - theme.directory.path
-    - 静的テーマシステム（docs/superpowers/specs/2026-05-21-fess-static-theme-design.mdを参照）
+    - テーマシステム（docs/superpowers/specs/2026-05-21-fess-static-theme-design.mdを参照）
     - ``themes``
   * - theme.upload.max.size
     - アップロードされたテーマアーカイブの最大サイズ（バイト）。
@@ -2453,10 +2453,10 @@ Web
     - 置き換えられたテーマディレクトリを、クリーンアップ処理が削除するまで保持する期間（日）。
     - ``7``
   * - theme.repositories
-    - 静的テーマのダウンロード元のリポジトリURL（カンマ区切り）。
+    - テーマのダウンロード元のリポジトリURL（カンマ区切り）。
     - ``https://maven.codelibs.org/release/org/codelibs/fess/themes/``
   * - theme.index.frame.ancestors
-    - 静的テーマのHTMLページのContent-Security-Policyにおけるframe-ancestorsディレクティブの値。これらをフレームに埋め込むことができるオリジンです。デフォルトの'none'は、どのページにも埋め込みを許可しません。WebKit（Safari）は、テーマのファイルプレビューとキャッシュ表示が使用するblob:フレームにもframe-ancestorsを適用するため、値が'none'の間はそれらが空白で表示されます。ディレクティブを削除するには値を空のままにします。どちらの場合もX-Frame-Options: DENYが送信され、すべてのブラウザーでページがフレームに入らないようにします（frame-ancestorsを尊重するブラウザーはそのヘッダーを無視します）。
+    - テーマのHTMLページのContent-Security-Policyにおけるframe-ancestorsディレクティブの値。これらをフレームに埋め込むことができるオリジンです。デフォルトの'none'は、どのページにも埋め込みを許可しません。WebKit（Safari）は、テーマのファイルプレビューとキャッシュ表示が使用するblob:フレームにもframe-ancestorsを適用するため、値が'none'の間はそれらが空白で表示されます。ディレクティブを削除するには値を空のままにします。どちらの場合もX-Frame-Options: DENYが送信され、すべてのブラウザーでページがフレームに入らないようにします（frame-ancestorsを尊重するブラウザーはそのヘッダーを無視します）。
     - ``'none'``
   * - theme.api.csrf.server.origins
     - 任意: このFessインスタンスの正規の外部オリジン（カンマ/改行区切り）。例: https://fess.example.com。設定すると、これらはv2のCSRF Originチェックで、転送ヘッダーを信頼せずに同一オリジンとして扱われます。rate.limit.trusted.proxiesに記載されていないリバースプロキシの背後での利用を推奨します。空の場合、ターゲットオリジンは、信頼するプロキシのX-Forwarded-\*ヘッダーから、次にサーブレットリクエストから再構築されます。
