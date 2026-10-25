@@ -548,7 +548,13 @@ Para asignar un rol fijo a todos los archivos, especifíquelo de la siguiente ma
 
 ::
 
-    role="{role}box-users"
+    role="Rbox-users"
+
+.. note::
+   El valor de ``role`` en el script se indexa tal cual. Especifique el rol de búsqueda
+   (``R`` + nombre del rol, ``2`` + nombre del grupo, ``1`` + nombre del usuario), no la
+   notación ``{role}nombre`` del campo «Permisos». Una cadena se trata como un único rol
+   y no se divide por comas ni punto y coma.
 
 Información de referencia
 ==========================
