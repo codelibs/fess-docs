@@ -59,7 +59,7 @@ Por ello, separe las palabras con espacios y especifique un número generoso.
     "全文 検索"~5
     "大阪 おいしい"~10
 
-Es posible que una cadena sin espacios (por ejemplo, ``"大阪おいしい"~10``) no funcione como se espera como búsqueda de proximidad entre palabras, ya que en los campos generales se compara como una única cadena continua. Separe las palabras con espacios. La distancia no se puede convertir exactamente en un número de caracteres, por lo que conviene empezar con un número generoso y reducirlo a medida que comprueba los resultados.
+Una cadena sin espacios (por ejemplo, ``"大阪おいしい"~10``) no funcionaba como búsqueda de proximidad en los campos generales hasta la versión 15.9 y podía no devolver ningún documento. En la versión 15.10, ``"大阪おいしい"~10`` coincide con los mismos documentos que ``"大阪 おいしい"~10``. Se sigue recomendando separar las palabras con espacios. La distancia no se puede convertir exactamente en un número de caracteres, por lo que conviene empezar con un número generoso y reducirlo a medida que comprueba los resultados.
 
 Véase también
 ===============

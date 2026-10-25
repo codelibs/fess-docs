@@ -530,6 +530,18 @@ Agregue lo siguiente a "Parámetros de Configuración" en la configuración de r
     client.proxyUsername=proxyuser
     client.proxyPassword=proxypass
 
+**Proxy SOCKS5 (a partir de la versión 15.10):**
+
+::
+
+    client.socksProxyHost=socks.example.com
+    client.socksProxyPort=1080
+
+- Defina tanto ``client.socksProxyHost`` como ``client.socksProxyPort``. Si solo se define uno de los dos, el rastreador se conecta directamente, sin proxy.
+- El proxy SOCKS se usa sin autenticación.
+- El rastreador resuelve por sí mismo el nombre de host del sitio y entrega al proxy una dirección IP, por lo que un nombre de host que solo el proxy puede resolver no logra conectarse.
+- El ajuste se aplica al cliente HTTP predeterminado (HttpClient 5). La versión 15.9 y las anteriores ignoran estas claves y se conectan directamente.
+
 **Excluir hosts específicos del proxy:**
 
 Los hosts a excluir del proxy no se configuran en los parámetros de configuración de rastreo, sino mediante propiedades del sistema JVM.

@@ -588,7 +588,7 @@ Die ZIP- und RPM/DEB-Pakete sowie die Docker-Images von 15.10 enthalten die Date
 Einstellungen, die Sie in ``tika.xml`` vorgenommen haben, etwa ``parser-exclude``, werden nicht mehr angewendet: Ein dort ausgeschlossener Parser läuft wieder.
 Liegt im Konfigurationsverzeichnis noch eine ``tika.xml`` aus einer früheren Version, ignoriert |Fess| sie und schreibt beim Start eine Warnung in ``fess.log``. Löschen Sie die Datei.
 
-- ZIP-Paket: ``app/WEB-INF/conf/tika.xml``
+- ZIP-Paket: Im ZIP von 15.9 und früher liegt die Datei unter ``app/WEB-INF/classes/tika.xml``. Die Startwarnung von 15.10 prüft sowohl ``app/WEB-INF/classes`` als auch ``app/WEB-INF/conf``
 - RPM/DEB-Paket: ``/etc/fess/tika.xml``
 
 .. _upgrade-1510-tika-metadata:
@@ -645,6 +645,11 @@ Wenn Sie im Berechtigungsfeld einer Crawl-Konfiguration oder einer ähnlichen Ei
 15.10 entfernt das Leerzeichen nach ``(deny)`` und ``(allow)`` vor dem Speichern, und erneutes Speichern behält eine Verweigerung bei. Eine ``(deny)``-Zeile ohne ``{user}``, ``{group}`` oder ``{role}`` wird nicht gespeichert.
 
 Eine in 15.9 oder früher gespeicherte Einstellung wird nicht automatisch repariert. Prüfen Sie das Berechtigungsfeld jeder Crawl-Konfiguration, die ``(deny)`` verwendet, schreiben Sie die Zeile in der Form ``(deny){user}name`` neu, speichern Sie sie und crawlen Sie erneut.
+
+Steuerzeichen in audit.log
+--------------------------
+
+Im LTSV-Format wird jedes Steuerzeichen sowie die Unicode-Zeilentrenner NEL, LS und PS in einem Feld durch ein Leerzeichen ersetzt (ein Tabulator durch einen Unterstrich), sodass ein eingegebener Benutzername keinen zweiten Datensatz beginnen kann. 15.9 ersetzte nur CR und LF.
 
 Änderungen für Plugin-Entwickler
 --------------------------------

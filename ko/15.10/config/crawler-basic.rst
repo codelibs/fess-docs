@@ -524,6 +524,18 @@ URL 패턴에 의한 제한
     client.proxyUsername=proxyuser
     client.proxyPassword=proxypass
 
+**SOCKS5 프록시 (15.10 이후):**
+
+::
+
+    client.socksProxyHost=socks.example.com
+    client.socksProxyPort=1080
+
+- ``client.socksProxyHost``\ 와 ``client.socksProxyPort``\ 를 모두 지정하십시오. 둘 중 하나만 지정하면 크롤러는 프록시를 사용하지 않고 직접 연결합니다.
+- SOCKS 프록시는 인증 없이 사용합니다.
+- 사이트의 호스트 이름은 크롤러가 직접 이름 해석을 하고 프록시에는 IP 주소를 전달합니다. 따라서 프록시 쪽에서만 이름 해석이 가능한 호스트 이름은 연결에 실패합니다.
+- 기본 HTTP 클라이언트(HttpClient 5)에 적용됩니다. 15.9 이전 버전은 이 키를 무시하고 직접 연결합니다.
+
 **특정 호스트를 프록시에서 제외:**
 
 프록시에서 제외할 호스트는 크롤링 설정의 설정 매개변수가 아닌 JVM 시스템 프로퍼티로 설정합니다.

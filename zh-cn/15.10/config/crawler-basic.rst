@@ -509,6 +509,18 @@ URL模式限制
     client.proxyUsername=proxyuser
     client.proxyPassword=proxypass
 
+**SOCKS5 代理 (15.10 及以后):**
+
+::
+
+    client.socksProxyHost=socks.example.com
+    client.socksProxyPort=1080
+
+- 请同时指定 ``client.socksProxyHost`` 和 ``client.socksProxyPort``。只指定其中一个时，爬虫不使用代理而直接连接。
+- SOCKS 代理不使用认证。
+- 站点的主机名由爬虫自行解析，向代理传递的是 IP 地址，因此只有代理一侧才能解析的主机名会连接失败。
+- 该设置适用于默认的 HTTP 客户端 (HttpClient 5)。15.9 及更早版本会忽略这些键并直接连接。
+
 **从代理服务器排除特定主机:**
 
 从代理排除的主机不在爬取配置的配置参数中设置，而是通过JVM系统属性配置。

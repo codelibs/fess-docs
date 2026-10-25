@@ -531,6 +531,18 @@ Dans la configuration d'indexation de l'interface d'administration, ajoutez ce q
     client.proxyUsername=proxyuser
     client.proxyPassword=proxypass
 
+**Proxy SOCKS5 (à partir de la version 15.10) :**
+
+::
+
+    client.socksProxyHost=socks.example.com
+    client.socksProxyPort=1080
+
+- Définissez à la fois ``client.socksProxyHost`` et ``client.socksProxyPort``. Si un seul des deux est défini, le robot se connecte directement, sans proxy.
+- Le proxy SOCKS est utilisé sans authentification.
+- Le robot résout lui-même le nom d'hôte du site et transmet une adresse IP au proxy ; un nom d'hôte que seul le proxy peut résoudre provoque donc un échec de connexion.
+- Le paramètre s'applique au client HTTP par défaut (HttpClient 5). La version 15.9 et les versions antérieures ignorent ces clés et se connectent directement.
+
 **Exclure des hôtes spécifiques du proxy :**
 
 Les hôtes à exclure du proxy ne sont pas configurés dans les paramètres de configuration de l'indexation, mais via les propriétés système JVM.
