@@ -389,6 +389,9 @@ SSL/TLS 종단
         }
     }
 
+.. note::
+   ``X-Forwarded-Proto`` 헤더를 전달해도 |Fess| 가 절대 URL(예: OpenSearch 설명 문서, SAML 대상 URL)을 만들 때 사용하는 스킴은 바뀌지 않습니다. 스킴은 커넥터 설정으로 결정됩니다. ``tomcat_config.properties`` 에 ``tomcat.secure=true``, ``tomcat.scheme=https``, ``tomcat.proxyPort=443`` 을 설정하고(기본값은 주석 처리되어 있습니다), 리버스 프록시가 원래의 ``Host`` 헤더를 그대로 전달하도록 한 후 |Fess| 를 재시작하십시오.
+
 방화벽 설정
 ====================
 
@@ -456,7 +459,7 @@ OpenSearch에 연결할 수 없음
 ----------------------------------------------------
 
 1. ``X-Forwarded-Host`` 헤더가 올바르게 설정되어 있는지 확인하십시오.
-2. ``X-Forwarded-Proto`` 헤더가 올바르게 설정되어 있는지 확인하십시오.
+2. ``X-Forwarded-Proto`` 헤더가 올바르게 설정되어 있는지 확인하십시오.또한 이 헤더만으로는 |Fess| 가 만드는 절대 URL의 스킴이 바뀌지 않으며, ``tomcat.secure``, ``tomcat.scheme``, ``tomcat.proxyPort`` 설정이 필요합니다(위 SSL/TLS 종단 절의 참고 사항 참조).
 3. 컨텍스트 경로가 올바르게 설정되어 있는지 확인하십시오.
 4. 리버스 프록시의 로그에서 오류를 확인하십시오.
 

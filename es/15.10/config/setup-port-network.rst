@@ -380,6 +380,9 @@ Ejemplo de configuración para terminación SSL/TLS en el proxy inverso (Nginx):
         }
     }
 
+.. note::
+   Pasar el encabezado ``X-Forwarded-Proto`` no cambia el esquema que |Fess| usa para construir URL absolutas (por ejemplo, en el documento de descripción de OpenSearch y en el destino de SAML). El esquema lo determina la configuración del conector. Configure ``tomcat.secure=true``, ``tomcat.scheme=https`` y ``tomcat.proxyPort=443`` en ``tomcat_config.properties`` (están comentadas de forma predeterminada), haga que el proxy inverso pase sin cambios el encabezado ``Host`` original y reinicie |Fess|.
+
 Configuración de Firewall
 ==========================
 
@@ -447,7 +450,7 @@ No Funciona Correctamente al Acceder Vía Proxy Inverso
 -------------------------------------------------------
 
 1. Verifique que el encabezado ``X-Forwarded-Host`` esté configurado correctamente.
-2. Verifique que el encabezado ``X-Forwarded-Proto`` esté configurado correctamente.
+2. Verifique que el encabezado ``X-Forwarded-Proto`` esté configurado correctamente. Este encabezado por sí solo no cambia el esquema de las URL absolutas que construye |Fess|; también se necesitan ``tomcat.secure``, ``tomcat.scheme`` y ``tomcat.proxyPort`` (consulte la nota de la sección de terminación SSL/TLS anterior).
 3. Verifique que la ruta de contexto esté configurada correctamente.
 4. Verifique errores en los logs del proxy inverso.
 

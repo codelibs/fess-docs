@@ -386,6 +386,9 @@ Configuration example for SSL/TLS termination at the reverse proxy (Nginx):
         }
     }
 
+.. note::
+   Passing the ``X-Forwarded-Proto`` header does not change the scheme that |Fess| uses to build absolute URLs (for example, in the OpenSearch description document and the SAML destination). The scheme is determined by the connector settings. Set ``tomcat.secure=true``, ``tomcat.scheme=https`` and ``tomcat.proxyPort=443`` in ``tomcat_config.properties`` (they are commented out by default), make the reverse proxy pass the original ``Host`` header unchanged, and restart |Fess|.
+
 Firewall Configuration
 ======================
 
@@ -453,7 +456,7 @@ Not Working Properly When Accessed via Reverse Proxy
 -----------------------------------------------------
 
 1. Verify that the ``X-Forwarded-Host`` header is configured correctly.
-2. Verify that the ``X-Forwarded-Proto`` header is configured correctly.
+2. Verify that the ``X-Forwarded-Proto`` header is configured correctly. This header alone does not change the scheme of the absolute URLs that |Fess| builds; ``tomcat.secure``, ``tomcat.scheme`` and ``tomcat.proxyPort`` are also required (see the note in the SSL/TLS termination section above).
 3. Verify that the context path is configured correctly.
 4. Check reverse proxy logs for errors.
 
