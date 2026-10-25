@@ -291,6 +291,8 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
      - The HTTP method is not allowed.
    * - 500 Internal Server Error
      - An internal server error occurred.
+   * - 503 Service Unavailable
+     - The search engine could not take the request: it is not reachable, or it refused the request for lack of capacity. ``error.code`` is ``service_unavailable``, and a ``Retry-After`` header gives the number of seconds to wait (``5``). The request itself is fine, so retry after a short wait.
 
 Table: Error Response
 

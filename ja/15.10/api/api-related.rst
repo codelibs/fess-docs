@@ -78,6 +78,8 @@ curlコマンドでのリクエスト例:
 
    * - ステータスコード
      - 説明
+   * - 400 Bad Request
+     - デコードできないリクエストパラメーター（ ``?q=%ff`` など）が指定された場合。 ``error.code`` は ``invalid_request`` です。
    * - 401 Unauthorized
      - 認証が必要な場合（ログイン必須設定が有効で匿名の呼び出し元）。 ``error.code`` は ``auth_required`` です。
    * - 405 Method Not Allowed
@@ -152,6 +154,8 @@ curlコマンドでのリクエスト例:
 
    * - ステータスコード
      - 説明
+   * - 400 Bad Request
+     - デコードできないリクエストパラメーター（ ``?q=%ff`` など）が指定された場合。 ``error.code`` は ``invalid_request`` です。
    * - 401 Unauthorized
      - 認証が必要な場合（ログイン必須設定が有効で匿名の呼び出し元）。 ``error.code`` は ``auth_required`` です。
    * - 405 Method Not Allowed

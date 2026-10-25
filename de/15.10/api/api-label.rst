@@ -90,6 +90,8 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
 
    * - Statuscode
      - Beschreibung
+   * - 400 Bad Request
+     - Wenn ein Anfrageparameter angegeben wurde, der sich nicht dekodieren lässt (zum Beispiel ``?q=%ff``). ``error.code`` ist ``invalid_request``.
    * - 401 Unauthorized
      - Wenn eine Authentifizierung erforderlich ist (Anmeldepflicht aktiviert und anonymer Aufrufer, oder die Anfrage enthält ein nicht registriertes oder abgelaufenes Zugriffstoken). ``error.code`` ist ``auth_required``.
    * - 405 Method Not Allowed

@@ -1133,10 +1133,31 @@ API 现在会拒绝的请求
    * - 为管理 API 的用户设置违反密码策略（例如 ``password.min.length`` ，默认值 ``8`` ）的密码；创建时省略密码；发送与 ``password`` 不一致的 ``confirm_password``
      - 会被保存，该用户可以用该密码登录
      - ``400``
+   * - ``GET /api/admin/log/file/{id}`` 指定了不允许作为日志文件的名称（例如不以 ``.log`` 或 ``.log.gz`` 结尾），或不在日志目录中的文件
+     - 不允许的名称返回 ``200`` 和空响应
+     - ``400``
+   * - 通过管理 API 创建或更新省略了 ``output`` 的 ``mapping`` 字典条目
+     - ``200`` （ ``id`` 为 ``0`` ）；不保存任何内容
+     - ``400``
+   * - 无法访问存储时的 ``GET /api/admin/storage/list`` （包括未安装存储客户端插件的情况）
+     - ``200`` （ ``status`` 为 ``0`` ）和空列表
+     - ``400`` 。 ``message`` 给出原因；缺少插件时会指出需要安装的插件
+   * - 在登录表单（ ``POST /login/login`` ）上，短时间内从同一 IP 地址，或从同一 IP 地址针对同一用户重复登录失败
+     - 无限制
+     - 超过按 IP 或按 IP 与用户组合的上限（ ``theme.api.login.rate.limit.per.ip.per.minute`` 、 ``theme.api.login.rate.limit.per.user.per.minute`` ）后，来自该 IP 地址（按用户上限时为来自该 IP 地址的该用户）的登录，即使凭据正确，也会在 ``theme.api.login.lockout.seconds`` 秒内被拒绝。响应与凭据错误时相同，均为登录错误。上限和锁定与 ``/api/v2/auth/login`` 共用（参见 :doc:`../api/api-auth` ）在地址未列入 ``rate.limit.trusted.proxies`` 的反向代理之后，所有客户端会被算作同一个地址，因此连续失败可能使所有用户无法登录。请将代理的地址添加到 ``rate.limit.trusted.proxies`` （当 ``X-Forwarded-For`` 来自不受信任的对端时， ``fess.log`` 中会输出一次警告）。
 
 ``/api/v2/documents/all`` 的每一行不再带有 ``score`` 。15.8 及之前，每个文档都带有搜索得分；15.10 使用 point in time 和 ``search_after`` 获取全部结果，因此不会产生得分。旧 API 插件的 ``/json?type=scroll`` 和 ``/api/v1/documents/all`` 也是如此。读取 ``score`` 的脚本需要能够处理该值不存在的情况。
 
 管理 API 的文件上传（6 种字典、 ``badword`` 、 ``elevateword`` 、 ``storage`` ）通过 ``POST`` 接收。15.8 的文档曾介绍使用 ``PUT`` ，但 ``multipart/form-data`` 的 ``PUT`` 不会传送文件，因此在 15.8 和 15.10 中都会因“需要文件”的验证错误而失败。 ``PUT`` 端点仍然保留，但上传请使用 ``POST`` 。
+
+以下变更不属于请求被拒绝，但可能影响使用 API 或管理界面的脚本和客户端。
+
+- 管理 API ``webauth`` 和 ``fileauth`` 的获取请求（ ``/api/admin/webauth/settings`` 、 ``/api/admin/webauth/setting/{id}`` 以及 ``fileauth`` 下相同的端点）不再返回已保存的密码。 ``PUT`` 时省略密码或发送空密码，将保留已保存的密码；发送非空密码则会替换。
+- 已登录的用户由会话识别，而不是由请求携带的 ``userCode`` 参数或 Cookie 识别（例如收藏 API）。匿名用户仍使用参数和 Cookie。
+- 管理界面中「搜索列表」和「爬取信息」的「全部删除」需要编辑角色（ ``admin-searchlist`` 、 ``admin-crawlinginfo`` ）。仅拥有查看角色（带有 ``-view`` 后缀的角色）的用户的请求会被拒绝。
+- 如果在 ``fess.xml`` 的 ``roleQueryHelper`` 中启用了 ``parameterKey`` 、 ``headerKey`` 或 ``cookieKey`` ，却没有设置 ``cipher`` ，并且值加密标志（ ``encryptedParameterValue`` 、 ``encryptedHeaderValue`` 或 ``encryptedCookieValue`` ）仍为默认值 ``true`` ，则 15.8 会把该值当作未加密的角色信息读取。15.10 会忽略该值，并在日志中输出一次警告。如果值已加密，请设置 ``cipher`` ；如果本意是接收未加密的值，请将该标志设为 ``false`` 。
+- ``Content-Type`` 中指定了 JVM 不认识的字符集（例如 ``charset=nope`` ）的请求，将按未指定字符集处理。此前 ``/api/v2/search`` 会返回 ``500`` （ ``internal_error`` ）。
+- 通过管理 API 上传或下载 ``kuromoji`` 、 ``mapping`` 、 ``stemmeroverride`` 、 ``synonym`` 字典失败时，消息现在会指明该字典。在 15.8 中，所有这些字典都显示“protwords file”。
 
 ``search_engine.type`` 的 ``cloud`` 已弃用
 ------------------------------------------

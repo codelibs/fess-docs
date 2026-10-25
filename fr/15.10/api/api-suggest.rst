@@ -127,3 +127,5 @@ En cas d'échec de l'API de suggestions, l'enveloppe d'erreur commune est retour
      - Une méthode HTTP non prise en charge a été spécifiée. L'en-tête ``Allow`` indique ``GET``.
    * - 500 Internal Server Error
      - Une erreur interne s'est produite sur le serveur.
+   * - 503 Service Unavailable
+     - Le moteur de recherche n'a pas pu prendre la requête en charge : il est injoignable ou a refusé la requête faute de capacité. ``error.code`` vaut ``service_unavailable`` et un en-tête ``Retry-After`` indique le nombre de secondes à attendre (``5``). La requête elle-même est correcte : réessayez après une courte attente.

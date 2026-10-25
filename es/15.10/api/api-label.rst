@@ -90,6 +90,8 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
 
    * - Código de estado
      - Descripción
+   * - 400 Bad Request
+     - Cuando se ha indicado un parámetro de la solicitud que no se puede decodificar (por ejemplo, ``?q=%ff``). El ``error.code`` es ``invalid_request``.
    * - 401 Unauthorized
      - Cuando se requiere autenticación (el inicio de sesión obligatorio está habilitado y el llamante es anónimo, o la solicitud lleva un token de acceso no registrado o caducado). ``error.code`` es ``auth_required``.
    * - 405 Method Not Allowed

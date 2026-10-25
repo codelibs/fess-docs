@@ -406,6 +406,8 @@ Respuesta de error
 
    * - Código de estado
      - Descripción
+   * - 400 Bad Request
+     - Cuando se ha indicado un parámetro de la solicitud que no se puede decodificar (por ejemplo, ``?q=%ff``). El ``error.code`` es ``invalid_request``.
    * - 405 Method Not Allowed
      - Cuando se especifica un método HTTP no admitido.
    * - 500 Internal Server Error

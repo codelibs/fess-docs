@@ -10,7 +10,7 @@ Storage API是用于管理 |Fess| 对象存储的API。
 
 .. note::
 
-   使用此API需要安装提供存储客户端的插件：Amazon S3 及 S3 兼容存储使用 ``fess-storage-s3`` ，Google Cloud Storage 使用 ``fess-storage-gcs`` 。插件未随发行包提供。未安装时，没有与所配置的 ``storage.type`` 对应的客户端，请求会失败。请在管理界面的「系统 > 插件」页面，或使用 ``bin/fess-setup install plugin fess-storage-s3`` （GCS 为 ``fess-storage-gcs`` ）进行安装。
+   使用此API需要安装提供存储客户端的插件：Amazon S3 及 S3 兼容存储使用 ``fess-storage-s3`` ，Google Cloud Storage 使用 ``fess-storage-gcs`` 。插件未随发行包提供。未安装时，没有与所配置的 ``storage.type`` 对应的客户端，请求会失败。例如 ``GET /api/admin/storage/list`` 不会返回空列表，而是返回 HTTP ``400``\ （ ``status`` 为 ``1``\ ）的错误，其 ``message`` 包含 ``No storage client is registered as ...`` （位于“Storage Access Error”前缀之后），并指出需要安装的插件。请在管理界面的「系统 > 插件」页面，或使用 ``bin/fess-setup install plugin fess-storage-s3`` （GCS 为 ``fess-storage-gcs`` ）进行安装。
 
 基础URL
 ==========
@@ -228,7 +228,7 @@ Storage API所属的Admin API全部端点均需要通过访问令牌进行认证
    * - 端点
      - 发生错误的主要情况
    * - 获取文件和目录列表
-     - 获取数量超过上限时
+     - 获取数量超过上限时，或无法访问存储时（包括未安装存储客户端插件的情况）
    * - 下载文件
      - ``id`` 无效，或下载失败时
    * - 删除文件

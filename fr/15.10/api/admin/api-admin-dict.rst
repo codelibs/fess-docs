@@ -421,7 +421,7 @@ Les champs du corps de requête de création/mise à jour d'une entrée de dicti
      - ``token`` (requis), ``segmentation`` (requis), ``reading`` (requis), ``pos`` (requis)
      - ``kuromojiFile``
    * - ``mapping``
-     - ``inputs`` (requis), ``output``
+     - ``inputs`` (requis), ``output`` (requis)
      - ``charMappingFile``
    * - ``protwords``
      - ``input`` (requis)
