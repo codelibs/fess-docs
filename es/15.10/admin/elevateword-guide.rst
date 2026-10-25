@@ -44,6 +44,7 @@ Permisos
 
 Configure la información de rol para la palabra.
 La sugerencia solo se mostrará a los usuarios que tengan el rol configurado.
+La especificación por usuario es {user}nombre_usuario, la especificación por rol es {role}nombre_rol, y la especificación por grupo es {group}nombre_grupo.
 
 Etiqueta
 ::::::::
@@ -55,6 +56,9 @@ Valor de impulso
 ::::::::::::::::
 
 Configure el valor de impulso para la palabra.
+
+.. note::
+   Las palabras que registre, edite o elimine (incluida la carga de un archivo CSV) no se aplican de inmediato a las sugerencias. Se aplican cuando se ejecuta el trabajo "Suggest Indexer", que reconstruye el índice de sugerencias (por defecto se ejecuta todos los días a las 12:00). Para aplicarlas de inmediato, haga clic en "Suggest Indexer" en [Sistema > Programador] y luego haga clic en el botón "Iniciar ahora".
 
 Eliminar configuración
 ----------------------
@@ -78,8 +82,8 @@ Desde la segunda línea en adelante se describen las palabras adicionales.
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
 
 Carga
 =====
@@ -96,8 +100,11 @@ Desde la segunda línea en adelante se describen las palabras adicionales.
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
+
+.. note::
+   En la columna Permissions, especifique cada valor con ``{role}``, ``{user}`` o ``{group}``, como ``{role}role1`` (separe varios valores con comas). Un valor sin prefijo, como ``role1``, no se trata como un rol y la palabra no se sugiere a los usuarios que tienen ese rol.
 
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/elevateword-1.png

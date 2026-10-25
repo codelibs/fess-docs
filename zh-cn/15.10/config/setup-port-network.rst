@@ -381,6 +381,9 @@ SSL/TLS 终止
         }
     }
 
+.. note::
+   传递 ``X-Forwarded-Proto`` 头不会改变 |Fess| 构建绝对 URL(例如 OpenSearch 描述文档和 SAML 目标 URL)时使用的协议。协议由连接器设置决定。请在 ``tomcat_config.properties`` 中设置 ``tomcat.secure=true``、``tomcat.scheme=https`` 和 ``tomcat.proxyPort=443``(默认处于注释状态),让反向代理原样传递原始的 ``Host`` 头,然后重启 |Fess|。
+
 防火墙配置
 ====================
 
@@ -448,7 +451,7 @@ SSL/TLS 终止
 ----------------------------------------------------
 
 1. 请确认 ``X-Forwarded-Host`` 头是否配置正确。
-2. 请确认 ``X-Forwarded-Proto`` 头是否配置正确。
+2. 请确认 ``X-Forwarded-Proto`` 头是否配置正确。此外,仅靠该头不会改变 |Fess| 构建的绝对 URL 的协议,还需要设置 ``tomcat.secure``、``tomcat.scheme`` 和 ``tomcat.proxyPort``(参见上面 SSL/TLS 终止一节中的说明)。
 3. 请确认上下文路径是否配置正确。
 4. 请在反向代理日志中确认错误信息。
 

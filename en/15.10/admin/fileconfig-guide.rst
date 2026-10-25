@@ -55,6 +55,9 @@ Included Paths for Crawling
 
 Paths matching this regular expression (Java format) will be crawled by the |Fess| crawler.
 
+.. note::
+   The pattern is matched against the whole of every path the crawler visits, including the start path and subdirectories. If you specify only file extensions such as ``.*\.(md|rst|adoc)$``, the start path and the subdirectories do not match, the crawler cannot reach the files, and nothing is crawled. To limit the documents by extension, specify the same pattern in "Included Paths for Indexing" instead (the directories are still traversed and only the matching files become search targets). Use "Included Paths for Crawling" only with patterns that also match the start path and the subdirectories.
+
 Excluded Paths for Crawling
 ::::::::::::::::::::::::::::
 

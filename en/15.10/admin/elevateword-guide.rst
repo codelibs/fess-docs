@@ -45,6 +45,7 @@ Permissions
 
 Roles to restrict suggesting.
 If roles are specified, suggest word is displayed in users which has roles.
+User-level: {user}username, Role-level: {role}rolename, Group-level: {group}groupname.
 
 Label
 :::::
@@ -57,6 +58,9 @@ Boost
 
 Boost value.
 Higher value is displayed at the top.
+
+.. note::
+   Words that you register, edit or delete (including by uploading a CSV file) are not applied to Suggest immediately. They are applied when the "Suggest Indexer" job, which rebuilds the suggest index, runs (by default it runs every day at 12:00). To apply them right away, click "Suggest Indexer" in [System > Scheduler] and click the Start Now button.
 
 Delete Configuration
 --------------------
@@ -83,6 +87,14 @@ CSV File
 ---------------
 
 The content of downloaded/uploaded CSV file is 5 column.
+
+::
+
+    "SuggestWord","Reading","Permissions","Labels","Boost"
+    "fess","ふぇす","{role}role1","label1","100"
+
+.. note::
+   In the Permissions column, specify each value with one of ``{role}``, ``{user}`` and ``{group}``, such as ``{role}role1`` (separate multiple values with commas). A value without a prefix, such as ``role1``, is not treated as a role, and the word is not suggested to users who have that role.
 
 
 

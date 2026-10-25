@@ -55,6 +55,9 @@ Zu crawlender Pfad
 
 Pfade, die mit dem regulären Ausdruck (Java-Format) übereinstimmen, der in diesem Element angegeben ist, werden vom |Fess| Crawler gecrawlt.
 
+.. note::
+   Das Muster wird auf den gesamten Pfad jedes vom Crawler besuchten Pfads angewendet, einschließlich des Startpfads und der Unterverzeichnisse. Geben Sie nur Dateiendungen wie ``.*\.(md|rst|adoc)$`` an, passen der Startpfad und die Unterverzeichnisse nicht zum Muster, der Crawler erreicht die Dateien nicht und es wird nichts gecrawlt. Um die Dokumente nach Dateiendung einzugrenzen, geben Sie dasselbe Muster stattdessen unter „Zu durchsuchender Pfad" an (die Verzeichnisse werden weiterhin durchlaufen, und nur die passenden Dateien werden durchsucht). Verwenden Sie „Zu crawlender Pfad" nur mit Mustern, die auch zum Startpfad und zu den Unterverzeichnissen passen.
+
 Vom Crawlen ausgeschlossener Pfad
 ::::::::::::::::::::::::::::::::::
 

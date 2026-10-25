@@ -269,8 +269,8 @@ Best Practices
 
    Konsultieren Sie die offizielle OpenSearch-Dokumentation für optimale umgebungsspezifische Einstellungen.
 
-Speicherkonfiguration für Vorschlag- und Thumbnail-Verarbeitung
-======================================
+Speicherkonfiguration für Vorschlag-, Chunk- und Thumbnail-Verarbeitung
+=======================================================================
 
 Vorschlags-Generierungsprozess
 ----------------------
@@ -284,6 +284,22 @@ Standardmäßig werden folgende Einstellungen verwendet:
 - Initialer Heap: 128 MB
 - Maximaler Heap: 256 MB
 - Maximaler Metaspace: 128 MB
+
+Content-Chunk-Generierungsprozess
+---------------------------------
+
+Die Speicherkonfiguration für die Content-Chunk-Verarbeitung (Vektorerzeugung für die semantische Suche) wird über ``jvm.chunk.options`` konfiguriert.
+
+Wie beim Crawler enthält diese Einstellung alle Standardoptionen. Ändern Sie daher nur die Zeile ``-Xmx1g`` und behalten Sie die übrigen bei.
+
+Standardmäßig werden folgende Einstellungen verwendet:
+
+- Initialer Heap: 128 MB
+- Maximaler Heap: 1 GB
+- Maximaler Metaspace: 128 MB
+
+.. note::
+   Bei großen Korpora muss der maximale Heap erhöht werden. Einzelheiten finden Sie unter :doc:`search-semantic`.
 
 Thumbnail-Generierungsprozess
 ----------------------

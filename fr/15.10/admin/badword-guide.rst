@@ -37,6 +37,9 @@ Candidat de suggestion
 Enregistre les mots NG.
 Les mots enregistrés ici ne seront plus affichés dans les suggestions.
 
+.. note::
+   Un mot exclu enregistré n'est pas appliqué immédiatement aux suggestions. Il est retiré des candidats de suggestion existants lorsque la tâche « Suggest Indexer », qui reconstruit l'index de suggestions, s'exécute (par défaut tous les jours à 12:00). Pour l'appliquer tout de suite, cliquez sur « Suggest Indexer » dans [Système > Planificateur], puis sur le bouton « Démarrer maintenant ». Il en va de même pour les mots enregistrés par téléversement d'un fichier CSV.
+
 Suppression de configuration
 ----------------------------
 

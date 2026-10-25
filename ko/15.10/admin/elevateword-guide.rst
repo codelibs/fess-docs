@@ -44,6 +44,7 @@
 
 단어에 역할 정보를 설정합니다.
 설정한 역할을 가진 사용자만 추천에 표시됩니다.
+사용자 단위 지정은 {user}사용자명, 역할 단위 지정은 {role}역할명, 그룹 단위 지정은 {group}그룹명으로 지정합니다.
 
 라벨
 :::::
@@ -55,6 +56,9 @@
 ::::::::
 
 단어에 부스트 값을 설정합니다.
+
+.. note::
+   등록, 편집, 삭제한 추가 단어(CSV 업로드 포함)는 추천에 즉시 반영되지 않습니다. 추천 인덱스를 다시 만드는 "Suggest Indexer" 작업이 실행될 때 반영됩니다(기본적으로 매일 12:00에 실행됩니다). 바로 반영하려면 [시스템 > 스케줄러] 에서 "Suggest Indexer" 를 클릭하고 "지금 시작" 버튼을 클릭합니다.
 
 설정 삭제
 --------
@@ -78,8 +82,8 @@ CSV 내용
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
 
 업로드
 =========
@@ -96,8 +100,11 @@ CSV 내용
 
 ::
 
-"SuggestWord","Reading","Role","Label","Boost"
-"fess","ふぇす","role1","label1","100"
+"SuggestWord","Reading","Permissions","Labels","Boost"
+"fess","ふぇす","{role}role1","label1","100"
+
+.. note::
+   Permissions 열에는 ``{role}role1`` 처럼 ``{role}``, ``{user}``, ``{group}`` 중 하나를 붙여서 지정합니다(여러 개는 쉼표로 구분). ``role1`` 처럼 접두사가 없는 값은 역할로 취급되지 않으며, 해당 역할을 가진 사용자에게 추천되지 않습니다.
 
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/elevateword-1.png

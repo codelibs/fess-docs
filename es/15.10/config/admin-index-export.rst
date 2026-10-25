@@ -64,6 +64,9 @@ Ejemplo de configuración:
     index.export.exclude.fields=cache,boost,role
     index.export.scroll.size=200
 
+.. note::
+   El valor predeterminado ``/var/lib/fess/export`` es el directorio de los paquetes RPM/DEB. Si ejecuta la versión ZIP con un usuario normal, no podrá escribir en él, por lo que debe cambiar ``index.export.path`` a un directorio en el que pueda escribir el usuario que ejecuta |Fess|. Si el directorio no se puede crear o no se puede escribir en él, el trabajo falla con el error ``Cannot write to the index export directory: index.export.path=...``.
+
 Habilitar el Trabajo
 ====================
 
@@ -193,7 +196,7 @@ Mejores Prácticas
 Consideraciones de Almacenamiento
 ----------------------------------
 
-- Especifique en ``index.export.path`` un directorio en el que pueda escribir el usuario que ejecuta |Fess| (el valor predeterminado ``/var/lib/fess/export`` es un directorio de las versiones RPM/DEB; si ejecuta la versión ZIP con un usuario normal, no podrá escribir en él. Si no se puede escribir, no se crean los archivos de exportación y se registra en ``fess.log`` una advertencia por cada documento)
+- Especifique en ``index.export.path`` un directorio en el que pueda escribir el usuario que ejecuta |Fess| (el valor predeterminado ``/var/lib/fess/export`` es un directorio de las versiones RPM/DEB; si ejecuta la versión ZIP con un usuario normal, no podrá escribir en él. Si no se puede escribir, el trabajo falla con el error ``Cannot write to the index export directory`` y no se crean los archivos de exportación)
 - Asegure suficiente espacio en disco en el directorio de exportación
 - Considere usar almacenamiento dedicado para grandes conjuntos de documentos
 - Implemente una limpieza periódica de exportaciones antiguas si ejecuta exportaciones regulares

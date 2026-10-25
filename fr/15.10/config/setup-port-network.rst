@@ -389,6 +389,9 @@ Exemple de configuration pour la terminaison SSL/TLS sur le reverse proxy (Nginx
         }
     }
 
+.. note::
+   Transmettre l'en-tête ``X-Forwarded-Proto`` ne change pas le schéma que |Fess| utilise pour construire les URL absolues (par exemple, dans le document de description OpenSearch et la destination SAML). Le schéma est déterminé par la configuration du connecteur. Définissez ``tomcat.secure=true``, ``tomcat.scheme=https`` et ``tomcat.proxyPort=443`` dans ``tomcat_config.properties`` (ils sont commentés par défaut), faites transmettre l'en-tête ``Host`` d'origine sans modification par le proxy inverse, puis redémarrez |Fess|.
+
 Configuration du pare-feu
 ====================
 
@@ -456,7 +459,7 @@ Fonctionnement anormal lors de l'accès via reverse proxy
 ----------------------------------------------------
 
 1. Vérifiez si l'en-tête ``X-Forwarded-Host`` est correctement configuré.
-2. Vérifiez si l'en-tête ``X-Forwarded-Proto`` est correctement configuré.
+2. Vérifiez si l'en-tête ``X-Forwarded-Proto`` est correctement configuré. Cet en-tête seul ne change pas le schéma des URL absolues construites par |Fess| ; ``tomcat.secure``, ``tomcat.scheme`` et ``tomcat.proxyPort`` sont également nécessaires (voir la note de la section sur la terminaison SSL/TLS ci-dessus).
 3. Vérifiez si le chemin de contexte est correctement configuré.
 4. Vérifiez les erreurs dans les journaux du reverse proxy.
 

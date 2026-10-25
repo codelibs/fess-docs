@@ -64,6 +64,9 @@ Example configuration:
     index.export.exclude.fields=cache,boost,role
     index.export.scroll.size=200
 
+.. note::
+   The default ``/var/lib/fess/export`` is the directory of the RPM/DEB packages. It is not writable when the ZIP distribution is run as a regular user, so change ``index.export.path`` to a directory that the user running |Fess| can write to. If the directory cannot be created or written to, the job fails with the error ``Cannot write to the index export directory: index.export.path=...``.
+
 Enabling the Job
 ================
 
@@ -193,7 +196,7 @@ Best Practices
 Storage Considerations
 ----------------------
 
-- Set ``index.export.path`` to a directory that the user running |Fess| can write to (the default ``/var/lib/fess/export`` is the RPM/DEB directory and is not writable when the ZIP distribution is run as a regular user; if it is not writable, no export files are created and a warning is written to ``fess.log`` for each document)
+- Set ``index.export.path`` to a directory that the user running |Fess| can write to (the default ``/var/lib/fess/export`` is the RPM/DEB directory and is not writable when the ZIP distribution is run as a regular user; if it is not writable, the job fails with the error ``Cannot write to the index export directory`` and no export files are created)
 - Ensure sufficient disk space in the export directory
 - Consider using dedicated storage for large document sets
 - Implement regular cleanup of old exports if running periodic exports

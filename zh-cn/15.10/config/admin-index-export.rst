@@ -64,6 +64,9 @@
     index.export.exclude.fields=cache,boost,role
     index.export.scroll.size=200
 
+.. note::
+   默认值 ``/var/lib/fess/export`` 是 RPM/DEB 软件包的目录。以普通用户运行 ZIP 版时无法写入该目录，请将 ``index.export.path`` 改为运行 |Fess| 的用户可以写入的目录。如果无法创建或写入该目录，作业会以 ``Cannot write to the index export directory: index.export.path=...`` 错误失败。
+
 启用作业
 ========
 
@@ -193,7 +196,7 @@ cron 表达式示例：
 存储注意事项
 ------------
 
-- ``index.export.path`` 请指定运行 |Fess| 的用户可以写入的目录（默认的 ``/var/lib/fess/export`` 是 RPM/DEB 版的目录，以普通用户运行 ZIP 版时无法写入。无法写入时不会创建导出文件，并且每个文档都会在 ``fess.log`` 中输出警告）
+- ``index.export.path`` 请指定运行 |Fess| 的用户可以写入的目录（默认的 ``/var/lib/fess/export`` 是 RPM/DEB 版的目录，以普通用户运行 ZIP 版时无法写入。无法写入时，作业会以 ``Cannot write to the index export directory`` 错误失败，并且不会创建导出文件）
 - 确保导出目录有足够的磁盘空间
 - 对于大型文档集，考虑使用专用存储
 - 如果运行定期导出，需定期清理旧的导出文件

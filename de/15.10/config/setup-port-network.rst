@@ -391,6 +391,9 @@ Konfigurationsbeispiel für SSL/TLS-Terminierung am Reverse-Proxy (Nginx):
         }
     }
 
+.. note::
+   Die Weitergabe des Headers ``X-Forwarded-Proto`` ändert nicht das Schema, mit dem |Fess| absolute URLs bildet (zum Beispiel im OpenSearch-Beschreibungsdokument und im SAML-Ziel). Das Schema wird durch die Connector-Einstellungen bestimmt. Setzen Sie ``tomcat.secure=true``, ``tomcat.scheme=https`` und ``tomcat.proxyPort=443`` in ``tomcat_config.properties`` (standardmäßig auskommentiert), lassen Sie den Reverse-Proxy den ursprünglichen ``Host``-Header unverändert weitergeben und starten Sie |Fess| neu.
+
 Firewall-Konfiguration
 ====================
 
@@ -457,7 +460,7 @@ Fehlfunktion beim Zugriff über Reverse-Proxy
 ----------------------------------------------------
 
 1. Überprüfen Sie, ob der Header ``X-Forwarded-Host`` korrekt konfiguriert ist.
-2. Überprüfen Sie, ob der Header ``X-Forwarded-Proto`` korrekt konfiguriert ist.
+2. Überprüfen Sie, ob der Header ``X-Forwarded-Proto`` korrekt konfiguriert ist. Dieser Header allein ändert das Schema der absoluten URLs, die |Fess| bildet, nicht; zusätzlich sind ``tomcat.secure``, ``tomcat.scheme`` und ``tomcat.proxyPort`` erforderlich (siehe den Hinweis im Abschnitt SSL/TLS-Terminierung oben).
 3. Überprüfen Sie, ob der Kontextpfad korrekt konfiguriert ist.
 4. Überprüfen Sie Fehler im Reverse-Proxy-Protokoll.
 
