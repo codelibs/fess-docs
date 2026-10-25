@@ -628,6 +628,24 @@ Erkennung der Zeichenkodierung
 
 Die Namen der Zeichenkodierung, die Tika 4 für Textdateien meldet, können von 15.9 abweichen. So meldet Tika 4 Shift_JIS als ``windows-31j``, ISO-8859-1 als ``windows-1252`` und EUC-JP als ``x-eucJP-Open``.
 
+Ratenbegrenzung des Anmeldeformulars
+------------------------------------
+
+In 15.9 galten die Grenzen von ``theme.api.login.rate.limit.*`` nur für ``/api/v2/auth/login``, nicht für das Anmeldeformular der Anmeldeseite (``/login/``).
+In 15.10 verwendet das Anmeldeformular dieselben Grenzen und dieselben Zähler. Erreichen fehlgeschlagene Anmeldungen von derselben IP-Adresse 10 pro Minute oder wird das Passwort desselben Benutzernamens 5-mal von derselben IP-Adresse abgelehnt, werden Anmeldungen von dieser IP-Adresse bzw. von dieser Kombination aus IP-Adresse und Benutzername für ``theme.api.login.lockout.seconds`` (standardmäßig 900 Sekunden) abgelehnt.
+Während der Sperre meldet auch das richtige Passwort nicht an, und die Seite zeigt dieselbe Meldung wie bei einem falschen Passwort. Eine erfolgreiche Anmeldung gibt den Platz zurück, den der Versuch verbraucht hat.
+Berücksichtigen Sie die Grenze bei Skripten, die ein falsches Passwort senden können, und bei Umgebungen, in denen viele Benutzer eine IP-Adresse teilen.
+
+Fügt ein Reverse-Proxy ``X-Forwarded-For`` als eigene Header-Zeile hinzu (zum Beispiel ``option forwardfor`` von HAProxy), liest 15.10 alle Zeilen und verwendet die erste Adresse von rechts, die kein vertrauenswürdiger Proxy ist, als Client-IP (siehe :doc:`../config/rate-limiting`). Bis 15.9 wurde nur die erste Zeile gelesen, also die vom Client gesendete, sodass ein Client die Adresse wählen konnte, die die Ratenbegrenzung verwendete.
+
+(deny) im Berechtigungsfeld einer Crawl-Konfiguration
+-----------------------------------------------------
+
+Wenn Sie im Berechtigungsfeld einer Crawl-Konfiguration oder einer ähnlichen Einstellung ``(deny)`` gefolgt von einem Leerzeichen schreiben, etwa ``(deny) {user}name``, hat 15.9 dies nicht als Verweigerung gespeichert, sondern den Text mit dem Leerzeichen unverändert. Wurde eine solche Konfiguration in der Verwaltungsoberfläche geöffnet und gespeichert, wurde daraus eine Erlaubnis (``{user}name``).
+15.10 entfernt das Leerzeichen nach ``(deny)`` und ``(allow)`` vor dem Speichern, und erneutes Speichern behält eine Verweigerung bei. Eine ``(deny)``-Zeile ohne ``{user}``, ``{group}`` oder ``{role}`` wird nicht gespeichert.
+
+Eine in 15.9 oder früher gespeicherte Einstellung wird nicht automatisch repariert. Prüfen Sie das Berechtigungsfeld jeder Crawl-Konfiguration, die ``(deny)`` verwendet, schreiben Sie die Zeile in der Form ``(deny){user}name`` neu, speichern Sie sie und crawlen Sie erneut.
+
 Änderungen für Plugin-Entwickler
 --------------------------------
 
