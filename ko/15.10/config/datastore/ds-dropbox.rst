@@ -79,6 +79,12 @@ Dropbox 커넥터는 Dropbox 클라우드 스토리지에서 파일을 가져와
    * - ``basic_plan``
      - 아니오
      - 개인 계정인 경우 ``true``, 팀 계정인 경우 ``false`` (기본값: ``false``)
+   * - ``proxy_host``
+     - 아니오
+     - Dropbox에 연결할 때 거치는 HTTP 프록시의 호스트 이름. 설정하지 않으면 Dropbox에 직접 연결합니다. JVM의 프록시 설정(``-Dhttps.proxyHost`` 등)은 Dropbox SDK가 사용하지 않으므로, 프록시를 거쳐야만 외부에 연결할 수 있는 환경에서는 이 파라미터를 설정하십시오. Dropbox와 Dropbox Paper 데이터 스토어 모두에 적용됩니다. 프록시 인증용 파라미터는 없습니다
+   * - ``proxy_port``
+     - ``proxy_host`` 지정 시
+     - HTTP 프록시의 포트 번호. ``proxy_host`` 를 지정했는데 이 값이 없거나 숫자가 아니면 데이터 스토어가 오류로 실패합니다
    * - ``max_size``
      - 아니오
      - 인덱싱 대상 최대 파일 크기 (바이트) (기본값: ``10000000``)

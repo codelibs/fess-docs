@@ -619,6 +619,11 @@ Tika 4 新增的元数据与其他元数据一样处理，只要名称不匹配 
 
 Tika 4 为文本文件报告的字符编码名称可能与 15.9 不同。例如，Shift_JIS 会被报告为 ``windows-31j``，ISO-8859-1 会被报告为 ``windows-1252``，EUC-JP 会被报告为 ``x-eucJP-Open``。
 
+``Content-Length`` 不再被添加到内容中
+-------------------------------------
+
+15.8.0 和 15.9.0 会把 ``Content-Length`` 元数据的值添加到文档的内容中。对于纯文本文件，该值为 ``0``，因此索引中的内容末尾会多出一个空格和 ``0``。15.10 不会把 ``Content-Length`` 添加到内容中，无论 ``crawler.metadata.content.excludes`` 是否列出它。该值仍会被提取，因此可以用于 ``crawler.metadata.name.mapping`` 和脚本。升级前已建立索引的文档，其内容在重新爬取之前不会改变。
+
 登录表单的次数限制
 ------------------
 
@@ -650,6 +655,15 @@ audit.log 中的控制字符
 - ``ExtractData`` 不再实现 Tika 的接口（``TikaCoreProperties``、``HttpHeaders`` 等）。字符串常量 ``CONTENT_TYPE`` 和 ``CONTENT_ENCODING`` 由 ``ExtractData`` 自身定义。``RESOURCE_NAME_KEY`` 仍为 ``"resourceName"``。
 - 已删除 ``TikaExtractor.setTikaConfig`` 和 ``fess.xml`` 中的 ``tikaConfig`` 组件。
 - 日志级别为 ``debug`` 时，``CrawlJob`` 不再向爬虫传递 ``-Dorg.apache.tika.service.error.warn=true``，因为 Tika 4 不再读取该属性。
+
+为 15.9 构建的插件
+------------------
+
+已确认，为 15.9.0 构建的插件无需重新构建，即可在 15.10 的 war 中安装、启动并执行爬取。但这只是检查的结果，并不是兼容性的保证，使用 ``fess-crawler`` 类的插件仍需按“面向插件开发者的变更”所述重新构建。
+
+即便如此，也请将插件替换为 15.10 的版本（参见 :ref:`upgrade-plugin-versions`）。``bin/fess-setup check`` 会将 15.9.0 插件的 jar 报告为 FAIL（“为其他版本构建”），并提示使用 ``upgrade plugins``。
+
+尤其不要保留 ``fess-storage-s3`` 和 ``fess-storage-gcs`` 的 15.9.0 jar。15.9.0 的这两个插件在存储列表获取失败时不会返回错误。因此，无论是存储无法连接、认证不正确，还是存储桶不存在，管理 API 的 ``/api/admin/storage/list`` 都会返回表示成功的空列表 ``{"items":[],"status":0}``。15.10 的插件会以异常的形式抛出失败，15.10 再将其转换为错误响应。如果保留旧的 jar，15.10 的这一改进就不会生效。
 
 从 15.8 升级到 15.10
 ===================

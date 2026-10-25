@@ -150,6 +150,12 @@ Configure la URL de callback después de la autenticación.
    Si ``oic.redirect.url`` se omite, se construye automáticamente a partir de ``oic.base.url``.
    Para entornos de producción, configure ``oic.base.url`` con una URL HTTPS.
 
+.. warning::
+   «Omitir» significa que la clave no existe en absoluto. Si guarda ``oic.redirect.url`` en blanco en la página "Sistema > General" de la pantalla de administración, la clave se elimina y se usa ``{oic.base.url}/sso/``.
+   En cambio, una línea ``oic.redirect.url=`` (solo el valor vacío) escrita a mano en ``system.properties`` no es un ajuste omitido sino un valor vacío: la solicitud de autorización lleva entonces un parámetro ``redirect_uri`` sin valor.
+   No coincide con el URI de redirección registrado en el OP, por lo que el OP lo rechaza y el inicio de sesión falla.
+   Indique un valor o elimine la línea.
+
 Configuración de atributos de usuario
 --------------------------------------
 

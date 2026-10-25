@@ -639,6 +639,13 @@ Character Encoding Detection
 
 The character set names that Tika 4 reports for text files can differ from 15.9. For example, Shift_JIS is reported as ``windows-31j``, ISO-8859-1 as ``windows-1252``, and EUC-JP as ``x-eucJP-Open``.
 
+``Content-Length`` Is No Longer Added to the Content
+----------------------------------------------------
+
+15.8.0 and 15.9.0 added the value of the ``Content-Length`` metadata to the content of a document. For a plain text file the value was ``0``, so the indexed content ended with a space and ``0``.
+15.10 does not add ``Content-Length`` to the content, whether or not ``crawler.metadata.content.excludes`` lists it. The value is still extracted, so it can be used in ``crawler.metadata.name.mapping`` and in scripts.
+The content of a document that was indexed before the upgrade does not change until the document is crawled again.
+
 Login Form Rate Limit
 ---------------------
 
@@ -670,6 +677,15 @@ The following changes affect plugins that use classes of ``fess-crawler``. Rebui
 - ``ExtractData`` no longer implements the Tika interfaces (``TikaCoreProperties``, ``HttpHeaders`` and so on). ``ExtractData`` itself declares the string constants ``CONTENT_TYPE`` and ``CONTENT_ENCODING``. ``RESOURCE_NAME_KEY`` is still ``"resourceName"``.
 - ``TikaExtractor.setTikaConfig`` and the ``tikaConfig`` component of ``fess.xml`` were removed.
 - At the ``debug`` log level, ``CrawlJob`` no longer passes ``-Dorg.apache.tika.service.error.warn=true`` to the crawler, because Tika 4 does not read it.
+
+Plugins Built for 15.9
+----------------------
+
+Plugins built for 15.9.0 were installed, started and used for crawling on the 15.10 war without being rebuilt. This is the result of a check, not a guarantee of compatibility, and a plugin that uses classes of ``fess-crawler`` still has to be rebuilt, as described in "Changes for Plugin Developers".
+
+Replace the plugins with the 15.10 versions all the same (see :ref:`upgrade-plugin-versions`). ``bin/fess-setup check`` reports a plugin jar of 15.9.0 as FAIL ("built for another release") and points to ``upgrade plugins``.
+
+In particular, do not keep the 15.9.0 jars of ``fess-storage-s3`` and ``fess-storage-gcs``. These plugins of 15.9.0 do not return an error when listing the storage fails. When the storage cannot be reached, the credentials are wrong or the bucket does not exist, ``/api/admin/storage/list`` of the admin API therefore still answers a successful, empty list, ``{"items":[],"status":0}``. The plugins of 15.10 throw the failure, and 15.10 turns it into an error response. With the old jars left in place, this improvement of 15.10 does not take effect.
 
 Upgrading from 15.8 to 15.10
 ===========================

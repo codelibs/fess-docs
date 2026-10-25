@@ -274,6 +274,28 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    ``spnego.logger.level`` contrôle le niveau de log du logger interne de la bibliothèque SPNEGO (le logger ``java.util.logging`` nommé ``Spnego``).
    Si ce paramètre n'est pas défini, le niveau est déterminé automatiquement en fonction du niveau de log de |Fess|.
 
+Limite des échecs d'authentification Basic
+------------------------------------------
+
+Le repli sur l'authentification Basic envoie au répertoire un mot de passe saisi, depuis ``/sso/``, accessible à tous sans connexion ; |Fess| 15.10 le limite donc.
+Ce sont les limites et le blocage du formulaire de connexion et de ``/api/v2/auth/login`` qui s'appliquent (voir :doc:`rate-limiting`), et le compteur de l'adresse IP cliente est partagé avec eux : alterner entre les points d'accès ne donne donc pas plus de tentatives depuis une même adresse.
+Les paramètres se trouvent dans ``fess_config.properties`` (valeurs par défaut entre parenthèses) :
+
+- ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``) : requêtes Basic par minute depuis une adresse IP cliente. Chaque requête portant un en-tête ``Authorization`` Basic utilise une place, qu'une connexion réussie rend.
+- ``theme.api.login.rate.limit.per.user.per.minute`` (``5``) : mots de passe refusés par minute pour une combinaison d'adresse IP cliente et de compte. Lorsque ce nombre est atteint, les requêtes Basic suivantes pour ce compte depuis cette adresse IP sont refusées. Une connexion réussie remet le compte à zéro.
+- ``theme.api.login.lockout.seconds`` (``900``) : durée pendant laquelle l'adresse IP cliente, ou la combinaison d'adresse IP et de compte, reste bloquée une fois une limite dépassée.
+
+Pendant le blocage, une requête Basic est refusée avant la vérification du mot de passe : même le bon mot de passe ne permet pas de se connecter.
+Le navigateur est dirigé vers la page de connexion avec l'erreur de connexion SSO, et un avertissement est écrit dans ``fess.log`` au début du blocage.
+
+Le compte est compté d'après son seul nom, sans tenir compte de la casse, d'un suffixe ``@REALM`` ni d'un préfixe ``DOMAIN\`` : ``alice``, ``ALICE``, ``alice@EXAMPLE.COM`` et ``EXAMPLE\alice`` comptent pour un seul compte ; écrire le nom autrement ne donne donc pas de nouvelles tentatives.
+Comme le compte est aussi tenu par adresse IP, personne ne peut bloquer un utilisateur depuis une autre adresse.
+Un nom d'utilisateur de plus de 100 caractères est refusé.
+Une connexion qui échoue parce que le KDC est injoignable compte comme un mot de passe refusé.
+Les requêtes sans en-tête Basic, comme l'échange Negotiate, ne sont pas comptées.
+
+Derrière un reverse proxy dont l'adresse ne figure pas dans ``rate.limit.trusted.proxies``, tous les clients comptent comme une seule adresse IP ; des échecs répétés peuvent alors bloquer tous les utilisateurs (voir :doc:`rate-limiting`).
+
 Configuration LDAP
 ==================
 
@@ -462,10 +484,13 @@ Augmentez la limite dans ``tomcat_config.properties``.
 L'authentification échoue après le changement du mot de passe du compte de service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Les informations d'identification du serveur sont obtenues une seule fois lors de la première
-connexion, puis mises en cache pour toute la durée de vie du processus.
+Les informations d'identification du serveur sont obtenues lors de la première connexion et, tant
+qu'aucun paramètre ``spnego.*`` ne change, mises en cache pour toute la durée de vie du processus.
 Redémarrez |Fess| après avoir changé le mot de passe du compte de service dans AD ou remplacé le
-keytab. Un redémarrage est également requis après toute modification d'un paramètre ``spnego.*``.
+keytab. En revanche, la modification d'un paramètre ``spnego.*`` ne nécessite pas de redémarrage, qu'elle soit enregistrée dans l'interface d'administration ou faite en éditant ``system.properties``.
+|Fess| compare les paramètres à chaque connexion et, après une modification, reconstruit SPNEGO avec les nouvelles valeurs à la connexion suivante.
+Une négociation en cours pendant la reconstruction peut échouer une fois ; le navigateur réessaie alors.
+Seuls les paramètres sont comparés : remplacer un keytab, ou modifier uniquement le contenu de ``krb5.conf`` ou du fichier de configuration de connexion sans changer de paramètre, nécessite donc toujours un redémarrage, comme indiqué plus haut.
 
 Paramètres de débogage
 ----------------------

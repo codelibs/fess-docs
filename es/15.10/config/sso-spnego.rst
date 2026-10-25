@@ -273,6 +273,28 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    ``spnego.logger.level`` controla el nivel de log del logger interno de la biblioteca SPNEGO (el logger llamado ``Spnego`` de ``java.util.logging``).
    Si no se especifica, el nivel se determina automáticamente en función del nivel de log de |Fess|.
 
+Límite de intentos fallidos de autenticación Basic
+--------------------------------------------------
+
+La alternativa de autenticación Basic envía al directorio una contraseña escrita por el usuario desde ``/sso/``, al que cualquiera puede acceder sin iniciar sesión, por lo que la versión 15.10 de |Fess| la limita.
+Se aplican los límites y el bloqueo del formulario de inicio de sesión y de ``/api/v2/auth/login`` (consulte :doc:`rate-limiting`), y el contador de la dirección IP del cliente se comparte con ellos, de modo que alternar entre los endpoints no concede más intentos desde una misma dirección.
+Los ajustes están en ``fess_config.properties`` (valores predeterminados entre paréntesis):
+
+- ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): solicitudes Basic por minuto desde una dirección IP de cliente. Cada solicitud con un encabezado ``Authorization`` Basic usa un cupo, que un inicio de sesión correcto devuelve.
+- ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): contraseñas rechazadas por minuto para una combinación de dirección IP de cliente y cuenta. Cuando se han rechazado tantas, se rechazan las siguientes solicitudes Basic para esa cuenta desde esa dirección IP. Un inicio de sesión correcto borra el recuento.
+- ``theme.api.login.lockout.seconds`` (``900``): durante cuánto tiempo queda bloqueada la dirección IP del cliente, o la combinación de dirección IP y cuenta, una vez superado un límite.
+
+Mientras está bloqueado, una solicitud Basic se rechaza antes de comprobar la contraseña, por lo que ni siquiera la contraseña correcta permite iniciar sesión.
+El navegador es enviado a la página de inicio de sesión con el error de inicio de sesión SSO, y se escribe una advertencia en ``fess.log`` cuando comienza el bloqueo.
+
+La cuenta se cuenta solo por su nombre, sin distinguir mayúsculas de minúsculas y sin el sufijo ``@REALM`` ni el prefijo ``DOMAIN\``: ``alice``, ``ALICE``, ``alice@EXAMPLE.COM`` y ``EXAMPLE\alice`` cuentan como una sola cuenta, por lo que escribir el nombre de otra forma no da un nuevo cupo.
+Como el recuento también es por dirección IP, nadie puede bloquear a un usuario desde otra dirección.
+Se rechaza un nombre de usuario de más de 100 caracteres.
+Un inicio de sesión que falla porque no se puede alcanzar el KDC cuenta como una contraseña rechazada.
+Las solicitudes sin encabezado Basic, como el intercambio Negotiate, no se cuentan.
+
+Detrás de un proxy inverso cuya dirección no está en ``rate.limit.trusted.proxies``, todos los clientes cuentan como una sola dirección IP, por lo que los fallos repetidos pueden bloquear a todos los usuarios (consulte :doc:`rate-limiting`).
+
 Configuración LDAP
 ==================
 
@@ -460,10 +482,13 @@ Aumente el límite en ``tomcat_config.properties``.
 La autenticación falla tras cambiar la contraseña de la cuenta de servicio
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-La credencial del servidor se obtiene una sola vez en el primer inicio de sesión y se almacena en
-caché durante toda la vida del proceso.
+La credencial del servidor se obtiene en el primer inicio de sesión y, mientras no cambie ningún
+ajuste ``spnego.*``, se almacena en caché durante toda la vida del proceso.
 Reinicie |Fess| después de cambiar la contraseña de la cuenta de servicio en AD o de sustituir el
-keytab. También es necesario reiniciar tras modificar cualquier ajuste ``spnego.*``.
+keytab. En cambio, un cambio en un ajuste ``spnego.*`` no requiere reiniciar, ya se guarde en la pantalla de administración o se haga editando ``system.properties``.
+|Fess| compara los ajustes en cada inicio de sesión y, tras un cambio, vuelve a construir SPNEGO con los nuevos valores en el siguiente inicio de sesión.
+Un handshake en curso durante la reconstrucción puede fallar una vez; el navegador lo reintenta.
+Solo se comparan los ajustes: si sustituye un keytab, o edita únicamente el contenido de ``krb5.conf`` o del archivo de configuración de inicio de sesión sin cambiar ningún ajuste, sigue siendo necesario reiniciar, como se describe más arriba.
 
 Configuración de depuración
 -----------------------------
