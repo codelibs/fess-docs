@@ -5,7 +5,7 @@ Semantic Search (Content Chunking + Vector Search)
 Overview
 ========
 
-In |Fess| 15.10, the **content chunking feature** — which splits document bodies into chunks and
+In |Fess| 15.8, the **content chunking feature** — which splits document bodies into chunks and
 generates and stores an embedding vector for each chunk — has been integrated into the core.
 The generated vectors are used for two purposes:
 
@@ -752,7 +752,7 @@ If You Were Using the fess-webapp-semantic-search Plugin
 --------------------------------------------------------------
 
 The ``fess-webapp-semantic-search`` plugin, which provided semantic search in |Fess| 15.7 and
-earlier, has been folded into the core in 15.10 and is now **unnecessary (deprecated)**. In
+earlier, has been folded into the core in 15.8 and is now **unnecessary (deprecated)**. In
 addition to the steps in *Existing Users Who Want to Enable Vector Search* above, you also need to
 do the following.
 

@@ -317,7 +317,7 @@ Each use needs the right one:
 
 A value read from CSV, JSON or a database is a string unless the script converts it, so convert the
 values you want to sort or search by range. With the JavaScript engine, the default for data store
-configurations created in 15.10 (``script_type=javascript``)::
+configurations created in 15.9 (``script_type=javascript``)::
 
     url="https://example.com/product/" + id
     title=name

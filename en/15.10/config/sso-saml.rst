@@ -35,7 +35,7 @@ In SAML authentication, |Fess| operates as an SP (Service Provider) and collabor
 
    Note that in 15.7 an IdP-initiated login happened to work when ``tomcat.sameSiteCookies=none``
    was set: |Fess| bounced the unmatched response back to the IdP, and the IdP immediately returned
-   a solicited assertion. 15.10 no longer bounces the response, so IdP-initiated login does not work.
+   a solicited assertion. 15.8 no longer bounces the response, so IdP-initiated login does not work.
 
 For role-based search integration, see :doc:`security-role`.
 

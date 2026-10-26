@@ -27,7 +27,7 @@
 기본 스크립트
 --------------------
 
-|Fess| 15.10에서 ``crawler.default.script`` 속성이 제거되었으므로 문서 부스트의 각 규칙은 :doc:`../admin/boostdoc-guide` 화면에서 스크립트 유형을 개별적으로 선택합니다.
+|Fess| 15.9에서 ``crawler.default.script`` 속성이 제거되었으므로 문서 부스트의 각 규칙은 :doc:`../admin/boostdoc-guide` 화면에서 스크립트 유형을 개별적으로 선택합니다.
 
 HTTP 스레드 풀
 ------------------
@@ -1179,7 +1179,7 @@ Playwright 크롤러를 사용하면 헤드리스 브라우저에서 페이지�
        npx playwright install --with-deps
 
 .. note::
-   15.10 부터 Playwright 가 사용하는 Node.js 실행 파일도 |Fess| 패키지에 포함되지
+   15.9 부터 Playwright 가 사용하는 Node.js 실행 파일도 |Fess| 패키지에 포함되지
    않습니다. 아래 명령으로 설치하십시오. ``bin/fess.in.sh`` 가 설치 위치를 찾아
    크롤러 프로세스에 ``PLAYWRIGHT_NODEJS_PATH`` 를 전달합니다.
 
@@ -1359,7 +1359,7 @@ DI 정의에서만 설정할 수 있는 항목
    대상으로 하는 크롤에서는 유효하지만, 일반적으로는 위의 안전하게 지정할 수
    있는 종류 중에서 선택하십시오.
 
-15.10에서의 변경 사항
+15.8에서의 변경 사항
 --------------------
 
 15.7 이전에서 업그레이드하는 경우, Playwright 크롤러의 동작이

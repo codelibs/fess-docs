@@ -10,7 +10,7 @@
 搜索界面始终是主题。未设置默认主题时， |Fess| 使用其内置的主题 ``bootstrap`` 。内置主题无法删除或替换；如需修改，请以新名称复制后再修改（参见 :ref:`theme-customize-bundled` ）。
 
 .. note::
-   基于 JSP 的主题（ ``fess-theme-*`` JAR 主题插件）已在 15.10 中删除。要更改外观，请使用主题（参见 :ref:`upgrade-159-static-theme` ）。
+   基于 JSP 的主题（ ``fess-theme-*`` JAR 主题插件）已在 15.9 中删除。要更改外观，请使用主题（参见 :ref:`upgrade-159-static-theme` ）。
    执行本页的操作需要 ``admin-theme`` 角色（仅查看时需要 ``admin-theme-view`` 角色）。
 
 获取主题
@@ -141,7 +141,7 @@ theme.yml 清单
      - 入口点文件（默认值: ``index.html`` ）。
    * - ``spaFallback``
      - 可选
-     - 已弃用，不再读取。自 15.10 起，搜索界面的路径始终返回入口文件。
+     - 已弃用，不再读取。自 15.9 起，搜索界面的路径始终返回入口文件。
 
 表: theme.yml 的字段
 

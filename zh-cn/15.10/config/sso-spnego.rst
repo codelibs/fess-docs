@@ -232,7 +232,7 @@ Kerberos配置文件
    该文件在 ZIP 版中位于 ``lib/classes/`` ，在 DEB/RPM 版中位于 ``/etc/fess/`` ，修改后需要重启 |Fess| 。
 
 .. warning::
-   在 |Fess| 15.10 中，如果客户端主体的领域与服务器的领域不同，登录将默认被拒绝。
+   在 |Fess| 15.8 中，如果客户端主体的领域与服务器的领域不同，登录将默认被拒绝。
    如果用户来自 AD 域树的子域或建立了信任关系的林，
    请在 ``spnego.allowed.realms`` 中以逗号分隔列出这些领域。
    否则，在 15.7 之前能够登录的用户将因 ``Kerberos realm is not allowed`` 而被拒绝。

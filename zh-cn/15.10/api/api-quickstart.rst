@@ -280,7 +280,7 @@ API 版本对应表
 
 .. note::
 
-   |Fess| 15.10 中，原有的 ``/api/v1`` JSON 搜索 API 和聊天 API 已废弃。
+   |Fess| 15.7 中，原有的 ``/api/v1`` JSON 搜索 API 和聊天 API 已废弃。
    使用 ``/api/v1`` 的客户端请迁移至 ``/api/v2``\ 。
    各版本间的详细差异，请参阅 `发布说明 <https://github.com/codelibs/fess/releases>`__\ 。
 

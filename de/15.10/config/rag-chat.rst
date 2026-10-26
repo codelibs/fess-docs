@@ -7,7 +7,7 @@ AI-Suchmodus-Funktion konfigurieren
 
 AI-Suchmodus (RAG: Retrieval-Augmented Generation) ist eine Funktion, die die |Fess|-Suchergebnisse mit einem LLM (Large Language Model) erweitert und Informationen in dialogorientierter Form bereitstellt. Benutzer können Fragen in natürlicher Sprache stellen und detaillierte Antworten basierend auf den Suchergebnissen erhalten.
 
-In |Fess| 15.10 wurde die LLM-Funktion als ``fess-llm-*``-Plugin ausgelagert.
+In |Fess| 15.6 wurde die LLM-Funktion als ``fess-llm-*``-Plugin ausgelagert.
 Kerneinstellungen und LLM-anbieterspezifische Einstellungen werden in ``fess_config.properties`` vorgenommen,
 während die LLM-Anbieterauswahl (``rag.llm.name``) in ``system.properties`` oder über die Administrationsoberfläche konfiguriert wird.
 
@@ -132,7 +132,7 @@ in OpenSearch persistiert). Die Konfigurationspfade unterscheiden sich, daher ni
 .. note::
 
    ``rag.llm.type`` ist der frühere Eigenschaftsname aus |Fess| 15.5 und davor.
-   In 15.10 und später wurde er in ``rag.llm.name`` umbenannt; Werte unter
+   In 15.6 und später wurde er in ``rag.llm.name`` umbenannt; Werte unter
    ``rag.llm.type`` werden nicht mehr gelesen.
 
 Kerneinstellungen-Übersicht

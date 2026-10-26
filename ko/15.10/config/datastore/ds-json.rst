@@ -270,7 +270,7 @@ JSON 오브젝트 최상위 레벨의 필드는 스크립트 내에서 **접두�
 
 .. note::
 
-   |Fess| 15.10 부터 내장 스크립트 엔진이 JavaScript로 변경되었습니다.
+   |Fess| 15.9 부터 내장 스크립트 엔진이 JavaScript로 변경되었습니다.
    Groovy는 ``fess-script-groovy`` 플러그인으로 제공됩니다.
    사용할 엔진은 데이터 스토어의 파라미터 ``script_type`` 으로 지정합니다
    ( ``script_type=javascript`` 등). 생략한 경우에는 ``groovy`` 가 사용됩니다.

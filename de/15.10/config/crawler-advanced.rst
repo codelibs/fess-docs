@@ -27,7 +27,7 @@ Erweiterte Crawler-Konfigurationen werden in folgenden Dateien vorgenommen:
 Standard-Skriptsprache
 ----------------------
 
-``crawler.default.script`` wurde in |Fess| 15.10 entfernt, und jede Dokument-Boosting-Regel wählt ihren Skripttyp jetzt einzeln auf der Seite :doc:`../admin/boostdoc-guide` aus.
+``crawler.default.script`` wurde in |Fess| 15.9 entfernt, und jede Dokument-Boosting-Regel wählt ihren Skripttyp jetzt einzeln auf der Seite :doc:`../admin/boostdoc-guide` aus.
 
 HTTP-Thread-Pool
 ------------------
@@ -1182,7 +1182,7 @@ zu verwenden, geben Sie diese wie folgt an.
        npx playwright install --with-deps
 
 .. note::
-   Seit 15.10 gehört auch die Node.js-Programmdatei, die Playwright ausführt, nicht
+   Seit 15.9 gehört auch die Node.js-Programmdatei, die Playwright ausführt, nicht
    mehr zum |Fess|-Paket. Installieren Sie sie mit dem folgenden Befehl;
    ``bin/fess.in.sh`` findet sie und übergibt ``PLAYWRIGHT_NODEJS_PATH`` an den
    Crawler-Prozess.
@@ -1372,7 +1372,7 @@ sowohl die Dauer eines Crawls als auch das übertragene Datenvolumen.
    wählen Sie jedoch normalerweise aus den oben genannten Typen aus, die sich
    gefahrlos angeben lassen.
 
-Änderungen in 15.10
+Änderungen in 15.8
 ------------------
 
 Beim Upgrade von 15.7 oder älter hat sich das Verhalten des

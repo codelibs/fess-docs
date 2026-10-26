@@ -192,7 +192,7 @@ is declared in the |Fess| core's ``fess.xml``, the replacement file is
    (for example, ``queryHelper`` in ``app.xml``). These must be kept in
    sync with each |Fess| release. If the file keeps calling a method
    that the core removed, the component definition fails to initialize
-   with a ``BeanMethodNotFoundException``. For example, 15.10 removed
+   with a ``BeanMethodNotFoundException``. For example, 15.9 removed
    ``addDesignJspFileName`` from ``systemHelper``, so a replacement file
    that still calls it fails. This maintenance cost is why addition is
    recommended over replacement.
@@ -314,7 +314,7 @@ for development:
    * - ``fess-webapp-bangs``
      - DuckDuckGo-style bangs (``!g``) that send a search to another site
    * - ``fess-webapp-semantic-search``
-     - Neural search / vector search (deprecated; superseded by the core integration in 15.10)
+     - Neural search / vector search (deprecated; superseded by the core integration in 15.8)
    * - ``fess-webapp-multimodal``
      - Multimodal (image/text) search
 

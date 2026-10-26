@@ -5,7 +5,7 @@ JavaScriptスクリプトガイド
 概要
 ====
 
-JavaScriptは |Fess| 15.10以降の既定のスクリプト言語です。
+JavaScriptは |Fess| 15.9以降の既定のスクリプト言語です。
 Sai（|Fess| がDI XMLの式判定にも利用している、CodeLibsによるNashornフォーク）上で
 動作し、スクリプトは ECMAScript 6 として実行されます。識別子は ``javascript`` で、
 ``js`` および ``sai`` というエイリアスでも指定できます。

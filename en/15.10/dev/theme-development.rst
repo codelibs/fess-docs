@@ -5,7 +5,7 @@ Theme Development Guide
 Overview
 ========
 
-In |Fess| 15.10, the search screen is always a theme. A theme is an independent SPA (Single Page Application) that uses the
+In |Fess| 15.9, the search screen is always a theme. A theme is an independent SPA (Single Page Application) that uses the
 ``/api/v2/*`` API. Themes are distributed as ZIP files, uploaded
 through the admin console, and enabled there. When no theme is
 selected, |Fess| uses ``bootstrap``, the theme bundled with it.
@@ -18,9 +18,9 @@ is to copy the bundled theme and change the copy, as described in
 .. note::
 
    ZIP-packaged themes are available in |Fess| 15.7 and later, and became the
-   default search screen in 15.10. JAR theme plugins, which replaced the
-   JSPs of the search screen, were removed in 15.10; see
-   `JAR Theme Plugin (Removed in 15.10)`_.
+   default search screen in 15.9. JAR theme plugins, which replaced the
+   JSPs of the search screen, were removed in 15.9; see
+   `JAR Theme Plugin (Removed in 15.9)`_.
 
 What Is a Theme
 ===============
@@ -118,7 +118,7 @@ The fields that can be specified are as follows.
    * - ``spaFallback``
      - Optional
      - Deprecated. Accepted for compatibility but no longer read: since
-       15.10 the entry HTML is always served for the search screen paths.
+       15.9 the entry HTML is always served for the search screen paths.
 
 .. note::
 
@@ -144,7 +144,7 @@ Serving and API
 - The entry HTML (``index.html`` by default) is returned for the paths
   ``/``, ``/search``, ``/advance``, ``/help``, ``/error``, ``/profile``,
   ``/cache``, and ``/chat``, and subsequent routing is handled by the
-  SPA. Since 15.10 this happens whatever ``spaFallback`` says; the field
+  SPA. Since 15.9 this happens whatever ``spaFallback`` says; the field
   is no longer read.
 - Errors are rendered by the theme as well: when a request fails, a
   browser receives the theme's entry HTML at the requested URL, with the
@@ -297,12 +297,12 @@ nor replaced by an upload. Copy it under a new name instead.
    |Fess| upgrade and reapply your changes, as the bundled theme follows
    the ``/api/v2/*`` API of its |Fess| version.
 
-JAR Theme Plugin (Removed in 15.10)
+JAR Theme Plugin (Removed in 15.9)
 ==================================
 
 The JAR theme plugin type, which put JSPs, CSS and images in a ``fess-theme-*`` JAR and
-applied them as the theme named after a virtual host key, was removed in |Fess| 15.10.
-15.10 does not extract a JAR theme and does not use it for any screen.
+applied them as the theme named after a virtual host key, was removed in |Fess| 15.9.
+15.9 does not extract a JAR theme and does not use it for any screen.
 
 - Installing one from "System" > "Plugin" in the admin UI only places it in
   ``app/WEB-INF/plugin/`` as a generic JAR of type ``jar``; no screen changes. A

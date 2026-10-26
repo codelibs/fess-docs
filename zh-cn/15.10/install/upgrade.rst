@@ -75,7 +75,7 @@
    - ``fess_basic_config.bulk`` - 配置索引（爬取设置、调度器、标签、
      关键词匹配、角色、Web/文件认证等 19 个索引）
    - ``fess_config.bulk`` - 除上述 19 个索引外，还包含爬取信息、失败 URL、作业日志、
-     缩略图队列等运行时数据，共 25 个索引（15.8 及之前；15.10 增加了保存用户标签的
+     缩略图队列等运行时数据，共 25 个索引（15.8 及之前；15.9 增加了保存用户标签的
      ``tag_type`` 索引，共 26 个）
    - ``fess_user.bulk`` - 用户、角色、群组
    - ``system.properties`` - 包含常规设置的系统设置
@@ -86,12 +86,12 @@
 
       ``fess_config.bulk`` 包含 ``fess_basic_config.bulk``。作为升级前的
       配置备份，\ ``fess_basic_config.bulk``\ 、\ ``fess_user.bulk``\ 、
-      ``system.properties`` 这 3 个文件就已足够。但是，如果备份来源为 15.10 或更高版本且使用了用户标签，由于保存用户标签的 ``tag_type`` 索引不包含在 ``fess_basic_config.bulk`` 中，请同时下载 ``fess_config.bulk``\ （参见 :doc:`../admin/tagtype-guide`\ ）。
+      ``system.properties`` 这 3 个文件就已足够。但是，如果备份来源为 15.9 或更高版本且使用了用户标签，由于保存用户标签的 ``tag_type`` 索引不包含在 ``fess_basic_config.bulk`` 中，请同时下载 ``fess_config.bulk``\ （参见 :doc:`../admin/tagtype-guide`\ ）。
 
    .. note::
 
       搜索日志、点击日志等日志数据（``search_log.ndjson``、``click_log.ndjson``、
-      ``favorite_log.ndjson``、``user_info.ndjson``；15.10 中还会显示 ``chat_log.ndjson``）也可从
+      ``favorite_log.ndjson``、``user_info.ndjson``；15.9 中还会显示 ``chat_log.ndjson``）也可从
       同一页面下载。
       如果仅备份配置，则不需要下载这些文件。另外，这些 ``*.ndjson`` 文件无法
       通过备份页面的上传功能重新导入恢复
@@ -275,7 +275,7 @@ ZIP 版
    .. warning::
 
       如果原样复制 ``fess_config.properties`` 与 ``fess.in.sh`` ，旧版本的值会被沿用，其中也包括
-      15.10 中默认值已变更的项。例如，升级后新建的作业默认将使用 Groovy。执行最后两条命令之前，
+      15.9 中默认值已变更的项。例如，升级后新建的作业默认将使用 Groovy。执行最后两条命令之前，
       请将各文件与 ``fess-15.10.0`` 中的文件进行比较，只迁移自己修改过的值。需要确认的项目请参阅
       :ref:`upgrade-159-carried-over-config` 。
 
@@ -666,12 +666,12 @@ audit.log 中的控制字符
 尤其不要保留 ``fess-storage-s3`` 和 ``fess-storage-gcs`` 的 15.9.0 jar。15.9.0 的这两个插件在存储列表获取失败时不会返回错误。因此，无论是存储无法连接、认证不正确，还是存储桶不存在，管理 API 的 ``/api/admin/storage/list`` 都会返回表示成功的空列表 ``{"items":[],"status":0}``。15.10 的插件会以异常的形式抛出失败，15.10 再将其转换为错误响应。如果保留旧的 jar，15.10 的这一改进就不会生效。
 
 从 15.8 升级到 15.10
-===================
+====================
 
 若从 15.8 升级，以下为不向后兼容的变更。若从 15.7 及更早版本升级，这些变更同样适用：请阅读从
 「内嵌 OpenSearch 的移除」到「将新字段和假名规范化应用到现有文档索引」的所有小节（内嵌
 OpenSearch、脚本引擎、S3 与 SSO 插件、Index Exporter 作业等），以及本页末尾的
-「15.10 特有的迁移工作」。
+「按功能划分的迁移工作」。
 
 内嵌 OpenSearch 的移除
 ----------------------
@@ -1008,9 +1008,9 @@ RPM 版请以同样方式比较 ``/etc/fess/fess_config.properties`` 与
 
 .. note::
 
-   |Fess| 15.10 同样使用 ``app.cipher.key`` 加密保存 Web 认证和文件认证的 ``password`` ，因此备份中的
+   |Fess| 15.9 同样使用 ``app.cipher.key`` 加密保存 Web 认证和文件认证的 ``password`` ，因此备份中的
    ``fess_basic_config.bulk`` 和 ``fess_config.bulk`` 包含加密后的值。恢复到其他安装环境时请沿用相同的 ``app.cipher.key`` ；
-   密钥不同时，使用这些认证信息的爬取会因错误而失败。15.10 之前创建的备份以明文包含这些值，可以继续正常使用
+   密钥不同时，使用这些认证信息的爬取会因错误而失败。15.9 之前创建的备份以明文包含这些值，可以继续正常使用
    （详见 :doc:`../admin/backup-guide` ）。
 
 .. _upgrade-159-jcifs:
@@ -1224,9 +1224,9 @@ API 现在会拒绝的请求
 ``search_engine.type`` 的 ``cloud`` 已弃用
 ------------------------------------------
 
-15.10 为 ``search_engine.type`` 新增了 ``vanilla`` 值，用于不含 CodeLibs 插件的原生 OpenSearch（请参阅 :doc:`../config/search-engine-type` ）。 ``cloud`` 成为 ``vanilla`` 的已弃用别名，仍可继续使用，但启动时会在日志中输出警告。在 15.10 上运行后，请改为 ``vanilla`` 。 ``aws`` 的行为与之前相同。
+15.9 为 ``search_engine.type`` 新增了 ``vanilla`` 值，用于不含 CodeLibs 插件的原生 OpenSearch（请参阅 :doc:`../config/search-engine-type` ）。 ``cloud`` 成为 ``vanilla`` 的已弃用别名，仍可继续使用，但启动时会在日志中输出警告。在 15.10 上运行后，请改为 ``vanilla`` 。 ``aws`` 的行为与之前相同。
 
-* ``vanilla`` 需要 15.10 及更高版本。\ |Fess| 15.8 及更早版本无法识别该值，因此在仍有可能回退到 15.8 期间，请保持 ``cloud`` 不变。
+* ``vanilla`` 需要 15.9 及更高版本。\ |Fess| 15.8 及更早版本无法识别该值，因此在仍有可能回退到 15.8 期间，请保持 ``cloud`` 不变。
 * ``aws`` 和 ``cloud`` 的索引定义现在从 ``fess_indices/_vanilla/`` 读取。随附的 ``fess_indices/_aws/`` 和 ``fess_indices/_cloud/`` 已不存在，自行添加的 ``fess_indices/_aws/`` 或 ``fess_indices/_cloud/`` 也不再被读取，请将修改内容移到 ``fess_indices/_vanilla/`` 。已存在的索引不会改变。
 * 15.8 保存在搜索引擎中的建议（suggest）设置会自动迁移，无需任何操作。
 
@@ -1273,8 +1273,8 @@ CSV 文件的数据存储配置。要保持 15.8 的行为，请在「参数」�
    因此要添加这些值，请暂时禁用「系统」→「常规」中的「检查上次修改时间」后再进行爬取。
 
 
-15.10 特有的迁移工作
-===================
+按功能划分的迁移工作
+====================
 
 从 15.7 及更早版本升级到 15.10 时，需要根据所使用的功能执行以下工作。
 
@@ -1282,7 +1282,7 @@ CSV 文件的数据存储配置。要保持 15.8 的行为，请在「参数」�
 ----------------------------------
 
 在 |Fess| 15.7 及更早版本中提供语义搜索功能的 ``fess-webapp-semantic-search`` 插件，
-已在 15.10 中并入核心，现已不再需要（已弃用）。需要移除该插件、删除
+已在 15.8 中并入核心，现已不再需要（已弃用）。需要移除该插件、删除
 ``-Dfess.semantic_search.*`` 及 ``-Drank.fusion.searchers=default,semantic``\ ，
 并解除旧的 ingest pipeline。详细步骤请参阅
 :ref:`semantic-search-migration`\ （:doc:`../config/search-semantic`）。
@@ -1290,21 +1290,21 @@ CSV 文件的数据存储配置。要保持 15.8 的行为，请在「参数」�
 若此前使用过 AI 搜索模式（RAG Chat）
 ---------------------------------------------
 
-自 15.10 起，AI 搜索模式（RAG Chat）功能已拆分为 ``fess-llm-ollama``\ 、\ ``fess-llm-openai``\ 、
+自 15.6 起，AI 搜索模式（RAG Chat）功能已拆分为 ``fess-llm-ollama``\ 、\ ``fess-llm-openai``\ 、
 ``fess-llm-gemini`` 等插件。请在管理页面「系统」→「插件」中安装与所使用的
-提供商对应的插件。15.10 还新增了面向 Amazon Bedrock 的
+提供商对应的插件。15.9 还新增了面向 Amazon Bedrock 的
 ``fess-llm-bedrock`` 。
 
 若此前使用过 SPNEGO（Windows 集成认证）
 ---------------------------------------
 
-自 15.10 起，如果客户端主体的 Kerberos 领域与服务器的领域不同，SPNEGO 登录将被拒绝。
+自 15.8 起，如果客户端主体的 Kerberos 领域与服务器的领域不同，SPNEGO 登录将被拒绝。
 如果用户来自 AD 域树的子域或建立了信任关系的林，请在管理页面「系统」→「通用」或
 ``app/WEB-INF/conf/system.properties`` 的 ``spnego.allowed.realms`` 中以逗号分隔列出
 这些领域。否则，在 15.7 之前能够登录的用户将因 ``Kerberos realm is not allowed`` 而被拒绝。
 详细内容请参阅 :doc:`../config/sso-spnego`\ 。
 
-此外，15.10 中 ``spnego.allow.unsecure.basic`` 与 ``spnego.allow.localhost`` 的代码默认值也从
+此外，15.8 中 ``spnego.allow.unsecure.basic`` 与 ``spnego.allow.localhost`` 的代码默认值也从
 ``true`` 改为了 ``false`` 。在 ``app/WEB-INF/conf/system.properties`` 中不存在这些键的环境中，
 升级后会自动采用更严格的行为。特别是当 ``spnego.allow.unsecure.basic=false`` 时，SPNEGO 库仅对
 ``HttpServletRequest#isSecure()`` 返回 ``true`` 的请求提供 Basic 认证，
@@ -1328,7 +1328,7 @@ CSV 文件的数据存储配置。要保持 15.8 的行为，请在「参数」�
 若此前使用过 SAML 认证（SSO）
 -----------------------------
 
-自 15.10 起，|Fess| 会将每个 SAML 响应与自身发出的 AuthnRequest 的 ID 进行绑定校验，
+自 15.8 起，|Fess| 会将每个 SAML 响应与自身发出的 AuthnRequest 的 ID 进行绑定校验，
 因此 IdP 发起（未经请求的 unsolicited）的 SSO 无法再使用。从 IdP 门户（如 Okta 仪表板或
 Microsoft Entra ID 的「我的应用」）中的 |Fess| 磁贴发起的登录没有可匹配的 AuthnRequest，
 会被拒绝。在 15.7 之前它之所以可用，是因为 |Fess| 会将无法匹配的响应退回给 IdP，
@@ -1347,14 +1347,14 @@ Microsoft Entra ID 的「我的应用」）中的 |Fess| 磁贴发起的登录�
 若此前使用过 Microsoft Entra ID（Azure AD）
 -------------------------------------------
 
-自 15.10 起，向授权端点请求的响应模式默认值由 ``form_post`` 变更为 ``query``\ 。15.7 之前回调以
+自 15.8 起，向授权端点请求的响应模式默认值由 ``form_post`` 变更为 ``query``\ 。15.7 之前回调以
 跨站 POST 返回，而 |Fess| 的默认值 ``tomcat.sameSiteCookies = lax`` 不会随该请求发送会话
 Cookie，因此需要将其改为 ``tomcat.sameSiteCookies = none``\ 。如果仅为此才设置了 ``none``\ ，
 可以恢复为默认值。若要保持原有行为，请指定 ``entraid.response.mode=form_post`` 并保留
 ``tomcat.sameSiteCookies = none``\ 。浏览器仅对同时带有 ``Secure`` 属性的 Cookie 接受
 ``none``\ ，因此这种方式同样要求通过 HTTPS 提供 |Fess| 。
 
-自 15.10 起，|Fess| 还会在登录完成后于后台解析用户所属的组和角色，而不再让登录等待 Microsoft
+自 15.8 起，|Fess| 还会在登录完成后于后台解析用户所属的组和角色，而不再让登录等待 Microsoft
 Graph。在解析完成之前——或解析未能完全成功时——用户拥有的仅有其自身的用户级权限，以及在
 ``entraid.default.groups`` 和 ``entraid.default.roles`` 中配置的组和角色。若两者都未配置
 （即附带的默认值），这段时间内的搜索将一条文档都搜不到，因为按附带的默认值创建的爬取配置会授予
@@ -1380,7 +1380,7 @@ Graph。在解析完成之前——或解析未能完全成功时——用户拥
 使用 LDAP / Active Directory 集成的情况
 ------------------------------------------
 
-从 15.10 开始，组和角色的权限名称取自条目 RDN 的值，而不再是从 DN 文本中截取的片段。CN 中包含
+从 15.8 开始，组和角色的权限名称取自条目 RDN 的值，而不再是从 DN 文本中截取的片段。CN 中包含
 在 DN 内被转义的字符（通常是逗号）的组，其权限名称将与 15.7 之前不同。
 
 .. list-table::
@@ -1408,7 +1408,7 @@ Graph。在解析完成之前——或解析未能完全成功时——用户拥
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 在 15.7 之前，即使设置了 ``ldap.role.search.user.enabled=false``\ ，仍会授予从用户名派生的权限
-（``role.search.user.prefix`` 加用户名）。从 15.10 开始该设置将实际生效，为 ``false`` 时不再授予。
+（``role.search.user.prefix`` 加用户名）。从 15.8 开始该设置将实际生效，为 ``false`` 时不再授予。
 
 在设置为 ``false`` 的环境中，升级后用户会失去以自身命名的权限，因此针对单个用户设置了权限的文档
 将无法被该用户检索到。若要保持原有行为，请恢复为随附的默认值 ``true``\ 。
@@ -1463,7 +1463,7 @@ Graph。在解析完成之前——或解析未能完全成功时——用户拥
     $ bin/fess-setup upgrade plugins
     $ bin/fess-setup check
 
-``upgrade plugins`` 只处理已安装的插件。 ``fess-script-groovy`` 等用于补充 15.10 从发行包中移除
+``upgrade plugins`` 只处理已安装的插件。 ``fess-script-groovy`` 等用于补充 15.9 从发行包中移除
 部分的插件，请按照前面各节的说明，使用 ``bin/fess-setup install plugin`` 安装。
 
 如果在 Docker 版中指定了 ``FESS_PLUGINS``，请按照 ``fess-ds-wikipedia:15.10.0``

@@ -100,7 +100,7 @@ Multiple files:
 .. note::
 
    Quote processing and escape processing are **enabled by default** in
-   |Fess| 15.10. CSV files (RFC 4180 compliant) where quoted fields contain
+   |Fess| 15.9. CSV files (RFC 4180 compliant) where quoted fields contain
    delimiters or line breaks are parsed correctly without specifying any
    parameters.
    For how to revert to the previous behavior (disabling quote processing)
@@ -246,7 +246,7 @@ Standard CSV (RFC 4180 compliant)
 Disabling Quote and Escape Processing
 --------------------------------------
 
-Quote processing and escape processing are enabled by default in |Fess| 15.10.
+Quote processing and escape processing are enabled by default in |Fess| 15.9.
 The default quote character is double quote ``"``, and the default escape
 character is the same as the quote character (escaped by doubling it, per
 RFC 4180); standard RFC 4180 CSV files can be parsed as-is without any
@@ -802,7 +802,7 @@ Advanced Script Examples
 ========================
 
 The examples below use the JavaScript engine (``script_type=javascript``), which a data store
-configuration created in 15.10 uses by default.
+configuration created in 15.9 uses by default.
 
 Data Processing
 ---------------

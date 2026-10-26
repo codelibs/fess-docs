@@ -52,7 +52,7 @@ Tabs
 .. note::
 
    Per-query click metrics and the zero-click queries count only clicks recorded since search words
-   started to be recorded with clicks (|Fess| 15.10 and later). The overall clicks and click-through
+   started to be recorded with clicks (|Fess| 15.9 and later). The overall clicks and click-through
    rate include older clicks. Some values, such as the number of users, are approximate.
 
 Looking into Zero-Hit Queries

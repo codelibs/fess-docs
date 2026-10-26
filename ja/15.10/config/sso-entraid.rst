@@ -29,7 +29,7 @@ Entra ID認証では、|Fess| がOAuth 2.0/OpenID Connectのクライアント�
 7. バックグラウンドで |Fess| がMicrosoft Graph APIを使用してユーザーのグループ・ロール情報を取得し、完了後にロールベース検索に適用
 
 .. note::
-   |Fess| 15.10 以降は認可エンドポイントに ``response_mode=query`` を要求するため、手順4の認可レスポンスはGETで返されます。
+   |Fess| 15.8 以降は認可エンドポイントに ``response_mode=query`` を要求するため、手順4の認可レスポンスはGETで返されます。
    15.7 以前はクロスサイトのPOSTで返されており、|Fess| の既定値である ``tomcat.sameSiteCookies = lax``
    ではセッションクッキーが送信されないため、``tomcat.sameSiteCookies = none`` への変更が回避策として必要でした。
    この回避策のためだけに ``none`` を設定していた場合は、既定値に戻せます。
@@ -243,7 +243,7 @@ APIアクセス許可の設定
 
 .. note::
    |Fess| はトークン取得時に ``https://graph.microsoft.com/.default`` スコープを要求します。
-   15.10 以降は、認可エンドポイントにも ``openid profile offline_access https://graph.microsoft.com/.default``
+   15.8 以降は、認可エンドポイントにも ``openid profile offline_access https://graph.microsoft.com/.default``
    を要求し、同じ範囲の同意を求めます。
    これは、アプリ登録で構成・同意済みのすべてのアクセス許可が使用されることを意味します。
    そのため、グループ情報を取得するには、上記のアクセス許可をアプリ登録に追加し、

@@ -238,7 +238,7 @@ The following settings can be added as needed.
    after it is changed.
 
 .. warning::
-   In |Fess| 15.10, a login is rejected by default when the realm of the client principal differs
+   In |Fess| 15.8, a login is rejected by default when the realm of the client principal differs
    from the server realm. If users log in from a child domain of an AD domain tree or from a
    trusted forest, list those realms in ``spnego.allowed.realms``, separated by commas.
    Otherwise users who could log in up to 15.7 are rejected with

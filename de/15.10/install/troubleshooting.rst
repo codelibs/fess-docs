@@ -569,7 +569,7 @@ Sammlung von Debug-Informationen
 
 Beim Melden von Problemen ist das Sammeln folgender Informationen hilfreich:
 
-1. **Versionsinformationen** (``bin/fess -v`` ist ab 15.10 verfügbar)::
+1. **Versionsinformationen** (``bin/fess -v`` ist ab 15.9 verfügbar)::
 
        $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version

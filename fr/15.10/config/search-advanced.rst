@@ -316,7 +316,7 @@ Chaque usage nécessite le bon champ :
 
 Une valeur lue depuis un CSV, du JSON ou une base de données est une chaîne, sauf si le script la
 convertit : convertissez donc les valeurs que vous souhaitez trier ou rechercher par plage. Avec le
-moteur JavaScript, utilisé par défaut par les configurations de banque de données créées en 15.10
+moteur JavaScript, utilisé par défaut par les configurations de banque de données créées en 15.9
 (``script_type=javascript``) :
 
 ::

@@ -7,7 +7,7 @@ Descripción general
 
 La **búsqueda híbrida** en |Fess| combina la búsqueda tradicional por palabras clave (BM25) con la **búsqueda semántica (vectorial)** y fusiona ambos conjuntos de resultados mediante **Rank Fusion** para producir clasificaciones más precisas y relevantes. Rank Fusion integra los resultados de múltiples buscadores en un único ranking optimizado.
 
-En |Fess| 15.10, la búsqueda semántica (chunking de contenido + búsqueda vectorial) se proporciona
+En |Fess| 15.8, la búsqueda semántica (chunking de contenido + búsqueda vectorial) se proporciona
 como una función del núcleo. Una vez que la habilita, el buscador semántico se registra
 automáticamente con Rank Fusion. Consulte :doc:`search-semantic` para su configuración.
 
@@ -149,7 +149,7 @@ Esta propiedad se comporta de la siguiente manera:
    anterior, es posible que se le haya indicado que estableciera esta propiedad como
    ``-Drank.fusion.searchers=default,semantic``. Ese plugin registraba su buscador con el nombre
    ``semantic``, que es un **buscador diferente** del nombre del buscador integrado en el núcleo,
-   ``semantic_chunk``, introducido en la 15.10. Si traslada esa configuración de la era 15.7 a la
+   ``semantic_chunk``, introducido en la 15.8. Si traslada esa configuración de la era 15.7 a la
    15.10 sin cambios, la lista de permitidos nunca incluye ``semantic_chunk``, por lo que la
    búsqueda semántica integrada en el núcleo (chunking de contenido + búsqueda vectorial) **no
    funciona en absoluto** — |Fess| sigue devolviendo silenciosamente resultados de búsqueda por

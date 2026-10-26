@@ -19,7 +19,7 @@ Ein Bang leitet eine Suche an eine andere Website weiter, statt |Fess| zu durchs
    * - ``airplane !unknown``
      - |Fess|, als normale Suche (``!`` bedeutet NOT, siehe :doc:`search-not`)
 
-Bangs werden vom Plugin ``fess-webapp-bangs`` bereitgestellt, das |Fess| 15.10 oder neuer voraussetzt. Installieren Sie es über [System > Plugin] in der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-webapp-bangs`` (siehe :doc:`../admin/plugin-guide`) und starten Sie |Fess| neu.
+Bangs werden vom Plugin ``fess-webapp-bangs`` bereitgestellt, das |Fess| 15.9 oder neuer voraussetzt. Installieren Sie es über [System > Plugin] in der Administrationsoberfläche oder mit ``bin/fess-setup install plugin fess-webapp-bangs`` (siehe :doc:`../admin/plugin-guide`) und starten Sie |Fess| neu.
 
 Wann ein Bang erkannt wird
 ==========================

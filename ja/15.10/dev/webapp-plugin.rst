@@ -181,7 +181,7 @@ Lasta Di は、クラスパス上の ``app++.xml`` を |Fess| 本体の ``app.xm
    すべて記述する必要があります(例えば ``app.xml`` の ``queryHelper``)。これらは
    |Fess| のリリースごとに同期する必要があります。コアから削除されたメソッドを呼び続けると、
    そのコンポーネント定義は ``BeanMethodNotFoundException`` で初期化に失敗します。例えば
-   15.10 では ``systemHelper`` の ``addDesignJspFileName`` が削除されたため、これを呼ぶ
+   15.9 では ``systemHelper`` の ``addDesignJspFileName`` が削除されたため、これを呼ぶ
    置き換えファイルは失敗します。この保守コストが、置き換えよりも追加が推奨される理由です。
 
 REST APIの追加(fess_api++.xml)
@@ -298,7 +298,7 @@ Web アプリプラグインは JSP ビューを追加できません。JSP ビ�
    * - ``fess-webapp-bangs``
      - DuckDuckGo 形式のバング(``!g``)。別のサイトへ検索を送る
    * - ``fess-webapp-semantic-search``
-     - ニューラル検索/ベクトル検索(15.10でコアに統合されたため非推奨)
+     - ニューラル検索/ベクトル検索(15.8でコアに統合されたため非推奨)
    * - ``fess-webapp-multimodal``
      - マルチモーダル(画像・テキスト)検索
 

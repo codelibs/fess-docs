@@ -36,7 +36,7 @@ Bei der SAML-Authentifizierung fungiert |Fess| als SP (Service Provider) und arb
 
    Beachten Sie: In 15.7 funktionierte eine IdP-initiierte Anmeldung zufällig, wenn
    ``tomcat.sameSiteCookies=none`` gesetzt war. |Fess| schickte die nicht zuordenbare Antwort an den
-   IdP zurück, und der IdP lieferte sofort eine angeforderte Assertion. In 15.10 erfolgt dieses
+   IdP zurück, und der IdP lieferte sofort eine angeforderte Assertion. In 15.8 erfolgt dieses
    Zurückschicken nicht mehr, sodass die IdP-initiierte Anmeldung nicht funktioniert.
 
 Für die Integration mit rollenbasierter Suche siehe :doc:`security-role`.

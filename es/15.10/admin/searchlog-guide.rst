@@ -55,7 +55,7 @@ Pestañas
 .. note::
 
    Las métricas de clics por consulta y las consultas sin clics solo cuentan los clics registrados
-   desde que la palabra de búsqueda se guarda con los clics (|Fess| 15.10 y posteriores). El total de
+   desde que la palabra de búsqueda se guarda con los clics (|Fess| 15.9 y posteriores). El total de
    clics y la tasa de clics incluyen los clics anteriores. Algunos valores, como el número de
    usuarios, son aproximados.
 

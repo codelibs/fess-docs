@@ -41,10 +41,10 @@ Lenguajes de scripting compatibles
 .. note::
    Una configuración de script que no tiene registrado un tipo de script se trata como
    Groovy. Esto no es una medida de transición temporal, sino un comportamiento
-   permanente: una configuración creada antes de 15.10 conserva su script en sintaxis
+   permanente: una configuración creada antes de 15.9 conserva su script en sintaxis
    Groovy sin tipo de script registrado, y este valor predeterminado es precisamente lo
    que hace que siga funcionando sin cambios tras la actualización. Una configuración
-   creada a partir de 15.10 tiene registrado explícitamente el tipo de script
+   creada a partir de 15.9 tiene registrado explícitamente el tipo de script
    ``javascript``.
 
    Salvo que se indique lo contrario, los ejemplos de scripts de este documento están

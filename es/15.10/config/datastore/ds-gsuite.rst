@@ -10,10 +10,10 @@ El conector de Google Workspace proporciona funcionalidad para obtener archivos 
 
 Esta funcionalidad requiere el plugin ``fess-ds-gsuite``.
 
-Cambios en la Versión 15.10
+Cambios en la Versión 15.9
 ==========================
 
-El conector se ha rediseñado en profundidad en |Fess| 15.10. Lea esta sección antes de
+El conector se ha rediseñado en profundidad en |Fess| 15.9. Lea esta sección antes de
 actualizar una configuración de almacén de datos existente.
 
 .. warning::
@@ -249,7 +249,7 @@ Parámetros Avanzados
    * - ``exclude_pattern``
      - Patrón de expresión regular para las URL que se excluyen
    * - ``refresh_token_interval``
-     - Se ignora desde la versión 15.10. Los tokens de acceso los renueva la biblioteca de autenticación. Un valor existente sigue funcionando y se registra una advertencia.
+     - Se ignora desde la versión 15.9. Los tokens de acceso los renueva la biblioteca de autenticación. Un valor existente sigue funcionando y se registra una advertencia.
 
 .. note::
 
@@ -537,7 +537,7 @@ Acceda a https://admin.google.com/:
 
    La entrada de delegación enumera los ámbitos de forma explícita, por lo que actualizar
    desde una versión anterior obliga a modificarla. El ámbito predeterminado se redujo en
-   15.10 de ``https://www.googleapis.com/auth/drive`` a
+   15.9 de ``https://www.googleapis.com/auth/drive`` a
    ``https://www.googleapis.com/auth/drive.readonly``, y los ámbitos concedidos aquí deben
    coincidir con el parámetro ``scopes`` de la configuración del almacén de datos.
 
@@ -598,7 +598,7 @@ El Rastreo No Se Inicia
    añada ese ámbito a ``scopes`` y a la entrada de delegación de dominio.
 
 Este es el resultado esperado al actualizar una configuración existente sin cambios.
-Consulte `Cambios en la Versión 15.10`_.
+Consulte `Cambios en la Versión 15.9`_.
 
 Error de Autenticación
 ----------------------
@@ -632,7 +632,7 @@ Error de Delegación de Dominio
 
    - El ID de cliente está registrado correctamente
    - Los ámbitos OAuth son correctos. La entrada de delegación los enumera de forma
-     explícita, por lo que la reducción introducida en 15.10 obliga a actualizarla.
+     explícita, por lo que la reducción introducida en 15.9 obliga a actualizarla.
 
 2. Verificar que la delegación de dominio esté habilitada en la cuenta de servicio
 3. Verificar que la cuenta indicada en ``impersonate_user`` sea administradora del dominio

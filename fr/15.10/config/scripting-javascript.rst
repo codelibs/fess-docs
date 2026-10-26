@@ -5,7 +5,7 @@ Guide de script JavaScript
 Aperçu
 ======
 
-JavaScript est le langage de script par défaut de |Fess| à partir de la version 15.10.
+JavaScript est le langage de script par défaut de |Fess| à partir de la version 15.9.
 Il s'exécute sur Sai (un fork de Nashorn développé par CodeLibs, déjà utilisé par |Fess|
 pour les expressions de ses XML de DI), et les scripts sont exécutés en tant qu'ECMAScript
 6. Son identifiant est ``javascript`` ; il peut également être indiqué via les alias

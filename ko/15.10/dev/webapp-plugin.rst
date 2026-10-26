@@ -183,7 +183,7 @@ pom.xml 전체 구성(부모 POM·의존 관계 선언 방법 등)은
    기술해야 합니다(예: ``app.xml`` 의 ``queryHelper``). 이는 |Fess|
    릴리스마다 동기화해야 합니다. 코어에서 삭제된 메서드를 계속 호출하면, 그
    컴포넌트 정의는 ``BeanMethodNotFoundException`` 으로 초기화에 실패합니다.
-   예를 들어 15.10 에서는 ``systemHelper`` 의 ``addDesignJspFileName`` 이
+   예를 들어 15.9 에서는 ``systemHelper`` 의 ``addDesignJspFileName`` 이
    삭제되었기 때문에, 이를 호출하는 교체 파일은 실패합니다. 이러한 유지보수
    비용이 교체보다 추가가 권장되는 이유입니다.
 
@@ -304,7 +304,7 @@ REST API 추가(fess_api++.xml)
    * - ``fess-webapp-bangs``
      - DuckDuckGo 방식의 뱅(``!g``). 다른 사이트로 검색을 보냄
    * - ``fess-webapp-semantic-search``
-     - 뉴럴 검색/벡터 검색(사용 중단됨; 15.10의 코어 통합 기능으로 대체됨)
+     - 뉴럴 검색/벡터 검색(사용 중단됨; 15.8의 코어 통합 기능으로 대체됨)
    * - ``fess-webapp-multimodal``
      - 멀티모달(이미지·텍스트) 검색
 

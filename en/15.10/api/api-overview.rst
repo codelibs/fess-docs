@@ -11,7 +11,7 @@ By using the API, you can use |Fess| as a search server from existing web system
 
 .. note::
 
-   In |Fess| 15.10, the API has been updated to **v2**. The former ``/api/v1``
+   In |Fess| 15.7, the API has been updated to **v2**. The former ``/api/v1``
    JSON search API and chat API have been discontinued and consolidated into ``/api/v2``.
    Clients using ``/api/v1`` should migrate to ``/api/v2``.
 

@@ -41,10 +41,10 @@ Langages de script pris en charge
 .. note::
    Une configuration de script sans type de script enregistre est traitee comme du
    Groovy. Il ne s'agit pas d'une mesure de transition temporaire mais d'un comportement
-   permanent : une configuration creee avant la 15.10 conserve son script en syntaxe
+   permanent : une configuration creee avant la 15.9 conserve son script en syntaxe
    Groovy sans type de script enregistre, et c'est precisement ce comportement par defaut
    qui lui permet de continuer a fonctionner sans changement apres une mise a niveau.
-   Une configuration creee a partir de la 15.10 a son type de script explicitement
+   Une configuration creee a partir de la 15.9 a son type de script explicitement
    enregistre comme ``javascript``.
 
    Sauf indication contraire, les exemples de scripts de cette documentation sont ecrits

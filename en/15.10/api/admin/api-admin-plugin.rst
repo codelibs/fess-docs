@@ -56,7 +56,7 @@ is an object with the following fields.
        ``fess-thumbnail`` (thumbnail), ``fess-crawler`` (crawler), ``fess-llm`` (LLM),
        ``fess-storage`` (storage), ``fess-sso`` (SSO),
        or ``jar`` (generic JAR not matching any of the above). ``fess-theme`` was removed
-       in 15.10, and a ``fess-theme-*`` JAR is reported as ``jar``.
+       in 15.9, and a ``fess-theme-*`` JAR is reported as ``jar``.
    * - ``id``
      - Identifier in ``{name}:{version}`` format.
    * - ``name``

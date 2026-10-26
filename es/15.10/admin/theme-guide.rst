@@ -10,7 +10,7 @@ La función de temas gestiona los temas, que agrupan el aspecto visual de la pan
 La pantalla de búsqueda es siempre un tema. Cuando no hay ningún tema predeterminado configurado, |Fess| utiliza ``bootstrap``, el tema incluido con él. El tema incluido no se puede eliminar ni reemplazar; para modificarlo, cópielo con otro nombre (consulte :ref:`theme-customize-bundled`).
 
 .. note::
-   Los temas basados en JSP (plugins de tema JAR ``fess-theme-*``) se eliminaron en 15.10. Para cambiar el aspecto, utilice un tema (consulte :ref:`upgrade-159-static-theme`).
+   Los temas basados en JSP (plugins de tema JAR ``fess-theme-*``) se eliminaron en 15.9. Para cambiar el aspecto, utilice un tema (consulte :ref:`upgrade-159-static-theme`).
    Para realizar las operaciones de esta página se requiere el rol ``admin-theme`` (o el rol ``admin-theme-view`` si solo se necesita acceso de lectura).
 
 Obtención de un tema
@@ -151,7 +151,7 @@ En la raíz del tema debe colocarse el archivo ``theme.yml`` (formato YAML) con 
      - Archivo de punto de entrada (predeterminado: ``index.html``).
    * - ``spaFallback``
      - Opcional
-     - Obsoleto; ya no se lee. Desde la versión 15.10 el archivo de entrada se sirve siempre para las rutas de la pantalla de búsqueda.
+     - Obsoleto; ya no se lee. Desde la versión 15.9 el archivo de entrada se sirve siempre para las rutas de la pantalla de búsqueda.
 
 Tabla: Campos de theme.yml
 

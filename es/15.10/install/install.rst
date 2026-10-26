@@ -174,7 +174,7 @@ Se utiliza OpenSearch como motor de búsqueda.
 
 .. note::
 
-   Si utiliza un OpenSearch en el que no puede instalar estos plugins, como un servicio gestionado, establezca ``search_engine.type`` en ``vanilla`` (|Fess| 15.10 y posteriores). En ese caso algunas funciones, como la gestión de diccionarios, no están disponibles. Consulte :doc:`../config/search-engine-type`.
+   Si utiliza un OpenSearch en el que no puede instalar estos plugins, como un servicio gestionado, establezca ``search_engine.type`` en ``vanilla`` (|Fess| 15.9 y posteriores). En ese caso algunas funciones, como la gestión de diccionarios, no están disponibles. Consulte :doc:`../config/search-engine-type`.
 
 Java (excepto versión Docker)
 ------------------------------

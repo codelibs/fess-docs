@@ -55,7 +55,7 @@ Plugin APIは、|Fess| のプラグイン（アーティファクト）を管理
        ``fess-ingest`` （Ingest）、``fess-script`` （スクリプト）、``fess-webapp`` （Webアプリ）、
        ``fess-thumbnail`` （サムネイル）、``fess-crawler`` （クローラ）、``fess-llm`` （LLM）、
        ``fess-storage`` （ストレージ）、``fess-sso`` （SSO）、
-       ``jar`` （上記以外の汎用JAR）のいずれかです。15.10 で ``fess-theme`` は削除され、
+       ``jar`` （上記以外の汎用JAR）のいずれかです。15.9 で ``fess-theme`` は削除され、
        ``fess-theme-*`` の JAR は ``jar`` として扱われます。
    * - ``id``
      - ``{name}:{version}`` 形式の識別子。

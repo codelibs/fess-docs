@@ -281,7 +281,7 @@ Tableau de compatibilité des versions d'API
 
 .. note::
 
-   Dans |Fess| 15.10, l'ancienne API de recherche JSON ``/api/v1`` et l'API de chat ont été supprimées.
+   Dans |Fess| 15.7, l'ancienne API de recherche JSON ``/api/v1`` et l'API de chat ont été supprimées.
    Les clients utilisant ``/api/v1`` doivent migrer vers ``/api/v2``.
    Pour les différences détaillées entre les versions, consultez les `notes de version <https://github.com/codelibs/fess/releases>`__.
 

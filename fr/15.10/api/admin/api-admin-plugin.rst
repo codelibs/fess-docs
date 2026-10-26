@@ -56,7 +56,7 @@ Chaque élément du tableau ``plugins`` renvoyé par les endpoints de liste
        ``fess-ingest`` (Ingest), ``fess-script`` (script), ``fess-webapp`` (application web),
        ``fess-thumbnail`` (miniature), ``fess-crawler`` (crawler), ``fess-llm`` (LLM),
        ``fess-storage`` (stockage), ``fess-sso`` (SSO),
-       ``jar`` (JAR générique pour tout autre cas). ``fess-theme`` a été supprimé en 15.10,
+       ``jar`` (JAR générique pour tout autre cas). ``fess-theme`` a été supprimé en 15.9,
        et un JAR ``fess-theme-*`` est traité comme ``jar``.
    * - ``id``
      - Identifiant au format ``{name}:{version}``.

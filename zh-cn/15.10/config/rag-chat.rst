@@ -9,7 +9,7 @@ AI搜索模式（RAG：检索增强生成）是通过LLM（大型语言模型）
 以对话形式提供信息的功能。用户可以用自然语言提问，
 获得基于搜索结果的详细回答。
 
-|Fess| 15.10 中，LLM功能已作为 ``fess-llm-*`` 插件分离提供。
+|Fess| 15.6 中，LLM功能已作为 ``fess-llm-*`` 插件分离提供。
 核心配置及LLM提供商专属配置在 ``fess_config.properties`` 中进行，LLM提供商名称（ ``rag.llm.name`` ）
 在 ``system.properties`` 或管理界面中进行。
 
@@ -135,7 +135,7 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 
 .. note::
 
-   ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.10 及以后已改为 ``rag.llm.name``，
+   ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.6 及以后已改为 ``rag.llm.name``，
    写入 ``rag.llm.type`` 的值不会被读取。
 
 核心配置一览

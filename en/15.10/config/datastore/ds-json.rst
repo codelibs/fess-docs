@@ -294,7 +294,7 @@ Available Fields
 
 .. note::
 
-   In |Fess| 15.10, the built-in scripting engine has become JavaScript.
+   In |Fess| 15.9, the built-in scripting engine has become JavaScript.
    Groovy is provided as the ``fess-script-groovy`` plugin. The engine to
    use is specified via the data store parameter ``script_type`` (e.g.,
    ``script_type=javascript``). If omitted, ``groovy`` is used. Simple

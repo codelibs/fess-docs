@@ -5,7 +5,7 @@ JavaScript脚本指南
 概述
 ====
 
-JavaScript 是 |Fess| 自 15.10 版本起的默认脚本语言。
+JavaScript 是 |Fess| 自 15.9 版本起的默认脚本语言。
 它运行于 Sai（CodeLibs 开发的 Nashorn 分支， |Fess| 已将其用于 DI XML 表达式的
 解析）之上，脚本以 ECMAScript 6 执行。其标识符为 ``javascript`` ，也可使用别名
 ``js`` 和 ``sai`` 指定。

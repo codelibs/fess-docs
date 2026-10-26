@@ -10,7 +10,7 @@ Die Theme-Funktion verwaltet Themes – Pakete aus statischen Assets (HTML / CSS
 Der Suchbildschirm ist immer ein Theme. Ist kein Standardtheme festgelegt, verwendet |Fess| ``bootstrap``, das mitgelieferte Theme. Das mitgelieferte Theme kann weder gelöscht noch ersetzt werden; um es zu ändern, kopieren Sie es unter einem neuen Namen (siehe :ref:`theme-customize-bundled`).
 
 .. note::
-   JSP-basierte Themes (``fess-theme-*``-JAR-Theme-Plugins) wurden in 15.10 entfernt. Verwenden Sie ein Theme, um das Aussehen zu ändern (siehe :ref:`upgrade-159-static-theme`).
+   JSP-basierte Themes (``fess-theme-*``-JAR-Theme-Plugins) wurden in 15.9 entfernt. Verwenden Sie ein Theme, um das Aussehen zu ändern (siehe :ref:`upgrade-159-static-theme`).
    Für die hier beschriebenen Operationen ist die Rolle ``admin-theme`` erforderlich (für reinen Lesezugriff genügt die Rolle ``admin-theme-view``).
 
 Ein Theme beziehen
@@ -152,7 +152,7 @@ Im Stammverzeichnis eines Themes muss die Datei ``theme.yml`` (YAML-Format) mit 
      - Einstiegspunktdatei des Themes (Standard: ``index.html``).
    * - ``spaFallback``
      - Optional
-     - Veraltet und wird nicht mehr gelesen. Seit 15.10 wird für die Pfade des Suchbildschirms immer die Einstiegsdatei ausgeliefert.
+     - Veraltet und wird nicht mehr gelesen. Seit 15.9 wird für die Pfade des Suchbildschirms immer die Einstiegsdatei ausgeliefert.
 
 Tabelle: Felder der theme.yml
 

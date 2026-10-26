@@ -11,7 +11,7 @@ API 概述
 
 .. note::
 
-   |Fess| 15.10 中，API 已升级为 **v2** 版本。原有的 ``/api/v1`` JSON 搜索 API
+   |Fess| 15.7 中，API 已升级为 **v2** 版本。原有的 ``/api/v1`` JSON 搜索 API
    和聊天 API 已废弃，统一整合至 ``/api/v2``\ 。
    使用 ``/api/v1`` 的客户端请迁移至 ``/api/v2``\ 。
 

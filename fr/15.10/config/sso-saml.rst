@@ -36,7 +36,7 @@ Dans l'authentification SAML, |Fess| fonctionne comme un SP (Service Provider) e
 
    Notez qu'en 15.7, une connexion initiée par l'IdP fonctionnait incidemment lorsque
    ``tomcat.sameSiteCookies=none`` était défini : |Fess| renvoyait à l'IdP la réponse qu'il ne pouvait
-   pas associer, et l'IdP retournait immédiatement une assertion sollicitée. En 15.10, ce renvoi n'a
+   pas associer, et l'IdP retournait immédiatement une assertion sollicitée. En 15.8, ce renvoi n'a
    plus lieu, si bien que la connexion initiée par l'IdP ne fonctionne pas.
 
 Pour l'intégration avec la recherche basée sur les rôles, voir :doc:`security-role`.

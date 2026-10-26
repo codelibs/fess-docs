@@ -35,7 +35,7 @@ SAML認証では、|Fess| がSP（Service Provider）として動作し、外部
 
    なお 15.7 では、``tomcat.sameSiteCookies=none`` を設定していると、IdP-Initiatedのログインが
    結果的に動作していました。|Fess| が対応付けできないレスポンスをIdPへ差し戻し、IdPが即座に
-   SP-Initiatedのアサーションを返していたためです。15.10 ではこの差し戻しを行わなくなったため、
+   SP-Initiatedのアサーションを返していたためです。15.8 ではこの差し戻しを行わなくなったため、
    IdP-Initiatedのログインは動作しません。
 
 ロールベース検索との連携については、:doc:`security-role` を参照してください。

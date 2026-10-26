@@ -11,7 +11,7 @@ En utilisant ces API, vous pouvez intégrer |Fess| comme serveur de recherche da
 
 .. note::
 
-   Dans |Fess| 15.10, l'API a été remaniée en **v2**. L'ancienne API de recherche JSON
+   Dans |Fess| 15.7, l'API a été remaniée en **v2**. L'ancienne API de recherche JSON
    ``/api/v1`` et l'API de chat ont été supprimées et fusionnées dans ``/api/v2``.
    Les clients utilisant ``/api/v1`` doivent migrer vers ``/api/v2``.
 

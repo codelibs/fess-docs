@@ -54,7 +54,7 @@ Mitgelieferte Mapping-Wörterbücher
 
 Das Standard-``mapping.txt`` wird bei der Analyse von Suchfeldern wie ``title`` und ``content``
 verwendet. Es vereinheitlicht Hiragana, kleine Kana und Halbbreiten-Katakana zu Vollbreiten-Katakana,
-sodass りんご, リンゴ und ﾘﾝｺﾞ einander finden. In |Fess| 15.10 werden zusätzlich folgende
+sodass りんご, リンゴ und ﾘﾝｺﾞ einander finden. In |Fess| 15.9 werden zusätzlich folgende
 Schreibweisen vereinheitlicht:
 
 - ゐ und ゑ (zu イ und エ), kleine Kana wie ゎ, ゕ, ゖ, ヮ, ヵ, ヶ und ㇰ-ㇿ sowie ゝ und ゞ (zu ヽ und ヾ)

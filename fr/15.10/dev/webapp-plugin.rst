@@ -200,7 +200,7 @@ remplacement sera ``fess+systemHelper.xml`` (et non
    fichier continue d'appeler une méthode supprimée du cœur,
    l'initialisation de cette définition de composant échoue avec
    ``BeanMethodNotFoundException``. Par exemple, ``addDesignJspFileName``
-   de ``systemHelper`` a été supprimé en 15.10, si bien qu'un fichier de
+   de ``systemHelper`` a été supprimé en 15.9, si bien qu'un fichier de
    remplacement qui l'appelle échoue. Ce coût de maintenance explique
    pourquoi l'ajout est recommandé plutôt que le remplacement.
 
@@ -324,7 +324,7 @@ le développement :
      - Bangs de type DuckDuckGo (``!g``) qui envoient une recherche vers un autre site
    * - ``fess-webapp-semantic-search``
      - Recherche neuronale / recherche vectorielle (obsolète ; remplacée par l'intégration au
-       cœur en 15.10)
+       cœur en 15.8)
    * - ``fess-webapp-multimodal``
      - Recherche multimodale (image et texte)
 

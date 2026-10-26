@@ -270,7 +270,7 @@ JSONオブジェクトのトップレベルのフィールドは、スクリプ�
 
 .. note::
 
-   |Fess| 15.10 では、組み込みのスクリプトエンジンがJavaScriptになりました。
+   |Fess| 15.9 では、組み込みのスクリプトエンジンがJavaScriptになりました。
    Groovyは ``fess-script-groovy`` プラグインとして提供されます。
    使用するエンジンはデータストアのパラメーター ``script_type`` で指定します
    （ ``script_type=javascript`` など）。省略した場合は ``groovy`` が使用されます。

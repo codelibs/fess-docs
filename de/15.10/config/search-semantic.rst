@@ -5,7 +5,7 @@ Semantische Suche (Content-Chunking + Vektorsuche)
 Übersicht
 =========
 
-In |Fess| 15.10 wurde die **Content-Chunking-Funktion** — die Dokumentinhalte in Chunks aufteilt
+In |Fess| 15.8 wurde die **Content-Chunking-Funktion** — die Dokumentinhalte in Chunks aufteilt
 und für jeden Chunk einen Embedding-Vektor generiert und speichert — in den Kern integriert.
 Die generierten Vektoren werden für zwei Zwecke verwendet:
 
@@ -803,7 +803,7 @@ Wenn Sie das Plugin fess-webapp-semantic-search verwendet haben
 ------------------------------------------------------------------
 
 Das Plugin ``fess-webapp-semantic-search``, das die semantische Suche in |Fess| 15.7 und früher
-bereitstellte, wurde in 15.10 in den Kern integriert und ist nun **unnötig (veraltet)**.
+bereitstellte, wurde in 15.8 in den Kern integriert und ist nun **unnötig (veraltet)**.
 Zusätzlich zu den oben unter *Bestehende Nutzer, die die Vektorsuche aktivieren möchten*
 beschriebenen Schritten müssen Sie außerdem Folgendes tun.
 

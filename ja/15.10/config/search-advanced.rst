@@ -313,7 +313,7 @@ OpenSearchのハイライターに渡す値を指定します。
      - ``query.additional.search.fields`` 。ここに無いフィールドは範囲検索になりません。
 
 CSV、JSON、データベースから読んだ値は、スクリプトで変換しない限り文字列です。ソートや範囲検索に
-使う値は変換してください。15.10 で作成したデータストア設定の既定である JavaScript エンジン
+使う値は変換してください。15.9 で作成したデータストア設定の既定である JavaScript エンジン
 （ ``script_type=javascript`` ）では次のようにします::
 
     url="https://example.com/product/" + id

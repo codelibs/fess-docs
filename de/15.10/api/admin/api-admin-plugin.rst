@@ -54,7 +54,7 @@ Jedes Element des ``plugins``-Arrays, das von den Auflistungs-Endpunkten (``/ins
        ``fess-ingest`` (Ingest), ``fess-script`` (Skript), ``fess-webapp`` (Web-App),
        ``fess-thumbnail`` (Thumbnail), ``fess-crawler`` (Crawler), ``fess-llm`` (LLM),
        ``fess-storage`` (Speicher), ``fess-sso`` (SSO),
-       ``jar`` (allgemeine JAR-Datei für alle anderen Fälle). ``fess-theme`` wurde in 15.10
+       ``jar`` (allgemeine JAR-Datei für alle anderen Fälle). ``fess-theme`` wurde in 15.9
        entfernt; ein ``fess-theme-*``-JAR wird als ``jar`` behandelt.
    * - ``id``
      - Bezeichner im Format ``{name}:{version}``.

@@ -21,7 +21,7 @@
    * - ``default``
      - 安装了 CodeLibs 插件的 OpenSearch。默认值。
    * - ``vanilla``
-     - 不含 CodeLibs 插件的原生 OpenSearch。15.10 新增。索引定义从 ``fess_indices/_vanilla/`` 读取。\ |Fess| 15.8 及更早版本无法识别该值，请在这些版本中指定 ``cloud`` 。
+     - 不含 CodeLibs 插件的原生 OpenSearch。15.9 新增。索引定义从 ``fess_indices/_vanilla/`` 读取。\ |Fess| 15.8 及更早版本无法识别该值，请在这些版本中指定 ``cloud`` 。
    * - ``aws``
      - 与 ``vanilla`` 相同，用于 Amazon OpenSearch Service（请参阅 :ref:`search-engine-type-aws` ）。
    * - ``cloud``
@@ -71,11 +71,11 @@ Docker
           - "SEARCH_ENGINE_HTTP_URL=http://search01:9200"
           - "SEARCH_ENGINE_TYPE=vanilla"
 
-``vanilla`` 可用于 |Fess| 15.10 及更高版本的镜像。使用更早的镜像时，请指定 ``SEARCH_ENGINE_TYPE=cloud`` 。其他 Docker 设置请参阅 :doc:`../install/install-docker` 。
+``vanilla`` 可用于 |Fess| 15.9 及更高版本的镜像。使用更早的镜像时，请指定 ``SEARCH_ENGINE_TYPE=cloud`` 。其他 Docker 设置请参阅 :doc:`../install/install-docker` 。
 
 .. note::
 
-   在 |Fess| 15.8 的镜像中，只有 ``-noble`` 版本（例如 ``ghcr.io/codelibs/fess:15.8.0-noble`` ）会把 ``SEARCH_ENGINE_TYPE`` 传递给 |Fess| 。默认的（基于 Alpine 的）15.8 镜像虽然会把该值写入 ``/etc/default/fess`` ，但不会以 ``-Dfess.config.search_engine.type`` 的形式传递给 JVM，因此该设置不会生效。从 15.10 起，默认镜像也会生效。
+   在 |Fess| 15.8 的镜像中，只有 ``-noble`` 版本（例如 ``ghcr.io/codelibs/fess:15.8.0-noble`` ）会把 ``SEARCH_ENGINE_TYPE`` 传递给 |Fess| 。默认的（基于 Alpine 的）15.8 镜像虽然会把该值写入 ``/etc/default/fess`` ，但不会以 ``-Dfess.config.search_engine.type`` 的形式传递给 JVM，因此该设置不会生效。从 15.9 起，默认镜像也会生效。
 
 非 Docker 环境
 --------------

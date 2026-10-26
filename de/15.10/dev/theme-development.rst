@@ -5,7 +5,7 @@ Theme-Entwicklungsleitfaden
 Übersicht
 =========
 
-In |Fess| 15.10 ist die Suchoberfläche immer ein Theme. Ein
+In |Fess| 15.9 ist die Suchoberfläche immer ein Theme. Ein
 Theme ist eine eigenständige SPA (Single-Page-Anwendung),
 die die ``/api/v2/*`` API nutzt. Themes werden als ZIP-Dateien
 verteilt, über die Administrationsoberfläche hochgeladen und dort
@@ -20,9 +20,9 @@ die Kopie, wie unter `Mitgeliefertes Theme anpassen`_ beschrieben.
 .. note::
 
    Als ZIP verteilte Themes stehen ab |Fess| 15.7 zur Verfügung und wurden in
-   15.10 zur Standard-Suchoberfläche. JAR-Theme-Plugins, die die JSPs
-   der Suchoberfläche ersetzten, wurden in 15.10 entfernt; siehe
-   `JAR-Theme-Plugin (in 15.10 entfernt)`_.
+   15.9 zur Standard-Suchoberfläche. JAR-Theme-Plugins, die die JSPs
+   der Suchoberfläche ersetzten, wurden in 15.9 entfernt; siehe
+   `JAR-Theme-Plugin (in 15.9 entfernt)`_.
 
 Was ein Theme ist
 =================
@@ -125,7 +125,7 @@ Die folgenden Felder können angegeben werden.
    * - ``spaFallback``
      - Optional
      - Veraltet. Wird aus Kompatibilitätsgründen akzeptiert, aber nicht
-       mehr gelesen: Seit 15.10 wird für die Pfade der Suchoberfläche
+       mehr gelesen: Seit 15.9 wird für die Pfade der Suchoberfläche
        immer das Einstiegs-HTML ausgeliefert.
 
 .. note::
@@ -152,7 +152,7 @@ Auslieferung und API
 - Für die Pfade ``/``, ``/search``, ``/advance``, ``/help``,
   ``/error``, ``/profile``, ``/cache`` und ``/chat`` wird jeweils das
   Einstiegs-HTML (Standard: ``index.html``) zurückgegeben, und das
-  weitere Routing übernimmt die SPA. Seit 15.10 geschieht dies
+  weitere Routing übernimmt die SPA. Seit 15.9 geschieht dies
   unabhängig davon, was ``spaFallback`` angibt; das Feld wird nicht
   mehr gelesen.
 - Auch Fehler werden vom Theme dargestellt: Schlägt eine Anfrage fehl,
@@ -323,12 +323,12 @@ Sie es stattdessen unter einem neuen Namen.
    erneut an, da das mitgelieferte Theme der ``/api/v2/*`` API seiner
    |Fess|-Version folgt.
 
-JAR-Theme-Plugin (in 15.10 entfernt)
-====================================
+JAR-Theme-Plugin (in 15.9 entfernt)
+===================================
 
 Der Typ JAR-Theme-Plugin, der JSPs, CSS und Bilder in einem ``fess-theme-*``-JAR bündelte
 und sie als das nach dem Schlüssel eines virtuellen Hosts benannte Theme anwendete, wurde in
-|Fess| 15.10 entfernt. 15.10 entpackt kein JAR-Theme und verwendet es für keinen Bildschirm.
+|Fess| 15.9 entfernt. 15.9 entpackt kein JAR-Theme und verwendet es für keinen Bildschirm.
 
 - Wenn Sie eines über „System" → „Plugin" in der Verwaltungsoberfläche installieren, wird es
   nur als allgemeines JAR vom Typ ``jar`` in ``app/WEB-INF/plugin/`` abgelegt; kein

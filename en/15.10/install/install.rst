@@ -174,7 +174,7 @@ OpenSearch is used as the search engine.
 
 .. note::
 
-   If you use an OpenSearch to which you cannot add these plugins, such as a managed service, set ``search_engine.type`` to ``vanilla`` (|Fess| 15.10 and later). Some features, such as dictionary management, are then unavailable. See :doc:`../config/search-engine-type`.
+   If you use an OpenSearch to which you cannot add these plugins, such as a managed service, set ``search_engine.type`` to ``vanilla`` (|Fess| 15.9 and later). Some features, such as dictionary management, are then unavailable. See :doc:`../config/search-engine-type`.
 
 Java (Non-Docker Versions)
 ---------------------------

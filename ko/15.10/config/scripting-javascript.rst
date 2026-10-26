@@ -5,7 +5,7 @@ JavaScript 스크립트 가이드
 개요
 ====
 
-JavaScript는 |Fess| 15.10 이후의 기본 스크립트 언어입니다.
+JavaScript는 |Fess| 15.9 이후의 기본 스크립트 언어입니다.
 |Fess|\ 가 DI XML 식 판정에도 사용하고 있는, CodeLibs의 Nashorn 포크인 Sai 위에서
 동작하며, 스크립트는 ECMAScript 6로 실행됩니다. 식별자는 ``javascript``\ 이며,
 ``js`` 및 ``sai``\ 라는 별칭으로도 지정할 수 있습니다.

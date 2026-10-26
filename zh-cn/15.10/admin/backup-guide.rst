@@ -98,9 +98,9 @@ user_info.ndjson包含搜索用户的信息。
 
 .. note::
 
-   |Fess| 15.10 会使用应用程序加密密钥（ ``fess_config.properties`` 中的 ``app.cipher.key`` ）加密保存 Web 认证和文件认证的
+   |Fess| 15.9 会使用应用程序加密密钥（ ``fess_config.properties`` 中的 ``app.cipher.key`` ）加密保存 Web 认证和文件认证的
    ``password`` ，因此 ``fess_basic_config.bulk`` 和 ``fess_config.bulk`` 中也包含加密后的值。将备份恢复到其他安装环境时，
-   请沿用相同的 ``app.cipher.key`` 。密钥不同时，使用这些认证信息的爬取会因错误而失败。15.10 之前创建的备份以明文包含这些值，
+   请沿用相同的 ``app.cipher.key`` 。密钥不同时，使用这些认证信息的爬取会因错误而失败。15.9 之前创建的备份以明文包含这些值，
    可以继续正常使用。
 
    另外， ``*.bulk`` 中包含的其他值并未加密，请将这些文件作为机密文件妥善保管。

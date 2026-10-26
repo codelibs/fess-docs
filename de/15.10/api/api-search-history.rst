@@ -115,5 +115,5 @@ Im mitgelieferten Theme
 Im mitgelieferten Theme ``bootstrap`` sieht ein angemeldeter Benutzer die letzten Suchen in der
 Vorschlagsliste, wenn er in das leere Suchfeld klickt oder darin die Pfeil-nach-unten-Taste drückt.
 Ein ausgewählter Eintrag führt dieselbe Suche erneut aus, einschließlich Bedingungen wie Labels.
-Suchprotokolle, die vor |Fess| 15.10 aufgezeichnet wurden, enthalten keine Bedingungen und werden nicht
+Suchprotokolle, die vor |Fess| 15.9 aufgezeichnet wurden, enthalten keine Bedingungen und werden nicht
 aufgeführt.

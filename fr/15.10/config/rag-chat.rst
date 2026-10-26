@@ -9,7 +9,7 @@ Le mode de recherche IA (RAG: Retrieval-Augmented Generation) est une fonctionna
 avec un LLM (grand modèle de langage) pour fournir des informations sous forme de dialogue.
 Les utilisateurs peuvent poser des questions en langage naturel et obtenir des réponses détaillées basées sur les résultats de recherche.
 
-Dans |Fess| 15.10, la fonctionnalité LLM a été séparée en plugins ``fess-llm-*``.
+Dans |Fess| 15.6, la fonctionnalité LLM a été séparée en plugins ``fess-llm-*``.
 La configuration principale et la configuration spécifique au fournisseur LLM s'effectuent dans ``fess_config.properties``,
 et la sélection du fournisseur LLM (``rag.llm.name``) s'effectue dans ``system.properties`` ou via l'administration.
 
@@ -134,7 +134,7 @@ persistée dans OpenSearch). Les chemins de configuration diffèrent ; ne pas le
 .. note::
 
    ``rag.llm.type`` est l'ancien nom de propriété dans |Fess| 15.5 et antérieur.
-   Dans 15.10 et supérieur il est renommé en ``rag.llm.name`` ; les valeurs écrites
+   Dans 15.6 et supérieur il est renommé en ``rag.llm.name`` ; les valeurs écrites
    sous ``rag.llm.type`` ne sont pas lues.
 
 Liste des configurations principales

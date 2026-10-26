@@ -36,7 +36,7 @@ En la autenticación SAML, |Fess| opera como un SP (Service Provider) y colabora
 
    Tenga en cuenta que en 15.7 el inicio de sesión iniciado por el IdP funcionaba de forma incidental
    cuando se establecía ``tomcat.sameSiteCookies=none``: |Fess| devolvía al IdP la respuesta que no
-   podía emparejar y el IdP entregaba de inmediato una aserción solicitada. En 15.10 ya no se devuelve
+   podía emparejar y el IdP entregaba de inmediato una aserción solicitada. En 15.8 ya no se devuelve
    la respuesta, por lo que el inicio de sesión iniciado por el IdP no funciona.
 
 Para la integración con búsqueda basada en roles, consulte :doc:`security-role`.

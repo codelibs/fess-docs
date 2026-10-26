@@ -239,7 +239,7 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    después de modificarlo.
 
 .. warning::
-   En |Fess| 15.10, un inicio de sesión se rechaza de forma predeterminada cuando el reino del
+   En |Fess| 15.8, un inicio de sesión se rechaza de forma predeterminada cuando el reino del
    principal del cliente difiere del reino del servidor. Si los usuarios inician sesión desde un
    dominio secundario de un árbol de dominios de AD o desde un bosque de confianza, indique esos
    reinos en ``spnego.allowed.realms``, separados por comas. De lo contrario, los usuarios que

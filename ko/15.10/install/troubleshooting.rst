@@ -566,7 +566,7 @@ NSSM 등의 타사 도구를 사용하여 Windows 서비스로 등록합니다.
 
 문제를 보고할 때 다음 정보를 수집해 두면 도움이 됩니다:
 
-1. **버전 정보** (``bin/fess -v`` 는 15.10 이상에서 사용할 수 있습니다)::
+1. **버전 정보** (``bin/fess -v`` 는 15.9 이상에서 사용할 수 있습니다)::
 
        $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version

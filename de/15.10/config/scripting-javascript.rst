@@ -5,7 +5,7 @@ JavaScript-Skripting-Leitfaden
 Übersicht
 ==========
 
-JavaScript ist ab |Fess| 15.10 die Standard-Skriptsprache.
+JavaScript ist ab |Fess| 15.9 die Standard-Skriptsprache.
 Es läuft auf Sai (einem Nashorn-Fork von CodeLibs, den |Fess| bereits für DI-XML-Ausdrücke
 verwendet), und Skripte werden als ECMAScript 6 ausgeführt. Der Bezeichner lautet
 ``javascript``; alternativ können auch die Aliase ``js`` und ``sai`` verwendet werden.

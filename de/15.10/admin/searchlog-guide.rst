@@ -56,7 +56,7 @@ Registerkarten
 .. note::
 
    Klick-Kennzahlen je Suchbegriff und die Suchbegriffe ohne Klicks zählen nur Klicks, die
-   aufgezeichnet wurden, seit Suchbegriffe mit den Klicks gespeichert werden (ab |Fess| 15.10). Die
+   aufgezeichnet wurden, seit Suchbegriffe mit den Klicks gespeichert werden (ab |Fess| 15.9). Die
    gesamten Klicks und die Klickrate enthalten auch ältere Klicks. Einige Werte, etwa die Zahl der
    Benutzer, sind Näherungswerte.
 

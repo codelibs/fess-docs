@@ -41,9 +41,9 @@ Supported Scripting Languages
 .. note::
    A script configuration that has no recorded script type is treated as Groovy.
    This is not a temporary transition measure but a permanent behavior: a configuration
-   created before 15.10 keeps its Groovy-syntax script without a recorded script type, so
+   created before 15.9 keeps its Groovy-syntax script without a recorded script type, so
    this default is what keeps it working unchanged after an upgrade. A configuration
-   created from 15.10 onward has its script type explicitly recorded as ``javascript``.
+   created from 15.9 onward has its script type explicitly recorded as ``javascript``.
 
    Unless noted otherwise, the script examples in this documentation are written in
    JavaScript syntax. For Groovy syntax, see :doc:`scripting-groovy`.

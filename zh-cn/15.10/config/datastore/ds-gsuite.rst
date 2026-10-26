@@ -10,10 +10,10 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
 
 此功能需要 ``fess-ds-gsuite`` 插件。
 
-15.10的变更
+15.9的变更
 ==========
 
-|Fess| 15.10对该连接器进行了大幅重构。升级现有的数据存储配置之前，请先阅读本节。
+|Fess| 15.9对该连接器进行了大幅重构。升级现有的数据存储配置之前，请先阅读本节。
 
 .. warning::
 
@@ -241,7 +241,7 @@ Google Workspace连接器提供从Google Drive（原G Suite）获取文件并注
    * - ``exclude_pattern``
      - 排除URL的正则表达式模式
    * - ``refresh_token_interval``
-     - 自15.10起被忽略。访问令牌由认证库负责刷新。现有设置仍可正常工作，并会输出一条警告日志
+     - 自15.9起被忽略。访问令牌由认证库负责刷新。现有设置仍可正常工作，并会输出一条警告日志
 
 .. note::
 
@@ -504,7 +504,7 @@ Google Cloud Platform设置
 
 .. warning::
 
-   委派配置会明确列出各个范围，因此从旧版本升级时必须更新。15.10中默认范围已从
+   委派配置会明确列出各个范围，因此从旧版本升级时必须更新。15.9中默认范围已从
    ``https://www.googleapis.com/auth/drive`` 收窄为
    ``https://www.googleapis.com/auth/drive.readonly``\ ，此处授予的范围必须与数据存储配置的
    ``scopes`` 参数保持一致。
@@ -602,7 +602,7 @@ Google Cloud Platform设置
 保留原有行为
 ------------
 
-``crawl_target=legacy`` 保留15.10之前的遍历方式，只能找到显式共享给服务账号的文件。
+``crawl_target=legacy`` 保留15.9之前的遍历方式，只能找到显式共享给服务账号的文件。
 不需要 ``impersonate_user``\ 。
 
 参数:
@@ -676,7 +676,7 @@ Google Cloud Platform设置
 3. ``parameter 'scopes' must include 'https://www.googleapis.com/auth/admin.directory.user.readonly'`` :
    请将该范围添加到 ``scopes`` 以及域全域委派的配置中
 
-将现有配置原样升级时，这是预期结果。请参阅 `15.10的变更`_\ 。
+将现有配置原样升级时，这是预期结果。请参阅 `15.9的变更`_\ 。
 
 认证错误
 --------
@@ -708,7 +708,7 @@ Google Cloud Platform设置
 1. 在Google Workspace管理控制台确认授权:
 
    - 客户端ID是否正确注册
-   - OAuth范围是否正确。委派配置会明确列出各个范围，因此需要配合15.10的范围变更进行更新
+   - OAuth范围是否正确。委派配置会明确列出各个范围，因此需要配合15.9的范围变更进行更新
 
 2. 确认服务账号是否启用了域全域委派
 3. 当 ``crawl_target`` 为 ``shared_drives`` 或 ``both`` 时，确认 ``impersonate_user``

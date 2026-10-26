@@ -112,4 +112,4 @@ In the Bundled Theme
 In the bundled ``bootstrap`` theme, a logged-in user sees the recent searches in the suggest
 dropdown when they click the empty search box or press the down arrow key in it. Choosing an entry
 runs the same search again, including conditions such as labels. Search logs recorded before
-|Fess| 15.10 carry no conditions and are not listed.
+|Fess| 15.9 carry no conditions and are not listed.

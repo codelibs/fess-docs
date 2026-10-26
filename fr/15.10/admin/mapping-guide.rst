@@ -54,7 +54,7 @@ Dictionnaires de mapping fournis
 
 Le ``mapping.txt`` par défaut sert à l'analyse des champs de recherche comme ``title`` et
 ``content``. Il ramène les hiragana, les petits kana et les katakana demi-chasse aux katakana pleine
-chasse, de sorte que りんご, リンゴ et ﾘﾝｺﾞ se correspondent. Dans |Fess| 15.10, il unifie aussi les
+chasse, de sorte que りんご, リンゴ et ﾘﾝｺﾞ se correspondent. Dans |Fess| 15.9, il unifie aussi les
 graphies suivantes :
 
 - ゐ et ゑ (en イ et エ), les petits kana comme ゎ, ゕ, ゖ, ヮ, ヵ, ヶ et ㇰ-ㇿ, ainsi que ゝ et ゞ (en ヽ et ヾ)

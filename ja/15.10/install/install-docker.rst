@@ -209,7 +209,7 @@ HTML ページのサムネイルは、どのイメージでもページ内の画
 AI検索モード（LLMプラグイン）の有効化
 =====================================
 
-|Fess| 15.10 から、AI検索モード（RAG Chat）機能は ``fess-llm-*`` プラグインとして分離されました。
+|Fess| 15.6 から、AI検索モード（RAG Chat）機能は ``fess-llm-*`` プラグインとして分離されました。
 公式の `docker-fess <https://github.com/codelibs/docker-fess>`__ リポジトリには、主要な LLM プロバイダー向けのオーバーレイファイルが同梱されています。
 
 .. list-table::
@@ -336,7 +336,7 @@ Docker コンテナの停止
    * - ``SEARCH_ENGINE_HTTP_URL``
      - OpenSearch の HTTP エンドポイント（``compose.yaml`` の既定値: ``http://search01:9200``）
    * - ``SEARCH_ENGINE_TYPE``
-     - 検索エンジンの種別（ ``default`` 、 ``vanilla`` 、 ``aws`` ）。 ``vanilla`` は Fess 15.10 以降のイメージで指定できます。それより前のイメージでは ``cloud`` を指定します（ :doc:`../config/search-engine-type` を参照）。15.8 のイメージでは、 ``-noble`` 版だけがこの値を Fess に渡します。
+     - 検索エンジンの種別（ ``default`` 、 ``vanilla`` 、 ``aws`` ）。 ``vanilla`` は Fess 15.9 以降のイメージで指定できます。それより前のイメージでは ``cloud`` を指定します（ :doc:`../config/search-engine-type` を参照）。15.8 のイメージでは、 ``-noble`` 版だけがこの値を Fess に渡します。
    * - ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``
      - 認証が有効な OpenSearch に接続する際の資格情報
    * - ``FESS_DICTIONARY_PATH``
@@ -458,7 +458,7 @@ Docker 環境で設定を反映させるには、以下の方法があります�
    * - ``compose-minio.yaml``
      - MinIO（オブジェクトストレージ）を追加し、Fess のストレージ機能の保存先として利用
    * - ``vanilla/``
-     - CodeLibs のプラグインを含まない素の OpenSearch と組み合わせる構成（ ``SEARCH_ENGINE_TYPE=vanilla`` 。Fess 15.10 以降のイメージで指定でき、それより前のイメージでは ``cloud`` を指定します）。辞書管理などの一部機能は利用できません（ :doc:`../config/search-engine-type` を参照）
+     - CodeLibs のプラグインを含まない素の OpenSearch と組み合わせる構成（ ``SEARCH_ENGINE_TYPE=vanilla`` 。Fess 15.9 以降のイメージで指定でき、それより前のイメージでは ``cloud`` を指定します）。辞書管理などの一部機能は利用できません（ :doc:`../config/search-engine-type` を参照）
    * - ``snapshot/``
      - 開発版（snapshot）イメージを使用する構成（クラスター構成や Elasticsearch 8 との組み合わせを含む）
    * - ``multi-instance/``

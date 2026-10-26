@@ -240,7 +240,7 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    les paquets DEB/RPM ; |Fess| doit être redémarré après sa modification.
 
 .. warning::
-   Dans |Fess| 15.10, une connexion est refusée par défaut lorsque le domaine Kerberos du principal
+   Dans |Fess| 15.8, une connexion est refusée par défaut lorsque le domaine Kerberos du principal
    client diffère de celui du serveur. Si des utilisateurs se connectent depuis un domaine enfant
    d'une arborescence de domaines AD ou depuis une forêt approuvée, indiquez ces domaines dans
    ``spnego.allowed.realms``, séparés par des virgules. Sinon, les utilisateurs qui pouvaient se

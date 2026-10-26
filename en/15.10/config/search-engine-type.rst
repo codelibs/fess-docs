@@ -21,7 +21,7 @@ Types
    * - ``default``
      - OpenSearch with the CodeLibs plugins. This is the default.
    * - ``vanilla``
-     - A plain OpenSearch without the CodeLibs plugins. New in 15.10. The index definitions are read from ``fess_indices/_vanilla/``. |Fess| 15.8 and earlier do not know this value; use ``cloud`` with them.
+     - A plain OpenSearch without the CodeLibs plugins. New in 15.9. The index definitions are read from ``fess_indices/_vanilla/``. |Fess| 15.8 and earlier do not know this value; use ``cloud`` with them.
    * - ``aws``
      - The same as ``vanilla``, intended for Amazon OpenSearch Service. See :ref:`search-engine-type-aws`.
    * - ``cloud``
@@ -69,11 +69,11 @@ Set the ``SEARCH_ENGINE_TYPE`` environment variable on the ``fess01`` service in
           - "SEARCH_ENGINE_HTTP_URL=http://search01:9200"
           - "SEARCH_ENGINE_TYPE=vanilla"
 
-``vanilla`` can be used with |Fess| 15.10 and later images. With an earlier image, set ``SEARCH_ENGINE_TYPE=cloud``. For the other Docker settings, see :doc:`../install/install-docker`.
+``vanilla`` can be used with |Fess| 15.9 and later images. With an earlier image, set ``SEARCH_ENGINE_TYPE=cloud``. For the other Docker settings, see :doc:`../install/install-docker`.
 
 .. note::
 
-   On the |Fess| 15.8 images, only the ``-noble`` variant (for example ``ghcr.io/codelibs/fess:15.8.0-noble``) passes ``SEARCH_ENGINE_TYPE`` on to |Fess|. The default (Alpine-based) 15.8 image writes the value to ``/etc/default/fess`` but does not give it to the JVM as ``-Dfess.config.search_engine.type``, so the setting has no effect there. From 15.10 on, the default image honors it as well.
+   On the |Fess| 15.8 images, only the ``-noble`` variant (for example ``ghcr.io/codelibs/fess:15.8.0-noble``) passes ``SEARCH_ENGINE_TYPE`` on to |Fess|. The default (Alpine-based) 15.8 image writes the value to ``/etc/default/fess`` but does not give it to the JVM as ``-Dfess.config.search_engine.type``, so the setting has no effect there. From 15.9 on, the default image honors it as well.
 
 Non-Docker Installations
 ------------------------

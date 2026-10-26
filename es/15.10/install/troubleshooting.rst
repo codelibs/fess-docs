@@ -569,7 +569,7 @@ Recopilación de Información de Depuración
 
 Al informar problemas, es útil recopilar la siguiente información:
 
-1. **Información de versión** (``bin/fess -v`` está disponible desde la 15.10)::
+1. **Información de versión** (``bin/fess -v`` está disponible desde la 15.9)::
 
        $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version

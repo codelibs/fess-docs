@@ -27,7 +27,7 @@ Detailed crawler settings are configured in the following files:
 Default Script
 --------------
 
-``crawler.default.script`` was removed in |Fess| 15.10; each document boost rule now selects its own script type on the :doc:`../admin/boostdoc-guide` screen.
+``crawler.default.script`` was removed in |Fess| 15.9; each document boost rule now selects its own script type on the :doc:`../admin/boostdoc-guide` screen.
 
 HTTP Thread Pool
 ----------------
@@ -1182,7 +1182,7 @@ Playwright. To use Playwright for specific sites only, specify them as follows.
        npx playwright install --with-deps
 
 .. note::
-   From 15.10, the Node.js executable that Playwright runs is no longer part of the
+   From 15.9, the Node.js executable that Playwright runs is no longer part of the
    |Fess| package either. Install it with the command below; ``bin/fess.in.sh``
    discovers it and passes ``PLAYWRIGHT_NODEJS_PATH`` to the crawler process.
 
@@ -1363,7 +1363,7 @@ amount of data transferred.
    targets server-side rendered pages only, but normally choose from the safe
    set listed above.
 
-Changes in 15.10
+Changes in 15.8
 ---------------
 
 When upgrading from 15.7 or earlier, the behavior of the Playwright crawler has

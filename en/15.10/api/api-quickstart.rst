@@ -281,7 +281,7 @@ API Version Compatibility
 
 .. note::
 
-   In |Fess| 15.10, the former ``/api/v1`` JSON search API and chat API were discontinued.
+   In |Fess| 15.7, the former ``/api/v1`` JSON search API and chat API were discontinued.
    Clients using ``/api/v1`` should migrate to ``/api/v2``.
    For detailed differences between versions, refer to the `Release Notes <https://github.com/codelibs/fess/releases>`__.
 

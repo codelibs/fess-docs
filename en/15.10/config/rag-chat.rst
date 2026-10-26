@@ -9,7 +9,7 @@ AI mode (RAG: Retrieval-Augmented Generation) extends |Fess| search results with
 providing information through conversational interaction. Users can ask questions in natural language and receive
 detailed answers based on search results.
 
-In |Fess| 15.10, LLM functionality has been separated as ``fess-llm-*`` plugins.
+In |Fess| 15.6, LLM functionality has been separated as ``fess-llm-*`` plugins.
 Core settings and LLM provider-specific settings are configured in ``fess_config.properties``, while
 the LLM provider selection (``rag.llm.name``) is configured in ``system.properties`` or from the administration screen.
 
@@ -135,7 +135,7 @@ not mix them up.
 .. note::
 
    ``rag.llm.type`` is the legacy property name from |Fess| 15.5 and earlier.
-   In 15.10 and later it has been renamed to ``rag.llm.name``; values written
+   In 15.6 and later it has been renamed to ``rag.llm.name``; values written
    under ``rag.llm.type`` are not read.
 
 Core Settings List

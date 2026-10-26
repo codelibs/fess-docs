@@ -19,7 +19,7 @@
    * - ``airplane !unknown``
      - |Fess| での通常の検索(``!`` は NOT の意味です。:doc:`search-not` を参照)
 
-バングは ``fess-webapp-bangs`` プラグインが提供します。|Fess| 15.10 以降が必要です。管理画面の [システム > プラグイン] か ``bin/fess-setup install plugin fess-webapp-bangs`` でインストールし(:doc:`../admin/plugin-guide` を参照)、|Fess| を再起動します。
+バングは ``fess-webapp-bangs`` プラグインが提供します。|Fess| 15.9 以降が必要です。管理画面の [システム > プラグイン] か ``bin/fess-setup install plugin fess-webapp-bangs`` でインストールし(:doc:`../admin/plugin-guide` を参照)、|Fess| を再起動します。
 
 バングとして扱われる条件
 ========================

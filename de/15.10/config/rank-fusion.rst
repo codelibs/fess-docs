@@ -7,7 +7,7 @@ Hybride Suche und Rank Fusion (Semantisch + Schlüsselwort)
 
 **Hybride Suche** in |Fess| kombiniert die klassische Schlüsselwortsuche (BM25) mit **semantischer (Vektor-)Suche** und führt beide Ergebnismengen mit **Rank Fusion** zu präziseren, relevanteren Rankings zusammen. Rank Fusion integriert die Ergebnisse mehrerer Sucher zu einem einzigen optimierten Ranking.
 
-In |Fess| 15.10 wird die semantische Suche (Content-Chunking + Vektorsuche) als Kernfunktion
+In |Fess| 15.8 wird die semantische Suche (Content-Chunking + Vektorsuche) als Kernfunktion
 bereitgestellt. Sobald Sie sie aktivieren, wird der semantische Sucher automatisch bei Rank Fusion
 registriert. Siehe :doc:`search-semantic` zur Konfiguration.
 
@@ -147,7 +147,7 @@ Diese Eigenschaft verhält sich wie folgt:
    Wenn Sie zuvor das Plugin ``fess-webapp-semantic-search`` aus |Fess| 15.7 oder früher genutzt
    haben, wurde Ihnen möglicherweise empfohlen, diese Eigenschaft auf
    ``-Drank.fusion.searchers=default,semantic`` zu setzen. Dieses Plugin registrierte seinen
-   Sucher unter dem Namen ``semantic``, was ein **anderer Sucher** ist als der in 15.10 eingeführte
+   Sucher unter dem Namen ``semantic``, was ein **anderer Sucher** ist als der in 15.8 eingeführte
    Name des im Kern integrierten Suchers, ``semantic_chunk``. Wenn Sie diese Einstellung aus der
    15.7-Ära unverändert nach 15.10 übernehmen, enthält die Allowlist niemals ``semantic_chunk``,
    sodass die im Kern integrierte semantische Suche (Content-Chunking + Vektorsuche) **überhaupt

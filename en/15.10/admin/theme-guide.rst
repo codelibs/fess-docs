@@ -10,7 +10,7 @@ The Theme feature manages themes — a bundled set of static assets (HTML / CSS 
 The search interface is always a theme. When no default theme is set, |Fess| uses ``bootstrap``, the theme bundled with it. The bundled theme cannot be deleted or replaced; to change it, copy it under a new name (see :ref:`theme-customize-bundled`).
 
 .. note::
-   JSP-based themes (``fess-theme-*`` JAR theme plugins) were removed in 15.10. Use a theme to change the look (see :ref:`upgrade-159-static-theme`).
+   JSP-based themes (``fess-theme-*`` JAR theme plugins) were removed in 15.9. Use a theme to change the look (see :ref:`upgrade-159-static-theme`).
    The ``admin-theme`` role is required to perform operations on this page (the ``admin-theme-view`` role is sufficient for read-only access).
 
 Obtaining a Theme
@@ -150,7 +150,7 @@ Place a ``theme.yml`` file (YAML format) at the root of the theme to describe th
      - The entry point file (default: ``index.html``).
    * - ``spaFallback``
      - Optional
-     - Deprecated and no longer read. Since 15.10 the entry file is always served for the search interface paths.
+     - Deprecated and no longer read. Since 15.9 the entry file is always served for the search interface paths.
 
 Table: theme.yml Fields
 

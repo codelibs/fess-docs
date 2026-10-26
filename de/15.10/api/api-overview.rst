@@ -11,7 +11,7 @@ Durch die Verwendung der API kann |Fess| auch in bestehenden Websystemen und Sin
 
 .. note::
 
-   In |Fess| 15.10 wurde die API auf **v2** erneuert. Die bisherige JSON-Such-API
+   In |Fess| 15.7 wurde die API auf **v2** erneuert. Die bisherige JSON-Such-API
    und die Chat-API unter ``/api/v1`` wurden abgekündigt und in ``/api/v2``
    zusammengeführt. Clients, die ``/api/v1`` verwenden, sollten auf ``/api/v2``
    migrieren.

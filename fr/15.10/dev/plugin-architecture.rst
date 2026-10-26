@@ -55,7 +55,7 @@ suivants :
 
 .. note::
 
-   Le type ``fess-theme-*`` (thème JAR), qui fournissait des JSP, a été supprimé en 15.10.
+   Le type ``fess-theme-*`` (thème JAR), qui fournissait des JSP, a été supprimé en 15.9.
    L'apparence de l'écran de recherche se modifie avec un thème, et non avec un
    plugin (voir :doc:`theme-development`).
 

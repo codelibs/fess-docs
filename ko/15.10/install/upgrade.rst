@@ -75,7 +75,7 @@
    - ``fess_basic_config.bulk`` - 설정 인덱스(크롤 설정, 스케줄러, 레이블,
      키 매치, 역할, 웹/파일 인증 등 19개 인덱스)
    - ``fess_config.bulk`` - 위 19개 인덱스에 더해 크롤 정보, 장애 URL, 작업 로그,
-     썸네일 큐 등 실행 시 데이터를 포함하는 25개 인덱스(15.8 까지. 15.10 에서는 사용자 태그를
+     썸네일 큐 등 실행 시 데이터를 포함하는 25개 인덱스(15.8 까지. 15.9 에서는 사용자 태그를
      보관하는 ``tag_type`` 인덱스가 추가되어 26개)
    - ``fess_user.bulk`` - 사용자, 역할, 그룹
    - ``system.properties`` - 전반 설정을 포함하는 시스템 설정
@@ -86,12 +86,12 @@
 
       ``fess_config.bulk`` 는 ``fess_basic_config.bulk`` 를 포함합니다. 업그레이드 전
       설정 백업으로는 ``fess_basic_config.bulk``, ``fess_user.bulk``,
-      ``system.properties`` 3개면 충분합니다. 다만 백업 원본이 15.10 이상이고 사용자 태그를 사용하는 경우에는, 사용자 태그를 보관하는 ``tag_type`` 인덱스가 ``fess_basic_config.bulk`` 에 포함되지 않으므로 ``fess_config.bulk`` 도 다운로드하십시오( :doc:`../admin/tagtype-guide` 참조).
+      ``system.properties`` 3개면 충분합니다. 다만 백업 원본이 15.9 이상이고 사용자 태그를 사용하는 경우에는, 사용자 태그를 보관하는 ``tag_type`` 인덱스가 ``fess_basic_config.bulk`` 에 포함되지 않으므로 ``fess_config.bulk`` 도 다운로드하십시오( :doc:`../admin/tagtype-guide` 참조).
 
    .. note::
 
       검색 로그나 클릭 로그 등의 로그 데이터(``search_log.ndjson``, ``click_log.ndjson``,
-      ``favorite_log.ndjson``, ``user_info.ndjson``. 15.10 에서는 ``chat_log.ndjson`` 도 표시됩니다)도
+      ``favorite_log.ndjson``, ``user_info.ndjson``. 15.9 에서는 ``chat_log.ndjson`` 도 표시됩니다)도
       같은 페이지에서 다운로드할 수 있습니다.
       설정만 백업하는 경우에는 불필요합니다. 또한 이 ``*.ndjson`` 파일들은
       백업 페이지에서 업로드하여 복원할 수 없습니다
@@ -275,7 +275,7 @@ ZIP 버전
 
    .. warning::
 
-      ``fess_config.properties`` 와 ``fess.in.sh`` 를 그대로 복사하면 15.10 에서 기본값이 바뀐 값을
+      ``fess_config.properties`` 와 ``fess.in.sh`` 를 그대로 복사하면 15.9 에서 기본값이 바뀐 값을
       포함해 이전 버전의 값이 그대로 이어집니다. 예를 들어 업그레이드 후에 만든 작업의 기본값이
       Groovy 가 됩니다. 마지막 두 명령을 실행하기 전에 각 파일을 ``fess-15.10.0`` 의 파일과 비교하고,
       직접 변경한 값만 옮기십시오. 확인할 항목은 :ref:`upgrade-159-carried-over-config` 를
@@ -678,12 +678,12 @@ LTSV 형식에서는 필드 값에 포함된 모든 제어 문자와 유니코�
 특히 ``fess-storage-s3`` 와 ``fess-storage-gcs`` 의 15.9.0 jar를 남겨 두지 마십시오. 15.9.0의 이 플러그인들은 스토리지 목록 조회에 실패해도 오류를 반환하지 않습니다. 그래서 스토리지에 접속할 수 없거나, 인증이 올바르지 않거나, 버킷이 존재하지 않는 경우에도 관리 API의 ``/api/admin/storage/list`` 는 성공을 나타내는 빈 목록 ``{"items":[],"status":0}`` 을 반환합니다. 15.10의 플러그인은 실패를 예외로 던지고, 15.10은 이를 오류 응답으로 바꿉니다. 오래된 jar가 남아 있으면 15.10의 이 개선은 적용되지 않습니다.
 
 15.8에서 15.10로 업그레이드
-==========================
+===========================
 
 15.8에서 업그레이드하는 경우 다음 변경 사항은 하위 호환되지 않습니다. 15.7 이전에서 업그레이드하는
 경우에도 이 변경 사항이 모두 적용됩니다. 「내장 OpenSearch 폐지」부터 「기존 문서 인덱스에 새 필드와
 가나 정규화 반영」까지의 각 절(내장 OpenSearch, 스크립트 엔진, S3 와 SSO 플러그인, Index Exporter
-작업 등)과 이 페이지 끝의 「15.10 전용 마이그레이션 작업」을 모두 읽으십시오.
+작업 등)과 이 페이지 끝의 「기능별 마이그레이션 작업」을 모두 읽으십시오.
 
 내장 OpenSearch 폐지
 --------------------
@@ -1059,9 +1059,9 @@ RPM 버전에서는 같은 방식으로 ``/etc/fess/fess_config.properties`` 와
 
 .. note::
 
-   |Fess| 15.10 는 웹 인증과 파일 인증의 ``password`` 도 ``app.cipher.key`` 로 암호화하여 저장하므로, 백업의
+   |Fess| 15.9 는 웹 인증과 파일 인증의 ``password`` 도 ``app.cipher.key`` 로 암호화하여 저장하므로, 백업의
    ``fess_basic_config.bulk`` 와 ``fess_config.bulk`` 에는 암호화된 값이 포함됩니다. 다른 설치에 복원할 때는 동일한
-   ``app.cipher.key`` 를 이어받으십시오. 키가 다르면 이 인증 정보를 사용하는 크롤이 오류로 실패합니다. 15.10 이전에 만든
+   ``app.cipher.key`` 를 이어받으십시오. 키가 다르면 이 인증 정보를 사용하는 크롤이 오류로 실패합니다. 15.9 이전에 만든
    백업에는 평문으로 들어 있으며 그대로 사용할 수 있습니다(:doc:`../admin/backup-guide` 참조).
 
 .. _upgrade-159-jcifs:
@@ -1297,9 +1297,9 @@ time 과 ``search_after`` 로 가져오므로 점수가 붙지 않습니다. 구
 ``search_engine.type`` 의 ``cloud`` 는 사용 중단 예정
 -----------------------------------------------------
 
-15.10 에서는 CodeLibs 플러그인이 없는 순정 OpenSearch 용으로 ``search_engine.type`` 의 값 ``vanilla`` 가 추가되었습니다( :doc:`../config/search-engine-type` 참조). ``cloud`` 는 ``vanilla`` 의 사용 중단 예정 별칭이 되었습니다. 계속 동작하지만 시작할 때 경고를 로그에 출력합니다. 15.10 로 운영하게 되면 ``vanilla`` 로 변경하십시오. ``aws`` 는 이전과 같이 동작합니다.
+15.9 에서는 CodeLibs 플러그인이 없는 순정 OpenSearch 용으로 ``search_engine.type`` 의 값 ``vanilla`` 가 추가되었습니다( :doc:`../config/search-engine-type` 참조). ``cloud`` 는 ``vanilla`` 의 사용 중단 예정 별칭이 되었습니다. 계속 동작하지만 시작할 때 경고를 로그에 출력합니다. 15.10 로 운영하게 되면 ``vanilla`` 로 변경하십시오. ``aws`` 는 이전과 같이 동작합니다.
 
-* ``vanilla`` 는 15.10 이상에서 사용할 수 있습니다. 15.8 이전의 |Fess| 는 이 값을 인식하지 못합니다. 15.8 로 되돌릴 가능성이 있는 동안에는 ``cloud`` 를 그대로 두십시오.
+* ``vanilla`` 는 15.9 이상에서 사용할 수 있습니다. 15.8 이전의 |Fess| 는 이 값을 인식하지 못합니다. 15.8 로 되돌릴 가능성이 있는 동안에는 ``cloud`` 를 그대로 두십시오.
 * ``aws`` 와 ``cloud`` 의 인덱스 정의는 ``fess_indices/_vanilla/`` 에서 읽어 들입니다. 동봉되어 있던 ``fess_indices/_aws/`` 와 ``fess_indices/_cloud/`` 는 없어졌으며, 직접 추가한 ``fess_indices/_aws/`` 또는 ``fess_indices/_cloud/`` 는 더 이상 읽지 않으므로 변경 내용을 ``fess_indices/_vanilla/`` 로 옮기십시오. 이미 만들어진 인덱스는 변경되지 않습니다.
 * 15.8 이 검색 엔진에 저장한 추천 단어(Suggest) 설정은 자동으로 마이그레이션됩니다. 별도의 조치는 필요하지 않습니다.
 
@@ -1355,8 +1355,8 @@ CSV 데이터스토어가 인용 부호로 감싼 필드를 해석
    일시적으로 비활성화하고 크롤하십시오.
 
 
-15.10 전용 마이그레이션 작업
-===========================
+기능별 마이그레이션 작업
+========================
 
 15.7 이전 버전에서 15.10로 업그레이드하는 경우, 사용 중인 기능에 따라 다음 작업이 필요합니다.
 
@@ -1364,7 +1364,7 @@ CSV 데이터스토어가 인용 부호로 감싼 필드를 해석
 ----------------------------------
 
 15.7 이전에 시맨틱 검색을 제공하던 ``fess-webapp-semantic-search`` 플러그인은
-15.10에서 코어로 통합되어 불필요해졌습니다(사용 중단). 플러그인 제거, ``-Dfess.semantic_search.*``
+15.8에서 코어로 통합되어 불필요해졌습니다(사용 중단). 플러그인 제거, ``-Dfess.semantic_search.*``
 및 ``-Drank.fusion.searchers=default,semantic`` 의 제거, 기존 인제스트 파이프라인 분리가
 필요합니다. 절차는 :ref:`semantic-search-migration` (:doc:`../config/search-semantic`)를
 참조하십시오.
@@ -1372,22 +1372,22 @@ CSV 데이터스토어가 인용 부호로 감싼 필드를 해석
 AI 검색 모드(RAG 채팅)를 사용하고 있었던 경우
 ---------------------------------------------
 
-15.10부터 AI 검색 모드(RAG 채팅) 기능은 ``fess-llm-ollama``, ``fess-llm-openai``,
+15.6부터 AI 검색 모드(RAG 채팅) 기능은 ``fess-llm-ollama``, ``fess-llm-openai``,
 ``fess-llm-gemini`` 등의 플러그인으로 분리되었습니다. 사용 중인 프로바이더에 대응하는
-플러그인을 관리 화면 「시스템」→「플러그인」에서 설치하십시오. 15.10에서는 Amazon Bedrock용
+플러그인을 관리 화면 「시스템」→「플러그인」에서 설치하십시오. 15.9에서는 Amazon Bedrock용
 ``fess-llm-bedrock`` 도 추가되었습니다.
 
 SPNEGO(Windows 통합 인증)를 사용하고 있었던 경우
 ------------------------------------------------
 
-15.10부터 클라이언트 주체의 Kerberos 영역이 서버의 영역과 다르면 SPNEGO 로그인이 거부됩니다.
+15.8부터 클라이언트 주체의 Kerberos 영역이 서버의 영역과 다르면 SPNEGO 로그인이 거부됩니다.
 AD 도메인 트리의 하위 도메인이나 신뢰 관계를 맺은 포리스트의 사용자가 로그인하는 구성에서는
 관리 화면 「시스템」→「일반」 또는 ``app/WEB-INF/conf/system.properties`` 의
 ``spnego.allowed.realms`` 에 해당 영역을 쉼표로 구분하여 나열하십시오. 나열하지 않으면
 15.7까지 로그인할 수 있었던 사용자가 ``Kerberos realm is not allowed`` 로 거부됩니다.
 자세한 내용은 :doc:`../config/sso-spnego` 를 참조하십시오.
 
-또한 15.10에서는 ``spnego.allow.unsecure.basic`` 과 ``spnego.allow.localhost`` 의 코드상 기본값이
+또한 15.8에서는 ``spnego.allow.unsecure.basic`` 과 ``spnego.allow.localhost`` 의 코드상 기본값이
 ``true`` 에서 ``false`` 로 변경되었습니다. 이 키들이 ``app/WEB-INF/conf/system.properties`` 에
 없는 환경에서는 업그레이드와 함께 더 엄격한 동작이 적용됩니다. 특히
 ``spnego.allow.unsecure.basic=false`` 인 경우 SPNEGO 라이브러리는 ``HttpServletRequest#isSecure()``
@@ -1413,7 +1413,7 @@ AD 도메인 트리의 하위 도메인이나 신뢰 관계를 맺은 포리스�
 SAML 인증(SSO)을 사용하고 있었던 경우
 -------------------------------------
 
-15.10부터 |Fess| 는 전송한 AuthnRequest의 ID와 SAML 응답을 대응시켜 검증하므로
+15.8부터 |Fess| 는 전송한 AuthnRequest의 ID와 SAML 응답을 대응시켜 검증하므로
 IdP-Initiated(미요청·unsolicited) SSO는 동작하지 않습니다. IdP 포털(Okta 대시보드나
 Microsoft Entra ID의 「내 앱」 등)에 배치한 타일에서 시작한 로그인은 대응시킬 AuthnRequest가
 없어 거부됩니다. 15.7까지는 |Fess| 가 대응시키지 못한 응답을 IdP로 되돌려 보내고, IdP가 즉시
@@ -1433,7 +1433,7 @@ IdP로의 무한 리다이렉트 루프로 나타났으므로, 동작하는 것�
 Microsoft Entra ID(Azure AD)를 사용하고 있었던 경우
 ---------------------------------------------------
 
-15.10부터 인가 엔드포인트에 요청하는 응답 모드의 기본값이 ``form_post`` 에서 ``query`` 로
+15.8부터 인가 엔드포인트에 요청하는 응답 모드의 기본값이 ``form_post`` 에서 ``query`` 로
 변경되었습니다. 15.7까지는 콜백이 교차 사이트 POST로 반환되므로, |Fess| 의 기본값인
 ``tomcat.sameSiteCookies = lax`` 에서는 세션 쿠키가 전송되지 않아 ``none`` 으로 변경해야
 했습니다. 이 회피책만을 위해 ``none`` 을 설정했다면 기본값으로 되돌릴 수 있습니다. 기존과 같이
@@ -1441,7 +1441,7 @@ Microsoft Entra ID(Azure AD)를 사용하고 있었던 경우
 ``tomcat.sameSiteCookies = none`` 을 유지하십시오. 브라우저는 ``Secure`` 속성이 함께 있는 쿠키에
 대해서만 ``none`` 을 허용하므로, 이 경우에도 |Fess| 를 HTTPS로 제공해야 합니다.
 
-또한 15.10부터 |Fess| 는 로그인이 완료된 후 백그라운드에서 사용자의 그룹·역할 소속을 해결하며,
+또한 15.8부터 |Fess| 는 로그인이 완료된 후 백그라운드에서 사용자의 그룹·역할 소속을 해결하며,
 로그인이 Microsoft Graph의 응답을 기다리다 멈추는 일은 없어졌습니다. 해결이 완료될 때까지, 또는
 해결이 완전히 성공하지 못한 경우 사용자가 보유하는 것은 사용자 본인의 사용자 수준 권한과
 ``entraid.default.groups`` 및 ``entraid.default.roles`` 에 설정한 그룹·역할뿐입니다. 둘 다
@@ -1474,7 +1474,7 @@ Microsoft Entra ID(Azure AD)를 사용하고 있었던 경우
 LDAP / Active Directory 연동을 사용하던 경우
 ---------------------------------------------
 
-15.10부터 그룹과 롤의 권한 이름은 엔트리의 DN을 텍스트로 잘라낸 값이 아니라 RDN으로 해석한 값이
+15.8부터 그룹과 롤의 권한 이름은 엔트리의 DN을 텍스트로 잘라낸 값이 아니라 RDN으로 해석한 값이
 됩니다. DN 안에서 이스케이프되는 문자(일반적으로 쉼표)를 CN에 포함하는 그룹은 15.7까지와 다른
 권한 이름을 갖게 됩니다.
 
@@ -1503,7 +1503,7 @@ LDAP / Active Directory 연동을 사용하던 경우
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 15.7까지는 ``ldap.role.search.user.enabled=false`` 를 설정해도 사용자 이름에서 유도한 권한
-(``role.search.user.prefix`` + 사용자 이름)이 부여되었습니다. 15.10부터는 이 설정이 실제로
+(``role.search.user.prefix`` + 사용자 이름)이 부여되었습니다. 15.8부터는 이 설정이 실제로
 반영되어 ``false`` 인 경우 부여되지 않습니다.
 
 ``false`` 로 설정한 환경에서는 업그레이드 후 사용자가 자신의 권한을 잃게 되므로, 개별 사용자에게
@@ -1565,7 +1565,7 @@ LDAP / Active Directory 연동을 사용하던 경우
     $ bin/fess-setup upgrade plugins
     $ bin/fess-setup check
 
-``upgrade plugins`` 의 대상은 이미 설치된 플러그인뿐입니다. ``fess-script-groovy`` 등 15.10 에서
+``upgrade plugins`` 의 대상은 이미 설치된 플러그인뿐입니다. ``fess-script-groovy`` 등 15.9 에서
 배포물에서 빠진 부분을 보완하는 플러그인은 앞의 각 절에 설명된 대로
 ``bin/fess-setup install plugin`` 으로 설치하십시오.
 

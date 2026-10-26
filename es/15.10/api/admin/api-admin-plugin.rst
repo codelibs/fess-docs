@@ -56,7 +56,7 @@ cuyos elementos son objetos con los siguientes campos.
        ``fess-thumbnail`` (miniatura), ``fess-crawler`` (crawler), ``fess-llm`` (LLM),
        ``fess-storage`` (almacenamiento), ``fess-sso`` (SSO),
        ``jar`` (JAR de propósito general no incluido en los anteriores). ``fess-theme`` se eliminó en
-       15.10, y un JAR ``fess-theme-*`` se trata como ``jar``.
+       15.9, y un JAR ``fess-theme-*`` se trata como ``jar``.
    * - ``id``
      - Identificador con formato ``{name}:{version}``.
    * - ``name``

@@ -9,7 +9,7 @@ AI検索モード（RAG: Retrieval-Augmented Generation）は、|Fess| の検索
 対話形式で情報を提供する機能です。ユーザーは自然言語で質問し、検索結果を基にした
 詳細な回答を得ることができます。
 
-|Fess| 15.10 では、LLM機能が ``fess-llm-*`` プラグインとして分離されました。
+|Fess| 15.6 では、LLM機能が ``fess-llm-*`` プラグインとして分離されました。
 コア設定およびLLMプロバイダー固有の設定は ``fess_config.properties`` で行い、
 LLMプロバイダーの選択（ ``rag.llm.name`` ）のみ ``system.properties`` または管理画面から行います。
 
@@ -135,7 +135,7 @@ LLMプロバイダーの詳細設定については、以下を参照してく�
 
 .. note::
 
-   ``rag.llm.type`` というプロパティ名は |Fess| 15.5 までの旧名です。15.10 以降は ``rag.llm.name`` に変更されており、
+   ``rag.llm.type`` というプロパティ名は |Fess| 15.5 までの旧名です。15.6 以降は ``rag.llm.name`` に変更されており、
    ``rag.llm.type`` の設定は読み取られません。
 
 コア設定一覧

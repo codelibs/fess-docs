@@ -35,7 +35,7 @@ SAML 인증에서는 |Fess| 가 SP（Service Provider）로 동작하여 외부 
 
    참고로 15.7에서는 ``tomcat.sameSiteCookies=none`` 을 설정하면 IdP-Initiated 로그인이 결과적으로
    동작했습니다. |Fess| 가 대응시키지 못한 응답을 IdP로 되돌려 보내고, IdP가 즉시 SP-Initiated
-   어서션을 반환했기 때문입니다. 15.10에서는 이 되돌려 보내기를 하지 않으므로 IdP-Initiated 로그인은
+   어서션을 반환했기 때문입니다. 15.8에서는 이 되돌려 보내기를 하지 않으므로 IdP-Initiated 로그인은
    동작하지 않습니다.
 
 역할 기반 검색과의 연동에 대해서는 :doc:`security-role` 을 참조하십시오.

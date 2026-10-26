@@ -568,7 +568,7 @@ Collecting Debug Information
 
 When reporting issues, collecting the following information is helpful:
 
-1. **Version information** (``bin/fess -v`` is available in 15.10 and later)::
+1. **Version information** (``bin/fess -v`` is available in 15.9 and later)::
 
        $ /path/to/fess/bin/fess -v
        $ /path/to/opensearch/bin/opensearch --version

@@ -7,7 +7,7 @@ Aperçu
 
 La **recherche hybride** dans |Fess| combine la recherche traditionnelle par mots-clés (BM25) avec la **recherche sémantique (vectorielle)**, puis fusionne les deux ensembles de résultats grâce au **Rank Fusion** afin de produire des classements plus précis et plus pertinents. Le Rank Fusion intègre les résultats de plusieurs moteurs de recherche en un classement unique optimisé.
 
-Dans |Fess| 15.10, la recherche sémantique (chunking de contenu + recherche vectorielle) est
+Dans |Fess| 15.8, la recherche sémantique (chunking de contenu + recherche vectorielle) est
 fournie comme une fonctionnalité du cœur. Une fois activée, le moteur de recherche sémantique est
 enregistré automatiquement auprès du Rank Fusion. Voir :doc:`search-semantic` pour sa
 configuration.
@@ -152,7 +152,7 @@ Ce paramètre se comporte comme suit :
    antérieur, il vous a peut-être été indiqué de définir ce paramètre sur
    ``-Drank.fusion.searchers=default,semantic``. Ce plugin enregistrait son moteur de recherche
    sous le nom ``semantic``, qui est un **moteur de recherche différent** du nom du moteur
-   intégré au cœur, ``semantic_chunk``, introduit en 15.10. Si vous reportez ce réglage datant de
+   intégré au cœur, ``semantic_chunk``, introduit en 15.8. Si vous reportez ce réglage datant de
    la 15.7 tel quel dans la 15.10, la liste blanche n'inclut jamais ``semantic_chunk``, de sorte
    que la recherche sémantique intégrée au cœur (chunking de contenu + recherche vectorielle) **ne
    fonctionne pas du tout** — |Fess| continue de renvoyer silencieusement des résultats de
