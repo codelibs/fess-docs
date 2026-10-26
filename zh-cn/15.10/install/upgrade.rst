@@ -696,6 +696,12 @@ LDAP 的角色 OU 与嵌套组
 - 已删除 ``TikaExtractor.setTikaConfig`` 和 ``fess.xml`` 中的 ``tikaConfig`` 组件。
 - 日志级别为 ``debug`` 时，``CrawlJob`` 不再向爬虫传递 ``-Dorg.apache.tika.service.error.warn=true``，因为 Tika 4 不再读取该属性。
 
+15.10 的 ``WEB-INF/lib`` 中也不再包含以下 15.9 随附的库。它们原先由 Tika 3 的模块引入，而 15.10 使用的 Tika 4 模块不再依赖它们。15.10 的 WAR 中没有任何类引用它们。
+
+- 不再包含的库有 JAXB（``jakarta.xml.bind-api``、``jaxb-core``、``jaxb-runtime``、``txw2``、``istack-commons-runtime``）、``jempbox``、``xmpbox`` 和 ``juniversalchardet``。``jakarta.activation-api`` 和 ``angus-activation`` 仍然包含。
+- 如果插件使用这些库中的类，请将这些库包含在插件的 JAR 中（例如使用 Maven Shade Plugin 打包）。插件可以依赖 WAR 提供的类，但不能依赖其他插件的类，而 15.10 的 WAR 不再提供这些类。``WEB-INF/lib`` 中的类先于 ``WEB-INF/plugin`` 中的类解析，因此包含 WAR 中没有的库不会产生重复。
+- 插件是否受影响，可以通过它所需的类是否存在于 15.10 的 ``WEB-INF/lib`` 的 JAR 中来确认。使用已移除类的处理会在运行时失败，例如抛出 ``NoClassDefFoundError``；不使用这些类的处理不受影响。
+
 为 15.9 构建的插件
 ------------------
 
