@@ -583,6 +583,8 @@ Hasta 15.9, el campo ``ip`` del registro de auditoría y el campo ``clientIp`` d
 
 Detrás de un proxy inverso que no figura en ``rate.limit.trusted.proxies``, todas las solicitudes se guardan con la dirección del proxy. Para guardar la dirección del cliente original, añada la dirección del proxy a ``rate.limit.trusted.proxies``.
 
+Si una solicitud procedente de una dirección que no figura en ``rate.limit.trusted.proxies`` incluye ``X-Forwarded-For`` o ``X-Real-IP``, 15.10 escribe en ``fess.log`` una advertencia que indica la dirección del origen y ``rate.limit.trusted.proxies``. La advertencia se escribe una sola vez después del inicio, no en cada solicitud, por lo que solo indica la primera dirección de este tipo y no contiene el valor de la cabecera. La cabecera se sigue ignorando, de modo que solo cambia el registro. Como el formulario de inicio de sesión usa los mismos límites (consulte «Límite de intentos del formulario de inicio de sesión» más abajo), todos los clientes detrás de un proxy así se cuentan como una sola dirección y, cuando los inicios de sesión fallidos alcanzan el límite, se rechazan los inicios de sesión de todos ellos. Si ve la advertencia, añada la dirección del proxy a ``rate.limit.trusted.proxies``.
+
 .. _upgrade-1510-cipher-key:
 
 Advertencia sobre ``app.cipher.key``
@@ -597,6 +599,9 @@ Otros cambios de comportamiento
 - «Eliminar todo» en las pantallas «Búsqueda» e «Información de rastreo» de la interfaz de administración requiere el rol de edición (``admin-searchlist``, ``admin-crawlinginfo``). Hasta 15.9, solo se ocultaba el botón: las solicitudes de un usuario que solo tenía un rol de visualización (un rol con el sufijo ``-view``) se aceptaban igualmente.
 - El texto convertido (``output``) de una entrada del diccionario de mapeo es obligatorio. Hasta 15.9, la interfaz de administración y la API de administración aceptaban una entrada sin él y no guardaban nada.
 - En una búsqueda, una sola palabra entre comillas dobles (como ``"less"``) coincide únicamente con esa palabra. Hasta 15.9, una palabra de al menos ``query.boost.fuzzy.min.length`` (valor predeterminado ``4``) caracteres recibía además condiciones de coincidencia aproximada, de modo que los documentos que contenían ``fess`` también coincidían con ``"less"``. Las palabras sin comillas y las palabras con un campo especificado (como ``content:"less"``) no cambian.
+- ``suggest.popular.word.cache.expire`` se lee en segundos, como describen ``fess_config.properties`` y :doc:`../config/properties`. Hasta 15.9 el valor se usaba como minutos, de modo que con el valor predeterminado ``60`` las palabras populares se guardaban en la caché durante 60 minutos; en 15.10 son 60 segundos. Para conservar la caché más larga, defina un valor mayor en segundos (``3600`` para 60 minutos). La caché también se vacía después de cada ejecución del trabajo de sugerencias.
+- La búsqueda de un documento por su ID de documento aplica ahora el filtro del host virtual, igual que una búsqueda. Hasta 15.9, ``/api/v2/cache/{docId}``, la redirección ``/go/``, las miniaturas, los puntos de acceso de favoritos y el resto de las búsquedas por ID de documento solo aplicaban el filtro de roles, por lo que, si los roles coincidían, respondían también para un documento de otro host virtual. En 15.10 ese documento se trata como no encontrado. Igual que en una búsqueda, un documento sin valor de host virtual no se devuelve cuando se determina un host virtual para la solicitud. No cambia nada para una solicitud sin host virtual determinado (host predeterminado).
+- El trabajo de sugerencias ya no toma palabras de los documentos que la búsqueda oculta. Se omiten un documento sin valor ``role`` y un documento con una entrada denegada (un valor que empieza por ``role.search.denied.prefix`` (valor predeterminado ``D``) seguido del prefijo de un usuario, un grupo o un rol, es decir, por defecto ``D1``, ``D2`` o ``DR``). Hasta 15.9, las palabras de esos documentos se sugerían a todos. Un documento con entradas permitidas y denegadas se omite por completo, porque una solicitud de sugerencias no puede expresar una denegación para un solo usuario. Las entradas de sugerencias ya creadas a partir de esos documentos caducan con la purga habitual de datos antiguos de sugerencias.
 
 .. _upgrade-1510-tika:
 
@@ -679,6 +684,41 @@ Caracteres de control en audit.log
 ----------------------------------
 
 En el formato LTSV, todo carácter de control de un campo, y los separadores de línea Unicode NEL, LS y PS, se sustituye por un espacio (un tabulador por un guion bajo), de modo que un nombre de usuario escrito no pueda iniciar un segundo registro. La versión 15.9 solo sustituía CR y LF.
+
+Roles de archivos leídos de las ACL
+-----------------------------------
+
+Al rastrear un sistema de archivos local (URL ``file:``) cuyos archivos tienen ACL (por ejemplo, NTFS), con ``file.role.from.file`` en su valor predeterminado ``true``, 15.9 convertía cada entrada de ACL de un archivo en un rol con permiso para leer el documento, sin tener en cuenta el tipo ni los permisos de la entrada. Un usuario al que se había denegado la lectura, o al que solo se había concedido el acceso de escritura, pasaba así a ser lector del documento indexado.
+
+15.10 examina el tipo y los permisos de cada entrada:
+
+- Una entrada ALLOW que incluye la lectura de datos (``READ_DATA``) concede el rol al usuario o grupo, como antes.
+- Una entrada DENY que incluye ``READ_DATA`` produce un rol denegado: el rol precedido de ``role.search.denied.prefix`` (valor predeterminado ``D``), el mismo prefijo que usan los rastreos SMB. La búsqueda oculta el documento a ese usuario o grupo.
+- Las entradas AUDIT y ALARM, y las entradas que no incluyen ``READ_DATA``, se ignoran.
+
+Los roles leídos de permisos POSIX (propietario y grupo) no cambian.
+
+Un documento conserva los roles con los que se indexó hasta que se vuelve a rastrear. Para aplicar las nuevas reglas a los documentos existentes, ejecute de nuevo el rastreo de archivos.
+
+LDAP: unidades organizativas de roles y grupos anidados
+-------------------------------------------------------
+
+Cuando |Fess| resuelve los permisos de un usuario de LDAP / Active Directory (consulte :doc:`../config/ldap-integration`), el DN de una entrada de grupo decide si es un rol (prefijo de permiso ``role.search.role.prefix``, valor predeterminado ``R``) o un grupo (``role.search.group.prefix``, valor predeterminado ``2``). Hasta 15.9, una entrada era un rol cuando su DN contenía el texto ``ou=role`` en cualquier posición; por eso una entrada bajo ``OU=Roles-Requests`` o ``OU=RoleOwners`` también era un rol.
+
+15.10 analiza el DN y trata una entrada como rol solo cuando uno de sus componentes ``ou`` es exactamente ``Role`` o ``Roles`` (sin distinguir mayúsculas de minúsculas). Cualquier otra entrada es un grupo, igual que una entrada cuyo DN no se puede analizar.
+
+Por tanto, las entradas bajo una OU como ``OU=Roles-Requests`` reciben el nombre de permiso de un grupo en lugar del de un rol (``2name`` en lugar de ``Rname``), y los documentos cuyos permisos contienen el nombre antiguo dejan de coincidir para los usuarios de esos grupos. Si dependía de una OU así, mueva las entradas a ``OU=Role`` o ``OU=Roles``, o actualice los ajustes de permisos que usan los nombres antiguos, y vuelva a rastrear (o a reindexar).
+
+Cuando ``ldap.group.filter`` está definido (por defecto está vacío), |Fess| lo usa para buscar los grupos que contienen los grupos del usuario (grupos anidados). Hasta 15.9, los DN de los grupos del usuario se insertaban en ese filtro sin escapar. Un DN con un carácter escapado, como la coma de ``CN=Sales\, EMEA,...``, no coincidía, de modo que los grupos anidados de ese grupo faltaban sin ningún error, y un DN con caracteres especiales de los filtros LDAP modificaba el filtro. 15.10 escapa los DN (RFC 4515). Los grupos anidados de esos grupos ahora se encuentran, por lo que los usuarios afectados obtienen también los permisos de esos grupos.
+
+Roles enviados en una solicitud sin cipher
+------------------------------------------
+
+|Fess| puede leer los roles de un usuario de un parámetro, una cabecera o una cookie de la solicitud cuando el componente ``roleQueryHelper`` de ``fess.xml`` define ``parameterKey``, ``headerKey`` o ``cookieKey``. Se espera que cada valor esté cifrado, salvo que ``encryptedParameterValue``, ``encryptedHeaderValue`` o ``encryptedCookieValue`` valga ``false`` (los tres valen ``true`` por defecto).
+
+Hasta 15.9, un valor que debía estar cifrado se leía como texto sin cifrar cuando no había ``cipher``, de modo que cualquier cliente podía enviar una lista de roles. 15.10 ignora ese valor y escribe una advertencia en ``fess.log`` una sola vez después del inicio. Un valor cuyo indicador es ``false`` se sigue leyendo tal cual, y un valor se sigue descifrando cuando hay un ``cipher``.
+
+Si su ``roleQueryHelper`` define alguna de las claves sin ``cipher``, defina un ``cipher`` y envíe valores cifrados, o ponga el indicador en ``false`` para los valores que envíe sin cifrar. En el ``fess.xml`` incluido estos ajustes están comentados, por lo que una instalación predeterminada no se ve afectada.
 
 Cambios para desarrolladores de plugins
 ---------------------------------------
