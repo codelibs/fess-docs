@@ -30,7 +30,7 @@ OpenID Connect认证的工作原理
 .. note::
    |Fess| 使用授权码流程（Authorization Code Flow）。ID Token不经过浏览器，而是通过 |Fess| 与OP之间的后端通道（服务器间通信）直接从令牌端点获取。
    |Fess| 通过解码ID Token来提取声明（如 ``email`` 和 ``groups``）以构建用户信息，但不对JWT签名进行密码学验证。由于令牌是通过TLS直接从令牌端点接收的，OpenID Connect Core允许这样做，因此令牌端点URL（``oic.token.server.url``）必须为HTTPS。只有 ``localhost``、``127.x.x.x`` 和 ``::1`` 可以使用 ``http``。
-   |Fess| 会校验声明：``aud`` 必须包含 ``oic.client.id``\ （``azp`` 存在时也必须与其一致），``exp`` 必须存在且尚未过期（允许最多300秒的时钟偏差），设置了 ``oic.issuer`` 时 ``iss`` 必须与其一致。未设置 ``oic.issuer`` 时不校验 ``iss``，并会在每次启动后的首次登录时记录一条警告。不使用 ``nonce`` 和PKCE。
+   |Fess| 会校验声明：``aud`` 必须包含 ``oic.client.id``\ （``azp`` 存在时也必须与其一致），``exp`` 必须存在且尚未过期（允许最多300秒的时钟偏差），设置了 ``oic.issuer`` 时 ``iss`` 必须与其一致。未设置 ``oic.issuer`` 时不校验 ``iss``，并会在每次启动后的首次登录时记录一条警告。每次授权请求都会发送 ``nonce``，ID Token 中的 ``nonce`` 声明必须与其一致；缺少该声明或值不同的令牌会被拒绝。不返回 ``nonce`` 的OP无法使用，也没有关闭此校验的设置。不使用PKCE，也不校验 ``iat`` 和 ``nbf``。
 
 有关基于角色的搜索集成，请参阅 :doc:`security-role`。
 

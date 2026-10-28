@@ -922,6 +922,8 @@ En 15.8, ``oic.token.server.url`` podía ser una URL ``http`` de cualquier host.
 
 Además, defina ``oic.issuer`` con el valor ``issuer`` del documento Discovery del OP. Si no se define, ``iss`` no se comprueba y se registra una advertencia en el primer inicio de sesión tras el arranque. Definir ``oic.issuer`` no relaja la regla de HTTPS.
 
+15.10 también comprueba el ``nonce`` del ID Token. Con cada solicitud de autorización se envía un ``nonce``, y el inicio de sesión se rechaza si el ID Token no contiene un claim ``nonce`` con el mismo valor. OpenID Connect Core exige que el OP devuelva el ``nonce``, pero un OP que no lo hace ya no se puede usar para iniciar sesión, y no existe ningún ajuste para desactivar esta comprobación. Antes de actualizar, compruebe que el OP que utiliza devuelve el claim ``nonce``. Un inicio de sesión que se había comenzado antes de actualizar el plugin falla una vez; repítalo.
+
 Si no utiliza SSO, es decir, si ``sso.type`` es ``none`` o no está definido, no hay nada que
 hacer.
 
