@@ -927,6 +927,8 @@ In 15.8 konnte für ``oic.token.server.url`` eine ``http``-URL mit beliebigem Ho
 
 Setzen Sie außerdem ``oic.issuer`` auf den ``issuer``-Wert aus dem Discovery-Dokument des OP. Ohne diesen Wert wird ``iss`` nicht geprüft, und bei der ersten Anmeldung nach dem Start wird eine Warnung protokolliert. Das Setzen von ``oic.issuer`` lockert die HTTPS-Regel nicht.
 
+15.10 prüft außerdem den ``nonce`` des ID Tokens. Mit jeder Autorisierungsanfrage wird ein ``nonce`` gesendet, und die Anmeldung wird abgelehnt, wenn der ID Token keinen ``nonce``-Claim mit demselben Wert enthält. OpenID Connect Core verlangt, dass der OP den ``nonce`` zurückgibt; ein OP, der das nicht tut, kann jedoch nicht mehr für die Anmeldung verwendet werden, und es gibt keine Einstellung, die diese Prüfung abschaltet. Stellen Sie vor dem Update sicher, dass der verwendete OP den ``nonce``-Claim zurückgibt. Eine Anmeldung, die vor dem Update des Plugins begonnen wurde, schlägt einmal fehl; wiederholen Sie sie.
+
 Ohne SSO ist nichts zu tun, also wenn ``sso.type`` den Wert ``none`` hat oder nicht gesetzt ist.
 
 .. _upgrade-159-script-engine:
