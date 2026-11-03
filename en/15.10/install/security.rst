@@ -71,7 +71,7 @@ Enable OpenSearch Security Plugin
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
 
-   Specify the credentials with the following properties in ``fess_config.properties`` (there are no ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` environment variables)::
+   Specify the credentials with the following properties in ``fess_config.properties`` (the zip, RPM and DEB packages have no ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` environment variables; the docker-fess images do)::
 
        search_engine.username=admin
        search_engine.password=<strong_password>
@@ -108,6 +108,10 @@ Nginx configuration example::
         }
     }
 
+When TLS is terminated at the reverse proxy, also set the following in ``fess_config.properties`` so that the session cookie gets the ``Secure`` attribute. Restart |Fess| after changing it. Do not set it if users also access |Fess| over plain HTTP, because a session cannot be established over HTTP once it is set::
+
+    session.cookie.secure=true
+
 **Method 2: Configure HTTPS in Fess Itself**
 
 Add the following to ``tomcat_config.properties``::
@@ -119,7 +123,7 @@ Add the following to ``tomcat_config.properties``::
     tomcat.certificateKeystorePassword=[password specified when creating the keystore file]
     tomcat.certificateKeyAlias=[certificate alias]
     tomcat.sslProtocol=[SSL protocol (e.g., TLS)]
-    tomcat.enabledProtocols=list of enabled protocols (comma-separated) (e.g., TLSv1.2,TLSv1.1,TLSv1)
+    tomcat.enabledProtocols=list of enabled protocols (comma-separated) (e.g., TLSv1.2,TLSv1.3)
 
 Recommended Security Configurations
 ====================================
@@ -140,9 +144,8 @@ Open only necessary ports and close unnecessary ones.
 
 Linux (firewalld) configuration example::
 
-    $ sudo firewall-cmd --permanent --add-service=http
     $ sudo firewall-cmd --permanent --add-service=https
-    $ sudo firewall-cmd --permanent --remove-service=opensearch  # for custom services
+    $ sudo firewall-cmd --permanent --add-port=8080/tcp  # only when Fess is accessed directly on port 8080
     $ sudo firewall-cmd --reload
 
 IP address restriction::
@@ -222,8 +225,10 @@ Backup data may contain sensitive information. Store backup files encrypted.
 
 Encrypted backup example::
 
-    $ tar czf fess-backup.tar.gz /var/lib/opensearch /etc/fess
+    $ tar czf fess-backup.tar.gz /etc/fess
     $ gpg --symmetric --cipher-algo AES256 fess-backup.tar.gz
+
+The data directory of a running OpenSearch (``/var/lib/opensearch``) cannot be backed up consistently by copying files. Use the `OpenSearch snapshot feature <https://docs.opensearch.org/latest/tuning-your-cluster/availability-and-recovery/snapshots/index/>`__ for index data. The configuration data of |Fess| can be downloaded from the Backup page of the admin screen (see :doc:`../admin/backup-guide`).
 
 Security Best Practices
 ========================
@@ -252,13 +257,12 @@ Regular Security Audits
 Security Header Configuration
 ------------------------------
 
+|Fess| sets ``X-Frame-Options: SAMEORIGIN`` on HTML responses by default (``response.headers`` in ``fess_config.properties``), so it does not need to be added in the proxy.
+
 Configure security headers in Nginx or Apache as needed::
 
-    add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header Content-Security-Policy "default-src 'self'" always;
 
 Security Checklist
 ==================

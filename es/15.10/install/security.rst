@@ -69,7 +69,7 @@ Habilitación del Plugin de Seguridad de OpenSearch
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
 
-   Especifique las credenciales mediante las siguientes propiedades en ``fess_config.properties`` (no existen las variables de entorno ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``)::
+   Especifique las credenciales mediante las siguientes propiedades en ``fess_config.properties`` (los paquetes ZIP, RPM y DEB no tienen las variables de entorno ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``; las imágenes de docker-fess sí las admiten)::
 
        search_engine.username=admin
        search_engine.password=<strong_password>
@@ -106,6 +106,10 @@ Ejemplo de configuración de Nginx::
         }
     }
 
+Si TLS se termina en el proxy inverso, configure también lo siguiente en ``fess_config.properties`` para que la cookie de sesión tenga el atributo ``Secure``. Reinicie |Fess| después de cambiarlo. No lo configure si los usuarios también acceden a |Fess| mediante HTTP sin cifrar, ya que con este valor no se puede establecer la sesión por HTTP::
+
+    session.cookie.secure=true
+
 **Método 2: Configurar HTTPS en Fess Mismo**
 
 Agregue lo siguiente a ``tomcat_config.properties``::
@@ -117,7 +121,7 @@ Agregue lo siguiente a ``tomcat_config.properties``::
     tomcat.certificateKeystorePassword=[contraseña especificada al crear el archivo keystore]
     tomcat.certificateKeyAlias=[alias del certificado]
     tomcat.sslProtocol=[protocolo SSL (ej. TLS)]
-    tomcat.enabledProtocols=lista de protocolos habilitados (separados por comas) (ej. TLSv1.2,TLSv1.1,TLSv1)
+    tomcat.enabledProtocols=lista de protocolos habilitados (separados por comas) (ej. TLSv1.2,TLSv1.3)
 
 Configuraciones de Seguridad Recomendadas
 ==========================================
@@ -138,9 +142,8 @@ Abra solo los puertos necesarios y cierre los puertos innecesarios.
 
 Ejemplo de configuración en Linux (firewalld)::
 
-    $ sudo firewall-cmd --permanent --add-service=http
     $ sudo firewall-cmd --permanent --add-service=https
-    $ sudo firewall-cmd --permanent --remove-service=opensearch  # en caso de servicio personalizado
+    $ sudo firewall-cmd --permanent --add-port=8080/tcp  # solo si se accede a Fess directamente por el puerto 8080
     $ sudo firewall-cmd --reload
 
 Restricción de direcciones IP::
@@ -220,8 +223,10 @@ Los datos de respaldo pueden contener información confidencial. Cifre y almacen
 
 Ejemplo de respaldo cifrado::
 
-    $ tar czf fess-backup.tar.gz /var/lib/opensearch /etc/fess
+    $ tar czf fess-backup.tar.gz /etc/fess
     $ gpg --symmetric --cipher-algo AES256 fess-backup.tar.gz
+
+El directorio de datos de un OpenSearch en ejecución (``/var/lib/opensearch``) no se puede respaldar de forma consistente copiando archivos. Para los datos de los índices, utilice la `función de instantáneas de OpenSearch <https://docs.opensearch.org/latest/tuning-your-cluster/availability-and-recovery/snapshots/index/>`__. Los datos de configuración de |Fess| se pueden descargar desde la página de copia de seguridad de la pantalla de administración (consulte :doc:`../admin/backup-guide`).
 
 Mejores Prácticas de Seguridad
 ===============================
@@ -250,13 +255,12 @@ Auditorías de Seguridad Periódicas
 Configuración de Encabezados de Seguridad
 ------------------------------------------
 
+|Fess| agrega ``X-Frame-Options: SAMEORIGIN`` de forma predeterminada a las respuestas HTML (``response.headers`` en ``fess_config.properties``), por lo que no es necesario añadirlo en el proxy.
+
 Según sea necesario, configure encabezados de seguridad en Nginx o Apache::
 
-    add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header Content-Security-Policy "default-src 'self'" always;
 
 Lista de Verificación de Seguridad
 ===================================

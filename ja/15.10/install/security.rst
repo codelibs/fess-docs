@@ -71,7 +71,7 @@ OpenSearch のセキュリティプラグイン有効化
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
 
-   認証情報は ``fess_config.properties`` の以下のプロパティで指定します（``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` という環境変数は存在しません）::
+   認証情報は ``fess_config.properties`` の以下のプロパティで指定します（zip・RPM・DEB パッケージには ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` という環境変数はありません。docker-fess のイメージでは使えます）::
 
        search_engine.username=admin
        search_engine.password=<strong_password>
@@ -108,6 +108,10 @@ Nginx の設定例::
         }
     }
 
+TLS をリバースプロキシで終端する場合は、セッション Cookie に ``Secure`` 属性が付くよう、``fess_config.properties`` に次の設定も追加してください。変更後は |Fess| を再起動します。設定すると HTTP ではセッションを確立できなくなるため、HTTP でもアクセスさせる場合は設定しないでください::
+
+    session.cookie.secure=true
+
 **方法 2: Fess 自体で HTTPS を設定**
 
 ``tomcat_config.properties`` に以下を追加::
@@ -119,7 +123,7 @@ Nginx の設定例::
     tomcat.certificateKeystorePassword=[キーストアファイル作成時に指定したパスワード]
     tomcat.certificateKeyAlias=[証明書のエイリアス]
     tomcat.sslProtocol=[SSL プロトコル（例: TLS）]
-    tomcat.enabledProtocols=有効なプロトコル一覧（カンマ区切り）（例: TLSv1.2,TLSv1.1,TLSv1）
+    tomcat.enabledProtocols=有効なプロトコル一覧（カンマ区切り）（例: TLSv1.2,TLSv1.3）
 
 推奨のセキュリティ設定
 ====================
@@ -140,9 +144,8 @@ Nginx の設定例::
 
 Linux (firewalld) の設定例::
 
-    $ sudo firewall-cmd --permanent --add-service=http
     $ sudo firewall-cmd --permanent --add-service=https
-    $ sudo firewall-cmd --permanent --remove-service=opensearch  # カスタムサービスの場合
+    $ sudo firewall-cmd --permanent --add-port=8080/tcp  # 8080 で直接アクセスさせる場合のみ
     $ sudo firewall-cmd --reload
 
 IP アドレス制限::
@@ -222,8 +225,10 @@ Nginx でのアクセス制限例::
 
 暗号化バックアップの例::
 
-    $ tar czf fess-backup.tar.gz /var/lib/opensearch /etc/fess
+    $ tar czf fess-backup.tar.gz /etc/fess
     $ gpg --symmetric --cipher-algo AES256 fess-backup.tar.gz
+
+稼働中の OpenSearch のデータディレクトリ（``/var/lib/opensearch``）は、ファイルのコピーでは整合したバックアップを取れません。インデックスのデータには `OpenSearch のスナップショット機能 <https://docs.opensearch.org/latest/tuning-your-cluster/availability-and-recovery/snapshots/index/>`__ を使用してください。|Fess| の設定データは、管理画面のバックアップページからダウンロードできます（:doc:`../admin/backup-guide` を参照）。
 
 セキュリティベストプラクティス
 ============================
@@ -252,13 +257,12 @@ Nginx でのアクセス制限例::
 セキュリティヘッダーの設定
 ------------------------
 
+|Fess| は既定で HTML の応答に ``X-Frame-Options: SAMEORIGIN`` を付与するため（``fess_config.properties`` の ``response.headers``）、プロキシで追加する必要はありません。
+
 必要に応じて、Nginx または Apache でセキュリティヘッダーを設定してください::
 
-    add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header Content-Security-Policy "default-src 'self'" always;
 
 セキュリティチェックリスト
 ========================

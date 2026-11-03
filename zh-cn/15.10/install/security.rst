@@ -71,7 +71,7 @@
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
 
-   请通过 ``fess_config.properties`` 中的以下属性指定认证信息（不存在 ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` 这样的环境变量）::
+   请通过 ``fess_config.properties`` 中的以下属性指定认证信息（zip、RPM、DEB 包中没有 ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` 环境变量；docker-fess 镜像支持这些环境变量）::
 
        search_engine.username=admin
        search_engine.password=<strong_password>
@@ -108,6 +108,10 @@ Nginx 配置示例::
         }
     }
 
+如果在反向代理处终止 TLS，请同时在 ``fess_config.properties`` 中添加以下设置，使会话 Cookie 带有 ``Secure`` 属性。修改后需要重启 |Fess|。设置后将无法通过 HTTP 建立会话，因此如果用户还会通过 HTTP 访问，请不要设置::
+
+    session.cookie.secure=true
+
 **方法 2: 在 Fess 自身配置 HTTPS**
 
 在 ``tomcat_config.properties`` 中添加以下内容::
@@ -119,7 +123,7 @@ Nginx 配置示例::
     tomcat.certificateKeystorePassword=[创建密钥库文件时指定的密码]
     tomcat.certificateKeyAlias=[证书别名]
     tomcat.sslProtocol=[SSL 协议（例如：TLS）]
-    tomcat.enabledProtocols=启用的协议列表（逗号分隔）（例如：TLSv1.2,TLSv1.1,TLSv1）
+    tomcat.enabledProtocols=启用的协议列表（逗号分隔）（例如：TLSv1.2,TLSv1.3）
 
 推荐的安全配置
 ====================
@@ -140,9 +144,8 @@ Nginx 配置示例::
 
 Linux (firewalld) 配置示例::
 
-    $ sudo firewall-cmd --permanent --add-service=http
     $ sudo firewall-cmd --permanent --add-service=https
-    $ sudo firewall-cmd --permanent --remove-service=opensearch  # 自定义服务的情况
+    $ sudo firewall-cmd --permanent --add-port=8080/tcp  # 仅在直接通过 8080 端口访问 Fess 时
     $ sudo firewall-cmd --reload
 
 IP 地址限制::
@@ -222,8 +225,10 @@ Nginx 访问限制示例::
 
 加密备份示例::
 
-    $ tar czf fess-backup.tar.gz /var/lib/opensearch /etc/fess
+    $ tar czf fess-backup.tar.gz /etc/fess
     $ gpg --symmetric --cipher-algo AES256 fess-backup.tar.gz
+
+无法通过复制文件的方式一致地备份正在运行的 OpenSearch 的数据目录（``/var/lib/opensearch``）。索引数据请使用 `OpenSearch 快照功能 <https://docs.opensearch.org/latest/tuning-your-cluster/availability-and-recovery/snapshots/index/>`__。|Fess| 的配置数据可以在管理界面的备份页面下载（参见 :doc:`../admin/backup-guide`）。
 
 安全最佳实践
 ============================
@@ -252,13 +257,12 @@ Nginx 访问限制示例::
 安全头配置
 ------------------------
 
+|Fess| 默认会为 HTML 响应添加 ``X-Frame-Options: SAMEORIGIN``（``fess_config.properties`` 中的 ``response.headers``），因此无需在代理中重复添加。
+
 根据需要，在 Nginx 或 Apache 中配置安全头::
 
-    add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header Content-Security-Policy "default-src 'self'" always;
 
 安全检查清单
 ========================
