@@ -113,6 +113,9 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
             "error_log": "Not found: https://example.com/not-found",
             "error_count": "1",
             "last_access_time": "1738143000000",
+            "content_length": "512",
+            "mime_type": "text/html",
+            "http_status_code": "404",
             "config_id": "webConfig_id_1"
           }
         ],
@@ -143,12 +146,22 @@ FailureUrl API는 |Fess| 의 크롤링 실패 URL을 관리하기 위한 API입�
      - 오류 발생 횟수 (문자열로 표현된 숫자값)
    * - ``last_access_time``
      - 최종 접근 시각 (문자열로 표현된 에포크 밀리초)
+   * - ``content_length``
+     - 문서의 크기(바이트, 숫자를 문자열로 표현한 값)
+   * - ``mime_type``
+     - 문서의 MIME 유형
+   * - ``http_status_code``
+     - HTTP 상태(숫자를 문자열로 표현한 값, ``http`` / ``https`` URL만 해당)
    * - ``config_id``
      - 크롤링 설정 ID
 
 .. note::
 
    모든 응답 필드는 문자열(JSON string)로 반환됩니다. ``error_count`` 는 문자열로 표현된 숫자값이며, ``last_access_time`` 은 문자열로 표현된 에포크 밀리초입니다.
+
+.. note::
+
+   ``content_length`` , ``mime_type`` , ``http_status_code`` 는 크롤러가 파악한 경우에만 포함되며, 파악하지 못한 경우에는 필드 자체가 생략됩니다. 기록되는 실패에 대해서는 :doc:`../../admin/failureurl-guide` 를 참조하십시오.
 
 실패 URL 조회
 =============

@@ -113,6 +113,9 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
             "error_log": "Not found: https://example.com/not-found",
             "error_count": "1",
             "last_access_time": "1738143000000",
+            "content_length": "512",
+            "mime_type": "text/html",
+            "http_status_code": "404",
             "config_id": "webConfig_id_1"
           }
         ],
@@ -143,6 +146,12 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
      - エラー発生回数（数値を表す文字列）
    * - ``last_access_time``
      - 最終アクセス時刻（エポックミリ秒を表す文字列）
+   * - ``content_length``
+     - ドキュメントのサイズ（バイト。数値を文字列で表したもの）
+   * - ``mime_type``
+     - ドキュメントの MIME タイプ
+   * - ``http_status_code``
+     - HTTP ステータス（数値を文字列で表したもの。``http`` / ``https`` の URL のみ）
    * - ``config_id``
      - クロール設定ID
 
@@ -150,6 +159,10 @@ FailureUrl APIは、|Fess| のクロール障害URLを管理するためのAPI�
 
    レスポンスの各フィールドはすべて文字列（JSON string）として返されます。
    ``error_count`` は数値を表す文字列、``last_access_time`` はエポックミリ秒を表す文字列です。
+
+.. note::
+
+   ``content_length`` ・ ``mime_type`` ・ ``http_status_code`` は、クローラーが把握できた場合にだけ含まれ、把握できなかった場合はフィールドごと省略されます。記録される失敗については :doc:`../../admin/failureurl-guide` を参照してください。
 
 障害URL取得
 ===========
