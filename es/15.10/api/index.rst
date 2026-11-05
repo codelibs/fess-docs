@@ -24,6 +24,7 @@ petición y respuesta, y la autenticación.
 
    api-search
    api-export
+   api-similar
    api-label
    api-popularword
    api-suggest

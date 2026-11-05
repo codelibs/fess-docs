@@ -23,6 +23,7 @@ AI 聊天 API、请求与响应格式，以及认证方式。
 
    api-search
    api-export
+   api-similar
    api-label
    api-popularword
    api-suggest

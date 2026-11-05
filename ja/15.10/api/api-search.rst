@@ -302,3 +302,4 @@ HTTPメソッド         GET
 - :doc:`../user/search-field`
 - :doc:`../user/special-char`
 - :doc:`../user/search-wildcard`
+- :doc:`api-similar` - 類似ドキュメント API

@@ -171,6 +171,9 @@ msgstr "Vom Suchergebnis-Export geschriebene Felder (kommagetrennt). Ein Feld, d
 msgid "Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit."
 msgstr "Maximale Anzahl von Suchergebnis-Exporten pro Minute für jeden Benutzer (für einen Gast pro Client-IP). 0 oder weniger deaktiviert das Limit."
 
+msgid "Maximum number of similar-document requests (/api/v2/documents/{docId}/similar) per minute for each user (each client IP for a guest). 0 or less disables the limit."
+msgstr "Maximale Anzahl von Anfragen nach ähnlichen Dokumenten (/api/v2/documents/{docId}/similar) pro Minute für jeden Benutzer (für einen Gast pro Client-IP). 0 oder weniger deaktiviert das Limit."
+
 msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
 msgstr "Header für die API-JSON-Antwort. Access-Control-* und Timing-Allow-Origin werden hier ignoriert (CORS wird über api.cors.* / CorsFilter gesteuert). Setzen Sie Vary nicht."
 

@@ -258,6 +258,9 @@ API 种类
    * - :doc:`cache <api-cache>`
      - ``/cache/{docId}``
      - 用于获取缓存文档正文的 API。
+   * - :doc:`similar <api-similar>`
+     - ``/documents/{docId}/similar``
+     - 用于获取与某个文档内容相同的文档的 API。
    * - :doc:`chat <api-chat>`
      - ``/chat`` , ``/chat/stream``
      - 用于使用 AI 搜索模式（RAG 聊天）功能的 API。

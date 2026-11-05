@@ -303,3 +303,4 @@ HTTP 메서드          GET
 - :doc:`../user/search-field` - 필드 지정 검색
 - :doc:`../user/special-char` - 특수 문자
 - :doc:`../user/search-wildcard` - 와일드카드 검색
+- :doc:`api-similar` - 유사 문서 API

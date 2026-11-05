@@ -314,6 +314,9 @@ one, fill in ``properties.po`` beside this file.
   * - api.search.export.rate.limit.per.minute
     - ユーザーごと（ゲストの場合はクライアントIPごと）の、1分あたりの検索結果エクスポートの最大数。0以下の場合は制限を無効にします。
     - ``10``
+  * - api.search.similar.rate.limit.per.minute
+    - ユーザーごと（ゲストの場合はクライアントIPごと）の、1分あたりの類似ドキュメントリクエスト（/api/v2/documents/{docId}/similar）の最大数。0以下の場合は制限を無効にします。
+    - ``30``
   * - api.json.response.headers
     - API JSONレスポンスのヘッダー。Access-Control-\*とTiming-Allow-Originはここでは無視されます（CORSはapi.cors.\* / CorsFilterで制御されます）。Varyは設定しないでください。
     - ``Referrer-Policy:strict-origin-when-cross-origin``

@@ -259,6 +259,9 @@ Types of APIs
    * - :doc:`cache <api-cache>`
      - ``/cache/{docId}``
      - API for retrieving cached document content.
+   * - :doc:`similar <api-similar>`
+     - ``/documents/{docId}/similar``
+     - API for retrieving the documents that have the same content as a document.
    * - :doc:`chat <api-chat>`
      - ``/chat`` , ``/chat/stream``
      - API for using the AI search mode (RAG chat) feature.

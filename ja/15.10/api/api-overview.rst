@@ -259,6 +259,9 @@ APIの種類
    * - :doc:`cache <api-cache>`
      - ``/cache/{docId}``
      - キャッシュされたドキュメント本文を取得する API。
+   * - :doc:`similar <api-similar>`
+     - ``/documents/{docId}/similar``
+     - ドキュメントと内容が同じドキュメントを取得する API。
    * - :doc:`chat <api-chat>`
      - ``/chat`` , ``/chat/stream``
      - AI 検索モード（RAG チャット）機能を利用する API。

@@ -314,6 +314,9 @@ one, fill in ``properties.po`` beside this file.
   * - api.search.export.rate.limit.per.minute
     - 사용자별(게스트는 클라이언트 IP별) 1분당 검색 결과 내보내기의 최대 횟수입니다. 0 이하이면 제한이 비활성화됩니다.
     - ``10``
+  * - api.search.similar.rate.limit.per.minute
+    - 사용자별(게스트는 클라이언트 IP별) 1분당 유사 문서 요청(/api/v2/documents/{docId}/similar)의 최대 횟수입니다. 0 이하이면 제한이 비활성화됩니다.
+    - ``30``
   * - api.json.response.headers
     - API JSON 응답용 헤더입니다. Access-Control-\* 및 Timing-Allow-Origin 은 여기서 무시됩니다(CORS는 api.cors.\* / CorsFilter 로 제어됩니다). Vary는 설정하지 마십시오.
     - ``Referrer-Policy:strict-origin-when-cross-origin``

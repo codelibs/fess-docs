@@ -314,6 +314,9 @@ Core
   * - api.search.export.rate.limit.per.minute
     - Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit.
     - ``10``
+  * - api.search.similar.rate.limit.per.minute
+    - Maximum number of similar-document requests (/api/v2/documents/{docId}/similar) per minute for each user (each client IP for a guest). 0 or less disables the limit.
+    - ``30``
   * - api.json.response.headers
     - Headers for API JSON response. Access-Control-\* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.\* / CorsFilter). Do not set Vary.
     - ``Referrer-Policy:strict-origin-when-cross-origin``

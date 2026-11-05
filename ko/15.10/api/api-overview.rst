@@ -259,6 +259,9 @@ API 종류
    * - :doc:`cache <api-cache>`
      - ``/cache/{docId}``
      - 캐시된 문서 본문을 취득하는 API.
+   * - :doc:`similar <api-similar>`
+     - ``/documents/{docId}/similar``
+     - 문서와 내용이 같은 문서를 가져오는 API.
    * - :doc:`chat <api-chat>`
      - ``/chat`` , ``/chat/stream``
      - AI 검색 모드 (RAG 채팅) 기능을 사용하는 API.

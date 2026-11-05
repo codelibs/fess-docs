@@ -314,6 +314,9 @@ Núcleo
   * - api.search.export.rate.limit.per.minute
     - Número máximo de exportaciones de resultados de búsqueda por minuto para cada usuario (cada IP de cliente en el caso de un invitado). 0 o menos deshabilita el límite.
     - ``10``
+  * - api.search.similar.rate.limit.per.minute
+    - Número máximo de solicitudes de documentos similares (/api/v2/documents/{docId}/similar) por minuto para cada usuario (cada IP de cliente en el caso de un invitado). 0 o menos deshabilita el límite.
+    - ``30``
   * - api.json.response.headers
     - Encabezados de la respuesta JSON de la API. Access-Control-\* y Timing-Allow-Origin se ignoran aquí (CORS se controla mediante api.cors.\* / CorsFilter). No establezca Vary.
     - ``Referrer-Policy:strict-origin-when-cross-origin``
