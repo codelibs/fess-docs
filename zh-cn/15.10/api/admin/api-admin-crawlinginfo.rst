@@ -29,6 +29,9 @@ CrawlingInfo API是用于查看和管理 |Fess| 爬虫信息（爬虫会话）�
      - /logs
      - 获取爬虫信息列表
    * - GET
+     - /progress
+     - 获取正在运行的爬网的进度
+   * - GET
      - /log/{id}
      - 获取爬虫信息
    * - DELETE
@@ -127,6 +130,88 @@ CrawlingInfo API是用于查看和管理 |Fess| 爬虫信息（爬虫会话）�
    响应中每个日志对象还包含一个内部字段 ``crud_mode``
    （表示CRUD操作模式的整数值，在读取操作时始终为 ``0``）。
    客户端可安全忽略此字段。
+
+获取正在运行的爬网的进度
+========================
+
+针对每个网站、文件系统或数据存储爬网配置，返回一项当前正在运行的爬网的进度。内容与管理界面爬网信息页面中的“正在运行的爬网”相同（参见 :doc:`../../admin/crawlinginfo-guide` ）。
+
+请求
+----
+
+::
+
+    GET /api/admin/crawlinginfo/progress
+
+此端点不接受参数。
+
+响应
+----
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "progress": [
+          {
+            "config_id": "Wabc123",
+            "name": "Example Site",
+            "count": 4200,
+            "last_count": 10000,
+            "updated_time": 1738144800000,
+            "percent": 42
+          },
+          {
+            "config_id": "Ddef456",
+            "name": "Example Database",
+            "count": 1500,
+            "last_count": 0,
+            "updated_time": 1738144795000
+          }
+        ],
+        "total": 2
+      }
+    }
+
+响应字段
+~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 字段
+     - 说明
+   * - ``progress``
+     - 正在运行的爬网的数组（按爬网配置名称排序）。没有正在运行的爬网时为空数组
+   * - ``total``
+     - ``progress`` 的元素个数
+
+``progress`` 的每个元素包含以下字段。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 字段
+     - 说明
+   * - ``config_id``
+     - 爬网配置的 ID（网站以 ``W`` 开头，文件系统以 ``F`` 开头，数据存储以 ``D`` 开头）
+   * - ``name``
+     - 爬网配置的名称（找不到配置时为 ``config_id`` ）
+   * - ``count``
+     - 正在运行的爬网到目前为止已处理的文档数
+   * - ``last_count``
+     - 上一次完成的爬网的文档数（未知时为 ``0`` ）
+   * - ``updated_time``
+     - 写入 ``count`` 的时间（纪元毫秒，数值）
+   * - ``percent``
+     - ``count`` 占 ``last_count`` 的百分比（%， ``0`` 到 ``99`` ）。没有上一次完成的爬网时省略
+
+.. note::
+
+   已完成或已停止的爬网不包含在内。如果爬虫在未记录的情况下中断（例如进程被强制终止），则该爬网在最后一次更新约 30 秒（默认）后不再包含在内。网站和文件系统爬网的 ``count`` 是访问结果的数量，数据存储爬网的 ``count`` 是该爬网配置已建立索引的文档数。
 
 获取爬虫信息
 ============

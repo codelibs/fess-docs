@@ -29,6 +29,9 @@ Liste des endpoints
      - /logs
      - Obtention de la liste des informations de crawl
    * - GET
+     - /progress
+     - Obtenir la progression des explorations en cours
+   * - GET
      - /log/{id}
      - Obtention d'une information de crawl
    * - DELETE
@@ -127,6 +130,88 @@ Champs de la réponse
    Chaque objet de journal dans la réponse inclut également un champ interne ``crud_mode``
    (un entier indiquant le mode d'opération CRUD, toujours ``0`` pour les opérations de lecture).
    Les clients peuvent l'ignorer en toute sécurité.
+
+Obtenir la progression des explorations en cours
+================================================
+
+Renvoie la progression des explorations en cours, une entrée par configuration d'exploration (web, système de fichiers ou magasin de données). Ce sont les mêmes informations que « Explorations en cours » sur la page Informations sur l'exploration de l'interface d'administration (voir :doc:`../../admin/crawlinginfo-guide`).
+
+Requête
+-------
+
+::
+
+    GET /api/admin/crawlinginfo/progress
+
+Ce point d'accès n'accepte aucun paramètre.
+
+Réponse
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "progress": [
+          {
+            "config_id": "Wabc123",
+            "name": "Example Site",
+            "count": 4200,
+            "last_count": 10000,
+            "updated_time": 1738144800000,
+            "percent": 42
+          },
+          {
+            "config_id": "Ddef456",
+            "name": "Example Database",
+            "count": 1500,
+            "last_count": 0,
+            "updated_time": 1738144795000
+          }
+        ],
+        "total": 2
+      }
+    }
+
+Champs de la réponse
+~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Champ
+     - Description
+   * - ``progress``
+     - Tableau des explorations en cours, trié par nom de configuration d'exploration. Tableau vide si aucune exploration n'est en cours
+   * - ``total``
+     - Nombre d'éléments de ``progress``
+
+Chaque élément de ``progress`` comporte les champs suivants.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Champ
+     - Description
+   * - ``config_id``
+     - ID de la configuration d'exploration (commence par ``W`` pour le web, ``F`` pour le système de fichiers et ``D`` pour un magasin de données)
+   * - ``name``
+     - Nom de la configuration d'exploration (``config_id`` si la configuration est introuvable)
+   * - ``count``
+     - Nombre de documents que l'exploration en cours a traités jusqu'ici
+   * - ``last_count``
+     - Nombre de documents de la dernière exploration terminée (``0`` si inconnu)
+   * - ``updated_time``
+     - Heure d'écriture de ``count`` (millisecondes epoch, nombre)
+   * - ``percent``
+     - ``count`` en pourcentage de ``last_count`` (de ``0`` à ``99``). Omis s'il n'y a pas d'exploration terminée précédente
+
+.. note::
+
+   Une exploration terminée ou arrêtée n'est pas incluse. Si le crawler s'arrête sans l'enregistrer (par exemple lorsque le processus est tué), l'exploration n'est plus incluse environ 30 secondes (par défaut) après sa dernière mise à jour. Le ``count`` d'une exploration web ou de système de fichiers est le nombre de résultats d'accès ; celui d'une exploration de magasin de données est le nombre de documents indexés pour la configuration d'exploration.
 
 Obtention d'une information de crawl
 ====================================

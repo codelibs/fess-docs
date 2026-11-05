@@ -19,6 +19,22 @@ Si desea verificar los detalles de la información de rastreo, haga clic en la i
 
 |image0|
 
+Rastreos en ejecución
+=====================
+
+Mientras hay rastreos en ejecución, "Rastreos en ejecución" se muestra encima de la lista. Tiene una fila por cada configuración de rastreo (web, sistema de archivos o almacén de datos) con los siguientes elementos.
+
+- Configuración de rastreo: el nombre de la configuración de rastreo.
+- Documentos procesados: el número de documentos que el rastreo en ejecución ha procesado hasta ahora. En los rastreos web y de sistema de archivos es el número de resultados de acceso; en los rastreos de almacenes de datos es el número de documentos indexados para la configuración de rastreo.
+- Progreso: los documentos procesados como porcentaje del número de documentos del último rastreo completado. No supera el 99 % hasta que el rastreo termina. Si no hay un rastreo completado anterior (por ejemplo, en el primer rastreo), no se puede calcular el porcentaje; se muestra ``-`` y solo se indica el recuento.
+
+Notas:
+
+- El bloque muestra el estado en el momento de abrir la página. Recargue la página para ver los valores más recientes.
+- Un rastreo terminado o detenido ya no aparece en el bloque la próxima vez que se abre la página. Si el rastreador se detiene sin registrarlo (por ejemplo, porque se mata el proceso), el rastreo desaparece unos 30 segundos (de forma predeterminada) después de su última actualización. Un rastreo detenido o fallido deja sin cambios el número de documentos del último rastreo completado, igual que un rastreo que termina sin procesar ningún documento.
+- El sistema guarda el estado del progreso en el campo ``metadata`` de la configuración de rastreo. No se puede editar en la interfaz de administración ni en la API de administración.
+- La misma información está disponible en la API de administración (consulte :doc:`../api/admin/api-admin-crawlinginfo`).
+
 Detalles
 ========
 

@@ -29,6 +29,9 @@ Endpunktliste
      - /logs
      - Crawl-Informationen auflisten
    * - GET
+     - /progress
+     - Fortschritt laufender Crawls abrufen
+   * - GET
      - /log/{id}
      - Crawl-Information abrufen
    * - DELETE
@@ -127,6 +130,88 @@ Response-Felder
    Jedes Log-Objekt in der Antwort enthält außerdem ein internes ``crud_mode``-Feld
    (eine Ganzzahl, die den CRUD-Operationsmodus angibt; bei Leseoperationen immer ``0``).
    Clients können dieses Feld gefahrlos ignorieren.
+
+Fortschritt laufender Crawls abrufen
+====================================
+
+Gibt den Fortschritt der aktuell laufenden Crawls zurück, ein Eintrag je Crawl-Konfiguration (Web, Dateisystem oder Datenspeicher). Es sind dieselben Informationen wie unter „Laufende Crawls" auf der Seite „Crawling-Informationen" der Verwaltungsoberfläche (siehe :doc:`../../admin/crawlinginfo-guide`).
+
+Anfrage
+-------
+
+::
+
+    GET /api/admin/crawlinginfo/progress
+
+Dieser Endpunkt akzeptiert keine Parameter.
+
+Antwort
+-------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "progress": [
+          {
+            "config_id": "Wabc123",
+            "name": "Example Site",
+            "count": 4200,
+            "last_count": 10000,
+            "updated_time": 1738144800000,
+            "percent": 42
+          },
+          {
+            "config_id": "Ddef456",
+            "name": "Example Database",
+            "count": 1500,
+            "last_count": 0,
+            "updated_time": 1738144795000
+          }
+        ],
+        "total": 2
+      }
+    }
+
+Antwortfelder
+~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Feld
+     - Beschreibung
+   * - ``progress``
+     - Array der laufenden Crawls, sortiert nach dem Namen der Crawl-Konfiguration. Ein leeres Array, wenn kein Crawl läuft
+   * - ``total``
+     - Anzahl der Elemente von ``progress``
+
+Jedes Element von ``progress`` hat die folgenden Felder.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Feld
+     - Beschreibung
+   * - ``config_id``
+     - ID der Crawl-Konfiguration (beginnt mit ``W`` für Web, ``F`` für Dateisystem und ``D`` für Datenspeicher)
+   * - ``name``
+     - Name der Crawl-Konfiguration (``config_id``, wenn die Konfiguration nicht gefunden wird)
+   * - ``count``
+     - Anzahl der Dokumente, die der laufende Crawl bisher verarbeitet hat
+   * - ``last_count``
+     - Dokumentanzahl des vorherigen abgeschlossenen Crawls (``0``, wenn unbekannt)
+   * - ``updated_time``
+     - Zeitpunkt, zu dem ``count`` geschrieben wurde (Epoch-Millisekunden, eine Zahl)
+   * - ``percent``
+     - ``count`` in Prozent von ``last_count`` (``0`` bis ``99``). Entfällt, wenn es keinen vorherigen abgeschlossenen Crawl gibt
+
+.. note::
+
+   Ein abgeschlossener oder gestoppter Crawl ist nicht enthalten. Hört der Crawler auf, ohne das zu vermerken (etwa weil der Prozess beendet wird), ist der Crawl nicht mehr enthalten, wenn seit seiner letzten Aktualisierung etwa 30 Sekunden (Standard) vergangen sind. ``count`` eines Web- oder Dateisystem-Crawls ist die Anzahl der Zugriffsergebnisse; ``count`` eines Datenspeicher-Crawls ist die Anzahl der für die Crawl-Konfiguration indexierten Dokumente.
 
 Crawl-Information abrufen
 =========================

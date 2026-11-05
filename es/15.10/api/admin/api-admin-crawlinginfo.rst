@@ -29,6 +29,9 @@ Lista de Endpoints
      - /logs
      - Obtener lista de información de rastreo
    * - GET
+     - /progress
+     - Obtener el progreso de los rastreos en ejecución
+   * - GET
      - /log/{id}
      - Obtener información de rastreo
    * - DELETE
@@ -127,6 +130,88 @@ Campos de Respuesta
    Cada objeto de registro en la respuesta incluye también un campo interno ``crud_mode``
    (un entero que indica el modo de operación CRUD, siempre ``0`` para operaciones de lectura).
    Los clientes pueden ignorarlo sin problema.
+
+Obtener el progreso de los rastreos en ejecución
+================================================
+
+Devuelve el progreso de los rastreos que se están ejecutando, una entrada por cada configuración de rastreo (web, sistema de archivos o almacén de datos). Es la misma información que "Rastreos en ejecución" en la página Información de rastreo de la interfaz de administración (consulte :doc:`../../admin/crawlinginfo-guide`).
+
+Solicitud
+---------
+
+::
+
+    GET /api/admin/crawlinginfo/progress
+
+Este endpoint no acepta parámetros.
+
+Respuesta
+---------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "progress": [
+          {
+            "config_id": "Wabc123",
+            "name": "Example Site",
+            "count": 4200,
+            "last_count": 10000,
+            "updated_time": 1738144800000,
+            "percent": 42
+          },
+          {
+            "config_id": "Ddef456",
+            "name": "Example Database",
+            "count": 1500,
+            "last_count": 0,
+            "updated_time": 1738144795000
+          }
+        ],
+        "total": 2
+      }
+    }
+
+Campos de la respuesta
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Campo
+     - Descripción
+   * - ``progress``
+     - Matriz de los rastreos en ejecución, ordenada por el nombre de la configuración de rastreo. Una matriz vacía si no hay ningún rastreo en ejecución
+   * - ``total``
+     - Número de elementos de ``progress``
+
+Cada elemento de ``progress`` tiene los siguientes campos.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Campo
+     - Descripción
+   * - ``config_id``
+     - ID de la configuración de rastreo (empieza por ``W`` para web, ``F`` para sistema de archivos y ``D`` para almacén de datos)
+   * - ``name``
+     - Nombre de la configuración de rastreo (``config_id`` si no se encuentra la configuración)
+   * - ``count``
+     - Número de documentos que el rastreo en ejecución ha procesado hasta ahora
+   * - ``last_count``
+     - Número de documentos del último rastreo completado (``0`` si se desconoce)
+   * - ``updated_time``
+     - Momento en que se escribió ``count`` (milisegundos epoch, un número)
+   * - ``percent``
+     - ``count`` como porcentaje de ``last_count`` (de ``0`` a ``99``). Se omite si no hay un rastreo completado anterior
+
+.. note::
+
+   Un rastreo terminado o detenido no se incluye. Si el rastreador se detiene sin registrarlo (por ejemplo, porque se mata el proceso), el rastreo deja de incluirse cuando han pasado unos 30 segundos (de forma predeterminada) desde su última actualización. El ``count`` de un rastreo web o de sistema de archivos es el número de resultados de acceso; el de un rastreo de almacén de datos es el número de documentos indexados para la configuración de rastreo.
 
 Obtener Información de Rastreo
 ==============================
