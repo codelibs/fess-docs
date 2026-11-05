@@ -273,6 +273,9 @@ General API是用于管理 |Fess| 常规设置（系统整体配置）的API。
    * - ``notification_advance_search``
      - 否
      - 在高级搜索页面显示的通知消息
+   * - ``theme_settings``
+     - 否
+     - 传递给主题的设置（以换行分隔 ``key=value`` 行的单个字符串）。规则与管理界面的“主题设置”相同，存在不符合规则的行时返回 HTTP 400。发送空字符串会删除设置，省略该字段则保留已保存的值。GET 只返回有效的行
    * - ``suggest_search_log``
      - 否
      - 来自搜索日志的建议的启用/禁用

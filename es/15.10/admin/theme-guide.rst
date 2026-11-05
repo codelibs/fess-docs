@@ -174,6 +174,30 @@ Detalles del tema
 Al hacer clic en el nombre de un tema en la página de lista se muestra la página de detalles. En ella puede consultar el contenido del manifiesto (nombre, nombre para mostrar, versión, disponibilidad como predeterminado y estado).
 
 
+.. _theme-settings:
+
+Configuración del tema
+----------------------
+
+Algunos temas permiten al administrador cambiar su comportamiento mediante ajustes que se les pasan. Introdúzcalos en "Configuración del tema" de [Sistema > General] en la interfaz de administración, un ``key=value`` por línea (consulte :doc:`general-guide`). |Fess| no los interpreta: los pasa al tema como ``theme_settings`` en ``GET /api/v2/ui/config`` (consulte :doc:`../api/api-uiconfig`). Cada tema define las claves que acepta y el significado de sus valores.
+
+Los valores son visibles para todos los usuarios de la interfaz de búsqueda, por lo que no debe introducir secretos como contraseñas.
+
+``filesearch.roots`` del tema File Search
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+El tema File Search (``filesearch``, versión 15.10.6 o posterior) permite elegir con ``filesearch.roots`` las carpetas que se muestran en el nivel superior de su árbol de carpetas. Sin este ajuste, el árbol empieza en las fuentes (hosts). Requiere |Fess| 15.10 o posterior.
+
+::
+
+    filesearch.roots=smb://server/share/Documents/|file:/data/docs/
+
+- El valor es una lista de prefijos de URL separados por ``|``. Se ignoran los espacios alrededor de un elemento; un espacio dentro de un elemento forma parte de la URL.
+- Escriba cada prefijo tal como lo almacena el campo ``url`` de un resultado de búsqueda: las URL ``smb:`` decodificadas (``smb://server/share/My Docs/``) y las URL ``file:`` codificadas con porcentaje (``file:/data/My%20Docs/``). Si falta la ``/`` final, se añade.
+- Se usan como máximo 20 raíces, y las raíces codificadas con porcentaje deben caber juntas en un límite de tamaño (caben menos si las rutas contienen caracteres japoneses). Las raíces se toman en el orden escrito y el resto se ignora, así que ponga primero las importantes. Una raíz puede tener hasta 500 caracteres. También se ignora un elemento que no sea una URL, que contenga un carácter de control o que esté dentro de otro elemento.
+- El nivel superior del árbol son exactamente las carpetas indicadas, en orden alfabético. Una carpeta sin ningún documento para la palabra clave y los filtros actuales no se muestra, por lo que un prefijo mal escrito se nota porque falta la carpeta.
+- Las carpetas solo cambian el punto de partida del árbol. No son un control de acceso: el ámbito de búsqueda y los documentos visibles no cambian. Para restringir el acceso, use roles (consulte :doc:`../config/security-role`).
+
 Propiedades de configuración
 =============================
 

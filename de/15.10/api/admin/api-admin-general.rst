@@ -293,6 +293,9 @@ Admin-Oberfläche). Ein-/Aus-Einstellungen werden als Zeichenketten ``"true"`` /
    * - ``notification_advance_search``
      - Nein
      - Benachrichtigungstext, der auf der erweiterten Suchseite angezeigt wird
+   * - ``theme_settings``
+     - Nein
+     - An das Theme übergebene Einstellungen (eine Zeichenfolge mit ``key=value``-Zeilen, getrennt durch Zeilenumbrüche). Es gelten dieselben Regeln wie für „Theme-Einstellungen" in der Verwaltungsoberfläche; eine Zeile, die sie verletzt, führt zu HTTP 400. Eine leere Zeichenfolge entfernt die Einstellungen; wird das Feld weggelassen, bleibt der gespeicherte Wert erhalten. GET liefert nur die gültigen Zeilen
    * - ``suggest_search_log``
      - Nein
      - Suggest aus dem Suchprotokoll aktivieren/deaktivieren

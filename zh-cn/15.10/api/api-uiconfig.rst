@@ -45,6 +45,7 @@ HTTP 方法            GET
           "version": "1.0.0",
           "supported_locales": ["en", "ja"]
         },
+        "theme_settings": {},
         "features": {
           "user_favorite": false,
           "search_history": true,
@@ -123,6 +124,9 @@ HTTP 方法            GET
    * - ``theme``
      - object
      - 当前活动主题描述符。详见下方表格。
+   * - ``theme_settings``
+     - object
+     - 管理界面“系统”→“通用”中“主题设置”的内容。以键到字符串值的扁平对象表示，未设置时为 ``{}`` 。详见下文的 ``theme_settings`` 。
    * - ``features``
      - object
      - 功能开关。详见下方表格。
@@ -186,6 +190,23 @@ theme
    * - ``supported_locales``
      - string[]
      - 主题支持的语言区域数组。
+
+theme_settings
+~~~~~~~~~~~~~~
+
+以键到字符串值的扁平对象返回管理员在管理界面“系统”→“通用”的“主题设置”（系统属性 ``theme.settings`` ）中输入的设置。 |Fess| 不解释其内容，键及其含义由当前使用的主题决定。未设置时为空对象。
+
+.. code-block:: json
+
+    "theme_settings": {
+      "filesearch.roots": "smb://server/share/Documents/|file:/data/docs/"
+    }
+
+- 键匹配 ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` ，且不是 ``__proto__`` 、 ``constructor`` 或 ``prototype`` 。
+- 值最多 1000 个字符，不含控制字符。
+- 只返回有效的项目，按保存顺序最多 100 项。同一个键出现多次时，使用后面一行的值。
+- 即使启用了“需要登录”，也可以不登录调用此端点。此时未登录的调用方会得到空对象。
+- 这些值对搜索界面的所有用户可见，因此不得包含机密信息。主题必须仅将这些值当作数据处理：不得将其作为 HTML 插入，也不得用作链接或重定向的目标。
 
 features
 ~~~~~~~~

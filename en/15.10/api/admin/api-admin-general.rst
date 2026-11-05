@@ -284,6 +284,9 @@ settings are specified as the strings ``"true"`` / ``"false"``.
    * - ``notification_advance_search``
      - No
      - Notification message displayed on the advanced search page
+   * - ``theme_settings``
+     - No
+     - Settings passed to the theme (one string with ``key=value`` lines separated by line feeds). The rules are the same as for "Theme Settings" in the admin UI, and a line that breaks them produces HTTP 400. An empty string removes the settings; omitting the field keeps the stored value. GET returns only the valid lines
    * - ``suggest_search_log``
      - No
      - Enable/disable suggest from search logs

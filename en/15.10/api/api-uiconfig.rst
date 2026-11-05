@@ -45,6 +45,7 @@ On success (HTTP 200, UiConfigResponse), the following response is returned in t
           "version": "1.0.0",
           "supported_locales": ["en", "ja"]
         },
+        "theme_settings": {},
         "features": {
           "user_favorite": false,
           "search_history": true,
@@ -123,6 +124,9 @@ Each element of ``response`` is as follows. All fields are required.
    * - ``theme``
      - object
      - Active theme descriptor. See the table below for details.
+   * - ``theme_settings``
+     - object
+     - The content of "Theme Settings" in System > General of the admin UI, as a flat object of string values by key; ``{}`` when nothing is set. See ``theme_settings`` below.
    * - ``features``
      - object
      - Feature flags. See the table below for details.
@@ -186,6 +190,23 @@ Manifest-derived keys (``display_name`` / ``version`` / ``supported_locales``) a
    * - ``supported_locales``
      - string[]
      - Array of locales supported by the theme.
+
+theme_settings
+~~~~~~~~~~~~~~
+
+Returns the settings that an administrator entered in "Theme Settings" in System > General of the admin UI (the system property ``theme.settings``), as a flat object of string values by key. |Fess| does not interpret them; the active theme defines the keys and their meaning. The object is empty when nothing is set.
+
+.. code-block:: json
+
+    "theme_settings": {
+      "filesearch.roots": "smb://server/share/Documents/|file:/data/docs/"
+    }
+
+- A key matches ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` and is not ``__proto__``, ``constructor`` or ``prototype``.
+- A value has at most 1000 characters and no control characters.
+- Only valid entries are returned, at most 100, in the stored order. When a key appears more than once, the later line's value is used.
+- This endpoint can be called without logging in even when "Login Required" is enabled. In that case, an anonymous caller gets an empty object.
+- The values are visible to every user of the search UI, so they must not hold secrets. A theme must treat the values as data only: never insert them as HTML, and never use them as the target of a link or a redirect.
 
 features
 ~~~~~~~~

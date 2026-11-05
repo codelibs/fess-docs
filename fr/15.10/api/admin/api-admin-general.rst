@@ -291,6 +291,9 @@ spécifiés sous forme de chaînes ``"true"`` / ``"false"``.
    * - ``notification_advance_search``
      - Non
      - Message de notification affiché sur la page de recherche avancée
+   * - ``theme_settings``
+     - Non
+     - Paramètres transmis au thème (une chaîne de lignes ``key=value`` séparées par des sauts de ligne). Les règles sont celles de « Paramètres du thème » dans l'interface d'administration, et une ligne qui ne les respecte pas provoque une réponse HTTP 400. Une chaîne vide supprime les paramètres ; omettre le champ conserve la valeur enregistrée. GET ne renvoie que les lignes valides
    * - ``suggest_search_log``
      - Non
      - Activer/désactiver les suggestions basées sur les journaux de recherche

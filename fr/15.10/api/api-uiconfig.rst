@@ -45,6 +45,7 @@ En cas de succès (HTTP 200, UiConfigResponse), une réponse au format d'envelop
           "version": "1.0.0",
           "supported_locales": ["en", "ja"]
         },
+        "theme_settings": {},
         "features": {
           "user_favorite": false,
           "search_history": true,
@@ -123,6 +124,9 @@ Les détails de chaque élément de ``response`` sont les suivants. Tous les cha
    * - ``theme``
      - object
      - Descripteur du thème actif. Voir le tableau ci-dessous.
+   * - ``theme_settings``
+     - object
+     - Contenu de « Paramètres du thème » dans Système > Général de l'interface d'administration, sous forme d'objet plat de valeurs textuelles par clé ; ``{}`` si rien n'est défini. Voir ``theme_settings`` ci-dessous.
    * - ``features``
      - object
      - Indicateurs de fonctionnalités. Voir le tableau ci-dessous.
@@ -186,6 +190,23 @@ Les clés issues du manifeste (``display_name`` / ``version`` / ``supported_loca
    * - ``supported_locales``
      - string[]
      - Tableau des paramètres régionaux pris en charge par le thème.
+
+theme_settings
+~~~~~~~~~~~~~~
+
+Renvoie les paramètres saisis par un administrateur dans « Paramètres du thème » de Système > Général de l'interface d'administration (propriété système ``theme.settings``), sous forme d'objet plat de valeurs textuelles par clé. |Fess| ne les interprète pas : le thème actif définit les clés et leur signification. L'objet est vide si rien n'est défini.
+
+.. code-block:: json
+
+    "theme_settings": {
+      "filesearch.roots": "smb://server/share/Documents/|file:/data/docs/"
+    }
+
+- Une clé correspond à ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` et n'est ni ``__proto__``, ni ``constructor``, ni ``prototype``.
+- Une valeur compte 1000 caractères au maximum et ne contient pas de caractères de contrôle.
+- Seules les entrées valides sont renvoyées, 100 au maximum, dans l'ordre enregistré. Lorsqu'une clé apparaît plusieurs fois, la valeur de la dernière ligne est utilisée.
+- Ce point d'accès peut être appelé sans connexion, même lorsque « Connexion requise » est activé. Dans ce cas, un appelant anonyme reçoit un objet vide.
+- Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche et ne doivent donc contenir aucun secret. Un thème doit traiter les valeurs comme de simples données : ne jamais les insérer comme HTML et ne jamais les utiliser comme cible d'un lien ou d'une redirection.
 
 features
 ~~~~~~~~

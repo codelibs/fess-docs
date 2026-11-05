@@ -175,6 +175,30 @@ Theme-Details
 Durch Klicken auf einen Theme-Namen in der Übersichtsseite wird die Detailseite geöffnet. Auf der Detailseite können die Manifest-Inhalte eingesehen werden (Name, Anzeigename, Version, Standard-Flag, Zustand).
 
 
+.. _theme-settings:
+
+Theme-Einstellungen
+-------------------
+
+Manche Themes lassen sich durch übergebene Einstellungen im Verhalten anpassen. Tragen Sie die Einstellungen in der Verwaltungsoberfläche unter [System > Allgemein] im Feld „Theme-Einstellungen" ein, eine ``key=value``-Angabe pro Zeile (siehe :doc:`general-guide`). |Fess| interpretiert sie nicht, sondern gibt sie als ``theme_settings`` in ``GET /api/v2/ui/config`` an das Theme weiter (siehe :doc:`../api/api-uiconfig`). Welche Schlüssel gelten und was ihre Werte bedeuten, legt jedes Theme selbst fest.
+
+Die Werte sind für alle Benutzer der Suchoberfläche sichtbar. Geben Sie daher keine geheimen Daten wie Passwörter ein.
+
+``filesearch.roots`` des Themes „File Search"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Mit ``filesearch.roots`` legen Sie beim Theme „File Search" (``filesearch``, ab Version 15.10.6) fest, welche Ordner auf der obersten Ebene des Ordnerbaums erscheinen. Ohne diese Einstellung beginnt der Baum bei den Quellen (Hosts). Erforderlich ist |Fess| 15.10 oder neuer.
+
+::
+
+    filesearch.roots=smb://server/share/Documents/|file:/data/docs/
+
+- Der Wert ist eine Liste von URL-Präfixen, getrennt durch ``|``. Leerzeichen um einen Eintrag werden ignoriert; ein Leerzeichen innerhalb eines Eintrags gehört zur URL.
+- Schreiben Sie jedes Präfix so, wie das Feld ``url`` eines Suchergebnisses es speichert: ``smb:``-URLs dekodiert (``smb://server/share/My Docs/``), ``file:``-URLs prozentkodiert (``file:/data/My%20Docs/``). Fehlt der abschließende ``/``, wird er ergänzt.
+- Es werden höchstens 20 Wurzeln verwendet, und die prozentkodierten Wurzeln müssen zusammen in ein Größenlimit passen (bei Pfaden mit japanischen Zeichen weniger). Die Wurzeln werden in der geschriebenen Reihenfolge übernommen, der Rest wird ignoriert; nennen Sie die wichtigen daher zuerst. Eine Wurzel darf bis zu 500 Zeichen lang sein. Ein Eintrag, der keine URL ist, ein Steuerzeichen enthält oder innerhalb eines anderen Eintrags liegt, wird ebenfalls ignoriert.
+- Die oberste Ebene des Baums besteht genau aus den angegebenen Ordnern in alphabetischer Reihenfolge. Ein Ordner ohne Dokument unter dem aktuellen Suchbegriff und den Filtern wird nicht angezeigt; ein falsch geschriebenes Präfix fällt daher als fehlender Ordner auf.
+- Die Ordner ändern nur den Startpunkt des Baums. Sie sind keine Zugriffskontrolle: Suchbereich und sichtbare Dokumente bleiben gleich. Zur Einschränkung dienen Rollen (siehe :doc:`../config/security-role`).
+
 Konfigurationseigenschaften
 ===========================
 

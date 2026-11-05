@@ -45,6 +45,7 @@ En caso de éxito (HTTP 200, UiConfigResponse), se devuelve una respuesta con el
           "version": "1.0.0",
           "supported_locales": ["en", "ja"]
         },
+        "theme_settings": {},
         "features": {
           "user_favorite": false,
           "search_history": true,
@@ -123,6 +124,9 @@ Los elementos de ``response`` son los siguientes. Todos los campos son obligator
    * - ``theme``
      - object
      - Descriptor del tema activo. Consulte la tabla siguiente para más detalles.
+   * - ``theme_settings``
+     - object
+     - Contenido de "Configuración del tema" en Sistema > General de la interfaz de administración, como objeto plano de valores de texto por clave; ``{}`` si no hay nada configurado. Consulte ``theme_settings`` más abajo.
    * - ``features``
      - object
      - Indicadores de características. Consulte la tabla siguiente para más detalles.
@@ -186,6 +190,23 @@ Las claves derivadas del manifiesto (``display_name`` / ``version`` / ``supporte
    * - ``supported_locales``
      - string[]
      - Array de configuraciones regionales admitidas por el tema.
+
+theme_settings
+~~~~~~~~~~~~~~
+
+Devuelve la configuración que un administrador introdujo en "Configuración del tema" de Sistema > General de la interfaz de administración (la propiedad del sistema ``theme.settings``), como objeto plano de valores de texto por clave. |Fess| no la interpreta: el tema activo define las claves y su significado. El objeto está vacío si no hay nada configurado.
+
+.. code-block:: json
+
+    "theme_settings": {
+      "filesearch.roots": "smb://server/share/Documents/|file:/data/docs/"
+    }
+
+- Una clave coincide con ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` y no es ``__proto__``, ``constructor`` ni ``prototype``.
+- Un valor tiene como máximo 1000 caracteres y no contiene caracteres de control.
+- Solo se devuelven las entradas válidas, como máximo 100, en el orden almacenado. Si una clave aparece más de una vez, se usa el valor de la última línea.
+- Este endpoint se puede llamar sin iniciar sesión incluso cuando "Requiere inicio de sesión" está habilitado. En ese caso, un llamante anónimo recibe un objeto vacío.
+- Los valores son visibles para todos los usuarios de la interfaz de búsqueda, por lo que no deben contener secretos. Un tema debe tratar los valores solo como datos: nunca insertarlos como HTML ni usarlos como destino de un enlace o de una redirección.
 
 features
 ~~~~~~~~

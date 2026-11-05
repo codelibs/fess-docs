@@ -293,6 +293,9 @@ activación/desactivación se especifican como las cadenas ``"true"`` /
    * - ``notification_advance_search``
      - No
      - Mensaje de notificación que se muestra en la página de búsqueda avanzada
+   * - ``theme_settings``
+     - No
+     - Configuración que se pasa al tema (una cadena con líneas ``key=value`` separadas por saltos de línea). Las reglas son las mismas que las de "Configuración del tema" en la interfaz de administración, y una línea que las incumpla produce HTTP 400. Una cadena vacía elimina la configuración; si se omite el campo, se conserva el valor almacenado. GET devuelve solo las líneas válidas
    * - ``suggest_search_log``
      - No
      - Habilitar/deshabilitar las sugerencias a partir de los registros de búsqueda
