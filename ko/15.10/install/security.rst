@@ -71,7 +71,7 @@ OpenSearch 보안 플러그인 활성화
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
 
-   인증 정보는 ``fess_config.properties`` 의 다음 속성으로 지정합니다(``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` 라는 환경 변수는 존재하지 않습니다)::
+   인증 정보는 ``fess_config.properties`` 의 다음 속성으로 지정합니다(zip, RPM, DEB 패키지에는 ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` 환경 변수가 없습니다. docker-fess 이미지에서는 사용할 수 있습니다)::
 
        search_engine.username=admin
        search_engine.password=<strong_password>
@@ -108,6 +108,10 @@ Nginx 설정 예::
         }
     }
 
+TLS를 리버스 프록시에서 종료하는 경우, 세션 쿠키에 ``Secure`` 속성이 붙도록 ``fess_config.properties`` 에 다음 설정도 추가하세요. 변경 후에는 |Fess| 를 재시작합니다. 설정하면 HTTP로는 세션을 만들 수 없으므로, HTTP로도 접속하는 경우에는 설정하지 마세요::
+
+    session.cookie.secure=true
+
 **방법 2: Fess 자체에서 HTTPS 설정**
 
 ``tomcat_config.properties`` 에 다음을 추가::
@@ -119,7 +123,7 @@ Nginx 설정 예::
     tomcat.certificateKeystorePassword=[키스토어 파일 생성 시 지정한 비밀번호]
     tomcat.certificateKeyAlias=[인증서 별칭]
     tomcat.sslProtocol=[SSL 프로토콜 (예: TLS)]
-    tomcat.enabledProtocols=활성화된 프로토콜 목록 (쉼표 구분) (예: TLSv1.2,TLSv1.1,TLSv1)
+    tomcat.enabledProtocols=활성화된 프로토콜 목록 (쉼표 구분) (예: TLSv1.2,TLSv1.3)
 
 권장 보안 설정
 ====================
@@ -140,9 +144,8 @@ Nginx 설정 예::
 
 Linux (firewalld) 설정 예::
 
-    $ sudo firewall-cmd --permanent --add-service=http
     $ sudo firewall-cmd --permanent --add-service=https
-    $ sudo firewall-cmd --permanent --remove-service=opensearch  # 사용자 정의 서비스의 경우
+    $ sudo firewall-cmd --permanent --add-port=8080/tcp  # 8080 포트로 직접 접속하는 경우에만
     $ sudo firewall-cmd --reload
 
 IP 주소 제한::
@@ -222,8 +225,10 @@ Nginx에서 액세스 제한 예::
 
 암호화 백업 예::
 
-    $ tar czf fess-backup.tar.gz /var/lib/opensearch /etc/fess
+    $ tar czf fess-backup.tar.gz /etc/fess
     $ gpg --symmetric --cipher-algo AES256 fess-backup.tar.gz
+
+실행 중인 OpenSearch의 데이터 디렉터리(``/var/lib/opensearch``)는 파일을 복사하는 방식으로는 일관된 백업을 만들 수 없습니다. 인덱스 데이터에는 `OpenSearch 스냅샷 기능 <https://docs.opensearch.org/latest/tuning-your-cluster/availability-and-recovery/snapshots/index/>`__ 을 사용하세요. |Fess| 의 설정 데이터는 관리 화면의 백업 페이지에서 다운로드할 수 있습니다(:doc:`../admin/backup-guide` 참조).
 
 보안 모범 사례
 ============================
@@ -252,13 +257,12 @@ Nginx에서 액세스 제한 예::
 보안 헤더 설정
 ------------------------
 
+|Fess| 는 기본적으로 HTML 응답에 ``X-Frame-Options: SAMEORIGIN`` 을 추가하므로(``fess_config.properties`` 의 ``response.headers``) 프록시에서 추가할 필요가 없습니다.
+
 필요에 따라 Nginx 또는 Apache에서 보안 헤더를 설정하십시오::
 
-    add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header Content-Security-Policy "default-src 'self'" always;
 
 보안 체크리스트
 ========================

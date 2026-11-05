@@ -71,7 +71,7 @@ Activation du plugin de sécurité OpenSearch
 
        SEARCH_ENGINE_HTTP_URL=https://opensearch:9200
 
-   Spécifiez les informations d'authentification via les propriétés suivantes dans ``fess_config.properties`` (il n'existe pas de variables d'environnement ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD``) ::
+   Spécifiez les informations d'authentification via les propriétés suivantes dans ``fess_config.properties`` (les paquets ZIP, RPM et DEB n'ont pas les variables d'environnement ``SEARCH_ENGINE_USERNAME`` / ``SEARCH_ENGINE_PASSWORD`` ; les images docker-fess les prennent en charge) ::
 
        search_engine.username=admin
        search_engine.password=<strong_password>
@@ -108,6 +108,10 @@ Exemple de configuration Nginx ::
         }
     }
 
+Lorsque TLS est terminé au niveau du proxy inverse, ajoutez également ce qui suit dans ``fess_config.properties`` afin que le cookie de session reçoive l'attribut ``Secure``. Redémarrez |Fess| après la modification. Ne le définissez pas si des utilisateurs accèdent aussi à |Fess| en HTTP simple, car la session ne peut alors plus être établie en HTTP ::
+
+    session.cookie.secure=true
+
 **Méthode 2 : Configuration HTTPS directement dans Fess**
 
 Ajoutez ce qui suit à ``tomcat_config.properties`` ::
@@ -119,7 +123,7 @@ Ajoutez ce qui suit à ``tomcat_config.properties`` ::
     tomcat.certificateKeystorePassword=[mot de passe spécifié lors de la création du fichier keystore]
     tomcat.certificateKeyAlias=[alias du certificat]
     tomcat.sslProtocol=[protocole SSL (ex. TLS)]
-    tomcat.enabledProtocols=liste des protocoles activés (séparés par des virgules) (ex. TLSv1.2,TLSv1.1,TLSv1)
+    tomcat.enabledProtocols=liste des protocoles activés (séparés par des virgules) (ex. TLSv1.2,TLSv1.3)
 
 Configurations de sécurité recommandées
 ========================================
@@ -140,9 +144,8 @@ Ouvrez uniquement les ports nécessaires et fermez les ports inutiles.
 
 Exemple de configuration Linux (firewalld) ::
 
-    $ sudo firewall-cmd --permanent --add-service=http
     $ sudo firewall-cmd --permanent --add-service=https
-    $ sudo firewall-cmd --permanent --remove-service=opensearch  # En cas de service personnalisé
+    $ sudo firewall-cmd --permanent --add-port=8080/tcp  # uniquement en cas d'accès direct à Fess sur le port 8080
     $ sudo firewall-cmd --reload
 
 Restriction d'adresse IP ::
@@ -222,8 +225,10 @@ Les données de sauvegarde peuvent contenir des informations confidentielles. Ve
 
 Exemple de sauvegarde chiffrée ::
 
-    $ tar czf fess-backup.tar.gz /var/lib/opensearch /etc/fess
+    $ tar czf fess-backup.tar.gz /etc/fess
     $ gpg --symmetric --cipher-algo AES256 fess-backup.tar.gz
+
+Le répertoire de données d'un OpenSearch en cours d'exécution (``/var/lib/opensearch``) ne peut pas être sauvegardé de façon cohérente par simple copie de fichiers. Pour les données d'index, utilisez la `fonction d'instantanés d'OpenSearch <https://docs.opensearch.org/latest/tuning-your-cluster/availability-and-recovery/snapshots/index/>`__. Les données de configuration de |Fess| peuvent être téléchargées depuis la page de sauvegarde de l'interface d'administration (voir :doc:`../admin/backup-guide`).
 
 Meilleures pratiques de sécurité
 =================================
@@ -252,13 +257,12 @@ Audit de sécurité régulier
 Configuration des en-têtes de sécurité
 ---------------------------------------
 
+|Fess| ajoute par défaut ``X-Frame-Options: SAMEORIGIN`` aux réponses HTML (``response.headers`` dans ``fess_config.properties``) ; il n'est donc pas nécessaire de l'ajouter dans le proxy.
+
 Si nécessaire, configurez les en-têtes de sécurité dans Nginx ou Apache ::
 
-    add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header Content-Security-Policy "default-src 'self'" always;
 
 Liste de vérification de sécurité
 ==================================
