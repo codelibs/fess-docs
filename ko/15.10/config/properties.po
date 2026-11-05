@@ -171,6 +171,9 @@ msgstr "검색 결과 내보내기에서 출력하는 필드(쉼표 구분)입�
 msgid "Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit."
 msgstr "사용자별(게스트는 클라이언트 IP별) 1분당 검색 결과 내보내기의 최대 횟수입니다. 0 이하이면 제한이 비활성화됩니다."
 
+msgid "Maximum number of similar-document requests (/api/v2/documents/{docId}/similar) per minute for each user (each client IP for a guest). 0 or less disables the limit."
+msgstr "사용자별(게스트는 클라이언트 IP별) 1분당 유사 문서 요청(/api/v2/documents/{docId}/similar)의 최대 횟수입니다. 0 이하이면 제한이 비활성화됩니다."
+
 msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
 msgstr "API JSON 응답용 헤더입니다. Access-Control-* 및 Timing-Allow-Origin 은 여기서 무시됩니다(CORS는 api.cors.* / CorsFilter 로 제어됩니다). Vary는 설정하지 마십시오."
 

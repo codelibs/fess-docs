@@ -103,6 +103,21 @@ Specifies the single sign-on type.
 - **SPNEGO**: Use SPNEGO (requires the ``fess-sso-spnego`` plugin)
 - **Entra ID**: Use Microsoft Entra ID (requires the ``fess-sso-entraid`` plugin)
 
+Theme Settings
+::::::::::::::
+
+Specifies the settings passed to the theme, one ``key=value`` per line. |Fess| does not interpret them; the theme defines the keys and what they mean (see :ref:`theme-settings`). The settings reach the theme as ``theme_settings`` in the search UI API (``GET /api/v2/ui/config``).
+
+- A key starts with a letter or digit and consists of letters, digits, underscores, dots and hyphens, up to 64 characters. ``__proto__``, ``constructor`` and ``prototype`` cannot be used.
+- A value has at most 1000 characters and no control characters.
+- At most 100 settings can be saved. When a key appears on several lines, the later line wins.
+- A line that breaks these rules, or more than 100 settings, is rejected when you save. Saving with the field empty removes the settings.
+- A change takes effect without restarting |Fess|.
+
+.. warning::
+
+   The values are visible to every user of the search UI. Do not enter secrets such as passwords. When "Login Required" is enabled, nothing is passed to users who are not logged in.
+
 Crawler
 -------
 

@@ -24,6 +24,7 @@ et l'authentification.
 
    api-search
    api-export
+   api-similar
    api-label
    api-popularword
    api-suggest

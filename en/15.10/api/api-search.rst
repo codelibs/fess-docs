@@ -302,3 +302,4 @@ Related Topics
 - :doc:`../user/search-field` - Field-specified search
 - :doc:`../user/special-char` - Special characters and escaping
 - :doc:`../user/search-wildcard` - Wildcard search
+- :doc:`api-similar` - Similar documents API

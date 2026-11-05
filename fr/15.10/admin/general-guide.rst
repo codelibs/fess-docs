@@ -103,6 +103,21 @@ Spécifie le type d'authentification unique (Single Sign-On).
 - **SPNEGO** : Utiliser SPNEGO (nécessite le plugin ``fess-sso-spnego``)
 - **Entra ID** : Utiliser Microsoft Entra ID (nécessite le plugin ``fess-sso-entraid``)
 
+Paramètres du thème
+:::::::::::::::::::
+
+Indique les paramètres transmis au thème, un ``key=value`` par ligne. |Fess| ne les interprète pas : c'est le thème qui définit les clés et leur signification (voir :ref:`theme-settings`). Les paramètres parviennent au thème sous le nom ``theme_settings`` dans l'API de l'interface de recherche (``GET /api/v2/ui/config``).
+
+- Une clé commence par une lettre ou un chiffre et se compose de lettres, de chiffres, de tirets bas, de points et de traits d'union (64 caractères au maximum). ``__proto__``, ``constructor`` et ``prototype`` sont interdits.
+- Une valeur compte 1000 caractères au maximum et ne contient pas de caractères de contrôle.
+- 100 paramètres au maximum peuvent être enregistrés. Lorsqu'une clé apparaît sur plusieurs lignes, la dernière ligne l'emporte.
+- Une ligne qui ne respecte pas ces règles, ou plus de 100 paramètres, est refusée à l'enregistrement. Enregistrer avec le champ vide supprime les paramètres.
+- Une modification est prise en compte sans redémarrer |Fess|.
+
+.. warning::
+
+   Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche. Ne saisissez pas de secrets tels que des mots de passe. Lorsque « Connexion requise » est activé, rien n'est transmis aux utilisateurs non connectés.
+
 Robot d'exploration
 -------------------
 

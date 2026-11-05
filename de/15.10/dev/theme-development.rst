@@ -185,6 +185,16 @@ Auslieferung und API
 - Die SPA des Themes ruft Daten wie Suchergebnisse und Chat über die
   ``/api/v2/*`` API ab.
 
+Theme-Einstellungen lesen
+-------------------------
+
+Die ``key=value``-Paare, die ein Administrator in der Verwaltungsoberfläche unter [System > Allgemein] bei „Theme-Einstellungen" einträgt, gelangen als ``theme_settings`` (ein flaches Objekt aus Zeichenfolgen) in ``GET /api/v2/ui/config`` zum Theme (siehe :doc:`../api/api-uiconfig`). |Fess| interpretiert sie nicht; das Theme bestimmt daher die Schlüsselnamen, das Format der Werte und die Aufteilung eines Werts mit mehreren Angaben. Das Theme „File Search" verwendet Schlüssel mit dem Theme-Namen als Präfix, etwa ``filesearch.roots`` (siehe :ref:`theme-settings`).
+
+- ``theme_settings`` ist immer vorhanden und ``{}``, wenn nichts gesetzt ist. Das Theme sollte auch ohne Einstellungen funktionieren.
+- Ist „Anmeldung erforderlich" aktiviert, erhalten nicht angemeldete Benutzer ``{}``.
+- Behandeln Sie die Werte ausschließlich als Daten. Fügen Sie sie niemals als HTML ein (``innerHTML``) und verwenden Sie sie niemals als Navigationsziel (Link, Weiterleitung oder ``href``).
+- Die Werte sind für alle Benutzer der Suchoberfläche sichtbar.
+
 Packaging
 ---------
 

@@ -175,6 +175,30 @@ Détails du thème
 Cliquez sur le nom d'un thème dans la page de liste pour afficher la page de détails. La page de détails permet de consulter le contenu du manifeste (nom, nom d'affichage, version, statut par défaut, état).
 
 
+.. _theme-settings:
+
+Paramètres du thème
+-------------------
+
+Certains thèmes permettent à un administrateur de modifier leur comportement en leur transmettant des paramètres. Saisissez-les dans « Paramètres du thème » de [Système > Général] dans l'interface d'administration, un ``key=value`` par ligne (voir :doc:`general-guide`). |Fess| ne les interprète pas : il les transmet au thème sous le nom ``theme_settings`` dans ``GET /api/v2/ui/config`` (voir :doc:`../api/api-uiconfig`). Chaque thème définit les clés qu'il accepte et la signification de leurs valeurs.
+
+Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche : ne saisissez pas de secrets tels que des mots de passe.
+
+``filesearch.roots`` du thème File Search
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Le thème File Search (``filesearch``, version 15.10.6 ou ultérieure) permet de choisir, avec ``filesearch.roots``, les dossiers affichés au premier niveau de son arborescence. Sans ce paramètre, l'arborescence commence aux sources (hôtes). |Fess| 15.10 ou ultérieur est requis.
+
+::
+
+    filesearch.roots=smb://server/share/Documents/|file:/data/docs/
+
+- La valeur est une liste de préfixes d'URL séparés par ``|``. Les espaces autour d'un élément sont ignorés ; un espace à l'intérieur d'un élément fait partie de l'URL.
+- Écrivez chaque préfixe tel que le champ ``url`` d'un résultat de recherche le stocke : les URL ``smb:`` décodées (``smb://server/share/My Docs/``), les URL ``file:`` encodées en pourcentage (``file:/data/My%20Docs/``). Un ``/`` final est ajouté s'il manque.
+- 20 racines au maximum sont utilisées, et les racines encodées en pourcentage doivent aussi tenir ensemble dans une limite de taille (moins si les chemins contiennent des caractères japonais). Les racines sont prises dans l'ordre d'écriture et les suivantes sont ignorées : placez les plus importantes en premier. Une racine peut compter jusqu'à 500 caractères. Un élément qui n'est pas une URL, qui contient un caractère de contrôle ou qui se trouve à l'intérieur d'un autre élément est également ignoré.
+- Le premier niveau de l'arborescence se compose exactement des dossiers indiqués, par ordre alphabétique. Un dossier sans document pour le mot-clé et les filtres en cours n'est pas affiché : un préfixe mal saisi se remarque donc par l'absence du dossier.
+- Les dossiers ne changent que le point de départ de l'arborescence. Ils ne constituent pas un contrôle d'accès : le périmètre de recherche et les documents visibles restent inchangés. Pour restreindre l'accès, utilisez les rôles (voir :doc:`../config/security-role`).
+
 Propriétés de configuration
 ============================
 

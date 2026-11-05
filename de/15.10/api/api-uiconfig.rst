@@ -45,6 +45,7 @@ Bei Erfolg (HTTP 200, UiConfigResponse) wird eine Antwort im gemeinsamen Envelop
           "version": "1.0.0",
           "supported_locales": ["en", "ja"]
         },
+        "theme_settings": {},
         "features": {
           "user_favorite": false,
           "search_history": true,
@@ -123,6 +124,9 @@ Die einzelnen Elemente von ``response`` sind wie folgt beschrieben. Alle Felder 
    * - ``theme``
      - object
      - Aktiver Theme-Deskriptor. Siehe nachfolgende Tabelle.
+   * - ``theme_settings``
+     - object
+     - Inhalt von „Theme-Einstellungen" unter System > Allgemein in der Verwaltungsoberfläche, als flaches Objekt mit Zeichenfolgenwerten je Schlüssel; ``{}``, wenn nichts gesetzt ist. Siehe ``theme_settings`` weiter unten.
    * - ``features``
      - object
      - Feature-Flags. Siehe nachfolgende Tabelle.
@@ -186,6 +190,23 @@ Aus dem Manifest abgeleitete Schlüssel (``display_name`` / ``version`` / ``supp
    * - ``supported_locales``
      - string[]
      - Array der vom Theme unterstützten Gebietsschemas.
+
+theme_settings
+~~~~~~~~~~~~~~
+
+Gibt die Einstellungen zurück, die ein Administrator unter „Theme-Einstellungen" in System > Allgemein der Verwaltungsoberfläche eingetragen hat (Systemeigenschaft ``theme.settings``), als flaches Objekt mit Zeichenfolgenwerten je Schlüssel. |Fess| interpretiert sie nicht; das aktive Theme bestimmt die Schlüssel und ihre Bedeutung. Ist nichts gesetzt, ist das Objekt leer.
+
+.. code-block:: json
+
+    "theme_settings": {
+      "filesearch.roots": "smb://server/share/Documents/|file:/data/docs/"
+    }
+
+- Ein Schlüssel entspricht ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` und ist weder ``__proto__`` noch ``constructor`` noch ``prototype``.
+- Ein Wert hat höchstens 1000 Zeichen und enthält keine Steuerzeichen.
+- Zurückgegeben werden nur gültige Einträge, höchstens 100, in der gespeicherten Reihenfolge. Kommt ein Schlüssel mehrfach vor, gilt der Wert der späteren Zeile.
+- Dieser Endpunkt kann auch bei aktivierter Option „Anmeldung erforderlich" ohne Anmeldung aufgerufen werden. In diesem Fall erhält ein anonymer Aufrufer ein leeres Objekt.
+- Die Werte sind für alle Benutzer der Suchoberfläche sichtbar und dürfen daher keine geheimen Daten enthalten. Ein Theme muss die Werte ausschließlich als Daten behandeln: niemals als HTML einfügen und niemals als Ziel eines Links oder einer Weiterleitung verwenden.
 
 features
 ~~~~~~~~

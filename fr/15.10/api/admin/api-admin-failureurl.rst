@@ -113,6 +113,9 @@ Réponse
             "error_log": "Not found: https://example.com/not-found",
             "error_count": "1",
             "last_access_time": "1738143000000",
+            "content_length": "512",
+            "mime_type": "text/html",
+            "http_status_code": "404",
             "config_id": "webConfig_id_1"
           }
         ],
@@ -143,12 +146,22 @@ Champs de la réponse
      - Nombre d'occurrences de l'erreur (valeur numérique sous forme de chaîne)
    * - ``last_access_time``
      - Heure du dernier accès (millisecondes epoch sous forme de chaîne)
+   * - ``content_length``
+     - Taille du document en octets (valeur numérique sous forme de chaîne)
+   * - ``mime_type``
+     - Type MIME du document
+   * - ``http_status_code``
+     - Statut HTTP (valeur numérique sous forme de chaîne ; URL ``http`` / ``https`` uniquement)
    * - ``config_id``
      - ID de la configuration de crawl
 
 .. note::
 
    Tous les champs de la réponse sont retournés sous forme de chaînes (JSON string). ``error_count`` est une valeur numérique représentée sous forme de chaîne, et ``last_access_time`` est le nombre de millisecondes epoch représenté sous forme de chaîne.
+
+.. note::
+
+   ``content_length``, ``mime_type`` et ``http_status_code`` ne figurent que si le crawler les connaissait ; sinon le champ est omis. Voir :doc:`../../admin/failureurl-guide` pour les échecs concernés.
 
 Obtention d'une URL en échec
 ============================

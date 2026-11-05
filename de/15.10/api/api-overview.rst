@@ -261,6 +261,9 @@ API-Typen
    * - :doc:`cache <api-cache>`
      - ``/cache/{docId}``
      - API zum Abrufen des gecachten Dokumentinhalts.
+   * - :doc:`similar <api-similar>`
+     - ``/documents/{docId}/similar``
+     - API zum Abrufen der Dokumente, die denselben Inhalt wie ein Dokument haben.
    * - :doc:`chat <api-chat>`
      - ``/chat`` , ``/chat/stream``
      - API zur Nutzung des KI-Suchmodus (RAG-Chat).

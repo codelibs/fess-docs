@@ -314,6 +314,9 @@ one, fill in ``properties.po`` beside this file.
   * - api.search.export.rate.limit.per.minute
     - 每个用户每分钟的搜索结果导出最大次数（访客按每个客户端 IP 计算）。0 或更小的值表示禁用该限制。
     - ``10``
+  * - api.search.similar.rate.limit.per.minute
+    - 每个用户每分钟的相似文档请求（/api/v2/documents/{docId}/similar）最大次数（访客按每个客户端 IP 计算）。0 或更小的值表示禁用该限制。
+    - ``30``
   * - api.json.response.headers
     - API JSON 响应的头信息。Access-Control-\* 和 Timing-Allow-Origin 在此处会被忽略（CORS 由 api.cors.\* / CorsFilter 控制）。请勿设置 Vary。
     - ``Referrer-Policy:strict-origin-when-cross-origin``

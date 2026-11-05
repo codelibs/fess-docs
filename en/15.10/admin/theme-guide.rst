@@ -173,6 +173,30 @@ Theme Details
 Click a theme name on the list page to open the details page. The details page shows the manifest contents (name, display name, version, default status, and health).
 
 
+.. _theme-settings:
+
+Theme Settings
+--------------
+
+Some themes let an administrator change their behavior by passing settings. Enter the settings in "Theme Settings" in [System > General] of the admin UI, one ``key=value`` per line (see :doc:`general-guide`). |Fess| does not interpret them; it passes them to the theme as ``theme_settings`` in ``GET /api/v2/ui/config`` (see :doc:`../api/api-uiconfig`). Each theme defines the keys it accepts and what their values mean.
+
+The values are visible to every user of the search UI, so do not enter secrets such as passwords.
+
+``filesearch.roots`` of the File Search Theme
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The File Search theme (``filesearch``, version 15.10.6 or later) lets you choose the folders shown at the top level of its folder tree with ``filesearch.roots``. Without it, the tree starts at the sources (hosts). It requires |Fess| 15.10 or later.
+
+::
+
+    filesearch.roots=smb://server/share/Documents/|file:/data/docs/
+
+- The value is a list of URL prefixes separated by ``|``. Spaces around an item are ignored; a space inside an item is part of the URL.
+- Write each prefix as the ``url`` field of a search result stores it: ``smb:`` URLs decoded (``smb://server/share/My Docs/``), ``file:`` URLs percent-encoded (``file:/data/My%20Docs/``). A trailing ``/`` is added when it is missing.
+- At most 20 roots are used, and the percent-encoded roots together must also fit in a size limit (fewer fit when paths contain Japanese characters). Roots are taken in the order written and the rest are ignored, so put the important ones first. One root can have up to 500 characters. An item that is not a URL, contains a control character, or lies inside another item is also ignored.
+- The top level of the tree is exactly the folders you listed, in alphabetical order. A folder with no document under the current keyword and filters is not shown, so a mistyped prefix shows up as a missing folder.
+- The folders only change where the tree starts. They are not access control: the search scope and the documents a user can see do not change. Use roles to restrict what users can see (see :doc:`../config/security-role`).
+
 Configuration Properties
 =========================
 

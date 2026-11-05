@@ -29,6 +29,9 @@ Endpoint List
      - /logs
      - List crawl information
    * - GET
+     - /progress
+     - Get the progress of running crawls
+   * - GET
      - /log/{id}
      - Get crawl information
    * - DELETE
@@ -127,6 +130,88 @@ Response Fields
    Each log object in the response also includes an internal ``crud_mode`` field
    (an integer indicating the CRUD operation mode, always ``0`` for read operations).
    Clients can safely ignore it.
+
+Get Progress of Running Crawls
+==============================
+
+Returns the progress of the crawls that are running now, one entry for each web, file system or data store crawl configuration. It is the same information as "Running Crawls" on the Crawling Info page of the admin UI (see :doc:`../../admin/crawlinginfo-guide`).
+
+Request
+-------
+
+::
+
+    GET /api/admin/crawlinginfo/progress
+
+This endpoint does not accept parameters.
+
+Response
+--------
+
+.. code-block:: json
+
+    {
+      "response": {
+        "status": 0,
+        "progress": [
+          {
+            "config_id": "Wabc123",
+            "name": "Example Site",
+            "count": 4200,
+            "last_count": 10000,
+            "updated_time": 1738144800000,
+            "percent": 42
+          },
+          {
+            "config_id": "Ddef456",
+            "name": "Example Database",
+            "count": 1500,
+            "last_count": 0,
+            "updated_time": 1738144795000
+          }
+        ],
+        "total": 2
+      }
+    }
+
+Response Fields
+~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Field
+     - Description
+   * - ``progress``
+     - Array of the running crawls, ordered by the name of the crawl configuration. An empty array when no crawl is running
+   * - ``total``
+     - Number of elements of ``progress``
+
+Each element of ``progress`` has the following fields.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Field
+     - Description
+   * - ``config_id``
+     - ID of the crawl configuration (starts with ``W`` for web, ``F`` for file system and ``D`` for data store)
+   * - ``name``
+     - Name of the crawl configuration (``config_id`` when the configuration is not found)
+   * - ``count``
+     - Number of documents the running crawl has processed so far
+   * - ``last_count``
+     - Number of documents of the previous completed crawl (``0`` when unknown)
+   * - ``updated_time``
+     - Time ``count`` was written (epoch milliseconds, a number)
+   * - ``percent``
+     - ``count`` as a percentage of ``last_count`` (``0`` to ``99``). Omitted when there is no previous completed crawl
+
+.. note::
+
+   A crawl that has finished or been stopped is not included. When the crawler stops without recording that (for example the process is killed), the crawl is not included once about 30 seconds (by default) have passed since its last update. ``count`` of a web or file system crawl is the number of access results; ``count`` of a data store crawl is the number of documents indexed for the crawl configuration.
 
 Get Crawl Information
 =====================

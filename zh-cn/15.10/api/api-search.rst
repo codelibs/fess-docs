@@ -302,3 +302,4 @@ HTTP 方法            GET
 - :doc:`../user/search-field` - 字段指定检索
 - :doc:`../user/special-char` - 特殊字符与转义
 - :doc:`../user/search-wildcard` - 通配符检索
+- :doc:`api-similar` - 相似文档 API

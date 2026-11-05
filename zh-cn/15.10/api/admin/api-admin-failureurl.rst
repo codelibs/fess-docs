@@ -113,6 +113,9 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
             "error_log": "Not found: https://example.com/not-found",
             "error_count": "1",
             "last_access_time": "1738143000000",
+            "content_length": "512",
+            "mime_type": "text/html",
+            "http_status_code": "404",
             "config_id": "webConfig_id_1"
           }
         ],
@@ -143,12 +146,22 @@ FailureUrl API是用于管理 |Fess| 爬虫失败URL的API。
      - 错误发生次数（以字符串形式返回的数值）
    * - ``last_access_time``
      - 最后访问时刻（以字符串形式返回的epoch毫秒值）
+   * - ``content_length``
+     - 文档的大小（字节，以字符串表示的数值）
+   * - ``mime_type``
+     - 文档的 MIME 类型
+   * - ``http_status_code``
+     - HTTP 状态（以字符串表示的数值，仅限 ``http`` / ``https`` 的 URL）
    * - ``config_id``
      - 爬虫配置ID
 
 .. note::
 
    所有响应字段均以字符串形式返回（JSON string）。\ ``error_count`` 是以字符串表示的数值，``last_access_time`` 是以字符串表示的epoch毫秒值。
+
+.. note::
+
+   ``content_length`` 、 ``mime_type`` 和 ``http_status_code`` 仅在爬虫已知时包含，未知时整个字段会被省略。有哪些失败会记录这些信息，请参阅 :doc:`../../admin/failureurl-guide` 。
 
 获取失败URL
 ===========

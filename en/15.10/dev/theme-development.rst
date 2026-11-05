@@ -175,6 +175,16 @@ Serving and API
 - The theme's SPA retrieves data such as search results and chat from
   the ``/api/v2/*`` API.
 
+Reading Theme Settings
+----------------------
+
+The ``key=value`` pairs that an administrator enters in "Theme Settings" in [System > General] of the admin UI reach the theme as ``theme_settings`` (a flat object of strings) in ``GET /api/v2/ui/config`` (see :doc:`../api/api-uiconfig`). |Fess| does not interpret them, so the theme defines the key names, the format of the values and how a value with several items is split. The File Search theme uses keys prefixed with the theme name, such as ``filesearch.roots`` (see :ref:`theme-settings`).
+
+- ``theme_settings`` is always present and is ``{}`` when nothing is set. Make the theme work without any setting.
+- When "Login Required" is enabled, users who are not logged in get ``{}``.
+- Treat the values as data only. Never insert them as HTML (``innerHTML``) and never use them as a navigation target (a link, a redirect or ``href``).
+- The values are visible to every user of the search UI.
+
 Packaging
 ---------
 

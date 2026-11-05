@@ -314,6 +314,9 @@ Kern
   * - api.search.export.rate.limit.per.minute
     - Maximale Anzahl von Suchergebnis-Exporten pro Minute für jeden Benutzer (für einen Gast pro Client-IP). 0 oder weniger deaktiviert das Limit.
     - ``10``
+  * - api.search.similar.rate.limit.per.minute
+    - Maximale Anzahl von Anfragen nach ähnlichen Dokumenten (/api/v2/documents/{docId}/similar) pro Minute für jeden Benutzer (für einen Gast pro Client-IP). 0 oder weniger deaktiviert das Limit.
+    - ``30``
   * - api.json.response.headers
     - Header für die API-JSON-Antwort. Access-Control-\* und Timing-Allow-Origin werden hier ignoriert (CORS wird über api.cors.\* / CorsFilter gesteuert). Setzen Sie Vary nicht.
     - ``Referrer-Policy:strict-origin-when-cross-origin``

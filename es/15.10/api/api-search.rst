@@ -302,3 +302,4 @@ Véase también
 - :doc:`../user/search-field` - Búsqueda con especificación de campos
 - :doc:`../user/special-char` - Caracteres especiales
 - :doc:`../user/search-wildcard` - Búsqueda con comodines
+- :doc:`api-similar` - API de documentos similares

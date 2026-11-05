@@ -23,6 +23,7 @@ the AI chat API, request and response formats, and authentication.
 
    api-search
    api-export
+   api-similar
    api-label
    api-popularword
    api-suggest

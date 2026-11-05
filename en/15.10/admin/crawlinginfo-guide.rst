@@ -17,6 +17,22 @@ Select System Info > Crawling Info in the left menu to display a list page of Cr
 
 |image0|
 
+Running Crawls
+--------------
+
+While crawls are running, "Running Crawls" is shown above the list. It has one row for each web, file system or data store crawl configuration with the following items.
+
+- Crawl Configuration: The name of the crawl configuration.
+- Processed Documents: The number of documents the running crawl has processed so far. For web and file system crawls this is the number of access results; for data store crawls it is the number of documents indexed for the crawl configuration.
+- Progress: The processed documents as a percentage of the number of documents of the previous completed crawl. It is at most 99% until the crawl completes. When there is no previous completed crawl (for example the first crawl), no percentage can be calculated, so ``-`` is shown and only the count is given.
+
+Notes:
+
+- The block shows the state when the page was opened. Reload the page to see the latest values.
+- A crawl that finishes or is stopped is gone from the block the next time the page is opened. When the crawler stops without recording that (for example the process is killed), the crawl disappears about 30 seconds (by default) after its last update. A stopped or failed crawl leaves the document count of the previous completed crawl unchanged, and so does a crawl that completes without processing any document.
+- The progress state is stored by the system in the ``metadata`` field of the crawl configuration. It cannot be edited in the admin UI or the admin API.
+- The same information is available from the admin API (see :doc:`../api/admin/api-admin-crawlinginfo`).
+
 Details
 -------
 

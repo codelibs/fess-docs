@@ -103,6 +103,21 @@ Gibt den Typ der Einmalanmeldung (Single Sign-On) an.
 - **SPNEGO**: SPNEGO verwenden (erfordert das Plugin ``fess-sso-spnego``)
 - **Entra ID**: Microsoft Entra ID verwenden (erfordert das Plugin ``fess-sso-entraid``)
 
+Theme-Einstellungen
+:::::::::::::::::::
+
+Legt die Einstellungen fest, die an das Theme übergeben werden, eine ``key=value``-Angabe pro Zeile. |Fess| interpretiert sie nicht; das Theme bestimmt die Schlüssel und ihre Bedeutung (siehe :ref:`theme-settings`). Die Einstellungen gelangen als ``theme_settings`` über die API der Suchoberfläche (``GET /api/v2/ui/config``) zum Theme.
+
+- Ein Schlüssel beginnt mit einem Buchstaben oder einer Ziffer und besteht aus Buchstaben, Ziffern, Unterstrichen, Punkten und Bindestrichen (höchstens 64 Zeichen). ``__proto__``, ``constructor`` und ``prototype`` sind nicht erlaubt.
+- Ein Wert hat höchstens 1000 Zeichen und enthält keine Steuerzeichen.
+- Es können höchstens 100 Einstellungen gespeichert werden. Kommt ein Schlüssel in mehreren Zeilen vor, gilt die spätere Zeile.
+- Eine Zeile, die diese Regeln verletzt, oder mehr als 100 Einstellungen werden beim Speichern abgelehnt. Wird das Feld leer gespeichert, werden die Einstellungen entfernt.
+- Eine Änderung wird ohne Neustart von |Fess| wirksam.
+
+.. warning::
+
+   Die Werte sind für alle Benutzer der Suchoberfläche sichtbar. Geben Sie keine geheimen Daten wie Passwörter ein. Ist „Anmeldung erforderlich" aktiviert, wird an nicht angemeldete Benutzer nichts übergeben.
+
 Crawler
 -------
 

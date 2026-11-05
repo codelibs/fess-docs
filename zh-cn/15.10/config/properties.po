@@ -171,6 +171,9 @@ msgstr "搜索结果导出写入的字段（逗号分隔）。不是 API 响应�
 msgid "Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit."
 msgstr "每个用户每分钟的搜索结果导出最大次数（访客按每个客户端 IP 计算）。0 或更小的值表示禁用该限制。"
 
+msgid "Maximum number of similar-document requests (/api/v2/documents/{docId}/similar) per minute for each user (each client IP for a guest). 0 or less disables the limit."
+msgstr "每个用户每分钟的相似文档请求（/api/v2/documents/{docId}/similar）最大次数（访客按每个客户端 IP 计算）。0 或更小的值表示禁用该限制。"
+
 msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
 msgstr "API JSON 响应的头信息。Access-Control-* 和 Timing-Allow-Origin 在此处会被忽略（CORS 由 api.cors.* / CorsFilter 控制）。请勿设置 Vary。"
 

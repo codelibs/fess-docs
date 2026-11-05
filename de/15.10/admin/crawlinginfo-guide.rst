@@ -19,6 +19,22 @@ Um Details der Crawl-Informationen anzuzeigen, klicken Sie auf die entsprechende
 
 |image0|
 
+Laufende Crawls
+===============
+
+Solange Crawls laufen, wird oberhalb der Liste „Laufende Crawls" angezeigt. Für jede Crawl-Konfiguration (Web, Dateisystem oder Datenspeicher) gibt es eine Zeile mit den folgenden Angaben.
+
+- Crawl-Konfiguration: Der Name der Crawl-Konfiguration.
+- Verarbeitete Dokumente: Die Anzahl der Dokumente, die der laufende Crawl bisher verarbeitet hat. Bei Web- und Dateisystem-Crawls ist das die Anzahl der Zugriffsergebnisse, bei Datenspeicher-Crawls die Anzahl der für die Crawl-Konfiguration indexierten Dokumente.
+- Fortschritt: Die verarbeiteten Dokumente in Prozent der Dokumentanzahl des vorherigen abgeschlossenen Crawls. Bis zum Abschluss des Crawls beträgt der Wert höchstens 99 %. Gibt es keinen vorherigen abgeschlossenen Crawl (z. B. beim ersten Crawl), lässt sich kein Prozentwert berechnen; dann wird ``-`` angezeigt und nur die Anzahl genannt.
+
+Hinweise:
+
+- Der Block zeigt den Stand beim Öffnen der Seite. Laden Sie die Seite neu, um die aktuellen Werte zu sehen.
+- Ein abgeschlossener oder gestoppter Crawl ist beim nächsten Öffnen der Seite nicht mehr im Block. Hört der Crawler auf, ohne das zu vermerken (etwa weil der Prozess beendet wird), verschwindet der Crawl etwa 30 Sekunden (Standard) nach der letzten Aktualisierung. Ein gestoppter oder fehlgeschlagener Crawl lässt die Dokumentanzahl des vorherigen abgeschlossenen Crawls unverändert, ebenso ein Crawl, der ohne ein verarbeitetes Dokument abgeschlossen wird.
+- Der Fortschrittsstatus wird vom System im Feld ``metadata`` der Crawl-Konfiguration gespeichert. Er kann in der Verwaltungsoberfläche und über die Admin-API nicht bearbeitet werden.
+- Dieselben Informationen sind über die Admin-API abrufbar (siehe :doc:`../api/admin/api-admin-crawlinginfo`).
+
 Details
 =======
 

@@ -314,6 +314,9 @@ Cœur
   * - api.search.export.rate.limit.per.minute
     - Nombre maximum d'exportations de résultats de recherche par minute pour chaque utilisateur (chaque IP cliente pour un invité). 0 ou moins désactive la limite.
     - ``10``
+  * - api.search.similar.rate.limit.per.minute
+    - Nombre maximum de requêtes de documents similaires (/api/v2/documents/{docId}/similar) par minute pour chaque utilisateur (chaque IP cliente pour un invité). 0 ou moins désactive la limite.
+    - ``30``
   * - api.json.response.headers
     - En-têtes de la réponse JSON de l'API. Access-Control-\* et Timing-Allow-Origin sont ignorés ici (CORS est contrôlé par api.cors.\* / CorsFilter). Ne définissez pas Vary.
     - ``Referrer-Policy:strict-origin-when-cross-origin``

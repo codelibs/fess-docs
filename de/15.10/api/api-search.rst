@@ -302,3 +302,4 @@ Siehe auch
 - :doc:`../user/search-field`
 - :doc:`../user/special-char`
 - :doc:`../user/search-wildcard`
+- :doc:`api-similar` - API für ähnliche Dokumente

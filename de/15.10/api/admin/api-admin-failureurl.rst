@@ -113,6 +113,9 @@ Response
             "error_log": "Not found: https://example.com/not-found",
             "error_count": "1",
             "last_access_time": "1738143000000",
+            "content_length": "512",
+            "mime_type": "text/html",
+            "http_status_code": "404",
             "config_id": "webConfig_id_1"
           }
         ],
@@ -143,12 +146,22 @@ Response-Felder
      - Anzahl der aufgetretenen Fehler (numerischer Wert als Zeichenkette)
    * - ``last_access_time``
      - Letzte Zugriffszeit (Epoch-Millisekunden als Zeichenkette)
+   * - ``content_length``
+     - Größe des Dokuments in Bytes (ein numerischer Wert als Zeichenfolge)
+   * - ``mime_type``
+     - MIME-Typ des Dokuments
+   * - ``http_status_code``
+     - HTTP-Status (ein numerischer Wert als Zeichenfolge; nur ``http``-/``https``-URLs)
    * - ``config_id``
      - Crawl-Konfigurations-ID
 
 .. note::
 
    Alle Antwortfelder werden als Zeichenketten (JSON string) zurückgegeben. ``error_count`` ist ein numerischer Wert, der als Zeichenkette dargestellt wird, und ``last_access_time`` sind Epoch-Millisekunden, die als Zeichenkette dargestellt werden.
+
+.. note::
+
+   ``content_length``, ``mime_type`` und ``http_status_code`` sind nur enthalten, wenn der Crawler sie kannte; andernfalls entfällt das Feld. Welche Fehler diese Angaben haben, steht unter :doc:`../../admin/failureurl-guide`.
 
 Fehlgeschlagene URL abrufen
 ===========================

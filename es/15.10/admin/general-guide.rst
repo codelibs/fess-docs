@@ -103,6 +103,21 @@ Especifica el tipo de inicio de sesión único (Single Sign-On).
 - **SPNEGO**: Usar SPNEGO (requiere el plugin ``fess-sso-spnego``)
 - **Entra ID**: Usar Microsoft Entra ID (requiere el plugin ``fess-sso-entraid``)
 
+Configuración del tema
+::::::::::::::::::::::
+
+Especifica la configuración que se pasa al tema, un ``key=value`` por línea. |Fess| no la interpreta: el tema define las claves y su significado (consulte :ref:`theme-settings`). La configuración llega al tema como ``theme_settings`` en la API de la interfaz de búsqueda (``GET /api/v2/ui/config``).
+
+- Una clave empieza por una letra o un dígito y se compone de letras, dígitos, guiones bajos, puntos y guiones (hasta 64 caracteres). No se pueden usar ``__proto__``, ``constructor`` ni ``prototype``.
+- Un valor tiene como máximo 1000 caracteres y no contiene caracteres de control.
+- Se pueden guardar como máximo 100 ajustes. Si una clave aparece en varias líneas, prevalece la última.
+- Una línea que incumpla estas reglas, o más de 100 ajustes, se rechaza al guardar. Si guarda con el campo vacío, se eliminan los ajustes.
+- Un cambio surte efecto sin reiniciar |Fess|.
+
+.. warning::
+
+   Los valores son visibles para todos los usuarios de la interfaz de búsqueda. No introduzca secretos como contraseñas. Cuando "Requiere inicio de sesión" está habilitado, no se pasa nada a los usuarios que no han iniciado sesión.
+
 Rastreador
 ----------
 

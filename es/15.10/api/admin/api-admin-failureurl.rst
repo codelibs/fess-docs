@@ -113,6 +113,9 @@ Respuesta
             "error_log": "Not found: https://example.com/not-found",
             "error_count": "1",
             "last_access_time": "1738143000000",
+            "content_length": "512",
+            "mime_type": "text/html",
+            "http_status_code": "404",
             "config_id": "webConfig_id_1"
           }
         ],
@@ -143,12 +146,22 @@ Campos de Respuesta
      - Número de ocurrencias del error (valor numérico representado como cadena)
    * - ``last_access_time``
      - Hora del último acceso (milisegundos epoch representados como cadena)
+   * - ``content_length``
+     - Tamaño del documento en bytes (un valor numérico como cadena)
+   * - ``mime_type``
+     - Tipo MIME del documento
+   * - ``http_status_code``
+     - Estado HTTP (un valor numérico como cadena; solo URL ``http`` / ``https``)
    * - ``config_id``
      - ID de configuración de rastreo
 
 .. note::
 
    Todos los campos de respuesta se devuelven como cadenas (JSON string). ``error_count`` es un valor numérico representado como cadena y ``last_access_time`` son milisegundos epoch representados como cadena.
+
+.. note::
+
+   ``content_length``, ``mime_type`` y ``http_status_code`` se incluyen solo cuando el rastreador los conocía; en caso contrario, el campo se omite. Consulte :doc:`../../admin/failureurl-guide` para ver qué fallos los tienen.
 
 Obtener URL Fallida
 ===================

@@ -113,6 +113,9 @@ Response
             "error_log": "Not found: https://example.com/not-found",
             "error_count": "1",
             "last_access_time": "1738143000000",
+            "content_length": "512",
+            "mime_type": "text/html",
+            "http_status_code": "404",
             "config_id": "webConfig_id_1"
           }
         ],
@@ -143,6 +146,12 @@ Response Fields
      - Number of error occurrences (a numeric value as a string)
    * - ``last_access_time``
      - Last access time (epoch milliseconds as a string)
+   * - ``content_length``
+     - Size of the document in bytes (a numeric value as a string)
+   * - ``mime_type``
+     - MIME type of the document
+   * - ``http_status_code``
+     - HTTP status (a numeric value as a string; ``http`` / ``https`` URLs only)
    * - ``config_id``
      - Crawl configuration ID
 
@@ -150,6 +159,10 @@ Response Fields
 
    All response fields are returned as strings (JSON string).
    ``error_count`` is a numeric value represented as a string, and ``last_access_time`` is epoch milliseconds represented as a string.
+
+.. note::
+
+   ``content_length``, ``mime_type`` and ``http_status_code`` are included only when the crawler knew them; otherwise the field is omitted. See :doc:`../../admin/failureurl-guide` for the failures that have them.
 
 Get Failure URL
 ===============

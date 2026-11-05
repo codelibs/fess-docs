@@ -171,6 +171,9 @@ msgstr "検索結果エクスポートで書き出すフィールド（カンマ
 msgid "Maximum number of search result exports per minute for each user (each client IP for a guest). 0 or less disables the limit."
 msgstr "ユーザーごと（ゲストの場合はクライアントIPごと）の、1分あたりの検索結果エクスポートの最大数。0以下の場合は制限を無効にします。"
 
+msgid "Maximum number of similar-document requests (/api/v2/documents/{docId}/similar) per minute for each user (each client IP for a guest). 0 or less disables the limit."
+msgstr "ユーザーごと（ゲストの場合はクライアントIPごと）の、1分あたりの類似ドキュメントリクエスト（/api/v2/documents/{docId}/similar）の最大数。0以下の場合は制限を無効にします。"
+
 msgid "Headers for API JSON response. Access-Control-* and Timing-Allow-Origin are ignored here (CORS is controlled by api.cors.* / CorsFilter). Do not set Vary."
 msgstr "API JSONレスポンスのヘッダー。Access-Control-*とTiming-Allow-Originはここでは無視されます（CORSはapi.cors.* / CorsFilterで制御されます）。Varyは設定しないでください。"
 
