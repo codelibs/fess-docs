@@ -32,7 +32,7 @@ OpenID Connect 인증에서는 |Fess| 가 Relying Party（RP）로 동작하며,
 .. note::
    |Fess| 는 인가 코드 플로우（Authorization Code Flow）를 사용합니다. ID Token은 브라우저를 경유하지 않고, |Fess| 와 OP 간의 백채널（서버 간 통신）을 통해 토큰 엔드포인트에서 직접 취득됩니다.
    |Fess| 는 ID Token을 디코딩하여 클레임（``email`` 이나 ``groups`` 등）을 추출하고 사용자 정보를 구성하지만, JWT 서명의 암호적 검증은 수행하지 않습니다. 토큰은 토큰 엔드포인트에서 TLS를 통해 직접 수신하므로 OpenID Connect Core는 이를 허용하며, 따라서 토큰 엔드포인트 URL（``oic.token.server.url``）은 HTTPS여야 합니다. ``http`` 는 ``localhost``, ``127.x.x.x``, ``::1`` 에서만 허용됩니다.
-   |Fess| 는 클레임을 다음과 같이 검증합니다. ``aud`` 에 ``oic.client.id`` 가 포함되어 있어야 하고（``azp`` 가 있으면 ``oic.client.id`` 와 일치해야 합니다）, ``exp`` 가 존재하며 만료되지 않았어야 합니다（최대 300초의 시각 차이는 허용합니다）. ``oic.issuer`` 를 설정한 경우에는 ``iss`` 가 이 값과 일치해야 합니다. ``oic.issuer`` 를 설정하지 않으면 ``iss`` 는 검증하지 않으며, 시작 후 첫 로그인 시 경고를 로그에 출력합니다. ``nonce`` 와 PKCE는 사용하지 않습니다.
+   |Fess| 는 클레임을 다음과 같이 검증합니다. ``aud`` 에 ``oic.client.id`` 가 포함되어 있어야 하고（``azp`` 가 있으면 ``oic.client.id`` 와 일치해야 합니다）, ``exp`` 가 존재하며 만료되지 않았어야 합니다（최대 300초의 시각 차이는 허용합니다）. ``oic.issuer`` 를 설정한 경우에는 ``iss`` 가 이 값과 일치해야 합니다. ``oic.issuer`` 를 설정하지 않으면 ``iss`` 는 검증하지 않으며, 시작 후 첫 로그인 시 경고를 로그에 출력합니다. ``nonce`` 는 인증 요청마다 전송하며, ID Token 의 ``nonce`` 클레임이 전송한 값과 일치해야 합니다. 클레임이 없거나 값이 다르면 로그인을 거부합니다. ``nonce`` 를 반환하지 않는 OP는 사용할 수 없으며, 이 검증을 끄는 설정은 없습니다. PKCE는 사용하지 않으며, ``iat`` 와 ``nbf`` 도 검증하지 않습니다.
 
 역할 기반 검색과의 연동에 대해서는 :doc:`security-role` 을 참조하십시오.
 

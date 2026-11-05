@@ -856,6 +856,8 @@ SSO 认证移至插件
 
 此外，建议将 ``oic.issuer`` 设置为OP的Discovery文档中 ``issuer`` 的值。未设置时不会校验 ``iss``，并在启动后的首次登录时输出警告。设置 ``oic.issuer`` 不会放宽HTTPS规则。
 
+15.10 还会校验 ID Token 的 ``nonce``。每次授权请求都会发送 ``nonce``，如果 ID Token 中没有值相同的 ``nonce`` 声明，则拒绝登录。OpenID Connect Core 要求OP原样返回 ``nonce``，但不返回的OP将无法登录，且没有关闭此校验的设置。更新前请确认所使用的OP会返回 ``nonce`` 声明。另外，在更新插件之前开始的登录会失败一次，请重新登录。
+
 如果不使用 SSO，即 ``sso.type`` 为 ``none`` 或未设置，则无需处理。
 
 .. _upgrade-159-script-engine:

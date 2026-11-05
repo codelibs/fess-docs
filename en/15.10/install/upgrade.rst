@@ -898,6 +898,8 @@ In 15.8, ``oic.token.server.url`` could be an ``http`` URL for any host. In 15.1
 
 Also set ``oic.issuer`` to the ``issuer`` value of the OP's Discovery document. Without it, ``iss`` is not checked and a warning is logged at the first login after startup. Setting ``oic.issuer`` does not relax the HTTPS rule.
 
+15.10 also checks the ``nonce`` of the ID Token. A ``nonce`` is sent with every authorization request, and a login is refused when the ID Token has no ``nonce`` claim with the same value. OpenID Connect Core requires the OP to echo the ``nonce``, but an OP that does not can no longer be used to log in, and there is no setting to turn this check off. Before updating, make sure that the OP you use returns the ``nonce`` claim. A login that was started before the plugin was updated fails once; retry it.
+
 Nothing is needed if you do not use SSO, that is if ``sso.type`` is ``none`` or unset.
 
 .. _upgrade-159-script-engine:

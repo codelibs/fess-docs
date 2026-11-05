@@ -930,6 +930,8 @@ En 15.8, ``oic.token.server.url`` pouvait être une URL ``http`` vers n'importe 
 
 Définissez aussi ``oic.issuer`` avec la valeur ``issuer`` du document Discovery de l'OP. Sans cette valeur, ``iss`` n'est pas vérifié et un avertissement est journalisé lors de la première connexion après le démarrage. Définir ``oic.issuer`` n'assouplit pas la règle HTTPS.
 
+15.10 vérifie aussi le ``nonce`` de l'ID Token. Un ``nonce`` est envoyé avec chaque requête d'autorisation, et la connexion est refusée si l'ID Token ne contient pas de claim ``nonce`` de même valeur. OpenID Connect Core exige que l'OP renvoie le ``nonce``, mais un OP qui ne le fait pas ne permet plus de se connecter, et aucun paramètre ne permet de désactiver cette vérification. Avant la mise à jour, vérifiez que l'OP utilisé renvoie le claim ``nonce``. Une connexion commencée avant la mise à jour du plugin échoue une fois ; recommencez-la.
+
 Rien à faire si vous n'utilisez pas le SSO, c'est-à-dire si ``sso.type`` vaut ``none`` ou n'est
 pas défini.
 
