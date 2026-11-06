@@ -72,7 +72,7 @@ one, fill in ``properties.po`` beside this file.
     - ``true``
   * - app.encrypt.property.pattern
     - 注意：app.digest.algorithm 仅为 旧版密码校验而保留（针对没有 {id} 前缀的升级前哈希）。请勿用于新密码。要加密的属性的正则表达式。
-    - ``.*password|.*key|.*token|.*secret``
+    - ``.*password|.*passphrase|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
     - 调试日志中要遮蔽的敏感值的正则表达式（对属性/环境变量键进行不区分大小写的匹配）。
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
@@ -490,6 +490,9 @@ one, fill in ``properties.po`` beside this file.
   * - crawler.system.monitor.interval
     - 爬取期间系统监控的间隔（秒）。
     - ``60``
+  * - crawler.progress.interval
+    - 将正在运行的爬取进度写入爬取配置的间隔（秒）。
+    - ``10``
   * - crawler.hotthread.ignore_idle_threads
     - hot thread 监控中是否忽略空闲线程。
     - ``true``
@@ -510,7 +513,7 @@ one, fill in ``properties.po`` beside this file.
     - ``cpu``
   * - crawler.metadata.content.excludes
     - 要从文档内容中排除的元数据字段。
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
   * - crawler.metadata.content.image.includes
     - 添加到图像文档（image/\*）内容中的元数据字段。图像的其他元数据（如尺寸和相机设置）不会添加。
     - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
@@ -1319,6 +1322,9 @@ one, fill in ``properties.po`` beside this file.
   * - query.boost.fuzzy.min.length
     - 查询中模糊提升的最小长度。
     - ``4``
+  * - query.boost.fuzzy.cjk.enabled
+    - 是否为包含汉字、平假名、片假名或谚文的文本添加模糊子句。内置的 standard_analyzer 会把这类文本切分为两个字符的二元组，AUTO 模糊度对二元组不允许任何编辑，因此默认跳过该子句。如果 title/content 使用不产生二元组的分析器，请设置为 true。
+    - ``false``
   * - query.boost.fuzzy.title
     - 模糊标题查询的提升值。
     - ``0.01``
@@ -1574,7 +1580,7 @@ Web
     - 搜索角色的默认显示权限。
     - ``{role}guest``
   * - role.search.guest.permissions
-    - 请保持 role.search.guest.permissions 非空。它用于初始化 guest 角色，使匿名搜索角色集合保持非空；如果解析出的角色集合为空，则会跳过角色过滤器（fail-open），这可能会禁用基于角色的访问控制，并将文档暴露给匿名用户。搜索角色的访客权限。
+    - 赋予匿名搜索的角色，以逗号分隔。带用户前缀的 guest 角色（role.search.user.prefix + guest）总是会被追加，因此值为空也不会使匿名角色集合为空，角色过滤器仍会生效；只是去掉了此处配置的权限。搜索角色的访客权限。
     - ``{role}guest``
   * - role.search.user.prefix
     - 搜索中用户角色的前缀。
@@ -1683,13 +1689,13 @@ Web
     - 每页获取的爬网信息记录的最大数量。
     - ``1000``
   * - page.data.config.max.fetch.size
-    - 每页获取的数据存储配置记录的最大数量。
+    - 为爬取而加载的数据存储配置的总数上限（不是每页）。超过该数量的配置会被忽略，不会被爬取。
     - ``100``
   * - page.web.config.max.fetch.size
-    - 每页获取的 Web 配置记录的最大数量。
+    - 为爬取而加载的 Web 配置的总数上限（不是每页）。超过该数量的配置会被忽略，不会被爬取。
     - ``100``
   * - page.file.config.max.fetch.size
-    - 每页获取的文件配置记录的最大数量。
+    - 为爬取而加载的文件配置的总数上限（不是每页）。超过该数量的配置会被忽略，不会被爬取。
     - ``100``
   * - page.duplicate.host.max.fetch.size
     - 每页获取的重复主机记录的最大数量。
@@ -2040,7 +2046,7 @@ Web
     - ``upgrade``
   * - online.help.name.sereq
     - 搜索请求的在线帮助键。
-    - ``sereq``
+    - ``esreq``
   * - online.help.name.accesstoken
     - 访问令牌的在线帮助键。
     - ``accesstoken``

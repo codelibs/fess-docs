@@ -72,7 +72,7 @@ one, fill in ``properties.po`` beside this file.
     - ``true``
   * - app.encrypt.property.pattern
     - 注意: app.digest.algorithmはレガシーパスワードの検証専用に残されています（{id}プレフィックスを持たない、アップグレード前のハッシュ）。新しいパスワードには使用しないでください。暗号化するプロパティの正規表現パターン。
-    - ``.*password|.*key|.*token|.*secret``
+    - ``.*password|.*passphrase|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
     - デバッグログでマスクする機密値の正規表現パターン（プロパティ/環境変数のキーに対する大文字小文字を区別しないマッチ）。
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
@@ -490,6 +490,9 @@ one, fill in ``properties.po`` beside this file.
   * - crawler.system.monitor.interval
     - クロール中のシステム監視の間隔（秒）。
     - ``60``
+  * - crawler.progress.interval
+    - 実行中のクロールの進捗をクロール設定へ書き込む間隔（秒）。
+    - ``10``
   * - crawler.hotthread.ignore_idle_threads
     - ホットスレッド監視でアイドルスレッドを無視するかどうか。
     - ``true``
@@ -510,7 +513,7 @@ one, fill in ``properties.po`` beside this file.
     - ``cpu``
   * - crawler.metadata.content.excludes
     - ドキュメントのコンテンツから除外するメタデータフィールド。
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
   * - crawler.metadata.content.image.includes
     - 画像ドキュメント（image/\*）のコンテンツに追加するメタデータのフィールド。サイズやカメラの設定など、画像のそれ以外のメタデータは追加されません。
     - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
@@ -1319,6 +1322,9 @@ one, fill in ``properties.po`` beside this file.
   * - query.boost.fuzzy.min.length
     - クエリのファジーブーストの最小長。
     - ``4``
+  * - query.boost.fuzzy.cjk.enabled
+    - 漢字・ひらがな・カタカナ・ハングルを含むテキストにあいまい検索の条件を加えるかどうか。同梱の standard_analyzer はこのようなテキストを 2 文字ずつに分割し、AUTO のあいまい度では 2 文字の語に編集を許さないため、既定ではこの条件を加えません。title と content に、2 文字ずつに分割しないアナライザを使っている場合は true にします。
+    - ``false``
   * - query.boost.fuzzy.title
     - ファジータイトルクエリのブースト値。
     - ``0.01``
@@ -1574,7 +1580,7 @@ Web
     - 検索ロールのデフォルトの表示パーミッション。
     - ``{role}guest``
   * - role.search.guest.permissions
-    - role.search.guest.permissionsは空にしないでください。これは、匿名の検索ロールセットを空にしないためのゲストロールの初期値になります。解決されたロールセットが空の場合、ロールフィルターはスキップされ（フェイルオープン）、ロールベースのアクセス制御が無効になり、ドキュメントが匿名ユーザーに公開される可能性があります。検索ロールのゲスト用パーミッション。
+    - 匿名の検索に与えるロール（カンマ区切り）。ユーザー接頭辞付きのゲストロール（role.search.user.prefix + guest）は常に追加されるため、空にしても匿名のロールが空にならず、ロールによる絞り込みは適用されます。空にすると、ここで設定したパーミッションだけが外れます。検索ロールのゲスト用パーミッション。
     - ``{role}guest``
   * - role.search.user.prefix
     - 検索におけるユーザーロールのプレフィックス。
@@ -1683,13 +1689,13 @@ Web
     - 1ページあたりに取得するクロール情報レコードの最大数。
     - ``1000``
   * - page.data.config.max.fetch.size
-    - 1ページあたりに取得するデータストア設定レコードの最大数。
+    - クロールのために読み込むデータストア設定の合計の最大数（ページごとではありません）。この数を超える設定は無視され、クロールされません。
     - ``100``
   * - page.web.config.max.fetch.size
-    - 1ページあたりに取得するウェブ設定レコードの最大数。
+    - クロールのために読み込むウェブ設定の合計の最大数（ページごとではありません）。この数を超える設定は無視され、クロールされません。
     - ``100``
   * - page.file.config.max.fetch.size
-    - 1ページあたりに取得するファイルシステム設定レコードの最大数。
+    - クロールのために読み込むファイルシステム設定の合計の最大数（ページごとではありません）。この数を超える設定は無視され、クロールされません。
     - ``100``
   * - page.duplicate.host.max.fetch.size
     - 1ページあたりに取得する重複ホストレコードの最大数。
@@ -2040,7 +2046,7 @@ Web
     - ``upgrade``
   * - online.help.name.sereq
     - 検索リクエストのオンラインヘルプキー。
-    - ``sereq``
+    - ``esreq``
   * - online.help.name.accesstoken
     - アクセストークンのオンラインヘルプキー。
     - ``accesstoken``

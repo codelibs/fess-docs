@@ -336,6 +336,9 @@ msgstr "HTTP-Statuscodes, die als Fehler-URLs gelten."
 msgid "Interval (seconds) for system monitor during crawling."
 msgstr "Intervall (Sekunden) für die Systemüberwachung während des Crawlings."
 
+msgid "Interval (seconds) for writing the progress of running crawls to the crawl configurations."
+msgstr "Intervall (Sekunden), in dem der Fortschritt laufender Crawls in die Crawl-Konfigurationen geschrieben wird."
+
 msgid "Whether to ignore idle threads in hot thread monitoring."
 msgstr "Gibt an, ob Leerlauf-Threads bei der Hot-Thread-Überwachung ignoriert werden sollen."
 
@@ -1005,6 +1008,9 @@ msgstr "Boost-Wert für das Feld für wichtigen Inhalt mit Sprache in Abfragen."
 msgid "Minimum length for fuzzy boosting in queries."
 msgstr "Mindestlänge für das Fuzzy-Boosting in Abfragen."
 
+msgid "Whether to add the fuzzy clause for text containing Han, Hiragana, Katakana or Hangul characters. The shipped standard_analyzer splits such text into two-character bigrams, for which AUTO fuzziness allows no edit, so the clause is skipped by default. Set true if title/content use an analyzer that does not produce bigrams."
+msgstr "Gibt an, ob die Fuzzy-Klausel für Text mit Han-, Hiragana-, Katakana- oder Hangul-Zeichen hinzugefügt wird. Der mitgelieferte standard_analyzer zerlegt solchen Text in Bigramme aus zwei Zeichen, für die die Fuzziness AUTO keine Änderung erlaubt; daher wird die Klausel standardmäßig übersprungen. Auf true setzen, wenn title/content einen Analyzer verwenden, der keine Bigramme erzeugt."
+
 msgid "Boost value for fuzzy title queries."
 msgstr "Boost-Wert für Fuzzy-Titelabfragen."
 
@@ -1230,8 +1236,8 @@ msgstr "Standardberechtigungen für Suchrollen."
 msgid "Default display permissions for search roles."
 msgstr "Standard-Anzeigeberechtigungen für Suchrollen."
 
-msgid "Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles."
-msgstr "Halten Sie role.search.guest.permissions nicht leer. Es initialisiert die Gastrolle, die den anonymen Suchrollensatz nicht leer hält; ist der aufgelöste Rollensatz leer, wird der Rollenfilter übersprungen (Fail-Open), was die rollenbasierte Zugriffskontrolle deaktivieren und Dokumente für anonyme Benutzer offenlegen kann. Gastberechtigungen für Suchrollen."
+msgid "Roles given to an anonymous search, comma-separated. The user-prefix guest role (role.search.user.prefix + guest) is always added to them, so an empty value does not leave the anonymous role set empty and the role filter is still applied; it only drops the permissions configured here. Guest permissions for search roles."
+msgstr "Rollen, die einer anonymen Suche zugewiesen werden, durch Kommas getrennt. Die Gastrolle mit Benutzerpräfix (role.search.user.prefix + guest) wird immer hinzugefügt; ein leerer Wert lässt den anonymen Rollensatz daher nicht leer, und der Rollenfilter wird weiterhin angewendet. Es entfallen nur die hier konfigurierten Berechtigungen. Gastberechtigungen für Suchrollen."
 
 msgid "Prefix for user roles in search."
 msgstr "Präfix für Benutzerrollen in der Suche."
@@ -1335,14 +1341,14 @@ msgstr "Maximale Anzahl von Crawl-Info-Parametern, die pro Seite abgerufen werde
 msgid "Maximum number of crawling info records to fetch per page."
 msgstr "Maximale Anzahl von Crawl-Info-Datensätzen, die pro Seite abgerufen werden."
 
-msgid "Maximum number of data config records to fetch per page."
-msgstr "Maximale Anzahl von Datenkonfigurations-Datensätzen, die pro Seite abgerufen werden."
+msgid "Maximum number of data configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Maximale Gesamtzahl der für das Crawlen geladenen Datenkonfigurationen (nicht pro Seite). Darüber hinausgehende Konfigurationen werden ignoriert und nicht gecrawlt."
 
-msgid "Maximum number of web config records to fetch per page."
-msgstr "Maximale Anzahl von Web-Konfigurations-Datensätzen, die pro Seite abgerufen werden."
+msgid "Maximum number of web configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Maximale Gesamtzahl der für das Crawlen geladenen Web-Konfigurationen (nicht pro Seite). Darüber hinausgehende Konfigurationen werden ignoriert und nicht gecrawlt."
 
-msgid "Maximum number of file config records to fetch per page."
-msgstr "Maximale Anzahl von Dateikonfigurations-Datensätzen, die pro Seite abgerufen werden."
+msgid "Maximum number of file configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Maximale Gesamtzahl der für das Crawlen geladenen Dateikonfigurationen (nicht pro Seite). Darüber hinausgehende Konfigurationen werden ignoriert und nicht gecrawlt."
 
 msgid "Maximum number of duplicate host records to fetch per page."
 msgstr "Maximale Anzahl von Duplikat-Host-Datensätzen, die pro Seite abgerufen werden."

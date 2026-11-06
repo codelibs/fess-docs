@@ -72,7 +72,7 @@ Núcleo
     - ``true``
   * - app.encrypt.property.pattern
     - NOTA: app.digest.algorithm se conserva únicamente para la verificación HEREDADA de contraseñas (hashes anteriores a la actualización que no tienen el prefijo {id}). No lo utilice para contraseñas nuevas. Patrón de expresión regular de las propiedades que se cifran.
-    - ``.*password|.*key|.*token|.*secret``
+    - ``.*password|.*passphrase|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
     - Patrón de expresión regular de los valores sensibles que se enmascaran en los registros de depuración (coincidencia sin distinguir mayúsculas y minúsculas con las claves de propiedades y de variables de entorno).
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
@@ -490,6 +490,9 @@ Límite de tasa
   * - crawler.system.monitor.interval
     - Intervalo (segundos) del monitor del sistema durante el rastreo.
     - ``60``
+  * - crawler.progress.interval
+    - Intervalo (segundos) para escribir el progreso de los rastreos en ejecución en las configuraciones de rastreo.
+    - ``10``
   * - crawler.hotthread.ignore_idle_threads
     - Indica si se ignoran los hilos inactivos en el monitoreo de hot threads.
     - ``true``
@@ -510,7 +513,7 @@ Límite de tasa
     - ``cpu``
   * - crawler.metadata.content.excludes
     - Campos de metadatos que se excluyen del contenido del documento.
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
   * - crawler.metadata.content.image.includes
     - Campos de metadatos que se añaden al contenido de un documento de imagen (image/\*). El resto de los metadatos de una imagen, como su tamaño y los ajustes de la cámara, no se añade.
     - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
@@ -1319,6 +1322,9 @@ Límite de tasa
   * - query.boost.fuzzy.min.length
     - Longitud mínima para el impulso fuzzy en las consultas.
     - ``4``
+  * - query.boost.fuzzy.cjk.enabled
+    - Indica si se añade la cláusula difusa para texto que contiene caracteres han, hiragana, katakana o hangul. El standard_analyzer incluido divide ese texto en bigramas de dos caracteres, para los que la difusión AUTO no permite ninguna edición, por lo que la cláusula se omite de forma predeterminada. Establézcalo en true si title/content usan un analizador que no genera bigramas.
+    - ``false``
   * - query.boost.fuzzy.title
     - Valor de impulso de las consultas fuzzy de título.
     - ``0.01``
@@ -1574,7 +1580,7 @@ Web
     - Permisos de visualización predeterminados de los roles de búsqueda.
     - ``{role}guest``
   * - role.search.guest.permissions
-    - Mantenga role.search.guest.permissions no vacío. Inicializa el rol de invitado que mantiene no vacío el conjunto de roles de búsqueda anónimo; si el conjunto de roles resuelto está vacío, se omite el filtro de roles (fail-open), lo que puede deshabilitar el control de acceso basado en roles y exponer documentos a usuarios anónimos. Permisos de invitado de los roles de búsqueda.
+    - Roles asignados a una búsqueda anónima, separados por comas. El rol de invitado con el prefijo de usuario (role.search.user.prefix + guest) siempre se añade, por lo que un valor vacío no deja vacío el conjunto de roles anónimo y el filtro de roles se sigue aplicando; solo se eliminan los permisos configurados aquí. Permisos de invitado de los roles de búsqueda.
     - ``{role}guest``
   * - role.search.user.prefix
     - Prefijo de los roles de usuario en la búsqueda.
@@ -1683,13 +1689,13 @@ Web
     - Número máximo de registros de información de rastreo que se obtienen por página.
     - ``1000``
   * - page.data.config.max.fetch.size
-    - Número máximo de registros de configuración de almacén de datos que se obtienen por página.
+    - Número máximo total de configuraciones de almacén de datos cargadas para el rastreo (no por página). Las configuraciones que superen este número se ignoran y no se rastrean.
     - ``100``
   * - page.web.config.max.fetch.size
-    - Número máximo de registros de configuración web que se obtienen por página.
+    - Número máximo total de configuraciones web cargadas para el rastreo (no por página). Las configuraciones que superen este número se ignoran y no se rastrean.
     - ``100``
   * - page.file.config.max.fetch.size
-    - Número máximo de registros de configuración de archivos que se obtienen por página.
+    - Número máximo total de configuraciones de archivos cargadas para el rastreo (no por página). Las configuraciones que superen este número se ignoran y no se rastrean.
     - ``100``
   * - page.duplicate.host.max.fetch.size
     - Número máximo de registros de host duplicado que se obtienen por página.
@@ -2040,7 +2046,7 @@ Web
     - ``upgrade``
   * - online.help.name.sereq
     - Clave de ayuda en línea para la solicitud de búsqueda.
-    - ``sereq``
+    - ``esreq``
   * - online.help.name.accesstoken
     - Clave de ayuda en línea para el token de acceso.
     - ``accesstoken``

@@ -72,7 +72,7 @@ Core
     - ``true``
   * - app.encrypt.property.pattern
     - NOTE: app.digest.algorithm is kept for LEGACY password verification only (pre-upgrade hashes that have no {id} prefix). Do not use for new passwords. Regex pattern for properties to encrypt.
-    - ``.*password|.*key|.*token|.*secret``
+    - ``.*password|.*passphrase|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
     - Regex pattern for sensitive values to mask in debug logs (case-insensitive match against property/env keys).
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
@@ -490,6 +490,9 @@ Index
   * - crawler.system.monitor.interval
     - Interval (seconds) for system monitor during crawling.
     - ``60``
+  * - crawler.progress.interval
+    - Interval (seconds) for writing the progress of running crawls to the crawl configurations.
+    - ``10``
   * - crawler.hotthread.ignore_idle_threads
     - Whether to ignore idle threads in hot thread monitoring.
     - ``true``
@@ -510,7 +513,7 @@ Index
     - ``cpu``
   * - crawler.metadata.content.excludes
     - Metadata fields to exclude from document content.
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
   * - crawler.metadata.content.image.includes
     - Metadata fields to add to the content of an image document (image/\*). Other metadata of an image, such as its size and camera settings, is not added.
     - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
@@ -1319,6 +1322,9 @@ Index
   * - query.boost.fuzzy.min.length
     - Minimum length for fuzzy boosting in queries.
     - ``4``
+  * - query.boost.fuzzy.cjk.enabled
+    - Whether to add the fuzzy clause for text containing Han, Hiragana, Katakana or Hangul characters. The shipped standard_analyzer splits such text into two-character bigrams, for which AUTO fuzziness allows no edit, so the clause is skipped by default. Set true if title/content use an analyzer that does not produce bigrams.
+    - ``false``
   * - query.boost.fuzzy.title
     - Boost value for fuzzy title queries.
     - ``0.01``
@@ -1574,7 +1580,7 @@ Web
     - Default display permissions for search roles.
     - ``{role}guest``
   * - role.search.guest.permissions
-    - Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles.
+    - Roles given to an anonymous search, comma-separated. The user-prefix guest role (role.search.user.prefix + guest) is always added to them, so an empty value does not leave the anonymous role set empty and the role filter is still applied; it only drops the permissions configured here. Guest permissions for search roles.
     - ``{role}guest``
   * - role.search.user.prefix
     - Prefix for user roles in search.
@@ -1683,13 +1689,13 @@ Web
     - Maximum number of crawling info records to fetch per page.
     - ``1000``
   * - page.data.config.max.fetch.size
-    - Maximum number of data config records to fetch per page.
+    - Maximum number of data configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled.
     - ``100``
   * - page.web.config.max.fetch.size
-    - Maximum number of web config records to fetch per page.
+    - Maximum number of web configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled.
     - ``100``
   * - page.file.config.max.fetch.size
-    - Maximum number of file config records to fetch per page.
+    - Maximum number of file configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled.
     - ``100``
   * - page.duplicate.host.max.fetch.size
     - Maximum number of duplicate host records to fetch per page.
@@ -2040,7 +2046,7 @@ Web
     - ``upgrade``
   * - online.help.name.sereq
     - Online help key for search request.
-    - ``sereq``
+    - ``esreq``
   * - online.help.name.accesstoken
     - Online help key for access token.
     - ``accesstoken``

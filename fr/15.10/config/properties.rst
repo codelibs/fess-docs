@@ -72,7 +72,7 @@ Cœur
     - ``true``
   * - app.encrypt.property.pattern
     - REMARQUE : app.digest.algorithm est conservé uniquement pour la vérification des mots de passe HÉRITÉS (hachages antérieurs à la mise à niveau qui n'ont pas de préfixe {id}). Ne pas l'utiliser pour les nouveaux mots de passe. Motif d'expression régulière des propriétés à chiffrer.
-    - ``.*password|.*key|.*token|.*secret``
+    - ``.*password|.*passphrase|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
     - Motif d'expression régulière des valeurs sensibles à masquer dans les journaux de débogage (correspondance insensible à la casse avec les clés de propriété/d'environnement).
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
@@ -490,6 +490,9 @@ Index
   * - crawler.system.monitor.interval
     - Intervalle (secondes) du moniteur système pendant le crawl.
     - ``60``
+  * - crawler.progress.interval
+    - Intervalle (secondes) d'écriture de la progression des crawls en cours dans les configurations de crawl.
+    - ``10``
   * - crawler.hotthread.ignore_idle_threads
     - Indique s'il faut ignorer les threads inactifs dans la surveillance des hot threads.
     - ``true``
@@ -510,7 +513,7 @@ Index
     - ``cpu``
   * - crawler.metadata.content.excludes
     - Champs de métadonnées à exclure du contenu du document.
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
   * - crawler.metadata.content.image.includes
     - Champs de métadonnées ajoutés au contenu d'un document image (image/\*). Les autres métadonnées d'une image, comme sa taille et les réglages de l'appareil photo, ne sont pas ajoutées.
     - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
@@ -1319,6 +1322,9 @@ Index
   * - query.boost.fuzzy.min.length
     - Longueur minimale pour le boost flou dans les requêtes.
     - ``4``
+  * - query.boost.fuzzy.cjk.enabled
+    - Indique s'il faut ajouter la clause floue pour un texte contenant des caractères Han, hiragana, katakana ou hangul. Le standard_analyzer fourni découpe ce texte en bigrammes de deux caractères, pour lesquels le flou AUTO n'autorise aucune modification ; la clause est donc ignorée par défaut. Définissez true si title/content utilisent un analyseur qui ne produit pas de bigrammes.
+    - ``false``
   * - query.boost.fuzzy.title
     - Valeur de boost pour les requêtes floues sur le titre.
     - ``0.01``
@@ -1574,7 +1580,7 @@ Web
     - Permissions d'affichage par défaut pour les rôles de recherche.
     - ``{role}guest``
   * - role.search.guest.permissions
-    - Conservez role.search.guest.permissions non vide. Elle initialise le rôle invité qui maintient non vide l'ensemble des rôles de recherche anonymes ; si l'ensemble de rôles résolu est vide, le filtre de rôles est ignoré (fail-open), ce qui peut désactiver le contrôle d'accès basé sur les rôles et exposer des documents aux utilisateurs anonymes. Permissions invité pour les rôles de recherche.
+    - Rôles attribués à une recherche anonyme, séparés par des virgules. Le rôle invité avec le préfixe utilisateur (role.search.user.prefix + guest) est toujours ajouté ; une valeur vide ne laisse donc pas l'ensemble des rôles anonymes vide et le filtre de rôles reste appliqué ; seules les permissions configurées ici sont supprimées. Permissions invité pour les rôles de recherche.
     - ``{role}guest``
   * - role.search.user.prefix
     - Préfixe des rôles utilisateur dans la recherche.
@@ -1683,13 +1689,13 @@ Web
     - Nombre maximum d'enregistrements d'informations de crawl à récupérer par page.
     - ``1000``
   * - page.data.config.max.fetch.size
-    - Nombre maximum d'enregistrements de configuration de magasin de données à récupérer par page.
+    - Nombre maximum total de configurations de magasin de données chargées pour le crawl (et non par page). Les configurations au-delà de ce nombre sont ignorées et ne sont pas crawlées.
     - ``100``
   * - page.web.config.max.fetch.size
-    - Nombre maximum d'enregistrements de configuration Web à récupérer par page.
+    - Nombre maximum total de configurations Web chargées pour le crawl (et non par page). Les configurations au-delà de ce nombre sont ignorées et ne sont pas crawlées.
     - ``100``
   * - page.file.config.max.fetch.size
-    - Nombre maximum d'enregistrements de configuration de fichiers à récupérer par page.
+    - Nombre maximum total de configurations de fichiers chargées pour le crawl (et non par page). Les configurations au-delà de ce nombre sont ignorées et ne sont pas crawlées.
     - ``100``
   * - page.duplicate.host.max.fetch.size
     - Nombre maximum d'enregistrements d'hôtes en double à récupérer par page.
@@ -2040,7 +2046,7 @@ Web
     - ``upgrade``
   * - online.help.name.sereq
     - Clé de l'aide en ligne pour la requête de recherche.
-    - ``sereq``
+    - ``esreq``
   * - online.help.name.accesstoken
     - Clé de l'aide en ligne pour le jeton d'accès.
     - ``accesstoken``

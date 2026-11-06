@@ -336,6 +336,9 @@ msgstr "障害URLとみなすHTTPステータスコード。"
 msgid "Interval (seconds) for system monitor during crawling."
 msgstr "クロール中のシステム監視の間隔（秒）。"
 
+msgid "Interval (seconds) for writing the progress of running crawls to the crawl configurations."
+msgstr "実行中のクロールの進捗をクロール設定へ書き込む間隔（秒）。"
+
 msgid "Whether to ignore idle threads in hot thread monitoring."
 msgstr "ホットスレッド監視でアイドルスレッドを無視するかどうか。"
 
@@ -1005,6 +1008,9 @@ msgstr "クエリの言語付きの重要なコンテンツフィールドのブ
 msgid "Minimum length for fuzzy boosting in queries."
 msgstr "クエリのファジーブーストの最小長。"
 
+msgid "Whether to add the fuzzy clause for text containing Han, Hiragana, Katakana or Hangul characters. The shipped standard_analyzer splits such text into two-character bigrams, for which AUTO fuzziness allows no edit, so the clause is skipped by default. Set true if title/content use an analyzer that does not produce bigrams."
+msgstr "漢字・ひらがな・カタカナ・ハングルを含むテキストにあいまい検索の条件を加えるかどうか。同梱の standard_analyzer はこのようなテキストを 2 文字ずつに分割し、AUTO のあいまい度では 2 文字の語に編集を許さないため、既定ではこの条件を加えません。title と content に、2 文字ずつに分割しないアナライザを使っている場合は true にします。"
+
 msgid "Boost value for fuzzy title queries."
 msgstr "ファジータイトルクエリのブースト値。"
 
@@ -1230,8 +1236,8 @@ msgstr "検索ロールのデフォルトのパーミッション。"
 msgid "Default display permissions for search roles."
 msgstr "検索ロールのデフォルトの表示パーミッション。"
 
-msgid "Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles."
-msgstr "role.search.guest.permissionsは空にしないでください。これは、匿名の検索ロールセットを空にしないためのゲストロールの初期値になります。解決されたロールセットが空の場合、ロールフィルターはスキップされ（フェイルオープン）、ロールベースのアクセス制御が無効になり、ドキュメントが匿名ユーザーに公開される可能性があります。検索ロールのゲスト用パーミッション。"
+msgid "Roles given to an anonymous search, comma-separated. The user-prefix guest role (role.search.user.prefix + guest) is always added to them, so an empty value does not leave the anonymous role set empty and the role filter is still applied; it only drops the permissions configured here. Guest permissions for search roles."
+msgstr "匿名の検索に与えるロール（カンマ区切り）。ユーザー接頭辞付きのゲストロール（role.search.user.prefix + guest）は常に追加されるため、空にしても匿名のロールが空にならず、ロールによる絞り込みは適用されます。空にすると、ここで設定したパーミッションだけが外れます。検索ロールのゲスト用パーミッション。"
 
 msgid "Prefix for user roles in search."
 msgstr "検索におけるユーザーロールのプレフィックス。"
@@ -1335,14 +1341,14 @@ msgstr "1ページあたりに取得するクロール情報パラメーター�
 msgid "Maximum number of crawling info records to fetch per page."
 msgstr "1ページあたりに取得するクロール情報レコードの最大数。"
 
-msgid "Maximum number of data config records to fetch per page."
-msgstr "1ページあたりに取得するデータストア設定レコードの最大数。"
+msgid "Maximum number of data configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "クロールのために読み込むデータストア設定の合計の最大数（ページごとではありません）。この数を超える設定は無視され、クロールされません。"
 
-msgid "Maximum number of web config records to fetch per page."
-msgstr "1ページあたりに取得するウェブ設定レコードの最大数。"
+msgid "Maximum number of web configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "クロールのために読み込むウェブ設定の合計の最大数（ページごとではありません）。この数を超える設定は無視され、クロールされません。"
 
-msgid "Maximum number of file config records to fetch per page."
-msgstr "1ページあたりに取得するファイルシステム設定レコードの最大数。"
+msgid "Maximum number of file configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "クロールのために読み込むファイルシステム設定の合計の最大数（ページごとではありません）。この数を超える設定は無視され、クロールされません。"
 
 msgid "Maximum number of duplicate host records to fetch per page."
 msgstr "1ページあたりに取得する重複ホストレコードの最大数。"
