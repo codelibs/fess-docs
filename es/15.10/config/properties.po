@@ -336,6 +336,9 @@ msgstr "Códigos de estado HTTP considerados como URLs de fallo."
 msgid "Interval (seconds) for system monitor during crawling."
 msgstr "Intervalo (segundos) del monitor del sistema durante el rastreo."
 
+msgid "Interval (seconds) for writing the progress of running crawls to the crawl configurations."
+msgstr "Intervalo (segundos) para escribir el progreso de los rastreos en ejecución en las configuraciones de rastreo."
+
 msgid "Whether to ignore idle threads in hot thread monitoring."
 msgstr "Indica si se ignoran los hilos inactivos en el monitoreo de hot threads."
 
@@ -1005,6 +1008,12 @@ msgstr "Valor de impulso del campo de contenido importante con idioma en las con
 msgid "Minimum length for fuzzy boosting in queries."
 msgstr "Longitud mínima para el impulso fuzzy en las consultas."
 
+msgid "Whether to add the fuzzy clause for text containing Han, Hiragana, Katakana or Hangul characters. The shipped standard_analyzer splits such text into two-character bigrams, for which AUTO fuzziness allows no edit, so the clause is skipped by default. Set true if title/content use an analyzer that does not produce bigrams."
+msgstr "Indica si se añade la cláusula difusa para texto que contiene caracteres han, hiragana, katakana o hangul. El standard_analyzer incluido divide ese texto en bigramas de dos caracteres, para los que la difusión AUTO no permite ninguna edición, por lo que la cláusula se omite de forma predeterminada. Establézcalo en true si title/content usan un analizador que no genera bigramas."
+
+msgid "Whether to add the fuzzy clause for text containing a digit. Text with a digit is usually an identifier (a part number, a ticket number, an error code), and a fuzzy match would also hit its neighbours (AB-1234 would match AB-1235), so the clause is skipped by default. A phrase in double quotes never gets the fuzzy clause."
+msgstr "Indica si se añade la cláusula difusa para texto que contiene un dígito. El texto con un dígito suele ser un identificador (un número de pieza, un número de ticket, un código de error), y una coincidencia difusa alcanzaría también a sus valores vecinos (AB-1234 coincidiría con AB-1235), por lo que la cláusula se omite de forma predeterminada. Una frase entre comillas dobles nunca recibe la cláusula difusa."
+
 msgid "Boost value for fuzzy title queries."
 msgstr "Valor de impulso de las consultas fuzzy de título."
 
@@ -1230,8 +1239,8 @@ msgstr "Permisos predeterminados de los roles de búsqueda."
 msgid "Default display permissions for search roles."
 msgstr "Permisos de visualización predeterminados de los roles de búsqueda."
 
-msgid "Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles."
-msgstr "Mantenga role.search.guest.permissions no vacío. Inicializa el rol de invitado que mantiene no vacío el conjunto de roles de búsqueda anónimo; si el conjunto de roles resuelto está vacío, se omite el filtro de roles (fail-open), lo que puede deshabilitar el control de acceso basado en roles y exponer documentos a usuarios anónimos. Permisos de invitado de los roles de búsqueda."
+msgid "Roles given to an anonymous search, comma-separated. The user-prefix guest role (role.search.user.prefix + guest) is always added to them, so an empty value does not leave the anonymous role set empty and the role filter is still applied; it only drops the permissions configured here. Guest permissions for search roles."
+msgstr "Roles asignados a una búsqueda anónima, separados por comas. El rol de invitado con el prefijo de usuario (role.search.user.prefix + guest) siempre se añade, por lo que un valor vacío no deja vacío el conjunto de roles anónimo y el filtro de roles se sigue aplicando; solo se eliminan los permisos configurados aquí. Permisos de invitado de los roles de búsqueda."
 
 msgid "Prefix for user roles in search."
 msgstr "Prefijo de los roles de usuario en la búsqueda."
@@ -1335,14 +1344,14 @@ msgstr "Número máximo de parámetros de información de rastreo que se obtiene
 msgid "Maximum number of crawling info records to fetch per page."
 msgstr "Número máximo de registros de información de rastreo que se obtienen por página."
 
-msgid "Maximum number of data config records to fetch per page."
-msgstr "Número máximo de registros de configuración de almacén de datos que se obtienen por página."
+msgid "Maximum number of data configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Número máximo total de configuraciones de almacén de datos cargadas para el rastreo (no por página). Las configuraciones que superen este número se ignoran y no se rastrean."
 
-msgid "Maximum number of web config records to fetch per page."
-msgstr "Número máximo de registros de configuración web que se obtienen por página."
+msgid "Maximum number of web configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Número máximo total de configuraciones web cargadas para el rastreo (no por página). Las configuraciones que superen este número se ignoran y no se rastrean."
 
-msgid "Maximum number of file config records to fetch per page."
-msgstr "Número máximo de registros de configuración de archivos que se obtienen por página."
+msgid "Maximum number of file configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Número máximo total de configuraciones de archivos cargadas para el rastreo (no por página). Las configuraciones que superen este número se ignoran y no se rastrean."
 
 msgid "Maximum number of duplicate host records to fetch per page."
 msgstr "Número máximo de registros de host duplicado que se obtienen por página."

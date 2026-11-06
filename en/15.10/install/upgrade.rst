@@ -592,6 +592,24 @@ Other Behavior Changes
 - Looking up a document by its document ID now applies the virtual host filter, as a search does. Up to 15.9, ``/api/v2/cache/{docId}``, the ``/go/`` redirect, thumbnails, the favorite endpoints and the other lookups by document ID applied only the role filter, so when the roles matched they also answered for a document of another virtual host. In 15.10 such a document is treated as not found. As in a search, a document that has no virtual host value is not returned when a virtual host is resolved for the request. Nothing changes for a request with no virtual host resolved (the default host).
 - The suggest job no longer takes words from a document that search hides. It skips a document that has no ``role`` value and a document that has a denied entry (a value that starts with ``role.search.denied.prefix`` (default ``D``) followed by the prefix of a user, group or role, that is ``D1``, ``D2`` or ``DR`` by default). Up to 15.9, the words of such documents were suggested to everyone. A document that has both allowed and denied entries is skipped as a whole, because a suggest request cannot express a denial for one user. Suggest entries already created from such documents expire through the usual purge of old suggest data.
 
+.. _upgrade-1510-implicit-fuzzy:
+
+Implicit fuzzy matching now uses the analyzed term
+--------------------------------------------------
+
+For a plain term without ``~``, |Fess| adds an implicit fuzzy clause with a small boost when the term is at least ``query.boost.fuzzy.min.length`` characters long (default ``4``; see the note in :doc:`../user/search-fuzzy`). Up to 15.9, the clause compared the typed text as it is with the terms in the index, which are stored in the analyzed form (lowercased and so on). A term with an uppercase letter or a stemmed word was therefore measured as farther from the indexed term than it really was, and it rarely matched.
+
+15.10 analyzes the typed text with the search analyzer before the comparison. A difference in spelling that did not match up to 15.9 now does. On the other hand, a term that contains a digit, such as an order number, a model number or a ticket ID (for example ``ZQFZ15`` or ``zqfz15``), no longer gets the implicit fuzzy clause at all. A term with a digit is usually an identifier, and a fuzzy match would also hit a similarly spelled identifier (such as ``ZQFZ14``). This is a change from 15.9, where an identifier typed in lowercase letters and digits only (such as ``zqfz15``) matched similar identifiers; in 15.10 it matches only itself. An identifier made of letters only (such as ``ABCE`` for ``ABCD``) can still match a similarly spelled identifier. A document that contains the typed term itself usually ranks higher, but a document that contains only the similar identifier is added to the results.
+
+To avoid this for an identifier made of letters only, do one of the following.
+
+- Enclose the term in double quotes (``"ABCD"``). A single quoted word is treated as a phrase and matches only that word (see "Other Behavior Changes" above).
+- To remove the implicit fuzzy clause from every search, set ``query.boost.fuzzy.min.length=-1`` in ``fess_config.properties`` and restart |Fess|.
+
+To apply the implicit fuzzy clause to terms that contain a digit as well (an identifier then matches similarly spelled identifiers again), set ``query.boost.fuzzy.digit.enabled`` to ``true`` (default ``false``). The workarounds above then apply to such identifiers too.
+
+Text that contains Han, Hiragana, Katakana or Hangul characters gets no implicit fuzzy clause by default: the bundled ``standard_analyzer`` splits it into two-character tokens, for which ``AUTO`` fuzziness allows no edit. The clause in 15.9 did not match a typo in such text either, so the results normally do not change. If you use an analyzer that does not produce such tokens (for example a morphological analyzer) for ``title`` and ``content``, set ``query.boost.fuzzy.cjk.enabled`` to ``true`` (default ``false``) to apply the clause to such text too.
+
 .. _upgrade-1510-tika:
 
 Apache Tika 4 and ``tika.xml``

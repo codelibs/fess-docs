@@ -609,6 +609,24 @@ Autres changements de comportement
 - La recherche d'un document par son identifiant applique désormais le filtre de l'hôte virtuel, comme une recherche. Jusqu'à la 15.9, ``/api/v2/cache/{docId}``, la redirection ``/go/``, les miniatures, les points d'accès des favoris et les autres recherches par identifiant de document n'appliquaient que le filtre de rôles et répondaient donc, lorsque les rôles correspondaient, pour un document d'un autre hôte virtuel. Dans la 15.10, un tel document est traité comme introuvable. Comme dans une recherche, un document sans valeur d'hôte virtuel n'est pas renvoyé lorsqu'un hôte virtuel est déterminé pour la requête. Rien ne change pour une requête sans hôte virtuel déterminé (hôte par défaut).
 - La tâche de suggestion ne prend plus de mots dans les documents que la recherche masque. Un document sans valeur ``role`` et un document avec une entrée refusée (une valeur qui commence par ``role.search.denied.prefix`` (valeur par défaut ``D``) suivi du préfixe d'un utilisateur, d'un groupe ou d'un rôle, soit par défaut ``D1``, ``D2`` ou ``DR``) sont ignorés. Jusqu'à la 15.9, les mots de ces documents étaient suggérés à tout le monde. Un document qui a à la fois des entrées autorisées et refusées est ignoré en entier, car une requête de suggestion ne peut pas exprimer un refus pour un seul utilisateur. Les entrées de suggestion déjà créées à partir de tels documents expirent lors de la purge habituelle des anciennes données de suggestion.
 
+.. _upgrade-1510-implicit-fuzzy:
+
+La recherche floue implicite utilise le terme analysé
+-----------------------------------------------------
+
+Pour un terme simple sans ``~``, |Fess| ajoute une condition floue implicite à faible poids lorsque le terme compte au moins ``query.boost.fuzzy.min.length`` caractères (valeur par défaut ``4`` ; voir la note de :doc:`../user/search-fuzzy`). Jusqu'à la 15.9, cette condition comparait le texte saisi tel quel aux termes de l'index, qui sont stockés sous forme analysée (en minuscules, entre autres). Un terme comportant une majuscule ou un mot réduit à sa racine était donc mesuré comme plus éloigné du terme indexé qu'il ne l'était réellement, et correspondait rarement.
+
+La 15.10 analyse le texte saisi avec l'analyseur de recherche avant la comparaison. Une différence d'orthographe qui ne donnait pas de résultat jusqu'à la 15.9 en donne désormais. En revanche, un terme contenant un chiffre, tel qu'un numéro de commande, un numéro de modèle ou un identifiant de ticket (par exemple ``ZQFZ15`` ou ``zqfz15``), ne reçoit plus aucune condition floue implicite. Un terme contenant un chiffre est généralement un identifiant, et une correspondance floue atteindrait aussi un identifiant à l'orthographe proche (tel que ``ZQFZ14``). C'est un changement par rapport à la 15.9, où un identifiant saisi uniquement en minuscules et en chiffres (tel que ``zqfz15``) correspondait à des identifiants proches ; dans la 15.10, il ne correspond plus qu'à lui-même. Un identifiant composé uniquement de lettres (tel que ``ABCE`` pour ``ABCD``) peut toujours correspondre à un identifiant à l'orthographe proche. Un document contenant le terme saisi lui-même est généralement mieux classé, mais un document qui ne contient que l'identifiant proche s'ajoute aux résultats.
+
+Pour l'éviter avec un identifiant composé uniquement de lettres, procédez de l'une des manières suivantes.
+
+- Placez le terme entre guillemets doubles (``"ABCD"``). Un mot unique entre guillemets est traité comme une expression exacte et ne correspond qu'à ce mot (voir « Autres changements de comportement » plus haut).
+- Pour retirer la condition floue implicite de toutes les recherches, définissez ``query.boost.fuzzy.min.length=-1`` dans ``fess_config.properties`` et redémarrez |Fess|.
+
+Pour appliquer la condition floue implicite aussi aux termes contenant un chiffre (un identifiant correspond alors de nouveau à des identifiants à l'orthographe proche), définissez ``query.boost.fuzzy.digit.enabled`` sur ``true`` (valeur par défaut ``false``). Les mesures ci-dessus s'appliquent alors aussi à ces identifiants.
+
+Un texte contenant des caractères Han, hiragana, katakana ou hangul ne reçoit par défaut aucune condition floue implicite : le ``standard_analyzer`` fourni le découpe en jetons de deux caractères, pour lesquels le flou ``AUTO`` n'autorise aucune modification. La condition de la 15.9 ne correspondait pas non plus à une faute de frappe dans un tel texte, de sorte que les résultats ne changent normalement pas. Si vous utilisez pour ``title`` et ``content`` un analyseur qui ne produit pas de tels jetons (par exemple un analyseur morphologique), définissez ``query.boost.fuzzy.cjk.enabled`` sur ``true`` (valeur par défaut ``false``) pour appliquer la condition à ce texte également.
+
 .. _upgrade-1510-tika:
 
 Apache Tika 4 et ``tika.xml``

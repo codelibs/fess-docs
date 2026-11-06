@@ -72,7 +72,7 @@ one, fill in ``properties.po`` beside this file.
     - ``true``
   * - app.encrypt.property.pattern
     - 참고: app.digest.algorithm 은 레거시 비밀번호 검증 전용으로 유지됩니다(업그레이드 이전의 {id} 접두사가 없는 해시). 새 비밀번호에는 사용하지 마십시오. 암호화할 프로퍼티의 정규 표현식 패턴입니다.
-    - ``.*password|.*key|.*token|.*secret``
+    - ``.*password|.*passphrase|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
     - 디버그 로그에서 마스킹할 민감한 값의 정규 표현식 패턴(프로퍼티/환경 변수 키에 대해 대소문자를 구분하지 않고 일치 판정).
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
@@ -490,6 +490,9 @@ one, fill in ``properties.po`` beside this file.
   * - crawler.system.monitor.interval
     - 크롤링 중 시스템 모니터링 간격(초).
     - ``60``
+  * - crawler.progress.interval
+    - 실행 중인 크롤링의 진행 상황을 크롤링 설정에 기록하는 간격(초).
+    - ``10``
   * - crawler.hotthread.ignore_idle_threads
     - 핫 스레드 모니터링에서 유휴 스레드 무시 여부.
     - ``true``
@@ -510,7 +513,7 @@ one, fill in ``properties.po`` beside this file.
     - ``cpu``
   * - crawler.metadata.content.excludes
     - 문서 콘텐츠에서 제외할 메타데이터 필드.
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
   * - crawler.metadata.content.image.includes
     - 이미지 문서(image/\*)의 콘텐츠에 추가할 메타데이터 필드. 크기나 카메라 설정 등 이미지의 나머지 메타데이터는 추가되지 않습니다.
     - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
@@ -1319,6 +1322,12 @@ one, fill in ``properties.po`` beside this file.
   * - query.boost.fuzzy.min.length
     - 쿼리의 퍼지 부스트 최소 길이.
     - ``4``
+  * - query.boost.fuzzy.cjk.enabled
+    - 한자, 히라가나, 가타카나, 한글이 포함된 텍스트에 퍼지 조건을 추가할지 여부. 기본 제공되는 standard_analyzer는 이러한 텍스트를 2글자 단위로 분할하며, AUTO 퍼지에서는 2글자 단어에 편집을 허용하지 않으므로 기본적으로 이 조건을 추가하지 않습니다. title/content에 2글자 단위로 분할하지 않는 애널라이저를 사용하는 경우 true로 설정합니다.
+    - ``false``
+  * - query.boost.fuzzy.digit.enabled
+    - 숫자가 포함된 텍스트에 퍼지 조건을 추가할지 여부. 숫자가 포함된 텍스트는 대부분 부품 번호, 티켓 번호, 오류 코드 같은 식별자이며, 퍼지 일치를 적용하면 인접한 값까지 일치하게 되므로(AB-1234가 AB-1235와 일치) 기본적으로 이 조건을 추가하지 않습니다. 큰따옴표로 묶은 구문에는 퍼지 조건이 추가되지 않습니다.
+    - ``false``
   * - query.boost.fuzzy.title
     - 퍼지 제목 쿼리의 부스트 값.
     - ``0.01``
@@ -1574,7 +1583,7 @@ one, fill in ``properties.po`` beside this file.
     - 검색 역할의 기본 표시 권한.
     - ``{role}guest``
   * - role.search.guest.permissions
-    - role.search.guest.permissions 는 비워 두지 마십시오. 이 값은 익명 검색 역할 집합이 비지 않도록 유지하는 게스트 역할의 시드가 됩니다. 확정된 역할 집합이 비어 있으면 역할 필터가 건너뛰어져(fail-open) 역할 기반 접근 제어가 무효화되고 문서가 익명 사용자에게 노출될 수 있습니다. 검색 역할의 게스트 권한입니다.
+    - 익명 검색에 부여되는 역할(쉼표로 구분). 사용자 접두사가 붙은 게스트 역할(role.search.user.prefix + guest)은 항상 추가되므로 값을 비워도 익명 역할 집합이 비지 않고 역할 필터는 그대로 적용됩니다. 비우면 여기에 설정한 권한만 제외됩니다. 검색 역할의 게스트 권한입니다.
     - ``{role}guest``
   * - role.search.user.prefix
     - 검색에서 사용자 역할의 접두사.
@@ -1683,13 +1692,13 @@ one, fill in ``properties.po`` beside this file.
     - 페이지당 가져올 크롤링 정보 레코드의 최대 수.
     - ``1000``
   * - page.data.config.max.fetch.size
-    - 페이지당 가져올 데이터 스토어 설정 레코드의 최대 수.
+    - 크롤링을 위해 읽어 들이는 데이터 스토어 설정의 전체 최대 개수(페이지당이 아님). 이 개수를 넘는 설정은 무시되며 크롤링되지 않습니다.
     - ``100``
   * - page.web.config.max.fetch.size
-    - 페이지당 가져올 웹 크롤링 설정 레코드의 최대 수.
+    - 크롤링을 위해 읽어 들이는 웹 크롤링 설정의 전체 최대 개수(페이지당이 아님). 이 개수를 넘는 설정은 무시되며 크롤링되지 않습니다.
     - ``100``
   * - page.file.config.max.fetch.size
-    - 페이지당 가져올 파일 크롤링 설정 레코드의 최대 수.
+    - 크롤링을 위해 읽어 들이는 파일 크롤링 설정의 전체 최대 개수(페이지당이 아님). 이 개수를 넘는 설정은 무시되며 크롤링되지 않습니다.
     - ``100``
   * - page.duplicate.host.max.fetch.size
     - 페이지당 가져올 중복 호스트 레코드의 최대 수.
@@ -2040,7 +2049,7 @@ one, fill in ``properties.po`` beside this file.
     - ``upgrade``
   * - online.help.name.sereq
     - 검색 요청의 온라인 도움말 키.
-    - ``sereq``
+    - ``esreq``
   * - online.help.name.accesstoken
     - 액세스 토큰의 온라인 도움말 키.
     - ``accesstoken``

@@ -603,6 +603,24 @@ Otros cambios de comportamiento
 - La búsqueda de un documento por su ID de documento aplica ahora el filtro del host virtual, igual que una búsqueda. Hasta 15.9, ``/api/v2/cache/{docId}``, la redirección ``/go/``, las miniaturas, los puntos de acceso de favoritos y el resto de las búsquedas por ID de documento solo aplicaban el filtro de roles, por lo que, si los roles coincidían, respondían también para un documento de otro host virtual. En 15.10 ese documento se trata como no encontrado. Igual que en una búsqueda, un documento sin valor de host virtual no se devuelve cuando se determina un host virtual para la solicitud. No cambia nada para una solicitud sin host virtual determinado (host predeterminado).
 - El trabajo de sugerencias ya no toma palabras de los documentos que la búsqueda oculta. Se omiten un documento sin valor ``role`` y un documento con una entrada denegada (un valor que empieza por ``role.search.denied.prefix`` (valor predeterminado ``D``) seguido del prefijo de un usuario, un grupo o un rol, es decir, por defecto ``D1``, ``D2`` o ``DR``). Hasta 15.9, las palabras de esos documentos se sugerían a todos. Un documento con entradas permitidas y denegadas se omite por completo, porque una solicitud de sugerencias no puede expresar una denegación para un solo usuario. Las entradas de sugerencias ya creadas a partir de esos documentos caducan con la purga habitual de datos antiguos de sugerencias.
 
+.. _upgrade-1510-implicit-fuzzy:
+
+La búsqueda difusa implícita usa el término analizado
+-----------------------------------------------------
+
+Para un término simple sin ``~``, |Fess| añade una condición difusa implícita con un peso pequeño cuando el término tiene al menos ``query.boost.fuzzy.min.length`` caracteres (valor predeterminado ``4``; consulte la nota de :doc:`../user/search-fuzzy`). Hasta 15.9, esa condición comparaba el texto escrito tal cual con los términos del índice, que se almacenan en forma analizada (en minúsculas, entre otras cosas). Por eso un término con una letra mayúscula o una palabra reducida a su raíz se medía como más alejado del término indexado de lo que estaba en realidad, y rara vez coincidía.
+
+15.10 analiza el texto escrito con el analizador de búsqueda antes de la comparación. Una diferencia de ortografía que hasta 15.9 no coincidía ahora sí lo hace. En cambio, un término que contiene un dígito, como un número de pedido, un número de modelo o un ID de ticket (por ejemplo ``ZQFZ15`` o ``zqfz15``), ya no recibe ninguna condición difusa implícita. Un término con un dígito suele ser un identificador, y una coincidencia difusa alcanzaría también a un identificador de ortografía parecida (como ``ZQFZ14``). Es un cambio respecto a 15.9, donde un identificador escrito solo con minúsculas y dígitos (como ``zqfz15``) coincidía con identificadores parecidos; en 15.10 solo coincide consigo mismo. Un identificador formado solo por letras (como ``ABCE`` para ``ABCD``) todavía puede coincidir con un identificador de ortografía parecida. Un documento que contiene el propio término escrito suele quedar más arriba, pero también se añade a los resultados un documento que solo contiene el identificador parecido.
+
+Para evitarlo en un identificador formado solo por letras, haga una de las siguientes cosas.
+
+- Encierre el término entre comillas dobles (``"ABCD"``). Una sola palabra entre comillas se trata como una frase y coincide únicamente con esa palabra (consulte «Otros cambios de comportamiento» más arriba).
+- Para quitar la condición difusa implícita de todas las búsquedas, establezca ``query.boost.fuzzy.min.length=-1`` en ``fess_config.properties`` y reinicie |Fess|.
+
+Si desea que la condición difusa implícita se aplique también a los términos que contienen un dígito (un identificador volverá a coincidir con identificadores de ortografía parecida), establezca ``query.boost.fuzzy.digit.enabled`` en ``true`` (valor predeterminado ``false``). Las medidas anteriores se aplican entonces también a esos identificadores.
+
+Al texto que contiene caracteres han, hiragana, katakana o hangul no se le añade de forma predeterminada ninguna condición difusa implícita: el ``standard_analyzer`` incluido lo divide en tokens de dos caracteres, para los que la difusión ``AUTO`` no permite ninguna edición. La condición de 15.9 tampoco coincidía con un error tipográfico en ese texto, por lo que los resultados normalmente no cambian. Si utiliza para ``title`` y ``content`` un analizador que no genera esos tokens (por ejemplo, un analizador morfológico), establezca ``query.boost.fuzzy.cjk.enabled`` en ``true`` (valor predeterminado ``false``) para aplicar la condición también a ese texto.
+
 .. _upgrade-1510-tika:
 
 Apache Tika 4 y ``tika.xml``

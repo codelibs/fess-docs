@@ -72,7 +72,7 @@ Kern
     - ``true``
   * - app.encrypt.property.pattern
     - HINWEIS: app.digest.algorithm bleibt nur für die Überprüfung von LEGACY-Passwörtern erhalten (Hashes von vor dem Upgrade, die kein {id}-Präfix haben). Nicht für neue Passwörter verwenden. Regex-Muster für zu verschlüsselnde Eigenschaften.
-    - ``.*password|.*key|.*token|.*secret``
+    - ``.*password|.*passphrase|.*key|.*token|.*secret``
   * - app.log.sensitive.property.pattern
     - Regex-Muster für sensible Werte, die in Debug-Protokollen maskiert werden (Abgleich ohne Beachtung der Groß-/Kleinschreibung mit den Schlüsseln von Eigenschaften/Umgebungsvariablen).
     - ``.*password.*|.*secret.*|.*key.*|.*token.*|.*credential.*|.*auth.*|.*private.*``
@@ -490,6 +490,9 @@ Index
   * - crawler.system.monitor.interval
     - Intervall (Sekunden) für die Systemüberwachung während des Crawlings.
     - ``60``
+  * - crawler.progress.interval
+    - Intervall (Sekunden), in dem der Fortschritt laufender Crawls in die Crawl-Konfigurationen geschrieben wird.
+    - ``10``
   * - crawler.hotthread.ignore_idle_threads
     - Gibt an, ob Leerlauf-Threads bei der Hot-Thread-Überwachung ignoriert werden sollen.
     - ``true``
@@ -510,7 +513,7 @@ Index
     - ``cpu``
   * - crawler.metadata.content.excludes
     - Metadatenfelder, die vom Dokumentinhalt ausgeschlossen werden.
-    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*``
+    - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
   * - crawler.metadata.content.image.includes
     - Metadatenfelder, die dem Inhalt eines Bilddokuments (image/\*) hinzugefügt werden. Die übrigen Metadaten eines Bildes, etwa Größe und Kameraeinstellungen, werden nicht hinzugefügt.
     - ``dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry``
@@ -1319,6 +1322,12 @@ Index
   * - query.boost.fuzzy.min.length
     - Mindestlänge für das Fuzzy-Boosting in Abfragen.
     - ``4``
+  * - query.boost.fuzzy.cjk.enabled
+    - Gibt an, ob die Fuzzy-Klausel für Text mit Han-, Hiragana-, Katakana- oder Hangul-Zeichen hinzugefügt wird. Der mitgelieferte standard_analyzer zerlegt solchen Text in Bigramme aus zwei Zeichen, für die die Fuzziness AUTO keine Änderung erlaubt; daher wird die Klausel standardmäßig übersprungen. Auf true setzen, wenn title/content einen Analyzer verwenden, der keine Bigramme erzeugt.
+    - ``false``
+  * - query.boost.fuzzy.digit.enabled
+    - Gibt an, ob die Fuzzy-Klausel für Text mit einer Ziffer hinzugefügt wird. Text mit einer Ziffer ist meist ein Bezeichner (Teilenummer, Ticketnummer, Fehlercode), und eine unscharfe Übereinstimmung würde auch benachbarte Werte treffen (AB-1234 würde AB-1235 finden); daher wird die Klausel standardmäßig übersprungen. Eine Phrase in doppelten Anführungszeichen erhält die Fuzzy-Klausel nie.
+    - ``false``
   * - query.boost.fuzzy.title
     - Boost-Wert für Fuzzy-Titelabfragen.
     - ``0.01``
@@ -1574,7 +1583,7 @@ Web
     - Standard-Anzeigeberechtigungen für Suchrollen.
     - ``{role}guest``
   * - role.search.guest.permissions
-    - Halten Sie role.search.guest.permissions nicht leer. Es initialisiert die Gastrolle, die den anonymen Suchrollensatz nicht leer hält; ist der aufgelöste Rollensatz leer, wird der Rollenfilter übersprungen (Fail-Open), was die rollenbasierte Zugriffskontrolle deaktivieren und Dokumente für anonyme Benutzer offenlegen kann. Gastberechtigungen für Suchrollen.
+    - Rollen, die einer anonymen Suche zugewiesen werden, durch Kommas getrennt. Die Gastrolle mit Benutzerpräfix (role.search.user.prefix + guest) wird immer hinzugefügt; ein leerer Wert lässt den anonymen Rollensatz daher nicht leer, und der Rollenfilter wird weiterhin angewendet. Es entfallen nur die hier konfigurierten Berechtigungen. Gastberechtigungen für Suchrollen.
     - ``{role}guest``
   * - role.search.user.prefix
     - Präfix für Benutzerrollen in der Suche.
@@ -1683,13 +1692,13 @@ Web
     - Maximale Anzahl von Crawl-Info-Datensätzen, die pro Seite abgerufen werden.
     - ``1000``
   * - page.data.config.max.fetch.size
-    - Maximale Anzahl von Datenkonfigurations-Datensätzen, die pro Seite abgerufen werden.
+    - Maximale Gesamtzahl der für das Crawlen geladenen Datenkonfigurationen (nicht pro Seite). Darüber hinausgehende Konfigurationen werden ignoriert und nicht gecrawlt.
     - ``100``
   * - page.web.config.max.fetch.size
-    - Maximale Anzahl von Web-Konfigurations-Datensätzen, die pro Seite abgerufen werden.
+    - Maximale Gesamtzahl der für das Crawlen geladenen Web-Konfigurationen (nicht pro Seite). Darüber hinausgehende Konfigurationen werden ignoriert und nicht gecrawlt.
     - ``100``
   * - page.file.config.max.fetch.size
-    - Maximale Anzahl von Dateikonfigurations-Datensätzen, die pro Seite abgerufen werden.
+    - Maximale Gesamtzahl der für das Crawlen geladenen Dateikonfigurationen (nicht pro Seite). Darüber hinausgehende Konfigurationen werden ignoriert und nicht gecrawlt.
     - ``100``
   * - page.duplicate.host.max.fetch.size
     - Maximale Anzahl von Duplikat-Host-Datensätzen, die pro Seite abgerufen werden.
@@ -2040,7 +2049,7 @@ Web
     - ``upgrade``
   * - online.help.name.sereq
     - Online-Hilfe-Schlüssel für Abfrageanforderung.
-    - ``sereq``
+    - ``esreq``
   * - online.help.name.accesstoken
     - Online-Hilfe-Schlüssel für Zugriffstoken.
     - ``accesstoken``

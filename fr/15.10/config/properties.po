@@ -336,6 +336,9 @@ msgstr "Codes d'état HTTP considérés comme des URL en échec."
 msgid "Interval (seconds) for system monitor during crawling."
 msgstr "Intervalle (secondes) du moniteur système pendant le crawl."
 
+msgid "Interval (seconds) for writing the progress of running crawls to the crawl configurations."
+msgstr "Intervalle (secondes) d'écriture de la progression des crawls en cours dans les configurations de crawl."
+
 msgid "Whether to ignore idle threads in hot thread monitoring."
 msgstr "Indique s'il faut ignorer les threads inactifs dans la surveillance des hot threads."
 
@@ -1005,6 +1008,12 @@ msgstr "Valeur de boost du champ de contenu important avec langue dans les requ�
 msgid "Minimum length for fuzzy boosting in queries."
 msgstr "Longueur minimale pour le boost flou dans les requêtes."
 
+msgid "Whether to add the fuzzy clause for text containing Han, Hiragana, Katakana or Hangul characters. The shipped standard_analyzer splits such text into two-character bigrams, for which AUTO fuzziness allows no edit, so the clause is skipped by default. Set true if title/content use an analyzer that does not produce bigrams."
+msgstr "Indique s'il faut ajouter la clause floue pour un texte contenant des caractères Han, hiragana, katakana ou hangul. Le standard_analyzer fourni découpe ce texte en bigrammes de deux caractères, pour lesquels le flou AUTO n'autorise aucune modification ; la clause est donc ignorée par défaut. Définissez true si title/content utilisent un analyseur qui ne produit pas de bigrammes."
+
+msgid "Whether to add the fuzzy clause for text containing a digit. Text with a digit is usually an identifier (a part number, a ticket number, an error code), and a fuzzy match would also hit its neighbours (AB-1234 would match AB-1235), so the clause is skipped by default. A phrase in double quotes never gets the fuzzy clause."
+msgstr "Indique s'il faut ajouter la clause floue pour un texte contenant un chiffre. Un texte contenant un chiffre est généralement un identifiant (référence de pièce, numéro de ticket, code d'erreur), et une correspondance floue atteindrait aussi les valeurs voisines (AB-1234 correspondrait à AB-1235) ; la clause est donc ignorée par défaut. Une expression entre guillemets doubles ne reçoit jamais la clause floue."
+
 msgid "Boost value for fuzzy title queries."
 msgstr "Valeur de boost pour les requêtes floues sur le titre."
 
@@ -1230,8 +1239,8 @@ msgstr "Permissions par défaut pour les rôles de recherche."
 msgid "Default display permissions for search roles."
 msgstr "Permissions d'affichage par défaut pour les rôles de recherche."
 
-msgid "Keep role.search.guest.permissions non-empty. It seeds the guest role that keeps the anonymous search role set non-empty; if the resolved role set is empty the role filter is skipped (fail-open), which can disable role-based access control and expose documents to anonymous users. Guest permissions for search roles."
-msgstr "Conservez role.search.guest.permissions non vide. Elle initialise le rôle invité qui maintient non vide l'ensemble des rôles de recherche anonymes ; si l'ensemble de rôles résolu est vide, le filtre de rôles est ignoré (fail-open), ce qui peut désactiver le contrôle d'accès basé sur les rôles et exposer des documents aux utilisateurs anonymes. Permissions invité pour les rôles de recherche."
+msgid "Roles given to an anonymous search, comma-separated. The user-prefix guest role (role.search.user.prefix + guest) is always added to them, so an empty value does not leave the anonymous role set empty and the role filter is still applied; it only drops the permissions configured here. Guest permissions for search roles."
+msgstr "Rôles attribués à une recherche anonyme, séparés par des virgules. Le rôle invité avec le préfixe utilisateur (role.search.user.prefix + guest) est toujours ajouté ; une valeur vide ne laisse donc pas l'ensemble des rôles anonymes vide et le filtre de rôles reste appliqué ; seules les permissions configurées ici sont supprimées. Permissions invité pour les rôles de recherche."
 
 msgid "Prefix for user roles in search."
 msgstr "Préfixe des rôles utilisateur dans la recherche."
@@ -1335,14 +1344,14 @@ msgstr "Nombre maximum de paramètres d'informations de crawl à récupérer par
 msgid "Maximum number of crawling info records to fetch per page."
 msgstr "Nombre maximum d'enregistrements d'informations de crawl à récupérer par page."
 
-msgid "Maximum number of data config records to fetch per page."
-msgstr "Nombre maximum d'enregistrements de configuration de magasin de données à récupérer par page."
+msgid "Maximum number of data configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Nombre maximum total de configurations de magasin de données chargées pour le crawl (et non par page). Les configurations au-delà de ce nombre sont ignorées et ne sont pas crawlées."
 
-msgid "Maximum number of web config records to fetch per page."
-msgstr "Nombre maximum d'enregistrements de configuration Web à récupérer par page."
+msgid "Maximum number of web configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Nombre maximum total de configurations Web chargées pour le crawl (et non par page). Les configurations au-delà de ce nombre sont ignorées et ne sont pas crawlées."
 
-msgid "Maximum number of file config records to fetch per page."
-msgstr "Nombre maximum d'enregistrements de configuration de fichiers à récupérer par page."
+msgid "Maximum number of file configs loaded in total for crawling (not per page). Configs beyond this number are ignored and not crawled."
+msgstr "Nombre maximum total de configurations de fichiers chargées pour le crawl (et non par page). Les configurations au-delà de ce nombre sont ignorées et ne sont pas crawlées."
 
 msgid "Maximum number of duplicate host records to fetch per page."
 msgstr "Nombre maximum d'enregistrements d'hôtes en double à récupérer par page."
