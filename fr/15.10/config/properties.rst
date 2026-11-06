@@ -1325,6 +1325,9 @@ Index
   * - query.boost.fuzzy.cjk.enabled
     - Indique s'il faut ajouter la clause floue pour un texte contenant des caractères Han, hiragana, katakana ou hangul. Le standard_analyzer fourni découpe ce texte en bigrammes de deux caractères, pour lesquels le flou AUTO n'autorise aucune modification ; la clause est donc ignorée par défaut. Définissez true si title/content utilisent un analyseur qui ne produit pas de bigrammes.
     - ``false``
+  * - query.boost.fuzzy.digit.enabled
+    - Indique s'il faut ajouter la clause floue pour un texte contenant un chiffre. Un texte contenant un chiffre est généralement un identifiant (référence de pièce, numéro de ticket, code d'erreur), et une correspondance floue atteindrait aussi les valeurs voisines (AB-1234 correspondrait à AB-1235) ; la clause est donc ignorée par défaut. Une expression entre guillemets doubles ne reçoit jamais la clause floue.
+    - ``false``
   * - query.boost.fuzzy.title
     - Valeur de boost pour les requêtes floues sur le titre.
     - ``0.01``

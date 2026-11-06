@@ -1325,6 +1325,9 @@ Index
   * - query.boost.fuzzy.cjk.enabled
     - Gibt an, ob die Fuzzy-Klausel für Text mit Han-, Hiragana-, Katakana- oder Hangul-Zeichen hinzugefügt wird. Der mitgelieferte standard_analyzer zerlegt solchen Text in Bigramme aus zwei Zeichen, für die die Fuzziness AUTO keine Änderung erlaubt; daher wird die Klausel standardmäßig übersprungen. Auf true setzen, wenn title/content einen Analyzer verwenden, der keine Bigramme erzeugt.
     - ``false``
+  * - query.boost.fuzzy.digit.enabled
+    - Gibt an, ob die Fuzzy-Klausel für Text mit einer Ziffer hinzugefügt wird. Text mit einer Ziffer ist meist ein Bezeichner (Teilenummer, Ticketnummer, Fehlercode), und eine unscharfe Übereinstimmung würde auch benachbarte Werte treffen (AB-1234 würde AB-1235 finden); daher wird die Klausel standardmäßig übersprungen. Eine Phrase in doppelten Anführungszeichen erhält die Fuzzy-Klausel nie.
+    - ``false``
   * - query.boost.fuzzy.title
     - Boost-Wert für Fuzzy-Titelabfragen.
     - ``0.01``

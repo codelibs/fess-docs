@@ -1325,6 +1325,9 @@ Límite de tasa
   * - query.boost.fuzzy.cjk.enabled
     - Indica si se añade la cláusula difusa para texto que contiene caracteres han, hiragana, katakana o hangul. El standard_analyzer incluido divide ese texto en bigramas de dos caracteres, para los que la difusión AUTO no permite ninguna edición, por lo que la cláusula se omite de forma predeterminada. Establézcalo en true si title/content usan un analizador que no genera bigramas.
     - ``false``
+  * - query.boost.fuzzy.digit.enabled
+    - Indica si se añade la cláusula difusa para texto que contiene un dígito. El texto con un dígito suele ser un identificador (un número de pieza, un número de ticket, un código de error), y una coincidencia difusa alcanzaría también a sus valores vecinos (AB-1234 coincidiría con AB-1235), por lo que la cláusula se omite de forma predeterminada. Una frase entre comillas dobles nunca recibe la cláusula difusa.
+    - ``false``
   * - query.boost.fuzzy.title
     - Valor de impulso de las consultas fuzzy de título.
     - ``0.01``

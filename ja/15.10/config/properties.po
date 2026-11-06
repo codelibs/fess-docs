@@ -1011,6 +1011,9 @@ msgstr "クエリのファジーブーストの最小長。"
 msgid "Whether to add the fuzzy clause for text containing Han, Hiragana, Katakana or Hangul characters. The shipped standard_analyzer splits such text into two-character bigrams, for which AUTO fuzziness allows no edit, so the clause is skipped by default. Set true if title/content use an analyzer that does not produce bigrams."
 msgstr "漢字・ひらがな・カタカナ・ハングルを含むテキストにあいまい検索の条件を加えるかどうか。同梱の standard_analyzer はこのようなテキストを 2 文字ずつに分割し、AUTO のあいまい度では 2 文字の語に編集を許さないため、既定ではこの条件を加えません。title と content に、2 文字ずつに分割しないアナライザを使っている場合は true にします。"
 
+msgid "Whether to add the fuzzy clause for text containing a digit. Text with a digit is usually an identifier (a part number, a ticket number, an error code), and a fuzzy match would also hit its neighbours (AB-1234 would match AB-1235), so the clause is skipped by default. A phrase in double quotes never gets the fuzzy clause."
+msgstr "数字を含むテキストにあいまい検索の条件を加えるかどうか。数字を含むテキストは多くの場合、型番・チケット番号・エラーコードなどの識別子で、あいまい一致ではその近隣の値にも一致してしまう（AB-1234 が AB-1235 に一致する）ため、既定ではこの条件を加えません。二重引用符で囲んだフレーズには、この条件は加わりません。"
+
 msgid "Boost value for fuzzy title queries."
 msgstr "ファジータイトルクエリのブースト値。"
 

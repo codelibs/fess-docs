@@ -1325,6 +1325,9 @@ Index
   * - query.boost.fuzzy.cjk.enabled
     - Whether to add the fuzzy clause for text containing Han, Hiragana, Katakana or Hangul characters. The shipped standard_analyzer splits such text into two-character bigrams, for which AUTO fuzziness allows no edit, so the clause is skipped by default. Set true if title/content use an analyzer that does not produce bigrams.
     - ``false``
+  * - query.boost.fuzzy.digit.enabled
+    - Whether to add the fuzzy clause for text containing a digit. Text with a digit is usually an identifier (a part number, a ticket number, an error code), and a fuzzy match would also hit its neighbours (AB-1234 would match AB-1235), so the clause is skipped by default. A phrase in double quotes never gets the fuzzy clause.
+    - ``false``
   * - query.boost.fuzzy.title
     - Boost value for fuzzy title queries.
     - ``0.01``

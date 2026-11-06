@@ -1325,6 +1325,9 @@ one, fill in ``properties.po`` beside this file.
   * - query.boost.fuzzy.cjk.enabled
     - 是否为包含汉字、平假名、片假名或谚文的文本添加模糊子句。内置的 standard_analyzer 会把这类文本切分为两个字符的二元组，AUTO 模糊度对二元组不允许任何编辑，因此默认跳过该子句。如果 title/content 使用不产生二元组的分析器，请设置为 true。
     - ``false``
+  * - query.boost.fuzzy.digit.enabled
+    - 是否为包含数字的文本添加模糊子句。含有数字的文本通常是标识符（零件编号、工单编号、错误代码等），模糊匹配会连相邻的值也一并命中（AB-1234 会匹配到 AB-1235），因此默认跳过该子句。用双引号括起来的短语不会添加模糊子句。
+    - ``false``
   * - query.boost.fuzzy.title
     - 模糊标题查询的提升值。
     - ``0.01``

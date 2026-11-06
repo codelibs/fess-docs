@@ -1011,6 +1011,9 @@ msgstr "Longitud mínima para el impulso fuzzy en las consultas."
 msgid "Whether to add the fuzzy clause for text containing Han, Hiragana, Katakana or Hangul characters. The shipped standard_analyzer splits such text into two-character bigrams, for which AUTO fuzziness allows no edit, so the clause is skipped by default. Set true if title/content use an analyzer that does not produce bigrams."
 msgstr "Indica si se añade la cláusula difusa para texto que contiene caracteres han, hiragana, katakana o hangul. El standard_analyzer incluido divide ese texto en bigramas de dos caracteres, para los que la difusión AUTO no permite ninguna edición, por lo que la cláusula se omite de forma predeterminada. Establézcalo en true si title/content usan un analizador que no genera bigramas."
 
+msgid "Whether to add the fuzzy clause for text containing a digit. Text with a digit is usually an identifier (a part number, a ticket number, an error code), and a fuzzy match would also hit its neighbours (AB-1234 would match AB-1235), so the clause is skipped by default. A phrase in double quotes never gets the fuzzy clause."
+msgstr "Indica si se añade la cláusula difusa para texto que contiene un dígito. El texto con un dígito suele ser un identificador (un número de pieza, un número de ticket, un código de error), y una coincidencia difusa alcanzaría también a sus valores vecinos (AB-1234 coincidiría con AB-1235), por lo que la cláusula se omite de forma predeterminada. Una frase entre comillas dobles nunca recibe la cláusula difusa."
+
 msgid "Boost value for fuzzy title queries."
 msgstr "Valor de impulso de las consultas fuzzy de título."
 

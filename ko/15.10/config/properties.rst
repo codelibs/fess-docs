@@ -1325,6 +1325,9 @@ one, fill in ``properties.po`` beside this file.
   * - query.boost.fuzzy.cjk.enabled
     - 한자, 히라가나, 가타카나, 한글이 포함된 텍스트에 퍼지 조건을 추가할지 여부. 기본 제공되는 standard_analyzer는 이러한 텍스트를 2글자 단위로 분할하며, AUTO 퍼지에서는 2글자 단어에 편집을 허용하지 않으므로 기본적으로 이 조건을 추가하지 않습니다. title/content에 2글자 단위로 분할하지 않는 애널라이저를 사용하는 경우 true로 설정합니다.
     - ``false``
+  * - query.boost.fuzzy.digit.enabled
+    - 숫자가 포함된 텍스트에 퍼지 조건을 추가할지 여부. 숫자가 포함된 텍스트는 대부분 부품 번호, 티켓 번호, 오류 코드 같은 식별자이며, 퍼지 일치를 적용하면 인접한 값까지 일치하게 되므로(AB-1234가 AB-1235와 일치) 기본적으로 이 조건을 추가하지 않습니다. 큰따옴표로 묶은 구문에는 퍼지 조건이 추가되지 않습니다.
+    - ``false``
   * - query.boost.fuzzy.title
     - 퍼지 제목 쿼리의 부스트 값.
     - ``0.01``

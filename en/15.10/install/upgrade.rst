@@ -599,12 +599,14 @@ Implicit fuzzy matching now uses the analyzed term
 
 For a plain term without ``~``, |Fess| adds an implicit fuzzy clause with a small boost when the term is at least ``query.boost.fuzzy.min.length`` characters long (default ``4``; see the note in :doc:`../user/search-fuzzy`). Up to 15.9, the clause compared the typed text as it is with the terms in the index, which are stored in the analyzed form (lowercased and so on). A term with an uppercase letter or a stemmed word was therefore measured as farther from the indexed term than it really was, and it rarely matched.
 
-15.10 analyzes the typed text with the search analyzer before the comparison. A difference in spelling that did not match up to 15.9 now does. As a side effect, an identifier that contains uppercase letters, such as an order number, a model number or a ticket ID (for example ``ZQFZ15``), also matches a similarly spelled identifier (such as ``ZQFZ14``). An identifier typed in lowercase letters and digits only (such as ``zqfz15``) already matched similar identifiers in 15.9. A document that contains the typed term itself usually ranks higher, but a document that contains only the similar identifier is added to the results.
+15.10 analyzes the typed text with the search analyzer before the comparison. A difference in spelling that did not match up to 15.9 now does. On the other hand, a term that contains a digit, such as an order number, a model number or a ticket ID (for example ``ZQFZ15`` or ``zqfz15``), no longer gets the implicit fuzzy clause at all. A term with a digit is usually an identifier, and a fuzzy match would also hit a similarly spelled identifier (such as ``ZQFZ14``). This is a change from 15.9, where an identifier typed in lowercase letters and digits only (such as ``zqfz15``) matched similar identifiers; in 15.10 it matches only itself. An identifier made of letters only (such as ``ABCE`` for ``ABCD``) can still match a similarly spelled identifier. A document that contains the typed term itself usually ranks higher, but a document that contains only the similar identifier is added to the results.
 
-To avoid this, do one of the following.
+To avoid this for an identifier made of letters only, do one of the following.
 
-- Enclose the term in double quotes (``"ZQFZ15"``). A single quoted word is treated as a phrase and matches only that word (see "Other Behavior Changes" above).
+- Enclose the term in double quotes (``"ABCD"``). A single quoted word is treated as a phrase and matches only that word (see "Other Behavior Changes" above).
 - To remove the implicit fuzzy clause from every search, set ``query.boost.fuzzy.min.length=-1`` in ``fess_config.properties`` and restart |Fess|.
+
+To apply the implicit fuzzy clause to terms that contain a digit as well (an identifier then matches similarly spelled identifiers again), set ``query.boost.fuzzy.digit.enabled`` to ``true`` (default ``false``). The workarounds above then apply to such identifiers too.
 
 Text that contains Han, Hiragana, Katakana or Hangul characters gets no implicit fuzzy clause by default: the bundled ``standard_analyzer`` splits it into two-character tokens, for which ``AUTO`` fuzziness allows no edit. The clause in 15.9 did not match a typo in such text either, so the results normally do not change. If you use an analyzer that does not produce such tokens (for example a morphological analyzer) for ``title`` and ``content``, set ``query.boost.fuzzy.cjk.enabled`` to ``true`` (default ``false``) to apply the clause to such text too.
 
