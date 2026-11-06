@@ -606,6 +606,22 @@ Weitere Verhaltensänderungen
 - Der Abruf eines Dokuments über seine Dokument-ID wendet jetzt wie eine Suche den Filter des virtuellen Hosts an. Bis 15.9 wendeten ``/api/v2/cache/{docId}``, die Weiterleitung ``/go/``, Vorschaubilder, die Favoriten-Endpunkte und die übrigen Abrufe über die Dokument-ID nur den Rollenfilter an und antworteten daher bei passenden Rollen auch für ein Dokument eines anderen virtuellen Hosts. In 15.10 gilt ein solches Dokument als nicht gefunden. Wie bei einer Suche wird ein Dokument ohne Wert für den virtuellen Host nicht zurückgegeben, wenn für die Anfrage ein virtueller Host bestimmt wird. Bei einer Anfrage ohne bestimmten virtuellen Host (Standard-Host) ändert sich nichts.
 - Der Suggest-Job übernimmt keine Wörter mehr aus Dokumenten, die die Suche ausblendet. Ein Dokument ohne ``role``-Wert und ein Dokument mit einem Verweigerungseintrag (ein Wert, der mit ``role.search.denied.prefix`` (Standardwert ``D``) beginnt und auf den das Präfix eines Benutzers, einer Gruppe oder einer Rolle folgt, standardmäßig also ``D1``, ``D2`` oder ``DR``) werden übersprungen. Bis 15.9 wurden die Wörter solcher Dokumente allen Benutzern vorgeschlagen. Ein Dokument mit Erlaubnis- und Verweigerungseinträgen wird als Ganzes übersprungen, weil eine Suggest-Anfrage keine Verweigerung für einen einzelnen Benutzer ausdrücken kann. Suggest-Einträge, die bereits aus solchen Dokumenten entstanden sind, laufen über die übliche Bereinigung alter Suggest-Daten ab.
 
+.. _upgrade-1510-implicit-fuzzy:
+
+Implizite unscharfe Suche nutzt den analysierten Begriff
+--------------------------------------------------------
+
+Zu einem einfachen Suchbegriff ohne ``~`` fügt |Fess| mit geringem Gewicht eine implizite unscharfe Bedingung hinzu, wenn der Begriff mindestens ``query.boost.fuzzy.min.length`` Zeichen lang ist (Standardwert ``4``; siehe den Hinweis in :doc:`../user/search-fuzzy`). Bis 15.9 verglich diese Bedingung den eingegebenen Text unverändert mit den Begriffen im Index, die in analysierter Form (unter anderem in Kleinbuchstaben) gespeichert sind. Ein Begriff mit Großbuchstaben oder ein Wort in gestemmter Form wurde daher als weiter vom indexierten Begriff entfernt gemessen, als er tatsächlich ist, und führte kaum zu Treffern.
+
+15.10 analysiert den eingegebenen Text vor dem Vergleich mit dem Such-Analyzer. Schreibweisenunterschiede, die bis 15.9 nicht zu einem Treffer führten, treffen jetzt. Als Nebeneffekt trifft ein Bezeichner mit Großbuchstaben wie eine Bestellnummer, eine Modellnummer oder eine Ticket-ID (zum Beispiel ``ZQFZ15``) auch auf einen ähnlich geschriebenen Bezeichner (etwa ``ZQFZ14``). Ein nur aus Kleinbuchstaben und Ziffern eingegebener Bezeichner (etwa ``zqfz15``) traf schon in 15.9 auf ähnliche Bezeichner. Ein Dokument, das den eingegebenen Begriff selbst enthält, steht in der Regel weiter oben, aber auch ein Dokument, das nur den ähnlichen Bezeichner enthält, kommt zu den Ergebnissen hinzu.
+
+Um das zu vermeiden, gehen Sie auf eine der folgenden Arten vor.
+
+- Setzen Sie den Begriff in doppelte Anführungszeichen (``"ZQFZ15"``). Ein einzelnes Wort in Anführungszeichen wird als Phrase behandelt und trifft nur auf dieses Wort (siehe „Weitere Verhaltensänderungen“ oben).
+- Um die implizite unscharfe Bedingung für alle Suchen zu entfernen, setzen Sie ``query.boost.fuzzy.min.length=-1`` in ``fess_config.properties`` und starten Sie |Fess| neu.
+
+Für Text mit Han-, Hiragana-, Katakana- oder Hangul-Zeichen wird standardmäßig keine implizite unscharfe Bedingung hinzugefügt: Der mitgelieferte ``standard_analyzer`` zerlegt ihn in Token aus zwei Zeichen, für die die Fuzziness ``AUTO`` keine Änderung erlaubt. Auch die Bedingung in 15.9 traf bei einem Tippfehler in solchem Text nicht, daher ändern sich die Ergebnisse normalerweise nicht. Wenn Sie für ``title`` und ``content`` einen Analyzer verwenden, der solche Token nicht erzeugt (zum Beispiel einen morphologischen Analyzer), setzen Sie ``query.boost.fuzzy.cjk.enabled`` auf ``true`` (Standardwert ``false``), damit die Bedingung auch für solchen Text gilt.
+
 .. _upgrade-1510-tika:
 
 Apache Tika 4 und ``tika.xml``
