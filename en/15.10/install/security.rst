@@ -29,7 +29,7 @@ The default administrator password (``admin`` / ``admin``) must be changed.
 
 .. note::
 
-   Once you have changed the password from ``admin``, you cannot set it back to a simple value such as ``admin`` (a blacklist of administrator passwords is configured via ``password.invalid.admin.passwords``). You can also change the initial password of the ``admin`` user before the first startup by setting ``index.user.initial_password`` in ``fess_config.properties``.
+   Once you have changed the password from ``admin``, you cannot set it back to a simple value such as ``admin`` (a blacklist of administrator passwords is configured via ``password.invalid.admin.passwords``). You can also change the initial password of the ``admin`` user before the first startup by setting ``index.user.initial_password`` in ``fess_config.properties``. ``bin/fess-setup init`` sets it for you; see :doc:`fess-setup`.
 
 **Recommended Password Policy:**
 
@@ -45,6 +45,21 @@ The default administrator password (``admin`` / ``admin``) must be changed.
 .. note::
 
    By default, the minimum length is ``8`` and all character-type requirements are disabled. To strengthen passwords, set the properties above explicitly. Note that |Fess| has no password expiration (forced periodic change) feature; if you want to enforce periodic password changes as an operational rule, do so manually.
+
+Change the Cipher Key
+---------------------
+
+``app.cipher.key`` in ``fess_config.properties`` is the key that encrypts the passwords stored in crawl configurations and data store configurations. The shipped value (``___change__me___``) is public. If the key is blank or still the shipped value, |Fess| writes a warning to ``fess.log`` at startup (see :ref:`upgrade-1510-cipher-key`). |Fess| does not change the key by itself.
+
+Set it before the first start, together with the initial password of the ``admin`` user::
+
+    $ bin/fess-setup init
+
+For the RPM and DEB packages, run ``/usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties``. The command generates a random key, or takes one with ``--cipher-key``; see :doc:`fess-setup`. To set it by hand instead, edit ``app.cipher.key`` in ``fess_config.properties`` (``app/WEB-INF/classes/fess_config.properties`` of the ZIP package, ``/etc/fess/fess_config.properties`` of the RPM and DEB packages). With the default ``app.cipher.algorithm`` (``aes``), the key must be 16, 24 or 32 characters.
+
+.. warning::
+
+   Changing the key after passwords have been saved in crawl or data store configurations makes those values impossible to decrypt. Keep the key with your backups of ``fess_config.properties``, and use the same key when you move to another installation.
 
 Enable OpenSearch Security Plugin
 ----------------------------------
@@ -273,6 +288,7 @@ Basic Configuration
 -------------------
 
 - [ ] Administrator password changed
+- [ ] Cipher key (``app.cipher.key``) changed from the shipped value
 - [ ] HTTPS enabled
 - [ ] Default port numbers changed (optional)
 

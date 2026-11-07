@@ -5,7 +5,7 @@ Comando fess-setup
 ``bin/fess-setup`` (``bin\fess-setup.bat`` en Windows) se incluye con el paquete ZIP de |Fess|.
 Instala lo que |Fess| necesita pero no incluye: OpenSearch con los plugins que requiere |Fess|,
 Node.js para los plugins de Playwright, los plugins de |Fess| y los temas. También informa sobre el estado
-de una instalación.
+de una instalación. También establece la contraseña inicial del usuario ``admin`` y la clave de cifrado (``init``).
 
 Ejecútelo desde el directorio de |Fess|. Sin argumentos, muestra la lista de comandos.
 
@@ -121,6 +121,54 @@ del directorio de |Fess|. ``bin/fess.in.sh`` (``bin\fess.in.bat`` en Windows) lo
 lugar la línea ``PLAYWRIGHT_NODEJS_PATH`` que debe añadir a ``bin/fess.in.sh``. ``--version``
 selecciona otra versión de Node.js. Consulte :doc:`../config/crawler-advanced` para el rastreador de
 Playwright.
+
+Establecer la contraseña inicial y la clave de cifrado
+======================================================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+Establece dos valores de ``fess_config.properties`` que se distribuyen con valores predeterminados públicos: ``index.user.initial_password``, la contraseña inicial del usuario ``admin`` (incluida como ``admin``), y ``app.cipher.key``, la clave que cifra las contraseñas guardadas en las configuraciones de rastreo y de almacén de datos (incluida como ``___change__me___``). Ejecútelo una vez, antes de que |Fess| se inicie por primera vez. Cada clave sustituye a su línea existente en el archivo; si el archivo no la tiene, se añade.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Opción
+     - Descripción
+   * - ``--admin-password <password>``
+     - La contraseña inicial del usuario ``admin``. Si se omite, se genera una contraseña alfanumérica aleatoria de 16 caracteres. No puede ser ``admin`` ni empezar o terminar con un espacio en blanco ni contener un carácter de control. Una contraseña indicada en la línea de comandos es visible para otros usuarios del equipo, por lo que es preferible la generada.
+   * - ``--cipher-key <key>``
+     - La clave de cifrado. Si se omite, se genera una clave alfanumérica aleatoria de 32 caracteres. Una clave indicada debe tener 16, 24 o 32 caracteres ASCII imprimibles sin espacios y no puede ser ``___change__me___``.
+   * - ``--config <file>``
+     - El ``fess_config.properties`` que se modifica. De forma predeterminada, ``app/WEB-INF/classes/fess_config.properties`` en el directorio de |Fess| (paquete ZIP). En los paquetes RPM y DEB el archivo es ``/etc/fess/fess_config.properties``; indíquelo con esta opción.
+   * - ``--force``
+     - Sustituye la clave de cifrado aunque ya no tenga el valor incluido. Véase más abajo.
+
+Cuando la contraseña se genera, el comando la muestra una sola vez, como ``Password of the admin user``; también queda en el archivo. |Fess| lee la contraseña solo cuando crea el índice de usuarios en su primer inicio, por lo que ejecutar ``init`` después de iniciar |Fess| no cambia nada. A partir de ese momento, cambie la contraseña de ``admin`` en la pantalla de administración; consulte :doc:`security`.
+
+Ejemplo para el paquete ZIP, con la contraseña y la clave de cifrado generadas::
+
+    $ bin/fess-setup init
+    Updated /path/to/fess-15.10.0/app/WEB-INF/classes/fess_config.properties
+      index.user.initial_password: set (generated)
+      app.cipher.key: set (generated)
+    Password of the admin user: <generated password>
+    This is the only time it is shown; it is also in the file above.
+    The password is read when Fess creates the user index, at its first start; it changes nothing afterwards.
+    Keep the cipher key: values Fess saves under it cannot be read under another one.
+
+En los paquetes RPM y DEB, ejecútelo con un usuario que pueda escribir en el archivo::
+
+    $ sudo /usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties
+
+La clave de cifrado solo se sustituye mientras esté vacía o conserve el valor incluido. En caso contrario, el comando termina con el código de salida ``1`` y no modifica ninguno de los dos valores, porque los valores que |Fess| guardó con la clave anterior, como las contraseñas de las configuraciones de rastreo y de almacén de datos, no se pueden leer con una clave nueva. ``--force`` sustituye la clave de todos modos; en ese caso hay que volver a introducir esas contraseñas. Conserve la clave de cifrado y trasládela al pasar a otra instalación; consulte :doc:`upgrade`.
+
+El comando también termina con el código de salida ``1`` si el archivo no existe o si ``app.cipher.algorithm`` tiene un valor distinto del predeterminado ``aes``.
 
 Gestión de Plugins
 ==================

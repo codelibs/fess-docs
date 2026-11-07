@@ -29,7 +29,7 @@
 
 .. note::
 
-   一旦将密码从 ``admin`` 更改后，就不能再设置回 ``admin`` 这样的简单字符串（``password.invalid.admin.passwords`` 中配置了管理员密码黑名单）。此外，在首次启动前，可以通过在 ``fess_config.properties`` 中设置 ``index.user.initial_password`` 来更改 ``admin`` 用户的初始密码。
+   一旦将密码从 ``admin`` 更改后，就不能再设置回 ``admin`` 这样的简单字符串（``password.invalid.admin.passwords`` 中配置了管理员密码黑名单）。此外，在首次启动前，可以通过在 ``fess_config.properties`` 中设置 ``index.user.initial_password`` 来更改 ``admin`` 用户的初始密码。也可以用 ``bin/fess-setup init`` 设置（参见 :doc:`fess-setup`）。
 
 **推荐密码策略:**
 
@@ -45,6 +45,21 @@
 .. note::
 
    默认情况下，最小长度为 ``8``，且所有字符类型要求均处于禁用状态。若要增强密码强度，请显式设置上述属性。另外，|Fess| 没有密码过期（强制定期更改）功能。如果希望将定期更改密码作为运维规则强制执行，请手动进行。
+
+更改加密密钥
+------------
+
+``fess_config.properties`` 中的 ``app.cipher.key`` 是用于加密爬取设置和数据存储设置中所保存密码的密钥。随附的值（``___change__me___``）是公开的。如果密钥为空或仍是随附的值，|Fess| 会在启动时向 ``fess.log`` 输出警告（参见 :ref:`upgrade-1510-cipher-key`）。|Fess| 不会自动更改密钥。
+
+请在首次启动之前，与 ``admin`` 用户的初始密码一起设置::
+
+    $ bin/fess-setup init
+
+RPM / DEB 包请运行 ``/usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties``。命令会生成随机密钥，也可以用 ``--cipher-key`` 指定（参见 :doc:`fess-setup`）。如需手动设置，请编辑 ``fess_config.properties`` 中的 ``app.cipher.key``（ZIP 包为 ``app/WEB-INF/classes/fess_config.properties``，RPM / DEB 包为 ``/etc/fess/fess_config.properties``）。在默认的 ``app.cipher.algorithm``（``aes``）下，密钥必须是 16、24 或 32 个字符。
+
+.. warning::
+
+   在爬取设置或数据存储设置中保存了密码之后再更改密钥，这些值将无法解密。请将密钥与 ``fess_config.properties`` 的备份一起保管，迁移到其他环境时使用同一个密钥。
 
 启用 OpenSearch 安全插件
 --------------------------------------
@@ -273,6 +288,7 @@ Nginx 访问限制示例::
 --------
 
 - [ ] 已更改管理员密码
+- [ ] 已将加密密钥（``app.cipher.key``）从随附的值更改
 - [ ] 已启用 HTTPS
 - [ ] 已更改默认端口号（可选）
 

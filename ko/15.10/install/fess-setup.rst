@@ -2,7 +2,7 @@
 fess-setup 명령
 ====================
 
-``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 플러그인이 사용하는 Node.js, |Fess| 플러그인, 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다.
+``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 플러그인이 사용하는 Node.js, |Fess| 플러그인, 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다. ``admin`` 사용자의 초기 비밀번호와 암호화 키도 설정합니다(``init``).
 
 |Fess| 디렉터리에서 실행합니다. 인수 없이 실행하면 명령 목록을 표시합니다.
 
@@ -86,6 +86,54 @@ install nodejs
     $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
 
 Playwright 플러그인(Playwright 크롤러용 ``fess-crawler-playwright`` 와 썸네일용 ``fess-thumbnail-playwright`` )이 필요로 하는 Node.js 를 |Fess| 디렉터리의 ``nodejs/`` 에 다운로드합니다. ``bin/fess.in.sh`` (Windows 에서는 ``bin\fess.in.bat`` )가 이를 찾아 ``PLAYWRIGHT_NODEJS_PATH`` 를 설정합니다. ``--dest`` 로 |Fess| 디렉터리 밖에 압축 해제한 경우에는 대신 ``bin/fess.in.sh`` 에 추가할 ``PLAYWRIGHT_NODEJS_PATH`` 줄을 표시합니다. ``--version`` 으로 다른 버전의 Node.js 를 지정할 수 있습니다. Playwright 크롤러에 대해서는 :doc:`../config/crawler-advanced` 를 참조하십시오.
+
+초기 비밀번호와 암호화 키 설정
+==============================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+``fess_config.properties`` 에서 공개된 기본값으로 제공되는 두 값을 설정합니다. ``admin`` 사용자의 초기 비밀번호인 ``index.user.initial_password`` (기본 제공 값은 ``admin`` )와, 크롤링 설정과 데이터 스토어 설정에 저장되는 비밀번호를 암호화하는 키인 ``app.cipher.key`` (기본 제공 값은 ``___change__me___`` )입니다. |Fess| 를 처음 시작하기 전에 한 번만 실행합니다. 각 키는 파일에 있는 기존 줄을 바꾸며, 파일에 없는 키는 추가합니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 옵션
+     - 설명
+   * - ``--admin-password <password>``
+     - ``admin`` 사용자의 초기 비밀번호. 생략하면 영숫자 16자의 임의 비밀번호를 생성합니다. ``admin`` 은 지정할 수 없으며, 앞뒤에 공백을 둘 수 없고 제어 문자도 포함할 수 없습니다. 명령줄에 지정한 비밀번호는 같은 컴퓨터의 다른 사용자에게 보이므로 생성된 비밀번호를 사용하는 것이 좋습니다.
+   * - ``--cipher-key <key>``
+     - 암호화 키. 생략하면 영숫자 32자의 임의 키를 생성합니다. 지정하는 키는 공백이 없는 출력 가능한 ASCII 문자 16, 24 또는 32자여야 하며 ``___change__me___`` 는 지정할 수 없습니다.
+   * - ``--config <file>``
+     - 변경할 ``fess_config.properties`` . 기본값은 |Fess| 디렉터리의 ``app/WEB-INF/classes/fess_config.properties`` (ZIP 패키지)입니다. RPM / DEB 패키지의 파일은 ``/etc/fess/fess_config.properties`` 이므로 이 옵션으로 지정합니다.
+   * - ``--force``
+     - 암호화 키가 기본 제공 값이 아니더라도 바꿉니다. 아래를 참조하십시오.
+
+비밀번호를 생성한 경우 명령은 ``Password of the admin user`` 로 한 번만 표시합니다. 파일에도 기록됩니다. |Fess| 는 처음 시작할 때 사용자 인덱스를 만드는 시점에만 비밀번호를 읽으므로, |Fess| 를 시작한 뒤에 ``init`` 를 실행해도 아무것도 바뀌지 않습니다. 시작한 뒤에는 관리 화면에서 ``admin`` 의 비밀번호를 변경하십시오( :doc:`security` 참조).
+
+ZIP 패키지에서 비밀번호와 암호화 키를 생성하는 예::
+
+    $ bin/fess-setup init
+    Updated /path/to/fess-15.10.0/app/WEB-INF/classes/fess_config.properties
+      index.user.initial_password: set (generated)
+      app.cipher.key: set (generated)
+    Password of the admin user: <generated password>
+    This is the only time it is shown; it is also in the file above.
+    The password is read when Fess creates the user index, at its first start; it changes nothing afterwards.
+    Keep the cipher key: values Fess saves under it cannot be read under another one.
+
+RPM / DEB 패키지에서는 파일을 쓸 수 있는 사용자로 실행합니다::
+
+    $ sudo /usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties
+
+암호화 키는 비어 있거나 기본 제공 값 그대로인 동안에만 바뀝니다. 그렇지 않으면 명령은 종료 코드 ``1`` 로 종료하며 두 값 모두 변경하지 않습니다. |Fess| 가 이전 키로 저장한 값(크롤링 설정과 데이터 스토어 설정의 비밀번호 등)은 새 키로는 읽을 수 없기 때문입니다. ``--force`` 를 지정하면 바꾸지만, 그 경우 해당 비밀번호를 다시 입력해야 합니다. 암호화 키는 보관해 두고, 다른 환경으로 이전할 때 같은 키를 이어서 사용하십시오( :doc:`upgrade` 참조).
+
+파일이 없거나 ``app.cipher.algorithm`` 이 기본값인 ``aes`` 이외로 설정된 경우에도 종료 코드 ``1`` 로 종료합니다.
 
 플러그인 관리
 ================

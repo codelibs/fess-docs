@@ -2,7 +2,7 @@
 fess-setup 命令
 ====================
 
-``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 插件所需的 Node.js、 |Fess| 插件以及主题。它还可以检查安装状态。
+``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 插件所需的 Node.js、 |Fess| 插件以及主题。它还可以检查安装状态。它还可以设置 ``admin`` 用户的初始密码和加密密钥（``init``）。
 
 请在 |Fess| 目录中运行。不带参数运行时，会显示命令列表。
 
@@ -86,6 +86,54 @@ install nodejs
     $ bin/fess-setup install nodejs [--dest <dir>] [--version <version>]
 
 将 Playwright 插件（用于 Playwright 爬虫的 ``fess-crawler-playwright`` 和用于缩略图的 ``fess-thumbnail-playwright``\ ）所需的 Node.js 下载到 |Fess| 目录下的 ``nodejs/`` 中。\ ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会在该位置找到它并设置 ``PLAYWRIGHT_NODEJS_PATH``\ 。使用 ``--dest`` 解压到 |Fess| 目录之外时，命令会改为显示需要添加到 ``bin/fess.in.sh`` 中的 ``PLAYWRIGHT_NODEJS_PATH`` 行。\ ``--version`` 用于选择其他版本的 Node.js。关于 Playwright 爬虫，请参阅 :doc:`../config/crawler-advanced`\ 。
+
+设置初始密码和加密密钥
+======================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+设置 ``fess_config.properties`` 中两个随附公开默认值的值：``admin`` 用户的初始密码 ``index.user.initial_password``（随附的值为 ``admin``），以及用于加密爬取设置和数据存储设置中所保存密码的密钥 ``app.cipher.key``（随附的值为 ``___change__me___``）。请在 |Fess| 首次启动之前运行一次。每个键会替换文件中已有的行；文件中没有的键会被追加。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 选项
+     - 说明
+   * - ``--admin-password <password>``
+     - ``admin`` 用户的初始密码。省略时，会生成 16 位的随机字母数字密码。不能是 ``admin``，开头和结尾不能有空白字符，也不能包含控制字符。在命令行中指定的密码对同一台机器上的其他用户可见，因此建议使用自动生成的密码。
+   * - ``--cipher-key <key>``
+     - 加密密钥。省略时，会生成 32 位的随机字母数字密钥。指定的密钥必须是不含空格的可打印 ASCII 字符，长度为 16、24 或 32，且不能是 ``___change__me___``。
+   * - ``--config <file>``
+     - 要修改的 ``fess_config.properties``。默认是 |Fess| 目录中的 ``app/WEB-INF/classes/fess_config.properties``（ZIP 包）。RPM / DEB 包的文件是 ``/etc/fess/fess_config.properties``，请用此选项指定。
+   * - ``--force``
+     - 即使加密密钥已不是随附的值，也会替换。见下文。
+
+生成密码时，命令只会以 ``Password of the admin user`` 显示一次，文件中也会写入该密码。|Fess| 只在首次启动创建用户索引时读取该密码，因此在 |Fess| 启动之后运行 ``init`` 不会有任何变化。启动之后，请在管理页面中更改 ``admin`` 的密码（参见 :doc:`security`）。
+
+ZIP 包生成密码和加密密钥的示例::
+
+    $ bin/fess-setup init
+    Updated /path/to/fess-15.10.0/app/WEB-INF/classes/fess_config.properties
+      index.user.initial_password: set (generated)
+      app.cipher.key: set (generated)
+    Password of the admin user: <generated password>
+    This is the only time it is shown; it is also in the file above.
+    The password is read when Fess creates the user index, at its first start; it changes nothing afterwards.
+    Keep the cipher key: values Fess saves under it cannot be read under another one.
+
+RPM / DEB 包请以能够写入该文件的用户运行::
+
+    $ sudo /usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties
+
+仅当加密密钥为空或仍是随附的值时才会替换。否则命令会以退出码 ``1`` 结束，且两个值都不会更改，因为 |Fess| 用旧密钥保存的值（例如爬取设置和数据存储设置中的密码）无法用新密钥读取。指定 ``--force`` 会强制替换，此时需要重新输入这些密码。请妥善保管加密密钥，迁移到其他环境时沿用同一个密钥（参见 :doc:`upgrade`）。
+
+文件不存在，或 ``app.cipher.algorithm`` 被设置为默认值 ``aes`` 以外的值时，命令同样会以退出码 ``1`` 结束。
 
 管理插件
 ========

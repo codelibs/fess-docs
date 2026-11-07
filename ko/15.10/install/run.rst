@@ -9,6 +9,10 @@
    |Fess| 를 시작하기 전에 반드시 OpenSearch를 시작하십시오.
    OpenSearch가 시작되어 있지 않은 경우 |Fess| 는 올바르게 작동하지 않습니다.
 
+.. tip::
+
+   처음 시작하기 전에 ``bin/fess-setup init`` 를 실행하여 ``fess_config.properties`` 에 ``admin`` 사용자의 초기 비밀번호와 암호화 키(``app.cipher.key``)를 설정하십시오. 암호화 키가 기본 제공 값 그대로이면 |Fess| 는 시작할 때 ``fess.log`` 에 경고를 출력합니다. :doc:`fess-setup` 와 :doc:`security` 를 참조하십시오.
+
 시작 방법
 =========
 

@@ -29,7 +29,7 @@ Das Standard-Administratorpasswort (``admin`` / ``admin``) muss unbedingt geänd
 
 .. note::
 
-   Sobald Sie das Passwort von ``admin`` geändert haben, können Sie es nicht mehr auf einen einfachen Wert wie ``admin`` zurücksetzen (eine Sperrliste für Administratorpasswörter wird über ``password.invalid.admin.passwords`` konfiguriert). Außerdem können Sie das Initialpasswort des Benutzers ``admin`` bereits vor dem ersten Start ändern, indem Sie ``index.user.initial_password`` in ``fess_config.properties`` setzen.
+   Sobald Sie das Passwort von ``admin`` geändert haben, können Sie es nicht mehr auf einen einfachen Wert wie ``admin`` zurücksetzen (eine Sperrliste für Administratorpasswörter wird über ``password.invalid.admin.passwords`` konfiguriert). Außerdem können Sie das Initialpasswort des Benutzers ``admin`` bereits vor dem ersten Start ändern, indem Sie ``index.user.initial_password`` in ``fess_config.properties`` setzen. ``bin/fess-setup init`` setzt es für Sie; siehe :doc:`fess-setup`.
 
 **Empfohlene Passwort-Richtlinie:**
 
@@ -45,6 +45,21 @@ Das Standard-Administratorpasswort (``admin`` / ``admin``) muss unbedingt geänd
 .. note::
 
    Standardmäßig beträgt die Mindestlänge ``8`` und alle Anforderungen an Zeichenarten sind deaktiviert. Um Passwörter zu stärken, setzen Sie die oben genannten Eigenschaften explizit. Beachten Sie, dass |Fess| keine Funktion zum Ablaufen von Passwörtern (erzwungene regelmäßige Änderung) besitzt. Wenn Sie regelmäßige Passwortänderungen als Betriebsregel durchsetzen möchten, führen Sie diese manuell durch.
+
+Chiffrierschlüssel ändern
+-------------------------
+
+``app.cipher.key`` in ``fess_config.properties`` ist der Schlüssel, der die in Crawl-Konfigurationen und Datenspeicher-Konfigurationen gespeicherten Passwörter verschlüsselt. Der mitgelieferte Wert (``___change__me___``) ist öffentlich bekannt. Ist der Schlüssel leer oder noch der mitgelieferte Wert, schreibt |Fess| beim Start eine Warnung in ``fess.log`` (siehe :ref:`upgrade-1510-cipher-key`). |Fess| ändert den Schlüssel nicht selbstständig.
+
+Legen Sie ihn vor dem ersten Start fest, zusammen mit dem Initialpasswort des Benutzers ``admin``::
+
+    $ bin/fess-setup init
+
+Bei den RPM- und DEB-Paketen führen Sie ``/usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties`` aus. Der Befehl erzeugt einen zufälligen Schlüssel oder übernimmt einen mit ``--cipher-key`` angegebenen; siehe :doc:`fess-setup`. Um ihn stattdessen von Hand zu setzen, bearbeiten Sie ``app.cipher.key`` in ``fess_config.properties`` (``app/WEB-INF/classes/fess_config.properties`` beim ZIP-Paket, ``/etc/fess/fess_config.properties`` bei den RPM- und DEB-Paketen). Mit dem Standardwert ``aes`` für ``app.cipher.algorithm`` muss der Schlüssel 16, 24 oder 32 Zeichen lang sein.
+
+.. warning::
+
+   Wird der Schlüssel geändert, nachdem Passwörter in Crawl- oder Datenspeicher-Konfigurationen gespeichert wurden, lassen sich diese Werte nicht mehr entschlüsseln. Bewahren Sie den Schlüssel zusammen mit Ihren Sicherungen von ``fess_config.properties`` auf und verwenden Sie bei einem Umzug auf eine andere Installation denselben Schlüssel.
 
 Aktivierung des OpenSearch-Sicherheits-Plugins
 -----------------------------------------------
@@ -273,6 +288,7 @@ Grundkonfiguration
 ------------------
 
 - [ ] Administratorpasswort geändert
+- [ ] Chiffrierschlüssel (``app.cipher.key``) vom mitgelieferten Wert geändert
 - [ ] HTTPS aktiviert
 - [ ] Standard-Portnummer geändert (optional)
 

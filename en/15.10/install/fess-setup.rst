@@ -5,7 +5,7 @@ fess-setup Command
 ``bin/fess-setup`` (``bin\fess-setup.bat`` on Windows) is included with the |Fess| ZIP package.
 It installs what |Fess| needs but does not bundle: OpenSearch with the plugins |Fess| requires,
 Node.js for the Playwright plugins, |Fess| plugins, and themes. It also reports on an
-installation.
+installation. It can also set the initial password of the ``admin`` user and the cipher key (``init``).
 
 Run it from the |Fess| directory. Without arguments, it prints the list of commands.
 
@@ -118,6 +118,54 @@ crawler and ``fess-thumbnail-playwright`` for thumbnails), into ``nodejs/`` in t
 ``PLAYWRIGHT_NODEJS_PATH``. With ``--dest`` outside the |Fess| directory, the command prints the
 ``PLAYWRIGHT_NODEJS_PATH`` line to add to ``bin/fess.in.sh`` instead. ``--version`` selects another
 Node.js version. See :doc:`../config/crawler-advanced` for the Playwright crawler.
+
+Setting the Initial Password and Cipher Key
+===========================================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+Sets two values in ``fess_config.properties`` that ship with publicly known defaults: ``index.user.initial_password``, the initial password of the ``admin`` user (shipped as ``admin``), and ``app.cipher.key``, the key that encrypts the passwords stored in crawl and data store configurations (shipped as ``___change__me___``). Run it once, before |Fess| starts for the first time. Each key replaces its existing line in the file; a key the file does not have is appended.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Option
+     - Description
+   * - ``--admin-password <password>``
+     - The initial password of the ``admin`` user. When omitted, a random 16-character alphanumeric password is generated. It must not be ``admin``, and must not start or end with whitespace or contain a control character. A password given on the command line is visible to other users of the machine, so the generated one is preferable.
+   * - ``--cipher-key <key>``
+     - The cipher key. When omitted, a random 32-character alphanumeric key is generated. A key you give must be 16, 24 or 32 characters of printable ASCII without spaces, and must not be ``___change__me___``.
+   * - ``--config <file>``
+     - The ``fess_config.properties`` to change. By default, ``app/WEB-INF/classes/fess_config.properties`` in the |Fess| directory (ZIP package). For the RPM and DEB packages the file is ``/etc/fess/fess_config.properties``; name it with this option.
+   * - ``--force``
+     - Replaces the cipher key even when it is no longer the shipped value. See below.
+
+When the password is generated, the command prints it once, as ``Password of the admin user``; it is also in the file. |Fess| reads the password only when it creates the user index at its first start, so running ``init`` after |Fess| has started changes nothing. After that, change the password of ``admin`` in the administration screen; see :doc:`security`.
+
+Example for the ZIP package, with the password and the cipher key generated::
+
+    $ bin/fess-setup init
+    Updated /path/to/fess-15.10.0/app/WEB-INF/classes/fess_config.properties
+      index.user.initial_password: set (generated)
+      app.cipher.key: set (generated)
+    Password of the admin user: <generated password>
+    This is the only time it is shown; it is also in the file above.
+    The password is read when Fess creates the user index, at its first start; it changes nothing afterwards.
+    Keep the cipher key: values Fess saves under it cannot be read under another one.
+
+For the RPM and DEB packages, run it as a user that can write the file::
+
+    $ sudo /usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties
+
+The cipher key is replaced only while it is blank or still the shipped value. Otherwise the command stops with exit code ``1`` and changes neither value, because values |Fess| saved under the old key, such as the passwords in crawl and data store configurations, cannot be read under a new one. ``--force`` replaces the key anyway; those passwords must then be entered again. Keep the cipher key, and carry it over when you move to another installation; see :doc:`upgrade`.
+
+The command also stops with exit code ``1`` when the file does not exist, or when ``app.cipher.algorithm`` is set to anything but ``aes``, the default.
 
 Managing Plugins
 ================
