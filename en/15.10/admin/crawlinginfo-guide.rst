@@ -29,7 +29,7 @@ While crawls are running, "Running Crawls" is shown above the list. It has one r
 Notes:
 
 - The block shows the state when the page was opened. Reload the page to see the latest values.
-- A crawl that finishes or is stopped is gone from the block the next time the page is opened. When the crawler stops without recording that (for example the process is killed), the crawl disappears about 30 seconds (by default) after its last update. A stopped or failed crawl leaves the document count of the previous completed crawl unchanged, and so does a crawl that completes without processing any document.
+- A crawl that finishes is gone from the block the next time the page is opened. A crawl that is stopped, or that the crawler stops without recording (for example the process is killed), disappears within about 30 seconds (by default) after its last update, so it may still be shown for a short time after it is stopped. A stopped or failed crawl leaves the document count of the previous completed crawl unchanged, and so does a crawl that completes without processing any document.
 - The progress state is stored by the system in the ``metadata`` field of the crawl configuration. It cannot be edited in the admin UI or the admin API.
 - The same information is available from the admin API (see :doc:`../api/admin/api-admin-crawlinginfo`).
 

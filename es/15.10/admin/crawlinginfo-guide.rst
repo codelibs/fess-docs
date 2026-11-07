@@ -31,7 +31,7 @@ Mientras hay rastreos en ejecución, "Rastreos en ejecución" se muestra encima 
 Notas:
 
 - El bloque muestra el estado en el momento de abrir la página. Recargue la página para ver los valores más recientes.
-- Un rastreo terminado o detenido ya no aparece en el bloque la próxima vez que se abre la página. Si el rastreador se detiene sin registrarlo (por ejemplo, porque se mata el proceso), el rastreo desaparece unos 30 segundos (de forma predeterminada) después de su última actualización. Un rastreo detenido o fallido deja sin cambios el número de documentos del último rastreo completado, igual que un rastreo que termina sin procesar ningún documento.
+- Un rastreo terminado ya no aparece en el bloque la próxima vez que se abre la página. Un rastreo detenido, o que el rastreador interrumpe sin registrarlo (por ejemplo, porque se mata el proceso), desaparece en unos 30 segundos (de forma predeterminada) tras su última actualización, por lo que puede seguir mostrándose un breve tiempo después de detenerlo. Un rastreo detenido o fallido deja sin cambios el número de documentos del último rastreo completado, igual que un rastreo que termina sin procesar ningún documento.
 - El sistema guarda el estado del progreso en el campo ``metadata`` de la configuración de rastreo. No se puede editar en la interfaz de administración ni en la API de administración.
 - La misma información está disponible en la API de administración (consulte :doc:`../api/admin/api-admin-crawlinginfo`).
 

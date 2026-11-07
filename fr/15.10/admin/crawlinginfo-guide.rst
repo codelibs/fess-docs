@@ -31,7 +31,7 @@ Tant que des explorations sont en cours, « Explorations en cours » s'affiche a
 Remarques :
 
 - Le bloc affiche l'état au moment de l'ouverture de la page. Rechargez la page pour voir les valeurs les plus récentes.
-- Une exploration terminée ou arrêtée n'est plus dans le bloc à la prochaine ouverture de la page. Si le crawler s'arrête sans l'enregistrer (par exemple lorsque le processus est tué), l'exploration disparaît environ 30 secondes (par défaut) après sa dernière mise à jour. Une exploration arrêtée ou en échec laisse inchangé le nombre de documents de la dernière exploration terminée, de même qu'une exploration qui se termine sans avoir traité aucun document.
+- Une exploration terminée n'est plus dans le bloc à la prochaine ouverture de la page. Une exploration arrêtée, ou que le crawler interrompt sans l'enregistrer (par exemple lorsque le processus est tué), disparaît dans un délai d'environ 30 secondes (par défaut) après sa dernière mise à jour ; elle peut donc rester affichée brièvement après l'arrêt. Une exploration arrêtée ou en échec laisse inchangé le nombre de documents de la dernière exploration terminée, de même qu'une exploration qui se termine sans avoir traité aucun document.
 - L'état de progression est enregistré par le système dans le champ ``metadata`` de la configuration d'exploration. Il ne peut être modifié ni dans l'interface d'administration ni par l'API d'administration.
 - Les mêmes informations sont disponibles via l'API d'administration (voir :doc:`../api/admin/api-admin-crawlinginfo`).
 
