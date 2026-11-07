@@ -7,7 +7,7 @@ CodeLibs Projectでは、サポート対象のリリースに移行すること�
 これにより、必要なサービスやサポートが利用できなくなっているという事態を回避することができます。
 最新のリリースは、`ダウンロードページ <downloads.html>`__ からダウンロードできます。
 
-製品サポート期限を超えた製品でサポートが必要な場合は、`商用サポート <https://www.n2sm.net/products/n2search.html>`__ にご相談ください。
+製品サポート期限を超えた製品でサポートが必要な場合は、`商用サポート <https://www.n2sm.net/campaign/n2search/?utm_source=fess-docs&utm_medium=referral&utm_campaign=commercial-support&utm_content=ja-eol>`__ にご相談ください。
 
 .. warning::
 
