@@ -27,6 +27,8 @@ Devuelve los documentos que tienen la misma firma de contenido que el documento 
 - Con ``login.required=true``, un llamante anónimo recibe ``auth_required`` (401). Un token de acceso se puede usar igual que con ``/api/v2/search``.
 - Las solicitudes están limitadas a ``api.search.similar.rate.limit.per.minute`` (predeterminado: ``30``; ``0`` significa sin límite) por minuto, contadas por usuario con sesión iniciada o por IP de cliente en el caso de un invitado. Al superar el límite, el endpoint responde ``429`` con una cabecera ``Retry-After``.
 - Solo se devuelve una página, ordenada por URL y después por ID de documento. No hay parámetro ``start`` ni desplazamiento.
+- A una solicitud para la que no se determina ningún host virtual (el host predeterminado) no se le añade el filtro de host virtual, por lo que también se incluyen los documentos que tienen un valor de host virtual (igual que ``/api/v2/search``). Restrinja por rol los documentos que los usuarios del host predeterminado no deben ver.
+- Cuando el contenido de un documento cambia y se vuelve a rastrear, su ``doc_id`` cambia. Un ``doc_id`` guardado puede pasar a ``not_found`` (404) después del nuevo rastreo.
 
 Qué documentos se devuelven
 ---------------------------

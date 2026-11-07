@@ -27,6 +27,8 @@ Returns the documents that have the same content signature as the document ``doc
 - With ``login.required=true``, an anonymous caller gets ``auth_required`` (401). An access token can be used the same way as with ``/api/v2/search``.
 - Requests are limited to ``api.search.similar.rate.limit.per.minute`` (default: ``30``; ``0`` means unlimited) per minute, counted per logged-in user, or per client IP for a guest. Over the limit the endpoint answers ``429`` with a ``Retry-After`` header.
 - Only one page is returned, ordered by URL and then document ID. There is no ``start`` or offset parameter.
+- A request for which no virtual host is determined (the default host) gets no virtual host filter, so documents that have a virtual host value are also covered (the same as ``/api/v2/search``). Restrict documents that the users of the default host must not see by role.
+- When the content of a document changes and it is crawled again, its ``doc_id`` changes. A saved ``doc_id`` may become ``not_found`` (404) after the re-crawl.
 
 Which Documents Are Returned
 ----------------------------

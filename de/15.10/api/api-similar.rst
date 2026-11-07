@@ -27,6 +27,8 @@ Gibt die Dokumente zurück, die dieselbe Inhaltssignatur wie das Dokument ``docI
 - Bei ``login.required=true`` erhält ein anonymer Aufrufer ``auth_required`` (401). Ein Zugriffstoken kann wie bei ``/api/v2/search`` verwendet werden.
 - Anfragen sind auf ``api.search.similar.rate.limit.per.minute`` (Standard: ``30``; ``0`` bedeutet unbegrenzt) pro Minute begrenzt, gezählt je angemeldetem Benutzer bzw. je Client-IP bei einem Gast. Bei Überschreitung antwortet der Endpunkt mit ``429`` und einem ``Retry-After``-Header.
 - Es wird nur eine Seite zurückgegeben, sortiert nach URL und dann nach Dokument-ID. Es gibt keinen Parameter ``start`` oder Offset.
+- Bei einer Anfrage, für die kein virtueller Host bestimmt wird (Standard-Host), wird kein Filter für virtuelle Hosts hinzugefügt, sodass auch Dokumente mit einem Wert für den virtuellen Host einbezogen werden (wie bei ``/api/v2/search``). Dokumente, die Benutzer des Standard-Hosts nicht sehen dürfen, sollten Sie über Rollen einschränken.
+- Ändert sich der Inhalt eines Dokuments und wird es erneut gecrawlt, ändert sich seine ``doc_id``. Eine gespeicherte ``doc_id`` kann nach dem erneuten Crawlen ``not_found`` (404) liefern.
 
 Welche Dokumente zurückgegeben werden
 -------------------------------------

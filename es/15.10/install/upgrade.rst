@@ -602,6 +602,22 @@ Otros cambios de comportamiento
 - ``suggest.popular.word.cache.expire`` se lee en segundos, como describen ``fess_config.properties`` y :doc:`../config/properties`. Hasta 15.9 el valor se usaba como minutos, de modo que con el valor predeterminado ``60`` las palabras populares se guardaban en la caché durante 60 minutos; en 15.10 son 60 segundos. Para conservar la caché más larga, defina un valor mayor en segundos (``3600`` para 60 minutos). La caché también se vacía después de cada ejecución del trabajo de sugerencias.
 - La búsqueda de un documento por su ID de documento aplica ahora el filtro del host virtual, igual que una búsqueda. Hasta 15.9, ``/api/v2/cache/{docId}``, la redirección ``/go/``, las miniaturas, los puntos de acceso de favoritos y el resto de las búsquedas por ID de documento solo aplicaban el filtro de roles, por lo que, si los roles coincidían, respondían también para un documento de otro host virtual. En 15.10 ese documento se trata como no encontrado. Igual que en una búsqueda, un documento sin valor de host virtual no se devuelve cuando se determina un host virtual para la solicitud. No cambia nada para una solicitud sin host virtual determinado (host predeterminado).
 - El trabajo de sugerencias ya no toma palabras de los documentos que la búsqueda oculta. Se omiten un documento sin valor ``role`` y un documento con una entrada denegada (un valor que empieza por ``role.search.denied.prefix`` (valor predeterminado ``D``) seguido del prefijo de un usuario, un grupo o un rol, es decir, por defecto ``D1``, ``D2`` o ``DR``). Hasta 15.9, las palabras de esos documentos se sugerían a todos. Un documento con entradas permitidas y denegadas se omite por completo, porque una solicitud de sugerencias no puede expresar una denegación para un solo usuario. Las entradas de sugerencias ya creadas a partir de esos documentos caducan con la purga habitual de datos antiguos de sugerencias.
+- El límite de intentos de inicio de sesión ya no distingue entre mayúsculas y minúsculas en el nombre de usuario. Hasta 15.9, ``Admin`` y ``admin`` se contaban como nombres de usuario distintos, por lo que los fallos repartidos entre distintas grafías nunca alcanzaban el límite por cuenta (5 fallos). 15.10 cuenta las grafías como la misma cuenta, tanto en el formulario de inicio de sesión (``/login/``) como en ``/api/v2/auth/login``.
+- Llamar a ``POST /login/changePassword`` sin la contraseña anterior devolvía HTTP 500 hasta 15.9. 15.10 devuelve un error de validación y la contraseña no cambia.
+- Un POST a un formulario de la pantalla de administración que no incluye ``crudMode`` (por ejemplo, desde un script) devolvía HTTP 500 en 15.9 (15.8 y anteriores no devuelven 500). 15.10 devuelve un error de validación.
+- La eliminación de un plugin solo afecta a los archivos situados directamente en el directorio de plugins. Un nombre o una versión que contenga ``../`` ya no elimina un archivo fuera del directorio; en su lugar se escribe una advertencia en ``fess.log``. Hasta 15.9, un nombre así podía eliminar archivos fuera del directorio. La eliminación se ejecuta en segundo plano, por lo que ``DELETE /api/admin/plugin`` devuelve ``status`` ``0`` tanto si la eliminación tiene éxito como si no. Compruebe el resultado en ``fess.log``.
+
+.. _upgrade-1510-new-api:
+
+API añadidas en 15.10
+---------------------
+
+15.10 añade las siguientes API. Los cambios de OpenAPI son solo adiciones, por lo que los clientes existentes siguen funcionando sin cambios.
+
+- ``GET /api/v2/documents/{docId}/similar``: enumera los documentos con el mismo contenido (:doc:`../api/api-similar`). Las llamadas están limitadas por ``api.search.similar.rate.limit.per.minute`` (predeterminado ``30``).
+- ``theme_settings`` en ``GET /api/v2/ui/config``: el contenido de «Configuración del tema» en Sistema > General de la pantalla de administración (:doc:`../api/api-uiconfig`).
+- ``GET /api/admin/crawlinginfo/progress``: el progreso de cada configuración de rastreo en ejecución (:doc:`../api/admin/api-admin-crawlinginfo`).
+- ``mime_type``, ``http_status_code`` y ``content_length`` en ``/api/admin/failureurl``: información sobre la respuesta de la URL fallida (:doc:`../api/admin/api-admin-failureurl`).
 
 .. _upgrade-1510-implicit-fuzzy:
 

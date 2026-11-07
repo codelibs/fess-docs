@@ -114,7 +114,7 @@ Los elementos de ``response`` son los siguientes. Todos los campos son obligator
      - Array de configuraciones regionales disponibles.
    * - ``ui_locale``
      - string
-     - El idioma de visualización de la pantalla de búsqueda como etiqueta BCP 47 (por ejemplo, ``ja`` o ``pt-BR``). Se determina a partir del parámetro de solicitud ``browser_lang`` (una vez indicado, se recuerda en la sesión), después de la sesión y después del encabezado ``Accept-Language``. Vacío cuando no se puede determinar. No es lo mismo que ``locales``, que enumera los idiomas de búsqueda.
+     - El idioma de visualización de la pantalla de búsqueda como etiqueta BCP 47 (por ejemplo, ``ja`` o ``pt-BR``). Se determina a partir del parámetro de solicitud ``browser_lang`` (una vez indicado, se recuerda en la sesión), después de la sesión y después del encabezado ``Accept-Language``. Vacío cuando no se puede determinar. No es lo mismo que ``locales``, que enumera los idiomas de búsqueda. Sin parámetro de solicitud, sin sesión y sin encabezado ``Accept-Language``, es la configuración regional predeterminada del servidor.
    * - ``default_label_values``
      - string[]
      - Valores de etiqueta que la pantalla de búsqueda preselecciona. Para el usuario actual se toman de "Valor de etiqueta por defecto" en la página "General" de la pantalla de administración, incluidos los valores definidos por rol o grupo. Un array vacío cuando ``label_options`` está vacío. ``/api/v2/search`` no los aplica.
@@ -205,7 +205,7 @@ Devuelve la configuración que un administrador introdujo en "Configuración del
 - Una clave coincide con ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` y no es ``__proto__``, ``constructor`` ni ``prototype``.
 - Un valor tiene como máximo 1000 caracteres y no contiene caracteres de control.
 - Solo se devuelven las entradas válidas, como máximo 100, en el orden almacenado. Si una clave aparece más de una vez, se usa el valor de la última línea.
-- Este endpoint se puede llamar sin iniciar sesión incluso cuando "Requiere inicio de sesión" está habilitado. En ese caso, un llamante anónimo recibe un objeto vacío.
+- Este endpoint se puede llamar sin iniciar sesión incluso cuando "Requiere inicio de sesión" está habilitado. En ese caso, un llamante anónimo recibe un objeto vacío. Sin embargo, cuando ``login.required`` está habilitado, ``theme_settings`` solo se devuelve a un llamante que inició sesión con una sesión. Una llamada que solo lleva un token de acceso también recibe un objeto vacío.
 - Los valores son visibles para todos los usuarios de la interfaz de búsqueda, por lo que no deben contener secretos. Un tema debe tratar los valores solo como datos: nunca insertarlos como HTML ni usarlos como destino de un enlace o de una redirección.
 
 features

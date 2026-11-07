@@ -27,6 +27,8 @@ Renvoie les documents qui ont la même signature de contenu que le document ``do
 - Avec ``login.required=true``, un appelant anonyme reçoit ``auth_required`` (401). Un jeton d'accès s'utilise comme pour ``/api/v2/search``.
 - Les requêtes sont limitées à ``api.search.similar.rate.limit.per.minute`` (par défaut : ``30`` ; ``0`` signifie illimité) par minute, comptées par utilisateur connecté, ou par IP cliente pour un invité. Au-delà de la limite, le point de terminaison répond ``429`` avec un en-tête ``Retry-After``.
 - Une seule page est renvoyée, triée par URL puis par ID de document. Il n'y a ni paramètre ``start`` ni décalage.
+- Une requête pour laquelle aucun hôte virtuel n'est déterminé (l'hôte par défaut) ne reçoit pas de filtre d'hôte virtuel ; les documents qui ont une valeur d'hôte virtuel sont donc aussi concernés (comme pour ``/api/v2/search``). Restreignez par rôle les documents que les utilisateurs de l'hôte par défaut ne doivent pas voir.
+- Lorsque le contenu d'un document change et qu'il est exploré à nouveau, son ``doc_id`` change. Un ``doc_id`` enregistré peut devenir ``not_found`` (404) après la nouvelle exploration.
 
 Documents renvoyés
 ------------------

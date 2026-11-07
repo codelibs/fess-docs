@@ -114,7 +114,7 @@ Die einzelnen Elemente von ``response`` sind wie folgt beschrieben. Alle Felder 
      - Array der verfügbaren Gebietsschemas.
    * - ``ui_locale``
      - string
-     - Die Anzeigesprache der Suchoberfläche als BCP-47-Tag (zum Beispiel ``ja`` oder ``pt-BR``). Sie wird aus dem Anfrageparameter ``browser_lang`` (einmal angegeben, wird er in der Sitzung gemerkt), dann aus der Sitzung und dann aus dem Header ``Accept-Language`` bestimmt. Leer, wenn sie sich nicht bestimmen lässt. Nicht zu verwechseln mit ``locales``, das die Suchsprachen auflistet.
+     - Die Anzeigesprache der Suchoberfläche als BCP-47-Tag (zum Beispiel ``ja`` oder ``pt-BR``). Sie wird aus dem Anfrageparameter ``browser_lang`` (einmal angegeben, wird er in der Sitzung gemerkt), dann aus der Sitzung und dann aus dem Header ``Accept-Language`` bestimmt. Leer, wenn sie sich nicht bestimmen lässt. Nicht zu verwechseln mit ``locales``, das die Suchsprachen auflistet. Ohne Anfrageparameter, ohne Sitzung und ohne ``Accept-Language``-Header ist es die Standardsprache des Servers.
    * - ``default_label_values``
      - string[]
      - Labelwerte, die die Suchoberfläche vorauswählt. Für den aktuellen Benutzer stammen sie aus „Standard-Labelwert“ auf der Seite „Allgemein“ der Verwaltungsoberfläche, einschließlich der Werte je Rolle oder Gruppe. Ein leeres Array, wenn ``label_options`` leer ist. ``/api/v2/search`` wendet sie nicht an.
@@ -205,7 +205,7 @@ Gibt die Einstellungen zurück, die ein Administrator unter „Theme-Einstellung
 - Ein Schlüssel entspricht ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` und ist weder ``__proto__`` noch ``constructor`` noch ``prototype``.
 - Ein Wert hat höchstens 1000 Zeichen und enthält keine Steuerzeichen.
 - Zurückgegeben werden nur gültige Einträge, höchstens 100, in der gespeicherten Reihenfolge. Kommt ein Schlüssel mehrfach vor, gilt der Wert der späteren Zeile.
-- Dieser Endpunkt kann auch bei aktivierter Option „Anmeldung erforderlich" ohne Anmeldung aufgerufen werden. In diesem Fall erhält ein anonymer Aufrufer ein leeres Objekt.
+- Dieser Endpunkt kann auch bei aktivierter Option „Anmeldung erforderlich" ohne Anmeldung aufgerufen werden. In diesem Fall erhält ein anonymer Aufrufer ein leeres Objekt. Ist ``login.required`` aktiviert, wird ``theme_settings`` jedoch nur an einen Aufrufer geliefert, der sich mit einer Sitzung angemeldet hat. Auch ein Aufruf, der nur ein Zugriffstoken mitsendet, erhält ein leeres Objekt.
 - Die Werte sind für alle Benutzer der Suchoberfläche sichtbar und dürfen daher keine geheimen Daten enthalten. Ein Theme muss die Werte ausschließlich als Daten behandeln: niemals als HTML einfügen und niemals als Ziel eines Links oder einer Weiterleitung verwenden.
 
 features
