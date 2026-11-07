@@ -13,14 +13,14 @@ In diesem Artikel wird ein Ansatz vorgestellt, wie Sie Fess-Konfigurationen als 
 Zielgruppe
 ==========
 
-- Personen, die den Betrieb von Suchsystemen automatisieren moechten
-- Personen, die DevOps/IaC-Methoden auf die Suchinfrastruktur anwenden moechten
+- Personen, die den Betrieb von Suchsystemen automatisieren möchten
+- Personen, die DevOps/IaC-Methoden auf die Suchinfrastruktur anwenden möchten
 - Personen mit Grundkenntnissen in Docker und CI/CD
 
 Anwendung von Infrastructure as Code
 ======================================
 
-Die folgenden Elemente werden fuer Fess-Umgebungen als "Code" verwaltet.
+Die folgenden Elemente werden für Fess-Umgebungen als "Code" verwaltet.
 
 .. list-table:: IaC-Verwaltungsobjekte
    :header-rows: 1
@@ -35,8 +35,8 @@ Die folgenden Elemente werden fuer Fess-Umgebungen als "Code" verwaltet.
    * - Fess-Einstellungen
      - Backup-Dateien / Admin-API
      - Git
-   * - Woerterbuchdaten
-     - Export ueber Admin-API
+   * - Wörterbuchdaten
+     - Export über Admin-API
      - Git
    * - OpenSearch-Einstellungen
      - Konfigurationsdateien
@@ -45,10 +45,10 @@ Die folgenden Elemente werden fuer Fess-Umgebungen als "Code" verwaltet.
 Umgebungsdefinition mit Docker Compose
 ========================================
 
-Docker-Compose-Datei fuer die Produktionsumgebung
+Docker-Compose-Datei für die Produktionsumgebung
 ---------------------------------------------------
 
-Wir erweitern die in Teil 2 verwendete Grundkonfiguration und definieren eine fuer Produktionsumgebungen geeignete Konfiguration.
+Wir erweitern die in Teil 2 verwendete Grundkonfiguration und definieren eine für Produktionsumgebungen geeignete Konfiguration.
 
 .. code-block:: yaml
 
@@ -92,21 +92,21 @@ Die wichtigsten Punkte sind die folgenden.
 
 - Health-Check-Definition: Fess wird erst gestartet, wenn OpenSearch bereit ist
 - Volume-Persistenz: Daten werden dauerhaft gespeichert
-- Neustartrichtlinie: Automatische Wiederherstellung bei Ausfaellen
+- Neustartrichtlinie: Automatische Wiederherstellung bei Ausfällen
 - Explizite Konfiguration des JVM-Heaps
 
 Automatisierung der Konfiguration mit der Admin-API
 =====================================================
 
-Durch die Verwendung der Fess-Admin-API koennen Sie Konfigurationen programmatisch verwalten, ohne die GUI zu verwenden.
+Durch die Verwendung der Fess-Admin-API können Sie Konfigurationen programmatisch verwalten, ohne die GUI zu verwenden.
 
 Einstellungen exportieren
 --------------------------
 
 Exportieren Sie die aktuellen Fess-Einstellungen und speichern Sie sie als Code.
 
-Sie koennen den Export ueber die Administrationskonsole unter [Systeminformationen] > [Backup] durchfuehren.
-Es ist auch moeglich, den Export ueber Skripte mit der Admin-API durchzufuehren.
+Sie können den Export über die Administrationskonsole unter [Systeminformationen] > [Backup] durchführen.
+Es ist auch möglich, den Export über Skripte mit der Admin-API durchzuführen.
 
 Einstellungen importieren
 --------------------------
@@ -117,36 +117,36 @@ Dies erleichtert die Wiederherstellung oder Replikation von Umgebungen.
 Verwendung der fessctl-CLI
 ============================
 
-fessctl ist ein Kommandozeilenwerkzeug fuer Fess.
-Viele Operationen, die in der Administrationskonsole durchgefuehrt werden koennen, lassen sich auch ueber die Kommandozeile ausfuehren.
+fessctl ist ein Kommandozeilenwerkzeug für Fess.
+Viele Operationen, die in der Administrationskonsole durchgeführt werden können, lassen sich auch über die Kommandozeile ausführen.
 
 Hauptoperationen
 -----------------
 
-- Erstellen, Aktualisieren und Loeschen von Crawl-Einstellungen (Web, Dateisystem, Datenspeicher)
-- Ausfuehren von Scheduler-Jobs
+- Erstellen, Aktualisieren und Löschen von Crawl-Einstellungen (Web, Dateisystem, Datenspeicher)
+- Ausführen von Scheduler-Jobs
 - Verwaltung von Benutzern, Rollen und Gruppen
 - Verwaltung von Sucheinstellungen wie Key Match, Labels und Boosts
 
-Durch die Verwendung der CLI koennen Sie Konfigurationsaenderungen skripten und in CI/CD-Pipelines integrieren.
+Durch die Verwendung der CLI können Sie Konfigurationsänderungen skripten und in CI/CD-Pipelines integrieren.
 
 Aufbau von CI/CD-Pipelines
 ============================
 
-Workflow fuer Konfigurationsaenderungen
+Workflow für Konfigurationsänderungen
 -----------------------------------------
 
-Verwalten Sie Konfigurationsaenderungen des Suchsystems mit dem folgenden Workflow.
+Verwalten Sie Konfigurationsänderungen des Suchsystems mit dem folgenden Workflow.
 
-1. **Aenderung**: Konfigurationsdateien aendern und in einem Git-Branch verwalten
-2. **Review**: Aenderungen ueber Pull Requests ueberpruefen
+1. **Änderung**: Konfigurationsdateien ändern und in einem Git-Branch verwalten
+2. **Review**: Änderungen über Pull Requests überprüfen
 3. **Test**: Verhalten in einer Staging-Umgebung verifizieren
 4. **Deployment**: Einstellungen in der Produktionsumgebung anwenden
 
 Automatisierungsbeispiel mit GitHub Actions
 ---------------------------------------------
 
-Dies ist ein Beispiel fuer die automatische Anwendung von Aenderungen in der Produktionsumgebung, wenn Konfigurationsdateiaenderungen gemergt werden.
+Dies ist ein Beispiel für die automatische Anwendung von Änderungen in der Produktionsumgebung, wenn Konfigurationsdateiänderungen gemergt werden.
 
 .. code-block:: yaml
 
@@ -177,12 +177,12 @@ Dies ist ein Beispiel fuer die automatische Anwendung von Aenderungen in der Pro
 Automatisierung von Backups
 =============================
 
-Automatisieren Sie auch regelmaessige Backups.
+Automatisieren Sie auch regelmäßige Backups.
 
 Backup-Skript
 --------------
 
-Verwenden Sie cron oder CI/CD-Planungsfunktionen, um regelmaessige Backups zu erstellen.
+Verwenden Sie cron oder CI/CD-Planungsfunktionen, um regelmäßige Backups zu erstellen.
 
 .. code-block:: bash
 
@@ -210,30 +210,30 @@ Verwenden Sie cron oder CI/CD-Planungsfunktionen, um regelmaessige Backups zu er
 Verfahren zur Umgebungsrekonstruktion
 =======================================
 
-Dokumentieren Sie das Verfahren zur vollstaendigen Rekonstruktion einer Umgebung fuer die Notfallwiederherstellung oder den Aufbau von Testumgebungen.
+Dokumentieren Sie das Verfahren zur vollständigen Rekonstruktion einer Umgebung für die Notfallwiederherstellung oder den Aufbau von Testumgebungen.
 
 1. Container mit Docker Compose starten
-2. Warten, bis der OpenSearch-Health-Check green/yellow zurueckgibt
-3. Fess-Einstellungen importieren (ueber Admin-API oder Wiederherstellungsfunktion)
-4. Woerterbuchdateien platzieren
-5. Crawl-Jobs ausfuehren
+2. Warten, bis der OpenSearch-Health-Check green/yellow zurückgibt
+3. Fess-Einstellungen importieren (über Admin-API oder Wiederherstellungsfunktion)
+4. Wörterbuchdateien platzieren
+5. Crawl-Jobs ausführen
 6. Betrieb verifizieren (Suchtests)
 
-Wenn Sie dieses Verfahren skripten, koennen Sie Umgebungen schnell rekonstruieren.
+Wenn Sie dieses Verfahren skripten, können Sie Umgebungen schnell rekonstruieren.
 
 Zusammenfassung
 ================
 
-In diesem Artikel wurde ein Ansatz vorgestellt, wie Sie die Fess-Suchinfrastruktur mit DevOps-Methoden verwalten koennen.
+In diesem Artikel wurde ein Ansatz vorgestellt, wie Sie die Fess-Suchinfrastruktur mit DevOps-Methoden verwalten können.
 
 - Kodifizierung von Umgebungsdefinitionen mit Docker Compose
 - Automatisierung der Konfiguration mit der Admin-API und fessctl
-- Automatisierung des Deployments von Konfigurationsaenderungen mit CI/CD-Pipelines
+- Automatisierung des Deployments von Konfigurationsänderungen mit CI/CD-Pipelines
 - Automatisierung von Backups und Verfahren zur Umgebungsrekonstruktion
 
-Entwickeln Sie den Betrieb Ihrer Suchinfrastruktur von "Handbuecher lesen und manuell konfigurieren" zu "Code ausfuehren und automatisch deployen" weiter.
+Entwickeln Sie den Betrieb Ihrer Suchinfrastruktur von "Handbücher lesen und manuell konfigurieren" zu "Code ausführen und automatisch deployen" weiter.
 
-Im naechsten Artikel wird die Erweiterung von Fess durch Plugin-Entwicklung behandelt.
+Im nächsten Artikel wird die Erweiterung von Fess durch Plugin-Entwicklung behandelt.
 
 Referenzen
 ==========

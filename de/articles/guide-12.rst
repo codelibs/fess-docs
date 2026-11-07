@@ -8,14 +8,14 @@ Einleitung
 Wichtige Unternehmensdaten sind nicht nur auf Dateiservern und in Cloud-Speichern abgelegt, sondern auch in SaaS-Anwendungen und Datenbanken.
 Kundeninformationen in Salesforce, Produktstammdaten in internen Datenbanken, in CSV-Dateien verwaltete Listendaten -- diese Daten sind normalerweise nur innerhalb des jeweiligen Systems durchsuchbar.
 
-Dieser Artikel behandelt Szenarien, in denen SaaS- und Datenbankdaten in den Fess-Index importiert werden, um sie zusammen mit anderen Dokumenten systemuebergreifend durchsuchen zu koennen.
+Dieser Artikel behandelt Szenarien, in denen SaaS- und Datenbankdaten in den Fess-Index importiert werden, um sie zusammen mit anderen Dokumenten systemübergreifend durchsuchen zu können.
 
 Zielgruppe
 ==========
 
-- Personen, die SaaS- und Datenbankinformationen in die Suche einbeziehen moechten
-- Personen, die die Nutzung von Data-Store-Plugins erlernen moechten
-- Personen, die eine Suchplattform ueber mehrere Datenquellen hinweg aufbauen moechten
+- Personen, die SaaS- und Datenbankinformationen in die Suche einbeziehen möchten
+- Personen, die die Nutzung von Data-Store-Plugins erlernen möchten
+- Personen, die eine Suchplattform über mehrere Datenquellen hinweg aufbauen möchten
 
 Szenario
 ========
@@ -30,19 +30,19 @@ Eine Vertriebsorganisation hat ihre Daten auf folgende Systeme verteilt.
      - Gespeicherte Daten
      - Aktuelle Herausforderung
    * - Salesforce
-     - Kundeninformationen, Geschaeftsabschluesse, Aktivitaetsverlauf
+     - Kundeninformationen, Geschäftsabschlüsse, Aktivitätsverlauf
      - Nur innerhalb von Salesforce durchsuchbar
    * - Interne DB
      - Produktstamm, Preislisten, Bestandsinformationen
-     - Nur ueber eine dedizierte Verwaltungsoberflaeche zugaenglich
+     - Nur über eine dedizierte Verwaltungsoberfläche zugänglich
    * - CSV-Dateien
      - Kundenlisten, Veranstaltungsteilnehmerlisten
-     - Koennen nur in Excel geoeffnet und visuell durchsucht werden
+     - Können nur in Excel geöffnet und visuell durchsucht werden
    * - Dateiserver
-     - Angebote, Kostenvoranschlaege, Vertraege
+     - Angebote, Kostenvoranschläge, Verträge
      - Bereits von Fess gecrawlt
 
-Das Ziel ist es, all diese Daten mit Fess systemuebergreifend durchsuchbar zu machen, sodass die fuer Vertriebsaktivitaeten benoetigten Informationen ueber ein einziges Suchfeld gefunden werden koennen.
+Das Ziel ist es, all diese Daten mit Fess systemübergreifend durchsuchbar zu machen, sodass die für Vertriebsaktivitäten benötigten Informationen über ein einziges Suchfeld gefunden werden können.
 
 Salesforce-Datenintegration
 =============================
@@ -58,7 +58,7 @@ Plugin-Installation
 Verbindungseinstellungen
 -------------------------
 
-Fuer die Integration mit Salesforce muss eine Connected App konfiguriert werden.
+Für die Integration mit Salesforce muss eine Connected App konfiguriert werden.
 
 **Vorbereitung auf Salesforce-Seite**
 
@@ -69,11 +69,11 @@ Fuer die Integration mit Salesforce muss eine Connected App konfiguriert werden.
 **Konfiguration auf Fess-Seite**
 
 1. Navigieren Sie zu [Crawler] > [Data Store] > [Neu erstellen]
-2. Handler-Name: Waehlen Sie SalesforceDataStore
+2. Handler-Name: Wählen Sie SalesforceDataStore
 3. Konfigurieren Sie Parameter und Skripte
 4. Label: Setzen Sie ``salesforce``
 
-**Beispiel fuer die Parameterkonfiguration**
+**Beispiel für die Parameterkonfiguration**
 
 .. code-block:: properties
 
@@ -85,7 +85,7 @@ Fuer die Integration mit Salesforce muss eine Connected App konfiguriert werden.
     client_id=your-consumer-key
     client_secret=your-consumer-secret
 
-**Beispiel fuer die Skriptkonfiguration**
+**Beispiel für die Skriptkonfiguration**
 
 .. code-block:: properties
 
@@ -94,13 +94,13 @@ Fuer die Integration mit Salesforce muss eine Connected App konfiguriert werden.
     content=content
     last_modified=last_modified
 
-Fuer ``auth_type`` geben Sie ``oauth_password`` (Benutzername/Passwort-Authentifizierung) oder ``oauth_token`` (JWT-Bearer-Token-Authentifizierung) an. Bei Verwendung der JWT-Authentifizierung setzen Sie den privaten RSA-Schluessel in ``private_key``.
+Für ``auth_type`` geben Sie ``oauth_password`` (Benutzername/Passwort-Authentifizierung) oder ``oauth_token`` (JWT-Bearer-Token-Authentifizierung) an. Bei Verwendung der JWT-Authentifizierung setzen Sie den privaten RSA-Schlüssel in ``private_key``.
 
 Auswahl der Zieldaten
 ----------------------
 
-Salesforce enthaelt viele Objekte, aber nicht alle muessen durchsuchbar sein.
-Konzentrieren Sie sich auf die Objekte, nach denen das Vertriebsteam haeufig sucht.
+Salesforce enthält viele Objekte, aber nicht alle müssen durchsuchbar sein.
+Konzentrieren Sie sich auf die Objekte, nach denen das Vertriebsteam häufig sucht.
 
 .. list-table:: Beispiel fuer Zielobjekte
    :header-rows: 1
@@ -114,7 +114,7 @@ Konzentrieren Sie sich auf die Objekte, nach denen das Vertriebsteam haeufig suc
      - Suche nach grundlegenden Kontoinformationen
    * - Opportunity
      - Name, Phase, Beschreibung, Betrag
-     - Suche nach laufenden Geschaeften
+     - Suche nach laufenden Geschäften
    * - Case
      - Betreff, Beschreibung, Status
      - Suche im Anfrageverlauf
@@ -128,17 +128,17 @@ Plugin-Installation
 --------------------
 
 Installieren Sie das Plugin ``fess-ds-db``.
-Dieses Plugin kann sich ueber JDBC mit verschiedenen Datenbanken verbinden (MySQL, PostgreSQL, Oracle, SQL Server usw.).
+Dieses Plugin kann sich über JDBC mit verschiedenen Datenbanken verbinden (MySQL, PostgreSQL, Oracle, SQL Server usw.).
 
 Konfiguration
 --------------
 
 1. Navigieren Sie zu [Crawler] > [Data Store] > [Neu erstellen]
-2. Handler-Name: Waehlen Sie DatabaseDataStore
+2. Handler-Name: Wählen Sie DatabaseDataStore
 3. Konfigurieren Sie Parameter und Skripte
 4. Label: Setzen Sie ``database``
 
-**Beispiel fuer die Parameterkonfiguration**
+**Beispiel für die Parameterkonfiguration**
 
 .. code-block:: properties
 
@@ -148,7 +148,7 @@ Konfiguration
     password=your-password
     sql=SELECT product_id, product_name, description, price, CONCAT('https://internal-app/products/', product_id) AS url FROM products WHERE status = 'active'
 
-**Beispiel fuer die Skriptkonfiguration**
+**Beispiel für die Skriptkonfiguration**
 
 .. code-block:: properties
 
@@ -161,30 +161,30 @@ Die Ergebnisse der in ``sql`` angegebenen SQL-Abfrage werden gecrawlt. In Skript
 SQL-Abfrage-Design
 --------------------
 
-Wichtige Punkte beim Entwerfen der SQL-Abfrage fuer den ``sql``-Parameter:
+Wichtige Punkte beim Entwerfen der SQL-Abfrage für den ``sql``-Parameter:
 
-- Fuegen Sie eine ``url``-Spalte hinzu, die als Linkziel in den Suchergebnissen dient (z.B. ``CONCAT('https://.../', id) AS url``)
-- Fuegen Sie Spalten hinzu, die als durchsuchbarer Textkoerper dienen
-- Verwenden Sie eine ``WHERE``-Klausel, um unnoetige Daten auszuschliessen (z.B. ``status = 'active'``)
+- Fügen Sie eine ``url``-Spalte hinzu, die als Linkziel in den Suchergebnissen dient (z.B. ``CONCAT('https://.../', id) AS url``)
+- Fügen Sie Spalten hinzu, die als durchsuchbarer Textkörper dienen
+- Verwenden Sie eine ``WHERE``-Klausel, um unnötige Daten auszuschließen (z.B. ``status = 'active'``)
 
 In Skripten verwenden Sie die SQL-Spaltennamen direkt, um sie den Fess-Indexfeldern zuzuordnen.
 
 CSV-Datei-Integration
 ======================
 
-Auch CSV-Dateidaten koennen durchsuchbar gemacht werden.
+Auch CSV-Dateidaten können durchsuchbar gemacht werden.
 
 Konfiguration
 --------------
 
-Verwenden Sie das Plugin ``fess-ds-csv`` oder die CSV-Data-Store-Funktionalitaet.
+Verwenden Sie das Plugin ``fess-ds-csv`` oder die CSV-Data-Store-Funktionalität.
 
 1. Navigieren Sie zu [Crawler] > [Data Store] > [Neu erstellen]
-2. Handler-Name: Waehlen Sie CsvDataStore
+2. Handler-Name: Wählen Sie CsvDataStore
 3. Konfigurieren Sie Parameter und Skripte
 4. Label: Setzen Sie ``csv-data``
 
-**Beispiel fuer die Parameterkonfiguration**
+**Beispiel für die Parameterkonfiguration**
 
 .. code-block:: properties
 
@@ -193,7 +193,7 @@ Verwenden Sie das Plugin ``fess-ds-csv`` oder die CSV-Data-Store-Funktionalitaet
     has_header_line=true
     separator_character=,
 
-**Beispiel fuer die Skriptkonfiguration** (Spaltennamen verwenden, wenn eine Kopfzeile vorhanden ist)
+**Beispiel für die Skriptkonfiguration** (Spaltennamen verwenden, wenn eine Kopfzeile vorhanden ist)
 
 .. code-block:: properties
 
@@ -201,14 +201,14 @@ Verwenden Sie das Plugin ``fess-ds-csv`` oder die CSV-Data-Store-Funktionalitaet
     title=company_name
     content=company_name + " " + contact_name + " " + email
 
-Bei ``has_header_line=true`` koennen die Spaltennamen der Kopfzeile in Skripten verwendet werden. Wenn keine Kopfzeile vorhanden ist, werden Spalten ueber Nummern referenziert, z.B. ``cell1``, ``cell2``, ``cell3``. Skripte koennen Groovy-Ausdruecke enthalten, einschliesslich Zeichenkettenverkettung.
+Bei ``has_header_line=true`` können die Spaltennamen der Kopfzeile in Skripten verwendet werden. Wenn keine Kopfzeile vorhanden ist, werden Spalten über Nummern referenziert, z.B. ``cell1``, ``cell2``, ``cell3``. Skripte können Groovy-Ausdrücke enthalten, einschließlich Zeichenkettenverkettung.
 
-Wenn CSV-Dateien regelmaessig aktualisiert werden, legen Sie den Ablageort fest und konfigurieren Sie einen Crawl-Zeitplan, damit die neuesten Daten automatisch im Index aktualisiert werden.
+Wenn CSV-Dateien regelmäßig aktualisiert werden, legen Sie den Ablageort fest und konfigurieren Sie einen Crawl-Zeitplan, damit die neuesten Daten automatisch im Index aktualisiert werden.
 
-Systemuebergreifende Suche
+Systemübergreifende Suche
 ============================
 
-Sobald alle Datenquellenkonfigurationen abgeschlossen sind, koennen Sie die systemuebergreifende Suche erleben.
+Sobald alle Datenquellenkonfigurationen abgeschlossen sind, können Sie die systemübergreifende Suche erleben.
 
 Suchbeispiel
 --------------
@@ -220,7 +220,7 @@ Eine Suche nach "ABC GmbH" liefert beispielsweise folgende Ergebnisse:
 3. Produktkaufhistorie aus der Datenbank
 4. Messeteilnehmerliste aus CSV
 
-Benutzer koennen die benoetigten Informationen finden, ohne sich Gedanken darueber machen zu muessen, wo diese gespeichert sind.
+Benutzer können die benötigten Informationen finden, ohne sich Gedanken darüber machen zu müssen, wo diese gespeichert sind.
 
 Filterung nach Label
 ---------------------
@@ -232,31 +232,31 @@ Wenn es viele Suchergebnisse gibt, grenzen Sie diese mithilfe von Labels ein.
 - ``csv-data``: Nur CSV-Daten
 - ``shared-files``: Nur Dateiserver-Dokumente
 
-Betriebliche Ueberlegungen
+Betriebliche Überlegungen
 ===========================
 
-Datenaktualitaet
+Datenaktualität
 -----------------
 
-SaaS- und Datenbankdaten koennen haeufig aktualisiert werden.
-Stellen Sie die Crawl-Haeufigkeit angemessen ein, um die Aktualitaet der Suchergebnisse zu gewaehrleisten.
+SaaS- und Datenbankdaten können häufig aktualisiert werden.
+Stellen Sie die Crawl-Häufigkeit angemessen ein, um die Aktualität der Suchergebnisse zu gewährleisten.
 
 .. list-table:: Empfohlene Crawl-Haeufigkeit
    :header-rows: 1
    :widths: 25 25 50
 
    * - Datenquelle
-     - Empfohlene Haeufigkeit
-     - Begruendung
+     - Empfohlene Häufigkeit
+     - Begründung
    * - Salesforce
      - Alle 4-6 Stunden
-     - Geschaefts- und Kundeninformationen werden waehrend der Geschaeftszeiten aktualisiert
+     - Geschäfts- und Kundeninformationen werden während der Geschäftszeiten aktualisiert
    * - Datenbank
      - Alle 2-4 Stunden
-     - Daten mit hoher Volatilitaet, wie z.B. Bestandsinformationen
+     - Daten mit hoher Volatilität, wie z.B. Bestandsinformationen
    * - CSV
-     - Taeglich
-     - Wird normalerweise ueber Batch-Verarbeitung aktualisiert
+     - Täglich
+     - Wird normalerweise über Batch-Verarbeitung aktualisiert
 
 Sicherheit der Datenbankverbindung
 ------------------------------------
@@ -264,8 +264,8 @@ Sicherheit der Datenbankverbindung
 Wenn Sie sich direkt mit einer Datenbank verbinden, achten Sie besonders auf die Sicherheit.
 
 - Verwenden Sie einen Datenbankbenutzer mit Nur-Lese-Zugriff
-- Beschraenken Sie Verbindungen auf die IP-Adresse des Fess-Servers
-- Gewaehren Sie keinen Zugriff auf unnoetige Tabellen
+- Beschränken Sie Verbindungen auf die IP-Adresse des Fess-Servers
+- Gewähren Sie keinen Zugriff auf unnötige Tabellen
 - Achten Sie auf eine sichere Passwortverwaltung
 
 Zusammenfassung
@@ -277,10 +277,10 @@ Dieser Artikel behandelte Szenarien, um Salesforce-, Datenbank- und CSV-Dateidat
 - Interne-DB-Integration mit dem Datenbank-Data-Store-Plugin
 - Listendatenintegration mit dem CSV-Data-Store
 - Feldzuordnung und SQL-Abfrage-Design
-- Nutzung von Labels bei der systemuebergreifenden Suche
+- Nutzung von Labels bei der systemübergreifenden Suche
 
-Durch die Beseitigung von Datensilos koennen Sie eine Umgebung schaffen, in der alle Informationsquellen ueber eine einzige Plattform durchsuchbar sind.
-Damit ist der Abschnitt "Praktische Loesungen" abgeschlossen. Ab dem naechsten Teil behandeln wir den Abschnitt "Architektur und Skalierung", beginnend mit dem Mehrmandanten-Design.
+Durch die Beseitigung von Datensilos können Sie eine Umgebung schaffen, in der alle Informationsquellen über eine einzige Plattform durchsuchbar sind.
+Damit ist der Abschnitt "Praktische Lösungen" abgeschlossen. Ab dem nächsten Teil behandeln wir den Abschnitt "Architektur und Skalierung", beginnend mit dem Mehrmandanten-Design.
 
 Referenzen
 ==========

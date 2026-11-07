@@ -2,42 +2,42 @@
 Teil 4 Verstreute Dateien zentral durchsuchen
 =============================================
 
-Einfuehrung
+Einführung
 ============
 
-Im vorherigen Teil haben wir gezeigt, wie Sie die Suchfunktion von Fess in eine bestehende Website integrieren koennen.
+Im vorherigen Teil haben wir gezeigt, wie Sie die Suchfunktion von Fess in eine bestehende Website integrieren können.
 In der Praxis sind Informationen in Unternehmen jedoch nicht nur auf Websites zu finden, sondern verteilen sich auf Dateiserver, Cloud-Speicher und viele weitere Speicherorte.
 
-In diesem Artikel bauen wir eine Umgebung auf, in der mehrere Datenquellen in Fess integriert werden und Benutzer ueber ein einziges Suchfeld alle Dokumente quellenuebergreifend durchsuchen koennen.
+In diesem Artikel bauen wir eine Umgebung auf, in der mehrere Datenquellen in Fess integriert werden und Benutzer über ein einziges Suchfeld alle Dokumente quellenübergreifend durchsuchen können.
 
 Zielgruppe
 ==========
 
 - Personen, deren interne Dokumente an mehreren Orten verteilt sind
 - Personen, die mit der Suche auf Dateiservern oder in Cloud-Speichern unzufrieden sind
-- Voraussetzung: Fess ist bereits gemaess der Anleitung aus Teil 2 gestartet
+- Voraussetzung: Fess ist bereits gemäß der Anleitung aus Teil 2 gestartet
 
 Szenario
 ========
 
-Wir gehen von einem mittelstaendischen Unternehmen aus. In diesem Unternehmen sind Dokumente an folgenden Orten verstreut:
+Wir gehen von einem mittelständischen Unternehmen aus. In diesem Unternehmen sind Dokumente an folgenden Orten verstreut:
 
 - **Interne Website**: Internes Portal, interner Blog
 - **Dateiserver**: Gemeinsame Ordner pro Abteilung (SMB/CIFS)
 - **Lokale Dateien**: Bestimmte Verzeichnisse auf dem Server
 
-Wenn Mitarbeiter sich fragen: "Wo war dieses Dokument nochmal?", muessen sie jedes Tool einzeln durchsuchen.
-Mit Fess zentralisieren wir diese Suche, sodass alle Quellen ueber ein einziges Suchfeld durchsucht werden koennen.
+Wenn Mitarbeiter sich fragen: "Wo war dieses Dokument nochmal?", müssen sie jedes Tool einzeln durchsuchen.
+Mit Fess zentralisieren wir diese Suche, sodass alle Quellen über ein einziges Suchfeld durchsucht werden können.
 
 Entwurf der Datenquellen
 =========================
 
-Beim Aufbau einer quellenuebergreifenden Suche ist der erste wichtige Schritt die Planung: "Was soll wie in den Suchindex aufgenommen werden?"
+Beim Aufbau einer quellenübergreifenden Suche ist der erste wichtige Schritt die Planung: "Was soll wie in den Suchindex aufgenommen werden?"
 
-Uebersicht der Suchobjekte
+Übersicht der Suchobjekte
 ----------------------------
 
-Zunaechst verschaffen wir uns einen Ueberblick ueber die Datenquellen, die in die Suche einbezogen werden sollen.
+Zunächst verschaffen wir uns einen Überblick über die Datenquellen, die in die Suche einbezogen werden sollen.
 
 .. list-table:: Uebersicht der Datenquellen
    :header-rows: 1
@@ -45,20 +45,20 @@ Zunaechst verschaffen wir uns einen Ueberblick ueber die Datenquellen, die in di
 
    * - Datenquelle
      - Art
-     - Geschaetzter Umfang
-     - Aktualisierungshaeufigkeit
+     - Geschätzter Umfang
+     - Aktualisierungshäufigkeit
    * - Internes Portal
      - Web-Crawling
      - Einige hundert Seiten
-     - Woechentlich
+     - Wöchentlich
    * - Technischer Blog
      - Web-Crawling
      - Einige Dutzend bis hundert Seiten
-     - Unregelmaessig
+     - Unregelmäßig
    * - Gemeinsame Ordner
      - Datei-Crawling
      - Zehntausende Dateien
-     - Taeglich
+     - Täglich
    * - Archiv
      - Datei-Crawling
      - Einige tausend Dateien
@@ -67,23 +67,23 @@ Zunaechst verschaffen wir uns einen Ueberblick ueber die Datenquellen, die in di
 Klassifikation durch Labels
 -----------------------------
 
-Mit der Label-Funktion von Fess koennen Sie Suchobjekte in Kategorien einteilen.
-Benutzer koennen bei der Suche ein Label auswaehlen, um die Ergebnisse auf eine bestimmte Kategorie einzuschraenken.
+Mit der Label-Funktion von Fess können Sie Suchobjekte in Kategorien einteilen.
+Benutzer können bei der Suche ein Label auswählen, um die Ergebnisse auf eine bestimmte Kategorie einzuschränken.
 
 In unserem Szenario richten wir folgende Labels ein:
 
 - **Portal**: Informationen aus dem internen Portal und Blog
 - **Gemeinsame Dateien**: Dokumente auf dem Dateiserver
-- **Archiv**: Aeltere Unterlagen
+- **Archiv**: Ältere Unterlagen
 
 Konfiguration der Labels
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. Waehlen Sie in der Verwaltungsoberflaeche [Crawler] > [Labels]
+1. Wählen Sie in der Verwaltungsoberfläche [Crawler] > [Labels]
 2. Erstellen Sie ein Label mit [Neu erstellen]
 
-Fuer jedes Label legen Sie einen "Namen" und einen "Wert" fest.
-Der Wert wird in alphanumerischen Zeichen angegeben und dient zur Verknuepfung mit der Crawl-Konfiguration.
+Für jedes Label legen Sie einen "Namen" und einen "Wert" fest.
+Der Wert wird in alphanumerischen Zeichen angegeben und dient zur Verknüpfung mit der Crawl-Konfiguration.
 
 Aufbau der Crawl-Konfiguration
 ================================
@@ -91,14 +91,14 @@ Aufbau der Crawl-Konfiguration
 Web-Crawl-Konfiguration
 --------------------------
 
-Dies ist die Crawl-Konfiguration fuer das interne Portal.
+Dies ist die Crawl-Konfiguration für das interne Portal.
 
 1. [Crawler] > [Web] > [Neu erstellen]
 2. Folgende Einstellungen vornehmen:
 
    - URL: ``https://portal.example.com/``
-   - Einzuschliessende URLs: ``https://portal.example.com/.*``
-   - Auszuschliessende URLs: ``https://portal.example.com/admin/.*``
+   - Einzuschließende URLs: ``https://portal.example.com/.*``
+   - Auszuschließende URLs: ``https://portal.example.com/admin/.*``
    - Maximale Zugriffe: ``500``
    - Threads: ``3``
    - Intervall: ``5000``
@@ -106,19 +106,19 @@ Dies ist die Crawl-Konfiguration fuer das interne Portal.
 
 3. Klicken Sie auf [Erstellen]
 
-Durch die Konfiguration auszuschliessender URLs koennen Sie Seiten wie Verwaltungsoberflaechen von der Suche ausschliessen.
+Durch die Konfiguration auszuschließender URLs können Sie Seiten wie Verwaltungsoberflächen von der Suche ausschließen.
 
 Datei-Crawl-Konfiguration
 ----------------------------
 
-Dies ist die Crawl-Konfiguration fuer die gemeinsamen Ordner.
+Dies ist die Crawl-Konfiguration für die gemeinsamen Ordner.
 
 1. [Crawler] > [Dateisystem] > [Neu erstellen]
 2. Folgende Einstellungen vornehmen:
 
    - Pfad: ``smb://fileserver.example.com/shared/``
-   - Einzuschliessende Pfade: ``smb://fileserver.example.com/shared/.*``
-   - Auszuschliessende Pfade: ``.*\\.tmp$``
+   - Einzuschließende Pfade: ``smb://fileserver.example.com/shared/.*``
+   - Auszuschließende Pfade: ``.*\\.tmp$``
    - Maximale Zugriffe: ``10000``
    - Threads: ``5``
    - Intervall: ``1000``
@@ -149,8 +149,8 @@ Um ein bestimmtes Verzeichnis auf dem Server zu crawlen, geben Sie den Dateipfad
 2. Folgende Einstellungen vornehmen:
 
    - Pfad: ``file:///data/archive/``
-   - Einzuschliessende Pfade: ``file:///data/archive/.*``
-   - Auszuschliessende Pfade: ``.*\\.(log|bak)$``
+   - Einzuschließende Pfade: ``file:///data/archive/.*``
+   - Auszuschließende Pfade: ``.*\\.(log|bak)$``
    - Maximale Zugriffe: ``5000``
    - Label: Archiv
 
@@ -160,88 +160,88 @@ Planung des Crawl-Zeitplans
 =============================
 
 Beim Crawling mehrerer Datenquellen ist die Zeitplanung besonders wichtig.
-Wenn alle Crawl-Vorgaenge gleichzeitig ausgefuehrt werden, belastet dies sowohl die Serverressourcen als auch die Zielsysteme erheblich.
+Wenn alle Crawl-Vorgänge gleichzeitig ausgeführt werden, belastet dies sowohl die Serverressourcen als auch die Zielsysteme erheblich.
 
 Verteilung des Zeitplans
 --------------------------
 
-Verteilen Sie die Crawl-Zeitplaene entsprechend der Aktualisierungshaeufigkeit der Datenquellen.
+Verteilen Sie die Crawl-Zeitpläne entsprechend der Aktualisierungshäufigkeit der Datenquellen.
 
 .. list-table:: Beispiel fuer einen Crawl-Zeitplan
    :header-rows: 1
    :widths: 25 25 50
 
    * - Datenquelle
-     - Ausfuehrungszeitpunkt
-     - Begruendung
+     - Ausführungszeitpunkt
+     - Begründung
    * - Internes Portal
-     - Taeglich um 2:00 Uhr
+     - Täglich um 2:00 Uhr
      - Geringe Seitenzahl, daher schnell abgeschlossen
    * - Gemeinsame Ordner
-     - Taeglich um 3:00 Uhr
-     - Hohe Dateianzahl, daher Ausfuehrung in der Nacht
+     - Täglich um 3:00 Uhr
+     - Hohe Dateianzahl, daher Ausführung in der Nacht
    * - Archiv
      - Jeden Sonntag um 4:00 Uhr
-     - Geringe Aktualisierungshaeufigkeit, woechentlich ausreichend
+     - Geringe Aktualisierungshäufigkeit, wöchentlich ausreichend
 
 Scheduler-Konfiguration
 --------------------------
 
-Ueber [System] > [Scheduler] in der Verwaltungsoberflaeche koennen Sie den Ausfuehrungszeitpunkt der Crawl-Jobs festlegen.
-Der Standard-Job "Default Crawler" fuehrt alle Crawl-Konfigurationen gebuendelt aus.
+Über [System] > [Scheduler] in der Verwaltungsoberfläche können Sie den Ausführungszeitpunkt der Crawl-Jobs festlegen.
+Der Standard-Job "Default Crawler" führt alle Crawl-Konfigurationen gebündelt aus.
 
-Pfad-Mapping fuer benutzerfreundliche Suchergebnisse
+Pfad-Mapping für benutzerfreundliche Suchergebnisse
 ======================================================
 
-Die gecrawlten URLs und Dateipfade koennen fuer Benutzer schwer verstaendlich sein.
-Mit dem Pfad-Mapping koennen Sie die in den Suchergebnissen angezeigten URLs umwandeln.
+Die gecrawlten URLs und Dateipfade können für Benutzer schwer verständlich sein.
+Mit dem Pfad-Mapping können Sie die in den Suchergebnissen angezeigten URLs umwandeln.
 
 Konfigurationsbeispiel
 ------------------------
 
-Wandeln Sie die Dateipfade des Dateiservers in URLs um, ueber die Benutzer direkt im Browser zugreifen koennen.
+Wandeln Sie die Dateipfade des Dateiservers in URLs um, über die Benutzer direkt im Browser zugreifen können.
 
 1. [Crawler] > [Pfad-Mapping] > [Neu erstellen]
 2. Folgende Einstellungen vornehmen:
 
-   - Regulaerer Ausdruck: ``smb://fileserver.example.com/shared/(.*)``
+   - Regulärer Ausdruck: ``smb://fileserver.example.com/shared/(.*)``
    - Ersetzung: ``https://fileserver.example.com/shared/$1``
 
-Dadurch koennen Benutzer auf einen Link in den Suchergebnissen klicken und direkt im Browser auf die Datei zugreifen.
+Dadurch können Benutzer auf einen Link in den Suchergebnissen klicken und direkt im Browser auf die Datei zugreifen.
 
-Nutzung der quellenuebergreifenden Suche
+Nutzung der quellenübergreifenden Suche
 ==========================================
 
 Eingrenzung durch Labels
 --------------------------
 
-Sobald das Crawling abgeschlossen ist, koennen Sie die quellenuebergreifende Suche auf der Suchoberflaeche ausprobieren.
+Sobald das Crawling abgeschlossen ist, können Sie die quellenübergreifende Suche auf der Suchoberfläche ausprobieren.
 
-Auf der Suchoberflaeche werden Tabs oder Dropdown-Menues fuer die Labels angezeigt.
-Benutzer koennen "Alle" waehlen, um quellenuebergreifend zu suchen, oder ein bestimmtes Label auswaehlen, um die Suche auf diese Kategorie einzuschraenken.
+Auf der Suchoberfläche werden Tabs oder Dropdown-Menüs für die Labels angezeigt.
+Benutzer können "Alle" wählen, um quellenübergreifend zu suchen, oder ein bestimmtes Label auswählen, um die Suche auf diese Kategorie einzuschränken.
 
 Wenn Sie beispielsweise nach "Projektplan" suchen, werden Ergebnisse aus Portal-Artikeln, Word-Dateien im gemeinsamen Ordner und PDFs im Archiv gemischt angezeigt.
-Durch die Eingrenzung auf das Label "Gemeinsame Dateien" koennen Sie die Ergebnisse auf Dokumente im Dateiserver beschraenken.
+Durch die Eingrenzung auf das Label "Gemeinsame Dateien" können Sie die Ergebnisse auf Dokumente im Dateiserver beschränken.
 
 Sortierung der Suchergebnisse
 -------------------------------
 
-Standardmaessig werden die Ergebnisse nach Relevanz (Score) zum Suchbegriff sortiert.
-Unabhaengig von der Art der Datenquelle werden die relevantesten Dokumente zuerst angezeigt.
+Standardmäßig werden die Ergebnisse nach Relevanz (Score) zum Suchbegriff sortiert.
+Unabhängig von der Art der Datenquelle werden die relevantesten Dokumente zuerst angezeigt.
 
 Zusammenfassung
 ================
 
-In diesem Artikel haben wir mehrere Datenquellen in Fess integriert und eine quellenuebergreifende Suchumgebung aufgebaut.
+In diesem Artikel haben wir mehrere Datenquellen in Fess integriert und eine quellenübergreifende Suchumgebung aufgebaut.
 
-- Crawl-Konfiguration fuer drei Typen: Websites, Dateiserver und lokale Dateien
+- Crawl-Konfiguration für drei Typen: Websites, Dateiserver und lokale Dateien
 - Kategorisierung durch Labels und Eingrenzung der Suche
-- Verteilte Planung der Crawl-Zeitplaene
+- Verteilte Planung der Crawl-Zeitpläne
 - URL-Umwandlung durch Pfad-Mapping
 
-Durch die Einfuehrung der quellenuebergreifenden Suche koennen Benutzer die benoetigten Informationen finden, ohne sich Gedanken darueber machen zu muessen, wo sie gespeichert sind.
+Durch die Einführung der quellenübergreifenden Suche können Benutzer die benötigten Informationen finden, ohne sich Gedanken darüber machen zu müssen, wo sie gespeichert sind.
 
-Im naechsten Teil behandeln wir die rollenbasierte Suche, bei der Suchergebnisse entsprechend den Berechtigungen der einzelnen Abteilungen gesteuert werden.
+Im nächsten Teil behandeln wir die rollenbasierte Suche, bei der Suchergebnisse entsprechend den Berechtigungen der einzelnen Abteilungen gesteuert werden.
 
 Referenzen
 ==========
