@@ -31,7 +31,7 @@ Solange Crawls laufen, wird oberhalb der Liste „Laufende Crawls" angezeigt. F�
 Hinweise:
 
 - Der Block zeigt den Stand beim Öffnen der Seite. Laden Sie die Seite neu, um die aktuellen Werte zu sehen.
-- Ein abgeschlossener oder gestoppter Crawl ist beim nächsten Öffnen der Seite nicht mehr im Block. Hört der Crawler auf, ohne das zu vermerken (etwa weil der Prozess beendet wird), verschwindet der Crawl etwa 30 Sekunden (Standard) nach der letzten Aktualisierung. Ein gestoppter oder fehlgeschlagener Crawl lässt die Dokumentanzahl des vorherigen abgeschlossenen Crawls unverändert, ebenso ein Crawl, der ohne ein verarbeitetes Dokument abgeschlossen wird.
+- Ein abgeschlossener Crawl ist beim nächsten Öffnen der Seite nicht mehr im Block. Ein gestoppter Crawl (oder einer, bei dem der Crawler aufhört, ohne das zu vermerken, etwa weil der Prozess beendet wird) verschwindet innerhalb von etwa 30 Sekunden (Standard) nach der letzten Aktualisierung; nach dem Stoppen kann er also noch kurz angezeigt werden. Ein gestoppter oder fehlgeschlagener Crawl lässt die Dokumentanzahl des vorherigen abgeschlossenen Crawls unverändert, ebenso ein Crawl, der ohne ein verarbeitetes Dokument abgeschlossen wird.
 - Der Fortschrittsstatus wird vom System im Feld ``metadata`` der Crawl-Konfiguration gespeichert. Er kann in der Verwaltungsoberfläche und über die Admin-API nicht bearbeitet werden.
 - Dieselben Informationen sind über die Admin-API abrufbar (siehe :doc:`../api/admin/api-admin-crawlinginfo`).
 

@@ -27,8 +27,8 @@ La lista muestra la URL, el tipo, el tipo MIME, el estado HTTP, el tamaño (byte
 
 El tipo MIME, el estado HTTP y el tamaño se registran solo cuando el rastreador los conocía; en caso contrario quedan en blanco.
 
-- Se registran cuando: el procesamiento falló después de obtener el documento (por ejemplo, falló la extracción de texto o se superó un límite de tamaño), o el servidor devolvió un estado HTTP incluido en ``crawler.failure.url.status.codes``. Cuando un documento se rechaza por superar un límite de tamaño antes de obtenerlo, solo se registra el tamaño.
-- No se registran cuando: no se obtuvo respuesta, como en un tiempo de espera agotado o un error de conexión, ni en los fallos de rastreos de almacenes de datos.
+- Se registran cuando: el procesamiento falló después de obtener el documento (por ejemplo, se superó un límite de tamaño), o el servidor devolvió un estado HTTP incluido en ``crawler.failure.url.status.codes``. Cuando un documento se rechaza por superar un límite de tamaño antes de obtenerlo, solo se registra el tamaño.
+- No se registran cuando: no se obtuvo respuesta, como en un tiempo de espera agotado o un error de conexión, ni en los fallos de rastreos de almacenes de datos. Un fallo al extraer el texto (por ejemplo, un PDF ilegible) tampoco se registra con el valor predeterminado ``crawler.ignore.content.exception=true``: el documento se indexa sin cuerpo. Solo se registra cuando esta clave es ``false``.
 - El estado HTTP solo se registra para URL ``http`` / ``https``. Queda en blanco para archivos, SMB y otros protocolos.
 - En una URL de fallo registrada antes de |Fess| 15.10, estos elementos quedan en blanco hasta que la URL vuelva a fallar.
 
