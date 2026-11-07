@@ -543,7 +543,7 @@ Avis
 
 .. note::
 
-   L'avis de la page de connexion est affiché tel qu'il a été saisi, sans ce filtrage. Ne laissez que des administrateurs de confiance modifier ce champ également.
+   L'avis de la page de connexion est affiché dans la boîte de dialogue de connexion du thème et filtré de la même manière. La page de connexion standard de la console d'administration (``/login/``) ne l'affiche pas.
 
 Page de connexion
 :::::::::::::::::

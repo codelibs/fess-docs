@@ -543,7 +543,7 @@ Hinweis
 
 .. note::
 
-   Die Mitteilung der Anmeldeseite wird ohne diese Filterung so angezeigt, wie sie eingegeben wurde. Lassen Sie auch dieses Feld nur von vertrauenswürdigen Administratoren bearbeiten.
+   Die Mitteilung der Anmeldeseite wird im Anmeldedialog des Themes angezeigt und auf dieselbe Weise gefiltert. Die Standard-Anmeldeseite der Verwaltungskonsole (``/login/``) zeigt sie nicht an.
 
 Anmeldeseite
 ::::::::::::

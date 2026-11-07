@@ -543,7 +543,7 @@ Aviso
 
 .. note::
 
-   El aviso de la página de inicio de sesión se muestra tal como se introdujo, sin este filtrado. Permita que solo administradores de confianza editen también ese campo.
+   El aviso de la página de inicio de sesión se muestra en el cuadro de diálogo de inicio de sesión del tema y se filtra de la misma manera. La página de inicio de sesión estándar de la consola de administración (``/login/``) no lo muestra.
 
 Página de inicio de sesión
 :::::::::::::::::::::::::::
