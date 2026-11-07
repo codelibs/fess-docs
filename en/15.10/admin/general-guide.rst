@@ -543,7 +543,7 @@ Notice
 
 .. note::
 
-   The notice of the login page is shown as entered, without this filtering. Allow only trusted administrators to edit that field as well.
+   The notice of the login page is shown in the sign-in dialog of the theme and is filtered in the same way. The built-in login page of the administration console (``/login/``) does not show it.
 
 Login Page
 ::::::::::
