@@ -114,7 +114,7 @@ Each element of ``response`` is as follows. All fields are required.
      - Array of available locales.
    * - ``ui_locale``
      - string
-     - The display language of the search screen as a BCP 47 tag (for example ``ja`` or ``pt-BR``). It is determined from the request parameter ``browser_lang`` (remembered in the session once given), then the session, then the ``Accept-Language`` header. Empty when it cannot be determined. Not the same as ``locales``, which lists the search languages.
+     - The display language of the search screen as a BCP 47 tag (for example ``ja`` or ``pt-BR``). It is determined from the request parameter ``browser_lang`` (remembered in the session once given), then the session, then the ``Accept-Language`` header. Empty when it cannot be determined. Not the same as ``locales``, which lists the search languages. With no request parameter, no session and no ``Accept-Language`` header, it is the default locale of the server.
    * - ``default_label_values``
      - string[]
      - Label values that the search screen pre-selects. For the current user, they are taken from "Default Label Value" on the "General Settings" page of the admin UI, including values set per role or group. An empty array when ``label_options`` is empty. ``/api/v2/search`` does not apply them.

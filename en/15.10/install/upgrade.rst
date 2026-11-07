@@ -591,6 +591,22 @@ Other Behavior Changes
 - ``suggest.popular.word.cache.expire`` is read as seconds, as ``fess_config.properties`` and :doc:`../config/properties` describe. Up to 15.9 the value was used as minutes, so the default ``60`` kept popular words cached for 60 minutes; in 15.10 it is 60 seconds. To keep the longer cache, set a larger value in seconds (``3600`` for 60 minutes). The cache is also cleared after every run of the suggest job.
 - Looking up a document by its document ID now applies the virtual host filter, as a search does. Up to 15.9, ``/api/v2/cache/{docId}``, the ``/go/`` redirect, thumbnails, the favorite endpoints and the other lookups by document ID applied only the role filter, so when the roles matched they also answered for a document of another virtual host. In 15.10 such a document is treated as not found. As in a search, a document that has no virtual host value is not returned when a virtual host is resolved for the request. Nothing changes for a request with no virtual host resolved (the default host).
 - The suggest job no longer takes words from a document that search hides. It skips a document that has no ``role`` value and a document that has a denied entry (a value that starts with ``role.search.denied.prefix`` (default ``D``) followed by the prefix of a user, group or role, that is ``D1``, ``D2`` or ``DR`` by default). Up to 15.9, the words of such documents were suggested to everyone. A document that has both allowed and denied entries is skipped as a whole, because a suggest request cannot express a denial for one user. Suggest entries already created from such documents expire through the usual purge of old suggest data.
+- The login rate limit no longer distinguishes upper and lower case in the user name. Up to 15.9, ``Admin`` and ``admin`` were counted as different user names, so failures spread over different spellings never reached the per-account limit (5 failures). 15.10 counts the spellings as the same account, both for the login form (``/login/``) and for ``/api/v2/auth/login``.
+- Calling ``POST /login/changePassword`` without the old password returned HTTP 500 up to 15.9. 15.10 returns a validation error, and the password is not changed.
+- A POST to an admin screen form that does not include ``crudMode`` (for example from a script) returned HTTP 500 in 15.9 (15.8 and earlier do not return 500). 15.10 returns a validation error.
+- Deleting a plugin only affects files directly in the plugin directory. A name or version that contains ``../`` no longer deletes a file outside the directory; a warning is written to ``fess.log`` instead. Up to 15.9, such a name could delete files outside the directory. Deletion runs in the background, so ``DELETE /api/admin/plugin`` returns ``status`` ``0`` whether or not the deletion succeeds. Check ``fess.log`` for the result.
+
+.. _upgrade-1510-new-api:
+
+API added in 15.10
+------------------
+
+15.10 adds the following APIs. The OpenAPI changes are additions only, so existing clients keep working unchanged.
+
+- ``GET /api/v2/documents/{docId}/similar``: lists documents with the same content (:doc:`../api/api-similar`). Calls are limited by ``api.search.similar.rate.limit.per.minute`` (default ``30``).
+- ``theme_settings`` in ``GET /api/v2/ui/config``: the contents of "Theme Settings" under System > General in the admin screen (:doc:`../api/api-uiconfig`).
+- ``GET /api/admin/crawlinginfo/progress``: the progress of each running crawl configuration (:doc:`../api/admin/api-admin-crawlinginfo`).
+- ``mime_type``, ``http_status_code`` and ``content_length`` in ``/api/admin/failureurl``: information about the response of the failed URL (:doc:`../api/admin/api-admin-failureurl`).
 
 .. _upgrade-1510-implicit-fuzzy:
 

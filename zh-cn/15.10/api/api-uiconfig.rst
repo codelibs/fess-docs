@@ -114,7 +114,7 @@ HTTP 方法            GET
      - 可用的语言区域数组。
    * - ``ui_locale``
      - string
-     - 以 BCP 47 标签（例如 ``ja`` 、 ``pt-BR`` ）表示的搜索界面显示语言。按请求参数 ``browser_lang`` （指定后会记在会话中）、会话、 ``Accept-Language`` 头的顺序确定。无法确定时为空字符串。它与列出搜索语言的 ``locales`` 不同。
+     - 以 BCP 47 标签（例如 ``ja`` 、 ``pt-BR`` ）表示的搜索界面显示语言。按请求参数 ``browser_lang`` （指定后会记在会话中）、会话、 ``Accept-Language`` 头的顺序确定。无法确定时为空字符串。它与列出搜索语言的 ``locales`` 不同。没有请求参数、会话和 ``Accept-Language`` 头时，为服务器的默认区域设置。
    * - ``default_label_values``
      - string[]
      - 搜索界面预先选中的标签值。针对当前用户，取自管理界面「常规」页面中的「默认标签值」（包含按角色或组指定的值）。 ``label_options`` 为空时为空数组。 ``/api/v2/search`` 不会应用这些值。

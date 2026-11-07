@@ -571,6 +571,22 @@ Docker 版::
 - ``suggest.popular.word.cache.expire`` 按秒读取，与 ``fess_config.properties`` 和 :doc:`../config/properties` 中的说明一致。直到 15.9，该值被当作分钟使用，因此默认值 ``60`` 会让热门词缓存 60 分钟；15.10 中是 60 秒。若要保持更长的缓存，请设置以秒为单位的更大值（60 分钟为 ``3600``）。每次建议作业运行之后，缓存也会被清除。
 - 按文档 ID 获取文档时，现在也会像搜索一样应用虚拟主机过滤。直到 15.9，``/api/v2/cache/{docId}``、``/go/`` 重定向、缩略图、收藏端点以及其他按文档 ID 获取文档的处理只应用角色过滤，因此角色匹配时，也会对属于其他虚拟主机的文档作出响应。15.10 中，这样的文档会被视为不存在。与搜索一样，当请求确定了虚拟主机时，不含虚拟主机值的文档不会被返回。对于没有确定虚拟主机的请求（默认主机），行为不变。
 - 建议作业不再从搜索中被隐藏的文档中获取词语。没有 ``role`` 值的文档，以及带有拒绝条目的文档（值以 ``role.search.denied.prefix``\ （默认值 ``D``）开头，后接用户、组或角色的前缀，默认即 ``D1``、``D2``、``DR``）都会被跳过。直到 15.9，这些文档中的词语会建议给所有用户。同时带有允许条目和拒绝条目的文档会整体跳过，因为建议请求无法表达只拒绝某一个用户。已经从这类文档生成的建议条目，会通过清除旧建议数据的常规处理过期。
+- 登录次数限制不再区分用户名的大小写。15.9 之前，``Admin`` 和 ``admin`` 被当作不同的用户名统计，因此变换写法分散进行的失败不会达到同一账户的失败上限（5 次）。15.10 无论是登录表单（``/login/``）还是 ``/api/v2/auth/login``，都把大小写不同的写法统计为同一个账户。
+- 不发送旧密码调用 ``POST /login/changePassword`` 时，15.9 之前返回 HTTP 500。15.10 返回验证错误，密码不会改变。
+- 对管理界面表单的 POST 不包含 ``crudMode`` 时（例如来自脚本的调用），15.9 返回 HTTP 500（15.8 及更早版本不会返回 500）。15.10 返回验证错误。
+- 删除插件只针对插件目录正下方的文件。名称或版本中包含 ``../`` 时，不会删除目录之外的文件，而是在 ``fess.log`` 中输出警告。15.9 之前，这样的名称可以删除目录之外的文件。删除在后台执行，因此无论删除是否成功，``DELETE /api/admin/plugin`` 都返回 ``status`` 为 ``0`` 的响应。请在 ``fess.log`` 中确认结果。
+
+.. _upgrade-1510-new-api:
+
+15.10 新增的 API
+----------------
+
+15.10 新增了以下 API。OpenAPI 的变更仅为新增，现有客户端无需修改即可继续使用。
+
+- ``GET /api/v2/documents/{docId}/similar``：列出内容相同的文档（:doc:`../api/api-similar`）。调用受 ``api.search.similar.rate.limit.per.minute`` （默认 ``30``）限制。
+- ``GET /api/v2/ui/config`` 中的 ``theme_settings``：管理界面“系统”→“常规”中“主题设置”的内容（:doc:`../api/api-uiconfig`）。
+- ``GET /api/admin/crawlinginfo/progress``：正在运行的爬取设置各自的进度（:doc:`../api/admin/api-admin-crawlinginfo`）。
+- ``/api/admin/failureurl`` 中的 ``mime_type``、``http_status_code``、``content_length``：失败 URL 的响应信息（:doc:`../api/admin/api-admin-failureurl`）。
 
 .. _upgrade-1510-implicit-fuzzy:
 
