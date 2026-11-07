@@ -607,7 +607,7 @@ Docker 版::
 Apache Tika 4 と ``tika.xml``
 -----------------------------
 
-15.9.0 は Apache Tika 3.3.2 を使用していましたが、15.10 は Apache Tika 4.1.0 を使用します。
+15.9.0 は Apache Tika 3.3.2 を使用していましたが、15.10 は Apache Tika 4.2.0 を使用します。
 Tika 4 には XML 形式の設定ファイルがないため、|Fess| 15.10 は Tika のパーサーをコード内で構築し、``tika.xml`` を読み込みません。
 15.10 の ZIP 版、RPM/DEB 版、Docker イメージには、このファイルは含まれません。
 

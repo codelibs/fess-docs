@@ -629,7 +629,7 @@ Für Text mit Han-, Hiragana-, Katakana- oder Hangul-Zeichen wird standardmäßi
 Apache Tika 4 und ``tika.xml``
 ------------------------------
 
-15.9.0 verwendete Apache Tika 3.3.2, 15.10 verwendet Apache Tika 4.1.0.
+15.9.0 verwendete Apache Tika 3.3.2, 15.10 verwendet Apache Tika 4.2.0.
 Tika 4 hat keine XML-Konfigurationsdatei. |Fess| 15.10 baut den Tika-Parser deshalb im Code auf und liest ``tika.xml`` nicht mehr.
 Die ZIP- und RPM/DEB-Pakete sowie die Docker-Images von 15.10 enthalten die Datei nicht.
 

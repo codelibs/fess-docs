@@ -605,7 +605,7 @@ Docker 버전::
 Apache Tika 4와 ``tika.xml``
 ----------------------------
 
-15.9.0은 Apache Tika 3.3.2를, 15.10은 Apache Tika 4.1.0을 사용합니다.
+15.9.0은 Apache Tika 3.3.2를, 15.10은 Apache Tika 4.2.0을 사용합니다.
 Tika 4에는 XML 설정 파일이 없으므로 |Fess| 15.10은 Tika 파서를 코드에서 구성하며 ``tika.xml``\ 을 읽지 않습니다.
 15.10의 ZIP 버전, RPM/DEB 버전, Docker 이미지에는 이 파일이 포함되어 있지 않습니다.
 

@@ -632,7 +632,7 @@ Un texte contenant des caractères Han, hiragana, katakana ou hangul ne reçoit 
 Apache Tika 4 et ``tika.xml``
 -----------------------------
 
-La version 15.9.0 utilisait Apache Tika 3.3.2 ; la version 15.10 utilise Apache Tika 4.1.0.
+La version 15.9.0 utilisait Apache Tika 3.3.2 ; la version 15.10 utilise Apache Tika 4.2.0.
 Tika 4 n'a pas de fichier de configuration XML : |Fess| 15.10 construit donc l'analyseur Tika dans le code et ne lit plus ``tika.xml``.
 Les paquets ZIP et RPM/DEB ainsi que les images Docker de la version 15.10 ne contiennent pas ce fichier.
 

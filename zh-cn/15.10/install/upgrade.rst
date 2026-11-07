@@ -595,7 +595,7 @@ Docker 版::
 Apache Tika 4 和 ``tika.xml``
 -----------------------------
 
-15.9.0 使用 Apache Tika 3.3.2，15.10 使用 Apache Tika 4.1.0。
+15.9.0 使用 Apache Tika 3.3.2，15.10 使用 Apache Tika 4.2.0。
 Tika 4 没有 XML 配置文件，因此 |Fess| 15.10 在代码中构建 Tika 解析器，不再读取 ``tika.xml``。
 15.10 的 ZIP 版、RPM/DEB 版和 Docker 镜像中不包含该文件。
 
