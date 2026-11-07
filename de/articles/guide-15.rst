@@ -6,7 +6,7 @@ Einleitung
 ==========
 
 Die Anforderungen an die Informationssicherheit in Unternehmen werden von Jahr zu Jahr strenger.
-Da Suchsysteme eine grosse Menge vertraulicher Dokumente zusammenfuehren, sind geeignete Authentifizierungs- und Autorisierungsmechanismen unerlaeesslich.
+Da Suchsysteme eine große Menge vertraulicher Dokumente zusammenführen, sind geeignete Authentifizierungs- und Autorisierungsmechanismen unerlässlich.
 
 In diesem Artikel bauen wir auf der in Teil 5 vorgestellten rollenbasierten Suche auf und entwerfen eine Sicherheitsarchitektur mit Schwerpunkt auf SSO-Integration (Single Sign-On).
 
@@ -17,10 +17,10 @@ Zielgruppe
 - Personen, die eine SSO-Integration (OIDC, SAML) planen
 - Personen, die mit den Konzepten der Zero-Trust-Sicherheit vertraut sind
 
-Uebersicht der Sicherheitsanforderungen
+Übersicht der Sicherheitsanforderungen
 ==========================================
 
-Im Folgenden werden die typischen Sicherheitsanforderungen fuer Unternehmen zusammengefasst.
+Im Folgenden werden die typischen Sicherheitsanforderungen für Unternehmen zusammengefasst.
 
 .. list-table:: Sicherheitsanforderungen
    :header-rows: 1
@@ -29,11 +29,11 @@ Im Folgenden werden die typischen Sicherheitsanforderungen fuer Unternehmen zusa
    * - Anforderung
      - Beschreibung
    * - Single Sign-On
-     - Integration mit einem bestehenden IdP, um zusaetzliche Anmeldevorgaenge zu vermeiden
+     - Integration mit einem bestehenden IdP, um zusätzliche Anmeldevorgänge zu vermeiden
    * - Rollenbasierter Zugriff
-     - Steuerung der Suchergebnisse basierend auf Zugehoerigkeit und Berechtigungen des Benutzers
-   * - Verschluesselung der Kommunikation
-     - Verschluesselung der gesamten Kommunikation ueber HTTPS
+     - Steuerung der Suchergebnisse basierend auf Zugehörigkeit und Berechtigungen des Benutzers
+   * - Verschlüsselung der Kommunikation
+     - Verschlüsselung der gesamten Kommunikation über HTTPS
    * - API-Zugriffskontrolle
      - Tokenbasierte API-Authentifizierung und Berechtigungsverwaltung
    * - Audit-Protokolle
@@ -42,7 +42,7 @@ Im Folgenden werden die typischen Sicherheitsanforderungen fuer Unternehmen zusa
 SSO-Integrationsoptionen
 ==========================
 
-Im Folgenden werden die von Fess unterstuetzten SSO-Protokolle und deren jeweilige Einsatzszenarien dargestellt.
+Im Folgenden werden die von Fess unterstützten SSO-Protokolle und deren jeweilige Einsatzszenarien dargestellt.
 
 .. list-table:: Vergleich der SSO-Protokolle
    :header-rows: 1
@@ -61,20 +61,20 @@ Im Folgenden werden die von Fess unterstuetzten SSO-Protokolle und deren jeweili
      - Active Directory
      - Windows-Umgebungen mit integrierter Authentifizierung
 
-SSO-Integration ueber OpenID Connect / Entra ID
+SSO-Integration über OpenID Connect / Entra ID
 ==================================================
 
 Dies ist der modernste und empfohlene Ansatz.
-Neben der generischen OpenID-Connect-Integration bietet Fess auch eine dedizierte Integrationsfunktion fuer Entra ID (Azure AD).
-Im Folgenden wird die Integration am Beispiel von Entra ID erlaeutert.
+Neben der generischen OpenID-Connect-Integration bietet Fess auch eine dedizierte Integrationsfunktion für Entra ID (Azure AD).
+Im Folgenden wird die Integration am Beispiel von Entra ID erläutert.
 
-Uebersicht des Authentifizierungsablaufs
+Übersicht des Authentifizierungsablaufs
 ------------------------------------------
 
 1. Ein Benutzer greift auf Fess zu
 2. Fess leitet den Benutzer zur Authentifizierungsseite von Entra ID weiter
-3. Der Benutzer authentifiziert sich bei Entra ID (einschliesslich MFA)
-4. Entra ID gibt ein Authentifizierungstoken an Fess zurueck
+3. Der Benutzer authentifiziert sich bei Entra ID (einschließlich MFA)
+4. Entra ID gibt ein Authentifizierungstoken an Fess zurück
 5. Fess ruft Benutzer- und Gruppeninformationen aus dem Token ab
 6. Rollen werden basierend auf Gruppeninformationen zugewiesen
 7. Suchergebnisse werden basierend auf den Rollen bereitgestellt
@@ -90,7 +90,7 @@ Konfiguration auf der Entra-ID-Seite
 Konfiguration auf der Fess-Seite
 ----------------------------------
 
-Konfigurieren Sie die SSO-Verbindungsinformationen auf der Seite [System] > [Allgemein] in der Verwaltungsoberflaeche.
+Konfigurieren Sie die SSO-Verbindungsinformationen auf der Seite [System] > [Allgemein] in der Verwaltungsoberfläche.
 Die wichtigsten Konfigurationselemente sind:
 
 - URL des OpenID-Connect-Anbieters (Entra-ID-Endpunkt)
@@ -103,16 +103,16 @@ Zuordnung von Gruppen zu Rollen
 ---------------------------------
 
 Ordnen Sie Entra-ID-Gruppen Fess-Rollen zu.
-Dadurch wird die Gruppenverwaltung in Entra ID direkt in die Steuerung der Suchergebnisse uebernommen.
+Dadurch wird die Gruppenverwaltung in Entra ID direkt in die Steuerung der Suchergebnisse übernommen.
 
 Beispiel: Entra-ID-Gruppe „Engineering" -> Fess-Rolle „engineering_role"
 
-SSO-Integration ueber SAML
+SSO-Integration über SAML
 ============================
 
-SAML-Integration ist fuer Umgebungen geeignet, in denen ein bestehender SAML-IdP vorhanden ist.
+SAML-Integration ist für Umgebungen geeignet, in denen ein bestehender SAML-IdP vorhanden ist.
 
-Uebersicht des Authentifizierungsablaufs
+Übersicht des Authentifizierungsablaufs
 ------------------------------------------
 
 Bei SAML werden SAML Assertions zwischen dem SP (Service Provider = Fess) und dem IdP ausgetauscht.
@@ -120,40 +120,40 @@ Bei SAML werden SAML Assertions zwischen dem SP (Service Provider = Fess) und de
 1. Ein Benutzer greift auf Fess zu
 2. Fess sendet einen SAML AuthnRequest an den IdP
 3. Der IdP authentifiziert den Benutzer
-4. Der IdP gibt eine SAML Response (mit Benutzerattributen) an Fess zurueck
+4. Der IdP gibt eine SAML Response (mit Benutzerattributen) an Fess zurück
 5. Fess weist Rollen basierend auf den Benutzerattributen zu
 
 Konfiguration auf der Fess-Seite
 ----------------------------------
 
-Fuer die SAML-Integration sind folgende Einstellungen erforderlich:
+Für die SAML-Integration sind folgende Einstellungen erforderlich:
 
 - Metadaten-URL oder XML-Datei des IdP
-- Entitaets-ID des SP
+- Entitäts-ID des SP
 - Assertion Consumer Service URL
 - Attributzuordnung (Benutzername, E-Mail-Adresse, Gruppen)
 
 SPNEGO-/Kerberos-Integration
 ===============================
 
-In Windows-Active-Directory-Umgebungen kann die integrierte Windows-Authentifizierung ueber SPNEGO/Kerberos verwendet werden.
-Wenn Sie ueber einen Browser von einem PC aus zugreifen, der der Domaene beigetreten ist, erfolgt die Authentifizierung automatisch ohne zusaetzliche Anmeldevorgaenge.
+In Windows-Active-Directory-Umgebungen kann die integrierte Windows-Authentifizierung über SPNEGO/Kerberos verwendet werden.
+Wenn Sie über einen Browser von einem PC aus zugreifen, der der Domäne beigetreten ist, erfolgt die Authentifizierung automatisch ohne zusätzliche Anmeldevorgänge.
 
-Diese Methode ist fuer die Benutzer am transparentesten, die Konfiguration ist jedoch am komplexesten.
-Eine Active-Directory-Domaenenumgebung ist Voraussetzung.
+Diese Methode ist für die Benutzer am transparentesten, die Konfiguration ist jedoch am komplexesten.
+Eine Active-Directory-Domänenumgebung ist Voraussetzung.
 
-Verschluesselung der Kommunikation
+Verschlüsselung der Kommunikation
 =====================================
 
 SSL/TLS-Konfiguration
 -----------------------
 
-In Produktionsumgebungen wird empfohlen, alle Zugriffe auf Fess ueber HTTPS durchzufuehren.
+In Produktionsumgebungen wird empfohlen, alle Zugriffe auf Fess über HTTPS durchzuführen.
 
 **Reverse-Proxy-Methode (empfohlen)**
 
-Setzen Sie Nginx oder Apache HTTP Server als Reverse-Proxy ein und fuehren Sie die SSL-Terminierung durch.
-Fess selbst arbeitet ueber HTTP, und der Reverse-Proxy uebernimmt HTTPS.
+Setzen Sie Nginx oder Apache HTTP Server als Reverse-Proxy ein und führen Sie die SSL-Terminierung durch.
+Fess selbst arbeitet über HTTP, und der Reverse-Proxy übernimmt HTTPS.
 
 ::
 
@@ -163,18 +163,18 @@ Der Vorteil dieser Methode besteht darin, dass die Zertifikatsverwaltung beim Re
 
 **Direkte Fess-Konfigurationsmethode**
 
-Es ist auch moeglich, SSL-Zertifikate direkt im Tomcat von Fess zu konfigurieren.
-Dies eignet sich fuer kleine Umgebungen oder wenn kein Reverse-Proxy eingesetzt wird.
+Es ist auch möglich, SSL-Zertifikate direkt im Tomcat von Fess zu konfigurieren.
+Dies eignet sich für kleine Umgebungen oder wenn kein Reverse-Proxy eingesetzt wird.
 
 API-Zugriffssicherheit
 ========================
 
-Im Folgenden wird die Sicherheit der in Teil 11 vorgestellten API-Integration verstaerkt.
+Im Folgenden wird die Sicherheit der in Teil 11 vorgestellten API-Integration verstärkt.
 
-Berechtigungsdesign fuer Token
+Berechtigungsdesign für Token
 -------------------------------
 
-Konfigurieren Sie geeignete Berechtigungen fuer Zugriffstoken.
+Konfigurieren Sie geeignete Berechtigungen für Zugriffstoken.
 
 .. list-table:: Beispiel fuer das Token-Design
    :header-rows: 1
@@ -184,7 +184,7 @@ Konfigurieren Sie geeignete Berechtigungen fuer Zugriffstoken.
      - Berechtigungen
      - Hinweise
    * - Such-Widget
-     - Nur Suche (schreibgeschuetzt)
+     - Nur Suche (schreibgeschützt)
      - Wird im Frontend verwendet
    * - Stapelverarbeitung
      - Suche + Indizierung
@@ -196,20 +196,20 @@ Konfigurieren Sie geeignete Berechtigungen fuer Zugriffstoken.
 Token-Verwaltung
 -----------------
 
-- Regelmaessige Rotation (alle 3 bis 6 Monate)
-- Sofortige Deaktivierung nicht mehr benoetigter Token
-- Ueberwachung der Token-Nutzung
+- Regelmäßige Rotation (alle 3 bis 6 Monate)
+- Sofortige Deaktivierung nicht mehr benötigter Token
+- Überwachung der Token-Nutzung
 
 Auditierung und Protokolle
 ============================
 
-Audit-Protokolle in einem Suchsystem sind wichtig fuer die Untersuchung von Sicherheitsvorfaellen und die Einhaltung von Compliance-Anforderungen.
+Audit-Protokolle in einem Suchsystem sind wichtig für die Untersuchung von Sicherheitsvorfällen und die Einhaltung von Compliance-Anforderungen.
 
 Von Fess aufgezeichnete Protokolle
 ------------------------------------
 
-- **Suchprotokolle**: Wer hat was gesucht (einsehbar unter [Systeminformationen] > [Suchprotokoll] in der Verwaltungsoberflaeche)
-- **Audit-Protokolle** (``audit.log``): Vorgaenge wie Anmeldung, Abmeldung, Zugriff und Berechtigungsaenderungen werden einheitlich aufgezeichnet
+- **Suchprotokolle**: Wer hat was gesucht (einsehbar unter [Systeminformationen] > [Suchprotokoll] in der Verwaltungsoberfläche)
+- **Audit-Protokolle** (``audit.log``): Vorgänge wie Anmeldung, Abmeldung, Zugriff und Berechtigungsänderungen werden einheitlich aufgezeichnet
 
 Aufbewahrung von Protokollen
 ------------------------------
@@ -220,17 +220,17 @@ Wenn Compliance-Anforderungen bestehen, sollten Sie auch die Weiterleitung an ei
 Zusammenfassung
 ================
 
-In diesem Artikel haben wir eine Sicherheitsarchitektur fuer Fess in einer Unternehmensumgebung entworfen.
+In diesem Artikel haben wir eine Sicherheitsarchitektur für Fess in einer Unternehmensumgebung entworfen.
 
 - Drei SSO-Integrationsoptionen (OIDC, SAML, SPNEGO) und deren jeweilige Einsatzszenarien
-- Entwurf der Entra-ID-Integration ueber OpenID Connect
-- Verschluesselung der Kommunikation ueber SSL/TLS
-- Berechtigungsdesign fuer API-Zugriffstoken
+- Entwurf der Entra-ID-Integration über OpenID Connect
+- Verschlüsselung der Kommunikation über SSL/TLS
+- Berechtigungsdesign für API-Zugriffstoken
 - Verwaltung von Audit-Protokollen
 
 Bauen Sie eine sichere Suchinfrastruktur auf und finden Sie dabei die richtige Balance zwischen Sicherheit und Benutzerfreundlichkeit.
 
-Im naechsten Artikel wird die Automatisierung der Suchinfrastruktur behandelt.
+Im nächsten Artikel wird die Automatisierung der Suchinfrastruktur behandelt.
 
 Referenzen
 ==========

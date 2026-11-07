@@ -1,20 +1,20 @@
 ===============================================
-Teil 14: Skalierungsstrategien fuer Suchsysteme
+Teil 14: Skalierungsstrategien für Suchsysteme
 ===============================================
 
-Einfuehrung
+Einführung
 ============
 
-Wenn Sie Fess zunachst in kleinem Umfang einfuehren, entstehen mit wachsender Nutzung unweigerlich Anforderungen wie "mehr Dokumente", "mehr Benutzer" und "schnellere Suche".
+Wenn Sie Fess zunachst in kleinem Umfang einführen, entstehen mit wachsender Nutzung unweigerlich Anforderungen wie "mehr Dokumente", "mehr Benutzer" und "schnellere Suche".
 
-In diesem Artikel werden die Strategien und Entscheidungskriterien fuer die schrittweise Skalierung von einer kleinen Einzelserver-Konfiguration bis hin zu einer grossen Cluster-Konfiguration erlaeutert.
+In diesem Artikel werden die Strategien und Entscheidungskriterien für die schrittweise Skalierung von einer kleinen Einzelserver-Konfiguration bis hin zu einer großen Cluster-Konfiguration erläutert.
 
 Zielgruppe
 ==========
 
-- Personen, die einen grossangelegten Fess-Betrieb planen
+- Personen, die einen großangelegten Fess-Betrieb planen
 - Personen, die mit Leistungsproblemen konfrontiert sind
-- Personen, die die grundlegenden Konzepte von OpenSearch-Clustern verstehen moechten
+- Personen, die die grundlegenden Konzepte von OpenSearch-Clustern verstehen möchten
 
 Skalierungsstufen
 ==================
@@ -49,7 +49,7 @@ Die Skalierung von Fess erfolgt typischerweise in den folgenden Stufen.
      - Multi-Instanz
      - 10 Millionen oder mehr
      - Mehrere Tausend oder mehr
-     - Am hoechsten
+     - Am höchsten
 
 Stufe S: Einzelserver-Konfiguration
 =====================================
@@ -60,7 +60,7 @@ Fess und OpenSearch laufen auf demselben Server.
 Einsatzszenarien
 -----------------
 
-- Ersteinrichtung, PoC, kleine bis mittelgrosse Organisationen
+- Ersteinrichtung, PoC, kleine bis mittelgroße Organisationen
 - Dokumentenanzahl von 1 Million oder weniger
 - Wenige gleichzeitige Suchbenutzer
 
@@ -69,9 +69,9 @@ Tuning-Punkte
 
 **JVM-Heap-Anpassung**
 
-Stellen Sie die JVM-Heap-Groesse fuer Fess und OpenSearch jeweils angemessen ein.
+Stellen Sie die JVM-Heap-Größe für Fess und OpenSearch jeweils angemessen ein.
 
-- Fess: Maximal 2 GB (Standard; anfaenglicher Heap betraegt 256 MB)
+- Fess: Maximal 2 GB (Standard; anfänglicher Heap beträgt 256 MB)
 - OpenSearch: 50 % oder weniger des physischen Speichers, jedoch nicht mehr als 32 GB
 
 **Thread-Pool**
@@ -86,7 +86,7 @@ Trennen Sie den Fess-Server und den OpenSearch-Server physisch.
 Einsatzszenarien
 -----------------
 
-- Wenn die Anzahl gleichzeitiger Suchbenutzer steigt und die Suchleistung waehrend des Crawlings zum Problem wird
+- Wenn die Anzahl gleichzeitiger Suchbenutzer steigt und die Suchleistung während des Crawlings zum Problem wird
 - Wenn Arbeitsspeicher oder CPU in Stufe S knapp werden
 
 Konfiguration
@@ -96,14 +96,14 @@ Konfiguration
 
     [Fess-Server] <-> [OpenSearch-Server]
 
-Aendern Sie in den Fess-Einstellungen das OpenSearch-Verbindungsziel auf den externen Server.
+Ändern Sie in den Fess-Einstellungen das OpenSearch-Verbindungsziel auf den externen Server.
 
 Vorteile
 ---------
 
 - Beseitigung der Ressourcenkonflikte zwischen Fess (Crawl-Verarbeitung) und OpenSearch (Suchverarbeitung)
-- Optimale Ressourcenzuweisung (CPU, Arbeitsspeicher) fuer jeden Server moeglich
-- Unabhaengige Festplatten-I/O des OpenSearch-Servers
+- Optimale Ressourcenzuweisung (CPU, Arbeitsspeicher) für jeden Server möglich
+- Unabhängige Festplatten-I/O des OpenSearch-Servers
 
 Stufe L: Cluster-Konfiguration
 ================================
@@ -114,7 +114,7 @@ Einsatzszenarien
 -----------------
 
 - Dokumentenanzahl von 1 Million bis 10 Millionen
-- Wenn hohe Verfuegbarkeit erforderlich ist
+- Wenn hohe Verfügbarkeit erforderlich ist
 - Wenn die Verbesserung der Suchantwortzeiten notwendig ist
 
 Konfigurationsbeispiel
@@ -132,14 +132,14 @@ Der OpenSearch-Cluster verteilt und repliziert Daten mithilfe der Konzepte von S
 
 **Shards**: Aufteilen des Index und Verteilung auf mehrere Knoten (schnellere Verarbeitung durch Parallelisierung)
 
-**Replicas**: Aufbewahrung von Shard-Kopien auf anderen Knoten (Redundanz bei Ausfaellen + Parallelisierung der Suche)
+**Replicas**: Aufbewahrung von Shard-Kopien auf anderen Knoten (Redundanz bei Ausfällen + Parallelisierung der Suche)
 
 Konfigurationshinweise
 -----------------------
 
 - Anzahl der Shards: Entsprechend der Dokumentenanzahl und Suchleistung einstellen (Richtwert: 10-50 GB pro Shard)
 - Anzahl der Replicas: Mindestens 1 (zur Sicherstellung der Redundanz)
-- Anzahl der Knoten: Mindestens 3 (Quorum fuer die Master-Wahl)
+- Anzahl der Knoten: Mindestens 3 (Quorum für die Master-Wahl)
 
 Stufe XL: Multi-Instanz-Konfiguration
 =======================================
@@ -149,8 +149,8 @@ Konfigurieren Sie mehrere Fess-Instanzen, um die Crawl- und Suchverarbeitung zu 
 Einsatzszenarien
 -----------------
 
-- Dokumentenanzahl uebersteigt 10 Millionen
-- Grosse Crawl-Jobs muessen parallel ausgefuehrt werden
+- Dokumentenanzahl übersteigt 10 Millionen
+- Große Crawl-Jobs müssen parallel ausgeführt werden
 - Hochfrequente Suchanfragen
 
 Konfigurationsbeispiel
@@ -169,31 +169,31 @@ Konfigurationsbeispiel
       +-- [Knoten 3] (Daten)
       +-- [Knoten 4] (Daten)
 
-Ab Fess 15.6 ermoeglicht die Funktion fuer verteilte Koordination die exklusive Steuerung von Wartungsoperationen (wie Indexneuaufbau und -leerung) ueber mehrere Fess-Instanzen hinweg.
+Ab Fess 15.6 ermöglicht die Funktion für verteilte Koordination die exklusive Steuerung von Wartungsoperationen (wie Indexneuaufbau und -leerung) über mehrere Fess-Instanzen hinweg.
 
-Entscheidungsflussdiagramm fuer die Skalierung
+Entscheidungsflussdiagramm für die Skalierung
 ================================================
 
-Wenn Leistungsprobleme auftreten, identifizieren Sie die Ursache und erwaegen Sie Gegenmassnahmen in der folgenden Reihenfolge.
+Wenn Leistungsprobleme auftreten, identifizieren Sie die Ursache und erwägen Sie Gegenmaßnahmen in der folgenden Reihenfolge.
 
 **1. Wenn die Suche langsam ist**
 
-- Ueberpruefen Sie den OpenSearch-Clusterstatus
-- Ueberpruefen Sie die JVM-Heap-Auslastung
-- Ueberpruefen Sie die Indexgroesse
+- Überprüfen Sie den OpenSearch-Clusterstatus
+- Überprüfen Sie die JVM-Heap-Auslastung
+- Überprüfen Sie die Indexgröße
 - -> Stufe M (Trennung) oder Stufe L (Clustering) in Betracht ziehen
 
 **2. Wenn das Crawling langsam ist oder nicht abgeschlossen wird**
 
-- Ueberpruefen Sie die Anzahl der zu crawlenden Dokumente
+- Überprüfen Sie die Anzahl der zu crawlenden Dokumente
 - Passen Sie die Thread-Anzahl und das Intervall an
-- Ueberpruefen Sie die Auswirkungen auf die Suche waehrend des Crawlings
+- Überprüfen Sie die Auswirkungen auf die Suche während des Crawlings
 - -> Stufe M (Trennung) oder Stufe XL (dedizierte Crawl-Instanz) in Betracht ziehen
 
 **3. Wenn viele gleichzeitige Zugriffe vorliegen**
 
-- Ueberwachen Sie die Suchantwortzeiten
-- Ueberpruefen Sie die CPU-Auslastung des Fess-Servers
+- Überwachen Sie die Suchantwortzeiten
+- Überprüfen Sie die CPU-Auslastung des Fess-Servers
 - -> Stufe XL (Load Balancer + mehrere Instanzen) in Betracht ziehen
 
 JVM-Tuning
@@ -212,16 +212,16 @@ Wichtige Parameter
      - Beschreibung
      - Empfohlener Wert
    * - ``-Xmx``
-     - Maximale Heap-Groesse
+     - Maximale Heap-Größe
      - 50 % oder weniger des physischen Speichers
    * - ``-Xms``
-     - Anfaengliche Heap-Groesse
+     - Anfängliche Heap-Größe
      - Gleicher Wert wie ``-Xmx``
    * - GC-Einstellungen
      - Garbage-Collection-Methode
      - G1GC (Standard)
 
-Richtwerte fuer die Heap-Groesse
+Richtwerte für die Heap-Größe
 ----------------------------------
 
 - 1 Million oder weniger: 2-4 GB
@@ -232,17 +232,17 @@ Richtwerte fuer die Heap-Groesse
 Zusammenfassung
 ================
 
-In diesem Artikel wurden die schrittweisen Skalierungsstrategien fuer Fess erlaeutert.
+In diesem Artikel wurden die schrittweisen Skalierungsstrategien für Fess erläutert.
 
 - **Stufe S**: Einzelserver (bis zu 1 Million Dokumente)
-- **Stufe M**: Fess / OpenSearch-Trennung (bis zu 1 Million Dokumente, Unterstuetzung mehrerer Benutzer)
+- **Stufe M**: Fess / OpenSearch-Trennung (bis zu 1 Million Dokumente, Unterstützung mehrerer Benutzer)
 - **Stufe L**: OpenSearch-Clustering (1 Million bis 10 Millionen Dokumente)
 - **Stufe XL**: Fess Multi-Instanz (10 Millionen Dokumente oder mehr)
-- Entscheidungsflussdiagramm fuer die Skalierung und JVM-Tuning
+- Entscheidungsflussdiagramm für die Skalierung und JVM-Tuning
 
-Mit dem Ansatz "klein anfangen und bei Bedarf wachsen" koennen Sie entsprechend den Anforderungen skalieren und dabei die Kosten unter Kontrolle halten.
+Mit dem Ansatz "klein anfangen und bei Bedarf wachsen" können Sie entsprechend den Anforderungen skalieren und dabei die Kosten unter Kontrolle halten.
 
-Im naechsten Artikel wird die Sicherheitsarchitektur behandelt.
+Im nächsten Artikel wird die Sicherheitsarchitektur behandelt.
 
 Referenzen
 ==========

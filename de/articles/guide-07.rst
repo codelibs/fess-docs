@@ -2,20 +2,20 @@
 Teil 7 Suchstrategien im Zeitalter von Cloud-Speicher
 =====================================================
 
-Einfuehrung
+Einführung
 ============
 
-In vielen Unternehmen ist die Nutzung von Cloud-Speicherdiensten laengst selbstverstaendlich.
+In vielen Unternehmen ist die Nutzung von Cloud-Speicherdiensten längst selbstverständlich.
 Dennoch ist es keine Seltenheit, dass je nach Abteilung oder Einsatzzweck unterschiedliche Cloud-Speicherdienste verwendet werden.
-Die Zeit, die damit verbracht wird, sich zu fragen "War diese Datei in Google Drive, SharePoint oder doch in Box?", beeintraechtigt die Produktivitaet.
+Die Zeit, die damit verbracht wird, sich zu fragen "War diese Datei in Google Drive, SharePoint oder doch in Box?", beeinträchtigt die Produktivität.
 
-In diesem Artikel wird beschrieben, wie Sie mehrere Cloud-Speicherdienste mit Fess integrieren und eine Umgebung aufbauen, in der Sie alle Dateien in der Cloud ueber ein einziges Suchfeld dienstuebergreifend durchsuchen koennen.
+In diesem Artikel wird beschrieben, wie Sie mehrere Cloud-Speicherdienste mit Fess integrieren und eine Umgebung aufbauen, in der Sie alle Dateien in der Cloud über ein einziges Suchfeld dienstübergreifend durchsuchen können.
 
 Zielgruppe
 ==========
 
 - Administratoren von Organisationen, die mehrere Cloud-Speicherdienste nutzen
-- Personen, die bei der Suche in Cloud-Speicherdiensten auf Herausforderungen stossen
+- Personen, die bei der Suche in Cloud-Speicherdiensten auf Herausforderungen stoßen
 - Personen, die mit den Grundkonzepten der OAuth-Authentifizierung vertraut sind
 
 Szenario
@@ -38,7 +38,7 @@ Ein Unternehmen nutzt die folgenden Cloud-Speicherdienste.
      - Intranet-Portal, gemeinsame Dokumente
    * - Box
      - Rechtsabteilung und Buchhaltung
-     - Vertraege, Rechnungen, vertrauliche Dokumente
+     - Verträge, Rechnungen, vertrauliche Dokumente
 
 Vorbereitung der Cloud-Speicher-Integration
 =============================================
@@ -46,18 +46,18 @@ Vorbereitung der Cloud-Speicher-Integration
 Installation der Datenspeicher-Plugins
 --------------------------------------
 
-Fuer das Crawling von Cloud-Speicherdiensten werden die folgenden Plugins verwendet.
+Für das Crawling von Cloud-Speicherdiensten werden die folgenden Plugins verwendet.
 
 - ``fess-ds-gsuite``: Crawling von Google Drive / Google Workspace
 - ``fess-ds-microsoft365``: Crawling von SharePoint Online / OneDrive
 - ``fess-ds-box``: Crawling von Box
 
-Die Installation erfolgt ueber die Verwaltungsoberflaeche unter [System] > [Plugins].
+Die Installation erfolgt über die Verwaltungsoberfläche unter [System] > [Plugins].
 
 OAuth-Authentifizierung konfigurieren
 -------------------------------------
 
-Fuer den Zugriff auf die APIs der Cloud-Speicherdienste ist die Konfiguration der OAuth-Authentifizierung erforderlich.
+Für den Zugriff auf die APIs der Cloud-Speicherdienste ist die Konfiguration der OAuth-Authentifizierung erforderlich.
 Registrieren Sie in der Verwaltungskonsole des jeweiligen Dienstes eine Anwendung und rufen Sie die Client-ID und das Client-Secret ab.
 
 **Allgemeine Vorgehensweise**
@@ -79,17 +79,17 @@ Machen Sie die Dateien in Google Drive suchbar.
 
 1. Erstellen Sie ein Projekt in der Google Cloud Console
 2. Aktivieren Sie die Google Drive API
-3. Erstellen Sie ein Dienstkonto und laden Sie die JSON-Schluesseldatei herunter
-4. Geben Sie das Dienstkonto fuer die gewuenschten Laufwerke und Ordner frei
+3. Erstellen Sie ein Dienstkonto und laden Sie die JSON-Schlüsseldatei herunter
+4. Geben Sie das Dienstkonto für die gewünschten Laufwerke und Ordner frei
 
 **Konfiguration in Fess**
 
 1. [Crawler] > [Datenspeicher] > [Neu erstellen]
-2. Handler-Name: GoogleDriveDataStore auswaehlen
+2. Handler-Name: GoogleDriveDataStore auswählen
 3. Parameter und Skripte konfigurieren
 4. Label: ``google-drive`` festlegen
 
-**Beispiel fuer die Parameterkonfiguration**
+**Beispiel für die Parameterkonfiguration**
 
 .. code-block:: properties
 
@@ -100,7 +100,7 @@ Machen Sie die Dateien in Google Drive suchbar.
     include_pattern=
     exclude_pattern=
 
-**Beispiel fuer die Skriptkonfiguration**
+**Beispiel für die Skriptkonfiguration**
 
 .. code-block:: properties
 
@@ -111,7 +111,7 @@ Machen Sie die Dateien in Google Drive suchbar.
     content_length=size
     last_modified=modified_time
 
-Tragen Sie die Werte fuer ``private_key``, ``private_key_id`` und ``client_email`` aus der JSON-Schluesseldatei des Dienstkontos ein. Google-eigene Formate wie Google Docs, Tabellen und Praesentationen koennen ebenfalls als Text extrahiert und durchsucht werden.
+Tragen Sie die Werte für ``private_key``, ``private_key_id`` und ``client_email`` aus der JSON-Schlüsseldatei des Dienstkontos ein. Google-eigene Formate wie Google Docs, Tabellen und Präsentationen können ebenfalls als Text extrahiert und durchsucht werden.
 
 SharePoint Online konfigurieren
 ---------------------------------
@@ -121,17 +121,17 @@ Machen Sie die Dokumentbibliotheken von SharePoint Online suchbar.
 **Vorbereitung in Entra ID (Azure AD)**
 
 1. Registrieren Sie eine Anwendung in Entra ID
-2. Konfigurieren Sie die Berechtigungen fuer die Microsoft Graph API (z. B. Sites.Read.All)
+2. Konfigurieren Sie die Berechtigungen für die Microsoft Graph API (z. B. Sites.Read.All)
 3. Erstellen Sie ein Client-Secret oder ein Zertifikat
 
 **Konfiguration in Fess**
 
 1. [Crawler] > [Datenspeicher] > [Neu erstellen]
-2. Handler-Name: SharePointDocLibDataStore auswaehlen (fuer Dokumentbibliotheken. Je nach Einsatzzweck koennen auch SharePointListDataStore, SharePointPageDataStore oder OneDriveDataStore verwendet werden)
+2. Handler-Name: SharePointDocLibDataStore auswählen (für Dokumentbibliotheken. Je nach Einsatzzweck können auch SharePointListDataStore, SharePointPageDataStore oder OneDriveDataStore verwendet werden)
 3. Parameter und Skripte konfigurieren
 4. Label: ``sharepoint`` festlegen
 
-**Beispiel fuer die Parameterkonfiguration**
+**Beispiel für die Parameterkonfiguration**
 
 .. code-block:: properties
 
@@ -140,7 +140,7 @@ Machen Sie die Dokumentbibliotheken von SharePoint Online suchbar.
     client_secret=your-client-secret
     site_id=your-site-id
 
-**Beispiel fuer die Skriptkonfiguration**
+**Beispiel für die Skriptkonfiguration**
 
 .. code-block:: properties
 
@@ -149,7 +149,7 @@ Machen Sie die Dokumentbibliotheken von SharePoint Online suchbar.
     content=content
     last_modified=modified
 
-``tenant``, ``client_id`` und ``client_secret`` werden mit den Werten aus der Anwendungsregistrierung in Entra ID konfiguriert. Wenn ``site_id`` angegeben wird, wird nur die angegebene Website gecrawlt. Wird der Wert weggelassen, werden alle zugaenglichen Websites erfasst.
+``tenant``, ``client_id`` und ``client_secret`` werden mit den Werten aus der Anwendungsregistrierung in Entra ID konfiguriert. Wenn ``site_id`` angegeben wird, wird nur die angegebene Website gecrawlt. Wird der Wert weggelassen, werden alle zugänglichen Websites erfasst.
 
 Box konfigurieren
 ------------------
@@ -159,17 +159,17 @@ Machen Sie die Dateien in Box suchbar.
 **Vorbereitung in der Box Developer Console**
 
 1. Erstellen Sie eine benutzerdefinierte Anwendung in der Box Developer Console
-2. Waehlen Sie als Authentifizierungsmethode "Serverauthentifizierung (mit Client-Anmeldeinformationen)"
+2. Wählen Sie als Authentifizierungsmethode "Serverauthentifizierung (mit Client-Anmeldeinformationen)"
 3. Bitten Sie einen Administrator um die Genehmigung der Anwendung
 
 **Konfiguration in Fess**
 
 1. [Crawler] > [Datenspeicher] > [Neu erstellen]
-2. Handler-Name: BoxDataStore auswaehlen
+2. Handler-Name: BoxDataStore auswählen
 3. Parameter und Skripte konfigurieren
 4. Label: ``box`` festlegen
 
-**Beispiel fuer die Parameterkonfiguration**
+**Beispiel für die Parameterkonfiguration**
 
 .. code-block:: properties
 
@@ -181,7 +181,7 @@ Machen Sie die Dateien in Box suchbar.
     passphrase=your-passphrase
     supported_mimetypes=.*
 
-**Beispiel fuer die Skriptkonfiguration**
+**Beispiel für die Skriptkonfiguration**
 
 .. code-block:: properties
 
@@ -192,9 +192,9 @@ Machen Sie die Dateien in Box suchbar.
     content_length=size
     last_modified=modified_at
 
-Konfigurieren Sie die Authentifizierungsinformationen der in der Box Developer Console erstellten benutzerdefinierten Anwendung. Mit ``supported_mimetypes`` koennen Sie die zu crawlenden Dateiformate per regulaerem Ausdruck einschraenken.
+Konfigurieren Sie die Authentifizierungsinformationen der in der Box Developer Console erstellten benutzerdefinierten Anwendung. Mit ``supported_mimetypes`` können Sie die zu crawlenden Dateiformate per regulärem Ausdruck einschränken.
 
-Optimierung der dienstuebergreifenden Suche
+Optimierung der dienstübergreifenden Suche
 =============================================
 
 Nutzung des inkrementellen Crawlings
@@ -202,14 +202,14 @@ Nutzung des inkrementellen Crawlings
 
 Beim Crawling von Cloud-Speicherdiensten ist es effizienter, anstatt jedes Mal alle Dateien abzurufen, nur die seit dem letzten Crawling aktualisierten Dateien zu erfassen (inkrementelles Crawling).
 
-Pruefen Sie in der Konfiguration der jeweiligen Plugins, ob die Option fuer inkrementelles Crawling verfuegbar ist.
-Durch inkrementelles Crawling laesst sich die Anzahl der API-Aufrufe reduzieren und die Crawling-Dauer verkuerzen.
+Prüfen Sie in der Konfiguration der jeweiligen Plugins, ob die Option für inkrementelles Crawling verfügbar ist.
+Durch inkrementelles Crawling lässt sich die Anzahl der API-Aufrufe reduzieren und die Crawling-Dauer verkürzen.
 
 URL der Suchergebnisse
 -----------------------
 
-Bei Dokumenten, die aus Cloud-Speicherdiensten gecrawlt wurden, oeffnet ein Klick auf den Link in den Suchergebnissen die Datei in der Web-Oberflaeche des jeweiligen Dienstes.
-Dies ist fuer die Benutzer ein natuerliches Verhalten, und es ist in der Regel keine besondere Konfiguration erforderlich.
+Bei Dokumenten, die aus Cloud-Speicherdiensten gecrawlt wurden, öffnet ein Klick auf den Link in den Suchergebnissen die Datei in der Web-Oberfläche des jeweiligen Dienstes.
+Dies ist für die Benutzer ein natürliches Verhalten, und es ist in der Regel keine besondere Konfiguration erforderlich.
 
 Hinweise zum Betrieb
 ======================
@@ -217,45 +217,45 @@ Hinweise zum Betrieb
 Erneuerung der OAuth-Tokens
 -----------------------------
 
-Bei der Integration mit Cloud-Speicherdiensten ist auf die Gueltigkeit der OAuth-Tokens zu achten.
+Bei der Integration mit Cloud-Speicherdiensten ist auf die Gültigkeit der OAuth-Tokens zu achten.
 
 - **Google Drive**: Bei Dienstkonten werden die Tokens automatisch erneuert
-- **SharePoint Online**: Client-Secrets haben ein Ablaufdatum und muessen regelmaessig erneuert werden
+- **SharePoint Online**: Client-Secrets haben ein Ablaufdatum und müssen regelmäßig erneuert werden
 - **Box**: Es kann erforderlich werden, die Anwendung erneut genehmigen zu lassen
 
 Tragen Sie die Ablaufdaten der Tokens in Ihren Kalender ein, um einen Crawling-Stopp durch abgelaufene Tokens zu vermeiden.
 
-Ueberwachung der API-Nutzung
+Überwachung der API-Nutzung
 ------------------------------
 
-Die APIs der Cloud-Speicherdienste unterliegen Nutzungsbeschraenkungen.
-Insbesondere beim Crawling grosser Datenmengen sollten Sie die API-Nutzung ueberwachen und die Crawling-Konfiguration so anpassen, dass die Limits nicht ueberschritten werden.
+Die APIs der Cloud-Speicherdienste unterliegen Nutzungsbeschränkungen.
+Insbesondere beim Crawling großer Datenmengen sollten Sie die API-Nutzung überwachen und die Crawling-Konfiguration so anpassen, dass die Limits nicht überschritten werden.
 
 Berechtigungen und Sicherheit
 -------------------------------
 
-Konfigurieren Sie fuer das Fess-Dienstkonto der Cloud-Speicherdienste ausschliesslich Lesezugriffsberechtigungen.
+Konfigurieren Sie für das Fess-Dienstkonto der Cloud-Speicherdienste ausschließlich Lesezugriffsberechtigungen.
 Schreibberechtigungen sind nicht erforderlich -- folgen Sie dem Prinzip der Minimierung von Sicherheitsrisiken.
 
-Darueber hinaus laesst sich durch die Kombination mit der in Teil 5 behandelten rollenbasierten Suche eine Steuerung der Suchergebnisse realisieren, die dem Berechtigungskonzept der Cloud-Speicherdienste entspricht.
+Darüber hinaus lässt sich durch die Kombination mit der in Teil 5 behandelten rollenbasierten Suche eine Steuerung der Suchergebnisse realisieren, die dem Berechtigungskonzept der Cloud-Speicherdienste entspricht.
 
 Zusammenfassung
 ================
 
-In diesem Artikel wurde beschrieben, wie Sie die drei Cloud-Speicherdienste Google Drive, SharePoint Online und Box mit Fess integrieren und eine dienstuebergreifende Suchumgebung aufbauen.
+In diesem Artikel wurde beschrieben, wie Sie die drei Cloud-Speicherdienste Google Drive, SharePoint Online und Box mit Fess integrieren und eine dienstübergreifende Suchumgebung aufbauen.
 
-- Konfiguration der Datenspeicher-Plugins und der OAuth-Authentifizierung fuer die einzelnen Cloud-Speicherdienste
+- Konfiguration der Datenspeicher-Plugins und der OAuth-Authentifizierung für die einzelnen Cloud-Speicherdienste
 - Unterscheidung und Filterung der Informationsquellen mithilfe von Labels
 - Optimierung des Sucherlebnisses durch inkrementelles Crawling
-- Verwaltung von OAuth-Tokens und Ueberwachung der API-Nutzung
+- Verwaltung von OAuth-Tokens und Überwachung der API-Nutzung
 
-Das Ergebnis ist eine Umgebung, in der Sie benoetigte Dateien sofort finden koennen, ohne darueber nachdenken zu muessen, in welchem Cloud-Speicher sie sich befinden.
+Das Ergebnis ist eine Umgebung, in der Sie benötigte Dateien sofort finden können, ohne darüber nachdenken zu müssen, in welchem Cloud-Speicher sie sich befinden.
 
-Im naechsten Teil wird es um den Tuning-Zyklus zur kontinuierlichen Verbesserung der Suchqualitaet gehen.
+Im nächsten Teil wird es um den Tuning-Zyklus zur kontinuierlichen Verbesserung der Suchqualität gehen.
 
 Referenzen
 ==========
 
 - `Fess Datenspeicher-Konfiguration <https://fess.codelibs.org/ja/15.5/admin/dataconfig.html>`__
 
-- `Fess Plugin-Uebersicht <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__
+- `Fess Plugin-Übersicht <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__

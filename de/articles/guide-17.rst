@@ -5,16 +5,16 @@ Teil 17: Suche mit Plugins erweitern
 Einleitung
 ==========
 
-Fess unterstuetzt standardmaessig viele Datenquellen. Um jedoch unternehmensspezifische Systeme und Datenformate zu unterstuetzen, kann eine Erweiterung durch Plugins erforderlich sein.
+Fess unterstützt standardmäßig viele Datenquellen. Um jedoch unternehmensspezifische Systeme und Datenformate zu unterstützen, kann eine Erweiterung durch Plugins erforderlich sein.
 
-In diesem Artikel wird die Plugin-Architektur von Fess erlaeutert und die Implementierung von benutzerdefinierten Datenquellen-Plugins und Ingest-Plugins vorgestellt.
+In diesem Artikel wird die Plugin-Architektur von Fess erläutert und die Implementierung von benutzerdefinierten Datenquellen-Plugins und Ingest-Plugins vorgestellt.
 
 Zielgruppe
 ==========
 
-- Personen, die Fess mit eigenen Datenquellen verbinden moechten
-- Java-Entwickler, die sich fuer die Plugin-Entwicklung interessieren
-- Personen, die die interne Architektur von Fess verstehen moechten
+- Personen, die Fess mit eigenen Datenquellen verbinden möchten
+- Java-Entwickler, die sich für die Plugin-Entwicklung interessieren
+- Personen, die die interne Architektur von Fess verstehen möchten
 
 Plugin-Architektur
 ===================
@@ -35,25 +35,25 @@ Fess bietet die folgenden Arten von Plugins.
      - Gecrawlte Daten verarbeiten und transformieren
      - Example
    * - Theme (fess-theme-\*)
-     - Design der Suchoberflaeche
+     - Design der Suchoberfläche
      - Simple, Code Search
    * - Script (fess-script-\*)
-     - Unterstuetzung von Skriptsprachen
+     - Unterstützung von Skriptsprachen
      - OGNL
    * - Web App (fess-webapp-\*)
-     - Erweiterungen fuer Webanwendungen
+     - Erweiterungen für Webanwendungen
      - MCP Server
 
 Plugin-Bereitstellung
 ---------------------
 
 Plugins werden als JAR-Dateien bereitgestellt und im Plugin-Verzeichnis von Fess abgelegt.
-Sie koennen ueber [System] > [Plugins] in der Administrationsoberflaeche installiert und verwaltet werden.
+Sie können über [System] > [Plugins] in der Administrationsoberfläche installiert und verwaltet werden.
 
 Entwicklung eines benutzerdefinierten Datenquellen-Plugins
 ===========================================================
 
-In diesem Abschnitt wird der Entwicklungsprozess fuer ein Datenquellen-Plugin erlaeutert, wobei ein proprietaeres internes Dokumentenmanagementsystem vorausgesetzt wird.
+In diesem Abschnitt wird der Entwicklungsprozess für ein Datenquellen-Plugin erläutert, wobei ein proprietäres internes Dokumentenmanagementsystem vorausgesetzt wird.
 
 Projektstruktur
 ---------------
@@ -73,7 +73,7 @@ Erstellen Sie ein Maven-Projekt unter Bezugnahme auf ein bestehendes Data-Store-
 pom.xml-Konfiguration
 ----------------------
 
-Geben Sie fess-parent als uebergeordnetes POM an und konfigurieren Sie die erforderlichen Abhaengigkeiten.
+Geben Sie fess-parent als übergeordnetes POM an und konfigurieren Sie die erforderlichen Abhängigkeiten.
 
 .. code-block:: xml
 
@@ -116,7 +116,7 @@ Die wichtigsten Felder sind:
 - ``url``: Dokument-URL (Linkziel in den Suchergebnissen)
 - ``content``: Dokumentinhalt (Suchziel)
 - ``mimetype``: MIME-Typ
-- ``last_modified``: Datum und Uhrzeit der letzten Aenderung
+- ``last_modified``: Datum und Uhrzeit der letzten Änderung
 
 Build und Deployment
 --------------------
@@ -132,25 +132,25 @@ Entwicklung eines Ingest-Plugins
 
 Ein Ingest-Plugin ist ein Mechanismus zur Verarbeitung und Transformation von Dokumenten, die durch Crawling gewonnen wurden, bevor sie im Index registriert werden.
 
-Anwendungsfaelle
+Anwendungsfälle
 -----------------
 
-- Hinzufuegen zusaetzlicher Felder zu gecrawlten Dokumenten
-- Bereinigung von Textinhalten (Entfernung unnoetiger Zeichen)
-- Anreicherung durch externe APIs (Uebersetzung, Klassifizierung usw.)
-- Log-Ausgabe (fuer Debugging)
+- Hinzufügen zusätzlicher Felder zu gecrawlten Dokumenten
+- Bereinigung von Textinhalten (Entfernung unnötiger Zeichen)
+- Anreicherung durch externe APIs (Übersetzung, Klassifizierung usw.)
+- Log-Ausgabe (für Debugging)
 
 Implementierungshinweise
 -------------------------
 
-In einem Ingest-Plugin greifen Sie auf die Dokumentdaten unmittelbar vor der Registrierung im Index zu und fuehren Transformationsverarbeitungen durch.
+In einem Ingest-Plugin greifen Sie auf die Dokumentdaten unmittelbar vor der Registrierung im Index zu und führen Transformationsverarbeitungen durch.
 
-Beispielsweise koennen Sie eine Verarbeitung implementieren, die allen Dokumenten Organisationsnamen-Metadaten hinzufuegt, oder eine Verarbeitung, die bestimmte Muster aus dem Textinhalt entfernt.
+Beispielsweise können Sie eine Verarbeitung implementieren, die allen Dokumenten Organisationsnamen-Metadaten hinzufügt, oder eine Verarbeitung, die bestimmte Muster aus dem Textinhalt entfernt.
 
 Entwicklung eines Theme-Plugins
 =================================
 
-Wenn Sie das Design der Suchoberflaeche vollstaendig anpassen moechten, entwickeln Sie ein Theme-Plugin.
+Wenn Sie das Design der Suchoberfläche vollständig anpassen möchten, entwickeln Sie ein Theme-Plugin.
 
 Theme-Struktur
 --------------
@@ -172,18 +172,18 @@ Ein Theme-Plugin besteht aus JSP-Dateien, CSS, JavaScript und Bilddateien.
                     ├── search.jsp
                     └── header.jsp
 
-Passen Sie das Design an, indem Sie JSP und CSS unter Bezugnahme auf bestehende Themes aendern.
+Passen Sie das Design an, indem Sie JSP und CSS unter Bezugnahme auf bestehende Themes ändern.
 
-Best Practices fuer die Entwicklung
+Best Practices für die Entwicklung
 =====================================
 
 Bestehende Plugins als Referenz
 -------------------------------
 
 Bei der Entwicklung eines neuen Plugins wird dringend empfohlen, den Quellcode bestehender Plugins als Referenz zu verwenden.
-Der Quellcode aller Plugins ist im CodeLibs-GitHub-Repository verfuegbar.
+Der Quellcode aller Plugins ist im CodeLibs-GitHub-Repository verfügbar.
 
-Beispielsweise sind ``fess-ds-git`` und ``fess-ds-slack`` gute Referenzen fuer die Entwicklung von Data-Store-Plugins.
+Beispielsweise sind ``fess-ds-git`` und ``fess-ds-slack`` gute Referenzen für die Entwicklung von Data-Store-Plugins.
 
 Tests
 -----
@@ -192,28 +192,28 @@ Testen Sie Plugins unter folgenden Gesichtspunkten:
 
 - Verbindungstests mit externen Systemen
 - Genauigkeit der Datentransformation
-- Fehlerbehandlung (Verbindungsfehler, ungueltige Daten usw.)
-- Leistung (Verarbeitungszeit fuer grosse Datenmengen)
+- Fehlerbehandlung (Verbindungsfehler, ungültige Daten usw.)
+- Leistung (Verarbeitungszeit für große Datenmengen)
 
-Versionskompatibilitaet
+Versionskompatibilität
 ------------------------
 
-Ueberpruefen Sie die Plugin-Kompatibilitaet beim Upgrade von Fess.
-Bei einem Hauptversions-Upgrade von Fess kann es zu API-Aenderungen kommen.
+Überprüfen Sie die Plugin-Kompatibilität beim Upgrade von Fess.
+Bei einem Hauptversions-Upgrade von Fess kann es zu API-Änderungen kommen.
 
 Zusammenfassung
 ===============
 
-In diesem Artikel wurde die Plugin-Entwicklung fuer Fess erlaeutert.
+In diesem Artikel wurde die Plugin-Entwicklung für Fess erläutert.
 
-- Ueberblick ueber die Plugin-Architektur (Data Store, Ingest, Theme, Script)
-- Entwicklungsprozess fuer benutzerdefinierte Datenquellen-Plugins
+- Überblick über die Plugin-Architektur (Data Store, Ingest, Theme, Script)
+- Entwicklungsprozess für benutzerdefinierte Datenquellen-Plugins
 - Dokumentverarbeitung mit Ingest-Plugins
 - UI-Anpassung mit Theme-Plugins
-- Best Practices fuer die Entwicklung
+- Best Practices für die Entwicklung
 
-Durch Plugins koennen Sie Fess an organisationsspezifische Anforderungen anpassen.
-Damit endet die Reihe zu Architektur und Skalierung. Ab dem naechsten Artikel befasst sich die Reihe KI und Suche der naechsten Generation mit den Grundlagen der semantischen Suche.
+Durch Plugins können Sie Fess an organisationsspezifische Anforderungen anpassen.
+Damit endet die Reihe zu Architektur und Skalierung. Ab dem nächsten Artikel befasst sich die Reihe KI und Suche der nächsten Generation mit den Grundlagen der semantischen Suche.
 
 Referenzen
 ==========

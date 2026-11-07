@@ -8,34 +8,34 @@ Einleitung
 Mit der Einfuhrung eines Suchsystems ist die Arbeit noch nicht abgeschlossen.
 Sobald die Benutzer die Suche in der Praxis verwenden, kann Feedback wie "Ich finde nicht die erwarteten Ergebnisse" oder "Irrelevante Ergebnisse erscheinen ganz oben" aufkommen.
 
-In diesem Artikel wird ein Tuning-Zyklus fuer die Suchqualitaet vorgestellt, der die Analyse von Suchprotokollen, die Identifikation von Problemen, die Umsetzung von Verbesserungen und die Messung ihrer Wirksamkeit umfasst.
-Anstatt eine perfekte Suchqualitaet auf einmal zu erreichen, handelt es sich um einen Ansatz der kontinuierlichen, datenbasierten Verbesserung.
+In diesem Artikel wird ein Tuning-Zyklus für die Suchqualität vorgestellt, der die Analyse von Suchprotokollen, die Identifikation von Problemen, die Umsetzung von Verbesserungen und die Messung ihrer Wirksamkeit umfasst.
+Anstatt eine perfekte Suchqualität auf einmal zu erreichen, handelt es sich um einen Ansatz der kontinuierlichen, datenbasierten Verbesserung.
 
 Zielgruppe
 ==========
 
 - Administratoren von Suchsystemen
-- Personen, die die Suchqualitaet verbessern moechten
+- Personen, die die Suchqualität verbessern möchten
 - Personen, die Fess bereits betreiben und Feedback von Benutzern erhalten haben
 
-Der Tuning-Zyklus fuer die Suchqualitaet
+Der Tuning-Zyklus für die Suchqualität
 =========================================
 
-Die Verbesserung der Suchqualitaet folgt einem Vier-Schritte-Zyklus:
+Die Verbesserung der Suchqualität folgt einem Vier-Schritte-Zyklus:
 
-1. **Analysieren**: Suchprotokolle ueberpruefen und Probleme identifizieren
-2. **Verbessern**: Loesungen fuer die identifizierten Probleme umsetzen
-3. **Verifizieren**: Die Wirksamkeit der Verbesserungen bestaetigen
-4. **Fortsetzen**: Den Zyklus wiederholen, um die Qualitaet kontinuierlich zu steigern
+1. **Analysieren**: Suchprotokolle überprüfen und Probleme identifizieren
+2. **Verbessern**: Lösungen für die identifizierten Probleme umsetzen
+3. **Verifizieren**: Die Wirksamkeit der Verbesserungen bestätigen
+4. **Fortsetzen**: Den Zyklus wiederholen, um die Qualität kontinuierlich zu steigern
 
 Schritt 1: Analyse der Suchprotokolle
 ======================================
 
-So ueberpruefen Sie die Suchprotokolle
+So überprüfen Sie die Suchprotokolle
 ---------------------------------------
 
 Fess zeichnet das Suchverhalten der Benutzer automatisch auf.
-Sie koennen die Suchprotokolle ueber [Systeminformationen] > [Suchprotokoll] in der Administrationsoberflaeche einsehen.
+Sie können die Suchprotokolle über [Systeminformationen] > [Suchprotokoll] in der Administrationsoberfläche einsehen.
 
 Die Suchprotokolle enthalten die folgenden Informationen:
 
@@ -52,19 +52,19 @@ Bei der Analyse der Suchprotokolle gibt es bestimmte Muster, auf die Sie besonde
 **Null-Treffer-Abfragen**
 
 Dies sind Abfragen, die keine Ergebnisse liefern.
-Die gesuchte Information existiert moeglicherweise nicht, oder die Suchbegriffe stimmen nicht angemessen ueberein.
+Die gesuchte Information existiert möglicherweise nicht, oder die Suchbegriffe stimmen nicht angemessen überein.
 
 Zum Beispiel liefert eine Suche nach "Betriebsausflug" keine Treffer, obwohl ein Dokument mit dem Titel "Mitarbeiterveranstaltung" vorhanden ist.
-Dies kann durch die Konfiguration von Synonymen geloest werden.
+Dies kann durch die Konfiguration von Synonymen gelöst werden.
 
-**Haeufige Abfragen**
+**Häufige Abfragen**
 
-Haeufig gesuchte Begriffe repraesentieren wichtige Informationsbeduerfnisse der Organisation.
-Ueberpruefen Sie, ob fuer diese Abfragen geeignete Ergebnisse an oberster Stelle angezeigt werden.
+Häufig gesuchte Begriffe repräsentieren wichtige Informationsbedürfnisse der Organisation.
+Überprüfen Sie, ob für diese Abfragen geeignete Ergebnisse an oberster Stelle angezeigt werden.
 
 **Klickprotokolle**
 
-Dies sind Aufzeichnungen darueber, welche Links in den Suchergebnissen angeklickt wurden.
+Dies sind Aufzeichnungen darüber, welche Links in den Suchergebnissen angeklickt wurden.
 Wenn die oberen Ergebnisse nicht angeklickt werden und nur weiter unten platzierte Ergebnisse angeklickt werden, besteht Verbesserungspotenzial beim Ranking.
 
 Schritt 2: Umsetzung von Verbesserungen
@@ -75,9 +75,9 @@ Setzen Sie basierend auf den Analyseergebnissen die folgenden Verbesserungen in 
 Synonyme konfigurieren
 ----------------------
 
-Registrieren Sie Synonyme, um Variationen in der Schreibweise und Abkuerzungen abzudecken.
+Registrieren Sie Synonyme, um Variationen in der Schreibweise und Abkürzungen abzudecken.
 
-Konfigurieren Sie diese, indem Sie das Synonymwoerterbuch unter [System] > [Woerterbuch] in der Administrationsoberflaeche auswaehlen.
+Konfigurieren Sie diese, indem Sie das Synonymwörterbuch unter [System] > [Wörterbuch] in der Administrationsoberfläche auswählen.
 
 Konfigurationsbeispiel:
 
@@ -93,11 +93,11 @@ Durch die Konfiguration von Synonymen werden bei der Suche nach einem Begriff au
 Key Match konfigurieren
 -----------------------
 
-Diese Funktion zeigt ein bestimmtes Dokument ganz oben in den Ergebnissen fuer ein bestimmtes Schluesselwort an.
+Diese Funktion zeigt ein bestimmtes Dokument ganz oben in den Ergebnissen für ein bestimmtes Schlüsselwort an.
 
-Konfigurieren Sie dies ueber [Crawler] > [Key Match] in der Administrationsoberflaeche.
+Konfigurieren Sie dies über [Crawler] > [Key Match] in der Administrationsoberfläche.
 
-Beispielsweise koennen Sie konfigurieren, dass die Seite des Reisekostenabrechnungshandbuchs ganz oben erscheint, wenn Benutzer nach "Reisekostenabrechnung" suchen.
+Beispielsweise können Sie konfigurieren, dass die Seite des Reisekostenabrechnungshandbuchs ganz oben erscheint, wenn Benutzer nach "Reisekostenabrechnung" suchen.
 
 .. list-table:: Key-Match-Konfigurationsbeispiel
    :header-rows: 1
@@ -121,21 +121,21 @@ Document Boost konfigurieren
 
 Hiermit wird der Gesamtscore von Dokumenten angepasst, die bestimmten Bedingungen entsprechen.
 
-Konfigurieren Sie dies ueber [Crawler] > [Document Boost] in der Administrationsoberflaeche.
+Konfigurieren Sie dies über [Crawler] > [Document Boost] in der Administrationsoberfläche.
 
-Beispielsweise koennen folgende Boost-Strategien in Betracht gezogen werden:
+Beispielsweise können folgende Boost-Strategien in Betracht gezogen werden:
 
-- Den Score offizieller Handbuecher (Portal-Seite) erhoehen
-- Dokumente mit neuerem Aenderungsdatum priorisieren
-- Den Score von Dokumenten mit einem bestimmten Label (offizielle Dokumente) erhoehen
+- Den Score offizieller Handbücher (Portal-Seite) erhöhen
+- Dokumente mit neuerem Änderungsdatum priorisieren
+- Den Score von Dokumenten mit einem bestimmten Label (offizielle Dokumente) erhöhen
 
 Verwandte Abfragen konfigurieren
 ---------------------------------
 
-Diese Funktion schlaegt verwandte Schluesselwoerter auf der Suchergebnisseite vor.
+Diese Funktion schlägt verwandte Schlüsselwörter auf der Suchergebnisseite vor.
 Sie hilft Benutzern, ihre Suche zu verfeinern oder aus einem anderen Blickwinkel zu suchen.
 
-Konfigurieren Sie dies ueber [Crawler] > [Verwandte Abfrage] in der Administrationsoberflaeche.
+Konfigurieren Sie dies über [Crawler] > [Verwandte Abfrage] in der Administrationsoberfläche.
 
 Konfigurationsbeispiel:
 
@@ -143,41 +143,41 @@ Konfigurationsbeispiel:
 
     「VPN」→ 関連クエリ: 「VPN接続方法」「リモートワーク」「社外アクセス」
 
-Stoppwoerter konfigurieren
+Stoppwörter konfigurieren
 ----------------------------
 
-Konfigurieren Sie Woerter, die bei der Suche ignoriert werden sollen.
-Gaengige Partikel wie "no", "wa" und "wo" werden standardmaessig verarbeitet, aber Sie koennen branchenspezifische Stoerwoerter bei Bedarf hinzufuegen.
+Konfigurieren Sie Wörter, die bei der Suche ignoriert werden sollen.
+Gängige Partikel wie "no", "wa" und "wo" werden standardmäßig verarbeitet, aber Sie können branchenspezifische Störwörter bei Bedarf hinzufügen.
 
-Konfigurieren Sie diese, indem Sie das Stoppwoerterwoerterbuch unter [System] > [Woerterbuch] in der Administrationsoberflaeche auswaehlen.
+Konfigurieren Sie diese, indem Sie das Stoppwörterbuch unter [System] > [Wörterbuch] in der Administrationsoberfläche auswählen.
 
-Schritt 3: Ueberpruefung der Wirksamkeit
+Schritt 3: Überprüfung der Wirksamkeit
 ==========================================
 
-Ueberpruefen Sie nach der Umsetzung von Verbesserungen deren Wirksamkeit.
+Überprüfen Sie nach der Umsetzung von Verbesserungen deren Wirksamkeit.
 
-Ueberpruefungsmethoden
+Überprüfungsmethoden
 -----------------------
 
-**Veraenderung der Null-Treffer-Rate**
+**Veränderung der Null-Treffer-Rate**
 
-Ueberpruefen Sie, wie sich der Anteil der Null-Treffer-Abfragen vor und nach der Verbesserung veraendert hat.
-Wenn die Null-Treffer-Rate nach dem Hinzufuegen von Synonymen oder der Konfiguration von Key Matches gesunken ist, koennen Sie daraus schliessen, dass die Verbesserung wirksam war.
+Überprüfen Sie, wie sich der Anteil der Null-Treffer-Abfragen vor und nach der Verbesserung verändert hat.
+Wenn die Null-Treffer-Rate nach dem Hinzufügen von Synonymen oder der Konfiguration von Key Matches gesunken ist, können Sie daraus schließen, dass die Verbesserung wirksam war.
 
-**Veraenderung der Klickposition**
+**Veränderung der Klickposition**
 
-Ueberpruefen Sie die Verteilung, an welcher Position in den Suchergebnissen geklickt wird.
-Wenn der Anteil der Klicks auf die oberen Ergebnisse zugenommen hat, koennen Sie daraus schliessen, dass sich das Ranking verbessert hat.
+Überprüfen Sie die Verteilung, an welcher Position in den Suchergebnissen geklickt wird.
+Wenn der Anteil der Klicks auf die oberen Ergebnisse zugenommen hat, können Sie daraus schließen, dass sich das Ranking verbessert hat.
 
-**Ueberpruefung beliebter Suchbegriffe**
+**Überprüfung beliebter Suchbegriffe**
 
-Ueberpruefen Sie die auf der Suchseite angezeigten beliebten Suchbegriffe und die aus den Suchprotokollen aggregierten haeufig gesuchten Schluesselwoerter.
-Es ist ebenfalls effektiv, manuell zu ueberpruefen, ob bei der Suche nach beliebten Begriffen geeignete Ergebnisse zurueckgegeben werden.
+Überprüfen Sie die auf der Suchseite angezeigten beliebten Suchbegriffe und die aus den Suchprotokollen aggregierten häufig gesuchten Schlüsselwörter.
+Es ist ebenfalls effektiv, manuell zu überprüfen, ob bei der Suche nach beliebten Begriffen geeignete Ergebnisse zurückgegeben werden.
 
 Schritt 4: Kontinuierliche Verbesserung
 ========================================
 
-Das Tuning der Suchqualitaet ist keine einmalige Angelegenheit.
+Das Tuning der Suchqualität ist keine einmalige Angelegenheit.
 
 Etablierung eines Betriebszyklus
 ---------------------------------
@@ -188,42 +188,42 @@ Wir empfehlen die Etablierung eines Betriebszyklus wie dem folgenden.
    :header-rows: 1
    :widths: 25 35 40
 
-   * - Haeufigkeit
+   * - Häufigkeit
      - Aktion
      - Details
-   * - Woechentlich
-     - Null-Treffer-Abfragen pruefen
-     - Pruefen, ob neue Null-Treffer-Abfragen vorliegen, und diese mit Synonymen oder Key Matches beheben
+   * - Wöchentlich
+     - Null-Treffer-Abfragen prüfen
+     - Prüfen, ob neue Null-Treffer-Abfragen vorliegen, und diese mit Synonymen oder Key Matches beheben
    * - Monatlich
      - Gesamtanalyse der Suchprotokolle
-     - Trends bei haeufigen Abfragen, Klickraten und Null-Treffer-Raten ueberpruefen
-   * - Vierteljaehrlich
-     - Umfassende Ueberpruefung
-     - Eine umfassende Bewertung der Suchqualitaet durchfuehren und einen Verbesserungsplan erstellen
+     - Trends bei häufigen Abfragen, Klickraten und Null-Treffer-Raten überprüfen
+   * - Vierteljährlich
+     - Umfassende Überprüfung
+     - Eine umfassende Bewertung der Suchqualität durchführen und einen Verbesserungsplan erstellen
 
 Feedback von Benutzern
 -----------------------
 
-Neben der Protokollanalyse ist auch das Feedback der tatsaechlichen Benutzer ein wichtiger Input fuer Verbesserungen.
+Neben der Protokollanalyse ist auch das Feedback der tatsächlichen Benutzer ein wichtiger Input für Verbesserungen.
 Richten Sie einen Mechanismus ein, um Feedback wie "Mit diesem Suchbegriff konnte ich nichts finden" oder "Dieses Ergebnis war hilfreich" zu sammeln.
 
 Zusammenfassung
 ===============
 
-In diesem Artikel wurde ein Tuning-Zyklus zur kontinuierlichen Verbesserung der Suchqualitaet vorgestellt.
+In diesem Artikel wurde ein Tuning-Zyklus zur kontinuierlichen Verbesserung der Suchqualität vorgestellt.
 
-- Analyse der Suchprotokolle (Null-Treffer, haeufige Abfragen, Klickprotokolle)
+- Analyse der Suchprotokolle (Null-Treffer, häufige Abfragen, Klickprotokolle)
 - Verbesserungen durch Synonyme, Key Match, Document Boost und verwandte Abfragen
-- Methoden zur Ueberpruefung der Verbesserungswirksamkeit
+- Methoden zur Überprüfung der Verbesserungswirksamkeit
 - Etablierung eines kontinuierlichen Betriebszyklus
 
-Lassen Sie uns die Suchqualitaet durch datenbasierte Verbesserung pflegen -- von "Suche, die genutzt wird" zu "Suche, die nuetzt."
+Lassen Sie uns die Suchqualität durch datenbasierte Verbesserung pflegen -- von "Suche, die genutzt wird" zu "Suche, die nützt."
 
-Im naechsten Artikel wird der Aufbau einer Suchinfrastruktur in mehrsprachigen Umgebungen behandelt.
+Im nächsten Artikel wird der Aufbau einer Suchinfrastruktur in mehrsprachigen Umgebungen behandelt.
 
 Referenzen
 ==========
 
 - `Fess Suchprotokoll <https://fess.codelibs.org/ja/15.5/admin/searchlog.html>`__
 
-- `Fess Woerterbuchverwaltung <https://fess.codelibs.org/ja/15.5/admin/dict.html>`__
+- `Fess Wörterbuchverwaltung <https://fess.codelibs.org/ja/15.5/admin/dict.html>`__

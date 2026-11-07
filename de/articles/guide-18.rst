@@ -2,21 +2,21 @@
 Teil 18: Grundlagen der KI-Suche
 ================================
 
-Einfuehrung
+Einführung
 ============
 
-In den bisherigen Artikeln haben wir uns auf die schluesselwortbasierte Volltextsuche konzentriert.
-Die Volltextsuche ist sehr effektiv, wenn Benutzer geeignete Schluesselwoerter eingeben koennen.
-Es gibt jedoch Faelle, in denen die Schluesselwortsuche allein nicht ausreicht, etwa wenn Benutzer nicht wissen, nach welchen Schluesselwoertern sie suchen sollen, oder wenn sie Antworten auf konzeptuelle Fragen benoetigen.
+In den bisherigen Artikeln haben wir uns auf die schlüsselwortbasierte Volltextsuche konzentriert.
+Die Volltextsuche ist sehr effektiv, wenn Benutzer geeignete Schlüsselwörter eingeben können.
+Es gibt jedoch Fälle, in denen die Schlüsselwortsuche allein nicht ausreicht, etwa wenn Benutzer nicht wissen, nach welchen Schlüsselwörtern sie suchen sollen, oder wenn sie Antworten auf konzeptuelle Fragen benötigen.
 
-In diesem Artikel ordnen wir das Spektrum der Suchtechnologien ein und erlaeutern, wie sich die Suche von der Schluesselwortsuche zur semantischen Suche weiterentwickelt.
+In diesem Artikel ordnen wir das Spektrum der Suchtechnologien ein und erläutern, wie sich die Suche von der Schlüsselwortsuche zur semantischen Suche weiterentwickelt.
 
 Zielgruppe
 ==========
 
-- Personen, die sich fuer KI-Suche interessieren und die Konzepte strukturieren moechten
-- Personen, die die Einfuehrung einer semantischen Suche in Betracht ziehen
-- Personen, die die KI-bezogenen Funktionen von Fess verstehen moechten
+- Personen, die sich für KI-Suche interessieren und die Konzepte strukturieren möchten
+- Personen, die die Einführung einer semantischen Suche in Betracht ziehen
+- Personen, die die KI-bezogenen Funktionen von Fess verstehen möchten
 
 Spektrum der Suchtechnologien
 ==============================
@@ -30,41 +30,41 @@ Suchtechnologien bilden ein Spektrum von einfach bis fortgeschritten, wie im Fol
    * - Technologie
      - Mechanismus
      - Merkmale
-   * - Schluesselwortsuche
+   * - Schlüsselwortsuche
      - Abgleich der Eingabebegriffe mit Begriffen in Dokumenten
-     - Schnell und zuverlaessig. Erfordert Uebereinstimmung der Begriffe
+     - Schnell und zuverlässig. Erfordert Übereinstimmung der Begriffe
    * - Fuzzy-Suche
-     - Abgleich auch bei aehnlicher Schreibweise
+     - Abgleich auch bei ähnlicher Schreibweise
      - Behandlung von Tippfehlern
    * - Synonymsuche
-     - Erweiterung um Synonyme fuer den Abgleich
+     - Erweiterung um Synonyme für den Abgleich
      - Behandlung von Schreibvarianten (manuelle Konfiguration)
    * - Semantische Suche
-     - Abgleich basierend auf semantischer Aehnlichkeit
-     - Findet verwandte Dokumente auch ohne Begriffsuebereinstimmung
+     - Abgleich basierend auf semantischer Ähnlichkeit
+     - Findet verwandte Dokumente auch ohne Begriffsübereinstimmung
    * - Hybridsuche
-     - Kombination aus Schluesselwort- und semantischer Suche
-     - Nutzt die Staerken beider Ansaetze
+     - Kombination aus Schlüsselwort- und semantischer Suche
+     - Nutzt die Stärken beider Ansätze
 
-Grenzen der Schluesselwortsuche
+Grenzen der Schlüsselwortsuche
 ================================
 
-Die Schluesselwortsuche ist in vielen Situationen wirksam, stoesst jedoch in den folgenden Faellen an ihre Grenzen.
+Die Schlüsselwortsuche ist in vielen Situationen wirksam, stößt jedoch in den folgenden Fällen an ihre Grenzen.
 
 Vokabular-Diskrepanz
 ----------------------
 
-Dies tritt auf, wenn die von Benutzern verwendeten Woerter von den in Dokumenten verwendeten Woertern abweichen.
+Dies tritt auf, wenn die von Benutzern verwendeten Wörter von den in Dokumenten verwendeten Wörtern abweichen.
 
-Beispiel: Selbst wenn ein Benutzer nach "Ich moechte das Zielkonto fuer meine Gehaltsueberweisung aendern" sucht, stimmen die Schluesselwoerter moeglicherweise nicht ueberein, wenn im internen Dokument der Begriff "Verfahren zur Aenderung des Gehaltskontos" verwendet wird.
+Beispiel: Selbst wenn ein Benutzer nach "Ich möchte das Zielkonto für meine Gehaltsüberweisung ändern" sucht, stimmen die Schlüsselwörter möglicherweise nicht überein, wenn im internen Dokument der Begriff "Verfahren zur Änderung des Gehaltskontos" verwendet wird.
 
-Dies kann teilweise mit Synonymen (siehe Teil 8) adressiert werden, aber es ist nicht praktikabel, alle moeglichen Vokabularkombinationen im Voraus zu registrieren.
+Dies kann teilweise mit Synonymen (siehe Teil 8) adressiert werden, aber es ist nicht praktikabel, alle möglichen Vokabularkombinationen im Voraus zu registrieren.
 
 Konzeptuelle Suche
 -------------------
 
-Dies ist der Fall, wenn Benutzer nach Konzepten statt nach bestimmten Schluesselwoertern suchen moechten, zum Beispiel "Interne Regeln zur Fernarbeit."
-In diesem Fall koennen verschiedene verwandte Dokumente relevant sein, darunter solche ueber "Homeoffice", "Telearbeit", "Anwesenheitsregeln" und "Arbeitszeiterfassung".
+Dies ist der Fall, wenn Benutzer nach Konzepten statt nach bestimmten Schlüsselwörtern suchen möchten, zum Beispiel "Interne Regeln zur Fernarbeit."
+In diesem Fall können verschiedene verwandte Dokumente relevant sein, darunter solche über "Homeoffice", "Telearbeit", "Anwesenheitsregeln" und "Arbeitszeiterfassung".
 
 Funktionsweise der semantischen Suche
 =======================================
@@ -75,103 +75,103 @@ Vektordarstellung (Embedding)
 Die Grundlage der semantischen Suche ist die Umwandlung von Text in "Vektoren (Arrays von Zahlen)."
 Diese Vektoren sind mathematische Darstellungen der "Bedeutung" des Textes.
 
-Texte mit aehnlicher Bedeutung werden im Vektorraum nahe beieinander platziert.
-Zum Beispiel liegen die Vektoren fuer "Hund" und "Haustier" nahe beieinander, waehrend die Vektoren fuer "Hund" und "Automobil" weit voneinander entfernt sind.
+Texte mit ähnlicher Bedeutung werden im Vektorraum nahe beieinander platziert.
+Zum Beispiel liegen die Vektoren für "Hund" und "Haustier" nahe beieinander, während die Vektoren für "Hund" und "Automobil" weit voneinander entfernt sind.
 
 Funktionsweise der Suche
 --------------------------
 
 1. Der Benutzer gibt eine Suchanfrage ein
 2. Die Anfrage wird in einen Vektor umgewandelt
-3. Die Aehnlichkeit mit den Dokumentvektoren im Index wird berechnet
-4. Dokumente werden in der Reihenfolge der hoechsten Aehnlichkeit zurueckgegeben
+3. Die Ähnlichkeit mit den Dokumentvektoren im Index wird berechnet
+4. Dokumente werden in der Reihenfolge der höchsten Ähnlichkeit zurückgegeben
 
-Dadurch koennen semantisch verwandte Dokumente gefunden werden, auch wenn die Schluesselwoerter nicht exakt uebereinstimmen.
+Dadurch können semantisch verwandte Dokumente gefunden werden, auch wenn die Schlüsselwörter nicht exakt übereinstimmen.
 
 Semantische Suche in Fess
 ===========================
 
-Fess kann durch Plugins fuer semantische Suche eine vektorbasierte Suche realisieren.
+Fess kann durch Plugins für semantische Suche eine vektorbasierte Suche realisieren.
 
 Aktivierung der semantischen Suche
 ------------------------------------
 
-1. Installieren Sie das Plugin fuer semantische Suche
+1. Installieren Sie das Plugin für semantische Suche
 2. Konfigurieren Sie das Embedding-Modell
 3. Erstellen Sie den Index neu (Vektorisierung bestehender Dokumente)
 
 Auswahl des Embedding-Modells
 -------------------------------
 
-Waehlen Sie ein Modell (Embedding-Modell) fuer die Umwandlung von Text in Vektoren.
+Wählen Sie ein Modell (Embedding-Modell) für die Umwandlung von Text in Vektoren.
 
 Die wesentlichen Auswahlkriterien sind:
 
-- **Sprachunterstuetzung**: Ob die Zielsprache angemessen verarbeitet werden kann
-- **Genauigkeit**: Qualitaet der Vektoren (Genauigkeit der semantischen Erfassung)
-- **Geschwindigkeit**: Fuer die Umwandlung benoetigte Zeit
-- **Kosten**: API-Nutzungsgebuehren, Hardwareanforderungen
+- **Sprachunterstützung**: Ob die Zielsprache angemessen verarbeitet werden kann
+- **Genauigkeit**: Qualität der Vektoren (Genauigkeit der semantischen Erfassung)
+- **Geschwindigkeit**: Für die Umwandlung benötigte Zeit
+- **Kosten**: API-Nutzungsgebühren, Hardwareanforderungen
 
 Hybridsuche: Rank Fusion
 ===========================
 
-Die semantische Suche ist leistungsfaehig, aber nicht allmaechtig.
-Fuer die Suche nach Eigennamen oder in Faellen, in denen eine exakte Uebereinstimmung erforderlich ist, ist die Schluesselwortsuche besser geeignet.
+Die semantische Suche ist leistungsfähig, aber nicht allmächtig.
+Für die Suche nach Eigennamen oder in Fällen, in denen eine exakte Übereinstimmung erforderlich ist, ist die Schlüsselwortsuche besser geeignet.
 
 Das Konzept der Hybridsuche
 ------------------------------
 
-Die Hybridsuche fuehrt sowohl eine Schluesselwortsuche als auch eine semantische Suche durch und integriert anschliessend die Ergebnisse.
+Die Hybridsuche führt sowohl eine Schlüsselwortsuche als auch eine semantische Suche durch und integriert anschließend die Ergebnisse.
 
-Fess verwendet Rank Fusion, um Ergebnisse verschiedener Suchmethoden zusammenzufuehren.
-Konkret sorgt der RRF-Algorithmus (Reciprocal Rank Fusion) dafuer, dass Dokumente, die in beiden Suchergebnissen hoch eingestuft werden, letztendlich an der Spitze stehen.
+Fess verwendet Rank Fusion, um Ergebnisse verschiedener Suchmethoden zusammenzuführen.
+Konkret sorgt der RRF-Algorithmus (Reciprocal Rank Fusion) dafür, dass Dokumente, die in beiden Suchergebnissen hoch eingestuft werden, letztendlich an der Spitze stehen.
 
 Vorteile der Hybridsuche
 --------------------------
 
-- Vereint die "Zuverlaessigkeit" der Schluesselwortsuche mit der "Flexibilitaet" der semantischen Suche
-- Eigennamen werden durch die Schluesselwortsuche abgedeckt
+- Vereint die "Zuverlässigkeit" der Schlüsselwortsuche mit der "Flexibilität" der semantischen Suche
+- Eigennamen werden durch die Schlüsselwortsuche abgedeckt
 - Konzeptuelle Suchen werden durch die semantische Suche abgedeckt
-- Die Gesamtqualitaet der Suche verbessert sich im Vergleich zur alleinigen Verwendung einer der beiden Methoden
+- Die Gesamtqualität der Suche verbessert sich im Vergleich zur alleinigen Verwendung einer der beiden Methoden
 
-Kriterien fuer die Einfuehrung
+Kriterien für die Einführung
 ================================
 
-Die semantische Suche sollte nicht unbedingt in jeder Umgebung eingefuehrt werden.
+Die semantische Suche sollte nicht unbedingt in jeder Umgebung eingeführt werden.
 
-Faelle, in denen eine Einfuehrung in Betracht gezogen werden sollte
+Fälle, in denen eine Einführung in Betracht gezogen werden sollte
 ----------------------------------------------------------------------
 
 - Es gibt viele "Null-Treffer-Anfragen" in den Suchprotokollen
-- Benutzer berichten, dass sie "die richtigen Schluesselwoerter nicht kennen"
-- Sie moechten natuerlichsprachliche Fragen unterstuetzen (Voraussetzung fuer RAG in Teil 19)
-- Sie moechten die sprachuebergreifende Suche fuer mehrsprachige Dokumente verbessern
+- Benutzer berichten, dass sie "die richtigen Schlüsselwörter nicht kennen"
+- Sie möchten natürlichsprachliche Fragen unterstützen (Voraussetzung für RAG in Teil 19)
+- Sie möchten die sprachübergreifende Suche für mehrsprachige Dokumente verbessern
 
-Faelle, in denen sie noch nicht erforderlich ist
+Fälle, in denen sie noch nicht erforderlich ist
 ---------------------------------------------------
 
-- Mit Schluesselwortsuche und Synonymen wird bereits eine ausreichende Suchqualitaet erzielt
-- Die Anzahl der Dokumente ist gering und die Benutzer kennen die passenden Schluesselwoerter
+- Mit Schlüsselwortsuche und Synonymen wird bereits eine ausreichende Suchqualität erzielt
+- Die Anzahl der Dokumente ist gering und die Benutzer kennen die passenden Schlüsselwörter
 - Rechenressourcen (GPU oder Cloud-API-Kosten) sind begrenzt
 
-Schrittweise Einfuehrung
+Schrittweise Einführung
 --------------------------
 
-1. Verbessern Sie zunaechst die Qualitaet mit Schluesselwortsuche und Synonymen (Teil 8)
+1. Verbessern Sie zunächst die Qualität mit Schlüsselwortsuche und Synonymen (Teil 8)
 2. Wenn weiterhin viele Null-Treffer-Anfragen auftreten, ziehen Sie die semantische Suche in Betracht
-3. Nutzen Sie die Hybridsuche, um von beiden Ansaetzen zu profitieren
+3. Nutzen Sie die Hybridsuche, um von beiden Ansätzen zu profitieren
 
 Zusammenfassung
 ================
 
-In diesem Artikel haben wir den Entwicklungspfad von der Schluesselwortsuche zur semantischen Suche dargestellt.
+In diesem Artikel haben wir den Entwicklungspfad von der Schlüsselwortsuche zur semantischen Suche dargestellt.
 
-- Das Spektrum der Suchtechnologien (Schluesselwort -> Fuzzy -> Synonym -> Semantisch -> Hybrid)
-- Funktionsweise der semantischen Suche (Vektordarstellung und Aehnlichkeitsberechnung)
+- Das Spektrum der Suchtechnologien (Schlüsselwort -> Fuzzy -> Synonym -> Semantisch -> Hybrid)
+- Funktionsweise der semantischen Suche (Vektordarstellung und Ähnlichkeitsberechnung)
 - Semantische Suche und Hybridsuche in Fess (Rank Fusion)
-- Kriterien fuer die Einfuehrung und ein schrittweiser Ansatz
+- Kriterien für die Einführung und ein schrittweiser Ansatz
 
-Im naechsten Artikel werden wir die semantische Suche weiterentwickeln und einen KI-Assistenten mit RAG aufbauen.
+Im nächsten Artikel werden wir die semantische Suche weiterentwickeln und einen KI-Assistenten mit RAG aufbauen.
 
 Referenzen
 ==========

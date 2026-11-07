@@ -2,22 +2,22 @@
 Teil 11: Bestehende Systeme mit der Such-API erweitern
 ======================================================
 
-Einfuehrung
+Einführung
 ============
 
-Fess kann nicht nur als eigenstaendiges Suchsystem eingesetzt werden, sondern auch als "Such-Microservice", der bestehenden Geschaeftssystemen Suchfunktionen bereitstellt.
+Fess kann nicht nur als eigenständiges Suchsystem eingesetzt werden, sondern auch als "Such-Microservice", der bestehenden Geschäftssystemen Suchfunktionen bereitstellt.
 
-In diesem Artikel werden konkrete Muster fuer die Integration mit bestehenden Systemen unter Verwendung der Fess-API vorgestellt.
+In diesem Artikel werden konkrete Muster für die Integration mit bestehenden Systemen unter Verwendung der Fess-API vorgestellt.
 Es werden praxisnahe Integrationsszenarien behandelt, wie z. B. die Einbettung einer Kundendokumentensuche in ein CRM, der Aufbau eines FAQ-Such-Widgets und die Erstellung eines Dokumentenportals.
 
 Zielgruppe
 ==========
 
-- Personen, die bestehenden Geschaeftssystemen Suchfunktionen hinzufuegen moechten
-- Personen, die sich fuer Systemintegration mit der Fess-API interessieren
+- Personen, die bestehenden Geschäftssystemen Suchfunktionen hinzufügen möchten
+- Personen, die sich für Systemintegration mit der Fess-API interessieren
 - Personen mit Grundkenntnissen in der Webanwendungsentwicklung
 
-Ueberblick ueber die Fess-API
+Überblick über die Fess-API
 ===============================
 
 Im Folgenden finden Sie eine Zusammenfassung der wichtigsten von Fess bereitgestellten APIs.
@@ -33,16 +33,16 @@ Im Folgenden finden Sie eine Zusammenfassung der wichtigsten von Fess bereitgest
      - Volltextsuche von Dokumenten
      - ``/api/v1/documents``
    * - Label-API
-     - Abruf verfuegbarer Labels
+     - Abruf verfügbarer Labels
      - ``/api/v1/labels``
    * - Suggest-API
-     - Abruf von Autovervollstaendigungs-Kandidaten
+     - Abruf von Autovervollständigungs-Kandidaten
      - ``/api/v1/suggest-words``
-   * - Beliebte-Woerter-API
+   * - Beliebte-Wörter-API
      - Abruf beliebter Suchbegriffe
      - ``/api/v1/popular-words``
    * - Health-API
-     - Pruefung des Systemstatus
+     - Prüfung des Systemstatus
      - ``/api/v1/health``
    * - Admin-API
      - Konfigurationsoperationen (CRUD)
@@ -51,16 +51,16 @@ Im Folgenden finden Sie eine Zusammenfassung der wichtigsten von Fess bereitgest
 Zugriffstoken
 ----------------
 
-Bei der Nutzung der API wird die Authentifizierung ueber Zugriffstoken empfohlen.
+Bei der Nutzung der API wird die Authentifizierung über Zugriffstoken empfohlen.
 
-1. Erstellen Sie unter [System] > [Zugriffstoken] in der Verwaltungsoberflaeche ein Zugriffstoken
-2. Fuegen Sie das Token in den Header der API-Anfrage ein
+1. Erstellen Sie unter [System] > [Zugriffstoken] in der Verwaltungsoberfläche ein Zugriffstoken
+2. Fügen Sie das Token in den Header der API-Anfrage ein
 
 ::
 
     Authorization: Bearer {Zugriffstoken}
 
-Token koennen Rollen zugewiesen werden, und die rollenbasierte Steuerung der Suchergebnisse wird auch auf Suchen angewendet, die ueber die API ausgefuehrt werden.
+Token können Rollen zugewiesen werden, und die rollenbasierte Steuerung der Suchergebnisse wird auch auf Suchen angewendet, die über die API ausgeführt werden.
 
 Muster 1: Suchintegration in ein CRM
 ======================================
@@ -68,14 +68,14 @@ Muster 1: Suchintegration in ein CRM
 Szenario
 --------
 
-Fuegen Sie dem CRM-System, das vom Vertriebsteam genutzt wird, eine Suchfunktion fuer kundenbezogene Dokumente hinzu.
-Ermoeglichen Sie die dokumentenuebergreifende Suche nach Angeboten, Besprechungsprotokollen, Vertraegen und mehr direkt aus der Kundenansicht im CRM.
+Fügen Sie dem CRM-System, das vom Vertriebsteam genutzt wird, eine Suchfunktion für kundenbezogene Dokumente hinzu.
+Ermöglichen Sie die dokumentenübergreifende Suche nach Angeboten, Besprechungsprotokollen, Verträgen und mehr direkt aus der Kundenansicht im CRM.
 
 Implementierungsansatz
 ----------------------
 
 Betten Sie ein Such-Widget in die CRM-Kundenansicht ein.
-Senden Sie den Kundennamen als Suchanfrage an die Fess-API und zeigen Sie die Ergebnisse innerhalb der CRM-Oberflaeche an.
+Senden Sie den Kundennamen als Suchanfrage an die Fess-API und zeigen Sie die Ergebnisse innerhalb der CRM-Oberfläche an.
 
 .. code-block:: javascript
 
@@ -97,8 +97,8 @@ Wichtige Punkte
 ----------------
 
 - Verwenden Sie ``fields.label``, um die Ergebnisse auf vertriebsbezogene Dokumente einzugrenzen
-- Verwenden Sie ``num``, um die Anzahl der angezeigten Ergebnisse zu begrenzen (angepasst an den verfuegbaren Platz in der CRM-Oberflaeche)
-- Es ist hilfreich, nicht nur nach Kundennamen, sondern auch nach Projektnamen oder Projektnummern suchen zu koennen
+- Verwenden Sie ``num``, um die Anzahl der angezeigten Ergebnisse zu begrenzen (angepasst an den verfügbaren Platz in der CRM-Oberfläche)
+- Es ist hilfreich, nicht nur nach Kundennamen, sondern auch nach Projektnamen oder Projektnummern suchen zu können
 
 Muster 2: FAQ-Such-Widget
 ============================
@@ -106,13 +106,13 @@ Muster 2: FAQ-Such-Widget
 Szenario
 --------
 
-Fuegen Sie dem internen Anfragensystem ein FAQ-Such-Widget hinzu.
-Bevor Mitarbeitende eine Anfrage einreichen, sollen sie durch die Suche nach relevanten FAQs zur Selbstloesung angeregt werden.
+Fügen Sie dem internen Anfragensystem ein FAQ-Such-Widget hinzu.
+Bevor Mitarbeitende eine Anfrage einreichen, sollen sie durch die Suche nach relevanten FAQs zur Selbstlösung angeregt werden.
 
 Implementierungsansatz
 ----------------------
 
-Kombinieren Sie die Suggest-API und die Such-API, um waehrend der Eingabe in Echtzeit Vorschlaege anzuzeigen.
+Kombinieren Sie die Suggest-API und die Such-API, um während der Eingabe in Echtzeit Vorschläge anzuzeigen.
 
 .. code-block:: javascript
 
@@ -127,15 +127,15 @@ Kombinieren Sie die Suggest-API und die Such-API, um waehrend der Eingabe in Ech
       return data.data;
     }
 
-Die Suggest-API wird verwendet, um Kandidaten anzuzeigen, waehrend der Benutzer Suchbegriffe eingibt.
-Wenn der Benutzer einen Suchbegriff bestaetigt und die Suche ausfuehrt, werden ueber die Such-API detaillierte Suchergebnisse abgerufen.
+Die Suggest-API wird verwendet, um Kandidaten anzuzeigen, während der Benutzer Suchbegriffe eingibt.
+Wenn der Benutzer einen Suchbegriff bestätigt und die Suche ausführt, werden über die Such-API detaillierte Suchergebnisse abgerufen.
 
 Wichtige Punkte
 ----------------
 
-- Da bei der Suggest-API die Echtzeitfaehigkeit entscheidend ist, ueberpruefen Sie die Antwortgeschwindigkeit
+- Da bei der Suggest-API die Echtzeitfähigkeit entscheidend ist, überprüfen Sie die Antwortgeschwindigkeit
 - Verwalten Sie FAQ-Kategorien mit Labels und bieten Sie eine kategoriebasierte Filterung an
-- Zeigen Sie "haeufig gesuchte Begriffe" ueber die Beliebte-Woerter-API an, um die Benutzer bei der Suche zu unterstuetzen
+- Zeigen Sie "häufig gesuchte Begriffe" über die Beliebte-Wörter-API an, um die Benutzer bei der Suche zu unterstützen
 
 Muster 3: Dokumentenportal
 =============================
@@ -144,7 +144,7 @@ Szenario
 --------
 
 Erstellen Sie ein internes Dokumentenverwaltungsportal.
-Stellen Sie eine Oberflaeche bereit, die kategoriebasiertes Durchsuchen mit Volltextsuche kombiniert.
+Stellen Sie eine Oberfläche bereit, die kategoriebasiertes Durchsuchen mit Volltextsuche kombiniert.
 
 Implementierungsansatz
 ----------------------
@@ -181,9 +181,9 @@ Verwenden Sie die Label-API, um die Kategorieliste abzurufen, und die Such-API, 
 Wichtige Punkte
 ----------------
 
-- Die Label-API ruft die Kategorieliste dynamisch ab (Hinzufuegungen und Loeschungen von Labels werden sofort auf API-Seite widergespiegelt)
+- Die Label-API ruft die Kategorieliste dynamisch ab (Hinzufügungen und Löschungen von Labels werden sofort auf API-Seite widergespiegelt)
 - Verwenden Sie ``sort=last_modified.desc``, um die neuesten Dokumente oben anzuzeigen
-- Das Durchsuchen ohne Suchbegriffe (Abruf aller Eintraege) ist mit ``q=*`` ebenfalls moeglich
+- Das Durchsuchen ohne Suchbegriffe (Abruf aller Einträge) ist mit ``q=*`` ebenfalls möglich
 
 Muster 4: Content-Indexing-API
 =================================
@@ -196,42 +196,42 @@ Registrieren Sie Daten, die von externen Systemen generiert werden (Protokolle, 
 Implementierungsansatz
 ----------------------
 
-Mit der Fess-Admin-API koennen Dokumente von externen Quellen im Index registriert werden.
+Mit der Fess-Admin-API können Dokumente von externen Quellen im Index registriert werden.
 
 Verwenden Sie den Dokument-Endpunkt der Admin-API, um Informationen wie Titel, URL und Textinhalt per POST-Anfrage zu senden.
 
 Wichtige Punkte
 ----------------
 
-- Effektiv fuer die Integration von Datenquellen, die nicht durch Crawling erfasst werden koennen
+- Effektiv für die Integration von Datenquellen, die nicht durch Crawling erfasst werden können
 - Stapelverarbeitung kann ebenfalls verwendet werden, um mehrere Dokumente auf einmal zu registrieren
-- Setzen Sie die Zugriffstoken-Berechtigungen angemessen und beschraenken Sie die Schreibberechtigungen
+- Setzen Sie die Zugriffstoken-Berechtigungen angemessen und beschränken Sie die Schreibberechtigungen
 
-Best Practices fuer die API-Integration
+Best Practices für die API-Integration
 =========================================
 
 Fehlerbehandlung
 ------------------
 
-Bei der API-Integration ist eine Fehlerbehandlung wichtig, die Netzwerkausfaelle und Wartungsarbeiten am Fess-Server beruecksichtigt.
+Bei der API-Integration ist eine Fehlerbehandlung wichtig, die Netzwerkausfälle und Wartungsarbeiten am Fess-Server berücksichtigt.
 
-- Timeout-Einstellungen: Setzen Sie angemessene Timeouts fuer Such-API-Aufrufe
-- Retry-Logik: Implementieren Sie Wiederholungsversuche fuer voruebergehende Fehler (maximal ca. 3 Wiederholungen)
-- Fallback: Stellen Sie eine alternative Anzeige bereit, wenn Fess nicht antwortet (z. B. "Der Suchdienst ist derzeit nicht verfuegbar")
+- Timeout-Einstellungen: Setzen Sie angemessene Timeouts für Such-API-Aufrufe
+- Retry-Logik: Implementieren Sie Wiederholungsversuche für vorübergehende Fehler (maximal ca. 3 Wiederholungen)
+- Fallback: Stellen Sie eine alternative Anzeige bereit, wenn Fess nicht antwortet (z. B. "Der Suchdienst ist derzeit nicht verfügbar")
 
 Leistungsaspekte
 --------------------
 
-- Antwort-Caching: Ergebnisse fuer dieselbe Abfrage kurzzeitig zwischenspeichern
-- Begrenzung der Ergebnisanzahl: Nur die benoetigte Anzahl von Ergebnissen abrufen (``num``-Parameter)
-- Feldspezifikation: Nur die benoetigten Felder abrufen, um die Antwortgroesse zu reduzieren
+- Antwort-Caching: Ergebnisse für dieselbe Abfrage kurzzeitig zwischenspeichern
+- Begrenzung der Ergebnisanzahl: Nur die benötigte Anzahl von Ergebnissen abrufen (``num``-Parameter)
+- Feldspezifikation: Nur die benötigten Felder abrufen, um die Antwortgröße zu reduzieren
 
 Sicherheit
 ------------
 
 - Verwendung von HTTPS-Kommunikation
 - Rotation der Zugriffstoken
-- Token-Berechtigungen auf das Minimum beschraenken (z. B. nur Lesezugriff)
+- Token-Berechtigungen auf das Minimum beschränken (z. B. nur Lesezugriff)
 - CORS angemessen konfigurieren
 
 Zusammenfassung
@@ -239,15 +239,15 @@ Zusammenfassung
 
 In diesem Artikel wurden Integrationsmuster mit bestehenden Systemen unter Verwendung der Fess-API vorgestellt.
 
-- **CRM-Integration**: Suche nach zugehoerigen Dokumenten aus der Kundenansicht
+- **CRM-Integration**: Suche nach zugehörigen Dokumenten aus der Kundenansicht
 - **FAQ-Widget**: Echtzeit-Kandidatenanzeige mit Suggest + Suche
-- **Dokumentenportal**: Kategorie-Browsing ueber die Label-API
-- **Content-Indexing**: Registrierung externer Daten ueber die API
+- **Dokumentenportal**: Kategorie-Browsing über die Label-API
+- **Content-Indexing**: Registrierung externer Daten über die API
 
 Die Fess-API ist REST-basiert und einfach gehalten, was die Integration mit verschiedenen Systemen erleichtert.
-Die Moeglichkeit, bestehenden Systemen nachtraeglich Suchfunktionen hinzuzufuegen, ist eine der groessten Staerken von Fess.
+Die Möglichkeit, bestehenden Systemen nachträglich Suchfunktionen hinzuzufügen, ist eine der größten Stärken von Fess.
 
-Im naechsten Artikel werden Szenarien behandelt, in denen SaaS- und Datenbankdaten durchsuchbar gemacht werden.
+Im nächsten Artikel werden Szenarien behandelt, in denen SaaS- und Datenbankdaten durchsuchbar gemacht werden.
 
 Referenzen
 ==========

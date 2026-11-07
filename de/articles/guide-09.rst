@@ -1,21 +1,21 @@
 ===========================================================
-Teil 9: Suchinfrastruktur fuer mehrsprachige Organisationen
+Teil 9: Suchinfrastruktur für mehrsprachige Organisationen
 ===========================================================
 
-Einfuehrung
+Einführung
 ============
 
-In Unternehmen, die global taetig sind, oder in Organisationen mit Mitarbeitern verschiedener Nationalitaeten werden interne Dokumente in mehreren Sprachen erstellt.
-Eine Suchinfrastruktur, die Dokumente in gemischten Sprachen -- wie japanische Sitzungsprotokolle, englische technische Spezifikationen und chinesische Marktberichte -- angemessen durchsuchen kann, ist unerlaeasslich.
+In Unternehmen, die global tätig sind, oder in Organisationen mit Mitarbeitern verschiedener Nationalitäten werden interne Dokumente in mehreren Sprachen erstellt.
+Eine Suchinfrastruktur, die Dokumente in gemischten Sprachen -- wie japanische Sitzungsprotokolle, englische technische Spezifikationen und chinesische Marktberichte -- angemessen durchsuchen kann, ist unerlässlich.
 
-In diesem Artikel gehen wir von einer Umgebung aus, in der Dokumente auf Japanisch, Englisch und Chinesisch nebeneinander existieren, und bauen eine Umgebung auf, in der Dokumente in jeder Sprache korrekt durchsucht werden koennen.
+In diesem Artikel gehen wir von einer Umgebung aus, in der Dokumente auf Japanisch, Englisch und Chinesisch nebeneinander existieren, und bauen eine Umgebung auf, in der Dokumente in jeder Sprache korrekt durchsucht werden können.
 
 Zielgruppe
 ==========
 
 - Administratoren von Organisationen, die mehrsprachige Dokumente verwalten
-- Personen, die die Suchqualitaet fuer andere Sprachen als Japanisch verbessern moechten
-- Personen, die die Grundlagen von Volltext-Analyzern erlernen moechten
+- Personen, die die Suchqualität für andere Sprachen als Japanisch verbessern möchten
+- Personen, die die Grundlagen von Volltext-Analyzern erlernen möchten
 
 Szenario
 ========
@@ -23,11 +23,11 @@ Szenario
 Wir gehen von einem Unternehmen mit Standorten in Japan, den USA und China aus.
 
 - Standort Japan: Erstellung japanischer Dokumente (Spezifikationen, Sitzungsprotokolle, Berichte)
-- Standort USA: Erstellung englischer Dokumente (technische Dokumente, Praesentationsmaterialien)
-- Standort China: Erstellung chinesischer Dokumente (Marktforschung, Geschaeftspartnerinformationen)
+- Standort USA: Erstellung englischer Dokumente (technische Dokumente, Präsentationsmaterialien)
+- Standort China: Erstellung chinesischer Dokumente (Marktforschung, Geschäftspartnerinformationen)
 - Gemeinsam: Globale Richtliniendokumente in englischer Sprache
 
-Das Ziel ist es, eine Umgebung zu schaffen, in der Mitarbeiter an jedem Standort Dokumente unabhaengig von der Sprache durchsuchen koennen.
+Das Ziel ist es, eine Umgebung zu schaffen, in der Mitarbeiter an jedem Standort Dokumente unabhängig von der Sprache durchsuchen können.
 
 Grundlagen der mehrsprachigen Suche
 =====================================
@@ -40,39 +40,39 @@ Dieser Vorgang wird als ``Tokenisierung`` bezeichnet.
 
 Die Methode der Tokenisierung unterscheidet sich je nach Sprache erheblich.
 
-**Englisch**: Durch Leerzeichen getrennte Woerter werden direkt zu Token.
-Zusaetzlich werden Stemming (z. B. running -> run) und Kleinschreibung angewendet.
+**Englisch**: Durch Leerzeichen getrennte Wörter werden direkt zu Token.
+Zusätzlich werden Stemming (z. B. running -> run) und Kleinschreibung angewendet.
 
-**Japanisch**: Da Woerter nicht durch Leerzeichen getrennt sind, wird ein morphologischer Analysator (wie Kuromoji) verwendet, um den Text in Woerter aufzuteilen.
+**Japanisch**: Da Wörter nicht durch Leerzeichen getrennt sind, wird ein morphologischer Analysator (wie Kuromoji) verwendet, um den Text in Wörter aufzuteilen.
 Zum Beispiel wird ein Ausdruck wie folgt aufgeteilt: ``Volltextsuchserver`` -> ``Volltext`` ``Such`` ``Server``.
 
-**Chinesisch**: Wie im Japanischen sind die Woerter nicht durch Leerzeichen getrennt, sodass ein spezieller Tokenizer erforderlich ist. Fess verwendet einen eigenen chinesischen Tokenizer fuer die Verarbeitung.
+**Chinesisch**: Wie im Japanischen sind die Wörter nicht durch Leerzeichen getrennt, sodass ein spezieller Tokenizer erforderlich ist. Fess verwendet einen eigenen chinesischen Tokenizer für die Verarbeitung.
 
-Mehrsprachige Unterstuetzung von Fess
+Mehrsprachige Unterstützung von Fess
 ---------------------------------------
 
 Fess verwendet OpenSearch als Backend und kann die von OpenSearch bereitgestellten mehrsprachigen Analyzer nutzen.
-In der Standardkonfiguration von Fess ist der japanische (Kuromoji) Analyzer aktiviert, es werden jedoch auch andere Sprachen unterstuetzt.
+In der Standardkonfiguration von Fess ist der japanische (Kuromoji) Analyzer aktiviert, es werden jedoch auch andere Sprachen unterstützt.
 
-Fess verfuegt ueber Indexeinstellungen fuer ueber 20 Sprachen und bietet eine Funktion, die die Sprache eines Dokuments automatisch erkennt und den entsprechenden Analyzer anwendet.
+Fess verfügt über Indexeinstellungen für über 20 Sprachen und bietet eine Funktion, die die Sprache eines Dokuments automatisch erkennt und den entsprechenden Analyzer anwendet.
 
 Sprachspezifische Einstellungen
 ================================
 
-Einstellungen fuer Japanisch
+Einstellungen für Japanisch
 ------------------------------
 
 Japanische Dokumente werden mit dem Kuromoji Analyzer verarbeitet.
-Da Japanisch durch die Standardeinstellungen von Fess angemessen verarbeitet wird, ist keine spezielle zusaetzliche Konfiguration erforderlich.
+Da Japanisch durch die Standardeinstellungen von Fess angemessen verarbeitet wird, ist keine spezielle zusätzliche Konfiguration erforderlich.
 
-Die Suchqualitaet kann jedoch durch die folgenden Anpassungen verbessert werden.
+Die Suchqualität kann jedoch durch die folgenden Anpassungen verbessert werden.
 
 **Benutzerlexikon**
 
-Registrieren Sie branchenspezifische Begriffe und interne Terminologie im Woerterbuch.
-Dies kann ueber die Administrationsoberflaeche unter [System] > [Woerterbuch] durch Auswahl des Kuromoji-Woerterbuchs konfiguriert werden.
+Registrieren Sie branchenspezifische Begriffe und interne Terminologie im Wörterbuch.
+Dies kann über die Administrationsoberfläche unter [System] > [Wörterbuch] durch Auswahl des Kuromoji-Wörterbuchs konfiguriert werden.
 
-Dies ist beispielsweise nuetzlich, wenn Sie moechten, dass ein zusammengesetzter Begriff als einzelnes Token behandelt wird, anstatt in separate Woerter aufgeteilt zu werden.
+Dies ist beispielsweise nützlich, wenn Sie möchten, dass ein zusammengesetzter Begriff als einzelnes Token behandelt wird, anstatt in separate Wörter aufgeteilt zu werden.
 
 **Synonyme**
 
@@ -84,56 +84,56 @@ Behandlung von japanischspezifischen Schreibvarianten.
     データベース,DB,ディービー
     ユーザー,ユーザ,利用者
 
-Einstellungen fuer Englisch
+Einstellungen für Englisch
 -----------------------------
 
 Englische Dokumente werden durch den mehrsprachigen Index von Fess automatisch mit dem entsprechenden Analyzer verarbeitet.
 
 Englischspezifische Anpassungen umfassen Folgendes.
 
-**Stoppwoerter**
+**Stoppwörter**
 
-Gaengige englische Stoppwoerter (the, a, an, is, are usw.) werden standardmaessig ausgeschlossen. Es koennen jedoch auch branchenspezifische Stoppwoerter hinzugefuegt werden.
+Gängige englische Stoppwörter (the, a, an, is, are usw.) werden standardmäßig ausgeschlossen. Es können jedoch auch branchenspezifische Stoppwörter hinzugefügt werden.
 
 **Stemmer-Override**
 
-Ueberschreiben Sie das Stemming bestimmter Woerter.
-Dies kann ueber die Administrationsoberflaeche unter [System] > [Woerterbuch] durch Auswahl des Stemmer-Override-Woerterbuchs konfiguriert werden.
+Überschreiben Sie das Stemming bestimmter Wörter.
+Dies kann über die Administrationsoberfläche unter [System] > [Wörterbuch] durch Auswahl des Stemmer-Override-Wörterbuchs konfiguriert werden.
 
 Dies wird beispielsweise verwendet, wenn Fachbegriffe unbeabsichtigte Transformationen erfahren.
 
-Einstellungen fuer Chinesisch
+Einstellungen für Chinesisch
 -------------------------------
 
-Fuer chinesische Dokumente wird der Fess-eigene chinesische Tokenizer verwendet.
+Für chinesische Dokumente wird der Fess-eigene chinesische Tokenizer verwendet.
 Im mehrsprachigen Index von Fess werden sowohl vereinfachte als auch traditionelle chinesische Texte korrekt tokenisiert.
 
-Chinesischspezifische Ueberlegungen umfassen Folgendes.
+Chinesischspezifische Überlegungen umfassen Folgendes.
 
 - Zuordnung zwischen vereinfachten und traditionellen chinesischen Zeichen
-- Suchunterstuetzung ueber Pinyin-Eingabe
+- Suchunterstützung über Pinyin-Eingabe
 - Chinesischspezifische Synonymeinstellungen
 
 Sucherlebnis in einer mehrsprachigen Umgebung
 ==============================================
 
-Ueberlegungen zur Such-UI
+Überlegungen zur Such-UI
 ---------------------------
 
 In einer mehrsprachigen Umgebung muss auch die Such-UI an die Sprache des Benutzers angepasst werden.
 
-Fess verfuegt ueber eine Funktion, die die UI-Sprache automatisch basierend auf den Spracheinstellungen des Browsers umschaltet.
-Die Suchoberflaeche wird in mehreren Sprachen bereitgestellt, darunter Japanisch, Englisch und Chinesisch.
+Fess verfügt über eine Funktion, die die UI-Sprache automatisch basierend auf den Spracheinstellungen des Browsers umschaltet.
+Die Suchoberfläche wird in mehreren Sprachen bereitgestellt, darunter Japanisch, Englisch und Chinesisch.
 
-Ueberlegungen zur sprachuebergreifenden Suche
+Überlegungen zur sprachübergreifenden Suche
 -----------------------------------------------
 
-Es besteht auch der Bedarf an sprachuebergreifender Suche, z. B. ``englische Dokumente mit japanischen Suchbegriffen finden``.
-Derzeit unterstuetzt Fess allein keine vollstaendig automatische uebersetzungsbasierte Suche, aber die folgenden Methoden koennen diesen Bedarf teilweise abdecken.
+Es besteht auch der Bedarf an sprachübergreifender Suche, z. B. ``englische Dokumente mit japanischen Suchbegriffen finden``.
+Derzeit unterstützt Fess allein keine vollständig automatische übersetzungsbasierte Suche, aber die folgenden Methoden können diesen Bedarf teilweise abdecken.
 
 **Mehrsprachige Synonymeinstellungen**
 
-Registrieren Sie Uebersetzungen zwischen Japanisch und Englisch als Synonyme.
+Registrieren Sie Übersetzungen zwischen Japanisch und Englisch als Synonyme.
 
 ::
 
@@ -141,73 +141,73 @@ Registrieren Sie Uebersetzungen zwischen Japanisch und Englisch als Synonyme.
     報告書,report,レポート
     仕様書,specification,スペック
 
-Dadurch werden bei einer Suche nach dem japanischen Wort fuer ``Meeting`` auch englische Dokumente gefunden, die ``meeting`` enthalten.
+Dadurch werden bei einer Suche nach dem japanischen Wort für ``Meeting`` auch englische Dokumente gefunden, die ``meeting`` enthalten.
 
 **Sprachfilterung mit Labels**
 
-Richten Sie Labels fuer jede Sprache ein, damit Benutzer den Sprachbereich ihrer Suche auswaehlen koennen.
+Richten Sie Labels für jede Sprache ein, damit Benutzer den Sprachbereich ihrer Suche auswählen können.
 
 - ``lang-ja``: Japanische Dokumente
 - ``lang-en``: Englische Dokumente
 - ``lang-zh``: Chinesische Dokumente
 
-Best Practices fuer die Woerterbuchverwaltung
+Best Practices für die Wörterbuchverwaltung
 ===============================================
 
-In einer mehrsprachigen Umgebung hat die Woerterbuchverwaltung einen erheblichen Einfluss auf die Suchqualitaet.
+In einer mehrsprachigen Umgebung hat die Wörterbuchverwaltung einen erheblichen Einfluss auf die Suchqualität.
 
-Woerterbuchpflege nach Sprache
+Wörterbuchpflege nach Sprache
 --------------------------------
 
 .. list-table:: Punkte zur Woerterbuchpflege
    :header-rows: 1
    :widths: 20 40 40
 
-   * - Woerterbuch
+   * - Wörterbuch
      - Japanisch
      - Englisch / Chinesisch
    * - Synonyme
-     - Schreibvarianten, Abkuerzungen, Fachbegriffe
-     - Abkuerzungserweiterung, Synonyme
-   * - Stoppwoerter
-     - Branchenspezifische ueberfluessige Woerter
-     - Domaenenspezifische ueberfluessige Woerter
+     - Schreibvarianten, Abkürzungen, Fachbegriffe
+     - Abkürzungserweiterung, Synonyme
+   * - Stoppwörter
+     - Branchenspezifische überflüssige Wörter
+     - Domänenspezifische überflüssige Wörter
    * - Benutzerlexikon
      - Interne Begriffe, Produktnamen
      - (Kuromoji-spezifisch)
-   * - Protwords (Geschuetzte Woerter)
-     - Woerter, die nicht gestemmt werden sollen
+   * - Protwords (Geschützte Wörter)
+     - Wörter, die nicht gestemmt werden sollen
      - Fachbegriffe, Eigennamen
 
-Regelmaessige Woerterbuchpflege
+Regelmäßige Wörterbuchpflege
 ---------------------------------
 
-Woerterbuecher sind nicht etwas, das man einmal einrichtet und dann vergisst; sie muessen regelmaessig ueberprueft werden.
+Wörterbücher sind nicht etwas, das man einmal einrichtet und dann vergisst; sie müssen regelmäßig überprüft werden.
 
-- Neue Produkt- und Projektnamen hinzufuegen
+- Neue Produkt- und Projektnamen hinzufügen
 - Nicht mehr verwendete Begriffe bereinigen
-- Neue Synonymkandidaten aus Suchprotokollen hinzufuegen
+- Neue Synonymkandidaten aus Suchprotokollen hinzufügen
 
-Kombinieren Sie dies mit dem in Teil 8 vorgestellten Zyklus zur Optimierung der Suchqualitaet, um Woerterbuecher kontinuierlich zu pflegen.
+Kombinieren Sie dies mit dem in Teil 8 vorgestellten Zyklus zur Optimierung der Suchqualität, um Wörterbücher kontinuierlich zu pflegen.
 
 Zusammenfassung
 ================
 
-In diesem Artikel haben wir den Aufbau einer Suchinfrastruktur in einer Umgebung erlaeutert, in der japanische, englische und chinesische Dokumente koexistieren.
+In diesem Artikel haben wir den Aufbau einer Suchinfrastruktur in einer Umgebung erläutert, in der japanische, englische und chinesische Dokumente koexistieren.
 
-- Verstaendnis der unterschiedlichen Tokenisierungsprozesse fuer jede Sprache
+- Verständnis der unterschiedlichen Tokenisierungsprozesse für jede Sprache
 - Mehrsprachiger Index und Analyzer-Einstellungen von Fess
-- Anpassungen fuer Japanisch (Kuromoji), Englisch und Chinesisch
-- Unterstuetzung der sprachuebergreifenden Suche durch mehrsprachige Synonyme
-- Best Practices fuer die Woerterbuchverwaltung
+- Anpassungen für Japanisch (Kuromoji), Englisch und Chinesisch
+- Unterstützung der sprachübergreifenden Suche durch mehrsprachige Synonyme
+- Best Practices für die Wörterbuchverwaltung
 
-Mehrsprachige Unterstuetzung ist nicht etwas, das mit einer einmaligen Konfiguration abgeschlossen werden kann; eine kontinuierliche Verbesserung basierend auf den Nutzungsmustern ist wichtig.
+Mehrsprachige Unterstützung ist nicht etwas, das mit einer einmaligen Konfiguration abgeschlossen werden kann; eine kontinuierliche Verbesserung basierend auf den Nutzungsmustern ist wichtig.
 
-Im naechsten Artikel behandeln wir den stabilen Betrieb von Suchsystemen.
+Im nächsten Artikel behandeln wir den stabilen Betrieb von Suchsystemen.
 
 Referenzen
 ==========
 
-- `Fess Woerterbuchverwaltung <https://fess.codelibs.org/ja/15.5/admin/dict.html>`__
+- `Fess Wörterbuchverwaltung <https://fess.codelibs.org/ja/15.5/admin/dict.html>`__
 
 - `OpenSearch Analyzer <https://opensearch.org/docs/latest/analyzers/>`__
