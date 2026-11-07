@@ -136,10 +136,10 @@ Fess は Apache ライセンスで提供され、無料 (フリーソフト) で
 
 Fess は Apache ライセンスで提供されるオープンソース製品で、個人や商用向けでも無料でご自由にご利用いただけます。
 
-Fess のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート(有償) <https://www.n2sm.net/products/n2search.html>`__\ をご覧ください。
+Fess のカスタマイズや導入・構築などのサポートサービスが必要な場合は、\ `商用サポート(有償) <https://www.n2sm.net/campaign/n2search/?utm_source=fess-docs&utm_medium=referral&utm_campaign=commercial-support&utm_content=ja-index-body>`__\ をご覧ください。
 また、検索品質やクロール速度の改善などのパフォーマンスチューニングも商用サポートで対応しています。
 
-- `N2 Search <https://www.n2sm.net/products/n2search.html>`__ (最適化されたFessの商用向けパッケージ)
+- `N2 Search <https://www.n2sm.net/campaign/n2search/?utm_source=fess-docs&utm_medium=referral&utm_campaign=commercial-support&utm_content=ja-index-list>`__ (最適化されたFessの商用向けパッケージ)
 
 - `N2 Search Super Lite <https://www.n2sm.net/services/n2search-asp-lite.html>`__ (Google Site Search代替サービス)
 
@@ -302,7 +302,7 @@ Scriptプラグイン
 .. |image1| image:: ../resources/images/ja/demo-2.png
 .. |image2| image:: ../resources/images/ja/demo-3.png
 .. |image3| image:: ../resources/images/ja/n2search_225x50.png
-   :target: https://www.n2sm.net/products/n2search.html
+   :target: https://www.n2sm.net/campaign/n2search/?utm_source=fess-docs&utm_medium=referral&utm_campaign=commercial-support&utm_content=ja-index-banner
 .. |image4| image:: ../resources/images/ja/n2search_b.png
 
 
