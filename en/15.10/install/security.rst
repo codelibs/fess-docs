@@ -200,6 +200,45 @@ Because it is enabled by default, no additional configuration is required. To cu
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
+Each audit record is one line of tab-separated ``key:value`` fields (LTSV). A record starts with ``action`` and ends with ``ip`` (the client IP address) and ``time`` (UTC, ISO 8601). When ``app.audit.log.format`` is ``ecs``, or it is empty and the environment variable ``FESS_APP_TYPE`` is ``docker``, records are written as ECS JSON instead, with the fields as ``labels.<key>``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - Action
+     - Fields
+     - Written when
+   * - ``LOGIN``
+     - ``user``, ``permissions``
+     - A user logs in.
+   * - ``LOGOUT``
+     - ``user``, ``permissions``
+     - A user logs out.
+   * - ``LOGIN_FAILURE``
+     - ``class``, ``user``
+     - A login is rejected, on the login form, in the login API or by SSO. A login that an SSO authenticator rejects with an exception is recorded as well.
+   * - ``ACCESS``
+     - ``user``, ``path``, ``execute``, ``method``, ``id``
+     - A request reaches an admin screen or the admin REST API, before the action runs. For the admin REST API this is after the access token has been accepted.
+   * - ``ACCESS_DENIED``
+     - ``user``, ``path``
+     - A request to an admin screen is rejected because of the user's roles, or an admin REST API request is rejected by the access token check (the API answers HTTP 401).
+   * - ``UPDATE_PASSWORD``
+     - ``user``, ``target``
+     - A password is changed: by a user through the login screen or ``/api/v2/auth/password``, or by an administrator who sets a new password for a user on the user admin screen or through the admin REST API.
+   * - ``UPDATE_PERMISSION``
+     - ``user``, ``permissions``
+     - The permissions of an LDAP user are updated.
+   * - ``SCRIPT_EXECUTION``
+     - ``scriptType``, ``source``, ``user``, ``result``, ``script``
+     - A script runs. See :doc:`../config/scripting-overview`.
+
+- ``LOGIN_FAILURE``: ``user`` is the user name that was typed and ``class`` is the type of the credential. When an SSO authenticator rejects a login with an exception, no credential has been resolved, so the record has neither ``user`` nor ``class``, and nothing from the exception is written.
+- ``ACCESS``: ``method`` is the HTTP method. ``id`` is the value of the ``id`` request parameter and is written only when the request has one (it is not read from an upload request). No other request parameter is written, because the admin forms carry passwords and keys.
+- ``ACCESS_DENIED``: for a rejected admin REST API request, only the request path is written. Neither the access token nor the parameter that carried it is recorded.
+- ``UPDATE_PASSWORD``: ``user`` is the user who changed the password and ``target`` is the name of the user whose password was changed. The password and its hash are never written, and a rejected change writes nothing.
+
 Regular Security Updates
 ------------------------
 

@@ -200,6 +200,45 @@ Da dies standardmäßig aktiviert ist, ist keine zusätzliche Konfiguration erfo
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
+Jeder Audit-Eintrag ist eine Zeile aus tabulatorgetrennten ``key:value``-Feldern (LTSV). Ein Eintrag beginnt mit ``action`` und endet mit ``ip`` (der IP-Adresse des Clients) und ``time`` (UTC, ISO 8601). Ist ``app.audit.log.format`` auf ``ecs`` gesetzt, oder ist es leer und die Umgebungsvariable ``FESS_APP_TYPE`` hat den Wert ``docker``, werden die Einträge stattdessen als ECS-JSON geschrieben, mit den Feldern als ``labels.<key>``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - Aktion
+     - Felder
+     - Wird geschrieben, wenn
+   * - ``LOGIN``
+     - ``user``, ``permissions``
+     - sich ein Benutzer anmeldet.
+   * - ``LOGOUT``
+     - ``user``, ``permissions``
+     - sich ein Benutzer abmeldet.
+   * - ``LOGIN_FAILURE``
+     - ``class``, ``user``
+     - eine Anmeldung abgelehnt wird, im Anmeldeformular, in der Anmelde-API oder per SSO. Auch eine Anmeldung, die ein SSO-Authentifikator mit einer Ausnahme ablehnt, wird erfasst.
+   * - ``ACCESS``
+     - ``user``, ``path``, ``execute``, ``method``, ``id``
+     - eine Anfrage an eine Verwaltungsseite oder die Admin-REST-API eingeht, bevor die Aktion ausgeführt wird. Bei der Admin-REST-API geschieht das, nachdem das Zugriffstoken akzeptiert wurde.
+   * - ``ACCESS_DENIED``
+     - ``user``, ``path``
+     - eine Anfrage an eine Verwaltungsseite wegen der Rollen des Benutzers abgelehnt wird oder eine Anfrage an die Admin-REST-API von der Prüfung des Zugriffstokens abgelehnt wird (die API antwortet mit HTTP 401).
+   * - ``UPDATE_PASSWORD``
+     - ``user``, ``target``
+     - ein Passwort geändert wird: von einem Benutzer über die Anmeldeseite oder ``/api/v2/auth/password`` oder von einem Administrator, der auf der Benutzerverwaltungsseite oder über die Admin-REST-API ein neues Passwort für einen Benutzer setzt.
+   * - ``UPDATE_PERMISSION``
+     - ``user``, ``permissions``
+     - die Berechtigungen eines LDAP-Benutzers aktualisiert werden.
+   * - ``SCRIPT_EXECUTION``
+     - ``scriptType``, ``source``, ``user``, ``result``, ``script``
+     - ein Skript ausgeführt wird. Siehe :doc:`../config/scripting-overview`.
+
+- ``LOGIN_FAILURE``: ``user`` ist der eingegebene Benutzername und ``class`` der Typ der Anmeldeinformationen. Lehnt ein SSO-Authentifikator eine Anmeldung mit einer Ausnahme ab, wurden keine Anmeldeinformationen ermittelt; der Eintrag enthält dann weder ``user`` noch ``class``, und nichts aus der Ausnahme wird geschrieben.
+- ``ACCESS``: ``method`` ist die HTTP-Methode. ``id`` ist der Wert des Anfrageparameters ``id`` und wird nur geschrieben, wenn die Anfrage ihn enthält (bei einer Upload-Anfrage wird er nicht gelesen). Kein anderer Anfrageparameter wird geschrieben, weil die Verwaltungsformulare Passwörter und Schlüssel enthalten.
+- ``ACCESS_DENIED``: Bei einer abgelehnten Anfrage an die Admin-REST-API wird nur der Pfad der Anfrage geschrieben. Weder das Zugriffstoken noch der Parameter, der es übermittelt hat, wird erfasst.
+- ``UPDATE_PASSWORD``: ``user`` ist der Benutzer, der das Passwort geändert hat, und ``target`` der Name des Benutzers, dessen Passwort geändert wurde. Das Passwort und sein Hash werden nie geschrieben, und eine abgelehnte Änderung erzeugt keinen Eintrag.
+
 Regelmäßige Sicherheitsupdates
 -------------------------------
 

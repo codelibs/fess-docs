@@ -186,7 +186,7 @@ Außerdem werden protokollrelative Pfade (führendes ``//``) und Pfade mit ASCII
    Die Rate-Limits für Anmeldung und Passwortänderung können mit folgenden Eigenschaften konfiguriert werden (Standardwerte in Klammern):
 
    - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Maximale Anzahl von Versuchen pro Minute und IP-Adresse. Gilt sowohl für ``/auth/login`` als auch für das Anmeldeformular ``POST /login/login``; beide teilen sich denselben Bucket.
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximale Anzahl von Versuchen pro Minute und Benutzer. Gilt für ``/auth/login`` und ``POST /login/login`` (diese teilen sich je Kombination aus aufrufender IP und Benutzername einen Bucket) sowie für ``/auth/password``.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Maximale Anzahl von Versuchen pro Minute und Benutzer. Gilt für ``/auth/login`` und ``POST /login/login`` (diese teilen sich je Kombination aus aufrufender IP und Benutzername einen Bucket) sowie für ``/auth/password``. Bei der Anmeldung wird die Groß- und Kleinschreibung des Benutzernamens nicht beachtet (``alice`` und ``Alice`` teilen sich einen Bucket).
    - ``theme.api.login.lockout.seconds`` (``900``): Sperrungsdauer (in Sekunden) nach Überschreitung des Limits. Wird als Wert des ``Retry-After``-Headers zurückgegeben.
 
    Das Anmeldeformular (``POST /login/login``) teilt sich die Buckets und die Sperrung mit ``/auth/login``; Fehlversuche am Formular zählen daher zum Limit von ``/auth/login`` und umgekehrt. Wird das Limit am Formular überschritten, wird dies als gewöhnlicher Anmeldefehler behandelt und nicht mit ``429`` beantwortet.

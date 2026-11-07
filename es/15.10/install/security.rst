@@ -198,6 +198,45 @@ Dado que está habilitado de forma predeterminada, no se requiere configuración
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
+Cada registro de auditoría es una línea de campos ``key:value`` separados por tabuladores (LTSV). Un registro empieza con ``action`` y termina con ``ip`` (la dirección IP del cliente) y ``time`` (UTC, ISO 8601). Cuando ``app.audit.log.format`` es ``ecs``, o está vacío y la variable de entorno ``FESS_APP_TYPE`` es ``docker``, los registros se escriben en JSON ECS, con los campos como ``labels.<key>``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - Acción
+     - Campos
+     - Se escribe cuando
+   * - ``LOGIN``
+     - ``user``, ``permissions``
+     - un usuario inicia sesión.
+   * - ``LOGOUT``
+     - ``user``, ``permissions``
+     - un usuario cierra sesión.
+   * - ``LOGIN_FAILURE``
+     - ``class``, ``user``
+     - se rechaza un inicio de sesión, en el formulario de inicio de sesión, en la API de inicio de sesión o mediante SSO. También se registra un inicio de sesión que un autenticador SSO rechaza con una excepción.
+   * - ``ACCESS``
+     - ``user``, ``path``, ``execute``, ``method``, ``id``
+     - una solicitud llega a una pantalla de administración o a la API REST de administración, antes de que se ejecute la acción. En la API REST de administración, es después de que se acepte el token de acceso.
+   * - ``ACCESS_DENIED``
+     - ``user``, ``path``
+     - se rechaza una solicitud a una pantalla de administración por los roles del usuario, o la comprobación del token de acceso rechaza una solicitud a la API REST de administración (la API responde con HTTP 401).
+   * - ``UPDATE_PASSWORD``
+     - ``user``, ``target``
+     - se cambia una contraseña: por un usuario desde la pantalla de inicio de sesión o ``/api/v2/auth/password``, o por un administrador que establece una nueva contraseña para un usuario en la pantalla de administración de usuarios o mediante la API REST de administración.
+   * - ``UPDATE_PERMISSION``
+     - ``user``, ``permissions``
+     - se actualizan los permisos de un usuario LDAP.
+   * - ``SCRIPT_EXECUTION``
+     - ``scriptType``, ``source``, ``user``, ``result``, ``script``
+     - se ejecuta un script. Consulte :doc:`../config/scripting-overview`.
+
+- ``LOGIN_FAILURE``: ``user`` es el nombre de usuario escrito y ``class`` es el tipo de credencial. Cuando un autenticador SSO rechaza un inicio de sesión con una excepción, no se ha resuelto ninguna credencial, por lo que el registro no contiene ``user`` ni ``class`` y no se escribe nada de la excepción.
+- ``ACCESS``: ``method`` es el método HTTP. ``id`` es el valor del parámetro de solicitud ``id`` y solo se escribe cuando la solicitud lo incluye (no se lee en una solicitud de carga de archivos). No se escribe ningún otro parámetro de la solicitud, porque los formularios de administración contienen contraseñas y claves.
+- ``ACCESS_DENIED``: en una solicitud rechazada a la API REST de administración, solo se escribe la ruta de la solicitud. No se registra ni el token de acceso ni el parámetro que lo transportaba.
+- ``UPDATE_PASSWORD``: ``user`` es el usuario que cambió la contraseña y ``target`` es el nombre del usuario cuya contraseña se cambió. La contraseña y su hash nunca se escriben, y un cambio rechazado no escribe nada.
+
 Actualizaciones de Seguridad Periódicas
 ----------------------------------------
 

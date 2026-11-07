@@ -691,6 +691,7 @@ Limite de tentatives du formulaire de connexion
 
 Dans la version 15.9, les limites de ``theme.api.login.rate.limit.*`` ne s'appliquaient qu'à ``/api/v2/auth/login`` et non au formulaire de connexion de la page de connexion (``/login/``).
 Dans la version 15.10, le formulaire utilise les mêmes limites et les mêmes compteurs. Lorsque les connexions échouées depuis la même adresse IP atteignent 10 par minute, ou que le mot de passe du même nom d'utilisateur est refusé 5 fois depuis la même adresse IP, les connexions depuis cette adresse IP, ou depuis cette combinaison d'adresse IP et de nom d'utilisateur, sont refusées pendant ``theme.api.login.lockout.seconds`` (900 secondes par défaut).
+Lors du comptage des connexions, les noms d'utilisateur sont comparés sans tenir compte de la casse : ``alice`` et ``Alice`` depuis la même adresse IP partagent donc un seul compteur. Le nom d'utilisateur utilisé pour l'authentification et écrit dans les journaux reste celui qui a été saisi.
 Pendant le blocage, même le bon mot de passe ne permet pas de se connecter, et la page affiche le même message que pour un mot de passe erroné. Une connexion réussie rend la place que la tentative a utilisée.
 Tenez compte de cette limite pour les scripts susceptibles d'envoyer un mot de passe erroné et pour les sites où de nombreux utilisateurs partagent une même adresse IP.
 

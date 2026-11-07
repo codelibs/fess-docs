@@ -200,6 +200,45 @@ L'historique des opérations du système, telles que l'authentification et les o
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
+Chaque enregistrement d'audit est une ligne de champs ``key:value`` séparés par des tabulations (LTSV). Un enregistrement commence par ``action`` et se termine par ``ip`` (l'adresse IP du client) et ``time`` (UTC, ISO 8601). Lorsque ``app.audit.log.format`` vaut ``ecs``, ou qu'il est vide et que la variable d'environnement ``FESS_APP_TYPE`` vaut ``docker``, les enregistrements sont écrits en JSON ECS, avec les champs sous la forme ``labels.<key>``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - Action
+     - Champs
+     - Écrit lorsque
+   * - ``LOGIN``
+     - ``user``, ``permissions``
+     - un utilisateur se connecte.
+   * - ``LOGOUT``
+     - ``user``, ``permissions``
+     - un utilisateur se déconnecte.
+   * - ``LOGIN_FAILURE``
+     - ``class``, ``user``
+     - une connexion est refusée, sur le formulaire de connexion, dans l'API de connexion ou par SSO. Une connexion qu'un authentificateur SSO refuse par une exception est également enregistrée.
+   * - ``ACCESS``
+     - ``user``, ``path``, ``execute``, ``method``, ``id``
+     - une requête atteint un écran d'administration ou l'API REST d'administration, avant l'exécution de l'action. Pour l'API REST d'administration, c'est après l'acceptation du jeton d'accès.
+   * - ``ACCESS_DENIED``
+     - ``user``, ``path``
+     - une requête vers un écran d'administration est refusée en raison des rôles de l'utilisateur, ou une requête vers l'API REST d'administration est refusée par la vérification du jeton d'accès (l'API répond HTTP 401).
+   * - ``UPDATE_PASSWORD``
+     - ``user``, ``target``
+     - un mot de passe est modifié : par un utilisateur depuis l'écran de connexion ou ``/api/v2/auth/password``, ou par un administrateur qui définit un nouveau mot de passe pour un utilisateur sur l'écran de gestion des utilisateurs ou via l'API REST d'administration.
+   * - ``UPDATE_PERMISSION``
+     - ``user``, ``permissions``
+     - les permissions d'un utilisateur LDAP sont mises à jour.
+   * - ``SCRIPT_EXECUTION``
+     - ``scriptType``, ``source``, ``user``, ``result``, ``script``
+     - un script est exécuté. Voir :doc:`../config/scripting-overview`.
+
+- ``LOGIN_FAILURE`` : ``user`` est le nom d'utilisateur saisi et ``class`` le type des identifiants. Lorsqu'un authentificateur SSO refuse une connexion par une exception, aucun identifiant n'a été établi : l'enregistrement ne contient alors ni ``user`` ni ``class``, et rien de l'exception n'est écrit.
+- ``ACCESS`` : ``method`` est la méthode HTTP. ``id`` est la valeur du paramètre de requête ``id``, écrit uniquement si la requête en comporte un (il n'est pas lu dans une requête de téléversement). Aucun autre paramètre de requête n'est écrit, car les formulaires d'administration contiennent des mots de passe et des clés.
+- ``ACCESS_DENIED`` : pour une requête refusée vers l'API REST d'administration, seul le chemin de la requête est écrit. Ni le jeton d'accès ni le paramètre qui le transportait ne sont enregistrés.
+- ``UPDATE_PASSWORD`` : ``user`` est l'utilisateur qui a modifié le mot de passe et ``target`` le nom de l'utilisateur dont le mot de passe a été modifié. Le mot de passe et son empreinte ne sont jamais écrits, et une modification refusée n'écrit rien.
+
 Mises à jour de sécurité régulières
 ------------------------------------
 

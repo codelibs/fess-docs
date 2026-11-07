@@ -186,7 +186,7 @@ Además, las rutas relativas al protocolo (que comienzan con ``//``) y las que c
    Los límites de velocidad para el inicio de sesión y el cambio de contraseña pueden configurarse con las siguientes propiedades (valor predeterminado entre paréntesis):
 
    - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): Número máximo de intentos por minuto por dirección IP. Se aplica tanto a ``/auth/login`` como al formulario de inicio de sesión ``POST /login/login``, que comparten el mismo cubo.
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Número máximo de intentos por minuto por usuario. Se aplica a ``/auth/login`` y ``POST /login/login`` (que comparten un cubo por cada combinación de IP del cliente y nombre de usuario) y a ``/auth/password``.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): Número máximo de intentos por minuto por usuario. Se aplica a ``/auth/login`` y ``POST /login/login`` (que comparten un cubo por cada combinación de IP del cliente y nombre de usuario) y a ``/auth/password``. En el inicio de sesión, los nombres de usuario se comparan sin distinguir mayúsculas de minúsculas (``alice`` y ``Alice`` comparten un mismo bucket).
    - ``theme.api.login.lockout.seconds`` (``900``): Duración del bloqueo (en segundos) una vez superado el límite. Se devuelve como valor de la cabecera ``Retry-After``.
 
    El formulario de inicio de sesión (``POST /login/login``) comparte los cubos y el bloqueo con ``/auth/login``, por lo que los fallos en el formulario cuentan para el límite de ``/auth/login`` y viceversa. Cuando se supera el límite en el formulario, se trata como un error de inicio de sesión normal en lugar de ``429``.

@@ -200,6 +200,45 @@ Nginx でのアクセス制限例::
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
+監査ログの 1 件は、タブ区切りの ``key:value`` を並べた 1 行（LTSV）です。 ``action`` で始まり、 ``ip`` （クライアントの IP アドレス）と ``time`` （UTC、ISO 8601）で終わります。 ``app.audit.log.format`` が ``ecs`` の場合、または空で環境変数 ``FESS_APP_TYPE`` が ``docker`` の場合は、代わりに ECS 形式の JSON で出力され、各項目は ``labels.<key>`` になります。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - action
+     - 項目
+     - 記録されるとき
+   * - ``LOGIN``
+     - ``user`` 、 ``permissions``
+     - ユーザーがログインしたとき。
+   * - ``LOGOUT``
+     - ``user`` 、 ``permissions``
+     - ユーザーがログアウトしたとき。
+   * - ``LOGIN_FAILURE``
+     - ``class`` 、 ``user``
+     - ログインフォーム、ログイン API、SSO でログインが拒否されたとき。SSO の認証処理が例外でログインを拒否した場合も記録されます。
+   * - ``ACCESS``
+     - ``user`` 、 ``path`` 、 ``execute`` 、 ``method`` 、 ``id``
+     - 管理画面または Admin API へのリクエストが、処理が実行される前に届いたとき。Admin API では、アクセストークンが受け付けられた後です。
+   * - ``ACCESS_DENIED``
+     - ``user`` 、 ``path``
+     - 管理画面へのリクエストがユーザーのロールにより拒否されたとき、または Admin API へのリクエストがアクセストークンの検査で拒否されたとき（API は HTTP 401 を返します）。
+   * - ``UPDATE_PASSWORD``
+     - ``user`` 、 ``target``
+     - パスワードが変更されたとき。ユーザー自身がログイン画面または ``/api/v2/auth/password`` から変更した場合と、管理者がユーザー管理画面または Admin API でユーザーに新しいパスワードを設定した場合です。
+   * - ``UPDATE_PERMISSION``
+     - ``user`` 、 ``permissions``
+     - LDAP ユーザーのパーミッションが更新されたとき。
+   * - ``SCRIPT_EXECUTION``
+     - ``scriptType`` 、 ``source`` 、 ``user`` 、 ``result`` 、 ``script``
+     - スクリプトが実行されたとき。 :doc:`../config/scripting-overview` を参照してください。
+
+- ``LOGIN_FAILURE``: ``user`` は入力されたユーザー名、 ``class`` は資格情報の種類です。SSO の認証処理が例外でログインを拒否した場合は、資格情報が確定していないため、 ``user`` も ``class`` も記録されず、例外の内容も書き込まれません。
+- ``ACCESS``: ``method`` は HTTP メソッドです。 ``id`` はリクエストパラメーター ``id`` の値で、リクエストにある場合にだけ記録されます（アップロードのリクエストからは読み取りません）。管理画面のフォームにはパスワードや鍵が含まれるため、それ以外のリクエストパラメーターは記録されません。
+- ``ACCESS_DENIED``: 拒否された Admin API のリクエストでは、リクエストのパスだけが記録されます。アクセストークンも、それを渡したパラメーターも記録されません。
+- ``UPDATE_PASSWORD``: ``user`` はパスワードを変更したユーザー、 ``target`` はパスワードを変更されたユーザーの名前です。パスワードやそのハッシュは記録されず、拒否された変更は記録されません。
+
 定期的なセキュリティアップデート
 ------------------------------
 

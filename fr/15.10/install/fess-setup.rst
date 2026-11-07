@@ -125,6 +125,39 @@ la place la ligne ``PLAYWRIGHT_NODEJS_PATH`` à ajouter à ``bin/fess.in.sh``. `
 choisir une autre version de Node.js. Consultez :doc:`../config/crawler-advanced` pour le robot
 Playwright.
 
+Paramètres initiaux
+===================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+Définit dans ``fess_config.properties`` deux valeurs livrées avec des valeurs par défaut connues de tous : le mot de passe initial de l'utilisateur ``admin`` (``index.user.initial_password``, livré à ``admin``) et la clé de chiffrement (``app.cipher.key``, livrée à ``___change__me___``). Exécutez la commande une seule fois, avant le premier démarrage de |Fess|. Une clé absente du fichier est ajoutée à la fin, avec un commentaire indiquant que ``fess-setup`` l'a ajoutée.
+
+Le mot de passe initial est lu lorsque |Fess| crée l'index des utilisateurs, à son premier démarrage. Ensuite, le compte ``admin`` est stocké dans l'index : exécuter ``init`` plus tard ne modifie donc pas le mot de passe de l'utilisateur ``admin``.
+
+La clé de chiffrement chiffre les mots de passe que |Fess| enregistre dans les configurations de crawl et de magasins de données, et une valeur enregistrée avec une clé ne peut pas être lue avec une autre. ``init`` ne remplace donc la clé de chiffrement que tant qu'elle a encore la valeur livrée (ou qu'elle est vide). Pour cette raison, une deuxième exécution échoue sans modifier aucune des deux valeurs, sauf si vous indiquez ``--force``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Option
+     - Description
+   * - ``--admin-password <password>``
+     - Le mot de passe initial. Sans cette option, ``init`` génère un mot de passe aléatoire de 16 lettres et chiffres et l'affiche une seule fois, après ``Password of the admin user:``. Le mot de passe est aussi écrit en clair dans le fichier. Un mot de passe indiqué sur la ligne de commande est visible des autres utilisateurs de la machine. Il ne doit pas être ``admin``, ne doit pas être vide, ne doit ni commencer ni finir par un espace et ne doit contenir aucun caractère de contrôle.
+   * - ``--cipher-key <key>``
+     - La clé de chiffrement. Sans cette option, ``init`` génère une clé aléatoire de 32 lettres et chiffres. Une clé que vous indiquez doit compter 16, 24 ou 32 caractères ASCII imprimables sans espace (les longueurs de clé AES) et ne doit pas être la valeur livrée. Conservez la clé : les valeurs que |Fess| enregistre avec elle ne peuvent pas être lues avec une autre.
+   * - ``--config <file>``
+     - Le ``fess_config.properties`` à modifier. Par défaut, ``app/WEB-INF/classes/fess_config.properties`` dans le répertoire de |Fess|.
+   * - ``--force``
+     - Remplace une clé de chiffrement qui n'a plus la valeur livrée. Les valeurs que |Fess| a enregistrées avec l'ancienne clé ne pourront plus être lues.
+
+``init`` se termine avec le code ``1`` et ne modifie rien lorsqu'une valeur n'est pas acceptable (voir les options ci-dessus), lorsque le fichier indiqué par ``--config`` n'existe pas, lorsque la clé de chiffrement a déjà été modifiée et que ``--force`` n'est pas indiqué, ou lorsque ``app.cipher.algorithm`` vaut autre chose que ``aes`` dans le fichier (``init`` ne définit une clé que pour ``aes``). Une option inconnue, ou une option sans valeur, se termine avec le code ``2``.
+
 Gestion des plugins
 ===================
 
@@ -190,6 +223,8 @@ Liste les plugins publiés pour ce |Fess| et signale ceux qui sont installés pa
 ``(installed: <version>)``. Les plugins installés mais non publiés dans le dépôt, comme un jar
 compilé localement, sont listés à part. Une version de développement de |Fess| consulte aussi le
 dépôt snapshot.
+
+Un plugin que le dépôt publie mais qui n'a pas de build pour cette ligne de |Fess| est signalé par ``(no build for <line>)``, par exemple ``(no build for 15.10)``. ``install plugin`` refuse un tel plugin. Rien n'est signalé lorsque les versions publiées d'un plugin ne peuvent pas être lues.
 
 list installed
 --------------

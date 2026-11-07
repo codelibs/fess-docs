@@ -193,6 +193,7 @@ Depuis la 15.10, ``/api/v2/auth/login`` et le formulaire de connexion de l'écra
 Chaque tentative consomme une place du quota par minute de l'IP client (valeur par défaut ``10``), et cette place est restituée lorsque la connexion réussit.
 Lorsque les tentatives d'une même adresse IP dépassent la limite, cette adresse IP est verrouillée pendant ``theme.api.login.lockout.seconds`` (valeur par défaut ``900``) secondes, et même des identifiants corrects ne permettent pas de se connecter pendant ce temps.
 Par conséquent, si une même adresse IP effectue plus de tentatives que la limite (par exemple des connexions simultanées) avant qu'une seule réussisse, cette adresse est verrouillée.
+La limite par utilisateur (``theme.api.login.rate.limit.per.user.per.minute``) est comptée pour chaque couple adresse IP du client et nom d'utilisateur. Les noms d'utilisateur sont comparés sans tenir compte de la casse : ``alice`` et ``Alice`` partagent donc un seul compteur. Le nom d'utilisateur utilisé pour l'authentification et écrit dans les journaux reste celui qui a été saisi.
 Voir :doc:`../api/api-auth` pour plus de détails.
 
 Configuration avancée de limitation de débit

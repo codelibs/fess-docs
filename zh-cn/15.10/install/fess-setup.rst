@@ -87,6 +87,39 @@ install nodejs
 
 将 Playwright 插件（用于 Playwright 爬虫的 ``fess-crawler-playwright`` 和用于缩略图的 ``fess-thumbnail-playwright``\ ）所需的 Node.js 下载到 |Fess| 目录下的 ``nodejs/`` 中。\ ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会在该位置找到它并设置 ``PLAYWRIGHT_NODEJS_PATH``\ 。使用 ``--dest`` 解压到 |Fess| 目录之外时，命令会改为显示需要添加到 ``bin/fess.in.sh`` 中的 ``PLAYWRIGHT_NODEJS_PATH`` 行。\ ``--version`` 用于选择其他版本的 Node.js。关于 Playwright 爬虫，请参阅 :doc:`../config/crawler-advanced`\ 。
 
+初始设置
+========
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+设置 ``fess_config.properties`` 中两个默认值已公开的项目：``admin`` 用户的初始密码（ ``index.user.initial_password`` ，随附的值为 ``admin`` ）和加密密钥（ ``app.cipher.key`` ，随附的值为 ``___change__me___`` ）。请在 |Fess| 首次启动之前运行一次。文件中没有的键会追加到文件末尾，并附带说明由 ``fess-setup`` 添加的注释。
+
+初始密码在 |Fess| 首次启动创建用户索引时读取。此后 ``admin`` 账户已保存在索引中，因此之后再运行 ``init`` 也不会改变 ``admin`` 用户的密码。
+
+加密密钥用于加密 |Fess| 保存在爬取配置和数据存储配置中的密码，用某个密钥保存的值无法用其他密钥读取。因此，只有当加密密钥仍是随附的值（或为空）时， ``init`` 才会替换它。出于这个原因，第二次运行会失败，且不会更改任何一个值；指定 ``--force`` 则会替换。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 选项
+     - 说明
+   * - ``--admin-password <password>``
+     - 初始密码。省略时， ``init`` 会随机生成由 16 个字母和数字组成的密码，并在 ``Password of the admin user:`` 之后仅显示一次。该密码也会以明文写入文件。在命令行中指定的密码，同一台机器上的其他用户可以看到。不能指定 ``admin``、空值、首尾带空白的值，或包含控制字符的值。
+   * - ``--cipher-key <key>``
+     - 加密密钥。省略时， ``init`` 会随机生成由 32 个字母和数字组成的密钥。指定的密钥必须是不含空格的 16、24 或 32 个可打印 ASCII 字符（AES 的密钥长度），且不能是随附的值。请妥善保管密钥：用某个密钥保存的值无法用其他密钥读取。
+   * - ``--config <file>``
+     - 要修改的 ``fess_config.properties`` 。默认为 |Fess| 目录下的 ``app/WEB-INF/classes/fess_config.properties`` 。
+   * - ``--force``
+     - 替换已不是随附值的加密密钥。用旧密钥保存的值之后将无法读取。
+
+在值不被接受（参见上面的选项）、 ``--config`` 指定的文件不存在、加密密钥已被更改且未指定 ``--force``，或文件中的 ``app.cipher.algorithm`` 设置为 ``aes`` 以外的值（ ``init`` 只设置 ``aes`` 的密钥）时， ``init`` 不做任何更改，并以退出码 ``1`` 结束。未知的选项或没有值的选项以退出码 ``2`` 结束。
+
 管理插件
 ========
 
@@ -127,6 +160,8 @@ list plugins
     $ bin/fess-setup list plugins [--repository <url>] [--dest <dir>]
 
 列出为此 |Fess| 发布的插件，并用 ``(installed: <version>)`` 标记已安装的插件。已安装但未在仓库中发布的插件（例如本地构建的 jar）会单独列出。\ |Fess| 的开发版还会列出快照仓库中的插件。
+
+如果插件已在仓库中发布，但没有适用于此 |Fess| 版本系列的构建，则会标记 ``(no build for <line>)`` （例如 ``(no build for 15.10)`` ）。 ``install plugin`` 不会安装这样的插件。无法读取插件的已发布版本时，不会添加任何标记。
 
 list installed
 --------------

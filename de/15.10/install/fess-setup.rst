@@ -128,6 +128,39 @@ Playwright-Crawler und ``fess-thumbnail-playwright`` für Thumbnails), nach ``no
 ``bin/fess.in.sh`` einzutragen ist. ``--version`` wählt eine andere Node.js-Version. Zum
 Playwright-Crawler siehe :doc:`../config/crawler-advanced`.
 
+Anfangseinstellungen
+====================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+Setzt in ``fess_config.properties`` zwei Werte, die mit allgemein bekannten Standardwerten ausgeliefert werden: das Anfangspasswort des Benutzers ``admin`` (``index.user.initial_password``, ausgeliefert als ``admin``) und den Verschlüsselungsschlüssel (``app.cipher.key``, ausgeliefert als ``___change__me___``). Führen Sie den Befehl einmal aus, bevor |Fess| zum ersten Mal startet. Ein Schlüssel, der in der Datei fehlt, wird angehängt, mit einem Kommentar, dass ``fess-setup`` ihn hinzugefügt hat.
+
+Das Anfangspasswort wird gelesen, wenn |Fess| beim ersten Start den Benutzerindex anlegt. Danach ist das Konto ``admin`` im Index gespeichert; ein späterer Aufruf von ``init`` ändert das Passwort des Benutzers ``admin`` daher nicht.
+
+Der Verschlüsselungsschlüssel verschlüsselt die Passwörter, die |Fess| in den Crawl- und Datenspeicher-Konfigurationen speichert, und ein mit einem Schlüssel gespeicherter Wert lässt sich mit einem anderen nicht lesen. ``init`` ersetzt den Schlüssel deshalb nur, solange er noch dem ausgelieferten Wert entspricht (oder leer ist). Ein zweiter Aufruf schlägt aus diesem Grund fehl, ohne einen der beiden Werte zu ändern, es sei denn, Sie geben ``--force`` an.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Option
+     - Beschreibung
+   * - ``--admin-password <password>``
+     - Das Anfangspasswort. Ohne Angabe erzeugt ``init`` ein zufälliges Passwort aus 16 Buchstaben und Ziffern und gibt es einmalig nach ``Password of the admin user:`` aus. Das Passwort wird außerdem im Klartext in die Datei geschrieben. Ein auf der Kommandozeile angegebenes Passwort ist für andere Benutzer des Rechners sichtbar. Es darf weder ``admin`` noch leer sein, nicht mit Leerraum beginnen oder enden und kein Steuerzeichen enthalten.
+   * - ``--cipher-key <key>``
+     - Der Verschlüsselungsschlüssel. Ohne Angabe erzeugt ``init`` einen zufälligen Schlüssel aus 32 Buchstaben und Ziffern. Ein angegebener Schlüssel muss aus 16, 24 oder 32 druckbaren ASCII-Zeichen ohne Leerzeichen bestehen (die AES-Schlüssellängen) und darf nicht dem ausgelieferten Wert entsprechen. Bewahren Sie den Schlüssel auf: Werte, die |Fess| mit ihm speichert, lassen sich mit einem anderen Schlüssel nicht lesen.
+   * - ``--config <file>``
+     - Die zu ändernde ``fess_config.properties``. Standard ist ``app/WEB-INF/classes/fess_config.properties`` im |Fess|-Verzeichnis.
+   * - ``--force``
+     - Ersetzt einen Verschlüsselungsschlüssel, der nicht mehr dem ausgelieferten Wert entspricht. Werte, die |Fess| mit dem alten Schlüssel gespeichert hat, lassen sich danach nicht mehr lesen.
+
+``init`` endet mit dem Exit-Code ``1`` und ändert nichts, wenn ein Wert nicht zulässig ist (siehe die Optionen oben), wenn die mit ``--config`` angegebene Datei nicht existiert, wenn der Verschlüsselungsschlüssel bereits geändert wurde und ``--force`` fehlt oder wenn ``app.cipher.algorithm`` in der Datei auf etwas anderes als ``aes`` gesetzt ist (``init`` setzt nur einen Schlüssel für ``aes``). Eine unbekannte Option oder eine Option ohne Wert endet mit ``2``.
+
 Verwaltung von Plugins
 ======================
 
@@ -196,6 +229,8 @@ Listet die für dieses |Fess| veröffentlichten Plugins auf und kennzeichnet die
 ``(installed: <version>)``. Plugins, die installiert, aber nicht im Repository veröffentlicht sind,
 etwa ein lokal gebautes JAR, werden gesondert aufgeführt. Ein Entwicklungs-Build von |Fess|
 berücksichtigt zusätzlich das Snapshot-Repository.
+
+Ein Plugin, das das Repository veröffentlicht, für das es aber keinen Build für diese |Fess|-Linie gibt, wird mit ``(no build for <line>)`` gekennzeichnet, zum Beispiel ``(no build for 15.10)``. ``install plugin`` weist ein solches Plugin ab. Wenn sich die veröffentlichten Versionen eines Plugins nicht lesen lassen, wird nichts gekennzeichnet.
 
 list installed
 --------------
