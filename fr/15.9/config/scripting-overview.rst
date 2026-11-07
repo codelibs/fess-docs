@@ -1,13 +1,13 @@
 ====================================
-Apercu du scripting
+Aperçu du scripting
 ====================================
 
-Apercu
+Aperçu
 ======
 
-Dans |Fess|, vous pouvez utiliser des scripts pour implementer une logique personnalisee dans diverses situations.
-En tirant parti des scripts, vous pouvez controler de maniere flexible le traitement des donnees lors du crawl,
-la transformation des URL et l'execution des taches planifiees.
+Dans |Fess|, vous pouvez utiliser des scripts pour implémenter une logique personnalisée dans diverses situations.
+En tirant parti des scripts, vous pouvez contrôler de manière flexible le traitement des données lors du crawl,
+la transformation des URL et l'exécution des tâches planifiées.
 
 Langages de script pris en charge
 ==================================
@@ -23,14 +23,14 @@ Langages de script pris en charge
      - Description
    * - JavaScript
      - ``javascript`` (alias : ``js`` , ``sai`` )
-     - Le langage de script integre par defaut dans |Fess|, et egalement le langage de
-       script par defaut ( ``Constants.DEFAULT_SCRIPT`` ). Il s'execute sur Sai (un fork
-       de Nashorn developpe par CodeLibs, deja utilise par |Fess| pour les expressions de
-       ses XML de DI) ; les scripts sont executes en tant qu'ECMAScript 6.
+     - Le langage de script intégré par défaut dans |Fess|, et également le langage de
+       script par défaut ( ``Constants.DEFAULT_SCRIPT`` ). Il s'exécute sur Sai (un fork
+       de Nashorn développé par CodeLibs, déjà utilisé par |Fess| pour les expressions de
+       ses XML de DI) ; les scripts sont exécutés en tant qu'ECMAScript 6.
    * - Groovy
      - ``groovy``
      - Fourni sous forme de plugin ``fess-script-groovy``, qui **ne fait pas partie de la
-       distribution**. Installez-le depuis l'ecran d'administration ou avec
+       distribution**. Installez-le depuis l'écran d'administration ou avec
        ``bin/fess-setup install plugin fess-script-groovy``.
    * - OGNL
      - ``ognl``
@@ -39,15 +39,15 @@ Langages de script pris en charge
        :doc:`scripting-ognl`.
 
 .. note::
-   Une configuration de script sans type de script enregistre est traitee comme du
+   Une configuration de script sans type de script enregistré est traitée comme du
    Groovy. Il ne s'agit pas d'une mesure de transition temporaire mais d'un comportement
-   permanent : une configuration creee avant la 15.9 conserve son script en syntaxe
-   Groovy sans type de script enregistre, et c'est precisement ce comportement par defaut
-   qui lui permet de continuer a fonctionner sans changement apres une mise a niveau.
-   Une configuration creee a partir de la 15.9 a son type de script explicitement
-   enregistre comme ``javascript``.
+   permanent : une configuration créée avant la 15.9 conserve son script en syntaxe
+   Groovy sans type de script enregistré, et c'est précisément ce comportement par défaut
+   qui lui permet de continuer à fonctionner sans changement après une mise à niveau.
+   Une configuration créée à partir de la 15.9 a son type de script explicitement
+   enregistré comme ``javascript``.
 
-   Sauf indication contraire, les exemples de scripts de cette documentation sont ecrits
+   Sauf indication contraire, les exemples de scripts de cette documentation sont écrits
    en syntaxe JavaScript. Pour la syntaxe Groovy, consultez :doc:`scripting-groovy`.
 
 Cas d'utilisation des scripts
@@ -56,9 +56,9 @@ Cas d'utilisation des scripts
 Configuration du Data Store
 ----------------------------
 
-Dans les connecteurs Data Store, des scripts sont utilises pour mapper les donnees recuperees
-vers les champs de l'index. La configuration s'ecrit au format ``nom_de_champ=expression``, une par ligne ;
-chaque ligne est evaluee comme une expression de script independante (JavaScript par defaut).
+Dans les connecteurs Data Store, des scripts sont utilisés pour mapper les données récupérées
+vers les champs de l'index. La configuration s'écrit au format ``nom_de_champ=expression``, une par ligne ;
+chaque ligne est évaluée comme une expression de script indépendante (JavaScript par défaut).
 
 ::
 
@@ -69,72 +69,72 @@ chaque ligne est evaluee comme une expression de script independante (JavaScript
 
 Les noms de variables disponibles dans les scripts Data Store varient selon le type de connecteur.
 Par exemple, pour les Data Stores CSV et JSON, chaque nom de colonne ou de champ est disponible
-directement en tant que variable (sans prefixe commun tel que ``data``).
-Pour les connecteurs de type fichier (Box, Google Drive, OneDrive, etc.), le prefixe est ``file.*`` ;
-pour Slack, c'est ``message.*`` ; le prefixe differe selon le connecteur.
-Consultez la documentation de chaque connecteur Data Store pour connaitre les variables disponibles.
+directement en tant que variable (sans préfixe commun tel que ``data``).
+Pour les connecteurs de type fichier (Box, Google Drive, OneDrive, etc.), le préfixe est ``file.*`` ;
+pour Slack, c'est ``message.*`` ; le préfixe diffère selon le connecteur.
+Consultez la documentation de chaque connecteur Data Store pour connaître les variables disponibles.
 
 .. note::
-   Chaque ligne d'un Data Store etant evaluee comme une expression unique, les blocs ``if`` multi-lignes
-   ainsi que les declarations de variables telles que ``let`` / ``const`` ne peuvent pas etre utilises.
-   Pour conditionner une valeur, utilisez l'operateur ternaire pour chaque champ
-   (exemple : ``title=enabled === "true" ? name : null``). Pour referencer une classe, utilisez
-   le nom completement qualifie (FQCN) en ligne.
+   Chaque ligne d'un Data Store étant évaluée comme une expression unique, les blocs ``if`` multi-lignes
+   ainsi que les déclarations de variables telles que ``let`` / ``const`` ne peuvent pas être utilisés.
+   Pour conditionner une valeur, utilisez l'opérateur ternaire pour chaque champ
+   (exemple : ``title=enabled === "true" ? name : null``). Pour référencer une classe, utilisez
+   le nom complètement qualifié (FQCN) en ligne.
 
 Mapping de chemin
 -----------------
 
-Le mapping de chemin est une fonctionnalite permettant de normaliser et de transformer les URL crawlees.
-Par defaut, il se configure avec un couple « expression reguliere » / « chaine de remplacement » et
-ne constitue pas un script. Par exemple, en indiquant ``http://`` comme expression reguliere
-et ``https://`` comme chaine de remplacement, le schema de l'URL est remplace.
+Le mapping de chemin est une fonctionnalité permettant de normaliser et de transformer les URL crawlées.
+Par défaut, il se configure avec un couple « expression régulière » / « chaîne de remplacement » et
+ne constitue pas un script. Par exemple, en indiquant ``http://`` comme expression régulière
+et ``https://`` comme chaîne de remplacement, le schéma de l'URL est remplacé.
 
-Lorsque la chaine de remplacement commence par ``(nom du moteur):``, la partie avant les
-deux-points est lue comme le nom d'un moteur de script ; si elle correspond a un moteur
-enregistre, le reste de la chaine est evalue en tant que script par ce moteur. Par
-exemple, ``groovy:`` selectionne le moteur Groovy (necessite le plugin
-``fess-script-groovy``), et ``javascript:`` (alias ``js:``, ``sai:``) selectionne le
-moteur JavaScript. Si la partie avant les deux-points ne correspond a aucun moteur
-enregistre — ``https://`` dans une chaine de remplacement ordinaire, par exemple —,
-la chaine entiere n'est pas traitee comme un script et est utilisee telle quelle comme
-simple chaine de remplacement d'expression reguliere. Lorsque la chaine est evaluee en
-tant que script, ``url`` represente la chaine URL a transformer et ``matcher``
-represente le ``java.util.regex.Matcher`` de l'expression reguliere.
+Lorsque la chaîne de remplacement commence par ``(nom du moteur):``, la partie avant les
+deux-points est lue comme le nom d'un moteur de script ; si elle correspond à un moteur
+enregistré, le reste de la chaîne est évalué en tant que script par ce moteur. Par
+exemple, ``groovy:`` sélectionne le moteur Groovy (nécessite le plugin
+``fess-script-groovy``), et ``javascript:`` (alias ``js:``, ``sai:``) sélectionne le
+moteur JavaScript. Si la partie avant les deux-points ne correspond à aucun moteur
+enregistré — ``https://`` dans une chaîne de remplacement ordinaire, par exemple —,
+la chaîne entière n'est pas traitée comme un script et est utilisée telle quelle comme
+simple chaîne de remplacement d'expression régulière. Lorsque la chaîne est évaluée en
+tant que script, ``url`` représente la chaîne URL à transformer et ``matcher``
+représente le ``java.util.regex.Matcher`` de l'expression régulière.
 
 ::
 
     javascript:url.replace(/http:\/\//g, "https://")
 
-Taches planifiees
+Tâches planifiées
 -----------------
 
-Dans les taches planifiees, vous pouvez ecrire une logique de traitement personnalisee dans un
-script. L'ensemble du script est evalue comme un seul script, ce qui permet d'utiliser des
-instructions multi-lignes, y compris, en JavaScript, des declarations de variables
-``let`` / ``const`` et des structures de controle.
+Dans les tâches planifiées, vous pouvez écrire une logique de traitement personnalisée dans un
+script. L'ensemble du script est évalué comme un seul script, ce qui permet d'utiliser des
+instructions multi-lignes, y compris, en JavaScript, des déclarations de variables
+``let`` / ``const`` et des structures de contrôle.
 
 ::
 
     return container.getComponent("crawlJob").logLevel("info").gcLogging().execute(executor);
 
-Une instruction ``return`` de niveau superieur est normalement une erreur de syntaxe en
+Une instruction ``return`` de niveau supérieur est normalement une erreur de syntaxe en
 JavaScript. Le moteur de script de |Fess| essaie d'abord de compiler le script en tant
-qu'expression, et ne le recompile en bloc d'instructions que si cela echoue. Cet exemple ne
-peut pas etre compile en tant qu'expression ; il est donc compile en bloc d'instructions et
-s'execute tel quel. Voir :doc:`scripting-javascript` pour plus de details.
+qu'expression, et ne le recompile en bloc d'instructions que si cela échoue. Cet exemple ne
+peut pas être compilé en tant qu'expression ; il est donc compilé en bloc d'instructions et
+s'exécute tel quel. Voir :doc:`scripting-javascript` pour plus de détails.
 
-Les methodes comme ``logLevel("info")`` sont des methodes de la classe du job (``ExecJob`` et ses
-sous-classes) et peuvent etre enchainées. Pour la variable ``executor``, consultez la section
-« Contexte d'execution et objets disponibles ».
+Les méthodes comme ``logLevel("info")`` sont des méthodes de la classe du job (``ExecJob`` et ses
+sous-classes) et peuvent être enchaînées. Pour la variable ``executor``, consultez la section
+« Contexte d'exécution et objets disponibles ».
 
 Syntaxe de base
 ===============
 
 Voici des exemples de syntaxe JavaScript de base. Les commentaires utilisent ``//`` (commentaire de ligne)
-ou ``/* */`` (commentaire de bloc). Notez que les commentaires commencant par ``#`` ne sont pas non plus
+ou ``/* */`` (commentaire de bloc). Notez que les commentaires commençant par ``#`` ne sont pas non plus
 utilisables en JavaScript.
 
-Acces aux variables
+Accès aux variables
 -------------------
 
 ::
@@ -145,7 +145,7 @@ Acces aux variables
     // Recuperer un composant depuis le conteneur DI
     container.getComponent("systemHelper")
 
-Manipulation de chaines
+Manipulation de chaînes
 ------------------------
 
 ::
@@ -181,71 +181,71 @@ Manipulation de dates
     // Formatage (l'interoperabilite Java utilise la meme notation qu'en Groovy)
     new java.text.SimpleDateFormat("yyyy-MM-dd").format(updated_at)
 
-Contexte d'execution et objets disponibles
+Contexte d'exécution et objets disponibles
 ===========================================
 
-Les objets disponibles dans un script dependent du contexte dans lequel il est execute.
+Les objets disponibles dans un script dépendent du contexte dans lequel il est exécuté.
 Seul ``container`` est disponible dans tous les contextes.
 
 .. list-table::
    :header-rows: 1
    :widths: 30 25 45
 
-   * - Contexte d'execution
+   * - Contexte d'exécution
      - Objets disponibles
      - Description
    * - Tous les contextes
      - ``container``
-     - Conteneur DI. Acces aux composants via ``container.getComponent("systemHelper")``
+     - Conteneur DI. Accès aux composants via ``container.getComponent("systemHelper")``
        ou ``container.getComponent("fessConfig")``
    * - Scripts Data Store
-     - Variables de champs specifiques au connecteur
-     - Chaque champ recupere du Data Store est disponible en tant que variable
-       (le nom de variable et le prefixe varient selon le connecteur ; CSV/JSON utilisent
+     - Variables de champs spécifiques au connecteur
+     - Chaque champ récupéré du Data Store est disponible en tant que variable
+       (le nom de variable et le préfixe varient selon le connecteur ; CSV/JSON utilisent
        directement le nom du champ comme variable)
    * - Mapping de chemin
      - ``url`` ``matcher``
-     - La chaine URL a transformer et le ``Matcher`` de l'expression reguliere
-       (uniquement lorsque le remplacement porte le prefixe ``(nom du moteur):`` ; le nom
-       indique, par exemple ``groovy`` ou ``javascript``, determine le langage execute)
-   * - Taches planifiees
+     - La chaîne URL à transformer et le ``Matcher`` de l'expression régulière
+       (uniquement lorsque le remplacement porte le préfixe ``(nom du moteur):`` ; le nom
+       indiqué, par exemple ``groovy`` ou ``javascript``, détermine le langage exécuté)
+   * - Tâches planifiées
      - ``executor``
-     - Instance d'execution du job (``JobExecutor``). Utilise pour controler l'arret du job
+     - Instance d'exécution du job (``JobExecutor``). Utilisé pour contrôler l'arrêt du job
 
 .. note::
-   Les objets autres que ``container`` ne sont injectes que dans des contextes specifiques.
-   Par exemple, ``executor`` n'est disponible que dans les taches planifiees et ne l'est pas
+   Les objets autres que ``container`` ne sont injectés que dans des contextes spécifiques.
+   Par exemple, ``executor`` n'est disponible que dans les tâches planifiées et ne l'est pas
    dans les scripts Data Store ni dans le mapping de chemin.
 
-Securite
+Sécurité
 ========
 
 .. warning::
-   Les scripts disposant de capacites puissantes, utilisez-les uniquement depuis des sources fiables.
+   Les scripts disposant de capacités puissantes, utilisez-les uniquement depuis des sources fiables.
 
-- Les scripts sont executes sur le serveur
-- L'acces au systeme de fichiers et au reseau est possible
+- Les scripts sont exécutés sur le serveur
+- L'accès au système de fichiers et au réseau est possible
 - Assurez-vous que seuls les utilisateurs disposant de droits d'administration peuvent modifier les scripts
-- L'execution des scripts est enregistree dans le journal d'audit (``audit.log``).
-  L'enregistrement est controle par ``script.audit.log.enabled`` (valeur par defaut : ``true``).
-  La longueur maximale de la chaine de script enregistree est controlee par
-  ``script.audit.log.max.length`` (valeur par defaut : ``100`` caracteres).
+- L'exécution des scripts est enregistrée dans le journal d'audit (``audit.log``).
+  L'enregistrement est contrôlé par ``script.audit.log.enabled`` (valeur par défaut : ``true``).
+  La longueur maximale de la chaîne de script enregistrée est contrôlée par
+  ``script.audit.log.max.length`` (valeur par défaut : ``100`` caractères).
 
 Performance
 ===========
 
 Conseils pour optimiser les performances des scripts :
 
-1. **Eviter les traitements complexes** : les scripts Data Store sont executes pour chaque document
-2. **Minimiser l'acces aux ressources externes** : les appels reseau sont source de latence
-3. **Tirer parti du cache** : envisagez la mise en cache pour les valeurs utilisees de maniere repetee
+1. **Éviter les traitements complexes** : les scripts Data Store sont exécutés pour chaque document
+2. **Minimiser l'accès aux ressources externes** : les appels réseau sont source de latence
+3. **Tirer parti du cache** : envisagez la mise en cache pour les valeurs utilisées de manière répétée
 
-Debogage
+Débogage
 ========
 
-Dans les scripts de taches planifiees, l'ensemble du script est evalue comme un seul script,
-ce qui permet d'utiliser la sortie de logs pour le debogage.
-(Les scripts Data Store evaluent chaque ligne comme une expression unique ; le traitement
+Dans les scripts de tâches planifiées, l'ensemble du script est évalué comme un seul script,
+ce qui permet d'utiliser la sortie de logs pour le débogage.
+(Les scripts Data Store évaluent chaque ligne comme une expression unique ; le traitement
 multi-lignes n'est pas utilisable.)
 
 ::
@@ -253,7 +253,7 @@ multi-lignes n'est pas utilisable.)
     const logger = org.apache.logging.log4j.LogManager.getLogger("fess.script");
     logger.info("executor = {}", executor);
 
-L'exemple ci-dessus utilise un logger nomme ``fess.script``.
+L'exemple ci-dessus utilise un logger nommé ``fess.script``.
 Pour activer la sortie de ce log, ajoutez la configuration du logger correspondant
 dans ``app/WEB-INF/classes/log4j2.xml``.
 
@@ -261,14 +261,14 @@ dans ``app/WEB-INF/classes/log4j2.xml``.
 
     <Logger name="fess.script" level="DEBUG"/>
 
-Pour activer les logs de debogage du moteur de script lui-meme, configurez le niveau de log
-du package ``org.codelibs.fess.script`` a ``DEBUG``.
+Pour activer les logs de débogage du moteur de script lui-même, configurez le niveau de log
+du package ``org.codelibs.fess.script`` à ``DEBUG``.
 
 ::
 
     <Logger name="org.codelibs.fess.script" level="DEBUG"/>
 
-Informations de reference
+Informations de référence
 ==========================
 
 - :doc:`scripting-javascript` - Guide du scripting JavaScript

@@ -2,26 +2,26 @@
 Parte 6: Hub de conocimiento para equipos de desarrollo
 =======================================================
 
-Introduccion
+Introducción
 ============
 
 Los equipos de desarrollo de software utilizan diversas herramientas en su trabajo diario.
-El codigo se almacena en repositorios Git, las especificaciones en Confluence, las tareas en Jira y la comunicacion cotidiana en Slack.
-Cada herramienta dispone de su propia funcion de busqueda, pero ante la pregunta "donde fue aquella discusion?", buscar individualmente en cada herramienta resulta ineficiente.
+El código se almacena en repositorios Git, las especificaciones en Confluence, las tareas en Jira y la comunicación cotidiana en Slack.
+Cada herramienta dispone de su propia función de búsqueda, pero ante la pregunta "¿dónde fue aquella discusión?", buscar individualmente en cada herramienta resulta ineficiente.
 
-En este articulo, construiremos un hub de conocimiento que centraliza en Fess la informacion de las herramientas que el equipo de desarrollo utiliza a diario, permitiendo realizar busquedas integradas.
+En este artículo, construiremos un hub de conocimiento que centraliza en Fess la información de las herramientas que el equipo de desarrollo utiliza a diario, permitiendo realizar búsquedas integradas.
 
 Lectores objetivo
 =================
 
-- Lideres de equipos de desarrollo de software y responsables de infraestructura
-- Personas que desean realizar busquedas transversales en herramientas de desarrollo
-- Personas que desean conocer el uso basico de los plugins de data store
+- Líderes de equipos de desarrollo de software y responsables de infraestructura
+- Personas que desean realizar búsquedas transversales en herramientas de desarrollo
+- Personas que desean conocer el uso básico de los plugins de data store
 
 Escenario
 =========
 
-Habilitaremos la busqueda integrada de la informacion de un equipo de desarrollo (20 personas).
+Habilitaremos la búsqueda integrada de la información de un equipo de desarrollo (20 personas).
 
 .. list-table:: Fuentes de datos objetivo
    :header-rows: 1
@@ -29,57 +29,57 @@ Habilitaremos la busqueda integrada de la informacion de un equipo de desarrollo
 
    * - Herramienta
      - Uso
-     - Informacion a buscar
+     - Información a buscar
    * - Repositorio Git
-     - Gestion de codigo fuente
-     - Codigo, README, archivos de configuracion
+     - Gestión de código fuente
+     - Código, README, archivos de configuración
    * - Confluence
-     - Gestion de documentos
-     - Documentos de diseno, actas de reuniones, manuales de procedimientos
+     - Gestión de documentos
+     - Documentos de diseño, actas de reuniones, manuales de procedimientos
    * - Jira
-     - Gestion de tickets
+     - Gestión de tickets
      - Reportes de errores, tareas, historias de usuario
    * - Slack
-     - Comunicacion
-     - Discusiones tecnicas, registros de decisiones
+     - Comunicación
+     - Discusiones técnicas, registros de decisiones
 
-Que es el rastreo de data store
+Qué es el rastreo de data store
 ================================
 
 El rastreo web y el rastreo de archivos recopilan documentos siguiendo URLs o rutas de archivos.
-Por otro lado, para recopilar informacion de herramientas SaaS se utiliza el "rastreo de data store".
+Por otro lado, para recopilar información de herramientas SaaS se utiliza el "rastreo de data store".
 
-El rastreo de data store obtiene datos a traves de la API de cada herramienta y los registra en el indice de Fess.
+El rastreo de data store obtiene datos a través de la API de cada herramienta y los registra en el índice de Fess.
 En Fess, se proporcionan plugins de data store para cada herramienta.
 
-Instalacion de plugins
+Instalación de plugins
 ========================
 
-Los plugins de data store se pueden instalar desde el panel de administracion de Fess.
+Los plugins de data store se pueden instalar desde el panel de administración de Fess.
 
-1. Seleccionar [Sistema] > [Plugins] en el panel de administracion
+1. Seleccionar [Sistema] > [Plugins] en el panel de administración
 2. Verificar la lista de plugins instalados
-3. Ir a la pantalla de instalacion desde el boton [Instalar] e instalar los plugins necesarios desde la pestana [Remoto]
+3. Ir a la pantalla de instalación desde el botón [Instalar] e instalar los plugins necesarios desde la pestaña [Remoto]
 
-Para el escenario de este articulo, utilizaremos los siguientes plugins.
+Para el escenario de este artículo, utilizaremos los siguientes plugins.
 
 - ``fess-ds-git``: Rastreo de repositorios Git
 - ``fess-ds-atlassian``: Rastreo de Confluence / Jira
 - ``fess-ds-slack``: Rastreo de mensajes de Slack
 
-Configuracion de cada fuente de datos
+Configuración de cada fuente de datos
 ======================================
 
-Configuracion de repositorio Git
+Configuración de repositorio Git
 ----------------------------------
 
-Rastrearemos repositorios Git para incluir codigo y documentos como objetivos de busqueda.
+Rastrearemos repositorios Git para incluir código y documentos como objetivos de búsqueda.
 
 1. [Rastreador] > [Data Store] > [Crear nuevo]
 2. Nombre del handler: Seleccionar GitDataStore
-3. Configuracion de parametros
+3. Configuración de parámetros
 
-**Ejemplo de configuracion de parametros**
+**Ejemplo de configuración de parámetros**
 
 .. code-block:: properties
 
@@ -89,7 +89,7 @@ Rastrearemos repositorios Git para incluir codigo y documentos como objetivos de
     include_pattern=.*\.(java|py|js|ts|md|rst|txt)$
     max_size=10000000
 
-**Ejemplo de configuracion de scripts**
+**Ejemplo de configuración de scripts**
 
 .. code-block:: properties
 
@@ -100,18 +100,18 @@ Rastrearemos repositorios Git para incluir codigo y documentos como objetivos de
     content_length=contentLength
     last_modified=timestamp
 
-En ``uri`` se especifica la URL del repositorio, y en ``username`` / ``password`` las credenciales de autenticacion. Para repositorios privados, se establece un token de acceso en ``password``. Con ``include_pattern`` se pueden filtrar las extensiones de archivo objetivo del rastreo mediante expresiones regulares.
+En ``uri`` se especifica la URL del repositorio, y en ``username`` / ``password`` las credenciales de autenticación. Para repositorios privados, se establece un token de acceso en ``password``. Con ``include_pattern`` se pueden filtrar las extensiones de archivo objetivo del rastreo mediante expresiones regulares.
 
-Configuracion de Confluence
+Configuración de Confluence
 -----------------------------
 
-Incluiremos las paginas y articulos de blog de Confluence como objetivos de busqueda.
+Incluiremos las páginas y artículos de blog de Confluence como objetivos de búsqueda.
 
 1. [Rastreador] > [Data Store] > [Crear nuevo]
 2. Nombre del handler: Seleccionar ConfluenceDataStore
-3. Configuracion de parametros
+3. Configuración de parámetros
 
-**Ejemplo de configuracion de parametros**
+**Ejemplo de configuración de parámetros**
 
 .. code-block:: properties
 
@@ -120,7 +120,7 @@ Incluiremos las paginas y articulos de blog de Confluence como objetivos de busq
     basic.username=user@example.com
     basic.password=your-api-token
 
-**Ejemplo de configuracion de scripts**
+**Ejemplo de configuración de scripts**
 
 .. code-block:: properties
 
@@ -129,22 +129,22 @@ Incluiremos las paginas y articulos de blog de Confluence como objetivos de busq
     content=content.body
     last_modified=content.last_modified
 
-En ``home`` se especifica la URL de Confluence y en ``auth_type`` se selecciona el metodo de autenticacion. Para Confluence Cloud se utiliza autenticacion ``basic``, configurando el token de API en ``basic.password``.
+En ``home`` se especifica la URL de Confluence y en ``auth_type`` se selecciona el método de autenticación. Para Confluence Cloud se utiliza autenticación ``basic``, configurando el token de API en ``basic.password``.
 
-Configuracion de Jira
+Configuración de Jira
 ----------------------
 
-Incluiremos los tickets (Issues) de Jira como objetivos de busqueda.
+Incluiremos los tickets (Issues) de Jira como objetivos de búsqueda.
 
 Se utiliza el handler JiraDataStore incluido en el mismo plugin ``fess-ds-atlassian``.
 Con JQL (Jira Query Language) se pueden filtrar los tickets objetivo del rastreo.
-Por ejemplo, es posible limitar el rastreo unicamente a los tickets de un proyecto especifico o solo a aquellos con un estado determinado (excluyendo los cerrados).
+Por ejemplo, es posible limitar el rastreo únicamente a los tickets de un proyecto específico o solo a aquellos con un estado determinado (excluyendo los cerrados).
 
 1. [Rastreador] > [Data Store] > [Crear nuevo]
 2. Nombre del handler: Seleccionar JiraDataStore
-3. Configuracion de parametros
+3. Configuración de parámetros
 
-**Ejemplo de configuracion de parametros**
+**Ejemplo de configuración de parámetros**
 
 .. code-block:: properties
 
@@ -154,7 +154,7 @@ Por ejemplo, es posible limitar el rastreo unicamente a los tickets de un proyec
     basic.password=your-api-token
     issue.jql=project = MYPROJ AND status != Closed
 
-**Ejemplo de configuracion de scripts**
+**Ejemplo de configuración de scripts**
 
 .. code-block:: properties
 
@@ -165,16 +165,16 @@ Por ejemplo, es posible limitar el rastreo unicamente a los tickets de un proyec
 
 En ``issue.jql`` se especifica la consulta JQL para filtrar los tickets objetivo del rastreo.
 
-Configuracion de Slack
+Configuración de Slack
 -----------------------
 
-Incluiremos los mensajes de Slack como objetivos de busqueda.
+Incluiremos los mensajes de Slack como objetivos de búsqueda.
 
 1. [Rastreador] > [Data Store] > [Crear nuevo]
 2. Nombre del handler: Seleccionar SlackDataStore
-3. Configuracion de parametros
+3. Configuración de parámetros
 
-**Ejemplo de configuracion de parametros**
+**Ejemplo de configuración de parámetros**
 
 .. code-block:: properties
 
@@ -182,7 +182,7 @@ Incluiremos los mensajes de Slack como objetivos de busqueda.
     channels=general,engineering,design
     include_private=false
 
-**Ejemplo de configuracion de scripts**
+**Ejemplo de configuración de scripts**
 
 .. code-block:: properties
 
@@ -196,19 +196,19 @@ En ``token`` se especifica el token OAuth del Bot de Slack. Con ``channels`` se 
 Uso de etiquetas
 =================
 
-Distinguir fuentes de informacion con etiquetas
+Distinguir fuentes de información con etiquetas
 -------------------------------------------------
 
-Al configurar etiquetas en cada fuente de datos, se permite alternar entre las fuentes de informacion durante la busqueda.
+Al configurar etiquetas en cada fuente de datos, se permite alternar entre las fuentes de información durante la búsqueda.
 
-- ``code``: Codigo de repositorios Git
+- ``code``: Código de repositorios Git
 - ``docs``: Documentos de Confluence
 - ``tickets``: Tickets de Jira
 - ``discussions``: Mensajes de Slack
 
-Los usuarios pueden realizar busquedas transversales con "Todos" y filtrar por etiqueta segun sea necesario.
+Los usuarios pueden realizar búsquedas transversales con "Todos" y filtrar por etiqueta según sea necesario.
 
-Mejora de la calidad de busqueda
+Mejora de la calidad de búsqueda
 =================================
 
 Uso del impulso de documentos
@@ -219,27 +219,27 @@ Por ejemplo, se pueden considerar las siguientes prioridades.
 
 1. Documentos de Confluence (especificaciones formales y manuales de procedimientos)
 2. Tickets de Jira (problemas actuales y tareas en curso)
-3. Repositorios Git (codigo y README)
+3. Repositorios Git (código y README)
 4. Mensajes de Slack (registros de discusiones)
 
-Con el impulso de documentos, se puede aumentar la puntuacion de busqueda de los documentos que coincidan con condiciones especificas.
-Desde [Rastreador] > [Impulso de documentos] en el panel de administracion, se pueden configurar valores de impulso basados en patrones de URL o etiquetas.
+Con el impulso de documentos, se puede aumentar la puntuación de búsqueda de los documentos que coincidan con condiciones específicas.
+Desde [Rastreador] > [Impulso de documentos] en el panel de administración, se pueden configurar valores de impulso basados en patrones de URL o etiquetas.
 
 Uso de contenido relacionado
 ------------------------------
 
-Al mostrar "contenido relacionado" en los resultados de busqueda, se ayuda a los usuarios a encontrar la informacion que necesitan.
-Por ejemplo, al buscar un documento de diseno en Confluence, resulta util que los tickets de Jira relacionados se muestren como "contenido relacionado".
+Al mostrar "contenido relacionado" en los resultados de búsqueda, se ayuda a los usuarios a encontrar la información que necesitan.
+Por ejemplo, al buscar un documento de diseño en Confluence, resulta útil que los tickets de Jira relacionados se muestren como "contenido relacionado".
 
 Consideraciones operativas
 ===========================
 
-Programacion del rastreo
+Programación del rastreo
 --------------------------
 
 Se configura una frecuencia de rastreo apropiada para cada fuente de datos.
 
-.. list-table:: Ejemplo de programacion
+.. list-table:: Ejemplo de programación
    :header-rows: 1
    :widths: 25 25 50
 
@@ -248,7 +248,7 @@ Se configura una frecuencia de rastreo apropiada para cada fuente de datos.
      - Motivo
    * - Confluence
      - Cada 4 horas
-     - La frecuencia de actualizacion de documentos es moderada
+     - La frecuencia de actualización de documentos es moderada
    * - Jira
      - Cada 2 horas
      - Las actualizaciones de tickets son frecuentes
@@ -259,40 +259,40 @@ Se configura una frecuencia de rastreo apropiada para cada fuente de datos.
      - Cada 4 horas
      - No se requiere tiempo real, pero la frescura es importante
 
-Manejo de limites de tasa de API
+Manejo de límites de tasa de API
 ----------------------------------
 
-Las API de herramientas SaaS tienen limites de tasa.
-Se deben configurar intervalos de rastreo apropiados para no exceder los limites de tasa de la API.
-En particular, la API de Slack tiene limites de tasa estrictos, por lo que es importante dejar un margen en los intervalos de rastreo.
+Las API de herramientas SaaS tienen límites de tasa.
+Se deben configurar intervalos de rastreo apropiados para no exceder los límites de tasa de la API.
+En particular, la API de Slack tiene límites de tasa estrictos, por lo que es importante dejar un margen en los intervalos de rastreo.
 
-Gestion de tokens de acceso
+Gestión de tokens de acceso
 -----------------------------
 
-La configuracion de los plugins de data store requiere tokens de acceso a la API de cada herramienta.
+La configuración de los plugins de data store requiere tokens de acceso a la API de cada herramienta.
 Desde el punto de vista de la seguridad, tenga en cuenta los siguientes aspectos.
 
-- Principio de minimo privilegio: Utilizar tokens de acceso de solo lectura
-- Rotacion periodica: Actualizar los tokens regularmente
+- Principio de mínimo privilegio: Utilizar tokens de acceso de solo lectura
+- Rotación periódica: Actualizar los tokens regularmente
 - Uso de cuentas dedicadas: Utilizar cuentas de servicio en lugar de cuentas personales
 
 Resumen
 ========
 
-En este articulo, construimos un hub de conocimiento que centraliza en Fess la informacion de las herramientas que el equipo de desarrollo utiliza a diario, permitiendo realizar busquedas integradas.
+En este artículo, construimos un hub de conocimiento que centraliza en Fess la información de las herramientas que el equipo de desarrollo utiliza a diario, permitiendo realizar búsquedas integradas.
 
-- Recopilacion de datos de Git, Confluence, Jira y Slack mediante plugins de data store
-- Experiencia de busqueda amigable para desarrolladores mediante etiquetas
-- Control de la prioridad de la informacion con impulso de documentos
-- Consideraciones operativas como limites de tasa de API y gestion de tokens
+- Recopilación de datos de Git, Confluence, Jira y Slack mediante plugins de data store
+- Experiencia de búsqueda amigable para desarrolladores mediante etiquetas
+- Control de la prioridad de la información con impulso de documentos
+- Consideraciones operativas como límites de tasa de API y gestión de tokens
 
-Con el hub de conocimiento del equipo de desarrollo, se logra un entorno donde es posible responder rapidamente a preguntas como "donde fue aquella discusion?" o "donde esta esa especificacion?".
+Con el hub de conocimiento del equipo de desarrollo, se logra un entorno donde es posible responder rápidamente a preguntas como "¿dónde fue aquella discusión?" o "donde esta esa especificación?".
 
-En el proximo articulo, abordaremos la busqueda transversal en almacenamiento en la nube.
+En el próximo artículo, abordaremos la búsqueda transversal en almacenamiento en la nube.
 
 Referencias
 ============
 
-- `Configuracion de data store de Fess <https://fess.codelibs.org/ja/15.5/admin/dataconfig.html>`__
+- `Configuración de data store de Fess <https://fess.codelibs.org/ja/15.5/admin/dataconfig.html>`__
 
-- `Gestion de plugins de Fess <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__
+- `Gestión de plugins de Fess <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__

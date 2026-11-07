@@ -1,24 +1,24 @@
 ============================================================
-Partie 7 : Strategies de recherche a l'ere du stockage cloud
+Partie 7 : Stratégies de recherche à l'ère du stockage cloud
 ============================================================
 
 Introduction
 ============
 
-Dans de nombreuses entreprises, l'utilisation du stockage cloud est devenue une evidence.
-Cependant, il n'est pas rare que differents services cloud soient utilises selon les departements ou les usages.
-Le temps passe a se demander "Ce fichier est-il sur Google Drive, SharePoint ou Box ?" nuit a la productivite.
+Dans de nombreuses entreprises, l'utilisation du stockage cloud est devenue une évidence.
+Cependant, il n'est pas rare que différents services cloud soient utilisés selon les départements ou les usages.
+Le temps passé à se demander "Ce fichier est-il sur Google Drive, SharePoint ou Box ?" nuit à la productivité.
 
-Dans cet article, nous allons integrer plusieurs services de stockage cloud avec Fess et mettre en place un environnement permettant de rechercher tous les fichiers cloud de maniere transversale depuis une seule barre de recherche.
+Dans cet article, nous allons intégrer plusieurs services de stockage cloud avec Fess et mettre en place un environnement permettant de rechercher tous les fichiers cloud de manière transversale depuis une seule barre de recherche.
 
 Public cible
 ============
 
 - Administrateurs d'organisations utilisant plusieurs services de stockage cloud
-- Personnes confrontees a des difficultes de recherche dans le stockage cloud
-- Personnes ayant une comprehension des concepts de base de l'authentification OAuth
+- Personnes confrontées à des difficultés de recherche dans le stockage cloud
+- Personnes ayant une compréhension des concepts de base de l'authentification OAuth
 
-Scenario
+Scénario
 ========
 
 Une entreprise utilise les services de stockage cloud suivants.
@@ -28,44 +28,44 @@ Une entreprise utilise les services de stockage cloud suivants.
    :widths: 25 35 40
 
    * - Service
-     - Departement utilisateur
+     - Département utilisateur
      - Usage principal
    * - Google Drive
      - Service commercial et marketing
      - Propositions, rapports, feuilles de calcul
    * - SharePoint Online
      - Ensemble de l'entreprise
-     - Portail interne, documents partages
+     - Portail interne, documents partagés
    * - Box
-     - Service juridique et comptabilite
+     - Service juridique et comptabilité
      - Contrats, factures, documents confidentiels
 
-Preparation de l'integration du stockage cloud
+Préparation de l'intégration du stockage cloud
 ================================================
 
 Installation des plugins de data store
 --------------------------------------
 
-Les plugins suivants sont utilises pour le crawl des services de stockage cloud.
+Les plugins suivants sont utilisés pour le crawl des services de stockage cloud.
 
 - ``fess-ds-gsuite``: Crawl de Google Drive / Google Workspace
 - ``fess-ds-microsoft365``: Crawl de SharePoint Online / OneDrive
 - ``fess-ds-box``: Crawl de Box
 
-L'installation s'effectue depuis l'ecran d'administration via [Systeme] > [Plugins].
+L'installation s'effectue depuis l'écran d'administration via [Système] > [Plugins].
 
 Configuration de l'authentification OAuth
 ------------------------------------------
 
-Pour acceder aux API des services de stockage cloud, la configuration de l'authentification OAuth est necessaire.
+Pour accéder aux API des services de stockage cloud, la configuration de l'authentification OAuth est nécessaire.
 Dans la console d'administration de chaque service, enregistrez une application et obtenez l'identifiant client et le secret.
 
-**Procedure commune**
+**Procédure commune**
 
 1. Enregistrer une application dans la console d'administration de chaque service
-2. Configurer les scopes API (permissions) necessaires (l'acces en lecture seule est suffisant)
+2. Configurer les scopes API (permissions) nécessaires (l'accès en lecture seule est suffisant)
 3. Obtenir l'identifiant client et le secret client
-4. Configurer ces informations dans les parametres de data store de Fess
+4. Configurer ces informations dans les paramètres de data store de Fess
 
 Configuration de chaque service
 ================================
@@ -75,21 +75,21 @@ Configuration de Google Drive
 
 Nous allons ajouter les fichiers Google Drive aux cibles de recherche.
 
-**Preparation dans Google Cloud Console**
+**Préparation dans Google Cloud Console**
 
-1. Creer un projet dans Google Cloud Console
+1. Créer un projet dans Google Cloud Console
 2. Activer l'API Google Drive
-3. Creer un compte de service et telecharger le fichier de cle JSON
+3. Créer un compte de service et télécharger le fichier de clé JSON
 4. Configurer le partage du compte de service sur les drives ou dossiers cibles
 
 **Configuration dans Fess**
 
 1. [Crawler] > [Data Store] > [Nouveau]
-2. Nom du handler : selectionner GoogleDriveDataStore
-3. Configuration des parametres et des scripts
-4. Label : definir ``google-drive``
+2. Nom du handler : sélectionner GoogleDriveDataStore
+3. Configuration des paramètres et des scripts
+4. Label : définir ``google-drive``
 
-**Exemple de configuration des parametres**
+**Exemple de configuration des paramètres**
 
 .. code-block:: properties
 
@@ -111,27 +111,27 @@ Nous allons ajouter les fichiers Google Drive aux cibles de recherche.
     content_length=size
     last_modified=modified_time
 
-Definissez les valeurs ``private_key``, ``private_key_id`` et ``client_email`` a partir du fichier de cle JSON du compte de service. Les formats proprietaires Google tels que Google Docs, Sheets et Slides peuvent egalement etre extraits et recherches sous forme de texte.
+Définissez les valeurs ``private_key``, ``private_key_id`` et ``client_email`` à partir du fichier de clé JSON du compte de service. Les formats propriétaires Google tels que Google Docs, Sheets et Slides peuvent également être extraits et recherchés sous forme de texte.
 
 Configuration de SharePoint Online
 ------------------------------------
 
-Nous allons ajouter les bibliotheques de documents SharePoint Online aux cibles de recherche.
+Nous allons ajouter les bibliothèques de documents SharePoint Online aux cibles de recherche.
 
-**Preparation dans Entra ID (Azure AD)**
+**Préparation dans Entra ID (Azure AD)**
 
 1. Enregistrer une application dans Entra ID
 2. Configurer les permissions de l'API Microsoft Graph (Sites.Read.All, etc.)
-3. Creer un secret client ou un certificat
+3. Créer un secret client ou un certificat
 
 **Configuration dans Fess**
 
 1. [Crawler] > [Data Store] > [Nouveau]
-2. Nom du handler : selectionner SharePointDocLibDataStore (pour les bibliotheques de documents. Selon l'usage, SharePointListDataStore, SharePointPageDataStore ou OneDriveDataStore sont egalement disponibles)
-3. Configuration des parametres et des scripts
-4. Label : definir ``sharepoint``
+2. Nom du handler : sélectionner SharePointDocLibDataStore (pour les bibliothèques de documents. Selon l'usage, SharePointListDataStore, SharePointPageDataStore ou OneDriveDataStore sont également disponibles)
+3. Configuration des paramètres et des scripts
+4. Label : définir ``sharepoint``
 
-**Exemple de configuration des parametres**
+**Exemple de configuration des paramètres**
 
 .. code-block:: properties
 
@@ -149,27 +149,27 @@ Nous allons ajouter les bibliotheques de documents SharePoint Online aux cibles 
     content=content
     last_modified=modified
 
-Definissez ``tenant``, ``client_id`` et ``client_secret`` avec les valeurs obtenues lors de l'enregistrement de l'application dans Entra ID. En specifiant ``site_id``, seul un site particulier sera crawle. Si cette valeur est omise, tous les sites accessibles seront inclus.
+Définissez ``tenant``, ``client_id`` et ``client_secret`` avec les valeurs obtenues lors de l'enregistrement de l'application dans Entra ID. En spécifiant ``site_id``, seul un site particulier sera crawlé. Si cette valeur est omise, tous les sites accessibles seront inclus.
 
 Configuration de Box
 ---------------------
 
 Nous allons ajouter les fichiers Box aux cibles de recherche.
 
-**Preparation dans Box Developer Console**
+**Préparation dans Box Developer Console**
 
-1. Creer une application personnalisee dans Box Developer Console
-2. Selectionner "Authentification serveur (avec identifiants client)" comme methode d'authentification
-3. Demander l'approbation de l'application a un administrateur
+1. Créer une application personnalisée dans Box Developer Console
+2. Sélectionner "Authentification serveur (avec identifiants client)" comme méthode d'authentification
+3. Demander l'approbation de l'application à un administrateur
 
 **Configuration dans Fess**
 
 1. [Crawler] > [Data Store] > [Nouveau]
-2. Nom du handler : selectionner BoxDataStore
-3. Configuration des parametres et des scripts
-4. Label : definir ``box``
+2. Nom du handler : sélectionner BoxDataStore
+3. Configuration des paramètres et des scripts
+4. Label : définir ``box``
 
-**Exemple de configuration des parametres**
+**Exemple de configuration des paramètres**
 
 .. code-block:: properties
 
@@ -192,68 +192,68 @@ Nous allons ajouter les fichiers Box aux cibles de recherche.
     content_length=size
     last_modified=modified_at
 
-Configurez les informations d'authentification de l'application personnalisee creee dans Box Developer Console. Le parametre ``supported_mimetypes`` permet de filtrer les types de fichiers a crawler a l'aide d'expressions regulieres.
+Configurez les informations d'authentification de l'application personnalisée créée dans Box Developer Console. Le paramètre ``supported_mimetypes`` permet de filtrer les types de fichiers à crawler à l'aide d'expressions régulières.
 
 Optimisation de la recherche transversale
 ==========================================
 
-Utilisation du crawl differentiel
+Utilisation du crawl différentiel
 ----------------------------------
 
-Pour le crawl des services de stockage cloud, il est plus efficace d'utiliser le crawl differentiel, qui ne recupere que les fichiers mis a jour depuis le dernier crawl, plutot que de recuperer l'ensemble des fichiers a chaque fois.
+Pour le crawl des services de stockage cloud, il est plus efficace d'utiliser le crawl différentiel, qui ne récupère que les fichiers mis à jour depuis le dernier crawl, plutôt que de récupérer l'ensemble des fichiers à chaque fois.
 
-Verifiez si l'option de crawl differentiel est disponible dans la configuration de chaque plugin.
-Le crawl differentiel permet de reduire le nombre d'appels API et de raccourcir le temps de crawl.
+Vérifiez si l'option de crawl différentiel est disponible dans la configuration de chaque plugin.
+Le crawl différentiel permet de réduire le nombre d'appels API et de raccourcir le temps de crawl.
 
-URL des resultats de recherche
+URL des résultats de recherche
 -------------------------------
 
-Pour les documents crawles depuis le stockage cloud, un clic sur le lien dans les resultats de recherche ouvre le fichier dans l'interface Web du service correspondant.
-Ce comportement est naturel pour les utilisateurs et ne necessite generalement aucune configuration particuliere.
+Pour les documents crawlés depuis le stockage cloud, un clic sur le lien dans les résultats de recherche ouvre le fichier dans l'interface Web du service correspondant.
+Ce comportement est naturel pour les utilisateurs et ne nécessite généralement aucune configuration particulière.
 
-Points d'attention operationnels
+Points d'attention opérationnels
 =================================
 
 Renouvellement des tokens OAuth
 --------------------------------
 
-Lors de l'integration avec les services de stockage cloud, il est important de surveiller la validite des tokens OAuth.
+Lors de l'intégration avec les services de stockage cloud, il est important de surveiller la validité des tokens OAuth.
 
-- **Google Drive** : dans le cas d'un compte de service, les tokens sont renouveles automatiquement
-- **SharePoint Online** : les secrets client ont une date d'expiration et doivent etre renouveles periodiquement
-- **Box** : une re-approbation de l'application peut etre necessaire
+- **Google Drive** : dans le cas d'un compte de service, les tokens sont renouvelés automatiquement
+- **SharePoint Online** : les secrets client ont une date d'expiration et doivent être renouvelés périodiquement
+- **Box** : une re-approbation de l'application peut être nécessaire
 
-Enregistrez les dates d'expiration des tokens dans un calendrier afin d'eviter l'arret du crawl en raison d'une expiration.
+Enregistrez les dates d'expiration des tokens dans un calendrier afin d'éviter l'arrêt du crawl en raison d'une expiration.
 
 Surveillance de l'utilisation des API
 --------------------------------------
 
-Les API des services de stockage cloud sont soumises a des limites d'utilisation.
-En particulier lors du crawl d'un grand nombre de fichiers, surveillez l'utilisation des API et ajustez les parametres de crawl pour ne pas depasser les limites.
+Les API des services de stockage cloud sont soumises à des limites d'utilisation.
+En particulier lors du crawl d'un grand nombre de fichiers, surveillez l'utilisation des API et ajustez les paramètres de crawl pour ne pas dépasser les limites.
 
-Permissions et securite
+Permissions et sécurité
 ------------------------
 
-Le compte de service Fess pour le stockage cloud doit etre configure avec des permissions en lecture seule.
-Les permissions en ecriture ne sont pas necessaires, conformement au principe de minimisation des risques de securite.
+Le compte de service Fess pour le stockage cloud doit être configuré avec des permissions en lecture seule.
+Les permissions en écriture ne sont pas nécessaires, conformément au principe de minimisation des risques de sécurité.
 
-De plus, en combinant cette approche avec la recherche basee sur les roles abordee dans la Partie 5, il est possible de controler les resultats de recherche en fonction du systeme de permissions du stockage cloud.
+De plus, en combinant cette approche avec la recherche basée sur les rôles abordée dans la Partie 5, il est possible de contrôler les résultats de recherche en fonction du système de permissions du stockage cloud.
 
 Conclusion
 ==========
 
-Dans cet article, nous avons integre trois services de stockage cloud -- Google Drive, SharePoint Online et Box -- avec Fess pour mettre en place un environnement de recherche transversale.
+Dans cet article, nous avons intégré trois services de stockage cloud -- Google Drive, SharePoint Online et Box -- avec Fess pour mettre en place un environnement de recherche transversale.
 
 - Configuration des plugins de data store et de l'authentification OAuth pour chaque service de stockage cloud
 - Distinction et filtrage des sources d'information par labels
-- Optimisation de l'experience de recherche grace au crawl differentiel
+- Optimisation de l'expérience de recherche grâce au crawl différentiel
 - Gestion des tokens OAuth et surveillance de l'utilisation des API
 
-Cela permet de trouver instantanement les fichiers necessaires sans avoir a se demander sur quel service cloud ils se trouvent.
+Cela permet de trouver instantanément les fichiers nécessaires sans avoir à se demander sur quel service cloud ils se trouvent.
 
-Dans le prochain article, nous aborderons le cycle de tuning pour l'amelioration continue de la qualite de recherche.
+Dans le prochain article, nous aborderons le cycle de tuning pour l'amélioration continue de la qualité de recherche.
 
-References
+Références
 ==========
 
 - `Configuration des data stores Fess <https://fess.codelibs.org/ja/15.5/admin/dataconfig.html>`__

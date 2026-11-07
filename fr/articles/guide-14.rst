@@ -1,93 +1,93 @@
 ====================================================================
-Partie 14 : Strategies de mise a l'echelle des systemes de recherche
+Partie 14 : Stratégies de mise à l'échelle des systèmes de recherche
 ====================================================================
 
 Introduction
 =============
 
-Lorsque vous deployez Fess a petite echelle, l'augmentation de l'utilisation engendre inevitablement des demandes telles que "plus de documents", "plus d'utilisateurs" et "des recherches plus rapides".
+Lorsque vous déployez Fess à petite échelle, l'augmentation de l'utilisation engendre inévitablement des demandes telles que "plus de documents", "plus d'utilisateurs" et "des recherches plus rapides".
 
-Cet article explique les strategies et les criteres de decision pour passer progressivement d'une configuration a serveur unique a petite echelle a une configuration en cluster a grande echelle.
+Cet article explique les stratégies et les critères de décision pour passer progressivement d'une configuration à serveur unique à petite échelle à une configuration en cluster à grande échelle.
 
 Public cible
 =============
 
-- Personnes planifiant l'exploitation de Fess a grande echelle
-- Personnes confrontees a des problemes de performances
+- Personnes planifiant l'exploitation de Fess à grande échelle
+- Personnes confrontées à des problèmes de performances
 - Personnes souhaitant comprendre les concepts de base des clusters OpenSearch
 
-Etapes de mise a l'echelle
+Étapes de mise à l'échelle
 ===========================
 
-La mise a l'echelle de Fess se fait generalement selon les etapes suivantes.
+La mise à l'échelle de Fess se fait généralement selon les étapes suivantes.
 
-.. list-table:: Etapes de mise a l'echelle
+.. list-table:: Étapes de mise à l'échelle
    :header-rows: 1
    :widths: 15 20 25 20 20
 
-   * - Etape
+   * - Étape
      - Configuration
      - Nombre de documents (env.)
      - Nombre d'utilisateurs (env.)
-     - Cout
+     - Coût
    * - S
      - Serveur unique
-     - Jusqu'a 1 million
-     - Jusqu'a 50
+     - Jusqu'à 1 million
+     - Jusqu'à 50
      - Faible
    * - M
-     - Configuration separee
-     - Jusqu'a 1 million
-     - Jusqu'a 500
+     - Configuration séparée
+     - Jusqu'à 1 million
+     - Jusqu'à 500
      - Moyen
    * - L
      - Configuration en cluster
-     - 1 million a 10 millions
-     - Jusqu'a plusieurs milliers
-     - Eleve
+     - 1 million à 10 millions
+     - Jusqu'à plusieurs milliers
+     - Élevé
    * - XL
      - Multi-instances
      - 10 millions ou plus
      - Plusieurs milliers ou plus
-     - Le plus eleve
+     - Le plus élevé
 
-Etape S : Configuration a serveur unique
+Étape S : Configuration à serveur unique
 ==========================================
 
-Cela correspond a la configuration Docker Compose construite dans la Partie 2.
-Fess et OpenSearch fonctionnent sur le meme serveur.
+Cela correspond à la configuration Docker Compose construite dans la Partie 2.
+Fess et OpenSearch fonctionnent sur le même serveur.
 
 Cas d'utilisation
 ------------------
 
-- Deploiement initial, PoC, organisations de petite a moyenne taille
+- Déploiement initial, PoC, organisations de petite à moyenne taille
 - Nombre de documents de 1 million ou moins
-- Peu d'utilisateurs effectuant des recherches simultanees
+- Peu d'utilisateurs effectuant des recherches simultanées
 
 Points d'optimisation
 ----------------------
 
 **Ajustement du tas JVM**
 
-Configurez la taille du tas JVM de maniere appropriee pour Fess et OpenSearch respectivement.
+Configurez la taille du tas JVM de manière appropriée pour Fess et OpenSearch respectivement.
 
-- Fess : Maximum 2 Go (par defaut ; le tas initial est de 256 Mo)
-- OpenSearch : 50 % ou moins de la memoire physique, mais pas plus de 32 Go
+- Fess : Maximum 2 Go (par défaut ; le tas initial est de 256 Mo)
+- OpenSearch : 50 % ou moins de la mémoire physique, mais pas plus de 32 Go
 
 **Pool de threads**
 
-Ajustez le nombre de threads de collecte en fonction du nombre de coeurs CPU du serveur.
+Ajustez le nombre de threads de collecte en fonction du nombre de cœurs CPU du serveur.
 
-Etape M : Configuration separee
+Étape M : Configuration séparée
 =================================
 
-Separez physiquement le serveur Fess et le serveur OpenSearch.
+Séparez physiquement le serveur Fess et le serveur OpenSearch.
 
 Cas d'utilisation
 ------------------
 
-- Lorsque le nombre d'utilisateurs effectuant des recherches simultanees augmente et que les performances de recherche pendant la collecte deviennent problematiques
-- Lorsque la memoire ou le CPU deviennent insuffisants a l'etape S
+- Lorsque le nombre d'utilisateurs effectuant des recherches simultanées augmente et que les performances de recherche pendant la collecte deviennent problématiques
+- Lorsque la mémoire ou le CPU deviennent insuffisants à l'étape S
 
 Configuration
 --------------
@@ -96,26 +96,26 @@ Configuration
 
     [Serveur Fess] <-> [Serveur OpenSearch]
 
-Modifiez la destination de connexion OpenSearch dans les parametres de Fess vers le serveur externe.
+Modifiez la destination de connexion OpenSearch dans les paramètres de Fess vers le serveur externe.
 
 Avantages
 ----------
 
-- Elimination des conflits de ressources entre Fess (traitement de collecte) et OpenSearch (traitement de recherche)
-- Attribution optimale des ressources (CPU, memoire) pour chaque serveur possible
-- Les E/S disque du serveur OpenSearch deviennent independantes
+- Élimination des conflits de ressources entre Fess (traitement de collecte) et OpenSearch (traitement de recherche)
+- Attribution optimale des ressources (CPU, mémoire) pour chaque serveur possible
+- Les E/S disque du serveur OpenSearch deviennent indépendantes
 
-Etape L : Configuration en cluster
+Étape L : Configuration en cluster
 ====================================
 
-Configurez OpenSearch en cluster pour ameliorer la redondance et les performances de recherche.
+Configurez OpenSearch en cluster pour améliorer la redondance et les performances de recherche.
 
 Cas d'utilisation
 ------------------
 
-- Nombre de documents de 1 million a 10 millions
-- Lorsque la haute disponibilite est requise
-- Lorsque l'amelioration du temps de reponse de recherche est necessaire
+- Nombre de documents de 1 million à 10 millions
+- Lorsque la haute disponibilité est requise
+- Lorsque l'amélioration du temps de réponse de recherche est nécessaire
 
 Exemple de configuration
 --------------------------
@@ -128,20 +128,20 @@ Exemple de configuration
     [Noeud OpenSearch 2] (Donnees)
     [Noeud OpenSearch 3] (Donnees)
 
-Le cluster OpenSearch distribue et replique les donnees en utilisant les concepts de shards et de replicas.
+Le cluster OpenSearch distribue et réplique les données en utilisant les concepts de shards et de replicas.
 
-**Shards** : Division de l'index et distribution sur plusieurs noeuds (traitement plus rapide par parallelisation)
+**Shards** : Division de l'index et distribution sur plusieurs nœuds (traitement plus rapide par parallélisation)
 
-**Replicas** : Conservation de copies des shards sur d'autres noeuds (redondance en cas de panne + parallelisation de la recherche)
+**Replicas** : Conservation de copies des shards sur d'autres nœuds (redondance en cas de panne + parallélisation de la recherche)
 
 Points de configuration
 -------------------------
 
-- Nombre de shards : A definir en fonction du nombre de documents et des performances de recherche (reference : 10-50 Go par shard)
+- Nombre de shards : À définir en fonction du nombre de documents et des performances de recherche (référence : 10-50 Go par shard)
 - Nombre de replicas : Au moins 1 (pour assurer la redondance)
-- Nombre de noeuds : Au moins 3 (quorum pour l'election du maitre)
+- Nombre de nœuds : Au moins 3 (quorum pour l'élection du maître)
 
-Etape XL : Configuration multi-instances
+Étape XL : Configuration multi-instances
 ==========================================
 
 Configurez plusieurs instances Fess pour distribuer le traitement de collecte et de recherche.
@@ -149,9 +149,9 @@ Configurez plusieurs instances Fess pour distribuer le traitement de collecte et
 Cas d'utilisation
 ------------------
 
-- Le nombre de documents depasse 10 millions
-- Necessite d'executer des taches de collecte massives en parallele
-- Requetes de recherche a haute frequence
+- Le nombre de documents dépasse 10 millions
+- Nécessite d'exécuter des tâches de collecte massives en parallèle
+- Requêtes de recherche à haute fréquence
 
 Exemple de configuration
 --------------------------
@@ -169,82 +169,82 @@ Exemple de configuration
       +-- [Noeud 3] (Donnees)
       +-- [Noeud 4] (Donnees)
 
-A partir de Fess 15.6, la fonctionnalite de coordinateur distribue permet le controle exclusif des operations de maintenance (telles que la reconstruction et le vidage de l'index) entre plusieurs instances Fess.
+À partir de Fess 15.6, la fonctionnalité de coordinateur distribué permet le contrôle exclusif des opérations de maintenance (telles que la reconstruction et le vidage de l'index) entre plusieurs instances Fess.
 
-Organigramme de decision pour la mise a l'echelle
+Organigramme de décision pour la mise à l'échelle
 ===================================================
 
-Lorsque des problemes de performances surviennent, identifiez la cause et envisagez des mesures correctives dans l'ordre suivant.
+Lorsque des problèmes de performances surviennent, identifiez la cause et envisagez des mesures correctives dans l'ordre suivant.
 
 **1. Lorsque la recherche est lente**
 
-- Verifiez l'etat du cluster OpenSearch
-- Verifiez l'utilisation du tas JVM
-- Verifiez la taille de l'index
-- -> Envisagez l'etape M (separation) ou l'etape L (mise en cluster)
+- Vérifiez l'état du cluster OpenSearch
+- Vérifiez l'utilisation du tas JVM
+- Vérifiez la taille de l'index
+- -> Envisagez l'étape M (séparation) ou l'étape L (mise en cluster)
 
 **2. Lorsque la collecte est lente ou ne se termine pas**
 
-- Verifiez le nombre de documents a collecter
+- Vérifiez le nombre de documents à collecter
 - Ajustez le nombre de threads et l'intervalle
-- Verifiez l'impact sur la recherche pendant la collecte
-- -> Envisagez l'etape M (separation) ou l'etape XL (instance dediee a la collecte)
+- Vérifiez l'impact sur la recherche pendant la collecte
+- -> Envisagez l'étape M (séparation) ou l'étape XL (instance dédiée à la collecte)
 
-**3. Lorsqu'il y a de nombreux acces simultanees**
+**3. Lorsqu'il y a de nombreux accès simultanés**
 
-- Surveillez le temps de reponse de recherche
-- Verifiez l'utilisation du CPU du serveur Fess
-- -> Envisagez l'etape XL (repartiteur de charge + plusieurs instances)
+- Surveillez le temps de réponse de recherche
+- Vérifiez l'utilisation du CPU du serveur Fess
+- -> Envisagez l'étape XL (répartiteur de charge + plusieurs instances)
 
 Optimisation de la JVM
 ========================
 
-A chaque etape, l'optimisation de la JVM a un impact significatif sur les performances.
+À chaque étape, l'optimisation de la JVM a un impact significatif sur les performances.
 
-Parametres principaux
+Paramètres principaux
 ----------------------
 
-.. list-table:: Parametres JVM
+.. list-table:: Paramètres JVM
    :header-rows: 1
    :widths: 25 35 40
 
-   * - Parametre
+   * - Paramètre
      - Description
-     - Valeur recommandee
+     - Valeur recommandée
    * - ``-Xmx``
      - Taille maximale du tas
-     - 50 % ou moins de la memoire physique
+     - 50 % ou moins de la mémoire physique
    * - ``-Xms``
      - Taille initiale du tas
-     - Meme valeur que ``-Xmx``
-   * - Parametres GC
-     - Methode de ramasse-miettes
-     - G1GC (par defaut)
+     - Même valeur que ``-Xmx``
+   * - Paramètres GC
+     - Méthode de ramasse-miettes
+     - G1GC (par défaut)
 
-Reference pour la taille du tas
+Référence pour la taille du tas
 ---------------------------------
 
 - 1 million ou moins : 2-4 Go
-- 1 million a 5 millions : 8 Go
-- 5 millions a 10 millions : 16 Go
-- 10 millions ou plus : 32 Go ou plus (cote OpenSearch)
+- 1 million à 5 millions : 8 Go
+- 5 millions à 10 millions : 16 Go
+- 10 millions ou plus : 32 Go ou plus (côté OpenSearch)
 
-Resume
+Résumé
 =======
 
-Cet article a presente les strategies de mise a l'echelle progressive de Fess.
+Cet article a présenté les stratégies de mise à l'échelle progressive de Fess.
 
-- **Etape S** : Serveur unique (jusqu'a 1 million de documents)
-- **Etape M** : Separation Fess / OpenSearch (jusqu'a 1 million de documents, prise en charge multi-utilisateurs)
-- **Etape L** : Mise en cluster OpenSearch (1 million a 10 millions de documents)
-- **Etape XL** : Multi-instances Fess (10 millions de documents ou plus)
-- Organigramme de decision pour la mise a l'echelle et optimisation de la JVM
+- **Étape S** : Serveur unique (jusqu'à 1 million de documents)
+- **Étape M** : Séparation Fess / OpenSearch (jusqu'à 1 million de documents, prise en charge multi-utilisateurs)
+- **Étape L** : Mise en cluster OpenSearch (1 million à 10 millions de documents)
+- **Étape XL** : Multi-instances Fess (10 millions de documents ou plus)
+- Organigramme de décision pour la mise à l'échelle et optimisation de la JVM
 
-Avec l'approche "commencer petit et grandir selon les besoins", il est possible de mettre a l'echelle en fonction des exigences tout en maitrisant les couts.
+Avec l'approche "commencer petit et grandir selon les besoins", il est possible de mettre à l'échelle en fonction des exigences tout en maîtrisant les coûts.
 
-Le prochain article traitera de l'architecture de securite.
+Le prochain article traitera de l'architecture de sécurité.
 
-References
+Références
 ===========
 
 - `Guide d'installation de Fess <https://fess.codelibs.org/ja/15.5/install/index.html>`__

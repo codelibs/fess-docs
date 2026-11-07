@@ -1,26 +1,26 @@
 ==================================================================
-Partie 11 : Etendre les systemes existants avec l'API de recherche
+Partie 11 : Étendre les systèmes existants avec l'API de recherche
 ==================================================================
 
 Introduction
 =============
 
-Fess peut etre utilise non seulement comme un systeme de recherche autonome, mais aussi comme un "microservice de recherche" qui fournit des fonctionnalites de recherche aux systemes metier existants.
+Fess peut être utilisé non seulement comme un système de recherche autonome, mais aussi comme un "microservice de recherche" qui fournit des fonctionnalités de recherche aux systèmes métier existants.
 
-Cet article presente des patrons concrets d'integration avec des systemes existants en utilisant l'API de Fess.
-Il couvre des scenarios d'integration pratiques tels que l'integration de la recherche de documents clients dans un CRM, la creation d'un widget de recherche FAQ et la construction d'un portail documentaire.
+Cet article présente des patrons concrets d'intégration avec des systèmes existants en utilisant l'API de Fess.
+Il couvre des scénarios d'intégration pratiques tels que l'intégration de la recherche de documents clients dans un CRM, la création d'un widget de recherche FAQ et la construction d'un portail documentaire.
 
 Public cible
 =============
 
-- Personnes souhaitant ajouter des fonctionnalites de recherche a des systemes metier existants
-- Personnes interessees par l'integration de systemes via l'API de Fess
-- Personnes ayant des connaissances de base en developpement d'applications web
+- Personnes souhaitant ajouter des fonctionnalités de recherche à des systèmes métier existants
+- Personnes intéressées par l'intégration de systèmes via l'API de Fess
+- Personnes ayant des connaissances de base en développement d'applications web
 
 Vue d'ensemble de l'API Fess
 ==============================
 
-Voici un resume des principales API fournies par Fess.
+Voici un résumé des principales API fournies par Fess.
 
 .. list-table:: Liste des API Fess
    :header-rows: 1
@@ -33,49 +33,49 @@ Voici un resume des principales API fournies par Fess.
      - Recherche plein texte de documents
      - ``/api/v1/documents``
    * - API de labels
-     - Recuperation des labels disponibles
+     - Récupération des labels disponibles
      - ``/api/v1/labels``
    * - API de suggestions
-     - Recuperation des candidats d'auto-completion
+     - Récupération des candidats d'auto-complétion
      - ``/api/v1/suggest-words``
    * - API de mots populaires
-     - Recuperation des mots-cles de recherche populaires
+     - Récupération des mots-clés de recherche populaires
      - ``/api/v1/popular-words``
-   * - API de sante
-     - Verification de l'etat operationnel du systeme
+   * - API de santé
+     - Vérification de l'état opérationnel du système
      - ``/api/v1/health``
    * - API d'administration
-     - Operations de configuration (CRUD)
+     - Opérations de configuration (CRUD)
      - ``/api/admin/*``
 
-Jetons d'acces
+Jetons d'accès
 ----------------
 
-Lors de l'utilisation de l'API, l'authentification par jetons d'acces est recommandee.
+Lors de l'utilisation de l'API, l'authentification par jetons d'accès est recommandée.
 
-1. Creez un jeton d'acces dans [Systeme] > [Jeton d'acces] de la console d'administration
-2. Incluez le jeton dans l'en-tete de la requete API
+1. Créez un jeton d'accès dans [Système] > [Jeton d'accès] de la console d'administration
+2. Incluez le jeton dans l'en-tête de la requête API
 
 ::
 
     Authorization: Bearer {jeton_d_acces}
 
-Des roles peuvent etre attribues aux jetons, et le controle des resultats de recherche base sur les roles s'applique egalement aux recherches effectuees via l'API.
+Des rôles peuvent être attribués aux jetons, et le contrôle des résultats de recherche basé sur les rôles s'applique également aux recherches effectuées via l'API.
 
-Patron 1 : Integration de la recherche dans un CRM
+Patron 1 : Intégration de la recherche dans un CRM
 ====================================================
 
-Scenario
+Scénario
 --------
 
-Ajouter une fonction de recherche de documents lies aux clients dans le systeme CRM utilise par l'equipe commerciale.
-Permettre la recherche transversale de propositions, comptes-rendus de reunions, contrats et plus encore depuis l'ecran client du CRM.
+Ajouter une fonction de recherche de documents liés aux clients dans le système CRM utilisé par l'équipe commerciale.
+Permettre la recherche transversale de propositions, comptes-rendus de réunions, contrats et plus encore depuis l'écran client du CRM.
 
-Approche d'implementation
+Approche d'implémentation
 --------------------------
 
-Integrer un widget de recherche dans l'ecran client du CRM.
-Envoyer le nom du client comme requete de recherche a l'API Fess et afficher les resultats dans l'ecran du CRM.
+Intégrer un widget de recherche dans l'écran client du CRM.
+Envoyer le nom du client comme requête de recherche à l'API Fess et afficher les résultats dans l'écran du CRM.
 
 .. code-block:: javascript
 
@@ -93,26 +93,26 @@ Envoyer le nom du client comme requete de recherche a l'API Fess et afficher les
       return await response.json();
     }
 
-Points cles
+Points clés
 ------------
 
-- Utilisez ``fields.label`` pour limiter les resultats aux documents lies aux ventes
-- Utilisez ``num`` pour limiter le nombre de resultats affiches (adapte a l'espace disponible dans l'ecran du CRM)
-- Il est utile de permettre la recherche non seulement par nom de client, mais aussi par nom de projet ou numero de projet
+- Utilisez ``fields.label`` pour limiter les résultats aux documents liés aux ventes
+- Utilisez ``num`` pour limiter le nombre de résultats affichés (adapté à l'espace disponible dans l'écran du CRM)
+- Il est utile de permettre la recherche non seulement par nom de client, mais aussi par nom de projet ou numéro de projet
 
 Patron 2 : Widget de recherche FAQ
 ====================================
 
-Scenario
+Scénario
 --------
 
-Ajouter un widget de recherche FAQ au systeme interne de gestion des demandes.
-Avant que les employes ne soumettent une demande, les encourager a trouver une solution par eux-memes en recherchant les FAQ pertinentes.
+Ajouter un widget de recherche FAQ au système interne de gestion des demandes.
+Avant que les employés ne soumettent une demande, les encourager à trouver une solution par eux-mêmes en recherchant les FAQ pertinentes.
 
-Approche d'implementation
+Approche d'implémentation
 --------------------------
 
-Combiner l'API de suggestions et l'API de recherche pour afficher des candidats en temps reel pendant la saisie.
+Combiner l'API de suggestions et l'API de recherche pour afficher des candidats en temps réel pendant la saisie.
 
 .. code-block:: javascript
 
@@ -127,29 +127,29 @@ Combiner l'API de suggestions et l'API de recherche pour afficher des candidats 
       return data.data;
     }
 
-L'API de suggestions est utilisee pour afficher des candidats pendant que l'utilisateur saisit des mots-cles.
-Lorsque l'utilisateur confirme un mot-cle et execute la recherche, l'API de recherche recupere des resultats de recherche detailles.
+L'API de suggestions est utilisée pour afficher des candidats pendant que l'utilisateur saisit des mots-clés.
+Lorsque l'utilisateur confirme un mot-clé et exécute la recherche, l'API de recherche récupère des résultats de recherche détaillés.
 
-Points cles
+Points clés
 ------------
 
-- La reactivite en temps reel etant cruciale pour l'API de suggestions, verifiez la vitesse de reponse
-- Gerez les categories de FAQ avec des labels et proposez un filtrage par categorie
-- Affichez les "mots-cles les plus recherches" via l'API de mots populaires pour aider les utilisateurs dans leur recherche
+- La réactivité en temps réel étant cruciale pour l'API de suggestions, vérifiez la vitesse de réponse
+- Gérez les catégories de FAQ avec des labels et proposez un filtrage par catégorie
+- Affichez les "mots-clés les plus recherchés" via l'API de mots populaires pour aider les utilisateurs dans leur recherche
 
 Patron 3 : Portail documentaire
 =================================
 
-Scenario
+Scénario
 --------
 
 Construire un portail interne de gestion de documents.
-Fournir une interface combinant la navigation par categories et la recherche plein texte.
+Fournir une interface combinant la navigation par catégories et la recherche plein texte.
 
-Approche d'implementation
+Approche d'implémentation
 --------------------------
 
-Utiliser l'API de labels pour recuperer la liste des categories et l'API de recherche pour recuperer les documents au sein de chaque categorie.
+Utiliser l'API de labels pour récupérer la liste des catégories et l'API de recherche pour récupérer les documents au sein de chaque catégorie.
 
 .. code-block:: javascript
 
@@ -178,78 +178,78 @@ Utiliser l'API de labels pour recuperer la liste des categories et l'API de rech
       return await response.json();
     }
 
-Points cles
+Points clés
 ------------
 
-- L'API de labels recupere la liste des categories de maniere dynamique (les ajouts et suppressions de labels sont immediatement refletes cote API)
-- Utilisez ``sort=last_modified.desc`` pour afficher les documents les plus recents en haut
-- La navigation sans mots-cles (recuperation de tous les elements) est egalement possible avec ``q=*``
+- L'API de labels récupère la liste des catégories de manière dynamique (les ajouts et suppressions de labels sont immédiatement reflétés côté API)
+- Utilisez ``sort=last_modified.desc`` pour afficher les documents les plus récents en haut
+- La navigation sans mots-clés (récupération de tous les éléments) est également possible avec ``q=*``
 
 Patron 4 : API d'indexation de contenu
 ========================================
 
-Scenario
+Scénario
 --------
 
-Enregistrer dans l'index Fess des donnees generees par des systemes externes (journaux, rapports, enregistrements de reponses de chatbots, etc.) pour les rendre recherchables.
+Enregistrer dans l'index Fess des données générées par des systèmes externes (journaux, rapports, enregistrements de réponses de chatbots, etc.) pour les rendre recherchables.
 
-Approche d'implementation
+Approche d'implémentation
 --------------------------
 
-Grace a l'API d'administration de Fess, il est possible d'enregistrer des documents dans l'index depuis des sources externes.
+Grâce à l'API d'administration de Fess, il est possible d'enregistrer des documents dans l'index depuis des sources externes.
 
-Utilisez le endpoint de documents de l'API d'administration pour envoyer des informations telles que le titre, l'URL et le corps du texte via une requete POST.
+Utilisez le endpoint de documents de l'API d'administration pour envoyer des informations telles que le titre, l'URL et le corps du texte via une requête POST.
 
-Points cles
+Points clés
 ------------
 
-- Efficace pour l'integration de sources de donnees qui ne peuvent pas etre obtenues par le crawl
-- Le traitement par lots peut egalement etre utilise pour enregistrer plusieurs documents en une seule fois
-- Definissez les permissions du jeton d'acces de maniere appropriee et limitez les permissions d'ecriture
+- Efficace pour l'intégration de sources de données qui ne peuvent pas être obtenues par le crawl
+- Le traitement par lots peut également être utilisé pour enregistrer plusieurs documents en une seule fois
+- Définissez les permissions du jeton d'accès de manière appropriée et limitez les permissions d'écriture
 
-Bonnes pratiques pour l'integration API
+Bonnes pratiques pour l'intégration API
 =========================================
 
 Gestion des erreurs
 --------------------
 
-Dans le cadre de l'integration API, la gestion des erreurs tenant compte des pannes reseau et de la maintenance du serveur Fess est importante.
+Dans le cadre de l'intégration API, la gestion des erreurs tenant compte des pannes réseau et de la maintenance du serveur Fess est importante.
 
-- Configuration des delais d'attente : Definissez des delais d'attente appropries pour les appels a l'API de recherche
-- Logique de nouvelles tentatives : Implementez des nouvelles tentatives pour les erreurs transitoires (environ 3 tentatives maximum)
-- Solution de repli : Fournissez un affichage alternatif lorsque Fess ne repond pas (par exemple, "Le service de recherche est actuellement indisponible")
+- Configuration des délais d'attente : Définissez des délais d'attente appropriés pour les appels à l'API de recherche
+- Logique de nouvelles tentatives : Implémentez des nouvelles tentatives pour les erreurs transitoires (environ 3 tentatives maximum)
+- Solution de repli : Fournissez un affichage alternatif lorsque Fess ne répond pas (par exemple, "Le service de recherche est actuellement indisponible")
 
-Considerations de performance
+Considérations de performance
 -------------------------------
 
-- Mise en cache des reponses : Mettez en cache les resultats de la meme requete pendant une courte periode
-- Limitation du nombre de resultats : Recuperez uniquement le nombre de resultats necessaire (parametre ``num``)
-- Specification des champs : Recuperez uniquement les champs necessaires pour reduire la taille de la reponse
+- Mise en cache des réponses : Mettez en cache les résultats de la même requête pendant une courte période
+- Limitation du nombre de résultats : Récupérez uniquement le nombre de résultats nécessaire (paramètre ``num``)
+- Spécification des champs : Récupérez uniquement les champs nécessaires pour réduire la taille de la réponse
 
-Securite
+Sécurité
 ---------
 
 - Utilisation de la communication HTTPS
-- Rotation des jetons d'acces
-- Definir les permissions des jetons au minimum necessaire (par exemple, lecture seule)
-- Configurer CORS de maniere appropriee
+- Rotation des jetons d'accès
+- Définir les permissions des jetons au minimum nécessaire (par exemple, lecture seule)
+- Configurer CORS de manière appropriée
 
-Synthese
+Synthèse
 =========
 
-Cet article a presente des patrons d'integration avec des systemes existants en utilisant l'API de Fess.
+Cet article a présenté des patrons d'intégration avec des systèmes existants en utilisant l'API de Fess.
 
-- **Integration CRM** : Recherche de documents associes depuis l'ecran client
-- **Widget FAQ** : Affichage de candidats en temps reel avec suggestions + recherche
-- **Portail documentaire** : Navigation par categories via l'API de labels
-- **Indexation de contenu** : Enregistrement de donnees externes via l'API
+- **Intégration CRM** : Recherche de documents associés depuis l'écran client
+- **Widget FAQ** : Affichage de candidats en temps réel avec suggestions + recherche
+- **Portail documentaire** : Navigation par catégories via l'API de labels
+- **Indexation de contenu** : Enregistrement de données externes via l'API
 
-L'API de Fess est basee sur REST et simple, ce qui facilite l'integration avec divers systemes.
-La possibilite d'ajouter des fonctionnalites de recherche aux systemes existants en tant qu'ajout ulterieur est l'un des plus grands atouts de Fess.
+L'API de Fess est basée sur REST et simple, ce qui facilite l'intégration avec divers systèmes.
+La possibilité d'ajouter des fonctionnalités de recherche aux systèmes existants en tant qu'ajout ultérieur est l'un des plus grands atouts de Fess.
 
-Dans le prochain article, nous aborderons les scenarios permettant de rendre recherchables les donnees de SaaS et de bases de donnees.
+Dans le prochain article, nous aborderons les scénarios permettant de rendre recherchables les données de SaaS et de bases de données.
 
-References
+Références
 ==========
 
 - `API de recherche Fess <https://fess.codelibs.org/ja/15.5/api/api-search.html>`__

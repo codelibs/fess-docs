@@ -239,7 +239,7 @@ Crawl-Zeitplan
 
 Legen Sie für jede Datenquelle eine angemessene Crawl-Häufigkeit fest.
 
-.. list-table:: Beispiel fuer einen Zeitplan
+.. list-table:: Beispiel für einen Zeitplan
    :header-rows: 1
    :widths: 25 25 50
 

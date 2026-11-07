@@ -13,7 +13,7 @@ Diese 23-teilige Serie behandelt alles von der Fess-Einführung bis zur KI-Integ
 - :doc:`articles/guide-01` - Warum Unternehmen Volltextsuche benötigen und welche Herausforderungen bei verteilten Informationen bestehen
 - :doc:`articles/guide-02` - Schnellstart: Fess mit Docker Compose in wenigen Minuten starten und Suche erleben
 - :doc:`articles/guide-03` - Drei Muster für die Einbettung von Such-Widgets in bestehende Websites
-- :doc:`articles/guide-04` - Quellenübergreifende Suche über Dateiserver und Cloud-Speicher aufbauen
+- :doc:`articles/guide-04` - Qüllenübergreifende Suche über Dateiserver und Cloud-Speicher aufbauen
 - :doc:`articles/guide-05` - Suchergebnisse nach Rolle, Label, Abteilung und Berechtigungen filtern
 
 **Praxislösungen (Für Fortgeschrittene)**

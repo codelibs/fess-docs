@@ -5,177 +5,177 @@ Partie 18 : Fondamentaux de la recherche IA
 Introduction
 =============
 
-Dans les articles precedents, nous nous sommes concentres sur la recherche en texte integral basee sur les mots-cles.
-La recherche en texte integral est tres efficace lorsque les utilisateurs peuvent saisir les mots-cles appropries.
-Cependant, il existe des cas ou la recherche par mots-cles seule ne peut pas repondre adequatement a des besoins tels que "je ne sais pas quels mots-cles utiliser" ou "je souhaite obtenir une reponse a une question conceptuelle".
+Dans les articles précédents, nous nous sommes concentrés sur la recherche en texte intégral basée sur les mots-clés.
+La recherche en texte intégral est très efficace lorsque les utilisateurs peuvent saisir les mots-clés appropriés.
+Cependant, il existe des cas où la recherche par mots-clés seule ne peut pas répondre adéquatement à des besoins tels que "je ne sais pas quels mots-clés utiliser" ou "je souhaite obtenir une réponse à une question conceptuelle".
 
-Cet article organise le spectre des technologies de recherche et explique comment la recherche evolue de la recherche par mots-cles vers la recherche semantique.
+Cet article organise le spectre des technologies de recherche et explique comment la recherche évolue de la recherche par mots-clés vers la recherche sémantique.
 
 Public cible
 =============
 
-- Personnes interessees par la recherche IA qui souhaitent organiser les concepts
-- Personnes envisageant l'introduction de la recherche semantique
-- Personnes souhaitant comprendre les fonctionnalites liees a l'IA de Fess
+- Personnes intéressées par la recherche IA qui souhaitent organiser les concepts
+- Personnes envisageant l'introduction de la recherche sémantique
+- Personnes souhaitant comprendre les fonctionnalités liées à l'IA de Fess
 
 Spectre des technologies de recherche
 =======================================
 
-Les technologies de recherche forment un spectre allant du simple au plus avance, comme presente ci-dessous.
+Les technologies de recherche forment un spectre allant du simple au plus avancé, comme présenté ci-dessous.
 
 .. list-table:: Spectre des technologies de recherche
    :header-rows: 1
    :widths: 20 35 45
 
    * - Technologie
-     - Mecanisme
-     - Caracteristiques
-   * - Recherche par mots-cles
+     - Mécanisme
+     - Caractéristiques
+   * - Recherche par mots-clés
      - Compare les termes saisis avec les termes des documents
-     - Rapide et fiable. Necessite une correspondance exacte des termes
+     - Rapide et fiable. Nécessite une correspondance exacte des termes
    * - Recherche floue
-     - Compare egalement les termes ayant une orthographe similaire
+     - Compare également les termes ayant une orthographe similaire
      - Gestion des fautes de frappe
    * - Recherche par synonymes
-     - Etend les synonymes pour la comparaison
+     - Étend les synonymes pour la comparaison
      - Gestion des variantes de notation (configuration manuelle)
-   * - Recherche semantique
-     - Compare sur la base de la similarite semantique
-     - Trouve des documents lies meme sans correspondance de termes
+   * - Recherche sémantique
+     - Compare sur la base de la similarité sémantique
+     - Trouve des documents liés même sans correspondance de termes
    * - Recherche hybride
-     - Combinaison de la recherche par mots-cles et semantique
+     - Combinaison de la recherche par mots-clés et sémantique
      - Exploite les forces des deux approches
 
-Limites de la recherche par mots-cles
+Limites de la recherche par mots-clés
 =======================================
 
-La recherche par mots-cles est efficace dans de nombreuses situations, mais ses limites apparaissent dans les cas suivants.
+La recherche par mots-clés est efficace dans de nombreuses situations, mais ses limites apparaissent dans les cas suivants.
 
-Decalage de vocabulaire
+Décalage de vocabulaire
 -------------------------
 
-Cela se produit lorsque les mots utilises par les utilisateurs different de ceux utilises dans les documents.
+Cela se produit lorsque les mots utilisés par les utilisateurs diffèrent de ceux utilisés dans les documents.
 
-Exemple : Meme si un utilisateur recherche "je veux changer la destination du virement de mon salaire", si le document interne utilise le terme "procedure de changement de compte salarial", les mots-cles peuvent ne pas correspondre.
+Exemple : Même si un utilisateur recherche "je veux changer la destination du virement de mon salaire", si le document interne utilise le terme "procédure de changement de compte salarial", les mots-clés peuvent ne pas correspondre.
 
-Cela peut etre partiellement resolu avec les synonymes (voir Partie 8), mais il n'est pas realiste d'enregistrer toutes les combinaisons de vocabulaire possibles a l'avance.
+Cela peut être partiellement résolu avec les synonymes (voir Partie 8), mais il n'est pas réaliste d'enregistrer toutes les combinaisons de vocabulaire possibles à l'avance.
 
 Recherche conceptuelle
 ------------------------
 
-C'est le cas ou les utilisateurs souhaitent effectuer une recherche par concept plutot que par mots-cles specifiques, comme "regles internes sur le teletravail".
-Dans ce cas, divers documents lies peuvent etre pertinents, y compris ceux portant sur le "travail a domicile", le "teletravail", les "regles de presence au bureau" et la "gestion du temps de travail".
+C'est le cas où les utilisateurs souhaitent effectuer une recherche par concept plutôt que par mots-clés spécifiques, comme "règles internes sur le télétravail".
+Dans ce cas, divers documents liés peuvent être pertinents, y compris ceux portant sur le "travail à domicile", le "télétravail", les "règles de présence au bureau" et la "gestion du temps de travail".
 
-Fonctionnement de la recherche semantique
+Fonctionnement de la recherche sémantique
 ============================================
 
-Representation vectorielle (Embedding)
+Représentation vectorielle (Embedding)
 -----------------------------------------
 
-Le fondement de la recherche semantique est la conversion du texte en "vecteurs (tableaux de nombres)".
-Ces vecteurs sont des representations mathematiques du "sens" du texte.
+Le fondement de la recherche sémantique est la conversion du texte en "vecteurs (tableaux de nombres)".
+Ces vecteurs sont des représentations mathématiques du "sens" du texte.
 
-Les textes ayant des significations similaires sont places pres les uns des autres dans l'espace vectoriel.
-Par exemple, les vecteurs de "chien" et "animal de compagnie" sont proches, tandis que les vecteurs de "chien" et "automobile" sont eloignes.
+Les textes ayant des significations similaires sont placés près les uns des autres dans l'espace vectoriel.
+Par exemple, les vecteurs de "chien" et "animal de compagnie" sont proches, tandis que les vecteurs de "chien" et "automobile" sont éloignés.
 
 Fonctionnement de la recherche
 ---------------------------------
 
-1. L'utilisateur saisit une requete de recherche
-2. La requete est convertie en vecteur
-3. La similarite avec les vecteurs de documents dans l'index est calculee
-4. Les documents sont renvoyes par ordre de similarite decroissante
+1. L'utilisateur saisit une requête de recherche
+2. La requête est convertie en vecteur
+3. La similarité avec les vecteurs de documents dans l'index est calculée
+4. Les documents sont renvoyés par ordre de similarité décroissante
 
-Cela permet de trouver des documents semantiquement lies meme lorsque les mots-cles ne correspondent pas exactement.
+Cela permet de trouver des documents sémantiquement liés même lorsque les mots-clés ne correspondent pas exactement.
 
-Recherche semantique dans Fess
+Recherche sémantique dans Fess
 =================================
 
-Fess peut realiser une recherche basee sur les vecteurs grace a des plugins de recherche semantique.
+Fess peut réaliser une recherche basée sur les vecteurs grâce à des plugins de recherche sémantique.
 
-Activation de la recherche semantique
+Activation de la recherche sémantique
 ----------------------------------------
 
-1. Installer le plugin de recherche semantique
-2. Configurer le modele d'embedding
+1. Installer le plugin de recherche sémantique
+2. Configurer le modèle d'embedding
 3. Reconstruire l'index (vectoriser les documents existants)
 
-Choix du modele d'embedding
+Choix du modèle d'embedding
 ------------------------------
 
-Selectionnez un modele (modele d'embedding) pour convertir le texte en vecteurs.
+Sélectionnez un modèle (modèle d'embedding) pour convertir le texte en vecteurs.
 
-Les criteres de selection sont les suivants :
+Les critères de sélection sont les suivants :
 
-- **Support linguistique** : Capacite a traiter correctement la langue cible
-- **Precision** : Qualite des vecteurs (precision de la capture semantique)
-- **Vitesse** : Temps necessaire a la conversion
-- **Cout** : Frais d'utilisation de l'API, exigences materielles
+- **Support linguistique** : Capacité à traiter correctement la langue cible
+- **Précision** : Qualité des vecteurs (précision de la capture sémantique)
+- **Vitesse** : Temps nécessaire à la conversion
+- **Coût** : Frais d'utilisation de l'API, exigences matérielles
 
 Recherche hybride : Rank Fusion
 ==================================
 
-La recherche semantique est puissante, mais pas omnipotente.
-Pour la recherche de noms propres ou dans les cas necessitant une correspondance exacte, la recherche par mots-cles est plus appropriee.
+La recherche sémantique est puissante, mais pas omnipotente.
+Pour la recherche de noms propres ou dans les cas nécessitant une correspondance exacte, la recherche par mots-clés est plus appropriée.
 
 Le concept de recherche hybride
 ---------------------------------
 
-La recherche hybride execute a la fois la recherche par mots-cles et la recherche semantique, puis integre les resultats.
+La recherche hybride exécute à la fois la recherche par mots-clés et la recherche sémantique, puis intègre les résultats.
 
-Fess utilise le Rank Fusion pour fusionner les resultats de differentes methodes de recherche.
-Concretement, l'algorithme RRF (Reciprocal Rank Fusion) garantit que les documents bien classes dans les deux resultats de recherche se retrouvent finalement en tete du classement.
+Fess utilise le Rank Fusion pour fusionner les résultats de différentes méthodes de recherche.
+Concrètement, l'algorithme RRF (Reciprocal Rank Fusion) garantit que les documents bien classés dans les deux résultats de recherche se retrouvent finalement en tête du classement.
 
 Avantages de la recherche hybride
 ------------------------------------
 
-- Combine la "fiabilite" de la recherche par mots-cles avec la "flexibilite" de la recherche semantique
-- Les noms propres sont couverts par la recherche par mots-cles
-- Les recherches conceptuelles sont couvertes par la recherche semantique
-- La qualite globale de la recherche s'ameliore par rapport a l'utilisation d'une seule methode
+- Combine la "fiabilité" de la recherche par mots-clés avec la "flexibilité" de la recherche sémantique
+- Les noms propres sont couverts par la recherche par mots-clés
+- Les recherches conceptuelles sont couvertes par la recherche sémantique
+- La qualité globale de la recherche s'améliore par rapport à l'utilisation d'une seule méthode
 
-Criteres d'adoption
+Critères d'adoption
 =====================
 
-La recherche semantique ne doit pas necessairement etre introduite dans tous les environnements.
+La recherche sémantique ne doit pas nécessairement être introduite dans tous les environnements.
 
-Cas ou l'adoption devrait etre envisagee
+Cas où l'adoption devrait être envisagée
 -------------------------------------------
 
-- Il y a de nombreuses "requetes sans resultats" dans les journaux de recherche
-- Les utilisateurs signalent qu'ils "ne connaissent pas les bons mots-cles"
-- Vous souhaitez prendre en charge les questions en langage naturel (un prerequis pour le RAG dans la Partie 19)
-- Vous souhaitez ameliorer la recherche interlinguistique pour les documents multilingues
+- Il y a de nombreuses "requêtes sans résultats" dans les journaux de recherche
+- Les utilisateurs signalent qu'ils "ne connaissent pas les bons mots-clés"
+- Vous souhaitez prendre en charge les questions en langage naturel (un prérequis pour le RAG dans la Partie 19)
+- Vous souhaitez améliorer la recherche interlinguistique pour les documents multilingues
 
-Cas ou elle n'est pas encore necessaire
+Cas où elle n'est pas encore nécessaire
 -----------------------------------------
 
-- Une qualite de recherche suffisante est obtenue avec la recherche par mots-cles + synonymes
-- Le nombre de documents est faible et les utilisateurs connaissent les mots-cles appropries
-- Les ressources de calcul (GPU ou couts d'API cloud) sont limitees
+- Une qualité de recherche suffisante est obtenue avec la recherche par mots-clés + synonymes
+- Le nombre de documents est faible et les utilisateurs connaissent les mots-clés appropriés
+- Les ressources de calcul (GPU ou coûts d'API cloud) sont limitées
 
 Adoption progressive
 ----------------------
 
-1. D'abord, ameliorer la qualite avec la recherche par mots-cles + synonymes (Partie 8)
-2. Si les requetes sans resultats restent frequentes, envisager la recherche semantique
-3. Utiliser la recherche hybride pour beneficier des deux approches
+1. D'abord, améliorer la qualité avec la recherche par mots-clés + synonymes (Partie 8)
+2. Si les requêtes sans résultats restent fréquentes, envisager la recherche sémantique
+3. Utiliser la recherche hybride pour bénéficier des deux approches
 
-Resume
+Résumé
 =======
 
-Cet article a organise le chemin d'evolution de la recherche par mots-cles vers la recherche semantique.
+Cet article a organisé le chemin d'évolution de la recherche par mots-clés vers la recherche sémantique.
 
-- Le spectre des technologies de recherche (mots-cles -> floue -> synonymes -> semantique -> hybride)
-- Le fonctionnement de la recherche semantique (representation vectorielle et calcul de similarite)
-- La recherche semantique et la recherche hybride dans Fess (Rank Fusion)
-- Les criteres d'adoption et une approche progressive
+- Le spectre des technologies de recherche (mots-clés -> floue -> synonymes -> sémantique -> hybride)
+- Le fonctionnement de la recherche sémantique (représentation vectorielle et calcul de similarité)
+- La recherche sémantique et la recherche hybride dans Fess (Rank Fusion)
+- Les critères d'adoption et une approche progressive
 
-Dans le prochain article, nous developperons davantage la recherche semantique et construirons un assistant IA utilisant le RAG.
+Dans le prochain article, nous développerons davantage la recherche sémantique et construirons un assistant IA utilisant le RAG.
 
-References
+Références
 ==========
 
-- `Fonctionnalites de recherche IA de Fess <https://fess.codelibs.org/ja/15.5/config/rag-chat.html>`__
+- `Fonctionnalités de recherche IA de Fess <https://fess.codelibs.org/ja/15.5/config/rag-chat.html>`__
 
 - `Recherche vectorielle OpenSearch <https://opensearch.org/docs/latest/search-plugins/knn/>`__

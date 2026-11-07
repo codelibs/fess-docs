@@ -1,38 +1,38 @@
 ========================================================================================
-Partie 23 : Plan directeur d'une plateforme de connaissances a l'echelle de l'entreprise
+Partie 23 : Plan directeur d'une plateforme de connaissances à l'échelle de l'entreprise
 ========================================================================================
 
 Introduction
 ============
 
-En tant que dernier volet de cette serie, nous integrons tous les elements abordes au cours des 22 parties precedentes et presentons une architecture de reference pour une plateforme de connaissances a l'echelle de l'entreprise centree sur Fess.
+En tant que dernier volet de cette série, nous intégrons tous les éléments abordés au cours des 22 parties précédentes et présentons une architecture de référence pour une plateforme de connaissances à l'échelle de l'entreprise centrée sur Fess.
 
-Plutot que de nous concentrer sur des fonctionnalites ou des scenarios individuels, nous resumons d'un point de vue strategique : comment concevoir et faire evoluer une infrastructure de recherche pour l'ensemble de l'organisation.
+Plutôt que de nous concentrer sur des fonctionnalités ou des scénarios individuels, nous résumons d'un point de vue stratégique : comment concevoir et faire évoluer une infrastructure de recherche pour l'ensemble de l'organisation.
 
 Public cible
 =============
 
-- Les personnes responsables de la conception d'une infrastructure de recherche a l'echelle de l'entreprise
-- Les personnes souhaitant elaborer un plan d'adoption progressif pour une plateforme de recherche
-- Les personnes souhaitant mettre en pratique les connaissances acquises tout au long de cette serie
+- Les personnes responsables de la conception d'une infrastructure de recherche à l'échelle de l'entreprise
+- Les personnes souhaitant élaborer un plan d'adoption progressif pour une plateforme de recherche
+- Les personnes souhaitant mettre en pratique les connaissances acquises tout au long de cette série
 
-Architecture de reference
+Architecture de référence
 ==========================
 
-Voici la vue d'ensemble d'une plateforme de connaissances a l'echelle de l'entreprise.
+Voici la vue d'ensemble d'une plateforme de connaissances à l'échelle de l'entreprise.
 
-Couche de collecte de donnees
+Couche de collecte de données
 ------------------------------
 
-Cette couche collecte des documents a partir de toutes les sources de donnees au sein de l'organisation.
+Cette couche collecte des documents à partir de toutes les sources de données au sein de l'organisation.
 
-.. list-table:: Couche de collecte de donnees
+.. list-table:: Couche de collecte de données
    :header-rows: 1
    :widths: 25 35 40
 
-   * - Categorie
-     - Source de donnees
-     - Articles associes
+   * - Catégorie
+     - Source de données
+     - Articles associés
    * - Contenu web
      - Portails internes, blogs techniques
      - Partie 2, Partie 3
@@ -45,277 +45,277 @@ Cette couche collecte des documents a partir de toutes les sources de donnees au
    * - SaaS
      - Salesforce, Slack, Confluence, Jira
      - Partie 6, Partie 12
-   * - Base de donnees
-     - Bases de donnees internes, CSV
+   * - Base de données
+     - Bases de données internes, CSV
      - Partie 12
-   * - Sources personnalisees
+   * - Sources personnalisées
      - Prise en charge via des plugins
      - Partie 17
 
 Couche de recherche et de traitement par IA
 ---------------------------------------------
 
-Cette couche rend les donnees collectees interrogeables et fournit des fonctionnalites avancees basees sur l'IA.
+Cette couche rend les données collectées interrogeables et fournit des fonctionnalités avancées basées sur l'IA.
 
 .. list-table:: Couche de recherche et de traitement par IA
    :header-rows: 1
    :widths: 25 35 40
 
-   * - Fonctionnalite
-     - Apercu
-     - Articles associes
-   * - Recherche en texte integral
-     - Recherche rapide par mots-cles
+   * - Fonctionnalité
+     - Aperçu
+     - Articles associés
+   * - Recherche en texte intégral
+     - Recherche rapide par mots-clés
      - Partie 2, Partie 3
-   * - Recherche semantique
-     - Recherche basee sur le sens
+   * - Recherche sémantique
+     - Recherche basée sur le sens
      - Partie 18
    * - Mode de recherche IA
-     - Assistant IA de questions-reponses
+     - Assistant IA de questions-réponses
      - Partie 19
    * - Recherche multimodale
      - Recherche transversale texte et images
      - Partie 21
    * - Serveur MCP
-     - Integration d'agents IA
+     - Intégration d'agents IA
      - Partie 20
 
-Couche de controle d'acces
+Couche de contrôle d'accès
 ---------------------------
 
-Cette couche assure la securite et la gouvernance.
+Cette couche assure la sécurité et la gouvernance.
 
-.. list-table:: Couche de controle d'acces
+.. list-table:: Couche de contrôle d'accès
    :header-rows: 1
    :widths: 25 35 40
 
-   * - Fonctionnalite
-     - Apercu
-     - Articles associes
-   * - Recherche basee sur les roles
-     - Controle des resultats de recherche base sur les permissions
+   * - Fonctionnalité
+     - Aperçu
+     - Articles associés
+   * - Recherche basée sur les rôles
+     - Contrôle des résultats de recherche basé sur les permissions
      - Partie 5
-   * - Integration SSO
-     - Integration de l'authentification avec les IdP existants
+   * - Intégration SSO
+     - Intégration de l'authentification avec les IdP existants
      - Partie 15
    * - Authentification API
-     - Controle d'acces base sur les jetons
+     - Contrôle d'accès basé sur les jetons
      - Partie 11, Partie 15
    * - Multi-tenancy
-     - Isolation des donnees entre les tenants
+     - Isolation des données entre les tenants
      - Partie 13
 
 Couche d'exploitation et d'analyse
 -------------------------------------
 
-Cette couche maintient et ameliore la qualite de l'infrastructure de recherche.
+Cette couche maintient et améliore la qualité de l'infrastructure de recherche.
 
 .. list-table:: Couche d'exploitation et d'analyse
    :header-rows: 1
    :widths: 25 35 40
 
-   * - Fonctionnalite
-     - Apercu
-     - Articles associes
+   * - Fonctionnalité
+     - Aperçu
+     - Articles associés
    * - Surveillance et sauvegarde
-     - Base pour des operations stables
+     - Base pour des opérations stables
      - Partie 10
-   * - Reglage de la qualite de recherche
-     - Amelioration continue basee sur les donnees
+   * - Réglage de la qualité de recherche
+     - Amélioration continue basée sur les données
      - Partie 8
    * - Support multilingue
      - Traitement correct du japonais, de l'anglais et du chinois
      - Partie 9
    * - Analytique de recherche
-     - Visualisation et mise en strategie de l'utilisation
+     - Visualisation et mise en stratégie de l'utilisation
      - Partie 22
    * - Automatisation de l'infrastructure
      - Gestion via IaC / CI/CD
      - Partie 16
 
-Modele de maturite d'adoption
+Modèle de maturité d'adoption
 ===============================
 
-Une infrastructure de recherche ne se construit pas en un jour. Il est important d'elever progressivement le niveau de maturite.
+Une infrastructure de recherche ne se construit pas en un jour. Il est important d'élever progressivement le niveau de maturité.
 
 Niveau 1 : Recherche de base (Phase d'introduction)
 -----------------------------------------------------
 
-**Objectif** : Fournir une experience de recherche de base
+**Objectif** : Fournir une expérience de recherche de base
 
-- Deployer Fess avec Docker Compose
+- Déployer Fess avec Docker Compose
 - Explorer les principaux sites web et serveurs de fichiers
 - Publier l'interface de recherche en interne
 
-**Duree estimee** : 1 a 2 semaines
+**Durée estimée** : 1 à 2 semaines
 
-**Articles associes** : Parties 1 a 4
+**Articles associés** : Parties 1 à 4
 
-Niveau 2 : Recherche securisee (Phase d'etablissement)
+Niveau 2 : Recherche sécurisée (Phase d'établissement)
 --------------------------------------------------------
 
-**Objectif** : Une infrastructure de recherche avec une securite garantie
+**Objectif** : Une infrastructure de recherche avec une sécurité garantie
 
-- Introduction de la recherche basee sur les roles
-- Integration SSO (LDAP / OIDC)
+- Introduction de la recherche basée sur les rôles
+- Intégration SSO (LDAP / OIDC)
 - Configuration de la sauvegarde et de la surveillance
 
-**Duree estimee** : 2 a 4 semaines
+**Durée estimée** : 2 à 4 semaines
 
-**Articles associes** : Partie 5, Partie 10, Partie 15
+**Articles associés** : Partie 5, Partie 10, Partie 15
 
-Niveau 3 : Recherche unifiee (Phase d'expansion)
+Niveau 3 : Recherche unifiée (Phase d'expansion)
 --------------------------------------------------
 
-**Objectif** : Integrer les sources de donnees de l'organisation
+**Objectif** : Intégrer les sources de données de l'organisation
 
-- Integration du stockage cloud (Google Drive, SharePoint, Box)
-- Integration des outils SaaS (Slack, Confluence, Jira, Salesforce)
-- Gestion des categories via des etiquettes
-- Debut du reglage de la qualite de recherche
+- Intégration du stockage cloud (Google Drive, SharePoint, Box)
+- Intégration des outils SaaS (Slack, Confluence, Jira, Salesforce)
+- Gestion des catégories via des étiquettes
+- Début du réglage de la qualité de recherche
 
-**Duree estimee** : 1 a 2 mois
+**Durée estimée** : 1 à 2 mois
 
-**Articles associes** : Partie 6, Partie 7, Partie 8, Partie 12
+**Articles associés** : Partie 6, Partie 7, Partie 8, Partie 12
 
-Niveau 4 : Optimisation (Phase de maturite)
+Niveau 4 : Optimisation (Phase de maturité)
 ---------------------------------------------
 
-**Objectif** : Optimiser la qualite de recherche et les operations
+**Objectif** : Optimiser la qualité de recherche et les opérations
 
-- Amelioration continue par l'analyse des journaux de recherche
+- Amélioration continue par l'analyse des journaux de recherche
 - Support multilingue
-- Mise a l'echelle (selon les besoins)
-- Automatisation des operations via IaC
+- Mise à l'échelle (selon les besoins)
+- Automatisation des opérations via IaC
 
-**Duree estimee** : En continu
+**Durée estimée** : En continu
 
-**Articles associes** : Partie 8, Partie 9, Partie 14, Partie 16, Partie 22
+**Articles associés** : Partie 8, Partie 9, Partie 14, Partie 16, Partie 22
 
 Niveau 5 : Exploitation de l'IA (Phase d'innovation)
 ------------------------------------------------------
 
-**Objectif** : Faire evoluer l'experience de recherche grace a l'IA
+**Objectif** : Faire évoluer l'expérience de recherche grâce à l'IA
 
-- Introduction de la recherche semantique
+- Introduction de la recherche sémantique
 - Assistant IA via le mode de recherche IA
-- Integration d'agents IA via le serveur MCP
+- Intégration d'agents IA via le serveur MCP
 - Recherche multimodale
 
-**Duree estimee** : 1 a 3 mois
+**Durée estimée** : 1 à 3 mois
 
-**Articles associes** : Parties 18 a 21
+**Articles associés** : Parties 18 à 21
 
-Lignes directrices pour les decisions de conception
+Lignes directrices pour les décisions de conception
 =====================================================
 
-Nous resumons ici les lignes directrices pour les decisions de conception qui sont apparues de maniere recurrente tout au long de cette serie.
+Nous résumons ici les lignes directrices pour les décisions de conception qui sont apparues de manière récurrente tout au long de cette série.
 
 Commencer petit, voir grand
 -----------------------------
 
-Il n'est pas necessaire d'integrer toutes les sources de donnees et d'activer toutes les fonctionnalites des le depart. Commencez par les sources de donnees principales et elargissez progressivement en fonction des retours des utilisateurs.
+Il n'est pas nécessaire d'intégrer toutes les sources de données et d'activer toutes les fonctionnalités dès le départ. Commencez par les sources de données principales et élargissez progressivement en fonction des retours des utilisateurs.
 
-Ameliorer en se basant sur les donnees
+Améliorer en se basant sur les données
 -----------------------------------------
 
-Plutot que de se fier a un sentiment vague que la qualite de recherche est mauvaise, mettez en oeuvre des ameliorations concretes basees sur les donnees des journaux de recherche. Verifiez regulierement des indicateurs tels que le taux de resultats nuls, le taux de clics et les termes de recherche populaires.
+Plutôt que de se fier à un sentiment vague que la qualité de recherche est mauvaise, mettez en œuvre des améliorations concrètes basées sur les données des journaux de recherche. Vérifiez régulièrement des indicateurs tels que le taux de résultats nuls, le taux de clics et les termes de recherche populaires.
 
-La securite des le depart
+La sécurité dès le départ
 ---------------------------
 
-Il est plus efficace d'integrer la recherche basee sur les roles et le controle d'acces dans la conception des le depart plutot que de les ajouter ulterieurement. Si les controles de permissions sont ajoutes apres la croissance de la base d'utilisateurs, une reindexation des donnees existantes peut s'averer necessaire.
+Il est plus efficace d'intégrer la recherche basée sur les rôles et le contrôle d'accès dans la conception dès le départ plutôt que de les ajouter ultérieurement. Si les contrôles de permissions sont ajoutés après la croissance de la base d'utilisateurs, une réindexation des données existantes peut s'avérer nécessaire.
 
-Definir clairement l'objectif de l'IA
+Définir clairement l'objectif de l'IA
 ----------------------------------------
 
-Plutot que d'adopter l'IA simplement parce que c'est de l'IA, definissez clairement l'objectif : nous allons resoudre ce probleme specifique avec l'IA. Si la recherche par mots-cles combinee aux synonymes suffit, il n'est pas necessaire de forcer l'adoption de la recherche semantique.
+Plutôt que d'adopter l'IA simplement parce que c'est de l'IA, définissez clairement l'objectif : nous allons résoudre ce problème spécifique avec l'IA. Si la recherche par mots-clés combinée aux synonymes suffit, il n'est pas nécessaire de forcer l'adoption de la recherche sémantique.
 
-Retrospective de la serie
+Rétrospective de la série
 ===========================
 
-Prenons une vue d'ensemble du contenu traite dans les 23 parties de la serie.
+Prenons une vue d'ensemble du contenu traité dans les 23 parties de la série.
 
-.. list-table:: Structure globale de la serie
+.. list-table:: Structure globale de la série
    :header-rows: 1
    :widths: 10 15 40 35
 
    * - Partie
      - Phase
      - Titre
-     - Theme cle
+     - Thème clé
    * - 1
      - Fondamentaux
      - Pourquoi les entreprises ont besoin de la recherche
      - Valeur de la recherche
    * - 2
      - Fondamentaux
-     - Une experience de recherche en 5 minutes
-     - Introduction a Docker Compose
+     - Une expérience de recherche en 5 minutes
+     - Introduction à Docker Compose
    * - 3
      - Fondamentaux
-     - Integrer la recherche dans un portail interne
-     - Trois methodes d'integration
+     - Intégrer la recherche dans un portail interne
+     - Trois méthodes d'intégration
    * - 4
      - Fondamentaux
-     - Recherche unifiee des fichiers disperses
+     - Recherche unifiée des fichiers dispersés
      - Recherche transversale multi-sources
    * - 5
      - Fondamentaux
-     - Adapter les resultats au chercheur
-     - Recherche basee sur les roles
+     - Adapter les résultats au chercheur
+     - Recherche basée sur les rôles
    * - 6
      - Pratique
-     - Hub de connaissances pour les equipes de developpement
-     - Integration de magasins de donnees
+     - Hub de connaissances pour les équipes de développement
+     - Intégration de magasins de données
    * - 7
      - Pratique
-     - Strategie de recherche pour l'ere du stockage cloud
+     - Stratégie de recherche pour l'ère du stockage cloud
      - Recherche transversale cloud
    * - 8
      - Pratique
-     - Cultiver la qualite de recherche
-     - Cycle de reglage
+     - Cultiver la qualité de recherche
+     - Cycle de réglage
    * - 9
      - Pratique
      - Infrastructure de recherche pour les organisations multilingues
      - Support multilingue
    * - 10
      - Pratique
-     - Operations stables pour les systemes de recherche
+     - Opérations stables pour les systèmes de recherche
      - Manuel d'exploitation
    * - 11
      - Pratique
-     - Etendre les systemes existants avec des API de recherche
-     - Modeles d'integration d'API
+     - Étendre les systèmes existants avec des API de recherche
+     - Modèles d'intégration d'API
    * - 12
      - Pratique
-     - Rendre les donnees SaaS interrogeables
-     - Elimination des silos de donnees
+     - Rendre les données SaaS interrogeables
+     - Élimination des silos de données
    * - 13
-     - Avance
+     - Avancé
      - Infrastructure de recherche multi-tenant
      - Conception de l'isolation des tenants
    * - 14
-     - Avance
-     - Strategies de mise a l'echelle pour les systemes de recherche
+     - Avancé
+     - Stratégies de mise à l'échelle pour les systèmes de recherche
      - Expansion par phases
    * - 15
-     - Avance
-     - Infrastructure de recherche securisee
+     - Avancé
+     - Infrastructure de recherche sécurisée
      - SSO et Zero Trust
    * - 16
-     - Avance
+     - Avancé
      - Automatisation de l'infrastructure de recherche
      - DevOps / IaC
    * - 17
-     - Avance
-     - Etendre la recherche avec des plugins
-     - Developpement de plugins
+     - Avancé
+     - Étendre la recherche avec des plugins
+     - Développement de plugins
    * - 18
      - IA
      - Fondamentaux de la recherche par IA
-     - Recherche semantique
+     - Recherche sémantique
    * - 19
      - IA
      - Construire un assistant IA interne
@@ -330,27 +330,27 @@ Prenons une vue d'ensemble du contenu traite dans les 23 parties de la serie.
      - Recherche multimodale
    * - 22
      - IA
-     - Dessiner la carte des connaissances de l'organisation a partir des donnees de recherche
+     - Dessiner la carte des connaissances de l'organisation à partir des données de recherche
      - Analytique
    * - 23
-     - Synthese
-     - Plan directeur d'une plateforme de connaissances a l'echelle de l'entreprise
+     - Synthèse
+     - Plan directeur d'une plateforme de connaissances à l'échelle de l'entreprise
      - Grand design
 
 Conclusion
 ==========
 
-Tout au long de cette serie, "Strategies d'exploitation des connaissances avec Fess", nous avons transmis les points suivants :
+Tout au long de cette série, "Stratégies d'exploitation des connaissances avec Fess", nous avons transmis les points suivants :
 
-- **La recherche est un investissement strategique** : Pouvoir "trouver" l'information est directement lie a la productivite de l'organisation
-- **Fess est une solution complete** : Du crawling a la recherche en passant par l'IA, fournie en tant que suite open source complete
-- **Une croissance progressive est possible** : Commencer petit et evoluer au rythme de la croissance de l'organisation
-- **Pret pour l'ere de l'IA** : Integration avec les dernieres technologies d'IA telles que RAG, MCP et multimodal
-- **Amelioration guidee par les donnees** : Amelioration continue de la qualite grace a l'analyse des journaux de recherche
+- **La recherche est un investissement stratégique** : Pouvoir "trouver" l'information est directement lié à la productivité de l'organisation
+- **Fess est une solution complète** : Du crawling à la recherche en passant par l'IA, fournie en tant que suite open source complète
+- **Une croissance progressive est possible** : Commencer petit et évoluer au rythme de la croissance de l'organisation
+- **Prêt pour l'ère de l'IA** : Intégration avec les dernières technologies d'IA telles que RAG, MCP et multimodal
+- **Amélioration guidée par les données** : Amélioration continue de la qualité grâce à l'analyse des journaux de recherche
 
-Nous esperons qu'une plateforme de connaissances centree sur Fess servira de fondation pour soutenir l'exploitation de l'information au sein de votre organisation.
+Nous espérons qu'une plateforme de connaissances centrée sur Fess servira de fondation pour soutenir l'exploitation de l'information au sein de votre organisation.
 
-References
+Références
 ==========
 
 - `Fess <https://fess.codelibs.org/>`__

@@ -1,47 +1,47 @@
 =================================================================
-Partie 6 : Hub de connaissances pour les equipes de developpement
+Partie 6 : Hub de connaissances pour les équipes de développement
 =================================================================
 
 Introduction
 ============
 
-Les equipes de developpement logiciel utilisent quotidiennement divers outils dans leur travail.
-Le code se trouve dans des repositories Git, les specifications dans Confluence, les taches dans Jira, et les echanges quotidiens dans Slack.
-Chaque outil dispose de sa propre fonction de recherche, mais pour repondre a la question "Ou avait-on discute de cela ?", effectuer des recherches separees dans chaque outil est inefficace.
+Les équipes de développement logiciel utilisent quotidiennement divers outils dans leur travail.
+Le code se trouve dans des repositories Git, les spécifications dans Confluence, les tâches dans Jira, et les échanges quotidiens dans Slack.
+Chaque outil dispose de sa propre fonction de recherche, mais pour répondre à la question "Où avait-on discuté de cela ?", effectuer des recherches séparées dans chaque outil est inefficace.
 
-Dans cet article, nous construisons un hub de connaissances qui centralise dans Fess les informations des outils utilises quotidiennement par l'equipe de developpement et permet une recherche unifiee.
+Dans cet article, nous construisons un hub de connaissances qui centralise dans Fess les informations des outils utilisés quotidiennement par l'équipe de développement et permet une recherche unifiée.
 
 Public cible
 ============
 
-- Responsables d'equipes de developpement logiciel et administrateurs d'infrastructure
-- Personnes souhaitant effectuer des recherches transversales sur les outils de developpement
+- Responsables d'équipes de développement logiciel et administrateurs d'infrastructure
+- Personnes souhaitant effectuer des recherches transversales sur les outils de développement
 - Personnes souhaitant apprendre les bases de l'utilisation des plugins de datastore
 
-Scenario
+Scénario
 ========
 
-Nous allons rendre les informations d'une equipe de developpement (20 personnes) accessibles via une recherche unifiee.
+Nous allons rendre les informations d'une équipe de développement (20 personnes) accessibles via une recherche unifiée.
 
-.. list-table:: Sources de donnees cibles
+.. list-table:: Sources de données cibles
    :header-rows: 1
    :widths: 20 30 50
 
    * - Outil
      - Usage
-     - Informations a rechercher
+     - Informations à rechercher
    * - Repository Git
      - Gestion du code source
      - Code, README, fichiers de configuration
    * - Confluence
      - Gestion documentaire
-     - Documents de conception, comptes rendus de reunion, procedures
+     - Documents de conception, comptes rendus de réunion, procédures
    * - Jira
      - Gestion des tickets
-     - Rapports de bugs, taches, stories
+     - Rapports de bugs, tâches, stories
    * - Slack
      - Communication
-     - Discussions techniques, historique des decisions
+     - Discussions techniques, historique des décisions
 
 Qu'est-ce que le crawl de datastore ?
 =====================================
@@ -49,37 +49,37 @@ Qu'est-ce que le crawl de datastore ?
 Le crawl Web et le crawl de fichiers collectent les documents en parcourant les URL ou les chemins de fichiers.
 En revanche, pour collecter les informations des outils SaaS, on utilise le "crawl de datastore".
 
-Le crawl de datastore recupere les donnees via l'API de chaque outil et les enregistre dans l'index de Fess.
+Le crawl de datastore récupère les données via l'API de chaque outil et les enregistre dans l'index de Fess.
 Dans Fess, un plugin de datastore est disponible pour chaque outil.
 
 Installation des plugins
 ========================
 
-Les plugins de datastore peuvent etre installes depuis l'interface d'administration de Fess.
+Les plugins de datastore peuvent être installés depuis l'interface d'administration de Fess.
 
-1. Selectionnez [Systeme] > [Plugins] dans l'interface d'administration
-2. Consultez la liste des plugins installes
-3. Accedez a l'ecran d'installation via le bouton [Installer], puis installez les plugins necessaires depuis l'onglet [Distant]
+1. Sélectionnez [Système] > [Plugins] dans l'interface d'administration
+2. Consultez la liste des plugins installés
+3. Accédez à l'écran d'installation via le bouton [Installer], puis installez les plugins nécessaires depuis l'onglet [Distant]
 
-Pour le scenario de cet article, nous utilisons les plugins suivants.
+Pour le scénario de cet article, nous utilisons les plugins suivants.
 
 - ``fess-ds-git`` : Crawl de repositories Git
 - ``fess-ds-atlassian`` : Crawl de Confluence / Jira
 - ``fess-ds-slack`` : Crawl des messages Slack
 
-Configuration des sources de donnees
+Configuration des sources de données
 =====================================
 
 Configuration du repository Git
 ---------------------------------
 
-Crawlez le repository Git pour rendre le code et les documents disponibles a la recherche.
+Crawlez le repository Git pour rendre le code et les documents disponibles à la recherche.
 
 1. [Crawler] > [Datastore] > [Nouveau]
-2. Nom du handler : selectionnez GitDataStore
-3. Configuration des parametres
+2. Nom du handler : sélectionnez GitDataStore
+3. Configuration des paramètres
 
-**Exemple de configuration des parametres**
+**Exemple de configuration des paramètres**
 
 .. code-block:: properties
 
@@ -100,18 +100,18 @@ Crawlez le repository Git pour rendre le code et les documents disponibles a la 
     content_length=contentLength
     last_modified=timestamp
 
-Specifiez l'URL du repository dans ``uri``, et les informations d'authentification dans ``username`` / ``password``. Pour les repositories prives, definissez le jeton d'acces dans ``password``. ``include_pattern`` permet de filtrer les extensions de fichiers a crawler a l'aide d'une expression reguliere.
+Spécifiez l'URL du repository dans ``uri``, et les informations d'authentification dans ``username`` / ``password``. Pour les repositories privés, définissez le jeton d'accès dans ``password``. ``include_pattern`` permet de filtrer les extensions de fichiers à crawler à l'aide d'une expression régulière.
 
 Configuration de Confluence
 -----------------------------
 
-Rendez les pages et articles de blog Confluence disponibles a la recherche.
+Rendez les pages et articles de blog Confluence disponibles à la recherche.
 
 1. [Crawler] > [Datastore] > [Nouveau]
-2. Nom du handler : selectionnez ConfluenceDataStore
-3. Configuration des parametres
+2. Nom du handler : sélectionnez ConfluenceDataStore
+3. Configuration des paramètres
 
-**Exemple de configuration des parametres**
+**Exemple de configuration des paramètres**
 
 .. code-block:: properties
 
@@ -129,22 +129,22 @@ Rendez les pages et articles de blog Confluence disponibles a la recherche.
     content=content.body
     last_modified=content.last_modified
 
-Specifiez l'URL de Confluence dans ``home`` et choisissez la methode d'authentification avec ``auth_type``. Pour Confluence Cloud, utilisez l'authentification ``basic`` et definissez le jeton API dans ``basic.password``.
+Spécifiez l'URL de Confluence dans ``home`` et choisissez la méthode d'authentification avec ``auth_type``. Pour Confluence Cloud, utilisez l'authentification ``basic`` et définissez le jeton API dans ``basic.password``.
 
 Configuration de Jira
 ----------------------
 
-Rendez les tickets (Issues) Jira disponibles a la recherche.
+Rendez les tickets (Issues) Jira disponibles à la recherche.
 
-Le handler JiraDataStore est inclus dans le meme plugin ``fess-ds-atlassian``.
-Vous pouvez utiliser JQL (Jira Query Language) pour filtrer les tickets a crawler.
-Par exemple, vous pouvez cibler uniquement les tickets d'un projet specifique ou uniquement les tickets ayant un statut particulier (autre que Closed).
+Le handler JiraDataStore est inclus dans le même plugin ``fess-ds-atlassian``.
+Vous pouvez utiliser JQL (Jira Query Language) pour filtrer les tickets à crawler.
+Par exemple, vous pouvez cibler uniquement les tickets d'un projet spécifique ou uniquement les tickets ayant un statut particulier (autre que Closed).
 
 1. [Crawler] > [Datastore] > [Nouveau]
-2. Nom du handler : selectionnez JiraDataStore
-3. Configuration des parametres
+2. Nom du handler : sélectionnez JiraDataStore
+3. Configuration des paramètres
 
-**Exemple de configuration des parametres**
+**Exemple de configuration des paramètres**
 
 .. code-block:: properties
 
@@ -163,18 +163,18 @@ Par exemple, vous pouvez cibler uniquement les tickets d'un projet specifique ou
     content=issue.description
     last_modified=issue.last_modified
 
-Specifiez la requete JQL dans ``issue.jql`` pour filtrer les tickets a crawler.
+Spécifiez la requête JQL dans ``issue.jql`` pour filtrer les tickets à crawler.
 
 Configuration de Slack
 -----------------------
 
-Rendez les messages Slack disponibles a la recherche.
+Rendez les messages Slack disponibles à la recherche.
 
 1. [Crawler] > [Datastore] > [Nouveau]
-2. Nom du handler : selectionnez SlackDataStore
-3. Configuration des parametres
+2. Nom du handler : sélectionnez SlackDataStore
+3. Configuration des paramètres
 
-**Exemple de configuration des parametres**
+**Exemple de configuration des paramètres**
 
 .. code-block:: properties
 
@@ -191,106 +191,106 @@ Rendez les messages Slack disponibles a la recherche.
     content=message.text
     last_modified=message.timestamp
 
-Specifiez le jeton OAuth du Bot Slack dans ``token``. Vous pouvez specifier les canaux a crawler avec ``channels`` ; pour cibler tous les canaux, definissez ``*all``. Pour inclure les canaux prives, definissez ``include_private=true`` et assurez-vous que le Bot a ete invite dans ces canaux.
+Spécifiez le jeton OAuth du Bot Slack dans ``token``. Vous pouvez spécifier les canaux à crawler avec ``channels`` ; pour cibler tous les canaux, définissez ``*all``. Pour inclure les canaux privés, définissez ``include_private=true`` et assurez-vous que le Bot a été invité dans ces canaux.
 
 Utilisation des labels
 ======================
 
-Differencier les sources d'information avec des labels
+Différencier les sources d'information avec des labels
 -------------------------------------------------------
 
-En definissant des labels pour chaque source de donnees, vous permettez aux utilisateurs de filtrer par source lors de la recherche.
+En définissant des labels pour chaque source de données, vous permettez aux utilisateurs de filtrer par source lors de la recherche.
 
 - ``code`` : Code provenant des repositories Git
 - ``docs`` : Documents de Confluence
 - ``tickets`` : Tickets de Jira
 - ``discussions`` : Messages de Slack
 
-Les utilisateurs peuvent effectuer une recherche transversale avec "Tout", puis affiner les resultats par label si necessaire.
+Les utilisateurs peuvent effectuer une recherche transversale avec "Tout", puis affiner les résultats par label si nécessaire.
 
-Amelioration de la qualite de recherche
+Amélioration de la qualité de recherche
 ========================================
 
 Utilisation du boost de documents
 ----------------------------------
 
-Dans un hub de connaissances pour equipe de developpement, tous les documents n'ont pas la meme importance.
-Par exemple, on peut envisager les priorites suivantes.
+Dans un hub de connaissances pour équipe de développement, tous les documents n'ont pas la même importance.
+Par exemple, on peut envisager les priorités suivantes.
 
-1. Documents Confluence (specifications officielles, procedures)
-2. Tickets Jira (problemes actuels, taches en cours)
+1. Documents Confluence (spécifications officielles, procédures)
+2. Tickets Jira (problèmes actuels, tâches en cours)
 3. Repositories Git (code, README)
 4. Messages Slack (historique des discussions)
 
-Le boost de documents permet d'augmenter le score de recherche des documents correspondant a certains criteres.
-Depuis l'interface d'administration, sous [Crawler] > [Boost de documents], vous pouvez definir des valeurs de boost basees sur les patterns d'URL ou les labels.
+Le boost de documents permet d'augmenter le score de recherche des documents correspondant à certains critères.
+Depuis l'interface d'administration, sous [Crawler] > [Boost de documents], vous pouvez définir des valeurs de boost basées sur les patterns d'URL ou les labels.
 
-Utilisation du contenu associe
+Utilisation du contenu associé
 -------------------------------
 
-En affichant du "contenu associe" dans les resultats de recherche, vous aidez les utilisateurs a trouver les informations qu'ils recherchent.
-Par exemple, lors de la recherche d'un document de conception dans Confluence, il est pratique de voir les tickets Jira associes affiches comme "contenu associe".
+En affichant du "contenu associé" dans les résultats de recherche, vous aidez les utilisateurs à trouver les informations qu'ils recherchent.
+Par exemple, lors de la recherche d'un document de conception dans Confluence, il est pratique de voir les tickets Jira associés affichés comme "contenu associé".
 
-Considerations operationnelles
+Considérations opérationnelles
 ===============================
 
 Planification du crawl
 -----------------------
 
-Definissez une frequence de crawl appropriee pour chaque source de donnees.
+Définissez une fréquence de crawl appropriée pour chaque source de données.
 
 .. list-table:: Exemple de planification
    :header-rows: 1
    :widths: 25 25 50
 
-   * - Source de donnees
-     - Frequence recommandee
+   * - Source de données
+     - Fréquence recommandée
      - Raison
    * - Confluence
      - Toutes les 4 heures
-     - La frequence de mise a jour des documents est moderee
+     - La fréquence de mise à jour des documents est modérée
    * - Jira
      - Toutes les 2 heures
-     - Les mises a jour des tickets sont frequentes
+     - Les mises à jour des tickets sont fréquentes
    * - Git
      - Quotidien
-     - Aligne sur le cycle de release
+     - Aligné sur le cycle de release
    * - Slack
      - Toutes les 4 heures
-     - Le temps reel n'est pas necessaire, mais la fraicheur est importante
+     - Le temps réel n'est pas nécessaire, mais la fraîcheur est importante
 
-Gestion des limites de debit API
+Gestion des limites de débit API
 ---------------------------------
 
-Les API des outils SaaS sont soumises a des limites de debit.
-Configurez un intervalle de crawl adequat pour ne pas depasser les limites de debit de l'API.
-L'API Slack en particulier a des limites de debit strictes, il est donc important de prevoir une marge suffisante dans l'intervalle de crawl.
+Les API des outils SaaS sont soumises à des limites de débit.
+Configurez un intervalle de crawl adéquat pour ne pas dépasser les limites de débit de l'API.
+L'API Slack en particulier a des limites de débit strictes, il est donc important de prévoir une marge suffisante dans l'intervalle de crawl.
 
-Gestion des jetons d'acces
+Gestion des jetons d'accès
 ---------------------------
 
-La configuration des plugins de datastore necessite les jetons d'acces API de chaque outil.
-Du point de vue de la securite, veuillez tenir compte des points suivants.
+La configuration des plugins de datastore nécessite les jetons d'accès API de chaque outil.
+Du point de vue de la sécurité, veuillez tenir compte des points suivants.
 
-- Principe du moindre privilege : utilisez des jetons d'acces en lecture seule
-- Rotation reguliere : renouvelez periodiquement les jetons
-- Utilisation de comptes dedies : utilisez des comptes de service plutot que des comptes personnels
+- Principe du moindre privilège : utilisez des jetons d'accès en lecture seule
+- Rotation régulière : renouvelez périodiquement les jetons
+- Utilisation de comptes dédiés : utilisez des comptes de service plutôt que des comptes personnels
 
 Conclusion
 ==========
 
-Dans cet article, nous avons construit un hub de connaissances qui centralise dans Fess les informations des outils utilises quotidiennement par l'equipe de developpement et permet une recherche unifiee.
+Dans cet article, nous avons construit un hub de connaissances qui centralise dans Fess les informations des outils utilisés quotidiennement par l'équipe de développement et permet une recherche unifiée.
 
-- Collecte des donnees de Git, Confluence, Jira et Slack avec les plugins de datastore
-- Labels offrant une experience de recherche conviviale pour les developpeurs
-- Boost de documents pour controler la priorite des informations
-- Considerations operationnelles telles que les limites de debit API et la gestion des jetons
+- Collecte des données de Git, Confluence, Jira et Slack avec les plugins de datastore
+- Labels offrant une expérience de recherche conviviale pour les développeurs
+- Boost de documents pour contrôler la priorité des informations
+- Considérations opérationnelles telles que les limites de débit API et la gestion des jetons
 
-Avec un hub de connaissances pour l'equipe de developpement, vous pouvez repondre rapidement aux questions telles que "Ou a eu lieu cette discussion ?" ou "Ou est cette specification ?".
+Avec un hub de connaissances pour l'équipe de développement, vous pouvez répondre rapidement aux questions telles que "Où a eu lieu cette discussion ?" ou "Où est cette spécification ?".
 
 Le prochain article traitera de la recherche transversale dans les services de stockage cloud.
 
-References
+Références
 ==========
 
 - `Configuration des datastores Fess <https://fess.codelibs.org/ja/15.5/admin/dataconfig.html>`__

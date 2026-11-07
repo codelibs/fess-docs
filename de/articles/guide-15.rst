@@ -176,7 +176,7 @@ Berechtigungsdesign für Token
 
 Konfigurieren Sie geeignete Berechtigungen für Zugriffstoken.
 
-.. list-table:: Beispiel fuer das Token-Design
+.. list-table:: Beispiel für das Token-Design
    :header-rows: 1
    :widths: 25 25 50
 

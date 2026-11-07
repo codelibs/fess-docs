@@ -39,7 +39,7 @@ Beim Aufbau einer quellenübergreifenden Suche ist der erste wichtige Schritt di
 
 Zunächst verschaffen wir uns einen Überblick über die Datenquellen, die in die Suche einbezogen werden sollen.
 
-.. list-table:: Uebersicht der Datenquellen
+.. list-table:: Übersicht der Datenquellen
    :header-rows: 1
    :widths: 20 25 25 30
 
@@ -167,7 +167,7 @@ Verteilung des Zeitplans
 
 Verteilen Sie die Crawl-Zeitpläne entsprechend der Aktualisierungshäufigkeit der Datenquellen.
 
-.. list-table:: Beispiel fuer einen Crawl-Zeitplan
+.. list-table:: Beispiel für einen Crawl-Zeitplan
    :header-rows: 1
    :widths: 25 25 50
 

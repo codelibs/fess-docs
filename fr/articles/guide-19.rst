@@ -5,18 +5,18 @@ Partie 19 : Construction d'un assistant IA interne
 Introduction
 ============
 
-Dans l'article precedent, nous avons organise les concepts de la recherche semantique.
-Dans cet article, en tant qu'evolution de cette approche, nous construisons un assistant IA interne en utilisant RAG (Retrieval-Augmented Generation).
+Dans l'article précédent, nous avons organisé les concepts de la recherche sémantique.
+Dans cet article, en tant qu'évolution de cette approche, nous construisons un assistant IA interne en utilisant RAG (Retrieval-Augmented Generation).
 
-RAG est un mecanisme qui « trouve des documents pertinents via la recherche, puis un LLM (grand modele de langage) genere des reponses basees sur leur contenu ».
-Comme les reponses sont generees a partir de documents internes, RAG peut repondre a des questions specifiques a l'entreprise auxquelles une IA de chat generique ne peut pas repondre.
+RAG est un mécanisme qui « trouve des documents pertinents via la recherche, puis un LLM (grand modèle de langage) génère des réponses basées sur leur contenu ».
+Comme les réponses sont générées à partir de documents internes, RAG peut répondre à des questions spécifiques à l'entreprise auxquelles une IA de chat générique ne peut pas répondre.
 
 Public cible
 ============
 
-- Les personnes interessees par la construction d'un assistant IA interne
-- Les personnes souhaitant apprendre comment implementer RAG
-- Les personnes souhaitant comprendre les options d'integration LLM
+- Les personnes intéressées par la construction d'un assistant IA interne
+- Les personnes souhaitant apprendre comment implémenter RAG
+- Les personnes souhaitant comprendre les options d'intégration LLM
 
 Fonctionnement de RAG
 ======================
@@ -26,23 +26,23 @@ Pipeline RAG
 
 Le mode de recherche IA de Fess fonctionne via le pipeline suivant :
 
-1. **Analyse d'intention (Intent)** : Analyse la question de l'utilisateur et classifie l'intention (recherche, resume, FAQ, ambigue)
-2. **Recherche (Search)** : Recupere les documents pertinents depuis l'index de Fess (regenere automatiquement les requetes et relance la recherche en cas de zero resultat)
-3. **Evaluation (Evaluate)** : Le LLM evalue la pertinence des documents recuperes
-4. **Recuperation du texte integral (Fetch)** : Recupere le texte complet des documents hautement pertinents
-5. **Generation de reponse (Answer)** : Le LLM genere une reponse en streaming avec citations basees sur le contenu du document
+1. **Analyse d'intention (Intent)** : Analyse la question de l'utilisateur et classifie l'intention (recherche, résumé, FAQ, ambiguë)
+2. **Recherche (Search)** : Récupère les documents pertinents depuis l'index de Fess (régénère automatiquement les requêtes et relance la recherche en cas de zéro résultat)
+3. **Évaluation (Evaluate)** : Le LLM évalue la pertinence des documents récupérés
+4. **Récupération du texte intégral (Fetch)** : Récupère le texte complet des documents hautement pertinents
+5. **Génération de réponse (Answer)** : Le LLM génère une réponse en streaming avec citations basées sur le contenu du document
 
-Ce pipeline attenue les « reponses plausibles mais inexactes (hallucinations) » du LLM et fournit des reponses etayees par des documents internes.
+Ce pipeline atténue les « réponses plausibles mais inexactes (hallucinations) » du LLM et fournit des réponses étayées par des documents internes.
 
-Le mode de recherche IA de Fess ne necessite pas de recherche vectorielle (modeles d'embeddings).
-Il exploite les index de recherche en texte integral existants tels quels, le LLM se chargeant de l'evaluation des resultats de recherche et de la generation des reponses.
-Cela signifie que vous pouvez introduire la recherche IA basee sur RAG immediatement, sans preparation d'infrastructure supplementaire telle que la selection de modeles d'embeddings ou la construction de bases de donnees vectorielles.
+Le mode de recherche IA de Fess ne nécessite pas de recherche vectorielle (modèles d'embeddings).
+Il exploite les index de recherche en texte intégral existants tels quels, le LLM se chargeant de l'évaluation des résultats de recherche et de la génération des réponses.
+Cela signifie que vous pouvez introduire la recherche IA basée sur RAG immédiatement, sans préparation d'infrastructure supplémentaire telle que la sélection de modèles d'embeddings ou la construction de bases de données vectorielles.
 
 Choix d'un fournisseur LLM
 ============================
 
 Fess prend en charge trois backends LLM.
-Voici un resume des caracteristiques et des criteres de selection de chaque fournisseur.
+Voici un résumé des caractéristiques et des critères de sélection de chaque fournisseur.
 
 .. list-table:: Comparaison des fournisseurs LLM
    :header-rows: 1
@@ -50,37 +50,37 @@ Voici un resume des caracteristiques et des criteres de selection de chaque four
 
    * - Fournisseur
      - Plugin
-     - Cout
-     - Caracteristiques
+     - Coût
+     - Caractéristiques
    * - OpenAI
      - fess-llm-openai
-     - Facturation a l'usage de l'API
-     - Haute qualite de reponse, support GPT-4o, facile a demarrer
+     - Facturation à l'usage de l'API
+     - Haute qualité de réponse, support GPT-4o, facile à démarrer
    * - Google Gemini
      - fess-llm-gemini
-     - Facturation a l'usage de l'API
-     - Support de la reflexion etendue, contexte long
+     - Facturation à l'usage de l'API
+     - Support de la réflexion étendue, contexte long
    * - Ollama
      - fess-llm-ollama
-     - Couts materiels
-     - Execution locale, les donnees restent internes, axe sur la confidentialite
+     - Coûts matériels
+     - Exécution locale, les données restent internes, axé sur la confidentialité
 
-Criteres de selection
+Critères de sélection
 ---------------------
 
 **Quand choisir une API cloud (OpenAI / Gemini)**
 
-- Vous souhaitez minimiser les couts initiaux
-- Vous ne pouvez pas preparer un serveur GPU
-- Vous privilegiez la qualite des reponses avant tout
-- L'envoi de donnees vers des services externes est acceptable
+- Vous souhaitez minimiser les coûts initiaux
+- Vous ne pouvez pas préparer un serveur GPU
+- Vous privilégiez la qualité des réponses avant tout
+- L'envoi de données vers des services externes est acceptable
 
-**Quand choisir l'execution locale (Ollama)**
+**Quand choisir l'exécution locale (Ollama)**
 
-- L'envoi de donnees internes vers des services externes n'est pas autorise
-- Les exigences de securite et de confidentialite sont strictes
-- Vous pouvez preparer un serveur GPU
-- Vous souhaitez reduire les couts operationnels (pour une utilisation a haut volume)
+- L'envoi de données internes vers des services externes n'est pas autorisé
+- Les exigences de sécurité et de confidentialité sont strictes
+- Vous pouvez préparer un serveur GPU
+- Vous souhaitez réduire les coûts opérationnels (pour une utilisation à haut volume)
 
 Configuration du mode de recherche IA
 ========================================
@@ -90,15 +90,15 @@ Installation du plugin
 
 Installez le plugin correspondant au fournisseur LLM choisi.
 
-1. Accedez a [Systeme] > [Plugins] dans la console d'administration
+1. Accédez à [Système] > [Plugins] dans la console d'administration
 2. Installez le plugin correspondant (par exemple, ``fess-llm-openai``)
 
 Activation du mode de recherche IA
 ------------------------------------
 
-Activez le mode de recherche IA dans les parametres de Fess.
+Activez le mode de recherche IA dans les paramètres de Fess.
 
-Definissez ``rag.chat.enabled=true`` dans les parametres de la console d'administration ou dans le fichier de configuration.
+Définissez ``rag.chat.enabled=true`` dans les paramètres de la console d'administration ou dans le fichier de configuration.
 
 Configuration de la connexion LLM
 -----------------------------------
@@ -107,14 +107,14 @@ Configurez les informations de connexion pour votre fournisseur LLM choisi.
 
 **Pour OpenAI**
 
-- Cle API
-- Modele a utiliser (gpt-4o, gpt-4o-mini, etc.)
+- Clé API
+- Modèle à utiliser (gpt-4o, gpt-4o-mini, etc.)
 - Nombre maximal de tokens
 
 **Pour Ollama**
 
 - URL du serveur Ollama
-- Nom du modele a utiliser
+- Nom du modèle à utiliser
 - Ajout d'un service via Docker Compose
 
 .. code-block:: yaml
@@ -132,47 +132,47 @@ Configurez les informations de connexion pour votre fournisseur LLM choisi.
                   count: 1
                   capabilities: [gpu]
 
-L'experience du chat IA
+L'expérience du chat IA
 =========================
 
 Interface de chat
 ------------------
 
-Lorsque le mode de recherche IA est active, le mode de recherche IA est ajoute a l'ecran de recherche de Fess.
-Les utilisateurs peuvent basculer entre la recherche par mots-cles et le chat IA.
+Lorsque le mode de recherche IA est activé, le mode de recherche IA est ajouté à l'écran de recherche de Fess.
+Les utilisateurs peuvent basculer entre la recherche par mots-clés et le chat IA.
 
-Exemple de question et reponse
+Exemple de question et réponse
 -------------------------------
 
-**Question** : « Comment puis-je demander un conge paye ? »
+**Question** : « Comment puis-je demander un congé payé ? »
 
-**Reponse de l'IA** :
+**Réponse de l'IA** :
 
-    Pour demander un conge paye, suivez ces etapes :
+    Pour demander un congé payé, suivez ces étapes :
 
-    1. Accedez a la page « Gestion des presences » sur le portail interne
-    2. Selectionnez « Conge paye » dans le menu « Demande d'absence »
-    3. Saisissez les dates, selectionnez votre superieur et soumettez la demande
+    1. Accédez à la page « Gestion des présences » sur le portail interne
+    2. Sélectionnez « Congé payé » dans le menu « Demande d'absence »
+    3. Saisissez les dates, sélectionnez votre supérieur et soumettez la demande
 
-    Veuillez soumettre votre demande au moins 3 jours ouvrables avant la date du conge.
+    Veuillez soumettre votre demande au moins 3 jours ouvrables avant la date du congé.
 
-    Reference : [Reglement interieur, Article 15](https://portal/rules/chapter15.html)
+    Référence : [Règlement intérieur, Article 15](https://portal/rules/chapter15.html)
 
-La reponse inclut des liens vers les sources, permettant aux utilisateurs de verifier les documents originaux.
+La réponse inclut des liens vers les sources, permettant aux utilisateurs de vérifier les documents originaux.
 
 Utilisation de la Chat API (SSE)
 ==================================
 
 Pour utiliser le mode de recherche IA depuis un programme, utilisez la Chat API.
-La Chat API renvoie des reponses en streaming via Server-Sent Events (SSE).
+La Chat API renvoie des réponses en streaming via Server-Sent Events (SSE).
 
-Pour les reponses en streaming (SSE) :
+Pour les réponses en streaming (SSE) :
 
 ::
 
     GET /api/v1/chat/stream?message=Comment demander un conge paye
 
-Pour les reponses JSON sans streaming :
+Pour les réponses JSON sans streaming :
 
 ::
 
@@ -181,75 +181,75 @@ Pour les reponses JSON sans streaming :
 
     message=Comment demander un conge paye
 
-Avec SSE, les reponses sont envoyees au client en temps reel au fur et a mesure de leur generation.
-Les utilisateurs peuvent commencer a lire la reponse affichee progressivement sans attendre que la reponse complete soit generee.
+Avec SSE, les réponses sont envoyées au client en temps réel au fur et à mesure de leur génération.
+Les utilisateurs peuvent commencer à lire la réponse affichée progressivement sans attendre que la réponse complète soit générée.
 
 Historique de conversation
 ---------------------------
 
-La Chat API prend en charge l'historique de conversation base sur les sessions.
-Les questions de suivi basees sur le contexte des questions precedentes sont possibles.
+La Chat API prend en charge l'historique de conversation basé sur les sessions.
+Les questions de suivi basées sur le contexte des questions précédentes sont possibles.
 
 Exemple :
 
-- Q1 : « Comment puis-je demander un conge paye ? »
-- R1 : (Reponse comme ci-dessus)
-- Q2 : « Que dois-je faire si j'ai depasse le delai de demande ? »
-- R2 : (Reponse basee sur le contexte de Q1)
+- Q1 : « Comment puis-je demander un congé payé ? »
+- R1 : (Réponse comme ci-dessus)
+- Q2 : « Que dois-je faire si j'ai dépassé le délai de demande ? »
+- R2 : (Réponse basée sur le contexte de Q1)
 
-Reglage de RAG
+Réglage de RAG
 ================
 
-Amelioration de la qualite des reponses
+Amélioration de la qualité des réponses
 -----------------------------------------
 
-La qualite des reponses de RAG est influencee par les facteurs suivants :
+La qualité des réponses de RAG est influencée par les facteurs suivants :
 
-**Qualite de la recherche**
+**Qualité de la recherche**
 
-Comme RAG genere des reponses basees sur les resultats de recherche, la qualite de la recherche affecte directement la qualite des reponses.
-L'amelioration de la qualite de la recherche grace au cycle de reglage decrit dans la Partie 8 conduit egalement a une amelioration de la qualite de RAG.
+Comme RAG génère des réponses basées sur les résultats de recherche, la qualité de la recherche affecte directement la qualité des réponses.
+L'amélioration de la qualité de la recherche grâce au cycle de réglage décrit dans la Partie 8 conduit également à une amélioration de la qualité de RAG.
 
-**Qualite des documents**
+**Qualité des documents**
 
-Si les documents recherches sont obsoletes, inexacts ou ambigus, la qualite des reponses de RAG diminuera egalement.
-Les mises a jour regulieres et la gestion de la qualite des documents sont importantes.
+Si les documents recherchés sont obsolètes, inexacts ou ambigus, la qualité des réponses de RAG diminuera également.
+Les mises à jour régulières et la gestion de la qualité des documents sont importantes.
 
 **Configuration des prompts**
 
-Le reglage des prompts (textes d'instructions) envoyes au LLM vous permet d'ajuster le style et la precision des reponses.
+Le réglage des prompts (textes d'instructions) envoyés au LLM vous permet d'ajuster le style et la précision des réponses.
 
-Considerations de securite
+Considérations de sécurité
 ============================
 
 Contre-mesures contre l'injection de prompts
 ----------------------------------------------
 
-La fonctionnalite RAG de Fess dispose de defenses integrees contre l'injection de prompts.
-Elle protege contre les attaques qui tentent de manipuler le comportement du LLM par des entrees malveillantes.
+La fonctionnalité RAG de Fess dispose de défenses intégrées contre l'injection de prompts.
+Elle protège contre les attaques qui tentent de manipuler le comportement du LLM par des entrées malveillantes.
 
-Prevention des fuites d'informations
+Prévention des fuites d'informations
 --------------------------------------
 
-Comme RAG genere des reponses basees sur les resultats de recherche, sa combinaison avec la recherche basee sur les roles (Partie 5) garantit que seules des reponses appropriees aux autorisations de l'utilisateur sont generees.
-Le contenu des documents auxquels l'utilisateur n'a pas acces autorise n'est pas inclus dans les reponses de RAG.
+Comme RAG génère des réponses basées sur les résultats de recherche, sa combinaison avec la recherche basée sur les rôles (Partie 5) garantit que seules des réponses appropriées aux autorisations de l'utilisateur sont générées.
+Le contenu des documents auxquels l'utilisateur n'a pas accès autorisé n'est pas inclus dans les réponses de RAG.
 
-Resume
+Résumé
 ======
 
-Dans cet article, nous avons explique comment construire un assistant IA interne en utilisant le mode de recherche IA de Fess.
+Dans cet article, nous avons expliqué comment construire un assistant IA interne en utilisant le mode de recherche IA de Fess.
 
-- Fonctionnement du pipeline RAG (analyse d'intention -> recherche -> evaluation -> generation de reponse)
-- Criteres de selection pour trois fournisseurs LLM (OpenAI, Gemini, Ollama)
-- Configuration et experience du mode de recherche IA
+- Fonctionnement du pipeline RAG (analyse d'intention -> recherche -> évaluation -> génération de réponse)
+- Critères de sélection pour trois fournisseurs LLM (OpenAI, Gemini, Ollama)
+- Configuration et expérience du mode de recherche IA
 - Utilisation de la Chat API (SSE) depuis des programmes
-- Reglage de la qualite des reponses et considerations de securite
+- Réglage de la qualité des réponses et considérations de sécurité
 
-Avec un assistant IA base sur des documents internes, l'utilisation des connaissances passe de « chercher » a « demander ».
+Avec un assistant IA basé sur des documents internes, l'utilisation des connaissances passe de « chercher » à « demander ».
 
-Dans le prochain article, nous aborderons comment integrer Fess en tant que serveur MCP dans des agents IA.
+Dans le prochain article, nous aborderons comment intégrer Fess en tant que serveur MCP dans des agents IA.
 
-References
+Références
 ==========
 
 - `Fess AI Search Mode Settings <https://fess.codelibs.org/ja/15.5/config/rag-chat.html>`__

@@ -159,7 +159,7 @@ In einer mehrsprachigen Umgebung hat die Wörterbuchverwaltung einen erheblichen
 Wörterbuchpflege nach Sprache
 --------------------------------
 
-.. list-table:: Punkte zur Woerterbuchpflege
+.. list-table:: Punkte zur Wörterbuchpflege
    :header-rows: 1
    :widths: 20 40 40
 

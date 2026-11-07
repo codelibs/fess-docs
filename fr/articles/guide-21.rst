@@ -1,41 +1,41 @@
 ==================================================
-Partie 21 : Recherche croisee d'images et de texte
+Partie 21 : Recherche croisée d'images et de texte
 ==================================================
 
 Introduction
 =============
 
-Dans les articles precedents, nous nous sommes principalement concentres sur la recherche de documents bases sur du texte.
-Cependant, les connaissances d'entreprise comprennent egalement de nombreux contenus au-dela du texte.
-Photos de produits, plans techniques, images de diapositives de presentations, photos de tableaux blancs -- si ces "images" pouvaient egalement etre recherchees, les possibilites d'exploitation des connaissances s'elargiraient considerablement.
+Dans les articles précédents, nous nous sommes principalement concentrés sur la recherche de documents basés sur du texte.
+Cependant, les connaissances d'entreprise comprennent également de nombreux contenus au-delà du texte.
+Photos de produits, plans techniques, images de diapositives de présentations, photos de tableaux blancs -- si ces "images" pouvaient également être recherchées, les possibilités d'exploitation des connaissances s'élargiraient considérablement.
 
-Dans cet article, nous presentons comment construire un environnement de recherche multimodale permettant la recherche croisee de texte et d'images.
+Dans cet article, nous présentons comment construire un environnement de recherche multimodale permettant la recherche croisée de texte et d'images.
 
 Public cible
 =============
 
-- Les personnes qui rencontrent des difficultes dans la recherche de documents contenant des images
-- Les personnes interessees par les applications de la recherche vectorielle
+- Les personnes qui rencontrent des difficultés dans la recherche de documents contenant des images
+- Les personnes intéressées par les applications de la recherche vectorielle
 - Les personnes souhaitant comprendre le concept d'IA multimodale
 
 Qu'est-ce que la recherche multimodale ?
 ==========================================
 
-La recherche multimodale est une technologie qui permet la recherche croisee entre differents types de donnees (texte, images, audio, etc.).
+La recherche multimodale est une technologie qui permet la recherche croisée entre différents types de données (texte, images, audio, etc.).
 
-Par exemple, lorsque vous recherchez avec le texte "design d'une voiture de sport rouge", les images correspondant conceptuellement s'affichent dans les resultats de recherche.
-C'est un mecanisme qui permet de rechercher des images a partir de texte, ou du texte a partir d'images.
+Par exemple, lorsque vous recherchez avec le texte "design d'une voiture de sport rouge", les images correspondant conceptuellement s'affichent dans les résultats de recherche.
+C'est un mécanisme qui permet de rechercher des images à partir de texte, ou du texte à partir d'images.
 
-Modele CLIP
+Modèle CLIP
 -----------
 
-La base de la recherche multimodale repose sur des modeles tels que CLIP (Contrastive Language-Image Pre-Training).
-CLIP convertit le texte et les images dans le meme espace vectoriel, rendant ainsi possible le calcul de la similarite entre texte et images.
+La base de la recherche multimodale repose sur des modèles tels que CLIP (Contrastive Language-Image Pre-Training).
+CLIP convertit le texte et les images dans le même espace vectoriel, rendant ainsi possible le calcul de la similarité entre texte et images.
 
 Recherche multimodale dans Fess
 ==================================
 
-Fess peut realiser la recherche croisee de texte et d'images grace a son plugin de recherche multimodale.
+Fess peut réaliser la recherche croisée de texte et d'images grâce à son plugin de recherche multimodale.
 
 Composants
 -----------
@@ -46,13 +46,13 @@ Les composants de la recherche multimodale sont les suivants :
 2. **OpenSearch** : Recherche les vecteurs par KNN (K-Nearest Neighbor)
 3. **Fess** : Fournit le crawling, l'indexation et l'interface de recherche
 
-Procedure de configuration
+Procédure de configuration
 ----------------------------
 
-**1. Preparation du serveur CLIP**
+**1. Préparation du serveur CLIP**
 
-Preparez un serveur pour executer le modele CLIP.
-Un environnement avec un GPU disponible est recommande.
+Préparez un serveur pour exécuter le modèle CLIP.
+Un environnement avec un GPU disponible est recommandé.
 
 Vous pouvez ajouter un serveur CLIP avec Docker Compose.
 
@@ -62,93 +62,93 @@ Installez le plugin de recherche multimodale pour Fess.
 
 **3. Configuration de l'index KNN**
 
-Configurez les parametres de l'index KNN pour effectuer la recherche vectorielle dans OpenSearch.
-Definissez les dimensions du vecteur en fonction du modele CLIP utilise.
+Configurez les paramètres de l'index KNN pour effectuer la recherche vectorielle dans OpenSearch.
+Définissez les dimensions du vecteur en fonction du modèle CLIP utilisé.
 
 **4. Configuration du crawl**
 
-Configurez les repertoires et sites web contenant des images comme cibles de crawl.
-Les fichiers image (PNG, JPEG, GIF, etc.) sont egalement collectes comme cibles de crawl.
+Configurez les répertoires et sites web contenant des images comme cibles de crawl.
+Les fichiers image (PNG, JPEG, GIF, etc.) sont également collectés comme cibles de crawl.
 
-Experience de recherche
+Expérience de recherche
 ========================
 
 Rechercher des images avec du texte
 --------------------------------------
 
-Lorsque vous recherchez avec du texte tel que "photo exterieure du produit", "tableau blanc de reunion" ou "plan technique", les images correspondant conceptuellement s'affichent dans les resultats de recherche.
+Lorsque vous recherchez avec du texte tel que "photo extérieure du produit", "tableau blanc de réunion" ou "plan technique", les images correspondant conceptuellement s'affichent dans les résultats de recherche.
 
-Des vignettes sont affichees dans les resultats de recherche, ce qui permet de trouver visuellement les images souhaitees.
+Des vignettes sont affichées dans les résultats de recherche, ce qui permet de trouver visuellement les images souhaitées.
 
-Resultats mixtes de texte et d'images
+Résultats mixtes de texte et d'images
 ----------------------------------------
 
-Dans la recherche multimodale, les resultats de recherche contiennent un melange de documents textuels et d'images.
-Le Rank Fusion (voir Partie 18) est utilise pour integrer les resultats de la recherche textuelle et de la recherche d'images.
+Dans la recherche multimodale, les résultats de recherche contiennent un mélange de documents textuels et d'images.
+Le Rank Fusion (voir Partie 18) est utilisé pour intégrer les résultats de la recherche textuelle et de la recherche d'images.
 
 Cas d'utilisation
 ==================
 
-Industrie manufacturiere : Recherche d'images de pieces et de produits
+Industrie manufacturière : Recherche d'images de pièces et de produits
 ------------------------------------------------------------------------
 
-Dans l'industrie manufacturiere, un grand nombre de photos de pieces et d'images de produits sont gerees.
-En recherchant avec du texte tel que "piece metallique ronde" ou en recherchant des pieces similaires a partir de la photo d'une piece specifique, les ressources de conception anterieures peuvent etre exploitees.
+Dans l'industrie manufacturière, un grand nombre de photos de pièces et d'images de produits sont gérées.
+En recherchant avec du texte tel que "pièce métallique ronde" ou en recherchant des pièces similaires à partir de la photo d'une pièce spécifique, les ressources de conception antérieures peuvent être exploitées.
 
-Equipes de design : Gestion des ressources de design
+Équipes de design : Gestion des ressources de design
 -------------------------------------------------------
 
-Les equipes de design gerent de grands volumes de ressources visuelles telles que des logos, des icones, des materiaux photographiques et des maquettes.
-La recherche avec un langage naturel tel que "fond avec degrade bleu" facilite la decouverte des ressources.
+Les équipes de design gèrent de grands volumes de ressources visuelles telles que des logos, des icônes, des matériaux photographiques et des maquettes.
+La recherche avec un langage naturel tel que "fond avec dégradé bleu" facilite la découverte des ressources.
 
-Recherche et developpement : Recherche de donnees experimentales
+Recherche et développement : Recherche de données expérimentales
 ------------------------------------------------------------------
 
-Les departements de R&D gerent des graphiques de resultats experimentaux, des photos au microscope et des images de donnees de mesure.
-En rendant ces images recherchables, la consultation des donnees experimentales anterieures est facilitee.
+Les départements de R&D gèrent des graphiques de résultats expérimentaux, des photos au microscope et des images de données de mesure.
+En rendant ces images recherchables, la consultation des données expérimentales antérieures est facilitée.
 
-Considerations pour le deploiement
+Considérations pour le déploiement
 =====================================
 
-Exigences materielles
+Exigences matérielles
 ----------------------
 
-La recherche multimodale necessite des ressources de calcul pour executer le modele CLIP.
+La recherche multimodale nécessite des ressources de calcul pour exécuter le modèle CLIP.
 
-- **Recommande** : Serveur GPU (NVIDIA GPU)
-- **Minimum** : Peut fonctionner sur CPU, mais la vitesse d'indexation sera reduite
+- **Recommandé** : Serveur GPU (NVIDIA GPU)
+- **Minimum** : Peut fonctionner sur CPU, mais la vitesse d'indexation sera réduite
 
-Le temps d'indexation depend de la vitesse de traitement du modele. Un environnement GPU est donc fortement recommande lors de l'indexation d'un grand nombre d'images.
+Le temps d'indexation dépend de la vitesse de traitement du modèle. Un environnement GPU est donc fortement recommandé lors de l'indexation d'un grand nombre d'images.
 
 Formats d'image pris en charge
 ---------------------------------
 
 Les formats d'image courants (JPEG, PNG, GIF, BMP, TIFF, etc.) sont pris en charge.
-La prise en charge des images dans les PDF et des images integrees dans les documents bureautiques depend des parametres de crawl.
+La prise en charge des images dans les PDF et des images intégrées dans les documents bureautiques dépend des paramètres de crawl.
 
-Deploiement progressif
+Déploiement progressif
 ------------------------
 
-La recherche multimodale peut etre deployee en complement d'un environnement de recherche textuelle existant.
+La recherche multimodale peut être déployée en complément d'un environnement de recherche textuelle existant.
 
-1. Commencez par un deploiement pilote sur les repertoires et sites contenant de nombreuses images
-2. Verifiez la qualite de recherche et l'utilisation
-3. Elargissez progressivement le perimetre
+1. Commencez par un déploiement pilote sur les répertoires et sites contenant de nombreuses images
+2. Vérifiez la qualité de recherche et l'utilisation
+3. Élargissez progressivement le périmètre
 
-Synthese
+Synthèse
 =========
 
-Dans cet article, nous avons presente la recherche croisee d'images et de texte grace a la recherche multimodale.
+Dans cet article, nous avons présenté la recherche croisée d'images et de texte grâce à la recherche multimodale.
 
-- Le concept de recherche multimodale (espace vectoriel unifie pour le texte et les images via CLIP)
+- Le concept de recherche multimodale (espace vectoriel unifié pour le texte et les images via CLIP)
 - Les composants et la configuration de la recherche multimodale dans Fess
-- L'experience de la recherche d'images par le texte et de la recherche d'images similaires par l'image
-- Les cas d'utilisation dans l'industrie manufacturiere, le design et la recherche et developpement
-- Les exigences GPU et une approche de deploiement progressif
+- L'expérience de la recherche d'images par le texte et de la recherche d'images similaires par l'image
+- Les cas d'utilisation dans l'industrie manufacturière, le design et la recherche et développement
+- Les exigences GPU et une approche de déploiement progressif
 
-Dans le prochain article, nous aborderons la visualisation des connaissances organisationnelles par l'analyse des donnees de recherche.
+Dans le prochain article, nous aborderons la visualisation des connaissances organisationnelles par l'analyse des données de recherche.
 
-References
+Références
 ==========
 
 - `OpenSearch KNN Search <https://opensearch.org/docs/latest/search-plugins/knn/>`__

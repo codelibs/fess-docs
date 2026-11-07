@@ -1,240 +1,240 @@
 ============================================
-Parte 15: Infraestructura de busqueda segura
+Parte 15: Infraestructura de búsqueda segura
 ============================================
 
-Introduccion
+Introducción
 =============
 
-Los requisitos de seguridad de la informacion empresarial son cada vez mas estrictos ano tras ano.
-Dado que los sistemas de busqueda agregan una gran cantidad de documentos confidenciales, son indispensables mecanismos adecuados de autenticacion y autorizacion.
+Los requisitos de seguridad de la información empresarial son cada vez más estrictos año tras año.
+Dado que los sistemas de búsqueda agregan una gran cantidad de documentos confidenciales, son indispensables mecanismos adecuados de autenticación y autorización.
 
-En este articulo, partimos de la busqueda basada en roles presentada en la Parte 5 y disenamos una arquitectura de seguridad centrada en la integracion con SSO (inicio de sesion unico).
+En este artículo, partimos de la búsqueda basada en roles presentada en la Parte 5 y diseñamos una arquitectura de seguridad centrada en la integración con SSO (inicio de sesión único).
 
-Publico objetivo
+Público objetivo
 =================
 
 - Personas que operan Fess en un entorno empresarial
-- Personas que disenan la integracion SSO (OIDC, SAML)
+- Personas que diseñan la integración SSO (OIDC, SAML)
 - Personas que comprenden los conceptos de seguridad de confianza cero
 
-Organizacion de los requisitos de seguridad
+Organización de los requisitos de seguridad
 =============================================
 
-A continuacion, se organizan los requisitos de seguridad tipicos de las empresas.
+A continuación, se organizan los requisitos de seguridad típicos de las empresas.
 
 .. list-table:: Requisitos de seguridad
    :header-rows: 1
    :widths: 30 70
 
    * - Requisito
-     - Descripcion
-   * - Inicio de sesion unico
-     - Integrarse con un IdP existente para eliminar operaciones de inicio de sesion adicionales
+     - Descripción
+   * - Inicio de sesión único
+     - Integrarse con un IdP existente para eliminar operaciones de inicio de sesión adicionales
    * - Acceso basado en roles
-     - Controlar los resultados de busqueda segun la afiliacion y los permisos del usuario
+     - Controlar los resultados de búsqueda según la afiliación y los permisos del usuario
    * - Cifrado de comunicaciones
      - Cifrar todas las comunicaciones mediante HTTPS
    * - Control de acceso a la API
-     - Autenticacion de API basada en tokens y gestion de permisos
-   * - Registros de auditoria
-     - Registrar quien busco que informacion
+     - Autenticación de API basada en tokens y gestión de permisos
+   * - Registros de auditoría
+     - Registrar quién buscó qué información
 
-Opciones de integracion SSO
+Opciones de integración SSO
 ==============================
 
-A continuacion, se presentan los protocolos SSO compatibles con Fess y los escenarios en los que cada uno es aplicable.
+A continuación, se presentan los protocolos SSO compatibles con Fess y los escenarios en los que cada uno es aplicable.
 
-.. list-table:: Comparacion de protocolos SSO
+.. list-table:: Comparación de protocolos SSO
    :header-rows: 1
    :widths: 20 30 50
 
    * - Protocolo
      - IdPs representativos
-     - Escenarios de aplicacion
+     - Escenarios de aplicación
    * - OpenID Connect
      - Entra ID, Keycloak, Google
-     - Entornos en la nube, infraestructura de autenticacion moderna
+     - Entornos en la nube, infraestructura de autenticación moderna
    * - SAML 2.0
      - Entra ID, Okta, OneLogin
      - Entornos empresariales, cuando existe un IdP SAML existente
    * - SPNEGO/Kerberos
      - Active Directory
-     - Entornos con autenticacion integrada de Windows
+     - Entornos con autenticación integrada de Windows
 
-Integracion SSO mediante OpenID Connect / Entra ID
+Integración SSO mediante OpenID Connect / Entra ID
 =====================================================
 
-Este es el enfoque mas moderno y recomendado.
-Ademas de la integracion generica con OpenID Connect, Fess tambien proporciona una funcion de integracion dedicada para Entra ID (Azure AD).
-A continuacion, se explica la integracion utilizando Entra ID como ejemplo.
+Este es el enfoque más moderno y recomendado.
+Además de la integración genérica con OpenID Connect, Fess también proporciona una función de integración dedicada para Entra ID (Azure AD).
+A continuación, se explica la integración utilizando Entra ID como ejemplo.
 
-Descripcion general del flujo de autenticacion
+Descripción general del flujo de autenticación
 -------------------------------------------------
 
 1. Un usuario accede a Fess
-2. Fess redirige al usuario a la pantalla de autenticacion de Entra ID
+2. Fess redirige al usuario a la pantalla de autenticación de Entra ID
 3. El usuario se autentica en Entra ID (incluida la MFA)
-4. Entra ID devuelve un token de autenticacion a Fess
-5. Fess obtiene la informacion de usuario y de grupo a partir del token
-6. Se asignan roles en funcion de la informacion de grupo
-7. Se proporcionan resultados de busqueda basados en los roles
+4. Entra ID devuelve un token de autenticación a Fess
+5. Fess obtiene la información de usuario y de grupo a partir del token
+6. Se asignan roles en función de la información de grupo
+7. Se proporcionan resultados de búsqueda basados en los roles
 
-Configuracion en el lado de Entra ID
+Configuración en el lado de Entra ID
 --------------------------------------
 
-1. Registre una aplicacion en Entra ID
-2. Configure la URI de redireccion (URL de callback OIDC de Fess)
+1. Registre una aplicación en Entra ID
+2. Configure la URI de redirección (URL de callback OIDC de Fess)
 3. Otorgue los permisos de API necesarios (User.Read, GroupMember.Read.All, etc.)
 4. Obtenga el ID de cliente y el secreto
 
-Configuracion en el lado de Fess
+Configuración en el lado de Fess
 ----------------------------------
 
-Configure la informacion de conexion SSO en la pagina [Sistema] > [General] de la consola de administracion.
-Los principales elementos de configuracion son los siguientes:
+Configure la información de conexión SSO en la página [Sistema] > [General] de la consola de administración.
+Los principales elementos de configuración son los siguientes:
 
 - URL del proveedor OpenID Connect (endpoint de Entra ID)
 - ID de cliente
 - Secreto de cliente
 - Alcances (openid, profile, email, etc.)
-- Configuracion de claims de grupo
+- Configuración de claims de grupo
 
 Mapeo de grupos a roles
 -------------------------
 
 Asigne los grupos de Entra ID a los roles de Fess.
-Esto permite que la gestion de grupos en Entra ID se refleje directamente en el control de los resultados de busqueda.
+Esto permite que la gestión de grupos en Entra ID se refleje directamente en el control de los resultados de búsqueda.
 
 Ejemplo: Grupo de Entra ID "Engineering" -> Rol de Fess "engineering_role"
 
-Integracion SSO mediante SAML
+Integración SSO mediante SAML
 ================================
 
-La integracion SAML es adecuada para entornos donde existe un IdP SAML existente.
+La integración SAML es adecuada para entornos donde existe un IdP SAML existente.
 
-Descripcion general del flujo de autenticacion
+Descripción general del flujo de autenticación
 -------------------------------------------------
 
 En SAML, se intercambian SAML Assertions entre el SP (Service Provider = Fess) y el IdP.
 
 1. Un usuario accede a Fess
-2. Fess envia un SAML AuthnRequest al IdP
+2. Fess envía un SAML AuthnRequest al IdP
 3. El IdP autentica al usuario
 4. El IdP devuelve una SAML Response (que contiene atributos de usuario) a Fess
-5. Fess asigna roles en funcion de los atributos de usuario
+5. Fess asigna roles en función de los atributos de usuario
 
-Configuracion en el lado de Fess
+Configuración en el lado de Fess
 ----------------------------------
 
-Para la integracion SAML, se requieren las siguientes configuraciones:
+Para la integración SAML, se requieren las siguientes configuraciones:
 
 - URL de metadatos o archivo XML del IdP
 - ID de entidad del SP
 - Assertion Consumer Service URL
-- Mapeo de atributos (nombre de usuario, direccion de correo electronico, grupos)
+- Mapeo de atributos (nombre de usuario, dirección de correo electrónico, grupos)
 
-Integracion SPNEGO / Kerberos
+Integración SPNEGO / Kerberos
 ================================
 
-En entornos de Windows Active Directory, se puede utilizar la autenticacion integrada de Windows mediante SPNEGO/Kerberos.
-Cuando se accede a traves de un navegador desde un PC unido al dominio, la autenticacion se realiza automaticamente sin operaciones de inicio de sesion adicionales.
+En entornos de Windows Active Directory, se puede utilizar la autenticación integrada de Windows mediante SPNEGO/Kerberos.
+Cuando se accede a través de un navegador desde un PC unido al dominio, la autenticación se realiza automáticamente sin operaciones de inicio de sesión adicionales.
 
-Este metodo es el mas transparente para los usuarios, pero la configuracion es la mas compleja.
+Este método es el más transparente para los usuarios, pero la configuración es la más compleja.
 Se requiere un entorno de dominio de Active Directory como prerrequisito.
 
 Cifrado de comunicaciones
 ===========================
 
-Configuracion de SSL/TLS
+Configuración de SSL/TLS
 --------------------------
 
-En entornos de produccion, se recomienda realizar todos los accesos a Fess a traves de HTTPS.
+En entornos de producción, se recomienda realizar todos los accesos a Fess a través de HTTPS.
 
-**Metodo de proxy inverso (recomendado)**
+**Método de proxy inverso (recomendado)**
 
-Despliegue Nginx o Apache HTTP Server como proxy inverso para realizar la terminacion SSL.
+Despliegue Nginx o Apache HTTP Server como proxy inverso para realizar la terminación SSL.
 Fess en si opera sobre HTTP, y el proxy inverso maneja HTTPS.
 
 ::
 
     [Cliente] --HTTPS--> [Nginx] --HTTP--> [Fess]
 
-La ventaja de este metodo es que la gestion de certificados se centraliza en el proxy inverso.
+La ventaja de este método es que la gestión de certificados se centraliza en el proxy inverso.
 
-**Metodo de configuracion directa en Fess**
+**Método de configuración directa en Fess**
 
-Tambien es posible configurar certificados SSL directamente en el Tomcat de Fess.
-Esto es adecuado para entornos de pequena escala o cuando no se despliega un proxy inverso.
+También es posible configurar certificados SSL directamente en el Tomcat de Fess.
+Esto es adecuado para entornos de pequeña escala o cuando no se despliega un proxy inverso.
 
 Seguridad del acceso a la API
 ================================
 
-A continuacion, se refuerza la seguridad de la integracion con la API presentada en la Parte 11.
+A continuación, se refuerza la seguridad de la integración con la API presentada en la Parte 11.
 
-Diseno de permisos de tokens
+Diseño de permisos de tokens
 ------------------------------
 
 Configure los permisos adecuados para los tokens de acceso.
 
-.. list-table:: Ejemplo de diseno de tokens
+.. list-table:: Ejemplo de diseño de tokens
    :header-rows: 1
    :widths: 25 25 50
 
-   * - Proposito
+   * - Propósito
      - Permisos
      - Notas
-   * - Widget de busqueda
-     - Solo busqueda (solo lectura)
+   * - Widget de búsqueda
+     - Solo búsqueda (solo lectura)
      - Utilizado en el frontend
    * - Procesamiento por lotes
-     - Busqueda + Indexacion
+     - Búsqueda + Indexación
      - Utilizado en el lado del servidor
-   * - Automatizacion de administracion
-     - Acceso a la API de administracion
+   * - Automatización de administración
+     - Acceso a la API de administración
      - Utilizado en scripts operativos
 
-Gestion de tokens
+Gestión de tokens
 ------------------
 
-- Rotacion periodica (cada 3 a 6 meses)
-- Revocacion inmediata de los tokens que ya no son necesarios
-- Supervision del uso de tokens
+- Rotación periódica (cada 3 a 6 meses)
+- Revocación inmediata de los tokens que ya no son necesarios
+- Supervisión del uso de tokens
 
-Auditoria y registros
+Auditoría y registros
 =======================
 
-Los registros de auditoria en un sistema de busqueda son importantes para investigar incidentes de seguridad y garantizar el cumplimiento normativo.
+Los registros de auditoría en un sistema de búsqueda son importantes para investigar incidentes de seguridad y garantizar el cumplimiento normativo.
 
 Registros generados por Fess
 ------------------------------
 
-- **Registros de busqueda**: Quien busco que (se pueden consultar en [Informacion del sistema] > [Registro de busqueda] en la consola de administracion)
-- **Registros de auditoria** (``audit.log``): Operaciones como inicio de sesion, cierre de sesion, acceso y cambios de permisos se registran de manera unificada
+- **Registros de búsqueda**: Quién buscó qué (se pueden consultar en [Información del sistema] > [Registro de búsqueda] en la consola de administración)
+- **Registros de auditoría** (``audit.log``): Operaciones como inicio de sesión, cierre de sesión, acceso y cambios de permisos se registran de manera unificada
 
-Retencion de registros
+Retención de registros
 -----------------------
 
-Configure el periodo de retencion de registros segun los requisitos de seguridad.
-Si existen requisitos de cumplimiento normativo, considere el reenvio de registros a un sistema externo de gestion de registros (SIEM).
+Configure el período de retención de registros según los requisitos de seguridad.
+Si existen requisitos de cumplimiento normativo, considere el reenvío de registros a un sistema externo de gestión de registros (SIEM).
 
 Resumen
 ========
 
-En este articulo, disenamos una arquitectura de seguridad para Fess en un entorno empresarial.
+En este artículo, diseñamos una arquitectura de seguridad para Fess en un entorno empresarial.
 
-- Tres opciones de integracion SSO (OIDC, SAML, SPNEGO) y sus escenarios de aplicacion
-- Diseno de la integracion con Entra ID mediante OpenID Connect
+- Tres opciones de integración SSO (OIDC, SAML, SPNEGO) y sus escenarios de aplicación
+- Diseño de la integración con Entra ID mediante OpenID Connect
 - Cifrado de comunicaciones mediante SSL/TLS
-- Diseno de permisos para tokens de acceso a la API
-- Gestion de registros de auditoria
+- Diseño de permisos para tokens de acceso a la API
+- Gestión de registros de auditoría
 
-Construya una infraestructura de busqueda segura manteniendo el equilibrio entre seguridad y usabilidad.
+Construya una infraestructura de búsqueda segura manteniendo el equilibrio entre seguridad y usabilidad.
 
-En el proximo articulo, se abordara la automatizacion de la infraestructura de busqueda.
+En el próximo artículo, se abordará la automatización de la infraestructura de búsqueda.
 
 Referencias
 ============
 
-- `Configuracion SSO de Fess <https://fess.codelibs.org/ja/15.5/config/sso.html>`__
+- `Configuración SSO de Fess <https://fess.codelibs.org/ja/15.5/config/sso.html>`__
 
-- `Configuracion de seguridad de Fess <https://fess.codelibs.org/ja/15.5/config/security.html>`__
+- `Configuración de seguridad de Fess <https://fess.codelibs.org/ja/15.5/config/security.html>`__
