@@ -51,7 +51,7 @@ HTTP 메서드         GET
    * - ``docId``
      - 문서 식별자(경로, 필수, 패턴 ``[A-Za-z0-9_-]{1,512}`` ). 일치하지 않는 값은 ``invalid_request`` (400) 가 됩니다.
    * - ``num``
-     - 반환할 문서 수(쿼리, 기본값 ``10`` ). ``20`` 과 ``paging.search.page.max.size`` 중 작은 쪽을 넘는 값은 그 값으로 줄어들며, 응답의 ``page_size`` 로 확인할 수 있습니다. ``0`` 이하는 ``invalid_request`` (400) 가 됩니다. 숫자가 아닌 값은 무시되고 기본값이 사용됩니다.
+     - 반환할 문서 수(쿼리). :doc:`api-search` 의 ``num`` 과 같은 규칙이며, 기본값은 ``paging.search.page.size`` (기본 ``10`` )입니다. ``paging.search.page.max.size`` 를 넘는 값은 그 값으로 줄어들며, 응답의 ``page_size`` 로 확인할 수 있습니다. ``0`` 이하는 ``invalid_request`` (400) 가 됩니다. 정수가 아닌 값은 무시되고 기본값이 사용됩니다.
 
 표: 요청 파라미터
 

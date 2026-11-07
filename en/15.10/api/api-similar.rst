@@ -51,7 +51,7 @@ Request Parameters
    * - ``docId``
      - Document identifier (path, required, pattern ``[A-Za-z0-9_-]{1,512}``). A value that does not match produces ``invalid_request`` (400).
    * - ``num``
-     - Number of documents to return (query, default ``10``). A value above ``20`` or above ``paging.search.page.max.size`` is reduced to the smaller of the two, and ``page_size`` in the response shows the result. A value of ``0`` or less produces ``invalid_request`` (400). A value that is not a number is ignored and the default is used.
+     - Number of documents to return (query). The rules are those of ``num`` in :doc:`api-search`: the default is ``paging.search.page.size`` (``10`` by default). A value above ``paging.search.page.max.size`` is reduced to it, and ``page_size`` in the response shows the result. A value of ``0`` or less produces ``invalid_request`` (400). A value that is not an integer is ignored and the default is used.
 
 Table: Request Parameters
 

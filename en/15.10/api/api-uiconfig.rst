@@ -205,7 +205,7 @@ Returns the settings that an administrator entered in "Theme Settings" in System
 - A key matches ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` and is not ``__proto__``, ``constructor`` or ``prototype``.
 - A value has at most 1000 characters and no control characters.
 - Only valid entries are returned, at most 100, in the stored order. When a key appears more than once, the later line's value is used.
-- This endpoint can be called without logging in even when "Login Required" is enabled. In that case, an anonymous caller gets an empty object. However, when ``login.required`` is enabled, ``theme_settings`` is returned only to a caller who logged in with a session. A call that only carries an access token also gets an empty object.
+- This endpoint can be called without logging in even when "Login Required" is enabled. In that case, an anonymous caller gets an empty object.
 - The values are visible to every user of the search UI, so they must not hold secrets. A theme must treat the values as data only: never insert them as HTML, and never use them as the target of a link or a redirect.
 
 features

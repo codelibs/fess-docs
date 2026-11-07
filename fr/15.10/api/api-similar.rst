@@ -51,7 +51,7 @@ Paramètres de requête
    * - ``docId``
      - Identifiant du document (chemin, obligatoire, motif ``[A-Za-z0-9_-]{1,512}``). Une valeur non conforme produit ``invalid_request`` (400).
    * - ``num``
-     - Nombre de documents à renvoyer (requête, ``10`` par défaut). Une valeur supérieure à ``20`` ou à ``paging.search.page.max.size`` est ramenée à la plus petite des deux, et ``page_size`` dans la réponse indique le résultat. Une valeur ``0`` ou négative produit ``invalid_request`` (400). Une valeur qui n'est pas un nombre est ignorée et la valeur par défaut est utilisée.
+     - Nombre de documents à renvoyer (requête). Les règles sont celles de ``num`` dans :doc:`api-search` : la valeur par défaut est ``paging.search.page.size`` (``10`` par défaut). Une valeur supérieure à ``paging.search.page.max.size`` est ramenée à cette limite, et ``page_size`` dans la réponse indique le résultat. Une valeur ``0`` ou négative produit ``invalid_request`` (400). Une valeur qui n'est pas un entier est ignorée et la valeur par défaut est utilisée.
 
 Tableau : Paramètres de requête
 

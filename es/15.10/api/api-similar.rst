@@ -51,7 +51,7 @@ Parámetros de solicitud
    * - ``docId``
      - Identificador del documento (ruta, obligatorio, patrón ``[A-Za-z0-9_-]{1,512}``). Un valor que no coincide produce ``invalid_request`` (400).
    * - ``num``
-     - Número de documentos que se devuelven (consulta, ``10`` de forma predeterminada). Un valor superior a ``20`` o a ``paging.search.page.max.size`` se reduce al menor de los dos, y ``page_size`` en la respuesta muestra el resultado. Un valor de ``0`` o menos produce ``invalid_request`` (400). Un valor que no es un número se ignora y se usa el valor predeterminado.
+     - Número de documentos que se devuelven (consulta). Se aplican las reglas de ``num`` en :doc:`api-search`: el valor predeterminado es ``paging.search.page.size`` (``10`` de forma predeterminada). Un valor superior a ``paging.search.page.max.size`` se reduce a ese máximo, y ``page_size`` en la respuesta muestra el resultado. Un valor de ``0`` o menos produce ``invalid_request`` (400). Un valor que no es un entero se ignora y se usa el valor predeterminado.
 
 Tabla: Parámetros de solicitud
 

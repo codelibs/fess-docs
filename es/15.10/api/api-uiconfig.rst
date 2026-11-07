@@ -205,7 +205,7 @@ Devuelve la configuración que un administrador introdujo en "Configuración del
 - Una clave coincide con ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` y no es ``__proto__``, ``constructor`` ni ``prototype``.
 - Un valor tiene como máximo 1000 caracteres y no contiene caracteres de control.
 - Solo se devuelven las entradas válidas, como máximo 100, en el orden almacenado. Si una clave aparece más de una vez, se usa el valor de la última línea.
-- Este endpoint se puede llamar sin iniciar sesión incluso cuando "Requiere inicio de sesión" está habilitado. En ese caso, un llamante anónimo recibe un objeto vacío. Sin embargo, cuando ``login.required`` está habilitado, ``theme_settings`` solo se devuelve a un llamante que inició sesión con una sesión. Una llamada que solo lleva un token de acceso también recibe un objeto vacío.
+- Este endpoint se puede llamar sin iniciar sesión incluso cuando "Requiere inicio de sesión" está habilitado. En ese caso, un llamante anónimo recibe un objeto vacío.
 - Los valores son visibles para todos los usuarios de la interfaz de búsqueda, por lo que no deben contener secretos. Un tema debe tratar los valores solo como datos: nunca insertarlos como HTML ni usarlos como destino de un enlace o de una redirección.
 
 features
