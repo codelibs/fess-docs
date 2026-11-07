@@ -74,7 +74,7 @@ La fecha de EOL de Fess es aproximadamente 18 meses después del lanzamiento.
 Versiones actualmente soportadas
 ---------------------------------
 
-.. GENERATED-BEGIN: supported-versions -- from versions.json vía tools/update_eol.py
+.. GENERATED-BEGIN: supported-versions -- from versions.json via tools/update_eol.py
 .. tabularcolumns:: |p{3cm}|p{4cm}|p{3cm}|
 .. list-table::
    :header-rows: 1
@@ -118,7 +118,7 @@ Versiones actualmente soportadas
 Versiones en fin de vida
 -------------------------
 
-.. GENERATED-BEGIN: eol-versions -- from versions.json vía tools/update_eol.py
+.. GENERATED-BEGIN: eol-versions -- from versions.json via tools/update_eol.py
 .. tabularcolumns:: |p{4cm}|p{8cm}|
 .. list-table::
 
