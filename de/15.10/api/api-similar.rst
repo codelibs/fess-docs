@@ -51,7 +51,7 @@ Anfrageparameter
    * - ``docId``
      - Dokumentkennung (Pfad, erforderlich, Muster ``[A-Za-z0-9_-]{1,512}``). Ein nicht passender Wert führt zu ``invalid_request`` (400).
    * - ``num``
-     - Anzahl der zurückzugebenden Dokumente (Query). Es gelten die Regeln von ``num`` in :doc:`api-search`: Der Standard ist ``paging.search.page.size`` (standardmäßig ``10``). Ein Wert über ``paging.search.page.max.size`` wird darauf gekürzt; ``page_size`` in der Antwort zeigt das Ergebnis. Ein Wert von ``0`` oder weniger führt zu ``invalid_request`` (400). Ein Wert, der keine ganze Zahl ist, wird ignoriert, und der Standardwert gilt.
+     - Anzahl der zurückzugebenden Dokumente (Query). Es gelten die Regeln von ``num`` in :doc:`api-search`: Der Standard ist ``10`` (``paging.search.page.size`` wird nicht verwendet). Ein Wert über ``paging.search.page.max.size`` wird darauf gekürzt; ``page_size`` in der Antwort zeigt das Ergebnis. Ein Wert von ``0`` oder weniger führt zu ``invalid_request`` (400). Ein Wert, der keine ganze Zahl ist, wird ignoriert, und der Standardwert gilt.
 
 Tabelle: Anfrageparameter
 

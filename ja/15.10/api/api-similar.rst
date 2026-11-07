@@ -51,7 +51,7 @@ HTTPメソッド        GET
    * - ``docId``
      - ドキュメントの識別子（パス、必須、パターン ``[A-Za-z0-9_-]{1,512}`` ）。一致しない値は ``invalid_request`` (400) になります。
    * - ``num``
-     - 返すドキュメント数（クエリ）。 :doc:`api-search` の ``num`` と同じ規則で、デフォルトは ``paging.search.page.size`` （既定は ``10`` ）です。 ``paging.search.page.max.size`` を超える値はその値に切り詰められ、レスポンスの ``page_size`` で確認できます。 ``0`` 以下は ``invalid_request`` (400) になります。整数でない値は無視され、デフォルト値が使われます。
+     - 返すドキュメント数（クエリ）。 :doc:`api-search` の ``num`` と同じ規則で、デフォルトは ``10`` です（ ``paging.search.page.size`` には従いません）。 ``paging.search.page.max.size`` を超える値はその値に切り詰められ、レスポンスの ``page_size`` で確認できます。 ``0`` 以下は ``invalid_request`` (400) になります。整数でない値は無視され、デフォルト値が使われます。
 
 表: リクエストパラメーター
 

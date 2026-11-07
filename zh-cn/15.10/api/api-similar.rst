@@ -51,7 +51,7 @@ HTTP 方法           GET
    * - ``docId``
      - 文档标识符（路径，必填，模式 ``[A-Za-z0-9_-]{1,512}`` ）。不匹配的值会产生 ``invalid_request`` (400)。
    * - ``num``
-     - 返回的文档数（查询参数）。规则与 :doc:`api-search` 中的 ``num`` 相同，默认值为 ``paging.search.page.size`` （默认 ``10`` ）。超过 ``paging.search.page.max.size`` 的值会被缩小为该值，响应中的 ``page_size`` 会显示结果。 ``0`` 或更小的值会产生 ``invalid_request`` (400)。不是整数的值会被忽略，使用默认值。
+     - 返回的文档数（查询参数）。规则与 :doc:`api-search` 中的 ``num`` 相同，默认值为 ``10`` （不使用 ``paging.search.page.size`` ）。超过 ``paging.search.page.max.size`` 的值会被缩小为该值，响应中的 ``page_size`` 会显示结果。 ``0`` 或更小的值会产生 ``invalid_request`` (400)。不是整数的值会被忽略，使用默认值。
 
 表: 请求参数
 
