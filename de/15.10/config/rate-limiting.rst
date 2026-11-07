@@ -189,6 +189,7 @@ Ab 15.10 teilen sich ``/api/v2/auth/login`` und das Anmeldeformular der Anmeldes
 Jeder Versuch verbraucht einen Platz im Minutenkontingent der Client-IP (Standardwert ``10``); bei erfolgreicher Anmeldung wird der Platz zurückgegeben.
 Überschreiten die Versuche von derselben IP-Adresse das Limit, wird diese IP-Adresse für ``theme.api.login.lockout.seconds`` (Standardwert ``900``) Sekunden gesperrt, und in dieser Zeit ist auch mit korrekten Zugangsdaten keine Anmeldung möglich.
 Kommen daher von derselben IP-Adresse mehr Versuche als erlaubt (etwa gleichzeitige Anmeldungen), bevor einer erfolgreich ist, wird diese Adresse gesperrt.
+Das Limit pro Benutzer (``theme.api.login.rate.limit.per.user.per.minute``) wird für jede Kombination aus Client-IP-Adresse und Benutzername gezählt. Die Groß- und Kleinschreibung des Benutzernamens wird nicht beachtet; ``alice`` und ``Alice`` teilen sich also einen Zähler. Der Benutzername, der für die Authentifizierung verwendet und in die Protokolle geschrieben wird, bleibt so, wie er eingegeben wurde.
 Einzelheiten finden Sie unter :doc:`../api/api-auth`.
 
 Erweiterte Rate-Limiting-Konfiguration

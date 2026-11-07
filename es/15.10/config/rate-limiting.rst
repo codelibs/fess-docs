@@ -190,6 +190,7 @@ Desde 15.10, ``/api/v2/auth/login`` y el formulario de inicio de sesión de la p
 Cada intento consume una plaza de la cuota por minuto de la IP del cliente (valor predeterminado ``10``), y la plaza se devuelve cuando el inicio de sesión tiene éxito.
 Cuando los intentos desde la misma dirección IP superan el límite, esa dirección IP queda bloqueada durante ``theme.api.login.lockout.seconds`` (valor predeterminado ``900``) segundos, y durante ese tiempo no se puede iniciar sesión ni siquiera con credenciales correctas.
 Por ello, si desde la misma dirección IP se hacen más intentos que el límite (por ejemplo, inicios de sesión simultáneos) antes de que alguno tenga éxito, esa dirección queda bloqueada.
+El límite por usuario (``theme.api.login.rate.limit.per.user.per.minute``) se cuenta para cada par de dirección IP del cliente y nombre de usuario. Los nombres de usuario se comparan sin distinguir mayúsculas de minúsculas, por lo que ``alice`` y ``Alice`` comparten un único contador. El nombre de usuario que se usa para la autenticación y se escribe en los registros es el que se escribió.
 Consulte :doc:`../api/api-auth` para más detalles.
 
 Configuración avanzada de límite de tasa

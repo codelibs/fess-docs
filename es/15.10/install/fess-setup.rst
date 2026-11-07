@@ -122,6 +122,39 @@ lugar la línea ``PLAYWRIGHT_NODEJS_PATH`` que debe añadir a ``bin/fess.in.sh``
 selecciona otra versión de Node.js. Consulte :doc:`../config/crawler-advanced` para el rastreador de
 Playwright.
 
+Configuración inicial
+=====================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+Establece en ``fess_config.properties`` dos valores que se distribuyen con valores predeterminados conocidos: la contraseña inicial del usuario ``admin`` (``index.user.initial_password``, distribuida como ``admin``) y la clave de cifrado (``app.cipher.key``, distribuida como ``___change__me___``). Ejecútelo una sola vez, antes de que |Fess| se inicie por primera vez. Una clave que no esté en el archivo se añade al final, con un comentario que indica que la añadió ``fess-setup``.
+
+La contraseña inicial se lee cuando |Fess| crea el índice de usuarios, en su primer inicio. Después, la cuenta ``admin`` queda almacenada en el índice, por lo que ejecutar ``init`` más tarde no cambia la contraseña del usuario ``admin``.
+
+La clave de cifrado cifra las contraseñas que |Fess| guarda en las configuraciones de rastreo y de almacenes de datos, y un valor guardado con una clave no se puede leer con otra. Por eso ``init`` solo sustituye la clave de cifrado mientras conserve el valor distribuido (o esté vacía). Por este motivo, una segunda ejecución falla sin modificar ninguno de los dos valores, salvo que indique ``--force``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Opción
+     - Descripción
+   * - ``--admin-password <password>``
+     - La contraseña inicial. Si se omite, ``init`` genera una contraseña aleatoria de 16 letras y dígitos y la muestra una sola vez, después de ``Password of the admin user:``. La contraseña también se escribe en texto plano en el archivo. Una contraseña indicada en la línea de comandos es visible para otros usuarios de la máquina. No puede ser ``admin``, no puede estar vacía, no puede empezar ni terminar con espacios en blanco y no puede contener caracteres de control.
+   * - ``--cipher-key <key>``
+     - La clave de cifrado. Si se omite, ``init`` genera una clave aleatoria de 32 letras y dígitos. Una clave que usted indique debe tener 16, 24 o 32 caracteres ASCII imprimibles sin espacios (las longitudes de clave de AES) y no puede ser el valor distribuido. Conserve la clave: los valores que |Fess| guarda con ella no se pueden leer con otra.
+   * - ``--config <file>``
+     - El ``fess_config.properties`` que se modificará. El valor predeterminado es ``app/WEB-INF/classes/fess_config.properties`` en el directorio de |Fess|.
+   * - ``--force``
+     - Sustituye una clave de cifrado que ya no tiene el valor distribuido. Los valores que |Fess| guardó con la clave anterior no se podrán leer después.
+
+``init`` termina con el código ``1`` y no cambia nada cuando un valor no es aceptable (vea las opciones anteriores), cuando el archivo indicado con ``--config`` no existe, cuando la clave de cifrado ya se ha cambiado y no se indica ``--force``, o cuando ``app.cipher.algorithm`` en el archivo tiene un valor distinto de ``aes`` (``init`` solo establece una clave para ``aes``). Una opción desconocida, o una opción sin valor, termina con el código ``2``.
+
 Gestión de Plugins
 ==================
 
@@ -189,6 +222,8 @@ Lista los plugins publicados para este |Fess| y marca los instalados con
 ``(installed: <version>)``. Los plugins que están instalados pero no publicados en el repositorio,
 como un jar compilado localmente, se listan por separado. Una versión de desarrollo de |Fess| lista
 también el repositorio de snapshots.
+
+Un plugin que el repositorio publica pero que no tiene compilación para esta línea de |Fess| se marca con ``(no build for <line>)``, por ejemplo ``(no build for 15.10)``. ``install plugin`` rechaza un plugin así. No se marca nada cuando no se pueden leer las versiones publicadas de un plugin.
 
 list installed
 --------------

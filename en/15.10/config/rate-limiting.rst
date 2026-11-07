@@ -189,6 +189,7 @@ From 15.10, ``/api/v2/auth/login`` and the login form on the login screen (``/lo
 Each attempt consumes one slot of the per-minute quota of the client IP (default ``10``), and the slot is returned when the login succeeds.
 When attempts from the same IP address exceed the limit, that IP address is locked out for ``theme.api.login.lockout.seconds`` (default ``900``) seconds, and during that time even correct credentials cannot log in.
 As a result, if more attempts than the limit (for example, simultaneous logins) come from the same IP address before one succeeds, that address is locked out.
+The per-user limit (``theme.api.login.rate.limit.per.user.per.minute``) is counted for each pair of client IP address and user name. User names are compared without regard to case, so ``alice`` and ``Alice`` share one count. The user name used for authentication and written to the logs is the one that was typed.
 See :doc:`../api/api-auth` for details.
 
 Advanced Rate Limiting Configuration
