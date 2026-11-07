@@ -77,6 +77,10 @@ Para "Host Virtual", especifique uno de los nombres de host virtual configurados
 En las búsquedas realizadas desde un host virtual, solo se muestran en los resultados los documentos de la configuración de rastreo que tiene asignado ese host virtual.
 En los accesos que no coinciden con ningún host virtual (acceso normal sin host virtual configurado), este filtrado no se aplica y se muestran todos los resultados de búsqueda de forma habitual.
 
+.. note::
+
+   Los hosts virtuales dividen los objetivos de búsqueda; no son un medio para restringir el acceso. Si usa hosts virtuales, realice todos los accesos con el nombre de un host virtual. Un acceso por dirección IP, o con un encabezado ``Host`` que no coincide con la configuración (por ejemplo, cuando un proxy inverso reescribe ``Host``), no coincide con ningún host virtual y también se devuelven los documentos que especifican un host virtual. Restrinja por rol los documentos que algunos usuarios no deben ver.
+
 **Ejemplo**
 
 .. list-table::

@@ -77,6 +77,10 @@ Spécifiez « Hôte virtuel » dans l'une des configurations suivantes : configu
 Pour une recherche effectuée depuis un hôte virtuel, seuls les documents de la configuration d'exploration pour laquelle cet hôte virtuel est spécifié apparaissent dans les résultats de recherche.
 Pour un accès ne correspondant à aucun hôte virtuel (accès normal sans hôte virtuel configuré), aucun filtrage n'est appliqué et tous les résultats de recherche sont affichés normalement.
 
+.. note::
+
+   Les hôtes virtuels répartissent les cibles de recherche ; ils ne servent pas à restreindre l'accès. Si vous utilisez des hôtes virtuels, effectuez tous les accès avec le nom d'un hôte virtuel. Un accès par adresse IP, ou avec un en-tête ``Host`` qui ne correspond pas à la configuration (par exemple lorsqu'un proxy inverse réécrit ``Host``), ne correspond à aucun hôte virtuel, et les documents qui spécifient un hôte virtuel sont aussi renvoyés. Restreignez par rôle les documents que certains utilisateurs ne doivent pas voir.
+
 **Exemple**
 
 .. list-table::

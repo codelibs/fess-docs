@@ -77,6 +77,10 @@ Unter „Virtueller Host" wird einer der in der Systemkonfiguration definierten 
 Suchanfragen, die über einen virtuellen Host eingehen, zeigen ausschließlich Dokumente aus den Crawl-Konfigurationen an, denen dieser virtuelle Host zugewiesen ist.
 Bei Zugriffen, die keinem virtuellen Host entsprechen (normaler Zugriff ohne konfigurierte virtuelle Hosts), wird diese Einschränkung nicht angewendet, und alle Suchergebnisse werden wie gewohnt angezeigt.
 
+.. note::
+
+   Virtuelle Hosts teilen die Suchziele auf; sie sind kein Mittel zur Zugriffsbeschränkung. Wenn Sie virtuelle Hosts verwenden, greifen Sie immer über den Namen eines virtuellen Hosts zu. Ein Zugriff über die IP-Adresse oder mit einem ``Host``-Header, der nicht zur Einstellung passt (zum Beispiel wenn ein Reverse-Proxy ``Host`` umschreibt), entspricht keinem virtuellen Host, und auch Dokumente mit einem virtuellen Host werden zurückgegeben. Beschränken Sie Dokumente, die bestimmte Benutzer nicht sehen dürfen, über Rollen.
+
 **Beispiel**
 
 .. list-table::
