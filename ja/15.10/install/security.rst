@@ -29,7 +29,7 @@
 
 .. note::
 
-   一度 ``admin`` から変更したパスワードは、``admin`` のような単純な文字列には戻せません（``password.invalid.admin.passwords`` により管理者パスワードのブラックリストが設定されています）。また、初回起動前であれば ``fess_config.properties`` の ``index.user.initial_password`` で ``admin`` ユーザーの初期パスワードを変更できます。
+   一度 ``admin`` から変更したパスワードは、``admin`` のような単純な文字列には戻せません（``password.invalid.admin.passwords`` により管理者パスワードのブラックリストが設定されています）。また、初回起動前であれば ``fess_config.properties`` の ``index.user.initial_password`` で ``admin`` ユーザーの初期パスワードを変更できます。``bin/fess-setup init`` で設定することもできます（ :doc:`fess-setup` を参照）。
 
 **推奨パスワードポリシー:**
 
@@ -45,6 +45,21 @@
 .. note::
 
    既定では最小文字数は ``8`` で、文字種の要件はすべて無効です。パスワード強度を高めるには、上記のプロパティを明示的に設定してください。なお、|Fess| にはパスワードの有効期限（定期変更の強制）機能はありません。定期的なパスワード変更を運用ルールとする場合は、手動で対応してください。
+
+暗号化キーの変更
+----------------
+
+``fess_config.properties`` の ``app.cipher.key`` は、クロール設定やデータストア設定に保存されるパスワードを暗号化するキーです。同梱の値（ ``___change__me___`` ）は公開されています。キーが空か同梱の値のままの場合、 |Fess| は起動時に ``fess.log`` へ警告を出力します（ :ref:`upgrade-1510-cipher-key` を参照）。 |Fess| がキーを自動で変更することはありません。
+
+初回起動の前に、 ``admin`` ユーザーの初期パスワードと合わせて設定します::
+
+    $ bin/fess-setup init
+
+RPM / DEB パッケージでは ``/usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties`` を実行します。コマンドはランダムなキーを生成します。 ``--cipher-key`` で指定することもできます（ :doc:`fess-setup` を参照）。手動で設定する場合は、 ``fess_config.properties`` の ``app.cipher.key`` を編集します（ZIP パッケージは ``app/WEB-INF/classes/fess_config.properties`` 、RPM / DEB パッケージは ``/etc/fess/fess_config.properties`` ）。既定の ``app.cipher.algorithm`` （ ``aes`` ）では、キーは 16、24、32 文字のいずれかにします。
+
+.. warning::
+
+   クロール設定やデータストア設定にパスワードを保存した後でキーを変更すると、それらの値は復号できなくなります。キーは ``fess_config.properties`` のバックアップと一緒に保管し、別の環境へ移行するときは同じキーを使ってください。
 
 OpenSearch のセキュリティプラグイン有効化
 --------------------------------------
@@ -273,6 +288,7 @@ Nginx でのアクセス制限例::
 --------
 
 - [ ] 管理者パスワードを変更済み
+- [ ] 暗号化キー（ ``app.cipher.key`` ）を同梱の値から変更済み
 - [ ] HTTPS を有効化済み
 - [ ] デフォルトのポート番号を変更（オプション）
 

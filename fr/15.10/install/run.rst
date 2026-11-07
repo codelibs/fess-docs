@@ -9,6 +9,10 @@ Cette page décrit les procédures de démarrage, d'arrêt et de configuration i
    Avant de démarrer |Fess|, veuillez obligatoirement démarrer OpenSearch.
    Si OpenSearch n'est pas démarré, |Fess| ne fonctionnera pas correctement.
 
+.. tip::
+
+   Avant le premier démarrage, exécutez ``bin/fess-setup init`` pour définir dans ``fess_config.properties`` le mot de passe initial de l'utilisateur ``admin`` et la clé de chiffrement (``app.cipher.key``). Avec la clé de chiffrement fournie, |Fess| écrit un avertissement dans ``fess.log`` au démarrage. Voir :doc:`fess-setup` et :doc:`security`.
+
 Méthodes de démarrage
 =====================
 

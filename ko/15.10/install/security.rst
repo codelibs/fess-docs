@@ -29,7 +29,7 @@
 
 .. note::
 
-   한 번 ``admin`` 에서 변경한 비밀번호는 ``admin`` 과 같은 단순한 문자열로는 다시 설정할 수 없습니다(``password.invalid.admin.passwords`` 에 의해 관리자 비밀번호의 블랙리스트가 설정되어 있습니다). 또한 최초 시작 전이라면 ``fess_config.properties`` 의 ``index.user.initial_password`` 로 ``admin`` 사용자의 초기 비밀번호를 변경할 수 있습니다.
+   한 번 ``admin`` 에서 변경한 비밀번호는 ``admin`` 과 같은 단순한 문자열로는 다시 설정할 수 없습니다(``password.invalid.admin.passwords`` 에 의해 관리자 비밀번호의 블랙리스트가 설정되어 있습니다). 또한 최초 시작 전이라면 ``fess_config.properties`` 의 ``index.user.initial_password`` 로 ``admin`` 사용자의 초기 비밀번호를 변경할 수 있습니다. ``bin/fess-setup init`` 로 설정할 수도 있습니다( :doc:`fess-setup` 참조).
 
 **권장 비밀번호 정책:**
 
@@ -45,6 +45,21 @@
 .. note::
 
    기본값에서는 최소 문자 수가 ``8`` 이며 문자 종류 요건은 모두 비활성화되어 있습니다. 비밀번호 강도를 높이려면 위의 속성을 명시적으로 설정하십시오. 또한 |Fess| 에는 비밀번호 유효기간(정기 변경 강제) 기능이 없습니다. 정기적인 비밀번호 변경을 운영 규칙으로 정하고자 하는 경우에는 수동으로 대응하십시오.
+
+암호화 키 변경
+--------------
+
+``fess_config.properties`` 의 ``app.cipher.key`` 는 크롤링 설정과 데이터 스토어 설정에 저장되는 비밀번호를 암호화하는 키입니다. 기본 제공 값(``___change__me___``)은 공개되어 있습니다. 키가 비어 있거나 기본 제공 값 그대로이면 |Fess| 는 시작할 때 ``fess.log`` 에 경고를 출력합니다( :ref:`upgrade-1510-cipher-key` 참조). |Fess| 는 키를 자동으로 변경하지 않습니다.
+
+처음 시작하기 전에 ``admin`` 사용자의 초기 비밀번호와 함께 설정합니다::
+
+    $ bin/fess-setup init
+
+RPM / DEB 패키지에서는 ``/usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties`` 를 실행합니다. 명령은 임의의 키를 생성하며, ``--cipher-key`` 로 지정할 수도 있습니다( :doc:`fess-setup` 참조). 직접 설정하려면 ``fess_config.properties`` 의 ``app.cipher.key`` 를 편집합니다(ZIP 패키지는 ``app/WEB-INF/classes/fess_config.properties`` , RPM / DEB 패키지는 ``/etc/fess/fess_config.properties`` ). 기본 ``app.cipher.algorithm`` (``aes``)에서는 키가 16, 24 또는 32자여야 합니다.
+
+.. warning::
+
+   크롤링 설정이나 데이터 스토어 설정에 비밀번호를 저장한 뒤에 키를 변경하면 해당 값을 복호화할 수 없게 됩니다. 키는 ``fess_config.properties`` 백업과 함께 보관하고, 다른 환경으로 이전할 때 같은 키를 사용하십시오.
 
 OpenSearch 보안 플러그인 활성화
 --------------------------------------
@@ -273,6 +288,7 @@ Nginx에서 액세스 제한 예::
 ---------
 
 - [ ] 관리자 비밀번호 변경 완료
+- [ ] 암호화 키(``app.cipher.key``)를 기본 제공 값에서 변경 완료
 - [ ] HTTPS 활성화 완료
 - [ ] 기본 포트 번호 변경(옵션)
 

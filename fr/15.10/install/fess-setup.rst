@@ -5,7 +5,7 @@ Commande fess-setup
 ``bin/fess-setup`` (``bin\fess-setup.bat`` sous Windows) est fourni avec le package ZIP de |Fess|.
 Il installe ce dont |Fess| a besoin sans l'intégrer : OpenSearch avec les plugins requis par
 |Fess|, Node.js pour les plugins Playwright, les plugins |Fess| et les thèmes. Il établit également un diagnostic
-d'une installation.
+d'une installation. Il définit également le mot de passe initial de l'utilisateur ``admin`` et la clé de chiffrement (``init``).
 
 Exécutez-le depuis le répertoire de |Fess|. Sans argument, il affiche la liste des commandes.
 
@@ -124,6 +124,54 @@ Playwright et ``fess-thumbnail-playwright`` pour les vignettes), dans ``nodejs/`
 la place la ligne ``PLAYWRIGHT_NODEJS_PATH`` à ajouter à ``bin/fess.in.sh``. ``--version`` permet de
 choisir une autre version de Node.js. Consultez :doc:`../config/crawler-advanced` pour le robot
 Playwright.
+
+Définir le mot de passe initial et la clé de chiffrement
+========================================================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+Définit deux valeurs de ``fess_config.properties`` qui sont fournies avec des valeurs par défaut publiques : ``index.user.initial_password``, le mot de passe initial de l'utilisateur ``admin`` (fourni sous la forme ``admin``), et ``app.cipher.key``, la clé qui chiffre les mots de passe enregistrés dans les configurations de crawl et de magasin de données (fournie sous la forme ``___change__me___``). Exécutez-la une seule fois, avant le premier démarrage de |Fess|. Chaque clé remplace sa ligne existante dans le fichier ; une clé absente du fichier est ajoutée.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Option
+     - Description
+   * - ``--admin-password <password>``
+     - Le mot de passe initial de l'utilisateur ``admin``. S'il est omis, un mot de passe alphanumérique aléatoire de 16 caractères est généré. Il ne peut pas être ``admin``, ne doit ni commencer ni finir par une espace, ni contenir de caractère de contrôle. Un mot de passe donné sur la ligne de commande est visible des autres utilisateurs de la machine ; il est donc préférable d'utiliser celui qui est généré.
+   * - ``--cipher-key <key>``
+     - La clé de chiffrement. Si elle est omise, une clé alphanumérique aléatoire de 32 caractères est générée. Une clé que vous donnez doit comporter 16, 24 ou 32 caractères ASCII imprimables, sans espace, et ne peut pas être ``___change__me___``.
+   * - ``--config <file>``
+     - Le ``fess_config.properties`` à modifier. Par défaut, ``app/WEB-INF/classes/fess_config.properties`` dans le répertoire de |Fess| (package ZIP). Pour les packages RPM et DEB, le fichier est ``/etc/fess/fess_config.properties`` ; indiquez-le avec cette option.
+   * - ``--force``
+     - Remplace la clé de chiffrement même si elle n'a plus la valeur fournie. Voir ci-dessous.
+
+Lorsque le mot de passe est généré, la commande l'affiche une seule fois, sous la forme ``Password of the admin user`` ; il figure aussi dans le fichier. |Fess| ne lit le mot de passe que lorsqu'il crée l'index des utilisateurs à son premier démarrage ; exécuter ``init`` après le démarrage de |Fess| ne change donc rien. Ensuite, modifiez le mot de passe de ``admin`` dans l'écran d'administration ; voir :doc:`security`.
+
+Exemple pour le package ZIP, avec le mot de passe et la clé de chiffrement générés ::
+
+    $ bin/fess-setup init
+    Updated /path/to/fess-15.10.0/app/WEB-INF/classes/fess_config.properties
+      index.user.initial_password: set (generated)
+      app.cipher.key: set (generated)
+    Password of the admin user: <generated password>
+    This is the only time it is shown; it is also in the file above.
+    The password is read when Fess creates the user index, at its first start; it changes nothing afterwards.
+    Keep the cipher key: values Fess saves under it cannot be read under another one.
+
+Pour les packages RPM et DEB, exécutez-la avec un utilisateur qui peut écrire dans le fichier ::
+
+    $ sudo /usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties
+
+La clé de chiffrement n'est remplacée que tant qu'elle est vide ou qu'elle a encore la valeur fournie. Sinon, la commande s'arrête avec le code de sortie ``1`` et ne modifie aucune des deux valeurs, car les valeurs que |Fess| a enregistrées avec l'ancienne clé, comme les mots de passe des configurations de crawl et de magasin de données, ne peuvent pas être lues avec une nouvelle clé. ``--force`` remplace la clé malgré tout ; ces mots de passe doivent alors être saisis à nouveau. Conservez la clé de chiffrement et reportez-la lorsque vous passez à une autre installation ; voir :doc:`upgrade`.
+
+La commande s'arrête aussi avec le code de sortie ``1`` lorsque le fichier n'existe pas, ou lorsque ``app.cipher.algorithm`` a une autre valeur que ``aes``, la valeur par défaut.
 
 Gestion des plugins
 ===================

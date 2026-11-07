@@ -29,7 +29,7 @@ Veuillez obligatoirement modifier le mot de passe administrateur par défaut (``
 
 .. note::
 
-   Une fois le mot de passe modifié à partir de ``admin``, il n'est plus possible de le redéfinir avec une valeur aussi simple que ``admin`` (une liste noire de mots de passe administrateur est configurée via ``password.invalid.admin.passwords``). Vous pouvez également modifier le mot de passe initial de l'utilisateur ``admin`` avant le premier démarrage en définissant ``index.user.initial_password`` dans ``fess_config.properties``.
+   Une fois le mot de passe modifié à partir de ``admin``, il n'est plus possible de le redéfinir avec une valeur aussi simple que ``admin`` (une liste noire de mots de passe administrateur est configurée via ``password.invalid.admin.passwords``). Vous pouvez également modifier le mot de passe initial de l'utilisateur ``admin`` avant le premier démarrage en définissant ``index.user.initial_password`` dans ``fess_config.properties``. ``bin/fess-setup init`` la définit pour vous ; voir :doc:`fess-setup`.
 
 **Politique de mot de passe recommandée :**
 
@@ -45,6 +45,21 @@ Veuillez obligatoirement modifier le mot de passe administrateur par défaut (``
 .. note::
 
    Par défaut, la longueur minimale est de ``8`` caractères et toutes les exigences de type de caractères sont désactivées. Pour renforcer la sécurité des mots de passe, définissez explicitement les propriétés ci-dessus. Notez que |Fess| ne dispose pas de fonctionnalité d'expiration des mots de passe (changement périodique forcé) ; si vous souhaitez imposer un changement périodique du mot de passe comme règle opérationnelle, faites-le manuellement.
+
+Modifier la clé de chiffrement
+------------------------------
+
+``app.cipher.key`` dans ``fess_config.properties`` est la clé qui chiffre les mots de passe enregistrés dans les configurations de crawl et de magasin de données. La valeur fournie (``___change__me___``) est publique. Si la clé est vide ou conserve la valeur fournie, |Fess| écrit un avertissement dans ``fess.log`` au démarrage (voir :ref:`upgrade-1510-cipher-key`). |Fess| ne modifie pas la clé automatiquement.
+
+Définissez-la avant le premier démarrage, avec le mot de passe initial de l'utilisateur ``admin`` ::
+
+    $ bin/fess-setup init
+
+Pour les packages RPM et DEB, exécutez ``/usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties``. La commande génère une clé aléatoire, ou prend celle donnée avec ``--cipher-key`` ; voir :doc:`fess-setup`. Pour la définir à la main, modifiez ``app.cipher.key`` dans ``fess_config.properties`` (``app/WEB-INF/classes/fess_config.properties`` pour le package ZIP, ``/etc/fess/fess_config.properties`` pour les packages RPM et DEB). Avec la valeur par défaut de ``app.cipher.algorithm`` (``aes``), la clé doit comporter 16, 24 ou 32 caractères.
+
+.. warning::
+
+   Modifier la clé après l'enregistrement de mots de passe dans des configurations de crawl ou de magasin de données rend ces valeurs impossibles à déchiffrer. Conservez la clé avec vos sauvegardes de ``fess_config.properties`` et utilisez la même clé lorsque vous passez à une autre installation.
 
 Activation du plugin de sécurité OpenSearch
 --------------------------------------------
@@ -273,6 +288,7 @@ Configuration de base
 ---------------------
 
 - [ ] Mot de passe administrateur modifié
+- [ ] Clé de chiffrement (``app.cipher.key``) modifiée par rapport à la valeur fournie
 - [ ] HTTPS activé
 - [ ] Numéro de port par défaut modifié (optionnel)
 

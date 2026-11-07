@@ -5,7 +5,7 @@ Der Befehl fess-setup
 ``bin/fess-setup`` (unter Windows ``bin\fess-setup.bat``) liegt dem ZIP-Paket von |Fess| bei.
 Es installiert, was |Fess| benötigt, aber nicht mitliefert: OpenSearch mit den von |Fess|
 benötigten Plugins, Node.js für die Playwright-Plugins, |Fess|-Plugins und Themes. Außerdem prüft es eine
-Installation.
+Installation. Außerdem setzt es das Initialpasswort des Benutzers ``admin`` und den Chiffrierschlüssel (``init``).
 
 Führen Sie es im |Fess|-Verzeichnis aus. Ohne Argumente gibt es die Liste der Befehle aus.
 
@@ -127,6 +127,54 @@ Playwright-Crawler und ``fess-thumbnail-playwright`` für Thumbnails), nach ``no
 |Fess|-Verzeichnisses, gibt der Befehl stattdessen die ``PLAYWRIGHT_NODEJS_PATH``-Zeile aus, die in
 ``bin/fess.in.sh`` einzutragen ist. ``--version`` wählt eine andere Node.js-Version. Zum
 Playwright-Crawler siehe :doc:`../config/crawler-advanced`.
+
+Initialpasswort und Chiffrierschlüssel festlegen
+================================================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+Setzt zwei Werte in ``fess_config.properties``, die mit allgemein bekannten Standardwerten ausgeliefert werden: ``index.user.initial_password``, das Initialpasswort des Benutzers ``admin`` (ausgeliefert als ``admin``), und ``app.cipher.key``, den Schlüssel, der die in Crawl- und Datenspeicher-Konfigurationen gespeicherten Passwörter verschlüsselt (ausgeliefert als ``___change__me___``). Führen Sie den Befehl einmal aus, bevor |Fess| zum ersten Mal startet. Jeder Schlüssel ersetzt seine vorhandene Zeile in der Datei; fehlt er in der Datei, wird er angehängt.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Option
+     - Beschreibung
+   * - ``--admin-password <password>``
+     - Das Initialpasswort des Benutzers ``admin``. Ohne Angabe wird ein zufälliges alphanumerisches Passwort mit 16 Zeichen erzeugt. Es darf nicht ``admin`` lauten und weder mit einem Leerzeichen beginnen oder enden noch ein Steuerzeichen enthalten. Ein auf der Befehlszeile angegebenes Passwort ist für andere Benutzer des Rechners sichtbar; das erzeugte Passwort ist daher vorzuziehen.
+   * - ``--cipher-key <key>``
+     - Der Chiffrierschlüssel. Ohne Angabe wird ein zufälliger alphanumerischer Schlüssel mit 32 Zeichen erzeugt. Ein angegebener Schlüssel muss aus 16, 24 oder 32 druckbaren ASCII-Zeichen ohne Leerzeichen bestehen und darf nicht ``___change__me___`` lauten.
+   * - ``--config <file>``
+     - Die zu ändernde ``fess_config.properties``. Standard ist ``app/WEB-INF/classes/fess_config.properties`` im |Fess|-Verzeichnis (ZIP-Paket). Bei den RPM- und DEB-Paketen lautet die Datei ``/etc/fess/fess_config.properties``; geben Sie sie mit dieser Option an.
+   * - ``--force``
+     - Ersetzt den Chiffrierschlüssel auch dann, wenn er nicht mehr der ausgelieferte Wert ist. Siehe unten.
+
+Wird das Passwort erzeugt, gibt der Befehl es einmal als ``Password of the admin user`` aus; es steht außerdem in der Datei. |Fess| liest das Passwort nur, wenn es beim ersten Start den Benutzerindex anlegt. Ein ``init`` nach dem Start von |Fess| ändert daher nichts. Ändern Sie das Passwort von ``admin`` danach in der Verwaltungsoberfläche; siehe :doc:`security`.
+
+Beispiel für das ZIP-Paket, mit erzeugtem Passwort und erzeugtem Chiffrierschlüssel::
+
+    $ bin/fess-setup init
+    Updated /path/to/fess-15.10.0/app/WEB-INF/classes/fess_config.properties
+      index.user.initial_password: set (generated)
+      app.cipher.key: set (generated)
+    Password of the admin user: <generated password>
+    This is the only time it is shown; it is also in the file above.
+    The password is read when Fess creates the user index, at its first start; it changes nothing afterwards.
+    Keep the cipher key: values Fess saves under it cannot be read under another one.
+
+Bei den RPM- und DEB-Paketen führen Sie den Befehl als Benutzer aus, der die Datei schreiben darf::
+
+    $ sudo /usr/share/fess/bin/fess-setup init --config /etc/fess/fess_config.properties
+
+Der Chiffrierschlüssel wird nur ersetzt, solange er leer oder noch der ausgelieferte Wert ist. Andernfalls bricht der Befehl mit Exit-Code ``1`` ab und ändert keinen der beiden Werte, weil Werte, die |Fess| mit dem alten Schlüssel gespeichert hat, etwa die Passwörter in Crawl- und Datenspeicher-Konfigurationen, mit einem neuen Schlüssel nicht gelesen werden können. ``--force`` ersetzt den Schlüssel trotzdem; diese Passwörter müssen dann erneut eingegeben werden. Bewahren Sie den Chiffrierschlüssel auf und übernehmen Sie ihn bei einem Umzug auf eine andere Installation; siehe :doc:`upgrade`.
+
+Der Befehl bricht außerdem mit Exit-Code ``1`` ab, wenn die Datei nicht existiert oder ``app.cipher.algorithm`` auf etwas anderes als den Standardwert ``aes`` gesetzt ist.
 
 Verwaltung von Plugins
 ======================
