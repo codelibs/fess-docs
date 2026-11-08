@@ -5,7 +5,7 @@ Der Befehl fess-setup
 ``bin/fess-setup`` (unter Windows ``bin\fess-setup.bat``) liegt dem ZIP-Paket von |Fess| bei.
 Es installiert, was |Fess| benötigt, aber nicht mitliefert: OpenSearch mit den von |Fess|
 benötigten Plugins, Node.js für die Playwright-Plugins, |Fess|-Plugins und Themes. Außerdem prüft es eine
-Installation.
+Installation. Außerdem setzt es das Initialpasswort des Benutzers ``admin`` und den Chiffrierschlüssel (``init``).
 
 Führen Sie es im |Fess|-Verzeichnis aus. Ohne Argumente gibt es die Liste der Befehle aus.
 
@@ -155,7 +155,7 @@ Der Verschlüsselungsschlüssel verschlüsselt die Passwörter, die |Fess| in de
    * - ``--cipher-key <key>``
      - Der Verschlüsselungsschlüssel. Ohne Angabe erzeugt ``init`` einen zufälligen Schlüssel aus 32 Buchstaben und Ziffern. Ein angegebener Schlüssel muss aus 16, 24 oder 32 druckbaren ASCII-Zeichen ohne Leerzeichen bestehen (die AES-Schlüssellängen) und darf nicht dem ausgelieferten Wert entsprechen. Bewahren Sie den Schlüssel auf: Werte, die |Fess| mit ihm speichert, lassen sich mit einem anderen Schlüssel nicht lesen.
    * - ``--config <file>``
-     - Die zu ändernde ``fess_config.properties``. Standard ist ``app/WEB-INF/classes/fess_config.properties`` im |Fess|-Verzeichnis.
+     - Die zu ändernde ``fess_config.properties``. Standard ist ``app/WEB-INF/classes/fess_config.properties`` im |Fess|-Verzeichnis; gibt es diese Datei nicht, wie bei den RPM- und DEB-Paketen, ``/etc/fess/fess_config.properties``.
    * - ``--force``
      - Ersetzt einen Verschlüsselungsschlüssel, der nicht mehr dem ausgelieferten Wert entspricht. Werte, die |Fess| mit dem alten Schlüssel gespeichert hat, lassen sich danach nicht mehr lesen.
 

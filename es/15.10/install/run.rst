@@ -9,6 +9,10 @@ Esta página describe los procedimientos de inicio, detención y configuración 
    Antes de iniciar |Fess|, asegúrese de iniciar OpenSearch.
    Si OpenSearch no está en ejecución, |Fess| no funcionará correctamente.
 
+.. tip::
+
+   Antes del primer inicio, ejecute ``bin/fess-setup init`` para establecer en ``fess_config.properties`` la contraseña inicial del usuario ``admin`` y la clave de cifrado (``app.cipher.key``). Con la clave de cifrado incluida, |Fess| escribe una advertencia en ``fess.log`` al iniciarse. Consulte :doc:`fess-setup` y :doc:`security`.
+
 Métodos de Inicio
 ==================
 

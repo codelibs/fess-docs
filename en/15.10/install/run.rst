@@ -9,6 +9,10 @@ This page describes the procedures for starting, stopping, and initial setup of 
    Before starting |Fess|, you must start OpenSearch.
    If OpenSearch is not running, |Fess| will not function correctly.
 
+.. tip::
+
+   Before the first start, run ``bin/fess-setup init`` to set the initial password of the ``admin`` user and the cipher key (``app.cipher.key``) in ``fess_config.properties``. With the shipped cipher key, |Fess| writes a warning to ``fess.log`` at startup. See :doc:`fess-setup` and :doc:`security`.
+
 Startup Methods
 ===============
 

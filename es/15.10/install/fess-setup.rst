@@ -5,7 +5,7 @@ Comando fess-setup
 ``bin/fess-setup`` (``bin\fess-setup.bat`` en Windows) se incluye con el paquete ZIP de |Fess|.
 Instala lo que |Fess| necesita pero no incluye: OpenSearch con los plugins que requiere |Fess|,
 Node.js para los plugins de Playwright, los plugins de |Fess| y los temas. También informa sobre el estado
-de una instalación.
+de una instalación. También establece la contraseña inicial del usuario ``admin`` y la clave de cifrado (``init``).
 
 Ejecútelo desde el directorio de |Fess|. Sin argumentos, muestra la lista de comandos.
 
@@ -149,7 +149,7 @@ La clave de cifrado cifra las contraseñas que |Fess| guarda en las configuracio
    * - ``--cipher-key <key>``
      - La clave de cifrado. Si se omite, ``init`` genera una clave aleatoria de 32 letras y dígitos. Una clave que usted indique debe tener 16, 24 o 32 caracteres ASCII imprimibles sin espacios (las longitudes de clave de AES) y no puede ser el valor distribuido. Conserve la clave: los valores que |Fess| guarda con ella no se pueden leer con otra.
    * - ``--config <file>``
-     - El ``fess_config.properties`` que se modificará. El valor predeterminado es ``app/WEB-INF/classes/fess_config.properties`` en el directorio de |Fess|.
+     - El ``fess_config.properties`` que se modificará. El valor predeterminado es ``app/WEB-INF/classes/fess_config.properties`` en el directorio de |Fess|; si la instalación no tiene ese archivo, como en los paquetes RPM y DEB, ``/etc/fess/fess_config.properties``.
    * - ``--force``
      - Sustituye una clave de cifrado que ya no tiene el valor distribuido. Los valores que |Fess| guardó con la clave anterior no se podrán leer después.
 

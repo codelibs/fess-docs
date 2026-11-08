@@ -9,6 +9,10 @@
    |Fess| を起動する前に、必ず OpenSearch を起動してください。
    OpenSearch が起動していない場合、 |Fess| は正しく動作しません。
 
+.. tip::
+
+   初回起動の前に ``bin/fess-setup init`` を実行して、 ``fess_config.properties`` に ``admin`` ユーザーの初期パスワードと暗号化キー（ ``app.cipher.key`` ）を設定してください。暗号化キーが同梱の値のままだと、 |Fess| は起動時に ``fess.log`` へ警告を出力します。 :doc:`fess-setup` と :doc:`security` を参照してください。
+
 起動方法
 ========
 

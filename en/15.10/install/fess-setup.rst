@@ -5,7 +5,7 @@ fess-setup Command
 ``bin/fess-setup`` (``bin\fess-setup.bat`` on Windows) is included with the |Fess| ZIP package.
 It installs what |Fess| needs but does not bundle: OpenSearch with the plugins |Fess| requires,
 Node.js for the Playwright plugins, |Fess| plugins, and themes. It also reports on an
-installation.
+installation. It can also set the initial password of the ``admin`` user and the cipher key (``init``).
 
 Run it from the |Fess| directory. Without arguments, it prints the list of commands.
 
@@ -146,7 +146,7 @@ The cipher key encrypts the passwords that |Fess| saves in the crawl and data st
    * - ``--cipher-key <key>``
      - The cipher key. Without it, ``init`` generates a random key of 32 letters and digits. A key you give must be 16, 24 or 32 characters of printable ASCII without spaces (the AES key lengths), and must not be the shipped value. Keep the key: values |Fess| saves under it cannot be read under another one.
    * - ``--config <file>``
-     - The ``fess_config.properties`` to change. The default is ``app/WEB-INF/classes/fess_config.properties`` in the |Fess| directory.
+     - The ``fess_config.properties`` to change. The default is ``app/WEB-INF/classes/fess_config.properties`` in the |Fess| directory; if the installation has no such file, as with the RPM and DEB packages, ``/etc/fess/fess_config.properties``.
    * - ``--force``
      - Replaces a cipher key that is no longer the shipped value. Values |Fess| saved under the old key cannot be read afterwards.
 
