@@ -22,7 +22,7 @@ Zielgruppe
 
 Im Folgenden finden Sie eine Zusammenfassung der wichtigsten von Fess bereitgestellten APIs.
 
-.. list-table:: Fess-API-Uebersicht
+.. list-table:: Fess-API-Übersicht
    :header-rows: 1
    :widths: 25 45 30
 

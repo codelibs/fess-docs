@@ -1,13 +1,13 @@
 ==========================================
-Parte 17: Extender la busqueda con plugins
+Parte 17: Extender la búsqueda con plugins
 ==========================================
 
-Introduccion
+Introducción
 ============
 
-Fess es compatible con muchas fuentes de datos de forma predeterminada, pero puede ser necesario extenderlo mediante plugins para adaptarlo a sistemas y formatos de datos especificos de la empresa.
+Fess es compatible con muchas fuentes de datos de forma predeterminada, pero puede ser necesario extenderlo mediante plugins para adaptarlo a sistemas y formatos de datos específicos de la empresa.
 
-En este articulo se explica la arquitectura de plugins de Fess y se presenta como implementar plugins de fuentes de datos personalizadas y plugins de Ingest.
+En este artículo se explica la arquitectura de plugins de Fess y se presenta cómo implementar plugins de fuentes de datos personalizadas y plugins de Ingest.
 
 Audiencia objetivo
 ==================
@@ -26,7 +26,7 @@ Fess ofrece los siguientes tipos de plugins.
    :widths: 25 35 40
 
    * - Tipo
-     - Funcion
+     - Función
      - Ejemplos
    * - Data Store (fess-ds-\*)
      - Obtener datos de fuentes de datos externas
@@ -35,7 +35,7 @@ Fess ofrece los siguientes tipos de plugins.
      - Procesar y transformar datos rastreados
      - Example
    * - Theme (fess-theme-\*)
-     - Diseno de la pantalla de busqueda
+     - Diseño de la pantalla de búsqueda
      - Simple, Code Search
    * - Script (fess-script-\*)
      - Soporte de lenguajes de scripting
@@ -48,12 +48,12 @@ Despliegue de plugins
 ---------------------
 
 Los plugins se proporcionan como archivos JAR y se colocan en el directorio de plugins de Fess.
-Se pueden instalar y administrar desde [Sistema] > [Plugins] en la consola de administracion.
+Se pueden instalar y administrar desde [Sistema] > [Plugins] en la consola de administración.
 
 Desarrollo de un plugin de fuente de datos personalizada
 =========================================================
 
-En esta seccion se explica el proceso de desarrollo de un plugin de fuente de datos, suponiendo que se dispone de un sistema de gestion documental interno propietario.
+En esta sección se explica el proceso de desarrollo de un plugin de fuente de datos, suponiendo que se dispone de un sistema de gestión documental interno propietario.
 
 Estructura del proyecto
 -----------------------
@@ -70,7 +70,7 @@ Cree un proyecto Maven tomando como referencia un plugin de Data Store existente
                 └── org/codelibs/fess/ds/custom/
                     └── CustomDataStore.java
 
-Configuracion de pom.xml
+Configuración de pom.xml
 -------------------------
 
 Especifique fess-parent como POM padre y configure las dependencias necesarias.
@@ -95,16 +95,16 @@ Especifique fess-parent como POM padre y configure las dependencias necesarias.
         </dependency>
     </dependencies>
 
-Implementacion de la clase Data Store
+Implementación de la clase Data Store
 --------------------------------------
 
-El nucleo de un plugin de Data Store es la clase que obtiene datos y registra documentos en Fess.
+El núcleo de un plugin de Data Store es la clase que obtiene datos y registra documentos en Fess.
 
-Los puntos clave de la implementacion son los siguientes:
+Los puntos clave de la implementación son los siguientes:
 
-1. Conexion y autenticacion con el sistema externo
-2. Obtencion de datos (llamadas a API, lectura de archivos, etc.)
-3. Conversion de los datos obtenidos al formato de documento de Fess
+1. Conexión y autenticación con el sistema externo
+2. Obtención de datos (llamadas a API, lectura de archivos, etc.)
+3. Conversión de los datos obtenidos al formato de documento de Fess
 4. Registro de documentos
 
 **Mapeo de campos**
@@ -112,13 +112,13 @@ Los puntos clave de la implementacion son los siguientes:
 Mapee los datos obtenidos a los campos de Fess.
 Los campos principales son los siguientes:
 
-- ``title``: Titulo del documento
-- ``url``: URL del documento (destino del enlace en los resultados de busqueda)
-- ``content``: Cuerpo del documento (objetivo de busqueda)
+- ``title``: Título del documento
+- ``url``: URL del documento (destino del enlace en los resultados de búsqueda)
+- ``content``: Cuerpo del documento (objetivo de búsqueda)
 - ``mimetype``: Tipo MIME
-- ``last_modified``: Fecha y hora de la ultima modificacion
+- ``last_modified``: Fecha y hora de la última modificación
 
-Compilacion y despliegue
+Compilación y despliegue
 -------------------------
 
 ::
@@ -130,27 +130,27 @@ Coloque el archivo JAR generado en el directorio de plugins de Fess y reinicie F
 Desarrollo de un plugin de Ingest
 ==================================
 
-Un plugin de Ingest es un mecanismo para procesar y transformar documentos obtenidos mediante rastreo antes de registrarlos en el indice.
+Un plugin de Ingest es un mecanismo para procesar y transformar documentos obtenidos mediante rastreo antes de registrarlos en el índice.
 
 Casos de uso
 -------------
 
 - Agregar campos adicionales a los documentos rastreados
-- Limpieza del texto del cuerpo (eliminacion de caracteres innecesarios)
-- Enriquecimiento mediante APIs externas (traduccion, clasificacion, etc.)
-- Salida de logs (para depuracion)
+- Limpieza del texto del cuerpo (eliminación de caracteres innecesarios)
+- Enriquecimiento mediante APIs externas (traducción, clasificación, etc.)
+- Salida de logs (para depuración)
 
-Puntos de implementacion
+Puntos de implementación
 -------------------------
 
-En un plugin de Ingest, se accede a los datos del documento justo antes de registrarlo en el indice y se realiza el procesamiento de transformacion.
+En un plugin de Ingest, se accede a los datos del documento justo antes de registrarlo en el índice y se realiza el procesamiento de transformación.
 
-Por ejemplo, se puede implementar un procesamiento que agregue metadatos del nombre de la organizacion a todos los documentos, o un procesamiento que elimine patrones especificos del texto del cuerpo.
+Por ejemplo, se puede implementar un procesamiento que agregue metadatos del nombre de la organización a todos los documentos, o un procesamiento que elimine patrones específicos del texto del cuerpo.
 
 Desarrollo de un plugin de tema
 =================================
 
-Si desea personalizar completamente el diseno de la pantalla de busqueda, desarrolle un plugin de tema.
+Si desea personalizar completamente el diseño de la pantalla de búsqueda, desarrolle un plugin de tema.
 
 Estructura del tema
 -------------------
@@ -172,16 +172,16 @@ Un plugin de tema se compone de archivos JSP, CSS, JavaScript y archivos de imag
                     ├── search.jsp
                     └── header.jsp
 
-Personalice el diseno modificando JSP y CSS tomando como referencia los temas existentes.
+Personalice el diseño modificando JSP y CSS tomando como referencia los temas existentes.
 
-Mejores practicas de desarrollo
+Mejores prácticas de desarrollo
 ================================
 
 Referencia a plugins existentes
 -------------------------------
 
-Al desarrollar un nuevo plugin, se recomienda encarecidamente consultar el codigo fuente de los plugins existentes.
-El codigo fuente de todos los plugins esta disponible en el repositorio de GitHub de CodeLibs.
+Al desarrollar un nuevo plugin, se recomienda encarecidamente consultar el código fuente de los plugins existentes.
+El código fuente de todos los plugins está disponible en el repositorio de GitHub de CodeLibs.
 
 Por ejemplo, ``fess-ds-git`` y ``fess-ds-slack`` son buenas referencias para el desarrollo de plugins de Data Store.
 
@@ -190,34 +190,34 @@ Pruebas
 
 Pruebe los plugins desde las siguientes perspectivas:
 
-- Pruebas de conexion con sistemas externos
-- Precision de la transformacion de datos
-- Manejo de errores (fallos de conexion, datos invalidos, etc.)
-- Rendimiento (tiempo de procesamiento para grandes volumenes de datos)
+- Pruebas de conexión con sistemas externos
+- Precisión de la transformación de datos
+- Manejo de errores (fallos de conexión, datos inválidos, etc.)
+- Rendimiento (tiempo de procesamiento para grandes volúmenes de datos)
 
 Compatibilidad de versiones
 ----------------------------
 
 Verifique la compatibilidad de los plugins al actualizar Fess.
-Pueden producirse cambios en la API durante las actualizaciones de version principal de Fess.
+Pueden producirse cambios en la API durante las actualizaciones de versión principal de Fess.
 
 Resumen
 =======
 
-En este articulo se explico el desarrollo de plugins para Fess.
+En este artículo se explicó el desarrollo de plugins para Fess.
 
-- Vision general de la arquitectura de plugins (Data Store, Ingest, tema, script)
+- Visión general de la arquitectura de plugins (Data Store, Ingest, tema, script)
 - Proceso de desarrollo de plugins de fuentes de datos personalizadas
 - Procesamiento de documentos con plugins de Ingest
-- Personalizacion de la interfaz con plugins de tema
-- Mejores practicas de desarrollo
+- Personalización de la interfaz con plugins de tema
+- Mejores prácticas de desarrollo
 
-Los plugins permiten extender Fess para satisfacer los requisitos especificos de la organizacion.
-Con esto concluye la serie de Arquitectura y Escalabilidad. A partir del proximo articulo, la serie de IA y Busqueda de Proxima Generacion abordara los fundamentos de la busqueda semantica.
+Los plugins permiten extender Fess para satisfacer los requisitos específicos de la organización.
+Con esto concluye la serie de Arquitectura y Escalabilidad. A partir del próximo artículo, la serie de IA y Búsqueda de Próxima Generación abordará los fundamentos de la búsqueda semántica.
 
 Referencias
 ===========
 
-- `Gestion de plugins de Fess <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__
+- `Gestión de plugins de Fess <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__
 
 - `CodeLibs GitHub <https://github.com/codelibs>`__

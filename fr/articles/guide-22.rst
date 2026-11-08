@@ -1,57 +1,57 @@
 =====================================================================================================
-Partie 22 : Dessiner une carte des connaissances organisationnelles a partir des donnees de recherche
+Partie 22 : Dessiner une carte des connaissances organisationnelles à partir des données de recherche
 =====================================================================================================
 
 Introduction
 =============
 
-Un systeme de recherche est un outil pour "trouver" des informations, mais les journaux de recherche eux-memes constituent egalement une precieuse source d'informations.
-"Que recherche-t-on ?", "Que ne trouve-t-on pas ?", "Quelles informations sont frequemment consultees ?" -- ces donnees servent de miroir refletant les besoins informationnels et les lacunes de connaissances de l'organisation.
+Un système de recherche est un outil pour "trouver" des informations, mais les journaux de recherche eux-mêmes constituent également une précieuse source d'informations.
+"Que recherche-t-on ?", "Que ne trouve-t-on pas ?", "Quelles informations sont fréquemment consultées ?" -- ces données servent de miroir reflétant les besoins informationnels et les lacunes de connaissances de l'organisation.
 
-Dans cet article, nous combinons les journaux de recherche de Fess avec OpenSearch Dashboards pour construire un tableau de bord analytique qui visualise l'etat d'utilisation des connaissances de l'organisation.
+Dans cet article, nous combinons les journaux de recherche de Fess avec OpenSearch Dashboards pour construire un tableau de bord analytique qui visualise l'état d'utilisation des connaissances de l'organisation.
 
 Public cible
 =============
 
-- Les personnes souhaitant comprendre quantitativement l'utilisation de leur systeme de recherche
-- Les personnes souhaitant collecter des donnees pour des strategies d'utilisation de l'information
-- Les personnes souhaitant apprendre les operations de base d'OpenSearch Dashboards
+- Les personnes souhaitant comprendre quantitativement l'utilisation de leur système de recherche
+- Les personnes souhaitant collecter des données pour des stratégies d'utilisation de l'information
+- Les personnes souhaitant apprendre les opérations de base d'OpenSearch Dashboards
 
-La valeur des donnees de recherche
+La valeur des données de recherche
 ====================================
 
-Ce que les journaux de recherche peuvent reveler
+Ce que les journaux de recherche peuvent révéler
 ---------------------------------------------------
 
-Les journaux de recherche sont un type de donnees rare permettant de comprendre quantitativement les besoins informationnels d'une organisation.
+Les journaux de recherche sont un type de données rare permettant de comprendre quantitativement les besoins informationnels d'une organisation.
 
-.. list-table:: Informations tirees des donnees de recherche
+.. list-table:: Informations tirées des données de recherche
    :header-rows: 1
    :widths: 30 70
 
-   * - Donnees
+   * - Données
      - Information
-   * - Mots-cles de recherche
-     - Ce que les employes recherchent (besoins informationnels)
-   * - Requetes sans resultats
+   * - Mots-clés de recherche
+     - Ce que les employés recherchent (besoins informationnels)
+   * - Requêtes sans résultats
      - Informations manquantes dans l'organisation (lacunes de connaissances)
    * - Journaux de clics
-     - Quels resultats de recherche ont ete utiles (valeur du contenu)
-   * - Frequence de recherche dans le temps
-     - Evolution des besoins informationnels (tendances)
+     - Quels résultats de recherche ont été utiles (valeur du contenu)
+   * - Fréquence de recherche dans le temps
+     - Évolution des besoins informationnels (tendances)
    * - Mots populaires
-     - Sujets d'interet dans l'ensemble de l'organisation
+     - Sujets d'intérêt dans l'ensemble de l'organisation
 
-Donnees collectees par Fess
+Données collectées par Fess
 ==============================
 
-Fess collecte et stocke automatiquement les donnees suivantes.
+Fess collecte et stocke automatiquement les données suivantes.
 
 Journaux de recherche (``fess_log.search_log``)
 --------------------------------------------------
 
-Ils peuvent etre consultes dans la console d'administration sous [Informations systeme] > [Journal de recherche].
-Ils sont stockes dans l'index OpenSearch ``fess_log.search_log``.
+Ils peuvent être consultés dans la console d'administration sous [Informations système] > [Journal de recherche].
+Ils sont stockés dans l'index OpenSearch ``fess_log.search_log``.
 
 Champs principaux :
 
@@ -64,19 +64,19 @@ Champs principaux :
      - Description
    * - ``searchWord``
      - keyword
-     - Mot-cle de recherche
+     - Mot-clé de recherche
    * - ``requestedAt``
      - date
      - Date et heure de la recherche
    * - ``hitCount``
      - long
-     - Nombre de resultats de recherche (0 indique une requete sans resultats)
+     - Nombre de résultats de recherche (0 indique une requête sans résultats)
    * - ``queryTime``
      - long
-     - Temps d'execution de la requete (millisecondes)
+     - Temps d'exécution de la requête (millisecondes)
    * - ``responseTime``
      - long
-     - Temps de reponse total (millisecondes)
+     - Temps de réponse total (millisecondes)
    * - ``userAgent``
      - keyword
      - Agent utilisateur
@@ -85,16 +85,16 @@ Champs principaux :
      - Adresse IP du client
    * - ``accessType``
      - keyword
-     - Type d'acces (web, json, gsa, admin, etc.)
+     - Type d'accès (web, json, gsa, admin, etc.)
    * - ``queryId``
      - keyword
-     - ID de requete (utilise pour le lien avec les journaux de clics)
+     - ID de requête (utilisé pour le lien avec les journaux de clics)
 
 Journaux de clics (``fess_log.click_log``)
 --------------------------------------------
 
-Ce sont les enregistrements des clics sur les liens des resultats de recherche.
-Ils sont stockes dans l'index OpenSearch ``fess_log.click_log``.
+Ce sont les enregistrements des clics sur les liens des résultats de recherche.
+Ils sont stockés dans l'index OpenSearch ``fess_log.click_log``.
 
 .. list-table::
    :header-rows: 1
@@ -105,13 +105,13 @@ Ils sont stockes dans l'index OpenSearch ``fess_log.click_log``.
      - Description
    * - ``url``
      - keyword
-     - URL cliquee
+     - URL cliquée
    * - ``queryId``
      - keyword
      - queryId du journal de recherche (identifie quelle recherche a conduit au clic)
    * - ``order``
      - integer
-     - Position d'affichage dans les resultats de recherche
+     - Position d'affichage dans les résultats de recherche
    * - ``requestedAt``
      - date
      - Date et heure du clic
@@ -122,18 +122,18 @@ Ils sont stockes dans l'index OpenSearch ``fess_log.click_log``.
 Mots populaires
 -----------------
 
-Les mots populaires affiches sur l'ecran de recherche sont agreges a partir des journaux de recherche dans l'index suggest de Fess.
-Les requetes depassant un certain nombre de resultats de recherche sont classees en fonction du nombre de recherches.
+Les mots populaires affichés sur l'écran de recherche sont agrégés à partir des journaux de recherche dans l'index suggest de Fess.
+Les requêtes dépassant un certain nombre de résultats de recherche sont classées en fonction du nombre de recherches.
 
 Visualisation avec OpenSearch Dashboards
 ==========================================
 
-Les journaux de recherche de Fess etant stockes dans OpenSearch, une visualisation avancee est possible avec OpenSearch Dashboards.
+Les journaux de recherche de Fess étant stockés dans OpenSearch, une visualisation avancée est possible avec OpenSearch Dashboards.
 
 Configuration d'OpenSearch Dashboards
 ----------------------------------------
 
-Ajoutez OpenSearch Dashboards a votre configuration Docker Compose.
+Ajoutez OpenSearch Dashboards à votre configuration Docker Compose.
 
 .. code-block:: yaml
 
@@ -146,22 +146,22 @@ Ajoutez OpenSearch Dashboards a votre configuration Docker Compose.
           OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
           DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
 
-Accedez a ``http://localhost:5601`` pour utiliser l'interface de Dashboards.
+Accédez à ``http://localhost:5601`` pour utiliser l'interface de Dashboards.
 
-Creation de modeles d'index
+Création de modèles d'index
 ------------------------------
 
-Pour visualiser les donnees de journaux Fess dans OpenSearch Dashboards, vous devez d'abord creer des modeles d'index.
+Pour visualiser les données de journaux Fess dans OpenSearch Dashboards, vous devez d'abord créer des modèles d'index.
 
-1. Accedez a Dashboards et selectionnez [Stack Management] > [Index Patterns] dans le menu de gauche
+1. Accédez à Dashboards et sélectionnez [Stack Management] > [Index Patterns] dans le menu de gauche
 2. Cliquez sur [Create index pattern]
-3. Creez les modeles d'index suivants
+3. Créez les modèles d'index suivants
 
 .. list-table::
    :header-rows: 1
    :widths: 35 25 40
 
-   * - Modele d'index
+   * - Modèle d'index
      - Champ temporel
      - Utilisation
    * - ``fess_log.search_log``
@@ -175,53 +175,53 @@ Conception du tableau de bord
 ===============================
 
 Concevez le tableau de bord selon les perspectives analytiques suivantes.
-Creez chaque visualisation depuis [Visualize] dans le menu de gauche et regroupez-les dans un [Dashboard].
+Créez chaque visualisation depuis [Visualize] dans le menu de gauche et regroupez-les dans un [Dashboard].
 
-Apercu de l'utilisation de la recherche
+Aperçu de l'utilisation de la recherche
 -----------------------------------------
 
-**Evolution du nombre de recherches quotidiennes**
+**Évolution du nombre de recherches quotidiennes**
 
-Comprenez comment l'utilisation de la recherche evolue dans le temps.
+Comprenez comment l'utilisation de la recherche évolue dans le temps.
 
-- Modele d'index : ``fess_log.search_log``
+- Modèle d'index : ``fess_log.search_log``
 - Visualisation : Line (graphique en courbes)
 - Axe X : Date Histogram (champ : ``requestedAt``, intervalle : 1d)
 - Axe Y : Count
 
-Si l'utilisation augmente, cela prouve que le systeme de recherche s'est implante ; si elle diminue, des ameliorations sont necessaires.
+Si l'utilisation augmente, cela prouve que le système de recherche s'est implanté ; si elle diminue, des améliorations sont nécessaires.
 
 **Nombre de recherches par tranche horaire**
 
-Comprenez a quels moments de la journee les recherches sont les plus nombreuses.
+Comprenez à quels moments de la journée les recherches sont les plus nombreuses.
 
 - Visualisation : Vertical Bar (graphique en barres)
 - Axe X : Date Histogram (champ : ``requestedAt``, intervalle : 1h)
 - Axe Y : Count
 
-Si les recherches sont frequentes au debut de la journee de travail ou apres le dejeuner, cela indique que la collecte d'informations est devenue une partie integrante du travail quotidien.
+Si les recherches sont fréquentes au début de la journée de travail ou après le déjeuner, cela indique que la collecte d'informations est devenue une partie intégrante du travail quotidien.
 
-Analyse de la qualite de recherche
+Analyse de la qualité de recherche
 -------------------------------------
 
-**Evolution du taux de requetes sans resultats**
+**Évolution du taux de requêtes sans résultats**
 
-Le taux de requetes sans resultats est un indicateur important de la qualite de recherche.
-Les enregistrements ou le champ ``hitCount`` du journal de recherche vaut ``0`` correspondent aux requetes sans resultats.
+Le taux de requêtes sans résultats est un indicateur important de la qualité de recherche.
+Les enregistrements où le champ ``hitCount`` du journal de recherche vaut ``0`` correspondent aux requêtes sans résultats.
 
-- Modele d'index : ``fess_log.search_log``
-- Filtre : Ajouter ``hitCount: 0`` pour extraire les requetes sans resultats
+- Modèle d'index : ``fess_log.search_log``
+- Filtre : Ajouter ``hitCount: 0`` pour extraire les requêtes sans résultats
 - Visualisation : Line (graphique en courbes)
 - Axe X : Date Histogram (champ : ``requestedAt``, intervalle : 1d)
 - Axe Y : Count
 
-Si le taux de requetes sans resultats est eleve, il est necessaire d'ajouter des synonymes ou d'elargir la portee de l'exploration (voir la Partie 8).
+Si le taux de requêtes sans résultats est élevé, il est nécessaire d'ajouter des synonymes ou d'élargir la portée de l'exploration (voir la Partie 8).
 
-Notez que vous pouvez egalement consulter la liste des requetes sans resultats dans la console d'administration sous [Informations systeme] > [Journal de recherche].
+Notez que vous pouvez également consulter la liste des requêtes sans résultats dans la console d'administration sous [Informations système] > [Journal de recherche].
 
-**Nuage de mots des requetes sans resultats**
+**Nuage de mots des requêtes sans résultats**
 
-L'affichage des requetes sans resultats sous forme de nuage de mots offre un apercu rapide des informations manquantes.
+L'affichage des requêtes sans résultats sous forme de nuage de mots offre un aperçu rapide des informations manquantes.
 
 - Filtre : ``hitCount: 0``
 - Visualisation : Tag Cloud
@@ -230,95 +230,95 @@ L'affichage des requetes sans resultats sous forme de nuage de mots offre un ape
 Analyse de la valeur du contenu
 ---------------------------------
 
-**Resultats de recherche les plus cliques**
+**Résultats de recherche les plus cliqués**
 
-Les resultats de recherche frequemment cliques representent un contenu a forte valeur pour l'organisation.
+Les résultats de recherche fréquemment cliqués représentent un contenu à forte valeur pour l'organisation.
 
-- Modele d'index : ``fess_log.click_log``
+- Modèle d'index : ``fess_log.click_log``
 - Visualisation : Data Table
-- Champ : Terms Aggregation (champ : ``url``, taille : 20, tri : Count decroissant)
+- Champ : Terms Aggregation (champ : ``url``, taille : 20, tri : Count décroissant)
 
-Donnez la priorite a la maintenance et a la mise a jour de ces contenus.
+Donnez la priorité à la maintenance et à la mise à jour de ces contenus.
 
 **Distribution des positions de clic**
 
-Examinez la distribution des positions dans les resultats de recherche ou les clics ont lieu.
+Examinez la distribution des positions dans les résultats de recherche où les clics ont lieu.
 
-- Modele d'index : ``fess_log.click_log``
+- Modèle d'index : ``fess_log.click_log``
 - Visualisation : Vertical Bar (graphique en barres)
 - Axe X : Histogram (champ : ``order``, intervalle : 1)
 - Axe Y : Count
 
-Si les positions 1 a 3 recoivent le plus de clics, la qualite de recherche est bonne ; si les positions 10 et au-dela recoivent beaucoup de clics, des ameliorations du classement sont necessaires.
+Si les positions 1 à 3 reçoivent le plus de clics, la qualité de recherche est bonne ; si les positions 10 et au-delà reçoivent beaucoup de clics, des améliorations du classement sont nécessaires.
 
 Analyse des tendances des besoins informationnels
 ----------------------------------------------------
 
-**Classement des mots-cles populaires**
+**Classement des mots-clés populaires**
 
-Comprenez ce qui interesse l'organisation dans son ensemble.
+Comprenez ce qui intéresse l'organisation dans son ensemble.
 
-- Modele d'index : ``fess_log.search_log``
+- Modèle d'index : ``fess_log.search_log``
 - Visualisation : Data Table
-- Champ : Terms Aggregation (champ : ``searchWord``, taille : 20, tri : Count decroissant)
+- Champ : Terms Aggregation (champ : ``searchWord``, taille : 20, tri : Count décroissant)
 
-Les changements dans les mots-cles populaires refletent les evolutions des defis et des centres d'interet de l'organisation.
+Les changements dans les mots-clés populaires reflètent les évolutions des défis et des centres d'intérêt de l'organisation.
 
-Exploitation des resultats d'analyse
+Exploitation des résultats d'analyse
 =======================================
 
-Les resultats de l'analyse des donnees de recherche peuvent etre appliques aux initiatives suivantes.
+Les résultats de l'analyse des données de recherche peuvent être appliqués aux initiatives suivantes.
 
-Strategie de contenu
+Stratégie de contenu
 ----------------------
 
-- **Requetes sans resultats** : Identifier le contenu manquant et en demander la creation
-- **Mots-cles populaires** : Enrichir l'information sur les sujets frequemment recherches
-- **Resultats a faible taux de clics** : Envisager l'amelioration ou la suppression du contenu
+- **Requêtes sans résultats** : Identifier le contenu manquant et en demander la création
+- **Mots-clés populaires** : Enrichir l'information sur les sujets fréquemment recherchés
+- **Résultats à faible taux de clics** : Envisager l'amélioration ou la suppression du contenu
 
-Amelioration de la qualite de recherche
+Amélioration de la qualité de recherche
 -----------------------------------------
 
-- **Ajout de synonymes** : Decouvrir des candidats synonymes a partir des requetes sans resultats
-- **Configuration de Key Match** : Definir des resultats optimaux pour les requetes populaires
-- **Ajustement du Boost** : Ameliorer le classement en fonction des taux de clics
+- **Ajout de synonymes** : Découvrir des candidats synonymes à partir des requêtes sans résultats
+- **Configuration de Key Match** : Définir des résultats optimaux pour les requêtes populaires
+- **Ajustement du Boost** : Améliorer le classement en fonction des taux de clics
 
-Decisions d'investissement IT
+Décisions d'investissement IT
 -------------------------------
 
 - **Augmentation de l'utilisation** : Planifier le renforcement des ressources serveur
-- **Nouveaux besoins informationnels** : Envisager la connexion de sources de donnees supplementaires
-- **Besoins en fonctionnalites IA** : Decider de l'introduction du mode de recherche IA (voir la Partie 19)
+- **Nouveaux besoins informationnels** : Envisager la connexion de sources de données supplémentaires
+- **Besoins en fonctionnalités IA** : Décider de l'introduction du mode de recherche IA (voir la Partie 19)
 
-Creation de rapports periodiques
+Création de rapports périodiques
 ==================================
 
-Resumez les resultats d'analyse dans des rapports periodiques et partagez-les avec les parties prenantes.
+Résumez les résultats d'analyse dans des rapports périodiques et partagez-les avec les parties prenantes.
 
-Exemple d'elements du rapport mensuel
+Exemple d'éléments du rapport mensuel
 -----------------------------------------
 
-1. Resume de l'utilisation de la recherche (nombre total de recherches, comparaison avec le mois precedent)
-2. Evolution du taux de requetes sans resultats et etat des ameliorations
-3. Top 10 des mots-cles populaires
-4. Lacunes de connaissances nouvellement decouvertes
-5. Mesures d'amelioration mises en oeuvre et leurs effets
-6. Plans d'amelioration pour le mois suivant
+1. Résumé de l'utilisation de la recherche (nombre total de recherches, comparaison avec le mois précédent)
+2. Évolution du taux de requêtes sans résultats et état des améliorations
+3. Top 10 des mots-clés populaires
+4. Lacunes de connaissances nouvellement découvertes
+5. Mesures d'amélioration mises en œuvre et leurs effets
+6. Plans d'amélioration pour le mois suivant
 
 Conclusion
 ===========
 
-Dans cet article, nous avons explique comment visualiser l'utilisation des connaissances organisationnelles a l'aide des journaux de recherche.
+Dans cet article, nous avons expliqué comment visualiser l'utilisation des connaissances organisationnelles à l'aide des journaux de recherche.
 
-- Informations tirees des journaux de recherche (besoins informationnels, lacunes de connaissances, valeur du contenu)
+- Informations tirées des journaux de recherche (besoins informationnels, lacunes de connaissances, valeur du contenu)
 - Construction de tableaux de bord de visualisation avec OpenSearch Dashboards
-- Application des resultats d'analyse a la strategie de contenu, a l'amelioration de la qualite de recherche et aux investissements IT
-- Amelioration continue grace aux rapports periodiques
+- Application des résultats d'analyse à la stratégie de contenu, à l'amélioration de la qualité de recherche et aux investissements IT
+- Amélioration continue grâce aux rapports périodiques
 
-Les donnees de recherche sont un actif precieux pour dessiner une "carte des connaissances organisationnelles."
-Ceci conclut la section sur l'IA et la recherche de nouvelle generation. Dans le prochain et dernier volet, nous presenterons un bilan global de la serie.
+Les données de recherche sont un actif précieux pour dessiner une "carte des connaissances organisationnelles."
+Ceci conclut la section sur l'IA et la recherche de nouvelle génération. Dans le prochain et dernier volet, nous présenterons un bilan global de la série.
 
-References
+Références
 ===========
 
 - `Journal de recherche Fess <https://fess.codelibs.org/ja/15.5/admin/searchlog.html>`__

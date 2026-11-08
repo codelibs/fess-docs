@@ -1,41 +1,41 @@
 ==============================================
-Partie 2 : Decouvrir la recherche en 5 minutes
+Partie 2 : Découvrir la recherche en 5 minutes
 ==============================================
 
 Introduction
 ============
 
-Dans l'article precedent, nous avons presente la necessite d'une plateforme de recherche en entreprise ainsi qu'une vue d'ensemble de Fess.
-Dans cet article, nous vous proposons la procedure la plus rapide pour demarrer Fess et experimenter la recherche.
+Dans l'article précédent, nous avons présenté la nécessité d'une plateforme de recherche en entreprise ainsi qu'une vue d'ensemble de Fess.
+Dans cet article, nous vous proposons la procédure la plus rapide pour démarrer Fess et expérimenter la recherche.
 
-L'objectif est de comprendre rapidement quel type d'experience de recherche Fess peut offrir.
+L'objectif est de comprendre rapidement quel type d'expérience de recherche Fess peut offrir.
 En utilisant Docker Compose, nous allons mettre en place un environnement Fess en quelques lignes de commande, crawler un site Web et effectuer une recherche.
 
 Public cible
 ============
 
-- Les personnes qui decouvrent Fess pour la premiere fois
-- Celles qui souhaitent realiser rapidement une PoC (preuve de concept) en vue d'une adoption
-- Celles qui maitrisent les operations de base de Docker
+- Les personnes qui découvrent Fess pour la première fois
+- Celles qui souhaitent réaliser rapidement une PoC (preuve de concept) en vue d'une adoption
+- Celles qui maîtrisent les opérations de base de Docker
 
 Environnement requis
 =====================
 
 - Un environnement dans lequel Docker et Docker Compose sont disponibles
-- Au moins 4 Go de memoire (8 Go ou plus recommandes)
+- Au moins 4 Go de mémoire (8 Go ou plus recommandés)
 - Une connexion Internet
 
-Preparation prealable (Linux / WSL2)
+Préparation préalable (Linux / WSL2)
 -------------------------------------
 
-OpenSearch, utilise par Fess, necessite un grand nombre de zones de mappage memoire au demarrage.
+OpenSearch, utilisé par Fess, nécessite un grand nombre de zones de mappage mémoire au démarrage.
 Dans les environnements Linux ou WSL2, augmentez la valeur de ``vm.max_map_count`` avec la commande suivante.
 
 ::
 
     $ sudo sysctl -w vm.max_map_count=262144
 
-Ce parametre est reinitialise au redemarrage du systeme d'exploitation. Pour le rendre persistant, ajoutez-le au fichier ``/etc/sysctl.conf``.
+Ce paramètre est réinitialisé au redémarrage du système d'exploitation. Pour le rendre persistant, ajoutez-le au fichier ``/etc/sysctl.conf``.
 
 ::
 
@@ -43,83 +43,83 @@ Ce parametre est reinitialise au redemarrage du systeme d'exploitation. Pour le 
 
 .. note::
 
-   Si vous utilisez Docker Desktop sur macOS, ce parametre n'est pas necessaire.
+   Si vous utilisez Docker Desktop sur macOS, ce paramètre n'est pas nécessaire.
 
-Demarrer Fess
+Démarrer Fess
 ==============
 
 Obtenir le fichier Docker Compose
 -----------------------------------
 
-Le fichier Docker Compose de Fess est disponible dans le depot GitHub.
-Recuperez-le avec les commandes suivantes.
+Le fichier Docker Compose de Fess est disponible dans le dépôt GitHub.
+Récupérez-le avec les commandes suivantes.
 
 ::
 
     $ git clone https://github.com/codelibs/docker-fess.git
     $ cd docker-fess/compose
 
-Le repertoire compose contient plusieurs fichiers de configuration.
-Commencons par demarrer avec une configuration simple.
+Le répertoire compose contient plusieurs fichiers de configuration.
+Commençons par démarrer avec une configuration simple.
 
-Demarrage
+Démarrage
 ---------
 
-Demarrez Fess et OpenSearch avec la commande suivante.
+Démarrez Fess et OpenSearch avec la commande suivante.
 
 ::
 
     $ docker compose up -d
 
-Lors du premier demarrage, le telechargement des images Docker peut prendre plusieurs minutes.
-Vous pouvez verifier l'etat du demarrage avec la commande suivante.
+Lors du premier démarrage, le téléchargement des images Docker peut prendre plusieurs minutes.
+Vous pouvez vérifier l'état du démarrage avec la commande suivante.
 
 ::
 
     $ docker compose ps
 
-Lorsque tous les conteneurs affichent l'etat "running", le demarrage est termine.
+Lorsque tous les conteneurs affichent l'état "running", le démarrage est terminé.
 
-Acceder a l'ecran de recherche
+Accéder à l'écran de recherche
 -------------------------------
 
 Ouvrez ``http://localhost:8080/`` dans votre navigateur.
-Si la page d'accueil de recherche Fess s'affiche, le demarrage s'est effectue correctement.
+Si la page d'accueil de recherche Fess s'affiche, le démarrage s'est effectué correctement.
 
-A ce stade, l'index est encore vide, donc aucune recherche ne renverra de resultats.
-Dans l'etape suivante, nous allons enregistrer une cible de crawl pour rendre la recherche operationnelle.
+À ce stade, l'index est encore vide, donc aucune recherche ne renverra de résultats.
+Dans l'étape suivante, nous allons enregistrer une cible de crawl pour rendre la recherche opérationnelle.
 
-Acceder a l'ecran d'administration
+Accéder à l'écran d'administration
 ====================================
 
-Connexion a l'ecran d'administration
+Connexion à l'écran d'administration
 --------------------------------------
 
-Accedez a ``http://localhost:8080/admin/`` pour vous connecter a l'ecran d'administration.
-Les identifiants par defaut sont les suivants.
+Accédez à ``http://localhost:8080/admin/`` pour vous connecter à l'écran d'administration.
+Les identifiants par défaut sont les suivants.
 
 - Nom d'utilisateur : ``admin``
 - Mot de passe : ``admin``
 
-Le tableau de bord de l'ecran d'administration permet de visualiser l'etat du systeme d'un seul coup d'oeil.
+Le tableau de bord de l'écran d'administration permet de visualiser l'état du système d'un seul coup d'œil.
 
-Structure de l'ecran d'administration
+Structure de l'écran d'administration
 --------------------------------------
 
-Le menu lateral gauche de l'ecran d'administration regroupe les principales fonctions d'administration de Fess.
-Passons-les brievement en revue.
+Le menu latéral gauche de l'écran d'administration regroupe les principales fonctions d'administration de Fess.
+Passons-les brièvement en revue.
 
 **Crawler**
 
-C'est la zone ou l'on enregistre les cibles de recherche. Elle permet de gerer les configurations de crawl pour trois types de sources : Web, systeme de fichiers et magasin de donnees.
+C'est la zone où l'on enregistre les cibles de recherche. Elle permet de gérer les configurations de crawl pour trois types de sources : Web, système de fichiers et magasin de données.
 
-**Systeme**
+**Système**
 
-Fonctions d'administration a l'echelle du systeme, telles que le planificateur, le design et les dictionnaires. Les dictionnaires permettent de gerer les parametres lies a la qualite de la recherche, comme les synonymes et les mots vides.
+Fonctions d'administration à l'échelle du système, telles que le planificateur, le design et les dictionnaires. Les dictionnaires permettent de gérer les paramètres liés à la qualité de la recherche, comme les synonymes et les mots vides.
 
-**Informations systeme**
+**Informations système**
 
-Fournit divers journaux et fonctions de maintenance : journaux de recherche, journaux de taches, informations de crawl, sauvegardes, etc.
+Fournit divers journaux et fonctions de maintenance : journaux de recherche, journaux de tâches, informations de crawl, sauvegardes, etc.
 
 Crawler un site Web
 ====================
@@ -127,73 +127,73 @@ Crawler un site Web
 Enregistrement d'une cible de crawl
 -------------------------------------
 
-Effectuons un crawl d'un site Web pour le rendre disponible a la recherche.
+Effectuons un crawl d'un site Web pour le rendre disponible à la recherche.
 Nous utiliserons ici le site officiel de Fess comme cible.
 
-1. Dans le menu de gauche de l'ecran d'administration, selectionnez [Crawler] > [Web]
-2. Cliquez sur [Creer]
+1. Dans le menu de gauche de l'écran d'administration, sélectionnez [Crawler] > [Web]
+2. Cliquez sur [Créer]
 3. Saisissez les informations suivantes
 
    - URL : ``https://fess.codelibs.org/ja/``
    - URL cible du crawl : ``https://fess.codelibs.org/ja/.*``
-   - Nombre maximum d'acces : ``50``
+   - Nombre maximum d'accès : ``50``
    - Nombre de threads : ``2``
    - Intervalle : ``10000``
 
 4. Cliquez sur [Enregistrer] pour sauvegarder
 
-La configuration pour crawler le site officiel de Fess (pages en japonais), avec un maximum de 50 pages et un intervalle de 10 secondes, est maintenant terminee.
+La configuration pour crawler le site officiel de Fess (pages en japonais), avec un maximum de 50 pages et un intervalle de 10 secondes, est maintenant terminée.
 
-Execution du crawl
+Exécution du crawl
 -------------------
 
-Le simple fait de sauvegarder la configuration ne declenche pas le crawl.
-Pour lancer le crawl, executez la tache depuis le planificateur.
+Le simple fait de sauvegarder la configuration ne déclenche pas le crawl.
+Pour lancer le crawl, exécutez la tâche depuis le planificateur.
 
-1. Selectionnez [Systeme] > [Planificateur]
-2. Selectionnez "Default Crawler"
-3. Cliquez sur [Demarrer maintenant]
+1. Sélectionnez [Système] > [Planificateur]
+2. Sélectionnez "Default Crawler"
+3. Cliquez sur [Démarrer maintenant]
 
-Le crawl demarre.
-Vous pouvez suivre la progression depuis [Informations systeme] > [Informations de crawl].
+Le crawl démarre.
+Vous pouvez suivre la progression depuis [Informations système] > [Informations de crawl].
 Pour environ 50 pages, le crawl se termine en quelques minutes.
 
-Experimenter la recherche
+Expérimenter la recherche
 ==========================
 
 Effectuer une recherche
 ------------------------
 
-Une fois le crawl termine, revenez a l'ecran de recherche ``http://localhost:8080/`` et essayez une recherche.
+Une fois le crawl terminé, revenez à l'écran de recherche ``http://localhost:8080/`` et essayez une recherche.
 
-Par exemple, en saisissant "インストール" (installation) et en lancant la recherche, les pages du site Fess relatives a l'installation s'affichent dans les resultats.
+Par exemple, en saisissant "インストール" (installation) et en lançant la recherche, les pages du site Fess relatives à l'installation s'affichent dans les résultats.
 
-Elements de l'ecran de resultats
+Éléments de l'écran de résultats
 ---------------------------------
 
-L'ecran de resultats de recherche affiche les elements suivants.
+L'écran de résultats de recherche affiche les éléments suivants.
 
-**Liste des resultats**
+**Liste des résultats**
 
-Chaque resultat comprend un titre, une URL et un extrait du contenu (snippet).
-Les parties correspondant aux mots-cles de recherche sont mises en surbrillance.
+Chaque résultat comprend un titre, une URL et un extrait du contenu (snippet).
+Les parties correspondant aux mots-clés de recherche sont mises en surbrillance.
 
-**Nombre de resultats et temps de traitement**
+**Nombre de résultats et temps de traitement**
 
-En haut des resultats de recherche, le nombre de resultats et le temps de recherche sont affiches.
+En haut des résultats de recherche, le nombre de résultats et le temps de recherche sont affichés.
 
 **Pagination**
 
-Lorsque les resultats s'etendent sur plusieurs pages, une navigation de pagination s'affiche.
+Lorsque les résultats s'étendent sur plusieurs pages, une navigation de pagination s'affiche.
 
-Fonctions de recherche avancees
+Fonctions de recherche avancées
 --------------------------------
 
-Fess offre diverses fonctions de recherche au-dela de la simple recherche par mots-cles.
+Fess offre diverses fonctions de recherche au-delà de la simple recherche par mots-clés.
 
 **Recherche AND/OR**
 
-La separation des mots-cles par des espaces effectue une recherche AND.
+La séparation des mots-clés par des espaces effectue une recherche AND.
 L'utilisation de ``OR`` permet d'effectuer une recherche OR.
 
 ::
@@ -211,65 +211,65 @@ En encadrant les termes par des guillemets doubles, vous recherchez les document
 
 **Recherche par exclusion**
 
-Pour rechercher des resultats ne contenant pas un mot-cle specifique, utilisez le signe moins.
+Pour rechercher des résultats ne contenant pas un mot-clé spécifique, utilisez le signe moins.
 
 ::
 
     インストール -Windows    # Resultats ne contenant pas "Windows"
 
-Arret et reprise de l'environnement
+Arrêt et reprise de l'environnement
 =====================================
 
-Arret
+Arrêt
 -----
 
-Une fois l'experience de recherche terminee, arretez l'environnement avec la commande suivante.
+Une fois l'expérience de recherche terminée, arrêtez l'environnement avec la commande suivante.
 
 ::
 
     $ docker compose down
 
-L'arret conserve les donnees (index), de sorte que vous retrouverez le meme etat au redemarrage.
+L'arrêt conserve les données (index), de sorte que vous retrouverez le même état au redémarrage.
 
-Nettoyage complet incluant les donnees
+Nettoyage complet incluant les données
 ---------------------------------------
 
-Pour supprimer egalement les volumes, executez la commande suivante.
+Pour supprimer également les volumes, exécutez la commande suivante.
 
 ::
 
     $ docker compose down -v
 
-Dans ce cas, les index crees par le crawl seront egalement supprimes.
+Dans ce cas, les index créés par le crawl seront également supprimés.
 
-Ce que l'experience de recherche revele
+Ce que l'expérience de recherche révèle
 ========================================
 
-Grace a cette experience, vous avez pu verifier le fonctionnement de base de Fess.
-En envisageant une utilisation en situation reelle, plusieurs questions peuvent se poser.
+Grâce à cette expérience, vous avez pu vérifier le fonctionnement de base de Fess.
+En envisageant une utilisation en situation réelle, plusieurs questions peuvent se poser.
 
-- "Peut-on egalement rechercher dans les serveurs de fichiers internes ?" --> traite dans la **Partie 4**
-- "Peut-on integrer une barre de recherche dans un site interne existant ?" --> traite dans la **Partie 3**
-- "Peut-on controler les informations visibles par departement ?" --> traite dans la **Partie 5**
-- "Je veux aussi rechercher dans Slack et Confluence" --> traite dans la **Partie 6**
-- "Je voudrais que l'IA reponde a mes questions" --> traite dans la **Partie 19**
+- "Peut-on également rechercher dans les serveurs de fichiers internes ?" --> traité dans la **Partie 4**
+- "Peut-on intégrer une barre de recherche dans un site interne existant ?" --> traité dans la **Partie 3**
+- "Peut-on contrôler les informations visibles par département ?" --> traité dans la **Partie 5**
+- "Je veux aussi rechercher dans Slack et Confluence" --> traité dans la **Partie 6**
+- "Je voudrais que l'IA réponde à mes questions" --> traité dans la **Partie 19**
 
-Fess peut repondre a tous ces scenarios.
-Tout au long de cette serie, nous presenterons progressivement les methodes pour les realiser.
+Fess peut répondre à tous ces scénarios.
+Tout au long de cette série, nous présenterons progressivement les méthodes pour les réaliser.
 
-Resume
+Résumé
 ======
 
-Dans cet article, nous avons demarre Fess avec Docker Compose et experimente le processus complet, du crawl d'un site Web a la recherche.
+Dans cet article, nous avons démarré Fess avec Docker Compose et expérimenté le processus complet, du crawl d'un site Web à la recherche.
 
-- Demarrage de Fess + OpenSearch en une seule commande avec Docker Compose
-- Enregistrement des cibles de crawl depuis l'ecran d'administration et execution via le planificateur
-- Experience de la recherche par mots-cles, de la recherche AND/OR et de la recherche par phrase sur l'ecran de recherche
-- Arret et reprise de l'environnement en toute simplicite
+- Démarrage de Fess + OpenSearch en une seule commande avec Docker Compose
+- Enregistrement des cibles de crawl depuis l'écran d'administration et exécution via le planificateur
+- Expérience de la recherche par mots-clés, de la recherche AND/OR et de la recherche par phrase sur l'écran de recherche
+- Arrêt et reprise de l'environnement en toute simplicité
 
-Le prochain article presentera comment integrer la fonction de recherche de Fess dans un site Web ou un portail existant.
+Le prochain article présentera comment intégrer la fonction de recherche de Fess dans un site Web ou un portail existant.
 
-References
+Références
 ==========
 
 - `Fess <https://fess.codelibs.org/ja/>`__

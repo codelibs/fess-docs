@@ -1,181 +1,181 @@
 ===========================================
-Parte 18: Fundamentos de la busqueda con IA
+Parte 18: Fundamentos de la búsqueda con IA
 ===========================================
 
-Introduccion
+Introducción
 =============
 
-En los articulos anteriores, nos hemos centrado en la busqueda de texto completo basada en palabras clave.
-La busqueda de texto completo es muy eficaz cuando los usuarios pueden introducir las palabras clave adecuadas.
-Sin embargo, hay casos en los que la busqueda por palabras clave por si sola no puede responder adecuadamente a necesidades como "no se que palabras clave usar para buscar" o "quiero respuestas a preguntas conceptuales".
+En los artículos anteriores, nos hemos centrado en la búsqueda de texto completo basada en palabras clave.
+La búsqueda de texto completo es muy eficaz cuando los usuarios pueden introducir las palabras clave adecuadas.
+Sin embargo, hay casos en los que la búsqueda por palabras clave por si sola no puede responder adecuadamente a necesidades como "no sé qué palabras clave usar para buscar" o "quiero respuestas a preguntas conceptuales".
 
-En este articulo, organizamos el espectro de las tecnologias de busqueda y explicamos como evoluciona la busqueda desde la busqueda por palabras clave hasta la busqueda semantica.
+En este artículo, organizamos el espectro de las tecnologías de búsqueda y explicamos cómo evoluciona la búsqueda desde la búsqueda por palabras clave hasta la búsqueda semántica.
 
 Audiencia objetivo
 ===================
 
-- Personas interesadas en la busqueda con IA que desean organizar los conceptos
-- Personas que estan considerando la introduccion de la busqueda semantica
+- Personas interesadas en la búsqueda con IA que desean organizar los conceptos
+- Personas que están considerando la introducción de la búsqueda semántica
 - Personas que desean comprender las funciones relacionadas con la IA de Fess
 
-Espectro de las tecnologias de busqueda
+Espectro de las tecnologías de búsqueda
 =========================================
 
-Las tecnologias de busqueda forman un espectro que va de lo simple a lo avanzado, como se muestra a continuacion.
+Las tecnologías de búsqueda forman un espectro que va de lo simple a lo avanzado, como se muestra a continuación.
 
-.. list-table:: Espectro de las tecnologias de busqueda
+.. list-table:: Espectro de las tecnologías de búsqueda
    :header-rows: 1
    :widths: 20 35 45
 
-   * - Tecnologia
+   * - Tecnología
      - Mecanismo
-     - Caracteristicas
-   * - Busqueda por palabras clave
-     - Compara los terminos de entrada con los terminos en los documentos
-     - Rapida y fiable. Requiere coincidencia exacta de terminos
-   * - Busqueda difusa
-     - Tambien compara terminos con ortografia similar
-     - Manejo de errores tipograficos
-   * - Busqueda por sinonimos
-     - Expande sinonimos para la comparacion
-     - Manejo de variaciones de notacion (configuracion manual)
-   * - Busqueda semantica
-     - Compara basandose en la similitud semantica
-     - Encuentra documentos relacionados incluso sin coincidencia de terminos
-   * - Busqueda hibrida
-     - Combinacion de busqueda por palabras clave + semantica
+     - Características
+   * - Búsqueda por palabras clave
+     - Compara los términos de entrada con los términos en los documentos
+     - Rápida y fiable. Requiere coincidencia exacta de términos
+   * - Búsqueda difusa
+     - También compara términos con ortografía similar
+     - Manejo de errores tipográficos
+   * - Búsqueda por sinónimos
+     - Expande sinónimos para la comparación
+     - Manejo de variaciones de notación (configuración manual)
+   * - Búsqueda semántica
+     - Compara basándose en la similitud semántica
+     - Encuentra documentos relacionados incluso sin coincidencia de términos
+   * - Búsqueda híbrida
+     - Combinación de búsqueda por palabras clave + semántica
      - Aprovecha las fortalezas de ambos enfoques
 
-Limitaciones de la busqueda por palabras clave
+Limitaciones de la búsqueda por palabras clave
 ================================================
 
-La busqueda por palabras clave es eficaz en muchas situaciones, pero muestra sus limitaciones en los siguientes casos.
+La búsqueda por palabras clave es eficaz en muchas situaciones, pero muestra sus limitaciones en los siguientes casos.
 
 Discrepancia de vocabulario
 -----------------------------
 
 Esto ocurre cuando las palabras utilizadas por los usuarios difieren de las palabras utilizadas en los documentos.
 
-Ejemplo: Incluso si un usuario busca "quiero cambiar el destino de la transferencia de mi salario", si el documento interno utiliza el termino "procedimiento de cambio de cuenta salarial", es posible que las palabras clave no coincidan.
+Ejemplo: Incluso si un usuario busca "quiero cambiar el destino de la transferencia de mi salario", si el documento interno utiliza el término "procedimiento de cambio de cuenta salarial", es posible que las palabras clave no coincidan.
 
-Esto se puede abordar parcialmente con sinonimos (vease la Parte 8), pero no es practico registrar todas las combinaciones de vocabulario posibles de antemano.
+Esto se puede abordar parcialmente con sinónimos (véase la Parte 8), pero no es práctico registrar todas las combinaciones de vocabulario posibles de antemano.
 
-Busqueda conceptual
+Búsqueda conceptual
 ---------------------
 
-Este es el caso en el que los usuarios desean buscar por concepto en lugar de por palabras clave especificas, como "reglas internas sobre el trabajo remoto".
-En este caso, diversos documentos relacionados pueden ser relevantes, incluyendo los que tratan sobre "trabajo desde casa", "teletrabajo", "reglas de asistencia a la oficina" y "gestion de horarios".
+Este es el caso en el que los usuarios desean buscar por concepto en lugar de por palabras clave específicas, como "reglas internas sobre el trabajo remoto".
+En este caso, diversos documentos relacionados pueden ser relevantes, incluyendo los que tratan sobre "trabajo desde casa", "teletrabajo", "reglas de asistencia a la oficina" y "gestión de horarios".
 
-Como funciona la busqueda semantica
+Cómo funciona la búsqueda semántica
 ======================================
 
-Representacion vectorial (Embedding)
+Representación vectorial (Embedding)
 --------------------------------------
 
-La base de la busqueda semantica es la conversion de texto en "vectores (matrices de numeros)".
-Estos vectores son representaciones matematicas del "significado" del texto.
+La base de la búsqueda semántica es la conversión de texto en "vectores (matrices de números)".
+Estos vectores son representaciones matemáticas del "significado" del texto.
 
 Los textos con significados similares se colocan cerca unos de otros en el espacio vectorial.
-Por ejemplo, los vectores de "perro" y "mascota" estan cerca, mientras que los vectores de "perro" y "automovil" estan lejos.
+Por ejemplo, los vectores de "perro" y "mascota" están cerca, mientras que los vectores de "perro" y "automóvil" están lejos.
 
-Funcionamiento de la busqueda
+Funcionamiento de la búsqueda
 -------------------------------
 
-1. El usuario introduce una consulta de busqueda
+1. El usuario introduce una consulta de búsqueda
 2. La consulta se convierte en un vector
-3. Se calcula la similitud con los vectores de documentos en el indice
+3. Se calcula la similitud con los vectores de documentos en el índice
 4. Los documentos se devuelven en orden de mayor similitud
 
-Esto permite encontrar documentos semanticamente relacionados incluso cuando las palabras clave no coinciden exactamente.
+Esto permite encontrar documentos semánticamente relacionados incluso cuando las palabras clave no coinciden exactamente.
 
-Busqueda semantica en Fess
+Búsqueda semántica en Fess
 ============================
 
-Fess puede lograr una busqueda basada en vectores a traves de plugins de busqueda semantica.
+Fess puede lograr una búsqueda basada en vectores a través de plugins de búsqueda semántica.
 
-Activacion de la busqueda semantica
+Activación de la búsqueda semántica
 --------------------------------------
 
-1. Instalar el plugin de busqueda semantica
+1. Instalar el plugin de búsqueda semántica
 2. Configurar el modelo de embedding
-3. Reconstruir el indice (vectorizar los documentos existentes)
+3. Reconstruir el índice (vectorizar los documentos existentes)
 
-Eleccion del modelo de embedding
+Elección del modelo de embedding
 -----------------------------------
 
 Seleccione un modelo (modelo de embedding) para convertir texto en vectores.
 
-Los criterios de seleccion son los siguientes:
+Los criterios de selección son los siguientes:
 
 - **Soporte de idiomas**: Si puede manejar adecuadamente el idioma objetivo
-- **Precision**: Calidad de los vectores (precision en la captura del significado)
-- **Velocidad**: Tiempo requerido para la conversion
+- **Precisión**: Calidad de los vectores (precisión en la captura del significado)
+- **Velocidad**: Tiempo requerido para la conversión
 - **Coste**: Tarifas de uso de API, requisitos de hardware
 
-Busqueda hibrida: Rank Fusion
+Búsqueda híbrida: Rank Fusion
 ================================
 
-La busqueda semantica es potente, pero no omnipotente.
-Para buscar nombres propios o en casos que requieren coincidencia exacta, la busqueda por palabras clave es mas apropiada.
+La búsqueda semántica es potente, pero no omnipotente.
+Para buscar nombres propios o en casos que requieren coincidencia exacta, la búsqueda por palabras clave es más apropiada.
 
-El concepto de busqueda hibrida
+El concepto de búsqueda híbrida
 ---------------------------------
 
-La busqueda hibrida ejecuta tanto la busqueda por palabras clave como la busqueda semantica, y luego integra los resultados.
+La búsqueda híbrida ejecuta tanto la búsqueda por palabras clave como la búsqueda semántica, y luego integra los resultados.
 
-Fess utiliza Rank Fusion para fusionar los resultados de diferentes metodos de busqueda.
-En concreto, el algoritmo RRF (Reciprocal Rank Fusion) asegura que los documentos que ocupan posiciones altas en ambos resultados de busqueda se clasifiquen finalmente en las primeras posiciones.
+Fess utiliza Rank Fusion para fusionar los resultados de diferentes métodos de búsqueda.
+En concreto, el algoritmo RRF (Reciprocal Rank Fusion) asegura que los documentos que ocupan posiciones altas en ambos resultados de búsqueda se clasifiquen finalmente en las primeras posiciones.
 
-Ventajas de la busqueda hibrida
+Ventajas de la búsqueda híbrida
 ---------------------------------
 
-- Combina la "fiabilidad" de la busqueda por palabras clave con la "flexibilidad" de la busqueda semantica
-- Los nombres propios se cubren con la busqueda por palabras clave
-- Las busquedas conceptuales se cubren con la busqueda semantica
-- La calidad general de la busqueda mejora en comparacion con el uso exclusivo de uno de los dos metodos
+- Combina la "fiabilidad" de la búsqueda por palabras clave con la "flexibilidad" de la búsqueda semántica
+- Los nombres propios se cubren con la búsqueda por palabras clave
+- Las búsquedas conceptuales se cubren con la búsqueda semántica
+- La calidad general de la búsqueda mejora en comparación con el uso exclusivo de uno de los dos métodos
 
-Criterios para la adopcion
+Criterios para la adopción
 ============================
 
-La busqueda semantica no debe introducirse necesariamente en todos los entornos.
+La búsqueda semántica no debe introducirse necesariamente en todos los entornos.
 
-Casos en los que se debe considerar la adopcion
+Casos en los que se debe considerar la adopción
 --------------------------------------------------
 
-- Hay muchas "consultas sin resultados" en los registros de busqueda
+- Hay muchas "consultas sin resultados" en los registros de búsqueda
 - Los usuarios informan que "no conocen las palabras clave adecuadas"
 - Se desea soportar preguntas en lenguaje natural (un prerrequisito para RAG en la Parte 19)
-- Se desea mejorar la busqueda entre idiomas para documentos multilingues
+- Se desea mejorar la búsqueda entre idiomas para documentos multilingües
 
-Casos en los que aun no es necesaria
+Casos en los que aún no es necesaria
 ---------------------------------------
 
-- Se obtiene una calidad de busqueda suficiente con busqueda por palabras clave + sinonimos
-- El numero de documentos es reducido y los usuarios conocen las palabras clave apropiadas
-- Los recursos de computo (GPU o costes de API en la nube) son limitados
+- Se obtiene una calidad de búsqueda suficiente con búsqueda por palabras clave + sinónimos
+- El número de documentos es reducido y los usuarios conocen las palabras clave apropiadas
+- Los recursos de cómputo (GPU o costes de API en la nube) son limitados
 
-Adopcion gradual
+Adopción gradual
 ------------------
 
-1. Primero, mejorar la calidad con busqueda por palabras clave + sinonimos (Parte 8)
-2. Si las consultas sin resultados siguen siendo frecuentes, considerar la busqueda semantica
-3. Utilizar la busqueda hibrida para beneficiarse de ambos enfoques
+1. Primero, mejorar la calidad con búsqueda por palabras clave + sinónimos (Parte 8)
+2. Si las consultas sin resultados siguen siendo frecuentes, considerar la búsqueda semántica
+3. Utilizar la búsqueda híbrida para beneficiarse de ambos enfoques
 
 Resumen
 ========
 
-En este articulo, hemos organizado el camino de evolucion desde la busqueda por palabras clave hasta la busqueda semantica.
+En este artículo, hemos organizado el camino de evolución desde la búsqueda por palabras clave hasta la búsqueda semántica.
 
-- El espectro de las tecnologias de busqueda (palabras clave -> difusa -> sinonimos -> semantica -> hibrida)
-- Como funciona la busqueda semantica (representacion vectorial y calculo de similitud)
-- Busqueda semantica y busqueda hibrida en Fess (Rank Fusion)
-- Criterios para la adopcion y un enfoque gradual
+- El espectro de las tecnologías de búsqueda (palabras clave -> difusa -> sinónimos -> semántica -> híbrida)
+- Cómo funciona la búsqueda semántica (representación vectorial y cálculo de similitud)
+- Búsqueda semántica y búsqueda híbrida en Fess (Rank Fusion)
+- Criterios para la adopción y un enfoque gradual
 
-En el proximo articulo, desarrollaremos aun mas la busqueda semantica y construiremos un asistente de IA utilizando RAG.
+En el próximo artículo, desarrollaremos aun más la búsqueda semántica y construiremos un asistente de IA utilizando RAG.
 
 Referencias
 ============
 
-- `Funciones de busqueda con IA de Fess <https://fess.codelibs.org/ja/15.5/config/rag-chat.html>`__
+- `Funciones de búsqueda con IA de Fess <https://fess.codelibs.org/ja/15.5/config/rag-chat.html>`__
 
-- `Busqueda vectorial de OpenSearch <https://opensearch.org/docs/latest/search-plugins/knn/>`__
+- `Búsqueda vectorial de OpenSearch <https://opensearch.org/docs/latest/search-plugins/knn/>`__

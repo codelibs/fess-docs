@@ -2,15 +2,15 @@
 Casos de uso de Fess
 =========================
 
-Introduccion
+Introducción
 ============
 
 Fess es utilizado por organizaciones de diversas industrias y escalas.
-Esta pagina presenta casos de uso representativos y ejemplos practicos de implementacion de Fess.
+Esta página presenta casos de uso representativos y ejemplos prácticos de implementación de Fess.
 
 .. note::
 
-   Los siguientes ejemplos ilustran patrones de implementacion comunes para Fess.
+   Los siguientes ejemplos ilustran patrones de implementación comunes para Fess.
    Para estudios de casos reales, contacte al `Soporte Comercial <../support-services.html>`__.
 
 ----
@@ -21,13 +21,13 @@ Casos de uso por industria
 Manufactura
 -----------
 
-**Desafio**: Los planos de diseno, documentos tecnicos y documentos de gestion de calidad estan dispersos en multiples servidores de archivos, lo que hace que encontrar la informacion necesaria consuma mucho tiempo.
+**Desafío**: Los planos de diseño, documentos técnicos y documentos de gestión de calidad están dispersos en múltiples servidores de archivos, lo que hace que encontrar la información necesaria consuma mucho tiempo.
 
-**Solucion con Fess**:
+**Solución con Fess**:
 
-- Busqueda unificada de planos CAD, documentos tecnicos en PDF y documentos de Office en servidores de archivos
-- Busqueda cruzada por numeros de modelo de producto, numeros de plano y nombres de proyecto
-- Visualizacion de resultados de busqueda basada en permisos de acceso (busqueda basada en roles)
+- Búsqueda unificada de planos CAD, documentos técnicos en PDF y documentos de Office en servidores de archivos
+- Búsqueda cruzada por números de modelo de producto, números de plano y nombres de proyecto
+- Visualización de resultados de búsqueda basada en permisos de acceso (búsqueda basada en roles)
 
 **Ejemplo de arquitectura**:
 
@@ -42,47 +42,47 @@ Manufactura
 **Funciones relacionadas**:
 
 - `Rastreo de servidores de archivos <https://fess.codelibs.org/es/15.5/config/config-filecrawl.html>`__
-- `Busqueda basada en roles <https://fess.codelibs.org/es/15.5/config/config-role.html>`__
-- `Visualizacion de miniaturas <https://fess.codelibs.org/es/15.5/admin/admin-general.html>`__
+- `Búsqueda basada en roles <https://fess.codelibs.org/es/15.5/config/config-role.html>`__
+- `Visualización de miniaturas <https://fess.codelibs.org/es/15.5/admin/admin-general.html>`__
 
 Servicios financieros y seguros
 -------------------------------
 
-**Desafio**: Los documentos de cumplimiento, contratos y regulaciones internas son extensos, lo que hace que las respuestas a auditorias y el manejo de consultas consuman mucho tiempo.
+**Desafío**: Los documentos de cumplimiento, contratos y regulaciones internas son extensos, lo que hace que las respuestas a auditorías y el manejo de consultas consuman mucho tiempo.
 
-**Solucion con Fess**:
+**Solución con Fess**:
 
-- Busqueda cruzada de regulaciones internas, manuales y preguntas frecuentes
-- Busqueda de texto en contratos y documentos de solicitud
-- Busqueda de conocimiento en el historial de consultas anteriores
+- Búsqueda cruzada de regulaciones internas, manuales y preguntas frecuentes
+- Búsqueda de texto en contratos y documentos de solicitud
+- Búsqueda de conocimiento en el historial de consultas anteriores
 
 **Funciones de seguridad**:
 
-- Autenticacion mediante integracion con LDAP/Active Directory
-- Inicio de sesion unico mediante SAML
-- Autenticacion de API mediante tokens de acceso
+- Autenticación mediante integración con LDAP/Active Directory
+- Inicio de sesión único mediante SAML
+- Autenticación de API mediante tokens de acceso
 
 **Funciones relacionadas**:
 
-- `Autenticacion LDAP <https://fess.codelibs.org/es/15.5/config/config-security.html>`__
-- `Autenticacion SAML <https://fess.codelibs.org/es/15.5/config/config-saml.html>`__
+- `Autenticación LDAP <https://fess.codelibs.org/es/15.5/config/config-security.html>`__
+- `Autenticación SAML <https://fess.codelibs.org/es/15.5/config/config-saml.html>`__
 
-Educacion
+Educación
 ---------
 
-**Desafio**: Los trabajos de investigacion, materiales de clase y documentos del campus estan distribuidos en servidores departamentales, dificultando el intercambio de informacion.
+**Desafío**: Los trabajos de investigación, materiales de clase y documentos del campus están distribuidos en servidores departamentales, dificultando el intercambio de información.
 
-**Solucion con Fess**:
+**Solución con Fess**:
 
-- Busqueda unificada desde el portal del campus
-- Busqueda en repositorios de trabajos de investigacion
-- Busqueda de materiales de clase y programas de estudio
+- Búsqueda unificada desde el portal del campus
+- Búsqueda en repositorios de trabajos de investigación
+- Búsqueda de materiales de clase y programas de estudio
 
 **Ejemplos de arquitectura**:
 
 - Rastreo de sitios web del campus
-- Integracion con repositorios de articulos (DSpace, etc.)
-- Busqueda de materiales en Google Drive / SharePoint
+- Integración con repositorios de artículos (DSpace, etc.)
+- Búsqueda de materiales en Google Drive / SharePoint
 
 **Funciones relacionadas**:
 
@@ -92,18 +92,18 @@ Educacion
 TI y Software
 -------------
 
-**Desafio**: El codigo fuente, la documentacion, las wikis y la informacion del sistema de gestion de tickets estan dispersos, lo que reduce la eficiencia del desarrollo.
+**Desafío**: El código fuente, la documentación, las wikis y la información del sistema de gestión de tickets están dispersos, lo que reduce la eficiencia del desarrollo.
 
-**Solucion con Fess**:
+**Solución con Fess**:
 
-- Busqueda de codigo en repositorios de GitHub/GitLab
-- Busqueda de paginas de Confluence/Wiki
-- Busqueda de mensajes de Slack/Teams
+- Búsqueda de código en repositorios de GitHub/GitLab
+- Búsqueda de páginas de Confluence/Wiki
+- Búsqueda de mensajes de Slack/Teams
 
 **Funciones para desarrolladores**:
 
-- Integracion con sistemas existentes mediante la API de busqueda
-- Resaltado de codigo
+- Integración con sistemas existentes mediante la API de búsqueda
+- Resaltado de código
 - Filtrado por tipo de archivo
 
 **Funciones relacionadas**:
@@ -117,18 +117,18 @@ TI y Software
 Casos de uso por escala
 ========================
 
-Pequena empresa (hasta 100 empleados)
+Pequeña empresa (hasta 100 empleados)
 --------------------------------------
 
-**Caracteristicas**: Desean una implementacion y operacion sencillas con recursos de TI limitados.
+**Características**: Desean una implementación y operación sencillas con recursos de TI limitados.
 
-**Configuracion recomendada**:
+**Configuración recomendada**:
 
-- Implementacion facil mediante Docker Compose
-- Configuracion de servidor unico (Fess + OpenSearch)
-- Memoria requerida: 8 GB o mas
+- Implementación fácil mediante Docker Compose
+- Configuración de servidor único (Fess + OpenSearch)
+- Memoria requerida: 8 GB o más
 
-**Pasos de implementacion**:
+**Pasos de implementación**:
 
 .. code-block:: bash
 
@@ -140,53 +140,53 @@ Pequena empresa (hasta 100 empleados)
 
 **Costo**:
 
-- Software: Gratuito (Codigo abierto)
+- Software: Gratuito (Código abierto)
 - Solo costos de servidor (Nube o local)
 
 Mediana empresa (100-1000 empleados)
 -------------------------------------
 
-**Caracteristicas**: Uso multidepartamental, requiere disponibilidad razonable.
+**Características**: Uso multidepartamental, requiere disponibilidad razonable.
 
-**Configuracion recomendada**:
+**Configuración recomendada**:
 
 - 2 servidores Fess (redundancia)
-- Cluster OpenSearch de 3 nodos
-- Balanceador de carga para distribucion de trafico
-- Integracion con Active Directory
+- Clúster OpenSearch de 3 nodos
+- Balanceador de carga para distribución de tráfico
+- Integración con Active Directory
 
 **Directrices de capacidad**:
 
 - Documentos: hasta 5 millones
-- Usuarios de busqueda simultaneos: hasta 100
+- Usuarios de búsqueda simultáneos: hasta 100
 
 **Funciones relacionadas**:
 
-- `Configuracion de cluster <https://fess.codelibs.org/es/15.5/install/clustering.html>`__
-- `Copia de seguridad y restauracion <https://fess.codelibs.org/es/15.5/admin/admin-backup.html>`__
+- `Configuración de clúster <https://fess.codelibs.org/es/15.5/install/clustering.html>`__
+- `Copia de seguridad y restauración <https://fess.codelibs.org/es/15.5/admin/admin-backup.html>`__
 
-Gran empresa (mas de 1000 empleados)
+Gran empresa (más de 1000 empleados)
 -------------------------------------
 
-**Caracteristicas**: Datos a gran escala, alta disponibilidad, requisitos estrictos de seguridad.
+**Características**: Datos a gran escala, alta disponibilidad, requisitos estrictos de seguridad.
 
-**Configuracion recomendada**:
+**Configuración recomendada**:
 
-- Multiples servidores Fess (ejecutandose en Kubernetes)
-- Cluster OpenSearch (configuracion de nodos dedicados)
+- Múltiples servidores Fess (ejecutándose en Kubernetes)
+- Clúster OpenSearch (configuración de nodos dedicados)
 - Servidores de rastreo dedicados
-- Integracion con infraestructura de monitoreo y recopilacion de registros
+- Integración con infraestructura de monitoreo y recopilación de registros
 
 **Escalabilidad**:
 
 - Documentos: cientos de millones posibles
-- Escalado horizontal mediante division de shards de OpenSearch
+- Escalado horizontal mediante división de shards de OpenSearch
 
 **Funciones empresariales**:
 
-- Gestion de etiquetas por departamento
+- Gestión de etiquetas por departamento
 - Registro detallado de accesos
-- Integracion con otros sistemas mediante API
+- Integración con otros sistemas mediante API
 
 .. note::
 
@@ -194,30 +194,30 @@ Gran empresa (mas de 1000 empleados)
 
 ----
 
-Casos de uso tecnicos
+Casos de uso técnicos
 ======================
 
-Busqueda en Wiki interno / Base de conocimiento
+Búsqueda en Wiki interno / Base de conocimiento
 -------------------------------------------------
 
-**Descripcion**: Permitir la busqueda cruzada en Confluence, MediaWiki y wikis internas.
+**Descripción**: Permitir la búsqueda cruzada en Confluence, MediaWiki y wikis internas.
 
 **Beneficios**:
 
-- Busqueda unificada en multiples sistemas wiki
-- Rastreo automatico basado en la frecuencia de actualizacion
-- Los archivos adjuntos de las paginas wiki se incluyen en el alcance de la busqueda
+- Búsqueda unificada en múltiples sistemas wiki
+- Rastreo automático basado en la frecuencia de actualización
+- Los archivos adjuntos de las páginas wiki se incluyen en el alcance de la búsqueda
 
-**Implementacion**:
+**Implementación**:
 
-1. Instalar el plugin de almacen de datos de Confluence
-2. Configurar los ajustes de conexion desde el panel de administracion
+1. Instalar el plugin de almacén de datos de Confluence
+2. Configurar los ajustes de conexión desde el panel de administración
 3. Establecer el cronograma de rastreo (por ejemplo, diario)
 
-Busqueda unificada en servidores de archivos
+Búsqueda unificada en servidores de archivos
 ---------------------------------------------
 
-**Descripcion**: Buscar documentos en servidores de archivos Windows y NAS.
+**Descripción**: Buscar documentos en servidores de archivos Windows y NAS.
 
 **Protocolos soportados**:
 
@@ -227,29 +227,29 @@ Busqueda unificada en servidores de archivos
 
 **Seguridad**:
 
-- Control de acceso basado en autenticacion NTLM
-- Las ACL de archivos se reflejan en los resultados de busqueda
+- Control de acceso basado en autenticación NTLM
+- Las ACL de archivos se reflejan en los resultados de búsqueda
 
-**Puntos de configuracion**:
+**Puntos de configuración**:
 
 - Crear una cuenta dedicada para el rastreo
-- Rastreo por fases para grandes volumenes de archivos
+- Rastreo por fases para grandes volúmenes de archivos
 - Considerar el ancho de banda de la red
 
-Busqueda en sitios web (Site Search)
+Búsqueda en sitios web (Site Search)
 -------------------------------------
 
-**Descripcion**: Agregar funcionalidad de busqueda a sitios web publicos.
+**Descripción**: Agregar funcionalidad de búsqueda a sitios web públicos.
 
-**Metodos de implementacion**:
+**Métodos de implementación**:
 
-1. **Insercion de JavaScript**
+1. **Inserción de JavaScript**
 
-   Use Fess Site Search (FSS) para agregar un cuadro de busqueda con solo unas pocas lineas de JavaScript
+   Use Fess Site Search (FSS) para agregar un cuadro de búsqueda con solo unas pocas líneas de JavaScript
 
-2. **Integracion por API**
+2. **Integración por API**
 
-   Construya una interfaz de busqueda personalizada utilizando la API de busqueda
+   Construya una interfaz de búsqueda personalizada utilizando la API de búsqueda
 
 **Ejemplo de FSS**:
 
@@ -269,10 +269,10 @@ Busqueda en sitios web (Site Search)
     </script>
     <fess:search></fess:search>
 
-Busqueda en bases de datos
+Búsqueda en bases de datos
 ---------------------------
 
-**Descripcion**: Hacer que los datos en bases de datos relacionales sean buscables.
+**Descripción**: Hacer que los datos en bases de datos relacionales sean buscables.
 
 **Bases de datos soportadas**:
 
@@ -283,13 +283,13 @@ Busqueda en bases de datos
 
 **Casos de uso**:
 
-- Busqueda en maestro de clientes
-- Busqueda en catalogo de productos
-- Busqueda en base de datos de preguntas frecuentes
+- Búsqueda en maestro de clientes
+- Búsqueda en catálogo de productos
+- Búsqueda en base de datos de preguntas frecuentes
 
-**Implementacion**:
+**Implementación**:
 
-1. Configurar el plugin de almacen de datos de base de datos
+1. Configurar el plugin de almacén de datos de base de datos
 2. Especificar el objetivo de rastreo con una consulta SQL
 3. Configurar el mapeo de campos
 
@@ -298,16 +298,16 @@ Busqueda en bases de datos
 Resumen
 =======
 
-Fess, con su diseno flexible, puede adaptarse a diversas industrias, escalas y casos de uso.
+Fess, con su diseño flexible, puede adaptarse a diversas industrias, escalas y casos de uso.
 
-**Para quienes estan considerando la implementacion**:
+**Para quienes están considerando la implementación**:
 
-1. Primero, pruebe Fess con el `Inicio rapido <../quick-start.html>`__
-2. Verifique las funciones requeridas en la `Documentacion <../documentation.html>`__
-3. Para implementacion en produccion, consulte el `Soporte Comercial <../support-services.html>`__
+1. Primero, pruebe Fess con el `Inicio rápido <../quick-start.html>`__
+2. Verifique las funciones requeridas en la `Documentación <../documentation.html>`__
+3. Para implementación en producción, consulte el `Soporte Comercial <../support-services.html>`__
 
 **Recursos relacionados**:
 
-- `Lista de articulos <../articles.html>`__ - Articulos tecnicos detallados
-- `Foro de discusion <https://discuss.codelibs.org/c/fessen/>`__ - Soporte de la comunidad
-- `GitHub <https://github.com/codelibs/fess>`__ - Codigo fuente y seguimiento de incidencias
+- `Lista de artículos <../articles.html>`__ - Artículos técnicos detallados
+- `Foro de discusión <https://discuss.codelibs.org/c/fessen/>`__ - Soporte de la comunidad
+- `GitHub <https://github.com/codelibs/fess>`__ - Código fuente y seguimiento de incidencias

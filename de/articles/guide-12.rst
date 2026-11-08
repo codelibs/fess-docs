@@ -22,7 +22,7 @@ Szenario
 
 Eine Vertriebsorganisation hat ihre Daten auf folgende Systeme verteilt.
 
-.. list-table:: Uebersicht der Datenquellen
+.. list-table:: Übersicht der Datenquellen
    :header-rows: 1
    :widths: 20 35 45
 
@@ -102,7 +102,7 @@ Auswahl der Zieldaten
 Salesforce enthält viele Objekte, aber nicht alle müssen durchsuchbar sein.
 Konzentrieren Sie sich auf die Objekte, nach denen das Vertriebsteam häufig sucht.
 
-.. list-table:: Beispiel fuer Zielobjekte
+.. list-table:: Beispiel für Zielobjekte
    :header-rows: 1
    :widths: 25 35 40
 
@@ -241,7 +241,7 @@ Datenaktualität
 SaaS- und Datenbankdaten können häufig aktualisiert werden.
 Stellen Sie die Crawl-Häufigkeit angemessen ein, um die Aktualität der Suchergebnisse zu gewährleisten.
 
-.. list-table:: Empfohlene Crawl-Haeufigkeit
+.. list-table:: Empfohlene Crawl-Häufigkeit
    :header-rows: 1
    :widths: 25 25 50
 

@@ -73,7 +73,7 @@ Wichtige Felder:
      - Anzahl der Suchergebnisse (0 bedeutet Nulltreffer)
    * - ``queryTime``
      - long
-     - Ausfuehrungszeit der Abfrage (Millisekunden)
+     - Ausführungszeit der Abfrage (Millisekunden)
    * - ``responseTime``
      - long
      - Gesamte Antwortzeit (Millisekunden)
@@ -88,7 +88,7 @@ Wichtige Felder:
      - Zugriffstyp (web, json, gsa, admin usw.)
    * - ``queryId``
      - keyword
-     - Abfrage-ID (wird zur Verknuepfung mit Klickprotokollen verwendet)
+     - Abfrage-ID (wird zur Verknüpfung mit Klickprotokollen verwendet)
 
 Klickprotokolle (``fess_log.click_log``)
 -----------------------------------------
@@ -108,7 +108,7 @@ Sie werden im OpenSearch-Index ``fess_log.click_log`` gespeichert.
      - Angeklickte URL
    * - ``queryId``
      - keyword
-     - queryId aus dem Suchprotokoll (identifiziert, welche Suche zum Klick fuehrte)
+     - queryId aus dem Suchprotokoll (identifiziert, welche Suche zum Klick führte)
    * - ``order``
      - integer
      - Anzeigeposition in den Suchergebnissen

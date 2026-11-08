@@ -1,54 +1,54 @@
 ==========================================================
-Parte 16: Automatizacion de la infraestructura de busqueda
+Parte 16: Automatización de la infraestructura de búsqueda
 ==========================================================
 
-Introduccion
+Introducción
 =============
 
-Cuando la configuracion de un sistema de busqueda se gestiona manualmente, resulta dificil reproducir los entornos y aumenta el riesgo de errores de configuracion.
-Adoptando practicas modernas de DevOps, gestionemos y automaticemos tambien la infraestructura de busqueda como codigo.
+Cuando la configuración de un sistema de búsqueda se gestiona manualmente, resulta difícil reproducir los entornos y aumenta el riesgo de errores de configuración.
+Adoptando prácticas modernas de DevOps, gestionemos y automaticemos también la infraestructura de búsqueda como código.
 
-En este articulo se presenta un enfoque para gestionar las configuraciones de Fess como codigo y automatizar los despliegues.
+En este artículo se presenta un enfoque para gestionar las configuraciones de Fess como código y automatizar los despliegues.
 
-Publico objetivo
+Público objetivo
 =================
 
-- Personas que desean automatizar las operaciones del sistema de busqueda
-- Personas que desean aplicar metodos DevOps/IaC a la infraestructura de busqueda
-- Personas con conocimientos basicos de Docker y CI/CD
+- Personas que desean automatizar las operaciones del sistema de búsqueda
+- Personas que desean aplicar métodos DevOps/IaC a la infraestructura de búsqueda
+- Personas con conocimientos básicos de Docker y CI/CD
 
-Aplicacion de Infrastructure as Code
+Aplicación de Infrastructure as Code
 =======================================
 
-Los siguientes elementos se gestionan como "codigo" para los entornos de Fess.
+Los siguientes elementos se gestionan como "código" para los entornos de Fess.
 
-.. list-table:: Objetivos de gestion IaC
+.. list-table:: Objetivos de gestión IaC
    :header-rows: 1
    :widths: 25 35 40
 
    * - Objetivo
-     - Metodo de gestion
+     - Método de gestión
      - Control de versiones
-   * - Configuracion de Docker
+   * - Configuración de Docker
      - compose.yaml
      - Git
-   * - Configuracion de Fess
-     - Archivos de respaldo / API de administracion
+   * - Configuración de Fess
+     - Archivos de respaldo / API de administración
      - Git
    * - Datos de diccionario
-     - Exportacion mediante API de administracion
+     - Exportación mediante API de administración
      - Git
-   * - Configuracion de OpenSearch
-     - Archivos de configuracion
+   * - Configuración de OpenSearch
+     - Archivos de configuración
      - Git
 
-Definicion de entornos con Docker Compose
+Definición de entornos con Docker Compose
 ============================================
 
-Archivo Docker Compose para produccion
+Archivo Docker Compose para producción
 -----------------------------------------
 
-Ampliamos la configuracion basica utilizada en la Parte 2 para definir una configuracion adecuada para entornos de produccion.
+Ampliamos la configuración básica utilizada en la Parte 2 para definir una configuración adecuada para entornos de producción.
 
 .. code-block:: yaml
 
@@ -90,63 +90,63 @@ Ampliamos la configuracion basica utilizada en la Parte 2 para definir una confi
 
 Los puntos clave son los siguientes.
 
-- Definicion del health check: Fess se inicia solo cuando OpenSearch esta listo
-- Persistencia de volumenes: Los datos se mantienen de forma permanente
-- Politica de reinicio: Recuperacion automatica ante fallos
-- Configuracion explicita del heap de la JVM
+- Definición del health check: Fess se inicia solo cuando OpenSearch está listo
+- Persistencia de volúmenes: Los datos se mantienen de forma permanente
+- Política de reinicio: Recuperación automática ante fallos
+- Configuración explícita del heap de la JVM
 
-Automatizacion de la configuracion con la API de administracion
+Automatización de la configuración con la API de administración
 =================================================================
 
-Mediante el uso de la API de administracion de Fess, puede gestionar las configuraciones de forma programatica sin utilizar la interfaz grafica.
+Mediante el uso de la API de administración de Fess, puede gestionar las configuraciones de forma programática sin utilizar la interfaz gráfica.
 
-Exportar configuracion
+Exportar configuración
 -----------------------
 
-Exporte la configuracion actual de Fess y guardela como codigo.
+Exporte la configuración actual de Fess y guárdela como código.
 
-Puede exportar desde la consola de administracion en [Informacion del sistema] > [Respaldo].
-Tambien es posible exportar mediante scripts utilizando la API de administracion.
+Puede exportar desde la consola de administración en [Información del sistema] > [Respaldo].
+También es posible exportar mediante scripts utilizando la API de administración.
 
-Importar configuracion
+Importar configuración
 -----------------------
 
-Aplique la configuracion a un nuevo entorno de Fess utilizando los archivos de configuracion guardados.
-Esto facilita la reconstruccion o replicacion de entornos.
+Aplique la configuración a un nuevo entorno de Fess utilizando los archivos de configuración guardados.
+Esto facilita la reconstrucción o replicación de entornos.
 
 Uso de la CLI fessctl
 ======================
 
-fessctl es una herramienta de linea de comandos para Fess.
-Muchas de las operaciones que se pueden realizar en la consola de administracion tambien se pueden ejecutar desde la linea de comandos.
+fessctl es una herramienta de línea de comandos para Fess.
+Muchas de las operaciones que se pueden realizar en la consola de administración también se pueden ejecutar desde la línea de comandos.
 
 Operaciones principales
 -------------------------
 
-- Crear, actualizar y eliminar configuraciones de rastreo (web, sistema de archivos, almacen de datos)
+- Crear, actualizar y eliminar configuraciones de rastreo (web, sistema de archivos, almacén de datos)
 - Ejecutar trabajos del planificador
 - Gestionar usuarios, roles y grupos
-- Gestionar configuraciones de busqueda como key match, etiquetas y boosts
+- Gestionar configuraciones de búsqueda como key match, etiquetas y boosts
 
-Mediante el uso de la CLI, puede convertir los cambios de configuracion en scripts e integrarlos en pipelines CI/CD.
+Mediante el uso de la CLI, puede convertir los cambios de configuración en scripts e integrarlos en pipelines CI/CD.
 
-Construccion de pipelines CI/CD
+Construcción de pipelines CI/CD
 =================================
 
-Flujo de trabajo para cambios de configuracion
+Flujo de trabajo para cambios de configuración
 -------------------------------------------------
 
-Gestione los cambios de configuracion del sistema de busqueda con el siguiente flujo de trabajo.
+Gestione los cambios de configuración del sistema de búsqueda con el siguiente flujo de trabajo.
 
-1. **Cambio**: Modificar los archivos de configuracion y gestionarlos en una rama de Git
-2. **Revision**: Revisar los cambios mediante pull requests
+1. **Cambio**: Modificar los archivos de configuración y gestionarlos en una rama de Git
+2. **Revisión**: Revisar los cambios mediante pull requests
 3. **Prueba**: Verificar el comportamiento en un entorno de staging
-4. **Despliegue**: Aplicar la configuracion al entorno de produccion
+4. **Despliegue**: Aplicar la configuración al entorno de producción
 
-Ejemplo de automatizacion con GitHub Actions
+Ejemplo de automatización con GitHub Actions
 -----------------------------------------------
 
-Este es un ejemplo de aplicacion automatica de cambios al entorno de produccion cuando se fusionan cambios en los archivos de configuracion.
+Este es un ejemplo de aplicación automática de cambios al entorno de producción cuando se fusionan cambios en los archivos de configuración.
 
 .. code-block:: yaml
 
@@ -174,15 +174,15 @@ Este es un ejemplo de aplicacion automatica de cambios al entorno de produccion 
               # Verificar el estado operativo de Fess mediante la API de salud
               curl -s https://fess.example.com/api/v1/health
 
-Automatizacion de respaldos
+Automatización de respaldos
 =============================
 
-Automaticemos tambien los respaldos periodicos.
+Automaticemos también los respaldos periódicos.
 
 Script de respaldo
 -------------------
 
-Utilice cron o las funciones de programacion de CI/CD para realizar respaldos periodicos.
+Utilice cron o las funciones de programación de CI/CD para realizar respaldos periódicos.
 
 .. code-block:: bash
 
@@ -207,33 +207,33 @@ Utilice cron o las funciones de programacion de CI/CD para realizar respaldos pe
 
     echo "Backup completed: ${BACKUP_DIR}"
 
-Procedimiento de reconstruccion del entorno
+Procedimiento de reconstrucción del entorno
 =============================================
 
-Documente el procedimiento para reconstruir completamente un entorno para la recuperacion ante desastres o la creacion de entornos de prueba.
+Documente el procedimiento para reconstruir completamente un entorno para la recuperación ante desastres o la creación de entornos de prueba.
 
 1. Iniciar los contenedores con Docker Compose
 2. Esperar hasta que el health check de OpenSearch devuelva green/yellow
-3. Importar la configuracion de Fess (mediante la API de administracion o la funcion de restauracion)
+3. Importar la configuración de Fess (mediante la API de administración o la función de restauración)
 4. Colocar los archivos de diccionario
 5. Ejecutar los trabajos de rastreo
-6. Verificar el funcionamiento (pruebas de busqueda)
+6. Verificar el funcionamiento (pruebas de búsqueda)
 
-Al convertir este procedimiento en un script, puede reconstruir los entornos rapidamente.
+Al convertir este procedimiento en un script, puede reconstruir los entornos rápidamente.
 
 Resumen
 ========
 
-En este articulo se presento un enfoque para gestionar la infraestructura de busqueda de Fess utilizando practicas de DevOps.
+En este artículo se presentó un enfoque para gestionar la infraestructura de búsqueda de Fess utilizando prácticas de DevOps.
 
-- Codificacion de las definiciones de entorno con Docker Compose
-- Automatizacion de la configuracion con la API de administracion y fessctl
-- Automatizacion del despliegue de cambios de configuracion con pipelines CI/CD
-- Automatizacion de respaldos y procedimientos de reconstruccion de entornos
+- Codificación de las definiciones de entorno con Docker Compose
+- Automatización de la configuración con la API de administración y fessctl
+- Automatización del despliegue de cambios de configuración con pipelines CI/CD
+- Automatización de respaldos y procedimientos de reconstrucción de entornos
 
-Evolucione las operaciones de su infraestructura de busqueda de "leer manuales y configurar manualmente" a "ejecutar codigo y desplegar automaticamente".
+Evolucione las operaciones de su infraestructura de búsqueda de "leer manuales y configurar manualmente" a "ejecutar código y desplegar automáticamente".
 
-En el proximo articulo se tratara la extension de Fess mediante el desarrollo de plugins.
+En el próximo artículo se tratará la extensión de Fess mediante el desarrollo de plugins.
 
 Referencias
 ============

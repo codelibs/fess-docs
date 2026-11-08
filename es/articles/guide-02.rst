@@ -1,41 +1,41 @@
 =============================================
-Parte 2: Experiencia de busqueda en 5 minutos
+Parte 2: Experiencia de búsqueda en 5 minutos
 =============================================
 
-Introduccion
+Introducción
 ============
 
-En la entrega anterior, presentamos la necesidad de una plataforma de busqueda en el ambito empresarial y una vision general de Fess.
-En este articulo, mostraremos el procedimiento mas rapido para iniciar Fess y experimentar la busqueda.
+En la entrega anterior, presentamos la necesidad de una plataforma de búsqueda en el ámbito empresarial y una visión general de Fess.
+En este artículo, mostraremos el procedimiento más rápido para iniciar Fess y experimentar la búsqueda.
 
-El objetivo es comprender rapidamente que tipo de experiencia de busqueda ofrece Fess.
-Usando Docker Compose, levantaremos un entorno de Fess con tan solo unas pocas lineas de comandos, rastrearemos un sitio web y experimentaremos la busqueda.
+El objetivo es comprender rápidamente qué tipo de experiencia de búsqueda ofrece Fess.
+Usando Docker Compose, levantaremos un entorno de Fess con tan solo unas pocas líneas de comandos, rastrearemos un sitio web y experimentaremos la búsqueda.
 
 Lectores objetivo
 =================
 
 - Personas que prueban Fess por primera vez
-- Personas que desean realizar rapidamente una PoC (prueba de concepto) para evaluar su implementacion
-- Personas con conocimientos basicos de operacion de Docker
+- Personas que desean realizar rápidamente una PoC (prueba de concepto) para evaluar su implementación
+- Personas con conocimientos básicos de operación de Docker
 
 Requisitos del entorno
 ======================
 
-- Un entorno donde Docker y Docker Compose esten disponibles
-- Memoria de 4 GB o mas (se recomiendan 8 GB o mas)
-- Conexion a internet
+- Un entorno donde Docker y Docker Compose estén disponibles
+- Memoria de 4 GB o más (se recomiendan 8 GB o más)
+- Conexión a internet
 
-Preparacion previa (en el caso de Linux / WSL2)
+Preparación previa (en el caso de Linux / WSL2)
 ------------------------------------------------
 
-OpenSearch, utilizado por Fess, requiere una gran cantidad de areas de mapeo de memoria al iniciarse.
+OpenSearch, utilizado por Fess, requiere una gran cantidad de áreas de mapeo de memoria al iniciarse.
 En entornos Linux o WSL2, aumente el valor de ``vm.max_map_count`` con el siguiente comando.
 
 ::
 
     $ sudo sysctl -w vm.max_map_count=262144
 
-Esta configuracion se restablece al reiniciar el sistema operativo. Para hacerla permanente, agreguela a ``/etc/sysctl.conf``.
+Esta configuración se restablece al reiniciar el sistema operativo. Para hacerla permanente, agréguela a ``/etc/sysctl.conf``.
 
 ::
 
@@ -43,24 +43,24 @@ Esta configuracion se restablece al reiniciar el sistema operativo. Para hacerla
 
 .. note::
 
-   Si utiliza Docker Desktop en macOS, esta configuracion no es necesaria.
+   Si utiliza Docker Desktop en macOS, esta configuración no es necesaria.
 
 Iniciar Fess
 =============
 
-Obtencion del archivo Docker Compose
+Obtención del archivo Docker Compose
 -------------------------------------
 
-El archivo Docker Compose de Fess esta publicado en el repositorio de GitHub.
-Obtengalo con los siguientes comandos.
+El archivo Docker Compose de Fess está publicado en el repositorio de GitHub.
+Obténgalo con los siguientes comandos.
 
 ::
 
     $ git clone https://github.com/codelibs/docker-fess.git
     $ cd docker-fess/compose
 
-En el directorio compose se encuentran varios archivos de configuracion.
-Primero, iniciemos con una configuracion sencilla.
+En el directorio compose se encuentran varios archivos de configuración.
+Primero, iniciemos con una configuración sencilla.
 
 Inicio
 ------
@@ -71,55 +71,55 @@ Inicie Fess y OpenSearch con el siguiente comando.
 
     $ docker compose up -d
 
-Durante el primer inicio, se descargan las imagenes de Docker, por lo que puede tardar varios minutos.
+Durante el primer inicio, se descargan las imágenes de Docker, por lo que puede tardar varios minutos.
 Puede verificar el estado del inicio con el siguiente comando.
 
 ::
 
     $ docker compose ps
 
-Cuando todos los contenedores muestren el estado "running", el inicio se habra completado.
+Cuando todos los contenedores muestren el estado "running", el inicio se habrá completado.
 
-Acceder a la pantalla de busqueda
+Acceder a la pantalla de búsqueda
 ---------------------------------
 
 Acceda a ``http://localhost:8080/`` desde el navegador.
-Si se muestra la pantalla principal de busqueda de Fess, el sistema se ha iniciado correctamente.
+Si se muestra la pantalla principal de búsqueda de Fess, el sistema se ha iniciado correctamente.
 
-En este punto, el indice esta vacio, por lo que las busquedas no devolveran resultados.
-En el siguiente paso, registraremos los objetivos de rastreo y habilitaremos la busqueda.
+En este punto, el índice está vacío, por lo que las búsquedas no devolverán resultados.
+En el siguiente paso, registraremos los objetivos de rastreo y habilitaremos la búsqueda.
 
-Verificar la pantalla de administracion
+Verificar la pantalla de administración
 ========================================
 
-Inicio de sesion en la pantalla de administracion
+Inicio de sesión en la pantalla de administración
 -------------------------------------------------
 
-Acceda a ``http://localhost:8080/admin/`` e inicie sesion en la pantalla de administracion.
+Acceda a ``http://localhost:8080/admin/`` e inicie sesión en la pantalla de administración.
 Las credenciales predeterminadas son las siguientes.
 
 - Nombre de usuario: ``admin``
-- Contrasena: ``admin``
+- Contraseña: ``admin``
 
-En el panel de control de la pantalla de administracion, puede ver el estado general del sistema.
+En el panel de control de la pantalla de administración, puede ver el estado general del sistema.
 
-Estructura de la pantalla de administracion
+Estructura de la pantalla de administración
 -------------------------------------------
 
-En el menu lateral izquierdo de la pantalla de administracion, se encuentran las principales funciones de administracion de Fess.
-Aqui solo revisaremos una descripcion general.
+En el menú lateral izquierdo de la pantalla de administración, se encuentran las principales funciones de administración de Fess.
+Aquí solo revisaremos una descripción general.
 
 **Rastreador**
 
-Es la seccion donde se registran los objetivos de busqueda. Administra la configuracion de rastreo para tres tipos: web, sistema de archivos y almacen de datos.
+Es la sección donde se registran los objetivos de búsqueda. Administra la configuración de rastreo para tres tipos: web, sistema de archivos y almacén de datos.
 
 **Sistema**
 
-Funciones de administracion del sistema en general, como el programador, el diseno y los diccionarios. En los diccionarios se administran configuraciones relacionadas con la calidad de busqueda, como sinonimos y palabras vacias (stop words).
+Funciones de administración del sistema en general, como el programador, el diseño y los diccionarios. En los diccionarios se administran configuraciones relacionadas con la calidad de búsqueda, como sinónimos y palabras vacías (stop words).
 
-**Informacion del sistema**
+**Información del sistema**
 
-Proporciona registros de busqueda, registros de trabajos, informacion de rastreo, copias de seguridad y otras funciones de registro y mantenimiento.
+Proporciona registros de búsqueda, registros de trabajos, información de rastreo, copias de seguridad y otras funciones de registro y mantenimiento.
 
 Rastrear un sitio web
 ======================
@@ -127,81 +127,81 @@ Rastrear un sitio web
 Registro del objetivo de rastreo
 ---------------------------------
 
-Rastreemos un sitio web real para que sea posible realizar busquedas.
-Aqui utilizaremos el sitio oficial de Fess como objetivo.
+Rastreemos un sitio web real para que sea posible realizar búsquedas.
+Aquí utilizaremos el sitio oficial de Fess como objetivo.
 
-1. En el menu izquierdo de la pantalla de administracion, seleccione [Rastreador] > [Web]
+1. En el menú izquierdo de la pantalla de administración, seleccione [Rastreador] > [Web]
 2. Haga clic en [Crear nuevo]
-3. Ingrese la siguiente informacion
+3. Ingrese la siguiente información
 
    - URL: ``https://fess.codelibs.org/ja/``
    - URL objetivo de rastreo: ``https://fess.codelibs.org/ja/.*``
-   - Numero maximo de accesos: ``50``
-   - Numero de hilos: ``2``
+   - Número máximo de accesos: ``50``
+   - Número de hilos: ``2``
    - Intervalo: ``10000``
 
 4. Haga clic en [Crear] para guardar
 
-Con esto, se ha completado la configuracion para rastrear un maximo de 50 paginas del sitio oficial de Fess (paginas en japones) con un intervalo de 10 segundos.
+Con esto, se ha completado la configuración para rastrear un máximo de 50 páginas del sitio oficial de Fess (páginas en japonés) con un intervalo de 10 segundos.
 
-Ejecucion del rastreo
+Ejecución del rastreo
 ----------------------
 
-Solo guardar la configuracion no inicia el rastreo.
+Solo guardar la configuración no inicia el rastreo.
 Para iniciar el rastreo, ejecute el trabajo desde el programador.
 
 1. Seleccione [Sistema] > [Programador]
 2. Seleccione "Default Crawler"
 3. Haga clic en [Iniciar ahora]
 
-El rastreo comenzara.
-Puede verificar el progreso desde [Informacion del sistema] > [Informacion de rastreo].
-Para aproximadamente 50 paginas, el rastreo se completara en unos pocos minutos.
+El rastreo comenzará.
+Puede verificar el progreso desde [Información del sistema] > [Información de rastreo].
+Para aproximadamente 50 páginas, el rastreo se completará en unos pocos minutos.
 
-Experimentar la busqueda
+Experimentar la búsqueda
 =========================
 
-Realizar una busqueda
+Realizar una búsqueda
 ---------------------
 
-Despues de completar el rastreo, vuelva a la pantalla de busqueda ``http://localhost:8080/`` y realice una busqueda.
+Después de completar el rastreo, vuelva a la pantalla de búsqueda ``http://localhost:8080/`` y realice una búsqueda.
 
-Por ejemplo, si ingresa "インストール" (instalacion) y busca, se mostraran como resultados de busqueda las paginas del sitio de Fess relacionadas con la instalacion.
+Por ejemplo, si ingresa "インストール" (instalación) y busca, se mostrarán como resultados de búsqueda las páginas del sitio de Fess relacionadas con la instalación.
 
-Elementos de la pantalla de resultados de busqueda
+Elementos de la pantalla de resultados de búsqueda
 ---------------------------------------------------
 
-En la pantalla de resultados de busqueda se muestran los siguientes elementos.
+En la pantalla de resultados de búsqueda se muestran los siguientes elementos.
 
-**Lista de resultados de busqueda**
+**Lista de resultados de búsqueda**
 
-Cada resultado muestra el titulo, la URL y un extracto del texto (snippet).
-Las partes que coinciden con las palabras clave de busqueda se muestran resaltadas.
+Cada resultado muestra el título, la URL y un extracto del texto (snippet).
+Las partes que coinciden con las palabras clave de búsqueda se muestran resaltadas.
 
-**Numero de resultados y tiempo de respuesta**
+**Número de resultados y tiempo de respuesta**
 
-En la parte superior de los resultados de busqueda se muestran el numero de coincidencias y el tiempo que tardo la busqueda.
+En la parte superior de los resultados de búsqueda se muestran el número de coincidencias y el tiempo que tardó la búsqueda.
 
-**Paginacion**
+**Paginación**
 
-Cuando los resultados abarcan multiples paginas, se muestra una navegacion para pasar entre paginas.
+Cuando los resultados abarcan múltiples páginas, se muestra una navegación para pasar entre páginas.
 
-Funciones de busqueda avanzadas
+Funciones de búsqueda avanzadas
 -------------------------------
 
-Fess cuenta con diversas funciones de busqueda ademas de la busqueda simple por palabras clave.
+Fess cuenta con diversas funciones de búsqueda además de la búsqueda simple por palabras clave.
 
-**Busqueda AND/OR**
+**Búsqueda AND/OR**
 
-Al separar multiples palabras clave con espacios, se realiza una busqueda AND.
-Usando ``OR``, tambien es posible realizar una busqueda OR.
+Al separar múltiples palabras clave con espacios, se realiza una búsqueda AND.
+Usando ``OR``, también es posible realizar una búsqueda OR.
 
 ::
 
     インストール Docker       # Busqueda AND (contiene ambos)
     インストール OR Docker    # Busqueda OR (contiene alguno de los dos)
 
-**Busqueda por frase**
+**Búsqueda por frase**
 
 Al encerrar el texto entre comillas dobles, se buscan documentos que coincidan en ese orden de palabras.
 
@@ -209,65 +209,65 @@ Al encerrar el texto entre comillas dobles, se buscan documentos que coincidan e
 
     "全文検索サーバー"
 
-**Busqueda con exclusion**
+**Búsqueda con exclusión**
 
-Para buscar resultados que no contengan una palabra clave especifica, utilice el signo menos.
+Para buscar resultados que no contengan una palabra clave específica, utilice el signo menos.
 
 ::
 
     インストール -Windows    # Resultados que no contienen "Windows"
 
-Detencion y reanudacion del entorno
+Detención y reanudación del entorno
 ====================================
 
-Detencion
+Detención
 ---------
 
-Una vez finalizada la experiencia de busqueda, detenga el entorno con el siguiente comando.
+Una vez finalizada la experiencia de búsqueda, detenga el entorno con el siguiente comando.
 
 ::
 
     $ docker compose down
 
-El entorno se detiene conservando los datos (indice), por lo que al reiniciar podra continuar en el mismo estado.
+El entorno se detiene conservando los datos (índice), por lo que al reiniciar podrá continuar en el mismo estado.
 
 Limpieza completa, incluyendo los datos
 ----------------------------------------
 
-Si desea eliminar tambien los volumenes, ejecute el siguiente comando.
+Si desea eliminar también los volúmenes, ejecute el siguiente comando.
 
 ::
 
     $ docker compose down -v
 
-En este caso, los indices creados durante el rastreo tambien se eliminaran.
+En este caso, los índices creados durante el rastreo también se eliminarán.
 
-Lo que revela la experiencia de busqueda
+Lo que revela la experiencia de búsqueda
 =========================================
 
-Con la experiencia realizada hasta aqui, hemos verificado el funcionamiento basico de Fess.
+Con la experiencia realizada hasta aquí, hemos verificado el funcionamiento básico de Fess.
 Al considerar su uso en el entorno laboral real, pueden surgir algunas preguntas.
 
-- "Se pueden incluir los servidores de archivos internos como objetivo de busqueda?" -> Se aborda en la **Parte 4**
-- "Se puede integrar un cuadro de busqueda en el sitio interno existente?" -> Se aborda en la **Parte 3**
-- "Se puede controlar la informacion visible por departamento?" -> Se aborda en la **Parte 5**
-- "Quiero buscar tambien en Slack y Confluence" -> Se aborda en la **Parte 6**
+- "¿Se pueden incluir los servidores de archivos internos como objetivo de búsqueda?" -> Se aborda en la **Parte 4**
+- "¿Se puede integrar un cuadro de búsqueda en el sitio interno existente?" -> Se aborda en la **Parte 3**
+- "¿Se puede controlar la información visible por departamento?" -> Se aborda en la **Parte 5**
+- "Quiero buscar también en Slack y Confluence" -> Se aborda en la **Parte 6**
 - "Quiero que una IA responda preguntas" -> Se aborda en la **Parte 19**
 
 Fess puede manejar todos estos escenarios.
-A lo largo de esta serie, presentaremos de forma progresiva como lograr cada uno de ellos.
+A lo largo de esta serie, presentaremos de forma progresiva cómo lograr cada uno de ellos.
 
 Resumen
 =======
 
-En este articulo, iniciamos Fess con Docker Compose y experimentamos desde el rastreo de un sitio web hasta la busqueda.
+En este artículo, iniciamos Fess con Docker Compose y experimentamos desde el rastreo de un sitio web hasta la búsqueda.
 
 - Inicio de Fess + OpenSearch con un solo comando mediante Docker Compose
-- Registro de objetivos de rastreo desde la pantalla de administracion y ejecucion mediante el programador
-- Experiencia de busqueda por palabras clave, busqueda AND/OR y busqueda por frase en la pantalla de busqueda
-- Detencion y reanudacion del entorno de forma sencilla
+- Registro de objetivos de rastreo desde la pantalla de administración y ejecución mediante el programador
+- Experiencia de búsqueda por palabras clave, búsqueda AND/OR y búsqueda por frase en la pantalla de búsqueda
+- Detención y reanudación del entorno de forma sencilla
 
-En la proxima entrega, presentaremos como integrar la funcion de busqueda de Fess en sitios web o portales existentes.
+En la próxima entrega, presentaremos cómo integrar la función de búsqueda de Fess en sitios web o portales existentes.
 
 Referencias
 ===========
@@ -276,4 +276,4 @@ Referencias
 
 - `Docker Fess <https://github.com/codelibs/docker-fess>`__
 
-- `Guia de instalacion de Fess <https://fess.codelibs.org/ja/15.5/install/index.html>`__
+- `Guía de instalación de Fess <https://fess.codelibs.org/ja/15.5/install/index.html>`__
