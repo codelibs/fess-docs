@@ -116,7 +116,7 @@ Especifica la configuración que se pasa al tema, un ``key=value`` por línea. |
 
 .. warning::
 
-   Los valores son visibles para todos los usuarios de la interfaz de búsqueda. No introduzca secretos como contraseñas. Cuando "Requiere inicio de sesión" está habilitado, no se pasa nada a los usuarios que no han iniciado sesión.
+   Los valores son visibles para cualquiera que acceda a la interfaz de búsqueda, incluidos los usuarios que no han iniciado sesión, incluso cuando "Requiere inicio de sesión" está habilitado. No introduzca secretos como contraseñas ni rutas internas que no desee publicar.
 
 Rastreador
 ----------

@@ -205,7 +205,7 @@ Renvoie les paramètres saisis par un administrateur dans « Paramètres du thè
 - Une clé correspond à ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` et n'est ni ``__proto__``, ni ``constructor``, ni ``prototype``.
 - Une valeur compte 1000 caractères au maximum et ne contient pas de caractères de contrôle.
 - Seules les entrées valides sont renvoyées, 100 au maximum, dans l'ordre enregistré. Lorsqu'une clé apparaît plusieurs fois, la valeur de la dernière ligne est utilisée.
-- Ce point d'accès peut être appelé sans connexion, même lorsque « Connexion requise » est activé. Dans ce cas, un appelant anonyme reçoit un objet vide.
+- Ce point d'accès peut être appelé sans connexion, même lorsque « Connexion requise » est activé. Cela permet à un appelant non connecté de lire ``login_required`` et d'être dirigé vers la page de connexion. ``theme_settings`` est identique pour un appelant anonyme.
 - Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche et ne doivent donc contenir aucun secret. Un thème doit traiter les valeurs comme de simples données : ne jamais les insérer comme HTML et ne jamais les utiliser comme cible d'un lien ou d'une redirection.
 
 features
