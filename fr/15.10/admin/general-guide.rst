@@ -116,7 +116,7 @@ Indique les paramètres transmis au thème, un ``key=value`` par ligne. |Fess| n
 
 .. warning::
 
-   Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche. Ne saisissez pas de secrets tels que des mots de passe. Lorsque « Connexion requise » est activé, rien n'est transmis aux utilisateurs non connectés.
+   Les valeurs sont visibles de toute personne accédant à l'interface de recherche, y compris des utilisateurs non connectés, même lorsque « Connexion requise » est activé. Ne saisissez pas de secrets tels que des mots de passe, ni de chemins internes que vous ne souhaitez pas publier.
 
 Robot d'exploration
 -------------------

@@ -205,7 +205,7 @@ Gibt die Einstellungen zurück, die ein Administrator unter „Theme-Einstellung
 - Ein Schlüssel entspricht ``[A-Za-z0-9][A-Za-z0-9_.-]{0,63}`` und ist weder ``__proto__`` noch ``constructor`` noch ``prototype``.
 - Ein Wert hat höchstens 1000 Zeichen und enthält keine Steuerzeichen.
 - Zurückgegeben werden nur gültige Einträge, höchstens 100, in der gespeicherten Reihenfolge. Kommt ein Schlüssel mehrfach vor, gilt der Wert der späteren Zeile.
-- Dieser Endpunkt kann auch bei aktivierter Option „Anmeldung erforderlich" ohne Anmeldung aufgerufen werden. In diesem Fall erhält ein anonymer Aufrufer ein leeres Objekt.
+- Dieser Endpunkt kann auch bei aktivierter Option „Anmeldung erforderlich" ohne Anmeldung aufgerufen werden. So kann ein nicht angemeldeter Aufrufer ``login_required`` lesen und zur Anmeldeseite geleitet werden. ``theme_settings`` ist für einen anonymen Aufrufer identisch.
 - Die Werte sind für alle Benutzer der Suchoberfläche sichtbar und dürfen daher keine geheimen Daten enthalten. Ein Theme muss die Werte ausschließlich als Daten behandeln: niemals als HTML einfügen und niemals als Ziel eines Links oder einer Weiterleitung verwenden.
 
 features
