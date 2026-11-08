@@ -245,9 +245,10 @@ URL 생성
    인덱스의 필드 이름은 ``lastModified`` 가 아니라 ``last_modified`` 입니다. ``lastModified=...`` 라고 작성해도 최종 수정 일시는 설정되지 않습니다.
 
 .. note::
-   현재로서는 JavaScript 내장 ``new Date(...)`` 로 만든 값은 ``last_modified`` 등의 날짜 필드에 등록할 수 없으며,
+   15.9 이전에는 JavaScript 내장 ``new Date(...)`` 로 만든 값을 ``last_modified`` 등의 날짜 필드에 등록할 수 없으며,
    해당 문서를 포함한 등록이 실패하여 문서가 인덱스에 등록되지 않습니다.
-   날짜는 위와 같이 정규화된 이름(FQCN)인 ``new java.util.Date(...)`` 로 만드십시오.
+   15.10 이후에는 ``new Date(...)`` 를 그대로 사용할 수 있습니다.
+   정규화된 이름(FQCN)인 ``new java.util.Date(...)`` 는 모든 버전에서 사용할 수 있습니다.
 
 사용 가능한 객체
 =================

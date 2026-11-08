@@ -486,7 +486,7 @@ one, fill in ``properties.po`` beside this file.
     - ``true``
   * - crawler.failure.url.status.codes
     - 被视为失败 URL 的 HTTP 状态码。
-    - ``404,403,410,401``
+    - ``404,403,410,401,5xx``
   * - crawler.system.monitor.interval
     - 爬取期间系统监控的间隔（秒）。
     - ``60``

@@ -261,6 +261,10 @@ Konfigurationsbeispiel
     # Inhaltsausnahmen ignorieren
     crawler.ignore.content.exception=true
 
+.. note::
+   Ein Dokument, das der Tika-Extraktor als vermutete Zip-Bombe ablehnt, wird auch bei ``true`` als Fehler-URL aufgezeichnet und nicht indiziert.
+   Andere Extraktionsfehler werden mit dem Standardwert weiterhin ignoriert.
+
 .. warning::
    Die Einstellung ``crawler.ignore.robots.txt=true`` kann gegen Nutzungsbedingungen von Websites verstoßen. Seien Sie vorsichtig beim Crawlen externer Sites.
 
@@ -276,15 +280,17 @@ Fehlerbehandlungs-Konfiguration
      - Standard
    * - ``crawler.failure.url.status.codes``
      - Als Fehler behandelte HTTP-Statuscodes (kommagetrennt)
-     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+
+Eine Klasse wie ``5xx`` steht für alle Statuscodes von 500 bis 599.
 
 Konfigurationsbeispiel
 ~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # Zusätzlich zu den Standardwerten (404,403,410,401) auch 500 als Fehler behandeln
-    crawler.failure.url.status.codes=404,403,410,401,500
+    # Soll 5xx (500–599) nicht als Fehler-URL gelten, entfernen Sie 5xx
+    crawler.failure.url.status.codes=404,403,410,401
 
 Systemüberwachungs-Konfiguration
 ================================

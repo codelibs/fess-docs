@@ -246,9 +246,10 @@ Date Processing
    The index field name is ``last_modified``, not ``lastModified``. Writing ``lastModified=...`` does not set the last modified date.
 
 .. note::
-   Currently, a value created with the JavaScript built-in ``new Date(...)`` cannot be registered in date fields such as ``last_modified``.
+   In 15.9 and earlier, a value created with the JavaScript built-in ``new Date(...)`` cannot be registered in date fields such as ``last_modified``.
    The registration that includes that document fails, and the document is not added to the index.
-   Create dates with the fully qualified ``new java.util.Date(...)`` as shown above.
+   In 15.10 and later, ``new Date(...)`` works as is.
+   The fully qualified ``new java.util.Date(...)`` works in all versions.
 
 Available Objects
 =================

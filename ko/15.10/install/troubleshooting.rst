@@ -181,7 +181,10 @@ OpenSearch가 시작되지 않음
 
 **증상:**
 
-|Fess| 에 액세스하면 HTTP 404 가 반환되고 ``fess.log`` 에 다음 오류가 출력됩니다::
+- |Fess| 15.10 이후: 웹 애플리케이션 시작에 실패하여 프로세스가 종료 코드 1로 종료됩니다(콘솔에 ``Fess aborted the startup because the web application ... failed to initialize.`` 가 표시되고 포트도 닫힙니다).
+- |Fess| 15.9 이전: 프로세스는 계속 실행되며 모든 요청에 HTTP 404 가 반환됩니다.
+
+어느 경우든 ``fess.log`` 에 다음 오류가 출력됩니다::
 
     Failed to create index: index=fess, path=fess_indices/fess.json
     ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt

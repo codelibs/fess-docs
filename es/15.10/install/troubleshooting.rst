@@ -184,7 +184,10 @@ No se Puede Crear el Índice (Ruta de los Archivos de Diccionario)
 
 **Síntoma:**
 
-Al acceder a |Fess| se devuelve HTTP 404, y se registra el siguiente error en ``fess.log``::
+- |Fess| 15.10 o posterior: la aplicación web no pudo iniciarse, por lo que el proceso termina con código de salida 1 (la consola muestra ``Fess aborted the startup because the web application ... failed to initialize.`` y el puerto se cierra).
+- |Fess| 15.9 o anterior: el proceso sigue en ejecución y todas las solicitudes devuelven HTTP 404.
+
+En ambos casos, se registra el siguiente error en ``fess.log``::
 
     Failed to create index: index=fess, path=fess_indices/fess.json
     ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt

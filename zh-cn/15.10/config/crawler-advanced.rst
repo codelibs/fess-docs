@@ -262,6 +262,10 @@ robots.txt 配置
     # 忽略内容异常
     crawler.ignore.content.exception=true
 
+.. note::
+   被 Tika 提取器判定为疑似 zip 炸弹而拒绝的文档，即使该键为 ``true``，也会记录为失败 URL，并且不会被索引。
+   其他提取失败在默认设置下仍会被忽略。
+
 .. warning::
    设置为 ``crawler.ignore.robots.txt=true`` 可能违反网站的使用条款。
    爬取外部网站时请注意。
@@ -278,15 +282,17 @@ robots.txt 配置
      - 默认值
    * - ``crawler.failure.url.status.codes``
      - 视为失败的 HTTP 状态码（逗号分隔）
-     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+
+像 ``5xx`` 这样按类别指定时，表示 500～599 的所有状态码。
 
 配置示例
 ~~~~~~
 
 ::
 
-    # 在默认值（404,403,410,401）的基础上，也将500视为错误
-    crawler.failure.url.status.codes=404,403,410,401,500
+    # 如果不想将 5xx（500～599）视为失败 URL，请去掉 5xx
+    crawler.failure.url.status.codes=404,403,410,401
 
 系统监控配置
 ================
