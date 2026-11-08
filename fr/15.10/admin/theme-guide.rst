@@ -182,7 +182,7 @@ Paramètres du thème
 
 Certains thèmes permettent à un administrateur de modifier leur comportement en leur transmettant des paramètres. Saisissez-les dans « Paramètres du thème » de [Système > Général] dans l'interface d'administration, un ``key=value`` par ligne (voir :doc:`general-guide`). |Fess| ne les interprète pas : il les transmet au thème sous le nom ``theme_settings`` dans ``GET /api/v2/ui/config`` (voir :doc:`../api/api-uiconfig`). Chaque thème définit les clés qu'il accepte et la signification de leurs valeurs.
 
-Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche : ne saisissez pas de secrets tels que des mots de passe.
+Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche, y compris des utilisateurs non connectés (même lorsque « Connexion requise » est activé) : ne saisissez pas de secrets tels que des mots de passe.
 
 ``filesearch.roots`` du thème File Search
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

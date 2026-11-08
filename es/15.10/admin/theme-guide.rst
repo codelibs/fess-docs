@@ -181,7 +181,7 @@ Configuración del tema
 
 Algunos temas permiten al administrador cambiar su comportamiento mediante ajustes que se les pasan. Introdúzcalos en "Configuración del tema" de [Sistema > General] en la interfaz de administración, un ``key=value`` por línea (consulte :doc:`general-guide`). |Fess| no los interpreta: los pasa al tema como ``theme_settings`` en ``GET /api/v2/ui/config`` (consulte :doc:`../api/api-uiconfig`). Cada tema define las claves que acepta y el significado de sus valores.
 
-Los valores son visibles para todos los usuarios de la interfaz de búsqueda, por lo que no debe introducir secretos como contraseñas.
+Los valores son visibles para todos los usuarios de la interfaz de búsqueda, incluidos los que no han iniciado sesión (incluso cuando "Requiere inicio de sesión" está habilitado), por lo que no debe introducir secretos como contraseñas.
 
 ``filesearch.roots`` del tema File Search
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

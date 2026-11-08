@@ -195,9 +195,9 @@ Lectura de la configuración del tema
 Los pares ``key=value`` que un administrador introduce en "Configuración del tema" de [Sistema > General] en la interfaz de administración llegan al tema como ``theme_settings`` (un objeto plano de cadenas) en ``GET /api/v2/ui/config`` (consulte :doc:`../api/api-uiconfig`). |Fess| no los interpreta, por lo que el tema define los nombres de las claves, el formato de los valores y cómo se divide un valor con varios elementos. El tema File Search usa claves con el nombre del tema como prefijo, como ``filesearch.roots`` (consulte :ref:`theme-settings`).
 
 - ``theme_settings`` siempre está presente y es ``{}`` si no hay nada configurado. Haga que el tema funcione sin ningún ajuste.
-- Cuando "Requiere inicio de sesión" está habilitado, los usuarios que no han iniciado sesión reciben ``{}``.
+- Los usuarios que no han iniciado sesión reciben los mismos ajustes, incluso cuando "Requiere inicio de sesión" está habilitado.
 - Trate los valores solo como datos. No los inserte nunca como HTML (``innerHTML``) ni los use como destino de navegación (un enlace, una redirección o ``href``).
-- Los valores son visibles para todos los usuarios de la interfaz de búsqueda.
+- Los valores son visibles para todos los usuarios de la interfaz de búsqueda, incluidos los que no han iniciado sesión (incluso cuando "Requiere inicio de sesión" está habilitado). No introduzca secretos en ellos.
 
 Empaquetado
 -----------

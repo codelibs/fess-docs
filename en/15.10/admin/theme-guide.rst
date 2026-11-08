@@ -180,7 +180,7 @@ Theme Settings
 
 Some themes let an administrator change their behavior by passing settings. Enter the settings in "Theme Settings" in [System > General] of the admin UI, one ``key=value`` per line (see :doc:`general-guide`). |Fess| does not interpret them; it passes them to the theme as ``theme_settings`` in ``GET /api/v2/ui/config`` (see :doc:`../api/api-uiconfig`). Each theme defines the keys it accepts and what their values mean.
 
-The values are visible to every user of the search UI, so do not enter secrets such as passwords.
+The values are visible to every user of the search UI, including users who are not logged in (even when "Login Required" is enabled), so do not enter secrets such as passwords.
 
 ``filesearch.roots`` of the File Search Theme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

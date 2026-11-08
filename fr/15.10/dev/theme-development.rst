@@ -187,9 +187,9 @@ Lecture des paramètres du thème
 Les paires ``key=value`` qu'un administrateur saisit dans « Paramètres du thème » de [Système > Général] dans l'interface d'administration parviennent au thème sous le nom ``theme_settings`` (un objet plat de chaînes) dans ``GET /api/v2/ui/config`` (voir :doc:`../api/api-uiconfig`). |Fess| ne les interprète pas : c'est donc au thème de définir les noms de clés, le format des valeurs et la façon de découper une valeur à plusieurs éléments. Le thème File Search utilise des clés préfixées par le nom du thème, comme ``filesearch.roots`` (voir :ref:`theme-settings`).
 
 - ``theme_settings`` est toujours présent et vaut ``{}`` si rien n'est défini. Faites en sorte que le thème fonctionne sans aucun paramètre.
-- Lorsque « Connexion requise » est activé, les utilisateurs non connectés reçoivent ``{}``.
+- Les utilisateurs non connectés reçoivent les mêmes paramètres, même lorsque « Connexion requise » est activé.
 - Traitez les valeurs comme de simples données. Ne les insérez jamais comme HTML (``innerHTML``) et ne les utilisez jamais comme cible de navigation (lien, redirection ou ``href``).
-- Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche.
+- Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche, y compris des utilisateurs non connectés (même lorsque « Connexion requise » est activé). N'y placez aucun secret.
 
 Empaquetage
 -----------

@@ -182,7 +182,7 @@ Theme-Einstellungen
 
 Manche Themes lassen sich durch übergebene Einstellungen im Verhalten anpassen. Tragen Sie die Einstellungen in der Verwaltungsoberfläche unter [System > Allgemein] im Feld „Theme-Einstellungen" ein, eine ``key=value``-Angabe pro Zeile (siehe :doc:`general-guide`). |Fess| interpretiert sie nicht, sondern gibt sie als ``theme_settings`` in ``GET /api/v2/ui/config`` an das Theme weiter (siehe :doc:`../api/api-uiconfig`). Welche Schlüssel gelten und was ihre Werte bedeuten, legt jedes Theme selbst fest.
 
-Die Werte sind für alle Benutzer der Suchoberfläche sichtbar. Geben Sie daher keine geheimen Daten wie Passwörter ein.
+Die Werte sind für alle Benutzer der Suchoberfläche sichtbar, auch für nicht angemeldete Benutzer (selbst bei aktivierter Option „Anmeldung erforderlich"). Geben Sie daher keine geheimen Daten wie Passwörter ein.
 
 ``filesearch.roots`` des Themes „File Search"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
