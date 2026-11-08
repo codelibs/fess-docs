@@ -2,7 +2,7 @@
 fess-setup 명령
 ====================
 
-``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 플러그인이 사용하는 Node.js, |Fess| 플러그인, 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다.
+``bin/fess-setup`` (Windows 에서는 ``bin\fess-setup.bat`` )은 |Fess| 의 ZIP 패키지에 포함되어 있습니다. |Fess| 에 필요하지만 배포물에 포함되지 않은 것, 즉 |Fess| 가 필요로 하는 플러그인을 넣은 OpenSearch, Playwright 플러그인이 사용하는 Node.js, |Fess| 플러그인, 테마를 설치합니다. 설치 상태를 진단할 수도 있습니다. ``admin`` 사용자의 초기 비밀번호와 암호화 키도 설정합니다(``init``).
 
 |Fess| 디렉터리에서 실행합니다. 인수 없이 실행하면 명령 목록을 표시합니다.
 
@@ -114,7 +114,7 @@ init
    * - ``--cipher-key <key>``
      - 암호화 키입니다. 생략하면 영문자와 숫자 32자의 키를 무작위로 생성합니다. 지정하는 키는 공백이 없는 인쇄 가능한 ASCII 문자 16자, 24자 또는 32자(AES 키 길이)여야 하며, 기본 제공 값이어서는 안 됩니다. 키는 보관하십시오. 어떤 키로 |Fess| 가 저장한 값은 다른 키로는 읽을 수 없습니다.
    * - ``--config <file>``
-     - 변경할 ``fess_config.properties`` 입니다. 기본값은 |Fess| 디렉터리의 ``app/WEB-INF/classes/fess_config.properties`` 입니다.
+     - 변경할 ``fess_config.properties`` 입니다. 기본값은 |Fess| 디렉터리의 ``app/WEB-INF/classes/fess_config.properties`` 입니다. 이 파일이 없으면(RPM / DEB 패키지 등) ``/etc/fess/fess_config.properties`` 입니다.
    * - ``--force``
      - 기본 제공 값이 아니게 된 암호화 키를 바꿉니다. 이전 키로 |Fess| 가 저장한 값은 이후 읽을 수 없게 됩니다.
 

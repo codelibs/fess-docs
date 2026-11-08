@@ -2,7 +2,7 @@
 fess-setup コマンド
 ====================
 
-``bin/fess-setup`` （Windows では ``bin\fess-setup.bat`` ）は、 |Fess| の ZIP パッケージに同梱されているコマンドです。 |Fess| に必要でありながら配布物に含まれていないもの、つまり |Fess| が必要とするプラグインを入れた OpenSearch、Playwright 系プラグインが使う Node.js、 |Fess| のプラグイン、テーマを導入します。インストール状態の診断もできます。
+``bin/fess-setup`` （Windows では ``bin\fess-setup.bat`` ）は、 |Fess| の ZIP パッケージに同梱されているコマンドです。 |Fess| に必要でありながら配布物に含まれていないもの、つまり |Fess| が必要とするプラグインを入れた OpenSearch、Playwright 系プラグインが使う Node.js、 |Fess| のプラグイン、テーマを導入します。インストール状態の診断もできます。 ``admin`` ユーザーの初期パスワードと暗号化キーも設定できます（ ``init`` ）。
 
 |Fess| のディレクトリで実行します。引数を付けずに実行すると、コマンドの一覧を表示します。
 
@@ -114,7 +114,7 @@ init
    * - ``--cipher-key <key>``
      - 暗号鍵です。省略すると、英数字 32 文字の鍵をランダムに生成します。指定する鍵は、空白を含まない印字可能な ASCII 文字の 16 文字、24 文字、または 32 文字（AES の鍵長）で、同梱の値以外にしてください。鍵は保管してください。ある鍵で |Fess| が保存した値は、別の鍵では読めません。
    * - ``--config <file>``
-     - 変更する ``fess_config.properties`` です。既定は |Fess| のディレクトリの ``app/WEB-INF/classes/fess_config.properties`` です。
+     - 変更する ``fess_config.properties`` です。既定は |Fess| のディレクトリの ``app/WEB-INF/classes/fess_config.properties`` です。このファイルがない場合（RPM / DEB パッケージなど）は ``/etc/fess/fess_config.properties`` です。
    * - ``--force``
      - 同梱の値ではなくなっている暗号鍵を置き換えます。古い鍵で |Fess| が保存した値は、以降は読めなくなります。
 

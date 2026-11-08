@@ -5,7 +5,7 @@ Commande fess-setup
 ``bin/fess-setup`` (``bin\fess-setup.bat`` sous Windows) est fourni avec le package ZIP de |Fess|.
 Il installe ce dont |Fess| a besoin sans l'intégrer : OpenSearch avec les plugins requis par
 |Fess|, Node.js pour les plugins Playwright, les plugins |Fess| et les thèmes. Il établit également un diagnostic
-d'une installation.
+d'une installation. Il définit également le mot de passe initial de l'utilisateur ``admin`` et la clé de chiffrement (``init``).
 
 Exécutez-le depuis le répertoire de |Fess|. Sans argument, il affiche la liste des commandes.
 
@@ -152,7 +152,7 @@ La clé de chiffrement chiffre les mots de passe que |Fess| enregistre dans les 
    * - ``--cipher-key <key>``
      - La clé de chiffrement. Sans cette option, ``init`` génère une clé aléatoire de 32 lettres et chiffres. Une clé que vous indiquez doit compter 16, 24 ou 32 caractères ASCII imprimables sans espace (les longueurs de clé AES) et ne doit pas être la valeur livrée. Conservez la clé : les valeurs que |Fess| enregistre avec elle ne peuvent pas être lues avec une autre.
    * - ``--config <file>``
-     - Le ``fess_config.properties`` à modifier. Par défaut, ``app/WEB-INF/classes/fess_config.properties`` dans le répertoire de |Fess|.
+     - Le ``fess_config.properties`` à modifier. Par défaut, ``app/WEB-INF/classes/fess_config.properties`` dans le répertoire de |Fess| ; si l'installation n'a pas ce fichier, comme avec les packages RPM et DEB, ``/etc/fess/fess_config.properties``.
    * - ``--force``
      - Remplace une clé de chiffrement qui n'a plus la valeur livrée. Les valeurs que |Fess| a enregistrées avec l'ancienne clé ne pourront plus être lues.
 

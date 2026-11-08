@@ -2,7 +2,7 @@
 fess-setup 命令
 ====================
 
-``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 插件所需的 Node.js、 |Fess| 插件以及主题。它还可以检查安装状态。
+``bin/fess-setup``\ （Windows 上为 ``bin\fess-setup.bat``\ ）随 |Fess| 的 ZIP 包提供。它用于安装 |Fess| 需要但发行包中未包含的内容：带有 |Fess| 所需插件的 OpenSearch、Playwright 插件所需的 Node.js、 |Fess| 插件以及主题。它还可以检查安装状态，并设置 ``admin`` 用户的初始密码和加密密钥（``init``）。
 
 请在 |Fess| 目录中运行。不带参数运行时，会显示命令列表。
 
@@ -114,7 +114,7 @@ init
    * - ``--cipher-key <key>``
      - 加密密钥。省略时， ``init`` 会随机生成由 32 个字母和数字组成的密钥。指定的密钥必须是不含空格的 16、24 或 32 个可打印 ASCII 字符（AES 的密钥长度），且不能是随附的值。请妥善保管密钥：用某个密钥保存的值无法用其他密钥读取。
    * - ``--config <file>``
-     - 要修改的 ``fess_config.properties`` 。默认为 |Fess| 目录下的 ``app/WEB-INF/classes/fess_config.properties`` 。
+     - 要修改的 ``fess_config.properties`` 。默认为 |Fess| 目录下的 ``app/WEB-INF/classes/fess_config.properties`` 。没有该文件时（如 RPM / DEB 包），为 ``/etc/fess/fess_config.properties`` 。
    * - ``--force``
      - 替换已不是随附值的加密密钥。用旧密钥保存的值之后将无法读取。
 

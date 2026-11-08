@@ -29,7 +29,7 @@ Asegúrese de cambiar la contraseña de administrador predeterminada (``admin`` 
 
 .. note::
 
-   Una vez que haya cambiado la contraseña desde ``admin``, no podrá volver a establecerla en un valor simple como ``admin`` (una lista negra de contraseñas de administrador está configurada mediante ``password.invalid.admin.passwords``). También puede cambiar la contraseña inicial del usuario ``admin`` antes del primer inicio estableciendo ``index.user.initial_password`` en ``fess_config.properties``.
+   Una vez que haya cambiado la contraseña desde ``admin``, no podrá volver a establecerla en un valor simple como ``admin`` (una lista negra de contraseñas de administrador está configurada mediante ``password.invalid.admin.passwords``). También puede cambiar la contraseña inicial del usuario ``admin`` antes del primer inicio estableciendo ``index.user.initial_password`` en ``fess_config.properties``. ``bin/fess-setup init`` también la establece; consulte :doc:`fess-setup`.
 
 |Fess| ofrece una función integrada que aplica los requisitos de longitud mínima/máxima y de tipos de caracteres de la contraseña. Configure las siguientes propiedades en ``fess_config.properties`` (los valores predeterminados se indican entre paréntesis):
 
@@ -43,6 +43,21 @@ Asegúrese de cambiar la contraseña de administrador predeterminada (``admin`` 
 .. note::
 
    De forma predeterminada, la longitud mínima es ``8`` y todos los requisitos de tipo de carácter están deshabilitados. Para reforzar las contraseñas, configure explícitamente las propiedades anteriores. Tenga en cuenta que |Fess| no cuenta con una función de expiración de contraseñas (cambio periódico forzado); si desea aplicar cambios periódicos de contraseña como regla operativa, hágalo manualmente.
+
+Cambiar la clave de cifrado
+---------------------------
+
+``app.cipher.key`` en ``fess_config.properties`` es la clave que cifra las contraseñas guardadas en las configuraciones de rastreo y de almacén de datos. El valor incluido (``___change__me___``) es público. Si la clave está vacía o conserva el valor incluido, |Fess| escribe una advertencia en ``fess.log`` al iniciarse (consulte :ref:`upgrade-1510-cipher-key`). |Fess| no cambia la clave por sí mismo.
+
+Defínala antes del primer inicio, junto con la contraseña inicial del usuario ``admin``::
+
+    $ bin/fess-setup init
+
+En los paquetes RPM y DEB, ejecute ``/usr/share/fess/bin/fess-setup init``. El comando genera una clave aleatoria o toma la indicada con ``--cipher-key``; consulte :doc:`fess-setup`. Para definirla manualmente, edite ``app.cipher.key`` en ``fess_config.properties`` (``app/WEB-INF/classes/fess_config.properties`` en el paquete ZIP, ``/etc/fess/fess_config.properties`` en los paquetes RPM y DEB). Con el valor predeterminado de ``app.cipher.algorithm`` (``aes``), la clave debe tener 16, 24 o 32 caracteres.
+
+.. warning::
+
+   Si cambia la clave después de guardar contraseñas en configuraciones de rastreo o de almacén de datos, esos valores ya no se podrán descifrar. Conserve la clave junto con sus copias de seguridad de ``fess_config.properties`` y use la misma clave al pasar a otra instalación.
 
 Habilitación del Plugin de Seguridad de OpenSearch
 ---------------------------------------------------
@@ -310,6 +325,7 @@ Configuración Básica
 --------------------
 
 - [ ] Contraseña de administrador cambiada
+- [ ] Clave de cifrado (``app.cipher.key``) cambiada respecto al valor incluido
 - [ ] HTTPS habilitado
 - [ ] Número de puerto predeterminado cambiado (opcional)
 
