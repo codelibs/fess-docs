@@ -192,6 +192,7 @@ Die ``key=value``-Paare, die ein Administrator in der Verwaltungsoberfläche unt
 
 - ``theme_settings`` ist immer vorhanden und ``{}``, wenn nichts gesetzt ist. Das Theme sollte auch ohne Einstellungen funktionieren.
 - Ist „Anmeldung erforderlich" aktiviert, erhalten nicht angemeldete Benutzer ``{}``.
+- Der Inhalt von ``theme_settings`` hängt vom Anmeldestatus ab. Rufen Sie ``GET /api/v2/ui/config`` nach der An- und Abmeldung des Benutzers erneut ab.
 - Behandeln Sie die Werte ausschließlich als Daten. Fügen Sie sie niemals als HTML ein (``innerHTML``) und verwenden Sie sie niemals als Navigationsziel (Link, Weiterleitung oder ``href``).
 - Die Werte sind für alle Benutzer der Suchoberfläche sichtbar.
 

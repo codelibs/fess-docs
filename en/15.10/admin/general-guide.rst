@@ -116,7 +116,7 @@ Specifies the settings passed to the theme, one ``key=value`` per line. |Fess| d
 
 .. warning::
 
-   The values are visible to anyone who can reach the search UI, including users who are not logged in, even when "Login Required" is enabled. Do not enter secrets such as passwords or internal paths you do not want published.
+   The values are visible to every user of the search UI. Do not enter secrets such as passwords. When "Login Required" is enabled, nothing is passed to users who are not logged in.
 
 Crawler
 -------

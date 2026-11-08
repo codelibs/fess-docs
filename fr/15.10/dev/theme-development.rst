@@ -188,6 +188,7 @@ Les paires ``key=value`` qu'un administrateur saisit dans « Paramètres du thè
 
 - ``theme_settings`` est toujours présent et vaut ``{}`` si rien n'est défini. Faites en sorte que le thème fonctionne sans aucun paramètre.
 - Lorsque « Connexion requise » est activé, les utilisateurs non connectés reçoivent ``{}``.
+- Le contenu de ``theme_settings`` dépend de l'état de connexion. Relisez ``GET /api/v2/ui/config`` après la connexion ou la déconnexion de l'utilisateur.
 - Traitez les valeurs comme de simples données. Ne les insérez jamais comme HTML (``innerHTML``) et ne les utilisez jamais comme cible de navigation (lien, redirection ou ``href``).
 - Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche.
 
