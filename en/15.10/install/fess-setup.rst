@@ -119,6 +119,39 @@ crawler and ``fess-thumbnail-playwright`` for thumbnails), into ``nodejs/`` in t
 ``PLAYWRIGHT_NODEJS_PATH`` line to add to ``bin/fess.in.sh`` instead. ``--version`` selects another
 Node.js version. See :doc:`../config/crawler-advanced` for the Playwright crawler.
 
+Initial Settings
+================
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+Sets two values in ``fess_config.properties`` that ship with well-known defaults: the initial password of the ``admin`` user (``index.user.initial_password``, shipped as ``admin``) and the cipher key (``app.cipher.key``, shipped as ``___change__me___``). Run it once, before |Fess| starts for the first time. A key that the file does not contain is appended, with a comment saying that ``fess-setup`` added it.
+
+The initial password is read when |Fess| creates the user index, at its first start. After that the ``admin`` account is stored in the index, so running ``init`` later does not change the password of the ``admin`` user.
+
+The cipher key encrypts the passwords that |Fess| saves in the crawl and data store configurations, and a value saved under one key cannot be read under another. ``init`` therefore replaces the cipher key only while it is still the shipped value (or empty). A second run fails for that reason, without changing either value, unless you pass ``--force``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Option
+     - Description
+   * - ``--admin-password <password>``
+     - The initial password. Without it, ``init`` generates a random password of 16 letters and digits and prints it once, after ``Password of the admin user:``. The password is also written to the file in plain text. A password given on the command line is visible to other users of the machine. It must not be ``admin``, must not be empty, must not start or end with whitespace, and must not contain a control character.
+   * - ``--cipher-key <key>``
+     - The cipher key. Without it, ``init`` generates a random key of 32 letters and digits. A key you give must be 16, 24 or 32 characters of printable ASCII without spaces (the AES key lengths), and must not be the shipped value. Keep the key: values |Fess| saves under it cannot be read under another one.
+   * - ``--config <file>``
+     - The ``fess_config.properties`` to change. The default is ``app/WEB-INF/classes/fess_config.properties`` in the |Fess| directory.
+   * - ``--force``
+     - Replaces a cipher key that is no longer the shipped value. Values |Fess| saved under the old key cannot be read afterwards.
+
+``init`` exits with ``1`` and changes nothing when a value is not acceptable (see the options above), when the file named by ``--config`` does not exist, when the cipher key has already been changed and ``--force`` is not given, or when ``app.cipher.algorithm`` in the file is set to anything other than ``aes`` (``init`` sets a key for ``aes`` only). An unknown option, or an option without a value, exits with ``2``.
+
 Managing Plugins
 ================
 
@@ -181,6 +214,8 @@ Lists the plugins published for this |Fess|, and marks the installed ones with
 ``(installed: <version>)``. Plugins that are installed but not published in the repository, such as
 a locally built jar, are listed separately. A development build of |Fess| lists the snapshot
 repository as well.
+
+A plugin that the repository publishes but has no build for this |Fess| line is marked ``(no build for <line>)``, for example ``(no build for 15.10)``. ``install plugin`` refuses such a plugin. Nothing is marked when the published versions of a plugin cannot be read.
 
 list installed
 --------------

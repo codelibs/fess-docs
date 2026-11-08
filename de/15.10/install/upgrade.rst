@@ -704,6 +704,7 @@ Ratenbegrenzung des Anmeldeformulars
 
 In 15.9 galten die Grenzen von ``theme.api.login.rate.limit.*`` nur für ``/api/v2/auth/login``, nicht für das Anmeldeformular der Anmeldeseite (``/login/``).
 In 15.10 verwendet das Anmeldeformular dieselben Grenzen und dieselben Zähler. Erreichen fehlgeschlagene Anmeldungen von derselben IP-Adresse 10 pro Minute oder wird das Passwort desselben Benutzernamens 5-mal von derselben IP-Adresse abgelehnt, werden Anmeldungen von dieser IP-Adresse bzw. von dieser Kombination aus IP-Adresse und Benutzername für ``theme.api.login.lockout.seconds`` (standardmäßig 900 Sekunden) abgelehnt.
+Beim Zählen der Anmeldungen wird die Groß- und Kleinschreibung des Benutzernamens nicht beachtet; ``alice`` und ``Alice`` von derselben IP-Adresse teilen sich also einen Zähler. Der Benutzername, der für die Authentifizierung verwendet und in die Protokolle geschrieben wird, bleibt so, wie er eingegeben wurde.
 Während der Sperre meldet auch das richtige Passwort nicht an, und die Seite zeigt dieselbe Meldung wie bei einem falschen Passwort. Eine erfolgreiche Anmeldung gibt den Platz zurück, den der Versuch verbraucht hat.
 Berücksichtigen Sie die Grenze bei Skripten, die ein falsches Passwort senden können, und bei Umgebungen, in denen viele Benutzer eine IP-Adresse teilen.
 

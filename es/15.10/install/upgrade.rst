@@ -701,6 +701,7 @@ Límite de intentos del formulario de inicio de sesión
 
 En la versión 15.9, los límites de ``theme.api.login.rate.limit.*`` se aplicaban únicamente a ``/api/v2/auth/login`` y no al formulario de inicio de sesión de la página de inicio de sesión (``/login/``).
 En la versión 15.10, el formulario usa los mismos límites y los mismos contadores. Cuando los inicios de sesión fallidos desde la misma dirección IP llegan a 10 por minuto, o la contraseña del mismo nombre de usuario es rechazada 5 veces desde la misma dirección IP, se rechazan los inicios de sesión desde esa dirección IP, o desde esa combinación de dirección IP y nombre de usuario, durante ``theme.api.login.lockout.seconds`` (900 segundos de forma predeterminada).
+Al contar los inicios de sesión, los nombres de usuario se comparan sin distinguir mayúsculas de minúsculas, por lo que ``alice`` y ``Alice`` desde la misma dirección IP comparten un único contador. El nombre de usuario que se usa para la autenticación y se escribe en los registros es el que se escribió.
 Mientras está bloqueado, ni siquiera la contraseña correcta permite iniciar sesión, y la página muestra el mismo mensaje que para una contraseña incorrecta. Un inicio de sesión correcto devuelve el cupo que usó el intento.
 Tenga en cuenta el límite en los scripts que puedan enviar una contraseña incorrecta y en los sitios donde muchos usuarios comparten una dirección IP.
 

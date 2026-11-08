@@ -87,6 +87,39 @@ install nodejs
 
 Playwright 플러그인(Playwright 크롤러용 ``fess-crawler-playwright`` 와 썸네일용 ``fess-thumbnail-playwright`` )이 필요로 하는 Node.js 를 |Fess| 디렉터리의 ``nodejs/`` 에 다운로드합니다. ``bin/fess.in.sh`` (Windows 에서는 ``bin\fess.in.bat`` )가 이를 찾아 ``PLAYWRIGHT_NODEJS_PATH`` 를 설정합니다. ``--dest`` 로 |Fess| 디렉터리 밖에 압축 해제한 경우에는 대신 ``bin/fess.in.sh`` 에 추가할 ``PLAYWRIGHT_NODEJS_PATH`` 줄을 표시합니다. ``--version`` 으로 다른 버전의 Node.js 를 지정할 수 있습니다. Playwright 크롤러에 대해서는 :doc:`../config/crawler-advanced` 를 참조하십시오.
 
+초기 설정
+=========
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+``fess_config.properties`` 에서 기본값이 공개되어 있는 두 값을 설정합니다. ``admin`` 사용자의 초기 비밀번호( ``index.user.initial_password`` , 기본 제공 값은 ``admin`` )와 암호화 키( ``app.cipher.key`` , 기본 제공 값은 ``___change__me___`` )입니다. |Fess| 를 처음 시작하기 전에 한 번만 실행하십시오. 파일에 없는 키는 ``fess-setup`` 이 추가했음을 나타내는 주석과 함께 파일 끝에 추가됩니다.
+
+초기 비밀번호는 |Fess| 가 처음 시작할 때 사용자 인덱스를 만들면서 읽습니다. 이후에는 ``admin`` 계정이 인덱스에 저장되어 있으므로, 나중에 ``init`` 을 실행해도 ``admin`` 사용자의 비밀번호는 바뀌지 않습니다.
+
+암호화 키는 |Fess| 가 크롤 설정과 데이터스토어 설정에 저장하는 비밀번호를 암호화하는 데 사용되며, 어떤 키로 저장한 값은 다른 키로는 읽을 수 없습니다. 따라서 ``init`` 은 암호화 키가 기본 제공 값 그대로이거나 비어 있는 동안에만 키를 바꿉니다. 이 때문에 두 번째 실행은 어느 값도 바꾸지 않고 실패합니다. ``--force`` 를 지정하면 바꿉니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - 옵션
+     - 설명
+   * - ``--admin-password <password>``
+     - 초기 비밀번호입니다. 생략하면 영문자와 숫자 16자의 비밀번호를 무작위로 생성하고, ``Password of the admin user:`` 뒤에 한 번만 표시합니다. 비밀번호는 파일에도 평문으로 기록됩니다. 명령줄에 지정한 비밀번호는 같은 머신의 다른 사용자에게 보입니다. ``admin`` , 빈 값, 앞뒤에 공백이 있는 값, 제어 문자가 포함된 값은 지정할 수 없습니다.
+   * - ``--cipher-key <key>``
+     - 암호화 키입니다. 생략하면 영문자와 숫자 32자의 키를 무작위로 생성합니다. 지정하는 키는 공백이 없는 인쇄 가능한 ASCII 문자 16자, 24자 또는 32자(AES 키 길이)여야 하며, 기본 제공 값이어서는 안 됩니다. 키는 보관하십시오. 어떤 키로 |Fess| 가 저장한 값은 다른 키로는 읽을 수 없습니다.
+   * - ``--config <file>``
+     - 변경할 ``fess_config.properties`` 입니다. 기본값은 |Fess| 디렉터리의 ``app/WEB-INF/classes/fess_config.properties`` 입니다.
+   * - ``--force``
+     - 기본 제공 값이 아니게 된 암호화 키를 바꿉니다. 이전 키로 |Fess| 가 저장한 값은 이후 읽을 수 없게 됩니다.
+
+``init`` 은 값이 받아들여지지 않는 경우(위의 옵션 참조), ``--config`` 로 지정한 파일이 없는 경우, 암호화 키가 이미 변경되었는데 ``--force`` 를 지정하지 않은 경우, 파일의 ``app.cipher.algorithm`` 이 ``aes`` 가 아닌 값으로 설정된 경우( ``init`` 은 ``aes`` 용 키만 설정합니다)에는 아무것도 변경하지 않고 종료 코드 ``1`` 로 종료합니다. 알 수 없는 옵션이나 값이 없는 옵션은 종료 코드 ``2`` 로 종료합니다.
+
 플러그인 관리
 ================
 
@@ -127,6 +160,8 @@ list plugins
     $ bin/fess-setup list plugins [--repository <url>] [--dest <dir>]
 
 이 |Fess| 용으로 공개된 플러그인 목록을 표시하고, 설치된 플러그인에는 ``(installed: <version>)`` 을 붙입니다. 설치되어 있지만 저장소에 공개되지 않은 플러그인(로컬에서 빌드한 jar 등)은 따로 표시합니다. |Fess| 의 개발 빌드에서는 스냅숏 저장소도 참조합니다.
+
+저장소에 공개되어 있어도 이 |Fess| 계열용 빌드가 없는 플러그인에는 ``(no build for <line>)`` (예: ``(no build for 15.10)`` )이 붙습니다. ``install plugin`` 은 이러한 플러그인을 설치하지 않습니다. 플러그인의 공개 버전을 읽을 수 없는 경우에는 아무것도 붙지 않습니다.
 
 list installed
 --------------

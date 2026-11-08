@@ -186,7 +186,7 @@ De plus, les chemins relatifs aux protocoles (commençant par ``//``) et les che
    Les limites de débit pour la connexion et le changement de mot de passe peuvent être configurées avec les propriétés suivantes (valeurs par défaut entre parenthèses) :
 
    - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``) : Nombre maximal de tentatives par minute par adresse IP. S'applique à la fois à ``/auth/login`` et au formulaire de connexion ``POST /login/login``, qui partagent le même bucket.
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``) : Nombre maximal de tentatives par minute par utilisateur. S'applique à ``/auth/login`` et ``POST /login/login`` (qui partagent un bucket pour chaque combinaison d'IP appelante et de nom d'utilisateur) ainsi qu'à ``/auth/password``.
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``) : Nombre maximal de tentatives par minute par utilisateur. S'applique à ``/auth/login`` et ``POST /login/login`` (qui partagent un bucket pour chaque combinaison d'IP appelante et de nom d'utilisateur) ainsi qu'à ``/auth/password``. Pour la connexion, les noms d'utilisateur sont comparés sans tenir compte de la casse (``alice`` et ``Alice`` partagent un même compteur).
    - ``theme.api.login.lockout.seconds`` (``900``) : Durée de verrouillage (en secondes) après dépassement de la limite. Retournée comme valeur de l'en-tête ``Retry-After``.
 
    Le formulaire de connexion (``POST /login/login``) partage les buckets et le verrouillage avec ``/auth/login`` : les échecs sur le formulaire comptent donc pour la limite de ``/auth/login`` et inversement. Lorsque la limite est dépassée sur le formulaire, elle est traitée comme une erreur de connexion ordinaire et non comme un ``429``.

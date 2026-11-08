@@ -186,7 +186,7 @@ HTTP 方法            POST
    登录和密码修改的速率限制可通过以下属性进行配置（括号内为默认值）：
 
    - ``theme.api.login.rate.limit.per.ip.per.minute`` (``10``): 每个 IP 地址每分钟的最大尝试次数。同时适用于 ``/auth/login`` 和登录表单 ``POST /login/login``\ ，两者共用同一个桶。
-   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 每个用户每分钟的最大尝试次数。适用于 ``/auth/login`` 和 ``POST /login/login``\ （每个调用方 IP 与用户名的组合共用同一个桶）以及 ``/auth/password``\ 。
+   - ``theme.api.login.rate.limit.per.user.per.minute`` (``5``): 每个用户每分钟的最大尝试次数。适用于 ``/auth/login`` 和 ``POST /login/login``\ （每个调用方 IP 与用户名的组合共用同一个桶）以及 ``/auth/password``\ 。登录时，用户名不区分大小写（ ``alice`` 和 ``Alice`` 共用同一个桶）。
    - ``theme.api.login.lockout.seconds`` (``900``): 超过限制后的锁定时长（秒）。作为 ``Retry-After`` 头的值返回。
 
    登录表单（ ``POST /login/login`` ）与 ``/auth/login`` 共用同一组桶和锁定，因此表单上的失败也会计入 ``/auth/login`` 的上限，反之亦然。在表单上超过上限时，不会返回 ``429``\ ，而是作为普通的登录错误处理。

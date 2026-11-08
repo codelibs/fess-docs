@@ -200,6 +200,45 @@ Nginx 访问限制示例::
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
+每条审计记录是一行以制表符分隔的 ``key:value`` 字段（LTSV）。记录以 ``action`` 开头，以 ``ip`` （客户端 IP 地址）和 ``time`` （UTC，ISO 8601）结尾。当 ``app.audit.log.format`` 为 ``ecs``，或为空且环境变量 ``FESS_APP_TYPE`` 为 ``docker`` 时，记录会改为以 ECS 格式的 JSON 输出，各字段为 ``labels.<key>`` 。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - action
+     - 字段
+     - 记录的时机
+   * - ``LOGIN``
+     - ``user`` 、 ``permissions``
+     - 用户登录时。
+   * - ``LOGOUT``
+     - ``user`` 、 ``permissions``
+     - 用户退出登录时。
+   * - ``LOGIN_FAILURE``
+     - ``class`` 、 ``user``
+     - 登录表单、登录 API 或 SSO 拒绝登录时。SSO 认证器以异常拒绝登录时也会记录。
+   * - ``ACCESS``
+     - ``user`` 、 ``path`` 、 ``execute`` 、 ``method`` 、 ``id``
+     - 对管理画面或 Admin API 的请求在执行处理之前到达时。对于 Admin API，是在访问令牌被接受之后。
+   * - ``ACCESS_DENIED``
+     - ``user`` 、 ``path``
+     - 对管理画面的请求因用户的角色被拒绝时，或对 Admin API 的请求被访问令牌检查拒绝时（API 返回 HTTP 401）。
+   * - ``UPDATE_PASSWORD``
+     - ``user`` 、 ``target``
+     - 密码被更改时。包括用户自己通过登录画面或 ``/api/v2/auth/password`` 更改，以及管理员在用户管理画面或通过 Admin API 为用户设置新密码。
+   * - ``UPDATE_PERMISSION``
+     - ``user`` 、 ``permissions``
+     - LDAP 用户的权限被更新时。
+   * - ``SCRIPT_EXECUTION``
+     - ``scriptType`` 、 ``source`` 、 ``user`` 、 ``result`` 、 ``script``
+     - 脚本被执行时。请参阅 :doc:`../config/scripting-overview` 。
+
+- ``LOGIN_FAILURE``： ``user`` 是输入的用户名， ``class`` 是凭据的类型。SSO 认证器以异常拒绝登录时，尚未确定凭据，因此记录中既没有 ``user`` 也没有 ``class``，也不会写入异常的任何内容。
+- ``ACCESS``： ``method`` 是 HTTP 方法。 ``id`` 是请求参数 ``id`` 的值，仅在请求中带有该参数时记录（不会从上传请求中读取）。由于管理画面的表单包含密码和密钥，因此不会记录其他请求参数。
+- ``ACCESS_DENIED``：对于被拒绝的 Admin API 请求，仅记录请求路径。访问令牌及传递它的参数都不会被记录。
+- ``UPDATE_PASSWORD``： ``user`` 是更改密码的用户， ``target`` 是被更改密码的用户的名称。密码及其哈希值不会被记录，被拒绝的更改也不会被记录。
+
 定期安全更新
 ------------------------------
 

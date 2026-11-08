@@ -87,6 +87,39 @@ install nodejs
 
 Playwright 系のプラグイン（Playwright クローラの ``fess-crawler-playwright`` とサムネイル生成の ``fess-thumbnail-playwright`` ）が必要とする Node.js を、 |Fess| のディレクトリの ``nodejs/`` にダウンロードします。 ``bin/fess.in.sh`` （Windows では ``bin\fess.in.bat`` ）がこれを見つけて ``PLAYWRIGHT_NODEJS_PATH`` を設定します。 ``--dest`` で |Fess| のディレクトリの外に展開した場合は、代わりに ``bin/fess.in.sh`` に追加する ``PLAYWRIGHT_NODEJS_PATH`` の行を表示します。 ``--version`` で別のバージョンの Node.js を指定できます。Playwright クローラについては :doc:`../config/crawler-advanced` を参照してください。
 
+初期設定
+========
+
+init
+----
+
+::
+
+    $ bin/fess-setup init [--admin-password <password>] [--cipher-key <key>] [--config <file>] [--force]
+
+``fess_config.properties`` の、既定値が公開されている 2 つの値を設定します。 ``admin`` ユーザーの初期パスワード（ ``index.user.initial_password`` 、同梱の値は ``admin`` ）と、暗号鍵（ ``app.cipher.key`` 、同梱の値は ``___change__me___`` ）です。 |Fess| を初めて起動する前に、1 度だけ実行してください。ファイルにないキーは、 ``fess-setup`` が追加したことを示すコメントとともに追記されます。
+
+初期パスワードは、 |Fess| が初回の起動時にユーザーのインデックスを作成するときに読み込まれます。以降は ``admin`` アカウントがインデックスに保存されているため、あとから ``init`` を実行しても ``admin`` ユーザーのパスワードは変わりません。
+
+暗号鍵は、 |Fess| がクロール設定とデータストア設定に保存するパスワードの暗号化に使われ、ある鍵で保存した値は別の鍵では読めません。そのため ``init`` は、暗号鍵が同梱の値のまま（または空）の間だけ置き換えます。この理由で、2 回目の実行は、どちらの値も変更せずに失敗します。 ``--force`` を指定した場合は置き換えます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - オプション
+     - 説明
+   * - ``--admin-password <password>``
+     - 初期パスワードです。省略すると、英数字 16 文字のパスワードをランダムに生成し、 ``Password of the admin user:`` に続けて 1 度だけ表示します。パスワードは平文でファイルにも書き込まれます。コマンドラインに指定したパスワードは、同じマシンの他のユーザーにも見えます。 ``admin`` 、空、前後に空白がある文字列、制御文字を含む文字列は指定できません。
+   * - ``--cipher-key <key>``
+     - 暗号鍵です。省略すると、英数字 32 文字の鍵をランダムに生成します。指定する鍵は、空白を含まない印字可能な ASCII 文字の 16 文字、24 文字、または 32 文字（AES の鍵長）で、同梱の値以外にしてください。鍵は保管してください。ある鍵で |Fess| が保存した値は、別の鍵では読めません。
+   * - ``--config <file>``
+     - 変更する ``fess_config.properties`` です。既定は |Fess| のディレクトリの ``app/WEB-INF/classes/fess_config.properties`` です。
+   * - ``--force``
+     - 同梱の値ではなくなっている暗号鍵を置き換えます。古い鍵で |Fess| が保存した値は、以降は読めなくなります。
+
+``init`` は、値が受け付けられない場合（上のオプションを参照）、 ``--config`` で指定したファイルがない場合、暗号鍵がすでに変更されていて ``--force`` を指定していない場合、ファイルの ``app.cipher.algorithm`` が ``aes`` 以外に設定されている場合（ ``init`` は ``aes`` の鍵だけを設定します）に、何も変更せずに終了コード ``1`` で終了します。未知のオプションや、値のないオプションは、終了コード ``2`` で終了します。
+
 プラグインの管理
 ================
 
@@ -127,6 +160,8 @@ list plugins
     $ bin/fess-setup list plugins [--repository <url>] [--dest <dir>]
 
 この |Fess| 向けに公開されているプラグインを一覧表示し、導入済みのものには ``(installed: <version>)`` を付けます。導入済みでもリポジトリに公開されていないプラグイン（ローカルでビルドした jar など）は、別に一覧表示します。 |Fess| の開発版では、スナップショットリポジトリも参照します。
+
+リポジトリに公開されていても、この |Fess| の系列向けのビルドがないプラグインには、 ``(no build for <line>)`` （たとえば ``(no build for 15.10)`` ）が付きます。 ``install plugin`` はそのようなプラグインを導入しません。プラグインの公開バージョンを読み取れなかった場合は、何も付きません。
 
 list installed
 --------------

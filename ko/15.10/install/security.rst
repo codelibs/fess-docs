@@ -200,6 +200,45 @@ Nginx에서 액세스 제한 예::
         <AppenderRef ref="AuditFile"/>
     </Logger>
 
+감사 로그의 레코드 하나는 탭으로 구분한 ``key:value`` 필드를 나열한 한 줄(LTSV)입니다. ``action`` 으로 시작하고 ``ip`` (클라이언트 IP 주소)와 ``time`` (UTC, ISO 8601)으로 끝납니다. ``app.audit.log.format`` 이 ``ecs`` 이거나, 비어 있고 환경 변수 ``FESS_APP_TYPE`` 이 ``docker`` 이면 ECS 형식의 JSON으로 출력되며, 각 필드는 ``labels.<key>`` 가 됩니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 50
+
+   * - action
+     - 필드
+     - 기록되는 시점
+   * - ``LOGIN``
+     - ``user`` , ``permissions``
+     - 사용자가 로그인했을 때.
+   * - ``LOGOUT``
+     - ``user`` , ``permissions``
+     - 사용자가 로그아웃했을 때.
+   * - ``LOGIN_FAILURE``
+     - ``class`` , ``user``
+     - 로그인 폼, 로그인 API 또는 SSO에서 로그인이 거부되었을 때. SSO 인증 처리가 예외로 로그인을 거부한 경우도 기록됩니다.
+   * - ``ACCESS``
+     - ``user`` , ``path`` , ``execute`` , ``method`` , ``id``
+     - 관리 화면 또는 Admin API에 대한 요청이 처리가 실행되기 전에 도착했을 때. Admin API에서는 액세스 토큰이 받아들여진 뒤입니다.
+   * - ``ACCESS_DENIED``
+     - ``user`` , ``path``
+     - 관리 화면에 대한 요청이 사용자의 역할 때문에 거부되었을 때, 또는 Admin API에 대한 요청이 액세스 토큰 검사에서 거부되었을 때(API는 HTTP 401을 반환합니다).
+   * - ``UPDATE_PASSWORD``
+     - ``user`` , ``target``
+     - 비밀번호가 변경되었을 때. 사용자가 로그인 화면 또는 ``/api/v2/auth/password`` 에서 직접 변경한 경우와, 관리자가 사용자 관리 화면 또는 Admin API에서 사용자에게 새 비밀번호를 설정한 경우입니다.
+   * - ``UPDATE_PERMISSION``
+     - ``user`` , ``permissions``
+     - LDAP 사용자의 권한이 갱신되었을 때.
+   * - ``SCRIPT_EXECUTION``
+     - ``scriptType`` , ``source`` , ``user`` , ``result`` , ``script``
+     - 스크립트가 실행되었을 때. :doc:`../config/scripting-overview` 를 참조하십시오.
+
+- ``LOGIN_FAILURE``: ``user`` 는 입력된 사용자 이름이고 ``class`` 는 자격 증명의 종류입니다. SSO 인증 처리가 예외로 로그인을 거부한 경우에는 자격 증명이 확정되지 않았으므로 ``user`` 와 ``class`` 가 모두 기록되지 않으며, 예외의 내용도 기록되지 않습니다.
+- ``ACCESS``: ``method`` 는 HTTP 메서드입니다. ``id`` 는 요청 파라미터 ``id`` 의 값이며, 요청에 있는 경우에만 기록됩니다(업로드 요청에서는 읽지 않습니다). 관리 화면의 폼에는 비밀번호와 키가 포함되므로 그 밖의 요청 파라미터는 기록되지 않습니다.
+- ``ACCESS_DENIED``: 거부된 Admin API 요청에서는 요청 경로만 기록됩니다. 액세스 토큰도, 그것을 전달한 파라미터도 기록되지 않습니다.
+- ``UPDATE_PASSWORD``: ``user`` 는 비밀번호를 변경한 사용자이고 ``target`` 은 비밀번호가 변경된 사용자의 이름입니다. 비밀번호와 그 해시는 기록되지 않으며, 거부된 변경은 기록되지 않습니다.
+
 정기적인 보안 업데이트
 ------------------------------
 

@@ -690,6 +690,7 @@ Login Form Rate Limit
 
 In 15.9 the limits of ``theme.api.login.rate.limit.*`` applied only to ``/api/v2/auth/login`` and not to the login form of the login page (``/login/``).
 In 15.10 the login form uses the same limits and the same counters. When failed logins from the same IP address reach 10 per minute, or the password of the same user name is rejected 5 times from the same IP address, logins from that IP address, or from that combination of IP address and user name, are refused for ``theme.api.login.lockout.seconds`` (900 seconds by default).
+When the logins are counted, user names are compared without regard to case, so ``alice`` and ``Alice`` from the same IP address share one count. The user name used for authentication and written to the logs is the one that was typed.
 While refused, even the correct password does not log in, and the page shows the same message as for a wrong password. A successful login gives back the slot that the attempt used.
 Take the limit into account for scripts that may send a wrong password and for sites where many users share one IP address.
 
