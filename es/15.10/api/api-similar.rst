@@ -27,6 +27,8 @@ Devuelve los documentos que tienen la misma firma de contenido que el documento 
 - Con ``login.required=true``, un llamante anónimo recibe ``auth_required`` (401). Un token de acceso se puede usar igual que con ``/api/v2/search``.
 - Las solicitudes están limitadas a ``api.search.similar.rate.limit.per.minute`` (predeterminado: ``30``; ``0`` significa sin límite) por minuto, contadas por usuario con sesión iniciada o por IP de cliente en el caso de un invitado. Al superar el límite, el endpoint responde ``429`` con una cabecera ``Retry-After``.
 - Solo se devuelve una página, ordenada por URL y después por ID de documento. No hay parámetro ``start`` ni desplazamiento.
+- A una solicitud para la que no se determina ningún host virtual (el host predeterminado) no se le añade el filtro de host virtual, por lo que también se incluyen los documentos que tienen un valor de host virtual (igual que ``/api/v2/search``). Restrinja por rol los documentos que los usuarios del host predeterminado no deben ver.
+- Cuando el contenido de un documento cambia y se vuelve a rastrear, su ``doc_id`` cambia. Un ``doc_id`` guardado puede pasar a ``not_found`` (404) después del nuevo rastreo.
 
 Qué documentos se devuelven
 ---------------------------
@@ -49,7 +51,7 @@ Parámetros de solicitud
    * - ``docId``
      - Identificador del documento (ruta, obligatorio, patrón ``[A-Za-z0-9_-]{1,512}``). Un valor que no coincide produce ``invalid_request`` (400).
    * - ``num``
-     - Número de documentos que se devuelven (consulta, ``10`` de forma predeterminada). Un valor superior a ``20`` o a ``paging.search.page.max.size`` se reduce al menor de los dos, y ``page_size`` en la respuesta muestra el resultado. Un valor de ``0`` o menos produce ``invalid_request`` (400). Un valor que no es un número se ignora y se usa el valor predeterminado.
+     - Número de documentos que se devuelven (consulta). Se aplican las reglas de ``num`` en :doc:`api-search`: el valor predeterminado es ``10`` (no se usa ``paging.search.page.size``). Un valor superior a ``paging.search.page.max.size`` se reduce a ese máximo, y ``page_size`` en la respuesta muestra el resultado. Un valor de ``0`` o menos produce ``invalid_request`` (400). Un valor que no es un entero se ignora y se usa el valor predeterminado.
 
 Tabla: Parámetros de solicitud
 

@@ -114,7 +114,7 @@ Die einzelnen Elemente von ``response`` sind wie folgt beschrieben. Alle Felder 
      - Array der verfügbaren Gebietsschemas.
    * - ``ui_locale``
      - string
-     - Die Anzeigesprache der Suchoberfläche als BCP-47-Tag (zum Beispiel ``ja`` oder ``pt-BR``). Sie wird aus dem Anfrageparameter ``browser_lang`` (einmal angegeben, wird er in der Sitzung gemerkt), dann aus der Sitzung und dann aus dem Header ``Accept-Language`` bestimmt. Leer, wenn sie sich nicht bestimmen lässt. Nicht zu verwechseln mit ``locales``, das die Suchsprachen auflistet.
+     - Die Anzeigesprache der Suchoberfläche als BCP-47-Tag (zum Beispiel ``ja`` oder ``pt-BR``). Sie wird aus dem Anfrageparameter ``browser_lang`` (einmal angegeben, wird er in der Sitzung gemerkt), dann aus der Sitzung und dann aus dem Header ``Accept-Language`` bestimmt. Leer, wenn sie sich nicht bestimmen lässt. Nicht zu verwechseln mit ``locales``, das die Suchsprachen auflistet. Ohne Anfrageparameter, ohne Sitzung und ohne ``Accept-Language``-Header ist es die Standardsprache des Servers.
    * - ``default_label_values``
      - string[]
      - Labelwerte, die die Suchoberfläche vorauswählt. Für den aktuellen Benutzer stammen sie aus „Standard-Labelwert“ auf der Seite „Allgemein“ der Verwaltungsoberfläche, einschließlich der Werte je Rolle oder Gruppe. Ein leeres Array, wenn ``label_options`` leer ist. ``/api/v2/search`` wendet sie nicht an.

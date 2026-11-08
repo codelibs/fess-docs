@@ -114,7 +114,7 @@ Les détails de chaque élément de ``response`` sont les suivants. Tous les cha
      - Tableau des paramètres régionaux disponibles.
    * - ``ui_locale``
      - string
-     - La langue d'affichage de l'écran de recherche sous forme d'étiquette BCP 47 (par exemple ``ja`` ou ``pt-BR``). Elle est déterminée à partir du paramètre de requête ``browser_lang`` (mémorisé dans la session une fois indiqué), puis de la session, puis de l'en-tête ``Accept-Language``. Vide si elle ne peut pas être déterminée. À ne pas confondre avec ``locales``, qui liste les langues de recherche.
+     - La langue d'affichage de l'écran de recherche sous forme d'étiquette BCP 47 (par exemple ``ja`` ou ``pt-BR``). Elle est déterminée à partir du paramètre de requête ``browser_lang`` (mémorisé dans la session une fois indiqué), puis de la session, puis de l'en-tête ``Accept-Language``. Vide si elle ne peut pas être déterminée. À ne pas confondre avec ``locales``, qui liste les langues de recherche. Sans paramètre de requête, sans session et sans en-tête ``Accept-Language``, il s'agit de la locale par défaut du serveur.
    * - ``default_label_values``
      - string[]
      - Valeurs d'étiquette que l'écran de recherche présélectionne. Pour l'utilisateur courant, elles sont tirées de « Valeur d'étiquette par défaut » dans la page « Général » de l'écran d'administration, y compris les valeurs définies par rôle ou par groupe. Tableau vide lorsque ``label_options`` est vide. ``/api/v2/search`` ne les applique pas.

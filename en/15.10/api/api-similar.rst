@@ -27,6 +27,8 @@ Returns the documents that have the same content signature as the document ``doc
 - With ``login.required=true``, an anonymous caller gets ``auth_required`` (401). An access token can be used the same way as with ``/api/v2/search``.
 - Requests are limited to ``api.search.similar.rate.limit.per.minute`` (default: ``30``; ``0`` means unlimited) per minute, counted per logged-in user, or per client IP for a guest. Over the limit the endpoint answers ``429`` with a ``Retry-After`` header.
 - Only one page is returned, ordered by URL and then document ID. There is no ``start`` or offset parameter.
+- A request for which no virtual host is determined (the default host) gets no virtual host filter, so documents that have a virtual host value are also covered (the same as ``/api/v2/search``). Restrict documents that the users of the default host must not see by role.
+- When the content of a document changes and it is crawled again, its ``doc_id`` changes. A saved ``doc_id`` may become ``not_found`` (404) after the re-crawl.
 
 Which Documents Are Returned
 ----------------------------
@@ -49,7 +51,7 @@ Request Parameters
    * - ``docId``
      - Document identifier (path, required, pattern ``[A-Za-z0-9_-]{1,512}``). A value that does not match produces ``invalid_request`` (400).
    * - ``num``
-     - Number of documents to return (query, default ``10``). A value above ``20`` or above ``paging.search.page.max.size`` is reduced to the smaller of the two, and ``page_size`` in the response shows the result. A value of ``0`` or less produces ``invalid_request`` (400). A value that is not a number is ignored and the default is used.
+     - Number of documents to return (query). The rules are those of ``num`` in :doc:`api-search`: the default is ``10`` (``paging.search.page.size`` is not used). A value above ``paging.search.page.max.size`` is reduced to it, and ``page_size`` in the response shows the result. A value of ``0`` or less produces ``invalid_request`` (400). A value that is not an integer is ignored and the default is used.
 
 Table: Request Parameters
 

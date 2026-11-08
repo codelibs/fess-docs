@@ -27,6 +27,8 @@ Gibt die Dokumente zurück, die dieselbe Inhaltssignatur wie das Dokument ``docI
 - Bei ``login.required=true`` erhält ein anonymer Aufrufer ``auth_required`` (401). Ein Zugriffstoken kann wie bei ``/api/v2/search`` verwendet werden.
 - Anfragen sind auf ``api.search.similar.rate.limit.per.minute`` (Standard: ``30``; ``0`` bedeutet unbegrenzt) pro Minute begrenzt, gezählt je angemeldetem Benutzer bzw. je Client-IP bei einem Gast. Bei Überschreitung antwortet der Endpunkt mit ``429`` und einem ``Retry-After``-Header.
 - Es wird nur eine Seite zurückgegeben, sortiert nach URL und dann nach Dokument-ID. Es gibt keinen Parameter ``start`` oder Offset.
+- Bei einer Anfrage, für die kein virtueller Host bestimmt wird (Standard-Host), wird kein Filter für virtuelle Hosts hinzugefügt, sodass auch Dokumente mit einem Wert für den virtuellen Host einbezogen werden (wie bei ``/api/v2/search``). Dokumente, die Benutzer des Standard-Hosts nicht sehen dürfen, sollten Sie über Rollen einschränken.
+- Ändert sich der Inhalt eines Dokuments und wird es erneut gecrawlt, ändert sich seine ``doc_id``. Eine gespeicherte ``doc_id`` kann nach dem erneuten Crawlen ``not_found`` (404) liefern.
 
 Welche Dokumente zurückgegeben werden
 -------------------------------------
@@ -49,7 +51,7 @@ Anfrageparameter
    * - ``docId``
      - Dokumentkennung (Pfad, erforderlich, Muster ``[A-Za-z0-9_-]{1,512}``). Ein nicht passender Wert führt zu ``invalid_request`` (400).
    * - ``num``
-     - Anzahl der zurückzugebenden Dokumente (Query, Standard ``10``). Ein Wert über ``20`` oder über ``paging.search.page.max.size`` wird auf den kleineren der beiden Werte gekürzt; ``page_size`` in der Antwort zeigt das Ergebnis. Ein Wert von ``0`` oder weniger führt zu ``invalid_request`` (400). Ein Wert, der keine Zahl ist, wird ignoriert, und der Standardwert gilt.
+     - Anzahl der zurückzugebenden Dokumente (Query). Es gelten die Regeln von ``num`` in :doc:`api-search`: Der Standard ist ``10`` (``paging.search.page.size`` wird nicht verwendet). Ein Wert über ``paging.search.page.max.size`` wird darauf gekürzt; ``page_size`` in der Antwort zeigt das Ergebnis. Ein Wert von ``0`` oder weniger führt zu ``invalid_request`` (400). Ein Wert, der keine ganze Zahl ist, wird ignoriert, und der Standardwert gilt.
 
 Tabelle: Anfrageparameter
 

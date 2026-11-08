@@ -77,6 +77,10 @@ Specify "Virtual Host" in web crawl configuration, file crawl configuration, or 
 Searches made from a matched virtual host will only display documents belonging to crawl configurations that have that virtual host assigned.
 Accesses that do not match any virtual host (normal access with no virtual host configured) are not filtered, and all search results are returned as usual.
 
+.. note::
+
+   Virtual hosts divide the search targets; they are not a way to restrict access. When you use virtual hosts, make every access by a virtual host name. An access by IP address, or with a ``Host`` header that does not match the setting (for example when a reverse proxy rewrites ``Host``), matches no virtual host, and documents that specify a virtual host are also returned. Restrict documents that some users must not see by role.
+
 **Example**
 
 .. list-table::
