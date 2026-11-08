@@ -116,7 +116,7 @@ Legt die Einstellungen fest, die an das Theme übergeben werden, eine ``key=valu
 
 .. warning::
 
-   Die Werte sind für jeden sichtbar, der die Suchoberfläche erreicht, auch für nicht angemeldete Benutzer, selbst bei aktivierter Option „Anmeldung erforderlich". Geben Sie keine geheimen Daten wie Passwörter und keine internen Pfade ein, die nicht veröffentlicht werden sollen.
+   Die Werte sind für alle Benutzer der Suchoberfläche sichtbar. Geben Sie keine geheimen Daten wie Passwörter ein. Ist „Anmeldung erforderlich" aktiviert, wird an nicht angemeldete Benutzer nichts übergeben.
 
 Crawler
 -------

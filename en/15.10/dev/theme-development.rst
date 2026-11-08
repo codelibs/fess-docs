@@ -182,6 +182,7 @@ The ``key=value`` pairs that an administrator enters in "Theme Settings" in [Sys
 
 - ``theme_settings`` is always present and is ``{}`` when nothing is set. Make the theme work without any setting.
 - When "Login Required" is enabled, users who are not logged in get ``{}``.
+- The content of ``theme_settings`` depends on the login state. Read ``GET /api/v2/ui/config`` again after the user logs in or out.
 - Treat the values as data only. Never insert them as HTML (``innerHTML``) and never use them as a navigation target (a link, a redirect or ``href``).
 - The values are visible to every user of the search UI.
 

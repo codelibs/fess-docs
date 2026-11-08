@@ -196,6 +196,7 @@ Los pares ``key=value`` que un administrador introduce en "Configuración del te
 
 - ``theme_settings`` siempre está presente y es ``{}`` si no hay nada configurado. Haga que el tema funcione sin ningún ajuste.
 - Cuando "Requiere inicio de sesión" está habilitado, los usuarios que no han iniciado sesión reciben ``{}``.
+- El contenido de ``theme_settings`` depende del estado de inicio de sesión. Vuelva a leer ``GET /api/v2/ui/config`` después de que el usuario inicie o cierre sesión.
 - Trate los valores solo como datos. No los inserte nunca como HTML (``innerHTML``) ni los use como destino de navegación (un enlace, una redirección o ``href``).
 - Los valores son visibles para todos los usuarios de la interfaz de búsqueda.
 
