@@ -444,9 +444,17 @@ SP证书与私钥配置
    * - ``saml.security.requested_authncontext``
      - 请求的认证上下文
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
+   * - ``saml.security.reject_missing_audience``
+     - 拒绝没有 Audience（``AudienceRestriction``）的断言
+     - ``false``
    * - ``saml.sp.nameidformat``
      - NameID格式
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
+
+.. note::
+   ``saml.security.reject_missing_audience`` 为 ``false`` 时，没有 Audience（``AudienceRestriction``）的断言也会被接受。列出了 Audience 但不包含 SP 实体 ID 的断言，无论此设置如何都会被拒绝。
+   设置为 ``true`` 后，没有 Audience 的断言也会被拒绝，错误与 Audience 不匹配时相同。
+   fess-sso-saml 使用 java-saml 3.1.3 或更高版本时可使用此设置。
 
 .. note::
    |Fess| 内部使用SAML库（java-saml），以 ``saml.`` 开头的属性将映射到该库对应的设置（``onelogin.saml2.`` 前缀）。

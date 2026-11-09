@@ -44,6 +44,10 @@ Asegúrese de cambiar la contraseña de administrador predeterminada (``admin`` 
 
    De forma predeterminada, la longitud mínima es ``8`` y todos los requisitos de tipo de carácter están deshabilitados. Para reforzar las contraseñas, configure explícitamente las propiedades anteriores. Tenga en cuenta que |Fess| no cuenta con una función de expiración de contraseñas (cambio periódico forzado); si desea aplicar cambios periódicos de contraseña como regla operativa, hágalo manualmente.
 
+**Sesiones tras un cambio de contraseña:**
+
+Cuando se cambia la contraseña de un usuario local, ya sea por el propio usuario o por un administrador en la pantalla de administración de usuarios o mediante la API REST de administración, las demás sesiones de inicio de sesión de ese usuario terminan en su siguiente solicitud. El cambio se consulta a través de una caché por nodo cuya vigencia es ``password.changed.cache.expire`` en ``fess_config.properties`` (valor predeterminado: ``10`` segundos; con ``0`` o menos se comprueba en cada solicitud). El nodo que realizó el cambio lo aplica de inmediato; los demás nodos lo aplican en ese número de segundos como máximo. Los usuarios autenticados mediante LDAP o SSO no se ven afectados, porque sus contraseñas se gestionan fuera de |Fess|.
+
 Cambiar la clave de cifrado
 ---------------------------
 

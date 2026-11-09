@@ -234,7 +234,10 @@ Steuert das Verhalten bei der Rollen- und Gruppenauflösung nach der Anmeldung.
      - Verwendet das Attribut ``sAMAccountName`` als Gruppenname (für Active Directory).
    * - ``ldap.max.username.length``
      - ``-1``
-     - Maximale Länge des Benutzernamens. ``-1`` bedeutet keine Einschränkung.
+     - Ein eingegebener Benutzername, der länger ist, wird auf diese Anzahl der ersten Zeichen gekürzt (gedacht für den 20 Zeichen langen Anmeldenamen eines älteren Active Directory). Der gekürzte Name wird für den Bind, den Benutzernamen, die Rollensuche, die Berechtigungsnamen und die Sitzung verwendet; die Anmeldung wird nie wegen der Länge abgelehnt. Ein negativer Wert (Standard ``-1``) kürzt nicht.
+
+.. note::
+   Bei einer Anmeldung mit LDAP-Benutzername und -Passwort werden Leerzeichen vor und nach dem eingegebenen Benutzernamen entfernt (Leerzeichen innerhalb des Namens bleiben erhalten). Danach wird gekürzt; ein Leerzeichen am Ende des gekürzten Namens wird ebenfalls entfernt.
 
 Reservierte Administrator-Benutzernamen
 ---------------------------------------

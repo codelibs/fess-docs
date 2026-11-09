@@ -46,6 +46,10 @@ Veuillez obligatoirement modifier le mot de passe administrateur par défaut (``
 
    Par défaut, la longueur minimale est de ``8`` caractères et toutes les exigences de type de caractères sont désactivées. Pour renforcer la sécurité des mots de passe, définissez explicitement les propriétés ci-dessus. Notez que |Fess| ne dispose pas de fonctionnalité d'expiration des mots de passe (changement périodique forcé) ; si vous souhaitez imposer un changement périodique du mot de passe comme règle opérationnelle, faites-le manuellement.
 
+**Sessions après un changement de mot de passe :**
+
+Lorsque le mot de passe d'un utilisateur local est modifié, que ce soit par l'utilisateur lui-même ou par un administrateur sur l'écran de gestion des utilisateurs ou via l'API REST d'administration, les autres sessions de connexion de cet utilisateur prennent fin à leur prochaine requête. La modification est consultée via un cache propre à chaque nœud, dont la durée de vie est ``password.changed.cache.expire`` dans ``fess_config.properties`` (par défaut : ``10`` secondes ; avec ``0`` ou moins, la vérification a lieu à chaque requête). Le nœud qui a effectué la modification l'applique immédiatement ; les autres nœuds l'appliquent dans ce nombre de secondes au plus. Les utilisateurs authentifiés par LDAP ou SSO ne sont pas concernés, car leurs mots de passe sont gérés en dehors de |Fess|.
+
 Modifier la clé de chiffrement
 ------------------------------
 

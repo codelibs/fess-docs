@@ -46,6 +46,10 @@ The default administrator password (``admin`` / ``admin``) must be changed.
 
    By default, the minimum length is ``8`` and all character-type requirements are disabled. To strengthen passwords, set the properties above explicitly. Note that |Fess| has no password expiration (forced periodic change) feature; if you want to enforce periodic password changes as an operational rule, do so manually.
 
+**Sessions after a password change:**
+
+When the password of a local user is changed, whether by the user or by an administrator on the user management screen or through the Admin API, the other login sessions of that user end on their next request. The change is looked up through a per-node cache whose lifetime is ``password.changed.cache.expire`` in ``fess_config.properties`` (default: ``10`` seconds; ``0`` or less checks on every request). The node that made the change applies it at once; other nodes apply it within this many seconds. Users authenticated by LDAP or SSO are not affected, because their passwords are managed outside |Fess|.
+
 Change the Cipher Key
 ---------------------
 

@@ -234,7 +234,10 @@ Contrôle le comportement de la résolution des rôles/groupes après la connexi
      - Utilise l'attribut ``sAMAccountName`` pour les noms de groupes (pour Active Directory).
    * - ``ldap.max.username.length``
      - ``-1``
-     - Longueur maximale du nom d'utilisateur. ``-1`` signifie sans limite.
+     - Si le nom d'utilisateur saisi est plus long, il est tronqué à ce nombre de caractères, les premiers étant conservés (prévu pour le nom d'ouverture de session de 20 caractères d'un ancien Active Directory). Le nom tronqué est utilisé pour le bind, le nom d'utilisateur, la recherche de rôles, les noms de permission et la session, et la connexion n'est jamais refusée à cause de la longueur. Une valeur négative (``-1`` par défaut) ne tronque pas.
+
+.. note::
+   Lors d'une connexion avec un nom d'utilisateur et un mot de passe LDAP, les espaces avant et après le nom d'utilisateur saisi sont supprimés (les espaces à l'intérieur du nom sont conservés). La troncature est effectuée ensuite, et un espace restant à la fin du nom tronqué est également supprimé.
 
 Noms d'utilisateur administrateur réservés
 ------------------------------------------

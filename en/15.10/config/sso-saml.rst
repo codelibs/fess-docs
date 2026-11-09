@@ -456,9 +456,17 @@ Other Security Settings
    * - ``saml.security.requested_authncontext``
      - Requested authentication context
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
+   * - ``saml.security.reject_missing_audience``
+     - Reject an assertion that has no Audience (``AudienceRestriction``)
+     - ``false``
    * - ``saml.sp.nameidformat``
      - NameID format
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
+
+.. note::
+   While ``saml.security.reject_missing_audience`` is ``false``, an assertion that has no Audience (``AudienceRestriction``) is accepted. An assertion that lists Audiences but not the SP entity ID is rejected regardless of this setting.
+   When it is ``true``, an assertion with no Audience is rejected as well, with the same error as an Audience that does not match.
+   This setting is available when fess-sso-saml uses java-saml 3.1.3 or later.
 
 .. note::
    |Fess| internally uses a SAML library (java-saml), and properties starting with ``saml.`` are mapped to the library's corresponding settings (the ``onelogin.saml2.`` prefix).
