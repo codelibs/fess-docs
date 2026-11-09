@@ -239,9 +239,10 @@ URL生成
    索引中的字段名是 ``last_modified``，而不是 ``lastModified``\ 。即使写成 ``lastModified=...`` 也不会设置最后更新时间。
 
 .. note::
-   目前，使用 JavaScript 内置的 ``new Date(...)`` 创建的值无法注册到 ``last_modified`` 等日期字段，
+   在 15.9 及更早版本中，使用 JavaScript 内置的 ``new Date(...)`` 创建的值无法注册到 ``last_modified`` 等日期字段，
    包含该文档的注册会失败，文档不会被注册到索引中。
-   日期请如上所示使用完全限定名 ``new java.util.Date(...)`` 创建。
+   从 15.10 起，可以直接使用 ``new Date(...)``。
+   完全限定名 ``new java.util.Date(...)`` 在所有版本中均可使用。
 
 可用对象
 ========

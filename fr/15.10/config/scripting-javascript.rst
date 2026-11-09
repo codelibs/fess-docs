@@ -251,9 +251,10 @@ Traitement des dates
    Le nom du champ de l'index est ``last_modified`` et non ``lastModified``. Avec ``lastModified=...``, la date de dernière modification n'est pas définie.
 
 .. note::
-   Actuellement, une valeur créée avec le ``new Date(...)`` natif de JavaScript ne peut pas être enregistrée dans un champ de date tel que ``last_modified`` :
+   Dans la version 15.9 et les versions antérieures, une valeur créée avec le ``new Date(...)`` natif de JavaScript ne peut pas être enregistrée dans un champ de date tel que ``last_modified`` :
    l'enregistrement contenant ce document échoue et le document n'est pas ajouté à l'index.
-   Créez la date avec le nom complet ``new java.util.Date(...)``, comme ci-dessus.
+   À partir de la version 15.10, ``new Date(...)`` fonctionne tel quel.
+   Le nom complet ``new java.util.Date(...)`` fonctionne dans toutes les versions.
 
 Objets disponibles
 ==================

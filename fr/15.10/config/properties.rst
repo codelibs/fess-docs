@@ -486,7 +486,7 @@ Index
     - ``true``
   * - crawler.failure.url.status.codes
     - Codes d'état HTTP considérés comme des URL en échec.
-    - ``404,403,410,401``
+    - ``404,403,410,401,5xx``
   * - crawler.system.monitor.interval
     - Intervalle (secondes) du moniteur système pendant le crawl.
     - ``60``

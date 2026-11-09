@@ -28,7 +28,7 @@ The list shows the URL, type, MIME type, HTTP status, size (bytes) and last acce
 The MIME type, HTTP status and size are recorded only when the crawler knew them; otherwise they are blank.
 
 - Recorded when: processing failed after the document was fetched (for example a size limit was exceeded), or the server returned an HTTP status listed in ``crawler.failure.url.status.codes``. When a document is rejected for exceeding a size limit before it is fetched, only the size is recorded.
-- Not recorded when: no response was obtained, such as a timeout or a connection error, and for failures of data store crawls. A failure to extract the text (for example an unreadable PDF) is not recorded either while ``crawler.ignore.content.exception`` is ``true`` (the default): the document is indexed without a body. It is recorded only when this key is ``false``.
+- Not recorded when: no response was obtained, such as a timeout or a connection error, and for failures of data store crawls. A failure to extract the text (for example an unreadable PDF) is not recorded either while ``crawler.ignore.content.exception`` is ``true`` (the default): the document is indexed without a body. It is recorded only when this key is ``false``. However, a document rejected as a suspected zip bomb is recorded as a failure URL and is not indexed even when this key is ``true``.
 - The HTTP status is recorded only for ``http`` / ``https`` URLs. It is blank for files, SMB and other protocols.
 - For a failure URL recorded before |Fess| 15.10, these items stay blank until the URL fails again.
 

@@ -184,7 +184,10 @@ Impossible de créer l'index (chemin des fichiers de dictionnaire)
 
 **Symptôme :**
 
-L'accès à |Fess| renvoie une erreur HTTP 404 et l'erreur suivante est enregistrée dans ``fess.log`` ::
+- |Fess| 15.10 ou ultérieur : l'application web n'a pas pu démarrer, donc le processus se termine avec le code de sortie 1 (la console affiche ``Fess aborted the startup because the web application ... failed to initialize.`` et le port est fermé).
+- |Fess| 15.9 ou antérieur : le processus reste actif et chaque requête renvoie une erreur HTTP 404.
+
+Dans les deux cas, l'erreur suivante est enregistrée dans ``fess.log`` ::
 
     Failed to create index: index=fess, path=fess_indices/fess.json
     ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt

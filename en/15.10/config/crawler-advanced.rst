@@ -262,6 +262,10 @@ Configuration Example
     # Ignore content exceptions
     crawler.ignore.content.exception=true
 
+.. note::
+   A document that the Tika extractor rejects as a suspected zip bomb is recorded as a failure URL and is not indexed, even when this key is ``true``.
+   Other extraction failures are still ignored under the default.
+
 .. warning::
    Setting ``crawler.ignore.robots.txt=true`` may violate site terms of service.
    Exercise caution when crawling external sites.
@@ -278,15 +282,17 @@ Error Handling Settings
      - Default
    * - ``crawler.failure.url.status.codes``
      - HTTP status codes considered failures (comma-separated)
-     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+
+A class such as ``5xx`` stands for all status codes from 500 to 599.
 
 Configuration Example
 ~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # In addition to the defaults (404,403,410,401), also treat 500 as an error
-    crawler.failure.url.status.codes=404,403,410,401,500
+    # To stop treating 5xx (500-599) as failure URLs, remove 5xx
+    crawler.failure.url.status.codes=404,403,410,401
 
 System Monitoring Settings
 ===========================

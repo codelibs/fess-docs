@@ -262,6 +262,10 @@ robots.txt 설정
     # 콘텐츠 예외 무시
     crawler.ignore.content.exception=true
 
+.. note::
+   zip 폭탄이 의심되어 Tika 추출기가 거부한 문서는 이 키가 ``true`` 여도 장애 URL로 기록되며 색인되지 않습니다.
+   그 외의 추출 실패는 기본값에서 계속 무시됩니다.
+
 .. warning::
    ``crawler.ignore.robots.txt=true`` 로 설정하면 사이트의 이용 약관을
    위반할 수 있습니다. 외부 사이트를 크롤링할 때는 주의하십시오.
@@ -278,15 +282,17 @@ robots.txt 설정
      - 기본값
    * - ``crawler.failure.url.status.codes``
      - 실패로 간주할 HTTP 상태 코드(쉼표로 구분)
-     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+
+``5xx`` 와 같이 클래스로 지정하면 500~599의 모든 상태 코드를 의미합니다.
 
 설정 예
 ~~~~~~~
 
 ::
 
-    # 기본값(404,403,410,401)에 더해 500도 오류로 처리
-    crawler.failure.url.status.codes=404,403,410,401,500
+    # 5xx(500~599)를 장애 URL로 처리하지 않으려면 5xx를 제외
+    crawler.failure.url.status.codes=404,403,410,401
 
 시스템 모니터링 설정
 ====================

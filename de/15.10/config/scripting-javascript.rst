@@ -250,9 +250,10 @@ Datumsverarbeitung
    Der Feldname im Index lautet ``last_modified`` und nicht ``lastModified``. Mit ``lastModified=...`` wird das Datum der letzten Änderung nicht gesetzt.
 
 .. note::
-   Derzeit können mit dem in JavaScript integrierten ``new Date(...)`` erzeugte Werte nicht in Datumsfeldern wie ``last_modified`` registriert werden.
+   In 15.9 und früher können mit dem in JavaScript integrierten ``new Date(...)`` erzeugte Werte nicht in Datumsfeldern wie ``last_modified`` registriert werden.
    Die Registrierung, die dieses Dokument enthält, schlägt dann fehl, und das Dokument wird nicht in den Index aufgenommen.
-   Erzeugen Sie Datumswerte wie oben gezeigt mit dem vollqualifizierten ``new java.util.Date(...)``.
+   Ab 15.10 funktioniert ``new Date(...)`` unverändert.
+   Das vollqualifizierte ``new java.util.Date(...)`` funktioniert in allen Versionen.
 
 Verfügbare Objekte
 ===================

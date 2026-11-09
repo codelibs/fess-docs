@@ -262,6 +262,10 @@ Ejemplo de Configuración
     # Ignorar excepciones de contenido
     crawler.ignore.content.exception=true
 
+.. note::
+   Un documento que el extractor Tika rechaza por sospecha de zip bomb se registra como URL de fallo y no se indexa, incluso con este valor en ``true``.
+   Los demás fallos de extracción se siguen ignorando con el valor predeterminado.
+
 .. warning::
    Configurar ``crawler.ignore.robots.txt=true`` puede violar los términos de servicio del sitio.
    Tenga cuidado al rastrear sitios externos.
@@ -278,15 +282,17 @@ Configuración de Manejo de Errores
      - Valor Predeterminado
    * - ``crawler.failure.url.status.codes``
      - Códigos de estado HTTP considerados como fallo (separados por comas)
-     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+
+Una clase como ``5xx`` representa todos los códigos de estado de 500 a 599.
 
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # Además de los valores predeterminados (404,403,410,401), tratar también 500 como error
-    crawler.failure.url.status.codes=404,403,410,401,500
+    # Para no tratar 5xx (500–599) como URL de fallo, quite 5xx
+    crawler.failure.url.status.codes=404,403,410,401
 
 Configuración de Monitoreo del Sistema
 =======================================

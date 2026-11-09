@@ -250,9 +250,10 @@ Procesamiento de fechas
    El nombre del campo del índice es ``last_modified``, no ``lastModified``. Aunque escriba ``lastModified=...``, no se establecerá la fecha de última modificación.
 
 .. note::
-   Actualmente, un valor creado con el ``new Date(...)`` integrado de JavaScript no puede registrarse en campos de fecha como ``last_modified``;
+   En 15.9 y versiones anteriores, un valor creado con el ``new Date(...)`` integrado de JavaScript no puede registrarse en campos de fecha como ``last_modified``;
    el registro que contiene ese documento falla y el documento no se añade al índice.
-   Cree las fechas con el nombre completamente calificado ``new java.util.Date(...)``, como se muestra arriba.
+   En 15.10 y posteriores, ``new Date(...)`` funciona tal cual.
+   El nombre completamente calificado ``new java.util.Date(...)`` funciona en todas las versiones.
 
 Objetos disponibles
 ===================

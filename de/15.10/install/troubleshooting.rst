@@ -184,7 +184,10 @@ Index kann nicht erstellt werden (Pfad der Wörterbuchdateien)
 
 **Symptom:**
 
-Beim Zugriff auf |Fess| wird HTTP 404 zurückgegeben, und in ``fess.log`` wird folgender Fehler ausgegeben::
+- |Fess| 15.10 oder neuer: Die Webanwendung konnte nicht starten, daher wird der Prozess mit Exit-Code 1 beendet (die Konsole zeigt ``Fess aborted the startup because the web application ... failed to initialize.`` an, und der Port wird geschlossen).
+- |Fess| 15.9 oder älter: Der Prozess läuft weiter, und jede Anfrage liefert HTTP 404.
+
+In beiden Fällen wird in ``fess.log`` folgender Fehler ausgegeben::
 
     Failed to create index: index=fess, path=fess_indices/fess.json
     ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt

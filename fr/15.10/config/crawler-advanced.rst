@@ -262,6 +262,10 @@ Exemple de configuration
     # Ignorer les exceptions de contenu
     crawler.ignore.content.exception=true
 
+.. note::
+   Un document que l'extracteur Tika rejette comme une bombe zip suspectée est enregistré comme URL en échec et n'est pas indexé, même lorsque cette clé vaut ``true``.
+   Les autres échecs d'extraction restent ignorés avec la valeur par défaut.
+
 .. warning::
    Définir ``crawler.ignore.robots.txt=true`` peut violer
    les conditions d'utilisation du site. Soyez prudent lors de l'indexation de sites externes.
@@ -278,15 +282,17 @@ Configuration de la gestion des erreurs
      - Par défaut
    * - ``crawler.failure.url.status.codes``
      - Codes d'état HTTP considérés comme des échecs (séparés par des virgules)
-     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+
+Une classe telle que ``5xx`` représente tous les codes d'état de 500 à 599.
 
 Exemple de configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 
-    # En plus des valeurs par défaut (404,403,410,401), traiter également 500 comme une erreur
-    crawler.failure.url.status.codes=404,403,410,401,500
+    # Pour ne plus traiter 5xx (500 à 599) comme des URL en échec, retirez 5xx
+    crawler.failure.url.status.codes=404,403,410,401
 
 Configuration de la surveillance système
 ========================================

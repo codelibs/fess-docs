@@ -181,7 +181,10 @@ OpenSearch 无法启动
 
 **症状:**
 
-访问 |Fess| 时返回 HTTP 404，并且 ``fess.log`` 中输出以下错误::
+- |Fess| 15.10 及更高版本：由于 Web 应用程序启动失败，进程会以退出码 1 退出（控制台显示 ``Fess aborted the startup because the web application ... failed to initialize.``，端口也会关闭）。
+- |Fess| 15.9 及更早版本：进程继续运行，所有请求都返回 HTTP 404。
+
+无论哪种情况，``fess.log`` 中都会输出以下错误::
 
     Failed to create index: index=fess, path=fess_indices/fess.json
     ... reason=Resource path must be inside config directory: /var/lib/opensearch/data/config/ja/mapping.txt

@@ -260,7 +260,7 @@ Types d'erreurs
    * - ``java.io.IOException``
      - Erreur d'entrée/sortie
    * - ``org.codelibs.fess.exception.ContentNotFoundException``
-     - URL ayant retourné un code de statut HTTP configuré dans ``crawler.failure.url.status.codes`` (défaut : 401, 403, 404, 410)
+     - URL ayant retourné un code de statut HTTP configuré dans ``crawler.failure.url.status.codes`` (défaut : 404, 403, 410, 401, 5xx ; ``5xx`` représente 500 à 599)
    * - ``org.codelibs.fess.crawler.exception.MaxLengthExceededException``
      - Le contenu a dépassé la longueur maximale autorisée
 
