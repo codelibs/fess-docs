@@ -48,7 +48,7 @@ Das Standard-Administratorpasswort (``admin`` / ``admin``) muss unbedingt geänd
 
 **Sitzungen nach einer Passwortänderung:**
 
-Wird das Passwort eines lokalen Benutzers geändert, sei es durch den Benutzer selbst oder durch einen Administrator auf der Benutzerverwaltungsseite oder über die Admin-REST-API, enden die übrigen Anmeldesitzungen dieses Benutzers mit der nächsten Anfrage. Die Änderung wird über einen Cache pro Knoten nachgeschlagen, dessen Gültigkeitsdauer ``password.changed.cache.expire`` in ``fess_config.properties`` festlegt (Standard: ``10`` Sekunden; bei ``0`` oder weniger wird bei jeder Anfrage geprüft). Der Knoten, auf dem die Änderung erfolgte, wendet sie sofort an; andere Knoten übernehmen sie innerhalb dieser Anzahl von Sekunden. Über LDAP oder SSO authentifizierte Benutzer sind nicht betroffen, da ihre Passwörter außerhalb von |Fess| verwaltet werden.
+Wird das Passwort eines lokalen Benutzers geändert, sei es durch den Benutzer selbst oder durch einen Administrator auf der Benutzerverwaltungsseite oder über die Admin-REST-API, enden die übrigen Anmeldesitzungen dieses Benutzers mit der nächsten Anfrage. Jede Anmeldesitzung liest den Zeitpunkt der letzten Passwortänderung höchstens einmal je ``password.changed.check.interval`` aus ``fess_config.properties`` aus dem Benutzerindex (Standard: ``10`` Sekunden; bei ``0`` oder weniger wird bei jeder Anfrage geprüft), sodass die übrigen Sitzungen auf jedem Knoten innerhalb dieser Anzahl von Sekunden enden. Über LDAP oder SSO authentifizierte Benutzer sind nicht betroffen, da ihre Passwörter außerhalb von |Fess| verwaltet werden.
 
 Chiffrierschlüssel ändern
 -------------------------

@@ -2356,8 +2356,8 @@ Web
   * - password.require.special.char
     - Exiger des caractères spéciaux dans le mot de passe.
     - ``false``
-  * - password.changed.cache.expire
-    - Nombre de secondes pendant lesquelles un nœud met en cache l'heure du dernier changement de mot de passe d'un utilisateur local, lue dans l'index des utilisateurs. Les autres sessions de l'utilisateur se terminent à la requête suivante sur le nœud qui a fait le changement, et dans ce délai sur les autres nœuds. 0 ou moins lit l'index des utilisateurs à chaque requête.
+  * - password.changed.check.interval
+    - Nombre de secondes entre deux consultations, par une session de connexion d'un utilisateur local, de l'heure du dernier changement de mot de passe stockée dans l'index des utilisateurs. Les autres sessions de l'utilisateur prennent fin dans ce délai après le changement, sur n'importe quel nœud ; la session qui a fait le changement reste ouverte. 0 ou moins lit l'index des utilisateurs à chaque requête.
     - ``10``
   * - rag.chat.enabled
     - Indique si la fonctionnalité de chat RAG est activée.

@@ -2001,8 +2001,8 @@ msgstr "Exigir dígitos en la contraseña."
 msgid "Require special characters in password."
 msgstr "Exigir caracteres especiales en la contraseña."
 
-msgid "Seconds a node caches the time a local user last changed the password, as read from the user index. The other login sessions of the user end on the next request on the node that made the change, and within this time on the other nodes. 0 or less reads the user index on every request."
-msgstr "Segundos que un nodo guarda en caché la hora del último cambio de contraseña de un usuario local, leída del índice de usuarios. Las demás sesiones del usuario terminan en la siguiente petición en el nodo que hizo el cambio, y dentro de este tiempo en los demás nodos. 0 o menos lee el índice de usuarios en cada petición."
+msgid "Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request."
+msgstr "Segundos entre dos consultas de una sesión de inicio de sesión de un usuario local a la hora del último cambio de contraseña, tal como está almacenada en el índice de usuarios. Las demás sesiones del usuario terminan dentro de este tiempo tras el cambio, en cualquier nodo; la sesión que hizo el cambio permanece. 0 o menos lee el índice de usuarios en cada solicitud."
 
 msgid "Whether RAG chat feature is enabled."
 msgstr "Indica si la funcionalidad de chat RAG está habilitada."

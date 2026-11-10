@@ -2001,8 +2001,8 @@ msgstr "パスワードに数字を必須にします。"
 msgid "Require special characters in password."
 msgstr "パスワードに特殊文字を必須にします。"
 
-msgid "Seconds a node caches the time a local user last changed the password, as read from the user index. The other login sessions of the user end on the next request on the node that made the change, and within this time on the other nodes. 0 or less reads the user index on every request."
-msgstr "ローカルユーザーが最後にパスワードを変更した時刻をユーザーインデックスから読み、ノードがキャッシュする秒数。そのユーザーの他のログインセッションは、変更を行ったノードでは次のリクエストで、他のノードではこの時間内に終了します。0以下の場合はリクエストごとにユーザーインデックスを読みます。"
+msgid "Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request."
+msgstr "ローカルユーザーのログインセッションが、最後にパスワードを変更した時刻をユーザーインデックスから確認する間隔（秒）。そのユーザーの他のログインセッションは、変更からこの時間内に、どのノードでも終了します。変更を行ったセッションは残ります。0以下の場合はリクエストごとにユーザーインデックスを読みます。"
 
 msgid "Whether RAG chat feature is enabled."
 msgstr "RAGチャット機能が有効かどうか。"

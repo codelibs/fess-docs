@@ -2001,8 +2001,8 @@ msgstr "密码中要求包含数字。"
 msgid "Require special characters in password."
 msgstr "密码中要求包含特殊字符。"
 
-msgid "Seconds a node caches the time a local user last changed the password, as read from the user index. The other login sessions of the user end on the next request on the node that made the change, and within this time on the other nodes. 0 or less reads the user index on every request."
-msgstr "节点缓存本地用户最近一次修改密码的时间（从用户索引读取）的秒数。该用户的其他登录会话在执行修改的节点上于下一次请求时结束，在其他节点上于此时间内结束。0 或更小的值表示每次请求都读取用户索引。"
+msgid "Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request."
+msgstr "本地用户的登录会话查询用户索引中最近一次密码更改时间的间隔（秒）。该用户的其他登录会话会在更改后的该时间内于任何节点结束；执行更改的会话保持有效。0 或更小的值表示每次请求都读取用户索引。"
 
 msgid "Whether RAG chat feature is enabled."
 msgstr "是否启用 RAG 聊天功能。"

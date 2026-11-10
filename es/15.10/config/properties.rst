@@ -2356,8 +2356,8 @@ Web
   * - password.require.special.char
     - Exigir caracteres especiales en la contraseña.
     - ``false``
-  * - password.changed.cache.expire
-    - Segundos que un nodo guarda en caché la hora del último cambio de contraseña de un usuario local, leída del índice de usuarios. Las demás sesiones del usuario terminan en la siguiente petición en el nodo que hizo el cambio, y dentro de este tiempo en los demás nodos. 0 o menos lee el índice de usuarios en cada petición.
+  * - password.changed.check.interval
+    - Segundos entre dos consultas de una sesión de inicio de sesión de un usuario local a la hora del último cambio de contraseña, tal como está almacenada en el índice de usuarios. Las demás sesiones del usuario terminan dentro de este tiempo tras el cambio, en cualquier nodo; la sesión que hizo el cambio permanece. 0 o menos lee el índice de usuarios en cada solicitud.
     - ``10``
   * - rag.chat.enabled
     - Indica si la funcionalidad de chat RAG está habilitada.
