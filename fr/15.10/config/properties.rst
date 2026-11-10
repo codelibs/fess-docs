@@ -485,7 +485,7 @@ Index
     - Indique s'il faut ignorer les exceptions de contenu pendant le crawl.
     - ``true``
   * - crawler.failure.url.status.codes
-    - Codes d'état HTTP considérés comme des URL en échec.
+    - Codes d'état HTTP considérés comme des URL en échec. 5xx désigne les codes de 500 à 599.
     - ``404,403,410,401,5xx``
   * - crawler.system.monitor.interval
     - Intervalle (secondes) du moniteur système pendant le crawl.
@@ -2192,7 +2192,7 @@ Web
     - Limite de temps côté serveur (millisecondes) pour une recherche LDAP. 0 ou moins signifie aucune limite.
     - ``60000``
   * - ldap.max.username.length
-    - Longueur maximale du nom d'utilisateur pour LDAP.
+    - Longueur maximale du nom de connexion pour LDAP, pour un annuaire dont les noms de connexion sont plus courts (20 caractères dans un ancien Active Directory). Un nom plus long est tronqué à cette longueur une seule fois lors de la connexion, puis le nom tronqué est utilisé partout : le bind, la recherche de rôles, le nom d'utilisateur de la session et le décompte des tentatives de connexion. La connexion n'est pas refusée à cause de la longueur. Une valeur négative (-1 par défaut) désactive la troncature.
     - ``-1``
   * - ldap.ignore.netbios.name
     - Indique s'il faut ignorer le nom NetBIOS dans LDAP.
@@ -2342,7 +2342,7 @@ Web
     - Longueur minimale du mot de passe (0 pour désactiver).
     - ``8``
   * - password.max.length
-    - Longueur maximale d'un champ de mot de passe.
+    - Longueur maximale d'un champ de mot de passe. Quelle que soit cette valeur, un mot de passe est aussi limité à 72 octets en UTF-8, car BCrypt ignore le reste.
     - ``100``
   * - password.require.uppercase
     - Exiger des lettres majuscules dans le mot de passe.
@@ -2356,6 +2356,9 @@ Web
   * - password.require.special.char
     - Exiger des caractères spéciaux dans le mot de passe.
     - ``false``
+  * - password.changed.cache.expire
+    - Nombre de secondes pendant lesquelles un nœud met en cache l'heure du dernier changement de mot de passe d'un utilisateur local, lue dans l'index des utilisateurs. Les autres sessions de l'utilisateur se terminent à la requête suivante sur le nœud qui a fait le changement, et dans ce délai sur les autres nœuds. 0 ou moins lit l'index des utilisateurs à chaque requête.
+    - ``10``
   * - rag.chat.enabled
     - Indique si la fonctionnalité de chat RAG est activée.
     - ``false``

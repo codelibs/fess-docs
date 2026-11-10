@@ -330,8 +330,8 @@ msgstr "クロール時にrobotsメタタグを無視するかどうか。"
 msgid "Whether to ignore content exceptions during crawling."
 msgstr "クロール時にコンテンツ例外を無視するかどうか。"
 
-msgid "HTTP status codes considered as failure URLs."
-msgstr "障害URLとみなすHTTPステータスコード。"
+msgid "HTTP status codes considered as failure URLs. 5xx stands for 500 to 599."
+msgstr "障害URLとみなすHTTPステータスコード。5xxは500から599を表します。"
 
 msgid "Interval (seconds) for system monitor during crawling."
 msgstr "クロール中のシステム監視の間隔（秒）。"
@@ -1836,8 +1836,8 @@ msgstr "接続がバインドされた後にLDAPの応答を待つタイムア�
 msgid "Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit."
 msgstr "LDAP検索のサーバー側の時間制限（ミリ秒）。0以下の場合は無制限です。"
 
-msgid "Maximum username length for LDAP."
-msgstr "LDAPのユーザー名の最大長。"
+msgid "Maximum length of the login name for LDAP, for a directory whose logon names are shorter (20 characters in an old Active Directory). A longer name is cut to this length once at the login, and the cut name is then used everywhere: the bind, the role search, the user name of the session and the login attempt count. The login is not refused for the length. A negative value (-1 by default) disables the cut."
+msgstr "LDAPのログイン名の最大長。ログイン名が短いディレクトリ（古いActive Directoryでは20文字）向けです。これより長い名前はログイン時に一度だけこの長さに切り詰められ、以降は切り詰めた名前をバインド、ロール検索、セッションのユーザー名、ログイン試行回数の集計のすべてで使います。長さを理由にログインを拒否することはありません。負の値（既定は-1）で切り詰めを無効にします。"
 
 msgid "Whether to ignore NetBIOS name in LDAP."
 msgstr "LDAPでNetBIOS名を無視するかどうか。"
@@ -1986,8 +1986,8 @@ msgstr "無効な管理者パスワードのリスト。"
 msgid "Minimum password length (0 to disable)."
 msgstr "パスワードの最小長（0で無効）。"
 
-msgid "Maximum length of a password field."
-msgstr "パスワードフィールドの最大長。"
+msgid "Maximum length of a password field. A password is also limited to 72 bytes in UTF-8 whatever this value is, because BCrypt ignores the rest."
+msgstr "パスワードフィールドの最大長。この値にかかわらず、BCryptは残りを無視するため、パスワードはUTF-8で72バイトまでに制限されます。"
 
 msgid "Require uppercase letters in password."
 msgstr "パスワードに大文字を必須にします。"
@@ -2000,6 +2000,9 @@ msgstr "パスワードに数字を必須にします。"
 
 msgid "Require special characters in password."
 msgstr "パスワードに特殊文字を必須にします。"
+
+msgid "Seconds a node caches the time a local user last changed the password, as read from the user index. The other login sessions of the user end on the next request on the node that made the change, and within this time on the other nodes. 0 or less reads the user index on every request."
+msgstr "ローカルユーザーが最後にパスワードを変更した時刻をユーザーインデックスから読み、ノードがキャッシュする秒数。そのユーザーの他のログインセッションは、変更を行ったノードでは次のリクエストで、他のノードではこの時間内に終了します。0以下の場合はリクエストごとにユーザーインデックスを読みます。"
 
 msgid "Whether RAG chat feature is enabled."
 msgstr "RAGチャット機能が有効かどうか。"
