@@ -458,9 +458,17 @@ SP의 비밀 키와 X.509 인증서를 설정해야 합니다.
    * - ``saml.security.requested_authncontext``
      - 요구하는 인증 컨텍스트
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
+   * - ``saml.security.reject_missing_audience``
+     - Audience(``AudienceRestriction``)가 없는 어서션을 거부한다
+     - ``false``
    * - ``saml.sp.nameidformat``
      - NameID 형식
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
+
+.. note::
+   ``saml.security.reject_missing_audience`` 가 ``false`` 인 동안에는 Audience(``AudienceRestriction``)가 없는 어서션도 허용됩니다. Audience가 있지만 SP의 엔티티 ID가 포함되지 않은 어서션은 이 설정과 관계없이 거부됩니다.
+   ``true`` 로 설정하면 Audience가 없는 어서션도 Audience가 일치하지 않을 때와 같은 오류로 거부됩니다.
+   이 설정은 fess-sso-saml이 java-saml 3.1.3 이상을 사용할 때 사용할 수 있습니다.
 
 .. note::
    |Fess| 는 내부적으로 SAML 라이브러리（java-saml）를 사용하며, ``saml.`` 로 시작하는 프로퍼티는

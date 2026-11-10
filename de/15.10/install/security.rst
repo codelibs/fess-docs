@@ -46,6 +46,10 @@ Das Standard-Administratorpasswort (``admin`` / ``admin``) muss unbedingt geänd
 
    Standardmäßig beträgt die Mindestlänge ``8`` und alle Anforderungen an Zeichenarten sind deaktiviert. Um Passwörter zu stärken, setzen Sie die oben genannten Eigenschaften explizit. Beachten Sie, dass |Fess| keine Funktion zum Ablaufen von Passwörtern (erzwungene regelmäßige Änderung) besitzt. Wenn Sie regelmäßige Passwortänderungen als Betriebsregel durchsetzen möchten, führen Sie diese manuell durch.
 
+**Sitzungen nach einer Passwortänderung:**
+
+Wird das Passwort eines lokalen Benutzers geändert, sei es durch den Benutzer selbst oder durch einen Administrator auf der Benutzerverwaltungsseite oder über die Admin-REST-API, enden die übrigen Anmeldesitzungen dieses Benutzers bei ihrer nächsten Prüfung (siehe unten). Jede Anmeldesitzung liest den Zeitpunkt der letzten Passwortänderung höchstens einmal je ``password.changed.check.interval`` aus ``fess_config.properties`` aus dem Benutzerindex (Standard: ``60`` Sekunden; bei ``0`` oder weniger wird bei jeder Anfrage geprüft), sodass die übrigen Sitzungen auf jedem Knoten innerhalb dieser Anzahl von Sekunden enden. Über LDAP oder SSO authentifizierte Benutzer sind nicht betroffen, da ihre Passwörter außerhalb von |Fess| verwaltet werden.
+
 Chiffrierschlüssel ändern
 -------------------------
 

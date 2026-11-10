@@ -233,7 +233,10 @@ Controls the behavior of role and group resolution after login.
      - Uses the ``sAMAccountName`` attribute for group names (for Active Directory).
    * - ``ldap.max.username.length``
      - ``-1``
-     - Maximum length of usernames. ``-1`` means no limit.
+     - A typed username longer than this is cut to its first this-many characters (meant for the 20-character logon name of an old Active Directory). The cut name is used for the bind, the user name, the role search, the permission names and the session, and the login is never refused for its length. A negative value (the default ``-1``) does not cut.
+
+.. note::
+   For a login with an LDAP username and password, blanks around the typed username are removed (blanks inside the name are kept). The cut is made after that, and a blank left at the end of the cut name is removed as well.
 
 Reserved Admin User Names
 -------------------------

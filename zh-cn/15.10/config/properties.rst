@@ -485,7 +485,7 @@ one, fill in ``properties.po`` beside this file.
     - 爬取时是否忽略内容异常。
     - ``true``
   * - crawler.failure.url.status.codes
-    - 被视为失败 URL 的 HTTP 状态码。
+    - 被视为失败 URL 的 HTTP 状态码。5xx 表示 500 到 599。
     - ``404,403,410,401,5xx``
   * - crawler.system.monitor.interval
     - 爬取期间系统监控的间隔（秒）。
@@ -2192,7 +2192,7 @@ Web
     - LDAP 搜索的服务器端时间限制（毫秒）。0 或更小的值表示无限制。
     - ``60000``
   * - ldap.max.username.length
-    - LDAP 的最大用户名长度。
+    - LDAP 登录名的最大长度，适用于登录名较短的目录（旧版 Active Directory 为 20 个字符）。较长的名称在登录时只截断一次，之后在绑定、角色搜索、会话的用户名和登录尝试计数中都使用截断后的名称。不会因为长度而拒绝登录。负值（默认为 -1）表示不截断。
     - ``-1``
   * - ldap.ignore.netbios.name
     - LDAP 中是否忽略 NetBIOS 名称。
@@ -2342,7 +2342,7 @@ Web
     - 最小密码长度（0 表示禁用）。
     - ``8``
   * - password.max.length
-    - 密码字段的最大长度。
+    - 密码字段的最大长度。无论该值为多少，由于 BCrypt 会忽略其余部分，密码在 UTF-8 下还限制为 72 字节。
     - ``100``
   * - password.require.uppercase
     - 密码中要求包含大写字母。
@@ -2356,6 +2356,9 @@ Web
   * - password.require.special.char
     - 密码中要求包含特殊字符。
     - ``false``
+  * - password.changed.check.interval
+    - 本地用户的登录会话查询用户索引中最近一次密码更改时间的间隔（秒）。该用户的其他登录会话会在更改后的该时间内于任何节点结束；执行更改的会话保持有效。0 或更小的值表示每次请求都读取用户索引。
+    - ``60``
   * - rag.chat.enabled
     - 是否启用 RAG 聊天功能。
     - ``false``

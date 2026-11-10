@@ -485,7 +485,7 @@ Index
     - Gibt an, ob Inhaltsausnahmen beim Crawling ignoriert werden sollen.
     - ``true``
   * - crawler.failure.url.status.codes
-    - HTTP-Statuscodes, die als Fehler-URLs gelten.
+    - HTTP-Statuscodes, die als Fehler-URLs gelten. 5xx steht für 500 bis 599.
     - ``404,403,410,401,5xx``
   * - crawler.system.monitor.interval
     - Intervall (Sekunden) für die Systemüberwachung während des Crawlings.
@@ -2192,7 +2192,7 @@ Web
     - Serverseitiges Zeitlimit (Millisekunden) für eine LDAP-Suche. 0 oder weniger bedeutet kein Limit.
     - ``60000``
   * - ldap.max.username.length
-    - Maximale Benutzernamenlänge für LDAP.
+    - Maximale Länge des Anmeldenamens für LDAP, für ein Verzeichnis mit kürzeren Anmeldenamen (20 Zeichen in einem alten Active Directory). Ein längerer Name wird bei der Anmeldung einmal auf diese Länge gekürzt, und der gekürzte Name wird danach überall verwendet: beim Bind, bei der Rollensuche, als Benutzername der Sitzung und beim Zählen der Anmeldeversuche. Die Anmeldung wird wegen der Länge nicht abgelehnt. Ein negativer Wert (standardmäßig -1) deaktiviert das Kürzen.
     - ``-1``
   * - ldap.ignore.netbios.name
     - Gibt an, ob der NetBIOS-Name in LDAP ignoriert werden soll.
@@ -2342,7 +2342,7 @@ Web
     - Minimale Passwortlänge (0 zum Deaktivieren).
     - ``8``
   * - password.max.length
-    - Maximale Länge eines Passwortfelds.
+    - Maximale Länge eines Passwortfelds. Unabhängig von diesem Wert ist ein Passwort auf 72 Bytes in UTF-8 begrenzt, weil BCrypt den Rest ignoriert.
     - ``100``
   * - password.require.uppercase
     - Großbuchstaben im Passwort verlangen.
@@ -2356,6 +2356,9 @@ Web
   * - password.require.special.char
     - Sonderzeichen im Passwort verlangen.
     - ``false``
+  * - password.changed.check.interval
+    - Sekunden zwischen zwei Abfragen einer Anmeldesitzung eines lokalen Benutzers nach dem Zeitpunkt der letzten Passwortänderung, wie er im Benutzerindex gespeichert ist. Die übrigen Anmeldesitzungen des Benutzers enden innerhalb dieser Zeit nach der Änderung, auf jedem Knoten; die Sitzung, die die Änderung vorgenommen hat, bleibt bestehen. 0 oder weniger liest den Benutzerindex bei jeder Anfrage.
+    - ``60``
   * - rag.chat.enabled
     - Gibt an, ob die RAG-Chat-Funktion aktiviert ist.
     - ``false``

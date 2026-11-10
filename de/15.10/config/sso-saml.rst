@@ -462,9 +462,17 @@ Weitere Sicherheitseinstellungen
    * - ``saml.security.requested_authncontext``
      - Angeforderter Authentifizierungskontext
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
+   * - ``saml.security.reject_missing_audience``
+     - Assertion ohne Audience (``AudienceRestriction``) ablehnen
+     - ``false``
    * - ``saml.sp.nameidformat``
      - NameID-Format
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
+
+.. note::
+   Solange ``saml.security.reject_missing_audience`` auf ``false`` steht, wird eine Assertion ohne Audience (``AudienceRestriction``) akzeptiert. Eine Assertion, die Audiences nennt, aber nicht die SP-Entity-ID, wird unabhängig von dieser Einstellung abgelehnt.
+   Bei ``true`` wird auch eine Assertion ohne Audience abgelehnt, mit demselben Fehler wie bei einer nicht passenden Audience.
+   Diese Einstellung steht zur Verfügung, wenn fess-sso-saml java-saml 3.1.3 oder neuer verwendet.
 
 .. note::
    |Fess| verwendet intern eine SAML-Bibliothek (java-saml), und Eigenschaften mit dem Präfix ``saml.`` werden auf die entsprechenden Einstellungen der Bibliothek (Präfix ``onelogin.saml2.``) abgebildet.

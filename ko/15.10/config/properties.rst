@@ -485,7 +485,7 @@ one, fill in ``properties.po`` beside this file.
     - 크롤링 중 콘텐츠 예외 무시 여부.
     - ``true``
   * - crawler.failure.url.status.codes
-    - 장애 URL로 간주하는 HTTP 상태 코드.
+    - 장애 URL로 간주하는 HTTP 상태 코드. 5xx는 500부터 599까지를 뜻합니다.
     - ``404,403,410,401,5xx``
   * - crawler.system.monitor.interval
     - 크롤링 중 시스템 모니터링 간격(초).
@@ -2192,7 +2192,7 @@ one, fill in ``properties.po`` beside this file.
     - LDAP 검색의 서버 측 시간 제한(밀리초)입니다. 0 이하이면 제한이 없습니다.
     - ``60000``
   * - ldap.max.username.length
-    - LDAP의 최대 사용자 이름 길이.
+    - LDAP 로그인 이름의 최대 길이입니다. 로그인 이름이 더 짧은 디렉터리(오래된 Active Directory에서는 20자)를 위한 설정입니다. 더 긴 이름은 로그인할 때 한 번만 이 길이로 잘리고, 이후 잘린 이름을 바인드, 역할 검색, 세션의 사용자 이름, 로그인 시도 횟수 집계에 모두 사용합니다. 길이를 이유로 로그인을 거부하지는 않습니다. 음수 값(기본값 -1)이면 자르지 않습니다.
     - ``-1``
   * - ldap.ignore.netbios.name
     - LDAP에서 NetBIOS 이름 무시 여부.
@@ -2342,7 +2342,7 @@ one, fill in ``properties.po`` beside this file.
     - 비밀번호의 최소 길이(0이면 비활성화).
     - ``8``
   * - password.max.length
-    - 비밀번호 필드의 최대 길이.
+    - 비밀번호 필드의 최대 길이입니다. 이 값과 관계없이 BCrypt가 나머지를 무시하므로 비밀번호는 UTF-8로 72바이트까지로 제한됩니다.
     - ``100``
   * - password.require.uppercase
     - 비밀번호에 대문자를 요구합니다.
@@ -2356,6 +2356,9 @@ one, fill in ``properties.po`` beside this file.
   * - password.require.special.char
     - 비밀번호에 특수 문자를 요구합니다.
     - ``false``
+  * - password.changed.check.interval
+    - 로컬 사용자의 로그인 세션이 마지막 비밀번호 변경 시각을 사용자 인덱스에서 확인하는 간격(초)입니다. 해당 사용자의 다른 로그인 세션은 변경 후 이 시간 이내에 어느 노드에서든 종료되며, 변경을 수행한 세션은 유지됩니다. 0 이하이면 요청마다 사용자 인덱스를 읽습니다.
+    - ``60``
   * - rag.chat.enabled
     - RAG 채팅 기능 활성화 여부.
     - ``false``

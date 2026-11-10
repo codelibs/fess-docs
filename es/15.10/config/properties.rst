@@ -485,7 +485,7 @@ Límite de tasa
     - Indica si se ignoran las excepciones de contenido durante el rastreo.
     - ``true``
   * - crawler.failure.url.status.codes
-    - Códigos de estado HTTP considerados como URLs de fallo.
+    - Códigos de estado HTTP considerados como URLs de fallo. 5xx representa de 500 a 599.
     - ``404,403,410,401,5xx``
   * - crawler.system.monitor.interval
     - Intervalo (segundos) del monitor del sistema durante el rastreo.
@@ -2192,7 +2192,7 @@ Web
     - Límite de tiempo del lado del servidor (milisegundos) para una búsqueda LDAP. 0 o menos significa sin límite.
     - ``60000``
   * - ldap.max.username.length
-    - Longitud máxima del nombre de usuario para LDAP.
+    - Longitud máxima del nombre de inicio de sesión para LDAP, para un directorio cuyos nombres de inicio de sesión son más cortos (20 caracteres en un Active Directory antiguo). Un nombre más largo se recorta a esta longitud una sola vez al iniciar sesión, y el nombre recortado se usa después en todas partes: el bind, la búsqueda de roles, el nombre de usuario de la sesión y el recuento de intentos de inicio de sesión. El inicio de sesión no se rechaza por la longitud. Un valor negativo (-1 por defecto) desactiva el recorte.
     - ``-1``
   * - ldap.ignore.netbios.name
     - Indica si se ignora el nombre NetBIOS en LDAP.
@@ -2342,7 +2342,7 @@ Web
     - Longitud mínima de la contraseña (0 para deshabilitar).
     - ``8``
   * - password.max.length
-    - Longitud máxima de un campo de contraseña.
+    - Longitud máxima de un campo de contraseña. Con independencia de este valor, una contraseña también está limitada a 72 bytes en UTF-8, porque BCrypt ignora el resto.
     - ``100``
   * - password.require.uppercase
     - Exigir letras mayúsculas en la contraseña.
@@ -2356,6 +2356,9 @@ Web
   * - password.require.special.char
     - Exigir caracteres especiales en la contraseña.
     - ``false``
+  * - password.changed.check.interval
+    - Segundos entre dos consultas de una sesión de inicio de sesión de un usuario local a la hora del último cambio de contraseña, tal como está almacenada en el índice de usuarios. Las demás sesiones del usuario terminan dentro de este tiempo tras el cambio, en cualquier nodo; la sesión que hizo el cambio permanece. 0 o menos lee el índice de usuarios en cada solicitud.
+    - ``60``
   * - rag.chat.enabled
     - Indica si la funcionalidad de chat RAG está habilitada.
     - ``false``

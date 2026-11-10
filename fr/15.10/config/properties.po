@@ -330,8 +330,8 @@ msgstr "Indique s'il faut ignorer les balises meta robots pendant le crawl."
 msgid "Whether to ignore content exceptions during crawling."
 msgstr "Indique s'il faut ignorer les exceptions de contenu pendant le crawl."
 
-msgid "HTTP status codes considered as failure URLs."
-msgstr "Codes d'état HTTP considérés comme des URL en échec."
+msgid "HTTP status codes considered as failure URLs. 5xx stands for 500 to 599."
+msgstr "Codes d'état HTTP considérés comme des URL en échec. 5xx désigne les codes de 500 à 599."
 
 msgid "Interval (seconds) for system monitor during crawling."
 msgstr "Intervalle (secondes) du moniteur système pendant le crawl."
@@ -1836,8 +1836,8 @@ msgstr "Délai d'expiration (millisecondes) d'attente d'une réponse LDAP une fo
 msgid "Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit."
 msgstr "Limite de temps côté serveur (millisecondes) pour une recherche LDAP. 0 ou moins signifie aucune limite."
 
-msgid "Maximum username length for LDAP."
-msgstr "Longueur maximale du nom d'utilisateur pour LDAP."
+msgid "Maximum length of the login name for LDAP, for a directory whose logon names are shorter (20 characters in an old Active Directory). A longer name is cut to this length once at the login, and the cut name is then used everywhere: the bind, the role search, the user name of the session and the login attempt count. The login is not refused for the length. A negative value (-1 by default) disables the cut."
+msgstr "Longueur maximale du nom de connexion pour LDAP, pour un annuaire dont les noms de connexion sont plus courts (20 caractères dans un ancien Active Directory). Un nom plus long est tronqué à cette longueur une seule fois lors de la connexion, puis le nom tronqué est utilisé partout : le bind, la recherche de rôles, le nom d'utilisateur de la session et le décompte des tentatives de connexion. La connexion n'est pas refusée à cause de la longueur. Une valeur négative (-1 par défaut) désactive la troncature."
 
 msgid "Whether to ignore NetBIOS name in LDAP."
 msgstr "Indique s'il faut ignorer le nom NetBIOS dans LDAP."
@@ -1986,8 +1986,8 @@ msgstr "Liste des mots de passe administrateur invalides."
 msgid "Minimum password length (0 to disable)."
 msgstr "Longueur minimale du mot de passe (0 pour désactiver)."
 
-msgid "Maximum length of a password field."
-msgstr "Longueur maximale d'un champ de mot de passe."
+msgid "Maximum length of a password field. A password is also limited to 72 bytes in UTF-8 whatever this value is, because BCrypt ignores the rest."
+msgstr "Longueur maximale d'un champ de mot de passe. Quelle que soit cette valeur, un mot de passe est aussi limité à 72 octets en UTF-8, car BCrypt ignore le reste."
 
 msgid "Require uppercase letters in password."
 msgstr "Exiger des lettres majuscules dans le mot de passe."
@@ -2000,6 +2000,9 @@ msgstr "Exiger des chiffres dans le mot de passe."
 
 msgid "Require special characters in password."
 msgstr "Exiger des caractères spéciaux dans le mot de passe."
+
+msgid "Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request."
+msgstr "Nombre de secondes entre deux consultations, par une session de connexion d'un utilisateur local, de l'heure du dernier changement de mot de passe stockée dans l'index des utilisateurs. Les autres sessions de l'utilisateur prennent fin dans ce délai après le changement, sur n'importe quel nœud ; la session qui a fait le changement reste ouverte. 0 ou moins lit l'index des utilisateurs à chaque requête."
 
 msgid "Whether RAG chat feature is enabled."
 msgstr "Indique si la fonctionnalité de chat RAG est activée."

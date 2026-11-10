@@ -485,7 +485,7 @@ Index
     - Whether to ignore content exceptions during crawling.
     - ``true``
   * - crawler.failure.url.status.codes
-    - HTTP status codes considered as failure URLs.
+    - HTTP status codes considered as failure URLs. 5xx stands for 500 to 599.
     - ``404,403,410,401,5xx``
   * - crawler.system.monitor.interval
     - Interval (seconds) for system monitor during crawling.
@@ -2192,7 +2192,7 @@ Web
     - Server side time limit (milliseconds) for an LDAP search. 0 or less means no limit.
     - ``60000``
   * - ldap.max.username.length
-    - Maximum username length for LDAP.
+    - Maximum length of the login name for LDAP, for a directory whose logon names are shorter (20 characters in an old Active Directory). A longer name is cut to this length once at the login, and the cut name is then used everywhere: the bind, the role search, the user name of the session and the login attempt count. The login is not refused for the length. A negative value (-1 by default) disables the cut.
     - ``-1``
   * - ldap.ignore.netbios.name
     - Whether to ignore NetBIOS name in LDAP.
@@ -2342,7 +2342,7 @@ Web
     - Minimum password length (0 to disable).
     - ``8``
   * - password.max.length
-    - Maximum length of a password field.
+    - Maximum length of a password field. A password is also limited to 72 bytes in UTF-8 whatever this value is, because BCrypt ignores the rest.
     - ``100``
   * - password.require.uppercase
     - Require uppercase letters in password.
@@ -2356,6 +2356,9 @@ Web
   * - password.require.special.char
     - Require special characters in password.
     - ``false``
+  * - password.changed.check.interval
+    - Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request.
+    - ``60``
   * - rag.chat.enabled
     - Whether RAG chat feature is enabled.
     - ``false``

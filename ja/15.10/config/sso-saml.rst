@@ -458,9 +458,17 @@ SPの秘密鍵とX.509証明書を設定する必要があります。
    * - ``saml.security.requested_authncontext``
      - 要求する認証コンテキスト
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
+   * - ``saml.security.reject_missing_audience``
+     - Audience（``AudienceRestriction``）を持たないアサーションを拒否する
+     - ``false``
    * - ``saml.sp.nameidformat``
      - NameIDフォーマット
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
+
+.. note::
+   ``saml.security.reject_missing_audience`` が ``false`` の間は、Audience（``AudienceRestriction``）を持たないアサーションも受け入れられます。Audienceを持つアサーションでSPのエンティティIDが含まれないものは、この設定にかかわらず拒否されます。
+   ``true`` にすると、Audienceを持たないアサーションも、Audienceが一致しない場合と同じエラーで拒否されます。
+   この設定は、java-saml 3.1.3以降を使用するfess-sso-samlで利用できます。
 
 .. note::
    |Fess| は内部的にSAMLライブラリ（java-saml）を使用しており、``saml.`` で始まるプロパティは

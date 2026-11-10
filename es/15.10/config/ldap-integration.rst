@@ -230,7 +230,10 @@ Controla el comportamiento de la resolución de roles y grupos tras el inicio de
      - Utiliza el atributo ``sAMAccountName`` como nombre de grupo (para Active Directory).
    * - ``ldap.max.username.length``
      - ``-1``
-     - Longitud máxima del nombre de usuario. ``-1`` significa sin límite.
+     - Si el nombre de usuario introducido es más largo, se recorta a este número de caracteres, conservando los primeros (pensado para el nombre de inicio de sesión de 20 caracteres de un Active Directory antiguo). El nombre recortado se usa para el bind, el nombre de usuario, la búsqueda de roles, los nombres de permiso y la sesión, y el inicio de sesión nunca se rechaza por su longitud. Un valor negativo (el predeterminado ``-1``) no recorta.
+
+.. note::
+   En un inicio de sesión con nombre de usuario y contraseña de LDAP, se eliminan los espacios al principio y al final del nombre de usuario introducido (los espacios dentro del nombre se conservan). El recorte se hace después, y un espacio que quede al final del nombre recortado también se elimina.
 
 Nombres de usuario administrador reservados
 -------------------------------------------
