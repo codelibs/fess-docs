@@ -278,7 +278,7 @@ ZIP 버전
       ``fess_config.properties`` 와 ``fess.in.sh`` 를 그대로 복사하면 15.9 에서 기본값이 바뀐 값을
       포함해 이전 버전의 값이 그대로 이어집니다. 예를 들어 업그레이드 후에 만든 작업의 기본값이
       Groovy 가 됩니다. 마지막 두 명령을 실행하기 전에 각 파일을 ``fess-15.10.0`` 의 파일과 비교하고,
-      직접 변경한 값만 옮기십시오. 확인할 항목은 :ref:`upgrade-159-carried-over-config` 를
+      직접 변경한 값만 옮기십시오. 확인할 항목은 :ref:`upgrade-159-carried-over-config` (15.8부터) 및 :ref:`upgrade-1510-carried-over-config` (15.9부터) 를
       참조하십시오.
 
 3. 커스터마이징한 경우에는 다음도 복사합니다::
@@ -344,7 +344,7 @@ RPM/DEB 버전
    업그레이드 시에도 유지됩니다(새 기본 파일은 ``.rpmnew`` 로 함께 배치됩니다).
    새로운 설정 옵션이 추가된 경우에는 수동으로 조정이 필요합니다. 변경한
    ``/etc/fess/fess_config.properties`` 는 ZIP 버전 절차에서 복사한 파일과 마찬가지로 15.10 에서도
-   이전 값이 그대로 사용됩니다. :ref:`upgrade-159-carried-over-config` 를 참조하십시오.
+   이전 값이 그대로 사용됩니다. :ref:`upgrade-159-carried-over-config` 와 :ref:`upgrade-1510-carried-over-config` 를 참조하십시오.
 
 .. warning::
 
@@ -572,6 +572,55 @@ Docker 버전::
 ``app.cipher.key`` 가 비어 있거나 ``fess_config.properties`` 에 기본 제공되는 값(``___change__me___``) 그대로이면, 15.10은 시작할 때 ``fess.log`` 에 경고를 출력합니다. 크롤러 등 잡 프로세스는 출력하지 않습니다.
 이 키는 크롤링 설정과 데이터 스토어 설정에 저장되는 비밀번호 등을 암호화하는 데 사용되며, 기본 제공 값은 공개되어 있습니다. |Fess| 는 키를 자동으로 변경하지 않습니다. 변경하면 이전 키로 암호화된 값은 복호화할 수 없게 되므로, 운용을 시작하기 전에 설정하십시오.
 
+.. _upgrade-1510-carried-over-config:
+
+15.9에서 이어받은 설정 파일
+---------------------------
+
+단계 3의 ZIP 버전 절차에서는 이전 설치의 ``fess_config.properties`` 를 복사합니다. RPM/DEB 버전 업그레이드에서는 변경한 ``/etc/fess/fess_config.properties`` 가 그대로 남습니다. 어느 경우든 15.10은 15.9의 값으로 동작하며, 15.10에서 기본 제공 값이 바뀐 키도 예외가 아닙니다. 다음 ``fess_config.properties`` 키는 15.10의 값이 15.9.0과 다릅니다.
+
+.. list-table::
+   :header-rows: 1
+
+   * - 키
+     - 15.9.0
+     - 15.10
+     - 15.9의 값이 남은 경우의 영향
+   * - ``crawler.failure.url.status.codes``
+     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+     - HTTP 500 등 5xx 상태를 반환한 페이지가 장애 URL로 기록되지 않습니다(아래의 "장애 URL: HTTP 5xx와 zip 폭탄 의심" 참조). ``5xx`` 를 추가하십시오. 15.8.0의 파일에는 ``404,403,410`` 이 들어 있습니다.
+   * - ``crawler.metadata.content.excludes``
+     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
+     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
+     - 없음. 15.10은 목록에 있는지 여부와 관계없이 ``tk:`` , ``X-TIKA:`` , ``zip:`` 으로 시작하는 이름을 제거하고 ``Content-Length`` 를 콘텐츠에 추가하지 않습니다(아래의 "메타데이터 이름" 및 "``Content-Length`` 가 콘텐츠에 추가되지 않는다" 참조).
+   * - ``online.help.name.sereq``
+     - ``sereq``
+     - ``esreq``
+     - "OpenSearch에 요청" 화면(``/admin/sereq/``)의 도움말 아이콘이 존재하지 않는 ``sereq-guide.html`` 을 엽니다. 이 화면의 가이드 이름인 ``esreq`` 를 사용하십시오.
+
+15.10은 ``fess_config.properties`` 에 다음 키도 추가합니다: ``api.search.similar.rate.limit.per.minute`` , ``crawler.progress.interval`` , ``crawler.metadata.content.image.includes`` , ``query.boost.fuzzy.cjk.enabled`` , ``query.boost.fuzzy.digit.enabled`` . 15.9에서 이어받은 파일에는 이 키들이 없으므로 15.10은 각 키에 대해 기본 제공 값을 사용하고 키마다 한 번씩 ``fess.log`` 에 경고를 출력합니다. 동작에는 문제가 없습니다. 경고를 없애려면 15.10 파일의 키를 추가하십시오.
+
+.. _upgrade-1510-failure-url:
+
+장애 URL: HTTP 5xx와 zip 폭탄 의심
+----------------------------------
+
+15.9까지는 ``crawler.failure.url.status.codes`` 의 기본값이 ``404,403,410,401`` 이었으므로 HTTP 500을 반환한 페이지는 색인되지도, 장애 URL로 기록되지도 않았습니다. 15.10은 500부터 599까지의 모든 상태를 나타내는 ``5xx`` 를 추가했으므로 이러한 URL은 "시스템 정보" → "장애 URL" 에 표시됩니다(:doc:`../admin/failureurl-guide` 와 :doc:`../config/crawler-advanced` 참조). 503은 크롤러가 재시도를 포기한 후에 기록됩니다.
+
+15.9에서 이어받은 ``fess_config.properties`` 에는 이전 목록이 남아 있어, HTTP 500을 반환하는 페이지는 계속 기록되지 않습니다. 목록에 ``5xx`` 를 추가하거나 15.10의 파일과 비교한 다음 |Fess|\ 를 다시 시작하십시오. 직접 설정한 목록은 업그레이드로 바뀌지 않으므로, 이러한 페이지를 기록하려면 그 목록에도 ``5xx`` 를 추가하십시오. 15.9 이전 버전은 목록의 각 항목을 숫자로 읽기 때문에 ``5xx`` 를 읽지 못합니다. 롤백하기 전에 제거하십시오.
+
+Tika 추출기가 zip 폭탄으로 의심하여 거부한 문서는 ``crawler.ignore.content.exception`` 이 ``true`` (기본값)여도 이제 장애 URL로 기록되며 색인되지 않습니다. 15.9까지는 콘텐츠 없이 색인되었습니다. 이 설정이 무시하는 그 밖의 콘텐츠 오류는 바뀌지 않습니다.
+
+.. _upgrade-1510-user-agent:
+
+일반 화면이 저장한 사용자 에이전트
+----------------------------------
+
+크롤러의 기본 사용자 에이전트에는 |Fess|\ 의 버전이 포함됩니다(``Mozilla/5.0 (compatible; Fess/<version>; +http://fess.codelibs.org/bot.html)``). 15.8 또는 15.9에서 관리 화면의 "시스템" → "일반" 을 저장했다면, "사용자 에이전트" 필드에 표시된 문자열이 ``crawling.user.agent`` 로 ``system.properties`` 에 저장되어 있으며, 저장된 값이 기본값보다 우선합니다. 따라서 업그레이드 후에도 크롤러는 15.10이 아니라 저장될 때의 버전을 계속 알립니다.
+
+새 기본값을 사용하려면 ``system.properties`` (ZIP 패키지는 ``app/WEB-INF/conf/`` , RPM/DEB 패키지는 ``/etc/fess/`` )에서 ``crawling.user.agent`` 줄을 삭제하거나, 일반 화면의 "사용자 에이전트" 필드를 비우고 저장하십시오(빈 필드는 키를 삭제합니다). 필드를 비우지 않고 화면을 저장하면 이전 값이 다시 기록됩니다. 이는 ``system.properties`` 를 15.10으로 이어받는 모든 경우(파일을 유지하는 ZIP, RPM/DEB, Docker 절차)에 해당합니다.
+
 그 밖의 동작 변경
 -----------------
 
@@ -587,6 +636,8 @@ Docker 버전::
 - 플러그인 삭제는 플러그인 디렉터리 바로 아래의 파일만 대상으로 합니다. 이름이나 버전에 ``../`` 가 들어 있어도 디렉터리 밖의 파일은 삭제되지 않으며 ``fess.log`` 에 경고가 출력됩니다. 15.9까지는 이런 이름으로 디렉터리 밖의 파일을 삭제할 수 있었습니다. 삭제는 백그라운드에서 수행되므로 ``DELETE /api/admin/plugin`` 은 삭제 성공 여부와 관계없이 ``status`` 가 ``0`` 인 응답을 반환합니다. 결과는 ``fess.log`` 에서 확인하세요.
 - 로컬 사용자의 비밀번호가 변경되면 해당 사용자의 다른 로그인 세션은 다음 확인 시 종료됩니다(아래 참조). 15.9까지는 다른 세션이 열린 채로 남았고, 종료되는 것은 변경을 수행한 세션뿐이었습니다(``/api/v2`` 로 비밀번호를 변경한 경우에 한함). 사용자 본인이 변경한 경우와 관리자가 변경한 경우(사용자 관리 화면과 Admin API) 모두 대상입니다. 각 세션이 변경 여부를 ``password.changed.check.interval`` 초(기본값 ``60``, :doc:`security` 참조)에 한 번 이하로 사용자 인덱스에서 확인하므로, 다른 세션은 그 시간 이내에 종료됩니다. LDAP와 SSO 사용자는 대상이 아닙니다. 업그레이드 전에 시작된 세션(세션을 영속화하거나 복제하는 구성에서만 해당하며, 기본 구성에서는 재시작하면 세션이 남지 않습니다)은 해당 HTTP 세션이 만들어진 뒤에 비밀번호가 변경되면 종료됩니다. 업그레이드 전에 변경된 비밀번호에는 변경 시각이 기록되어 있지 않으므로 그 세션은 열린 채로 남습니다. 사용자 인덱스에는 시작 시 ``password_changed_at`` 필드가 추가되므로 재인덱싱은 필요하지 않습니다.
 - LDAP 로그인은 입력한 사용자 이름의 앞뒤 공백을 제거한 후에 처리합니다. 15.9까지는 입력한 그대로의 이름(예: 앞에 공백이 있는 이름)이 세션의 사용자 ID, 감사 로그, 로그인 횟수 제한에 사용되어 같은 계정의 다른 표기로 취급되었습니다. 또한 ``ldap.max.username.length`` 에 의한 잘라내기는 15.9까지 바인드에만 적용되었고, 사용자 이름, 역할 검색, 권한 이름, 세션에는 잘라내기 전의 이름이 사용되었습니다. 15.10은 이 모두에 잘라낸 이름을 사용합니다(:doc:`../config/ldap-integration` 참조).
+- UTF-8로 72바이트를 넘는 비밀번호는 설정하거나 변경할 때 거부됩니다(사용자 관리 화면, 로그인 폼의 강제 비밀번호 변경, ``/api/v2/auth/password`` , Admin API). ``password.max.length`` (기본값 ``100`` )가 허용하는 길이와 관계없이 적용됩니다. BCrypt는 앞의 72바이트만 읽으므로, 15.9까지는 그보다 긴 비밀번호도 받아들여진 뒤 앞의 72바이트만으로 검증되었습니다. 즉 뒷부분이 무엇이든 로그인할 수 있었습니다. ASCII가 아닌 문자는 한 글자가 여러 바이트를 차지합니다(일본어, 중국어, 한국어 문자 대부분은 3바이트). 거부 메시지는 최소 길이의 메시지와 같습니다(``password.min.length`` 가 기본값이면 "비밀번호는 최소 8자 이상이어야 합니다."). ``/api/v2/auth/password`` 는 ``reason`` 으로 ``errors.password_length`` 를 반환합니다. 기존 계정은 영향을 받지 않습니다. 로그인할 때는 길이를 확인하지 않으므로 업그레이드 전에 설정한 72바이트를 넘는 비밀번호도 계속 로그인할 수 있습니다. 다만 앞의 72바이트만으로 검증되므로 변경하십시오.
+- 15.10의 ``audit.log`` 레코드는 15.9와 세 가지가 다릅니다(:doc:`security` 참조). ``ACCESS`` 레코드에 ``method`` (HTTP 메서드)와 ``id`` (``id`` 요청 파라미터. 있는 경우만)가 추가되었습니다. 새 액션 ``UPDATE_PASSWORD`` 는 비밀번호 변경을 조작한 사용자(``user``)와 비밀번호가 변경된 사용자(``target``)와 함께 기록합니다. 액세스 토큰 확인에서 거부된 Admin REST API 요청은 이제 ``ACCESS_DENIED`` 로 기록됩니다. ``audit.log`` 를 분석하는 프로그램이 있다면 이 변경에 대응하는지 확인하십시오.
 
 .. _upgrade-1510-new-api:
 
@@ -628,10 +679,10 @@ Tika 4에는 XML 설정 파일이 없으므로 |Fess| 15.10은 Tika 파서를 �
 15.10의 ZIP 버전, RPM/DEB 버전, Docker 이미지에는 이 파일이 포함되어 있지 않습니다.
 
 ``tika.xml``\ 에 작성한 ``parser-exclude`` 등의 설정은 더 이상 적용되지 않으며, 그곳에서 제외했던 파서도 다시 동작합니다.
-이전 버전의 ``tika.xml``\ 이 설정 디렉터리에 남아 있으면 |Fess|\ 는 이 파일을 무시하고 시작할 때 ``fess.log``\ 에 경고를 출력합니다. 파일을 삭제하십시오.
+이전 버전의 ``tika.xml``\ 이 설정 디렉터리에 남아 있으면 |Fess|\ 는 이 파일을 무시하고 시작할 때 ``fess.log``\ 에 경고를 출력합니다. 업그레이드 후에도 파일이 남아 있으면 삭제하십시오.
 
-- ZIP 버전: 15.9 이전의 ZIP 버전에서는 ``app/WEB-INF/classes/tika.xml``\ 에 있습니다. 15.10의 시작 시 경고는 ``app/WEB-INF/classes``\ 와 ``app/WEB-INF/conf``\ 를 모두 확인합니다
-- RPM/DEB 버전: ``/etc/fess/tika.xml``
+- ZIP 버전: 15.9 이전의 ZIP 버전에서는 ``app/WEB-INF/classes/tika.xml``\ 에 있습니다. 15.10의 시작 시 경고는 ``app/WEB-INF/classes``\ 와 ``app/WEB-INF/conf``\ 를 모두 확인합니다. 파일은 직접 삭제하십시오
+- RPM/DEB 패키지: 파일은 ``/etc/fess/tika.xml`` 이며, 편집하지 않았다면 업그레이드가 삭제합니다. 편집했다면 업그레이드가 사용자의 사본을 ``/etc/fess/tika.xml.rpmsave`` (RPM) 또는 ``/etc/fess/tika.xml.dpkg-bak`` (DEB)으로 남깁니다. |Fess|\ 는 이 사본을 읽지 않으며 경고도 출력하지 않습니다. 더 이상 필요 없으면 삭제하십시오. 이전 패키지로 롤백하면 이전 ``tika.xml`` 이 다시 설치됩니다.
 
 .. _upgrade-1510-tika-metadata:
 
@@ -653,7 +704,7 @@ Tika 4에서 새로 추가된 메타데이터는 다른 메타데이터와 똑�
 15.10에서는 MIME 타입이 ``image/*``\ 인 문서의 콘텐츠에 이름이 ``crawler.metadata.content.image.includes``\ 와 일치하는 메타데이터만 추가합니다. 기본적으로는 EXIF, XMP, IPTC의 제목, 설명, 작성자, 키워드, 코멘트, 저작권, 지명과 Windows 탐색기 속성, PNG의 텍스트 청크가 대상입니다.
 나머지 메타데이터도 추출은 되므로 ``crawler.metadata.name.mapping``\ 이나 스크립트에서 사용할 수 있습니다. 이 목록과 일치하는 이름에도 ``crawler.metadata.content.excludes``\ 가 적용됩니다.
 
-업그레이드 전에 인덱싱한 이미지의 콘텐츠는 그 이미지를 다시 크롤링할 때까지 바뀌지 않습니다.
+업그레이드 전에 인덱싱한 이미지의 콘텐츠는 그 이미지를 다시 크롤링할 때까지 바뀌지 않습니다. "최종 갱신 일시 확인"(증분 크롤링, :doc:`../admin/general-guide` )이 활성화되어 있으면(기본값) 다시 크롤링해도 변경되지 않은 이미지는 건너뛰므로 콘텐츠는 그대로입니다. 갱신하려면 "최종 갱신 일시 확인"을 한 번만 비활성화하고 크롤링하거나, 해당 문서를 색인에서 삭제한 후 다시 크롤링하십시오.
 
 크롤링 설정의 Tesseract 및 PDF 프로퍼티 파일
 --------------------------------------------
@@ -675,7 +726,7 @@ Tika 4가 텍스트 파일에 대해 보고하는 문자 인코딩 이름은 15.
 
 15.8.0과 15.9.0은 문서의 콘텐츠에 ``Content-Length`` 메타데이터의 값을 추가했습니다. 일반 텍스트 파일에서는 그 값이 ``0`` 이었기 때문에 인덱스에 저장된 콘텐츠의 끝에 공백과 ``0`` 이 붙었습니다.
 15.10은 ``crawler.metadata.content.excludes`` 에 포함되어 있는지와 관계없이 ``Content-Length`` 를 콘텐츠에 추가하지 않습니다. 값 자체는 계속 추출되므로 ``crawler.metadata.name.mapping`` 과 스크립트에서 사용할 수 있습니다.
-업그레이드 전에 인덱싱한 문서의 콘텐츠는 그 문서를 다시 크롤링할 때까지 바뀌지 않습니다.
+업그레이드 전에 인덱싱한 문서의 콘텐츠는 그 문서를 다시 크롤링할 때까지 바뀌지 않습니다. 이미지의 경우와 마찬가지로(위의 "이미지의 메타데이터와 콘텐츠" 참조) 다시 크롤링해도 변경되지 않은 문서는 건너뛰므로, "최종 갱신 일시 확인"을 한 번만 비활성화하고 크롤링하거나 문서를 삭제한 후 다시 크롤링하십시오.
 
 로그인 폼의 횟수 제한
 ---------------------
@@ -714,7 +765,7 @@ ACL이 있는 파일 시스템(예: NTFS)의 로컬 파일(``file:`` URL)을 크
 
 POSIX 권한(소유자와 그룹)에서 읽는 롤은 달라지지 않습니다.
 
-문서는 다시 크롤링될 때까지 인덱싱될 때의 롤을 유지합니다. 이미 있는 문서에 새 규칙을 적용하려면 파일 크롤링을 다시 실행하십시오.
+문서는 다시 크롤링될 때까지 인덱싱될 때의 롤을 유지합니다. 이미 있는 문서에 새 규칙을 적용하려면 파일 크롤링을 다시 실행하십시오. "최종 갱신 일시 확인"이 활성화되어 있으면(기본값) 다시 크롤링해도 변경되지 않은 파일은 건너뛰므로, 이 설정을 한 번만 비활성화하고 크롤링하거나 문서를 삭제한 후 다시 크롤링하십시오.
 
 LDAP의 롤 OU와 중첩 그룹
 ------------------------
@@ -1695,6 +1746,10 @@ RPM/DEB 버전의 경우::
    ``/etc/fess/fess_config.properties`` 등을 사본을 남기지 않고 덮어씁니다. 단계 1 에서 취득한
    백업에서 복원하십시오.
 
+.. note::
+
+   이전 버전이 사용하는 ``fess_config.properties`` 의 ``crawler.failure.url.status.codes`` 에 ``5xx`` 가 있다면 제거하십시오. 15.9 이전 버전은 목록의 각 항목을 숫자로 읽기 때문에 ``5xx`` 를 읽지 못합니다("장애 URL: HTTP 5xx와 zip 폭탄 의심" 참조).
+
 단계 3: 데이터 복원
 ----------------------
 
@@ -1714,9 +1769,13 @@ RPM/DEB 버전의 경우::
 
    두 번째 명령은 첫 번째 명령이 표시한 인덱스마다 실행합니다.
 
-3. 스냅샷을 복원합니다::
+3. 복원할 인덱스를 지정하여 스냅샷을 복원합니다::
 
-       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" \
+           -H 'Content-Type: application/json' \
+           -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
+
+   단계 1의 방법으로 만든 스냅샷에는 OpenSearch ML 플러그인의 시스템 인덱스인 ``.plugins-ml-config`` 를 포함하여 클러스터의 모든 인덱스가 들어 있습니다. 이 인덱스는 실행 중인 클러스터에서 열려 있으므로, ``indices`` 설정 없이 복원하면 ``cannot restore index [.plugins-ml-config] because an open index with same name already exists`` 로 거부됩니다. ``indices`` 를 지정하면 Fess의 인덱스와 ``configsync`` 인덱스만 복원됩니다.
 
 .. note::
 
