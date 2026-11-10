@@ -716,9 +716,9 @@ Fügt ein Reverse-Proxy ``X-Forwarded-For`` als eigene Header-Zeile hinzu (zum B
 -----------------------------------------------------
 
 Wenn Sie im Berechtigungsfeld einer Crawl-Konfiguration oder einer ähnlichen Einstellung ``(deny)`` gefolgt von einem Leerzeichen schreiben, etwa ``(deny) {user}name``, hat 15.9 dies nicht als Verweigerung gespeichert, sondern den Text mit dem Leerzeichen unverändert. Wurde eine solche Konfiguration in der Verwaltungsoberfläche geöffnet und gespeichert, wurde daraus eine Erlaubnis (``{user}name``).
-15.10 entfernt das Leerzeichen nach ``(deny)`` und ``(allow)`` vor dem Speichern, und erneutes Speichern behält eine Verweigerung bei. Eine ``(deny)``-Zeile ohne ``{user}``, ``{group}`` oder ``{role}`` wird nicht gespeichert.
+15.10 wandelt einen solchen Eintrag nicht um. Die Verwaltungsoberfläche und die Verwaltungs-API lehnen einen Berechtigungseintrag mit einem Leerzeichen nach ``(deny)`` oder ``(allow)`` oder vor ``{user}``, ``{group}`` oder ``{role}`` ab und melden einen Fehler am Berechtigungsfeld. Schreiben Sie den Eintrag ohne Leerzeichen, als ``(deny){user}name`` oder ``(allow){user}name``. Eine ``(deny)``-Zeile ohne ``{user}``, ``{group}`` oder ``{role}`` wird nicht gespeichert.
 
-Eine in 15.9 oder früher gespeicherte Einstellung wird nicht automatisch repariert. Prüfen Sie das Berechtigungsfeld jeder Crawl-Konfiguration, die ``(deny)`` verwendet, schreiben Sie die Zeile in der Form ``(deny){user}name`` neu, speichern Sie sie und crawlen Sie erneut.
+Eine in 15.9 oder früher gespeicherte Einstellung wird nicht automatisch repariert, und die Verwaltungsoberfläche zeigt den Eintrag so an, wie er gespeichert wurde, mit einem führenden Leerzeichen. Unverändert gespeichert, wird er mit dem obigen Fehler abgelehnt. Prüfen Sie das Berechtigungsfeld jeder Crawl-Konfiguration, die ``(deny)`` verwendet, geben Sie jede solche Zeile in der Form ``(deny){user}name`` (oder ``(allow){user}name``) erneut ein, speichern Sie sie und crawlen Sie erneut.
 
 Steuerzeichen in audit.log
 --------------------------
