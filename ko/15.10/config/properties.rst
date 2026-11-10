@@ -2358,7 +2358,7 @@ one, fill in ``properties.po`` beside this file.
     - ``false``
   * - password.changed.check.interval
     - 로컬 사용자의 로그인 세션이 마지막 비밀번호 변경 시각을 사용자 인덱스에서 확인하는 간격(초)입니다. 해당 사용자의 다른 로그인 세션은 변경 후 이 시간 이내에 어느 노드에서든 종료되며, 변경을 수행한 세션은 유지됩니다. 0 이하이면 요청마다 사용자 인덱스를 읽습니다.
-    - ``10``
+    - ``60``
   * - rag.chat.enabled
     - RAG 채팅 기능 활성화 여부.
     - ``false``

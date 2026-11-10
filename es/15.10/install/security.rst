@@ -46,7 +46,7 @@ Asegúrese de cambiar la contraseña de administrador predeterminada (``admin`` 
 
 **Sesiones tras un cambio de contraseña:**
 
-Cuando se cambia la contraseña de un usuario local, ya sea por el propio usuario o por un administrador en la pantalla de administración de usuarios o mediante la API REST de administración, las demás sesiones de inicio de sesión de ese usuario terminan en su siguiente solicitud. Cada sesión de inicio de sesión consulta en el índice de usuarios la hora del último cambio de contraseña como máximo una vez por ``password.changed.check.interval`` de ``fess_config.properties`` (valor predeterminado: ``10`` segundos; con ``0`` o menos se comprueba en cada solicitud), de modo que las demás sesiones terminan dentro de ese número de segundos, en cualquier nodo. Los usuarios autenticados mediante LDAP o SSO no se ven afectados, porque sus contraseñas se gestionan fuera de |Fess|.
+Cuando se cambia la contraseña de un usuario local, ya sea por el propio usuario o por un administrador en la pantalla de administración de usuarios o mediante la API REST de administración, las demás sesiones de inicio de sesión de ese usuario terminan en su siguiente comprobación (véase más abajo). Cada sesión de inicio de sesión consulta en el índice de usuarios la hora del último cambio de contraseña como máximo una vez por ``password.changed.check.interval`` de ``fess_config.properties`` (valor predeterminado: ``60`` segundos; con ``0`` o menos se comprueba en cada solicitud), de modo que las demás sesiones terminan dentro de ese número de segundos, en cualquier nodo. Los usuarios autenticados mediante LDAP o SSO no se ven afectados, porque sus contraseñas se gestionan fuera de |Fess|.
 
 Cambiar la clave de cifrado
 ---------------------------

@@ -48,7 +48,7 @@ The default administrator password (``admin`` / ``admin``) must be changed.
 
 **Sessions after a password change:**
 
-When the password of a local user is changed, whether by the user or by an administrator on the user management screen or through the Admin API, the other login sessions of that user end on their next request. Each login session looks up the time of the last password change in the user index at most once per ``password.changed.check.interval`` in ``fess_config.properties`` (default: ``10`` seconds; ``0`` or less checks on every request), so the other sessions end within this many seconds, on any node. Users authenticated by LDAP or SSO are not affected, because their passwords are managed outside |Fess|.
+When the password of a local user is changed, whether by the user or by an administrator on the user management screen or through the Admin API, the other login sessions of that user end at their next check (see below). Each login session looks up the time of the last password change in the user index at most once per ``password.changed.check.interval`` in ``fess_config.properties`` (default: ``60`` seconds; ``0`` or less checks on every request), so the other sessions end within this many seconds, on any node. Users authenticated by LDAP or SSO are not affected, because their passwords are managed outside |Fess|.
 
 Change the Cipher Key
 ---------------------

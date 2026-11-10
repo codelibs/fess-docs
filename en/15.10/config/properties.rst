@@ -2358,7 +2358,7 @@ Web
     - ``false``
   * - password.changed.check.interval
     - Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request.
-    - ``10``
+    - ``60``
   * - rag.chat.enabled
     - Whether RAG chat feature is enabled.
     - ``false``

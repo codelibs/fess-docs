@@ -2358,7 +2358,7 @@ Web
     - ``false``
   * - password.changed.check.interval
     - Nombre de secondes entre deux consultations, par une session de connexion d'un utilisateur local, de l'heure du dernier changement de mot de passe stockée dans l'index des utilisateurs. Les autres sessions de l'utilisateur prennent fin dans ce délai après le changement, sur n'importe quel nœud ; la session qui a fait le changement reste ouverte. 0 ou moins lit l'index des utilisateurs à chaque requête.
-    - ``10``
+    - ``60``
   * - rag.chat.enabled
     - Indique si la fonctionnalité de chat RAG est activée.
     - ``false``
