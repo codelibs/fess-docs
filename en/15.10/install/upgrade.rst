@@ -753,9 +753,9 @@ When a reverse proxy adds ``X-Forwarded-For`` as a header line of its own (for e
 -------------------------------------------------------
 
 If you write ``(deny)`` followed by a space in the permission field of a crawl configuration or a similar setting, such as ``(deny) {user}name``, 15.9 did not store it as a deny: it stored the text with the space as it was. Opening such a configuration in the admin screen and saving it then turned it into an allow (``{user}name``).
-15.10 removes the space after ``(deny)`` and ``(allow)`` before storing, and saving the setting again keeps a deny as a deny. A ``(deny)`` line that has none of ``{user}``, ``{group}`` or ``{role}`` is not stored.
+15.10 does not convert such an entry. The admin screens and the admin API refuse a permission entry that has a space after ``(deny)`` or ``(allow)``, or a space before ``{user}``, ``{group}`` or ``{role}``, and report an error on the permission field. Write the entry without spaces, as ``(deny){user}name`` or ``(allow){user}name``. A ``(deny)`` line that has none of ``{user}``, ``{group}`` or ``{role}`` is not stored.
 
-A setting saved in 15.9 or earlier is not repaired automatically. Check the permission field of every crawl configuration that uses ``(deny)``, write the line again in the form ``(deny){user}name``, save it, and crawl again.
+A setting saved in 15.9 or earlier is not repaired automatically, and the admin screen shows the entry as it was stored, with a leading space. Saving it unchanged is refused with the error above. Check the permission field of every crawl configuration that uses ``(deny)``, enter each such line again in the form ``(deny){user}name`` (or ``(allow){user}name``), save it, and crawl again.
 
 Control Characters in audit.log
 -------------------------------

@@ -764,9 +764,9 @@ Si un proxy inverso añade ``X-Forwarded-For`` como una línea de encabezado pro
 --------------------------------------------------------------
 
 Si escribe ``(deny)`` seguido de un espacio en el campo de permisos de una configuración de rastreo o de un ajuste similar, por ejemplo ``(deny) {user}name``, la versión 15.9 no lo guardaba como una denegación: guardaba el texto con el espacio tal cual. Si luego se abría esa configuración en la pantalla de administración y se guardaba, se convertía en una autorización (``{user}name``).
-La versión 15.10 elimina el espacio después de ``(deny)`` y ``(allow)`` antes de guardar, y guardar de nuevo mantiene una denegación como denegación. Una línea ``(deny)`` que no tenga ``{user}``, ``{group}`` ni ``{role}`` no se guarda.
+La versión 15.10 no convierte una entrada así. La pantalla de administración y la API de administración rechazan una entrada de permiso con un espacio después de ``(deny)`` o ``(allow)``, o con un espacio antes de ``{user}``, ``{group}`` o ``{role}``, e indican un error en el campo de permisos. Escriba la entrada sin espacios, como ``(deny){user}name`` o ``(allow){user}name``. Una línea ``(deny)`` que no tenga ``{user}``, ``{group}`` ni ``{role}`` no se guarda.
 
-Un ajuste guardado en la versión 15.9 o anterior no se repara automáticamente. Revise el campo de permisos de cada configuración de rastreo que use ``(deny)``, escriba de nuevo la línea con el formato ``(deny){user}name``, guárdela y vuelva a rastrear.
+Un ajuste guardado en la versión 15.9 o anterior no se repara automáticamente, y la pantalla de administración muestra la entrada tal como se guardó, con un espacio al principio. Si se guarda sin cambios, se rechaza con el error anterior. Revise el campo de permisos de cada configuración de rastreo que use ``(deny)``, introduzca de nuevo cada una de esas líneas con el formato ``(deny){user}name`` (o ``(allow){user}name``), guárdela y vuelva a rastrear.
 
 Caracteres de control en audit.log
 ----------------------------------

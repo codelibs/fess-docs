@@ -770,9 +770,9 @@ Lorsqu'un reverse proxy ajoute ``X-Forwarded-For`` comme ligne d'en-tête distin
 ----------------------------------------------------------------------
 
 Si vous écrivez ``(deny)`` suivi d'une espace dans le champ des permissions d'une configuration d'exploration ou d'un paramètre similaire, par exemple ``(deny) {user}name``, la version 15.9 ne l'enregistrait pas comme un refus : elle enregistrait le texte avec l'espace tel quel. Ouvrir cette configuration dans l'écran d'administration puis l'enregistrer la transformait en autorisation (``{user}name``).
-La version 15.10 supprime l'espace après ``(deny)`` et ``(allow)`` avant l'enregistrement, et un nouvel enregistrement conserve un refus comme refus. Une ligne ``(deny)`` qui ne contient ni ``{user}``, ni ``{group}``, ni ``{role}`` n'est pas enregistrée.
+La version 15.10 ne convertit pas une telle entrée. L'écran d'administration et l'API d'administration refusent une entrée de permission comportant une espace après ``(deny)`` ou ``(allow)``, ou une espace avant ``{user}``, ``{group}`` ou ``{role}``, et signalent une erreur sur le champ des permissions. Écrivez l'entrée sans espace, sous la forme ``(deny){user}name`` ou ``(allow){user}name``. Une ligne ``(deny)`` qui ne contient ni ``{user}``, ni ``{group}``, ni ``{role}`` n'est pas enregistrée.
 
-Un paramètre enregistré dans la version 15.9 ou une version antérieure n'est pas réparé automatiquement. Vérifiez le champ des permissions de chaque configuration d'exploration qui utilise ``(deny)``, réécrivez la ligne sous la forme ``(deny){user}name``, enregistrez-la, puis relancez l'exploration.
+Un paramètre enregistré dans la version 15.9 ou une version antérieure n'est pas réparé automatiquement, et l'écran d'administration affiche l'entrée telle qu'elle a été enregistrée, avec une espace au début. Enregistrée sans modification, elle est refusée avec l'erreur ci-dessus. Vérifiez le champ des permissions de chaque configuration d'exploration qui utilise ``(deny)``, saisissez de nouveau chacune de ces lignes sous la forme ``(deny){user}name`` (ou ``(allow){user}name``), enregistrez-la, puis relancez l'exploration.
 
 Caractères de contrôle dans audit.log
 -------------------------------------
