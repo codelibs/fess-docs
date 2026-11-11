@@ -277,7 +277,7 @@ ZIP 版
       如果原样复制 ``fess_config.properties`` 与 ``fess.in.sh`` ，旧版本的值会被沿用，其中也包括
       15.9 中默认值已变更的项。例如，升级后新建的作业默认将使用 Groovy。执行最后两条命令之前，
       请将各文件与 ``fess-15.10.0`` 中的文件进行比较，只迁移自己修改过的值。需要确认的项目请参阅
-      :ref:`upgrade-159-carried-over-config` 。
+      :ref:`upgrade-159-carried-over-config` （从 15.8 升级）和 :ref:`upgrade-1510-carried-over-config` （从 15.9 升级） 。
 
 3. 如有定制内容，请同时复制以下文件::
 
@@ -338,7 +338,7 @@ RPM/DEB 版
    RPM 版中，``/etc/fess/*`` 的配置文件被注册为 ``%config(noreplace)``，
    因此在升级时会被保留（新的默认文件会以 ``.rpmnew`` 的形式并存）。
    如果添加了新的配置选项，需要手动调整。修改过的 ``/etc/fess/fess_config.properties`` 与 ZIP 版
-   步骤中复制的文件一样，在 15.10 中仍使用旧值。请参阅 :ref:`upgrade-159-carried-over-config` 。
+   步骤中复制的文件一样，在 15.10 中仍使用旧值。请参阅 :ref:`upgrade-159-carried-over-config` 和 :ref:`upgrade-1510-carried-over-config` 。
 
 .. warning::
 
@@ -562,6 +562,55 @@ Docker 版::
 如果 ``app.cipher.key`` 为空，或仍是 ``fess_config.properties`` 中随附的值（``___change__me___``），15.10 会在启动时向 ``fess.log`` 输出警告。爬虫等作业进程不会输出。
 该密钥用于加密爬取设置和数据存储设置中保存的密码等，而随附的值是公开的。|Fess| 不会自动更改密钥。更改后，用旧密钥加密的值将无法解密，因此请在开始运维之前设置。
 
+.. _upgrade-1510-carried-over-config:
+
+从 15.9 沿用的配置文件
+----------------------
+
+步骤 3 的 ZIP 版步骤会从旧安装中复制 ``fess_config.properties`` ，RPM/DEB 版升级则会保留您修改过的 ``/etc/fess/fess_config.properties`` 。无论哪种方式，15.10 都会沿用 15.9 的值运行，15.10 中内置值已变更的键也不例外。下列 ``fess_config.properties`` 的键在 15.10 中的值与 15.9.0 不同。
+
+.. list-table::
+   :header-rows: 1
+
+   * - 键
+     - 15.9.0
+     - 15.10
+     - 保留 15.9 的值时的影响
+   * - ``crawler.failure.url.status.codes``
+     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+     - 返回 HTTP 5xx 状态（如 500）的页面不会被记录为失败 URL（请参阅下文的“失败 URL: HTTP 5xx 与疑似 zip 炸弹”）。请添加 ``5xx`` 。15.8.0 的文件中为 ``404,403,410`` 。
+   * - ``crawler.metadata.content.excludes``
+     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
+     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
+     - 无。无论列表中是否包含，15.10 都会删除以 ``tk:`` 、 ``X-TIKA:`` 或 ``zip:`` 开头的名称，并且不会把 ``Content-Length`` 添加到内容中（请参阅下文的“元数据名称”和“``Content-Length`` 不再被添加到内容中”）。
+   * - ``online.help.name.sereq``
+     - ``sereq``
+     - ``esreq``
+     - “对OpenSearch的请求”页面（ ``/admin/sereq/`` ）的帮助图标会打开不存在的 ``sereq-guide.html`` 。请使用该页面指南的名称 ``esreq`` 。
+
+15.10 还会向 ``fess_config.properties`` 添加下列键： ``api.search.similar.rate.limit.per.minute`` 、 ``crawler.progress.interval`` 、 ``crawler.metadata.content.image.includes`` 、 ``query.boost.fuzzy.cjk.enabled`` 和 ``query.boost.fuzzy.digit.enabled`` 。沿用自 15.9 的文件中没有这些键，因此 15.10 对每个键使用其内置值，并为每个键向 ``fess.log`` 输出一次警告。不会出现故障；如需消除警告，请从 15.10 的文件中添加这些键。
+
+.. _upgrade-1510-failure-url:
+
+失败 URL: HTTP 5xx 与疑似 zip 炸弹
+----------------------------------
+
+直到 15.9，返回 HTTP 500 的页面既不会被索引，也不会被记录为失败 URL，因为 ``crawler.failure.url.status.codes`` 的默认值是 ``404,403,410,401`` 。15.10 添加了代表 500 到 599 所有状态的 ``5xx`` ，因此这类 URL 会显示在“系统信息”→“失败URL”中（请参阅 :doc:`../admin/failureurl-guide` 和 :doc:`../config/crawler-advanced` ）。503 会在爬虫放弃重试之后被记录。
+
+沿用自 15.9 的 ``fess_config.properties`` 仍保留旧列表，此时返回 HTTP 500 的页面仍不会被记录。请在列表中添加 ``5xx`` ，或与 15.10 的文件对比，然后重启 |Fess| 。您自行设置的列表不会因升级而改变，如果希望记录这些页面，也请在其中添加 ``5xx`` 。15.9 及更早版本会把列表的每一项都当作数字读取，无法读取 ``5xx`` ，因此回滚之前请将其删除。
+
+被 Tika 提取器判定为疑似 zip 炸弹而拒绝的文档，即使 ``crawler.ignore.content.exception`` 为 ``true`` （默认），现在也会被记录为失败 URL，并且不会被索引。直到 15.9，这类文档会以没有内容的状态被索引。该设置所忽略的其他内容错误保持不变。
+
+.. _upgrade-1510-user-agent:
+
+常规页面保存的用户代理
+----------------------
+
+爬虫的默认用户代理包含 |Fess| 的版本（ ``Mozilla/5.0 (compatible; Fess/<version>; +http://fess.codelibs.org/bot.html)`` ）。如果您在 15.8 或 15.9 中保存过管理界面的“系统”→“常规”，“用户代理”字段中显示的字符串就会作为 ``crawling.user.agent`` 保存在 ``system.properties`` 中，已保存的值优先于默认值。因此升级后，爬虫仍会沿用保存时的版本，而不是 15.10。
+
+要使用新的默认值，请从 ``system.properties`` （ZIP 包为 ``app/WEB-INF/conf/`` ，RPM/DEB 包为 ``/etc/fess/`` ）中删除 ``crawling.user.agent`` 这一行，或者清空常规页面的“用户代理”字段后保存（空字段会删除该键）。如果不清空字段就保存页面，旧值会被再次写入。凡是把 ``system.properties`` 沿用到 15.10 的情况都适用，例如保留该文件的 ZIP、RPM/DEB 和 Docker 步骤。
+
 其他行为变更
 ------------
 
@@ -577,6 +626,8 @@ Docker 版::
 - 删除插件只针对插件目录正下方的文件。名称或版本中包含 ``../`` 时，不会删除目录之外的文件，而是在 ``fess.log`` 中输出警告。15.9 之前，这样的名称可以删除目录之外的文件。删除在后台执行，因此无论删除是否成功，``DELETE /api/admin/plugin`` 都返回 ``status`` 为 ``0`` 的响应。请在 ``fess.log`` 中确认结果。
 - 本地用户的密码被更改后，该用户的其他登录会话会在下一次检查时结束（见下）。15.9 及更早版本中，其他会话会一直保持打开，只有执行更改的会话会结束（且仅限通过 ``/api/v2`` 更改密码的情况）。用户本人的更改和管理员的更改（用户管理界面和 Admin API）都适用。每个会话最多每隔 ``password.changed.check.interval`` 秒（默认值 ``60``，参见 :doc:`security`）从用户索引读取一次更改，因此其他会话会在该时间内结束。LDAP 和 SSO 用户不在检查范围内。升级前已开始的会话（仅在会话被持久化或复制的配置下；默认配置重启后不会保留会话）会在其 HTTP 会话创建之后密码被更改时结束；升级前更改的密码没有记录更改时间，因此这类会话会保持打开。启动时会向用户索引添加 ``password_changed_at`` 字段，因此无需重新索引。
 - LDAP 登录会先去除输入的用户名前后的空白再进行处理。15.9 及更早版本中，会话的用户 ID、审计日志和登录次数限制使用的是输入原样的名称（例如前面带有空白的名称），因此被视为同一账户的另一种写法。另外，``ldap.max.username.length`` 的截断在 15.9 及更早版本中只应用于绑定，用户名、角色搜索、权限名称和会话仍使用截断前的名称。15.10 在所有这些地方都使用截断后的名称（参见 :doc:`../config/ldap-integration`）。
+- 以 UTF-8 计超过 72 字节的密码在设置或修改时会被拒绝（用户管理页面、登录表单中的强制修改密码、 ``/api/v2/auth/password`` 和 Admin API），与 ``password.max.length`` （默认 ``100`` ）允许的长度无关。BCrypt 只读取前 72 字节，因此直到 15.9，更长的密码也会被接受，并且只用前 72 字节进行验证：无论后面是什么都可以登录。非 ASCII 字符占用多个字节（大多数日文、中文和韩文字符占 3 字节）。拒绝时使用的是最小长度的消息（ ``password.min.length`` 为默认值时是“密码长度必须至少为 8 个字符。”）， ``/api/v2/auth/password`` 会把 ``errors.password_length`` 作为 ``reason`` 返回。现有账户不受影响：登录时不检查长度，因此升级前设置的超过 72 字节的密码仍可登录。但它仍只用前 72 字节验证，请修改它。
+- 15.10 的 ``audit.log`` 记录与 15.9 有三点不同（请参阅 :doc:`security` ）。 ``ACCESS`` 记录新增了字段 ``method`` （HTTP 方法）和 ``id`` （请求参数 ``id`` ，仅在存在时）。新的操作 ``UPDATE_PASSWORD`` 会记录密码修改，以及执行操作的用户（ ``user`` ）和被修改密码的用户（ ``target`` ）。被访问令牌检查拒绝的 Admin REST API 请求现在会记录为 ``ACCESS_DENIED`` 。如果有解析 ``audit.log`` 的程序，请确认它能处理这些变化。
 
 .. _upgrade-1510-new-api:
 
@@ -618,10 +669,10 @@ Tika 4 没有 XML 配置文件，因此 |Fess| 15.10 在代码中构建 Tika 解
 15.10 的 ZIP 版、RPM/DEB 版和 Docker 镜像中不包含该文件。
 
 在 ``tika.xml`` 中编写的 ``parser-exclude`` 等设置将不再生效，被排除的解析器会重新运行。
-如果配置目录中残留有以前版本的 ``tika.xml``，|Fess| 会忽略该文件，并在启动时向 ``fess.log`` 输出警告。请删除该文件。
+如果配置目录中残留有以前版本的 ``tika.xml``，|Fess| 会忽略该文件，并在启动时向 ``fess.log`` 输出警告。如果升级后该文件仍然存在，请删除。
 
-- ZIP 版: 在 15.9 及更早的 ZIP 版中，该文件位于 ``app/WEB-INF/classes/tika.xml``。15.10 启动时的警告会同时检查 ``app/WEB-INF/classes`` 和 ``app/WEB-INF/conf``
-- RPM/DEB 版: ``/etc/fess/tika.xml``
+- ZIP 版: 在 15.9 及更早的 ZIP 版中，该文件位于 ``app/WEB-INF/classes/tika.xml``。15.10 启动时的警告会同时检查 ``app/WEB-INF/classes`` 和 ``app/WEB-INF/conf``。请手动删除该文件
+- RPM/DEB 版: 该文件为 ``/etc/fess/tika.xml`` ，如果您没有编辑过，升级时会将其删除。如果编辑过，升级会把您的副本保留为 ``/etc/fess/tika.xml.rpmsave`` （RPM）或 ``/etc/fess/tika.xml.dpkg-bak`` （DEB）。 |Fess| 不会读取这些副本，也不会对其发出警告。不再需要时请删除。如果回滚到旧软件包，旧的 ``tika.xml`` 会被重新安装。
 
 .. _upgrade-1510-tika-metadata:
 
@@ -643,7 +694,7 @@ Tika 4 新增的元数据与其他元数据一样处理，只要名称不匹配 
 15.10 中，对于 MIME 类型为 ``image/*`` 的文档，只有名称与 ``crawler.metadata.content.image.includes`` 匹配的元数据才会添加到内容中。默认情况下，包括 EXIF、XMP、IPTC 的标题、说明、作者、关键字、注释、版权和地名，以及 Windows 资源管理器的属性和 PNG 的文本块。
 其他元数据仍会被提取，因此可以用于 ``crawler.metadata.name.mapping`` 和脚本。``crawler.metadata.content.excludes`` 同样适用于与该列表匹配的名称。
 
-升级之前已建立索引的图像，其内容在重新爬取该图像之前不会改变。
+升级之前已建立索引的图像，其内容在重新爬取该图像之前不会改变。启用“检查上次修改时间”（增量爬取， :doc:`../admin/general-guide` ，默认启用）时，重新爬取会跳过未变化的图像，因此内容保持原样。要更新内容，请临时禁用“检查上次修改时间”后爬取一次，或者先从索引中删除这些文档后重新爬取。
 
 爬取配置的 Tesseract 和 PDF 属性文件
 ------------------------------------
@@ -663,7 +714,7 @@ Tika 4 为文本文件报告的字符编码名称可能与 15.9 不同。例如�
 ``Content-Length`` 不再被添加到内容中
 -------------------------------------
 
-15.8.0 和 15.9.0 会把 ``Content-Length`` 元数据的值添加到文档的内容中。对于纯文本文件，该值为 ``0``，因此索引中的内容末尾会多出一个空格和 ``0``。15.10 不会把 ``Content-Length`` 添加到内容中，无论 ``crawler.metadata.content.excludes`` 是否列出它。该值仍会被提取，因此可以用于 ``crawler.metadata.name.mapping`` 和脚本。升级前已建立索引的文档，其内容在重新爬取之前不会改变。
+15.8.0 和 15.9.0 会把 ``Content-Length`` 元数据的值添加到文档的内容中。对于纯文本文件，该值为 ``0``，因此索引中的内容末尾会多出一个空格和 ``0``。15.10 不会把 ``Content-Length`` 添加到内容中，无论 ``crawler.metadata.content.excludes`` 是否列出它。该值仍会被提取，因此可以用于 ``crawler.metadata.name.mapping`` 和脚本。升级前已建立索引的文档，其内容在重新爬取之前不会改变。与图像的情况相同（请参阅上文的“内容中的图像元数据”），重新爬取会跳过未变化的文档，因此请临时禁用“检查上次修改时间”后爬取一次，或者先删除这些文档后重新爬取。
 
 登录表单的次数限制
 ------------------
@@ -702,7 +753,7 @@ audit.log 中的控制字符
 
 从 POSIX 权限（所有者和组）读取的角色不变。
 
-文档会保留建立索引时的角色，直到再次被爬取。要将新规则应用于已有文档，请再次运行文件爬取。
+文档会保留建立索引时的角色，直到再次被爬取。要将新规则应用于已有文档，请再次运行文件爬取。启用“检查上次修改时间”（默认）时，重新爬取会跳过未变化的文件，因此请临时禁用该设置后爬取一次，或者先删除这些文档后重新爬取。
 
 LDAP 的角色 OU 与嵌套组
 -----------------------
@@ -1590,6 +1641,10 @@ RPM/DEB 版的情况::
    15.8.0 的 DEB 软件包没有将 ``/etc/fess/*`` 注册为 conffile，因此 ``dpkg -i`` 会覆盖编辑过的
    ``/etc/fess/fess_config.properties`` 等文件，且不保留副本。请从步骤 1 中获取的备份恢复。
 
+.. note::
+
+   如果旧版本使用的 ``fess_config.properties`` 中 ``crawler.failure.url.status.codes`` 含有 ``5xx`` ，请将其删除。15.9 及更早版本会把列表的每一项都当作数字读取，无法读取 ``5xx`` （请参阅“失败 URL: HTTP 5xx 与疑似 zip 炸弹”）。
+
 步骤 3: 恢复数据
 ----------------------
 
@@ -1608,9 +1663,13 @@ RPM/DEB 版的情况::
 
    对第一条命令列出的每个索引，分别执行第二条命令。
 
-3. 恢复快照::
+3. 指定要恢复的索引，恢复快照::
 
-       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" \
+           -H 'Content-Type: application/json' \
+           -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
+
+   按步骤 1 创建的快照包含集群中的所有索引，其中包括 OpenSearch ML 插件的系统索引 ``.plugins-ml-config`` 。该索引在运行中的集群上处于打开状态，因此不指定 ``indices`` 的恢复会被拒绝，并提示 ``cannot restore index [.plugins-ml-config] because an open index with same name already exists`` 。指定 ``indices`` 后，只会恢复 Fess 的索引和 ``configsync`` 索引。
 
 .. note::
 

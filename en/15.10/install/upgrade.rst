@@ -280,7 +280,7 @@ ZIP Version
       values whose default changed in 15.9: jobs created afterwards default to Groovy, for example.
       Before running the last two commands, compare each file with the one in ``fess-15.10.0`` and
       carry over only the values you changed yourself. See :ref:`upgrade-159-carried-over-config`
-      for what to check.
+      (from 15.8) and :ref:`upgrade-1510-carried-over-config` (from 15.9) for what to check.
 
 3. If you have customizations, also copy the following::
 
@@ -346,7 +346,7 @@ Install the new version package::
    alongside them with a ``.rpmnew`` suffix). If new configuration options have been added,
    manual adjustment may be necessary. A ``/etc/fess/fess_config.properties`` that you modified
    keeps its old values in 15.10, just as a file copied in the ZIP procedure does; see
-   :ref:`upgrade-159-carried-over-config`.
+   :ref:`upgrade-159-carried-over-config` and :ref:`upgrade-1510-carried-over-config`.
 
 .. warning::
 
@@ -582,6 +582,55 @@ Warning for ``app.cipher.key``
 If ``app.cipher.key`` is blank or still the value shipped in ``fess_config.properties`` (``___change__me___``), 15.10 writes a warning to ``fess.log`` at startup. Job processes such as the crawler do not write it.
 The key encrypts values such as the passwords stored in crawl configurations and data store configurations, and the shipped value is public. |Fess| does not change the key by itself. Changing it makes values encrypted with the previous key impossible to decrypt, so set it before you start operating.
 
+.. _upgrade-1510-carried-over-config:
+
+Configuration Carried Over from 15.9
+------------------------------------
+
+The ZIP procedure in Step 3 copies ``fess_config.properties`` from the old installation, and an RPM or DEB upgrade keeps a ``/etc/fess/fess_config.properties`` that you modified. 15.10 then runs with the 15.9 values, including those whose shipped value changed in 15.10. The following keys of ``fess_config.properties`` have a different value in 15.10 than in 15.9.0.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Key
+     - 15.9.0
+     - 15.10
+     - Effect of keeping the 15.9 value
+   * - ``crawler.failure.url.status.codes``
+     - ``404,403,410,401``
+     - ``404,403,410,401,5xx``
+     - A page that answers with an HTTP 5xx status, such as 500, is not recorded as a failure URL; see "Failure URLs: HTTP 5xx and Suspected Zip Bombs" below. Add ``5xx``. A file from 15.8.0 holds ``404,403,410``.
+   * - ``crawler.metadata.content.excludes``
+     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
+     - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
+     - None. 15.10 removes the names that start with ``tk:``, ``X-TIKA:`` or ``zip:`` and does not add ``Content-Length`` to the content, whether or not the list names them (see "Metadata Names" and "``Content-Length`` Is No Longer Added to the Content" below).
+   * - ``online.help.name.sereq``
+     - ``sereq``
+     - ``esreq``
+     - The help icon of the "Request to OpenSearch" screen (``/admin/sereq/``) opens ``sereq-guide.html``, which does not exist. Use ``esreq``, the name of the guide of that screen.
+
+15.10 also adds the following keys to ``fess_config.properties``: ``api.search.similar.rate.limit.per.minute``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``query.boost.fuzzy.cjk.enabled`` and ``query.boost.fuzzy.digit.enabled``. They are missing from a file carried over from 15.9, so 15.10 uses the value it ships for each of them and writes a warning to ``fess.log`` once per key. Nothing breaks; add the keys from the 15.10 file to stop the warnings.
+
+.. _upgrade-1510-failure-url:
+
+Failure URLs: HTTP 5xx and Suspected Zip Bombs
+----------------------------------------------
+
+Up to 15.9, a page that answered with HTTP 500 was not indexed and was not recorded as a failure URL, because the default of ``crawler.failure.url.status.codes`` was ``404,403,410,401``. 15.10 adds ``5xx``, which stands for every status from 500 to 599, so such a URL is listed under "System Info" → "Failure URL" (see :doc:`../admin/failureurl-guide` and :doc:`../config/crawler-advanced`). A 503 is recorded after the crawler has given up retrying it.
+
+A ``fess_config.properties`` carried over from 15.9 still holds the old list, and then a page that answers with HTTP 500 is still not recorded. Add ``5xx`` to the list, or compare the file with the one of 15.10, and restart |Fess|. A list that you set yourself is not changed by the upgrade, so add ``5xx`` to it, too, if you want these pages recorded. 15.9 and earlier read every entry of the list as a number and cannot read ``5xx``, so remove it before you roll back.
+
+A document that the Tika extractor rejects as a suspected zip bomb is now recorded as a failure URL and is not indexed, even when ``crawler.ignore.content.exception`` is ``true`` (the default). Up to 15.9, it was indexed with no content. Other content errors that this setting ignores are unchanged.
+
+.. _upgrade-1510-user-agent:
+
+User Agent Saved by the General Screen
+--------------------------------------
+
+The default user agent of the crawler contains the version of |Fess| (``Mozilla/5.0 (compatible; Fess/<version>; +http://fess.codelibs.org/bot.html)``). If you saved "System" → "General" in the admin UI in 15.8 or 15.9, the string shown in the "User Agent" field was stored as ``crawling.user.agent`` in ``system.properties``, and a stored value takes precedence over the default. After the upgrade, the crawler therefore keeps announcing the version it was saved with, not 15.10.
+
+To use the new default, delete the ``crawling.user.agent`` line from ``system.properties`` (``app/WEB-INF/conf/`` of the ZIP package, ``/etc/fess/`` of the RPM/DEB package), or clear the "User Agent" field of the General screen and save it (a blank field removes the key). Saving the screen without clearing the field writes the old value again. This applies wherever ``system.properties`` is carried over to 15.10, such as the ZIP, RPM/DEB and Docker procedures when you keep the file.
+
 Other Behavior Changes
 ----------------------
 
@@ -597,6 +646,8 @@ Other Behavior Changes
 - Deleting a plugin only affects files directly in the plugin directory. A name or version that contains ``../`` no longer deletes a file outside the directory; a warning is written to ``fess.log`` instead. Up to 15.9, such a name could delete files outside the directory. Deletion runs in the background, so ``DELETE /api/admin/plugin`` returns ``status`` ``0`` whether or not the deletion succeeds. Check ``fess.log`` for the result.
 - When the password of a local user is changed, the other login sessions of that user end at their next check (see below). Up to 15.9 they stayed open, and only the session that made the change ended (and only for a password change through ``/api/v2``). This applies to a change by the user and to a change by an administrator (user management screen and Admin API). Each session looks up the change in the user index at most once per ``password.changed.check.interval`` seconds (default ``60``; see :doc:`security`), so the other sessions end within that time. Users of LDAP and SSO are not checked. A session opened before the upgrade (only where sessions are persisted or replicated; the default configuration does not keep sessions across a restart) ends if the password is changed after its HTTP session was created; a password changed before the upgrade has no recorded time, so such a session stays open. The field ``password_changed_at`` is added to the user index at startup, so no reindex is needed.
 - LDAP login drops the blanks around the typed username before using it. Up to 15.9 the name was used as typed (for example with a blank in front of it) for the session user ID, the audit log and the login attempt limit, so it counted as a second spelling of the same account. Likewise, the cut made by ``ldap.max.username.length`` was applied to the bind only up to 15.9, while the user name, the role search, the permission names and the session kept the uncut name. 15.10 uses the cut name for all of them (see :doc:`../config/ldap-integration`).
+- A password that is longer than 72 bytes in UTF-8 is refused when it is set or changed (user management screen, forced password change on the login form, ``/api/v2/auth/password`` and the Admin API), whatever ``password.max.length`` (default ``100``) allows. BCrypt reads only the first 72 bytes, so up to 15.9 a longer password was accepted and then verified against its first 72 bytes only: any ending logged in. Characters other than ASCII take more than one byte (3 bytes for most Japanese, Chinese and Korean characters). The refusal reuses the message of the minimum length ("Password must be at least 8 characters long." with the default of ``password.min.length``), and ``/api/v2/auth/password`` returns ``errors.password_length`` as ``reason``. Existing accounts are not affected: login does not check the length, so a password longer than 72 bytes set before the upgrade still logs in. It is still verified by its first 72 bytes only, so change it.
+- The ``audit.log`` records of 15.10 differ from 15.9 in three ways (see :doc:`security`). ``ACCESS`` records have the new fields ``method`` (HTTP method) and ``id`` (the ``id`` request parameter, when there is one). A new action ``UPDATE_PASSWORD`` records a password change with the acting user (``user``) and the user whose password was changed (``target``). Admin REST API requests rejected by the access token check are now recorded as ``ACCESS_DENIED``. Check a program that parses ``audit.log`` against these.
 
 .. _upgrade-1510-new-api:
 
@@ -635,13 +686,13 @@ Apache Tika 4 and ``tika.xml``
 
 15.9.0 used Apache Tika 3.3.2; 15.10 uses Apache Tika 4.2.0.
 Tika 4 has no XML configuration file, so |Fess| 15.10 builds the Tika parser in code and no longer reads ``tika.xml``.
-The ZIP and RPM/DEB packages and the Docker images of 15.10 do not contain the file.
+The ZIP package, the RPM/DEB packages and the Docker images of 15.10 do not contain the file.
 
 Settings you made in ``tika.xml``, such as ``parser-exclude``, are no longer applied: a parser you excluded there runs again.
-If a ``tika.xml`` from an earlier version is in the configuration directory, |Fess| ignores it and writes a warning to ``fess.log`` at startup. Delete the file.
+If a ``tika.xml`` from an earlier version is in the configuration directory, |Fess| ignores it and writes a warning to ``fess.log`` at startup. Delete the file if it is still there after the upgrade.
 
-- ZIP package: in the ZIP of 15.9 and earlier the file is ``app/WEB-INF/classes/tika.xml``. The startup warning of 15.10 checks both ``app/WEB-INF/classes`` and ``app/WEB-INF/conf``
-- RPM/DEB package: ``/etc/fess/tika.xml``
+- ZIP package: in the ZIP of 15.9 and earlier the file is ``app/WEB-INF/classes/tika.xml``. The startup warning of 15.10 checks both ``app/WEB-INF/classes`` and ``app/WEB-INF/conf``. Delete the file by hand.
+- RPM/DEB package: the file is ``/etc/fess/tika.xml``, and the upgrade removes it if you have not edited it. If you have edited it, the upgrade keeps your copy as ``/etc/fess/tika.xml.rpmsave`` (RPM) or ``/etc/fess/tika.xml.dpkg-bak`` (DEB). |Fess| does not read these copies and does not warn about them. Delete them when you no longer need them. If you roll back to the old package, the old ``tika.xml`` is installed again.
 
 .. _upgrade-1510-tika-metadata:
 
@@ -663,7 +714,7 @@ Up to 15.9, all the metadata of an image file (PNG, JPEG, TIFF, GIF, BMP, etc.) 
 In 15.10, only the metadata whose name matches ``crawler.metadata.content.image.includes`` is added to the content of a document whose MIME type is ``image/*``. By default, these are the title, description, creator, keywords, comments, copyright and place names of EXIF, XMP and IPTC, the Windows Explorer properties, and the text chunks of a PNG.
 The other metadata is still extracted, so it can be used in ``crawler.metadata.name.mapping`` and in scripts. ``crawler.metadata.content.excludes`` also applies to the names that the list matches.
 
-The content of an image that was indexed before the upgrade does not change until the image is crawled again.
+The content of an image that was indexed before the upgrade does not change until the image is crawled again. A re-crawl skips an image that has not changed when "Check Last Modified" (incremental crawling) in :doc:`../admin/general-guide` is on, which is the default, so the content stays as it was. To refresh it, turn "Check Last Modified" off for one crawl, or delete the documents from the index and crawl again.
 
 Tesseract and PDF Properties Files of a Crawl Configuration
 -----------------------------------------------------------
@@ -685,7 +736,7 @@ The character set names that Tika 4 reports for text files can differ from 15.9.
 
 15.8.0 and 15.9.0 added the value of the ``Content-Length`` metadata to the content of a document. For a plain text file the value was ``0``, so the indexed content ended with a space and ``0``.
 15.10 does not add ``Content-Length`` to the content, whether or not ``crawler.metadata.content.excludes`` lists it. The value is still extracted, so it can be used in ``crawler.metadata.name.mapping`` and in scripts.
-The content of a document that was indexed before the upgrade does not change until the document is crawled again.
+The content of a document that was indexed before the upgrade does not change until the document is crawled again. As for images (see "Metadata of Images in the Content" above), a re-crawl skips a document that has not changed, so turn "Check Last Modified" off for one crawl, or delete the documents and crawl again.
 
 Login Form Rate Limit
 ---------------------
@@ -724,7 +775,7 @@ For a crawl of a local file system (``file:`` URLs) whose files have ACLs, such 
 
 The roles read from POSIX permissions (owner and group) are unchanged.
 
-A document keeps the roles it was indexed with until it is crawled again. To apply the new rules to the documents you already have, run the file crawl again.
+A document keeps the roles it was indexed with until it is crawled again. To apply the new rules to the documents you already have, run the file crawl again. A re-crawl skips a file that has not changed when "Check Last Modified" is on (the default), so turn it off for one crawl, or delete the documents and crawl again.
 
 LDAP Role Organizational Units and Nested Groups
 ------------------------------------------------
@@ -1713,6 +1764,12 @@ Or::
    the files you edited, such as ``/etc/fess/fess_config.properties``, without keeping a copy. Restore
    them from the backup you took in Step 1.
 
+.. note::
+
+   If the ``fess_config.properties`` that the old version uses contains ``5xx`` in
+   ``crawler.failure.url.status.codes``, remove it. 15.9 and earlier read every entry of the list as a
+   number and cannot read ``5xx`` (see "Failure URLs: HTTP 5xx and Suspected Zip Bombs").
+
 Step 3: Restore Data
 ---------------------
 
@@ -1733,9 +1790,13 @@ Restore from snapshot. OpenSearch must be running and |Fess| stopped:
 
    Run the second command for each index that the first one lists.
 
-3. Restore the snapshot::
+3. Restore the snapshot, naming the indices to restore::
 
-       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true"
+       $ curl -X POST "http://localhost:9200/_snapshot/fess_backup/snapshot_1/_restore?wait_for_completion=true" \
+           -H 'Content-Type: application/json' \
+           -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
+
+   A snapshot taken as in Step 1 holds every index of the cluster, including ``.plugins-ml-config``, the system index of the OpenSearch ML plugin. That index is open on the running cluster, so a restore without the ``indices`` setting is refused with ``cannot restore index [.plugins-ml-config] because an open index with same name already exists``. The setting restores only the Fess indices and the ``configsync`` index.
 
 .. note::
 
