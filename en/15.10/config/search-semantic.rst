@@ -628,10 +628,11 @@ Limitations
 
   - A sort order (the ``sort:`` pseudo field, or the ``sort`` parameter, which is also appended
     internally as ``sort:...``)
-  - A phrase (``"..."``), wildcard (``*`` ``?``), fuzzy search (``~``) or range on words that name
-    no field, including the phrase of advanced search. The ASCII ``?`` is read as a wildcard, so a
-    natural-language question ending in an ASCII question mark - "what is ...?" - is skipped as
-    well. (The full-width ``？`` is not affected.)
+  - A phrase (``"..."``) or range on words that name no field, including the phrase of advanced
+    search, and a word made only of ``?`` or ``*`` (such as the lone ``?`` in ``miso soup ?``). A
+    wildcard (``*`` ``?``), prefix or fuzzy (``~``) term that contains a letter or digit is not
+    skipped: its characters are embedded as typed, so a natural-language question ending in an
+    ASCII question mark - "what is ...?" - still runs semantic search.
   - Excluding a word (``-word``, ``NOT word``, including the excluded words of advanced search) or
     boosting one (``word^2``)
   - A query whose conditions cannot be separated out as a filter, such as a word and a condition

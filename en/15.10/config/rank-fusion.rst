@@ -433,8 +433,8 @@ Search Results Differ from Expectations
 1. Check the ``searcher`` field (see "Verifying Fusion Results"). If every document has only
    ``["default"]``, the semantic searcher is not returning any results.
 2. Check whether semantic search is being skipped. The semantic searcher returns no results, so
-   only keyword search results are used, for queries that contain search syntax such as phrases or
-   wildcards, as well as for sorted searches, geo searches, and similar-document searches. See
+   only keyword search results are used, for queries that contain search syntax such as phrases,
+   as well as for sorted searches, geo searches, and similar-document searches. See
    :doc:`search-semantic` for details on the skip conditions.
 3. Verify the results of each search type individually
 4. Adjust the ``rank.fusion.rank_constant`` value

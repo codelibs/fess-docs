@@ -667,11 +667,13 @@ Einschränkungen
 
   - Eine Sortierbedingung (das Pseudofeld ``sort:`` oder der Parameter ``sort``, der intern
     ebenfalls als ``sort:...`` angehängt wird)
-  - Eine Phrase (``"..."``), ein Platzhalter (``*`` ``?``), eine unscharfe Suche (``~``) oder ein
-    Bereich auf Wörtern ohne Feldangabe, einschließlich der Phrase der erweiterten Suche. Das
-    ASCII-Zeichen ``?`` wird als Platzhalter gelesen, daher wird auch ein natürlichsprachlicher
-    Satz, der mit einem ASCII-Fragezeichen endet (etwa „Was ist ...?"), übersprungen (das
-    Vollbreiten-``？`` zählt nicht dazu).
+  - Eine Phrase (``"..."``) oder ein Bereich auf Wörtern ohne Feldangabe, einschließlich der
+    Phrase der erweiterten Suche, sowie ein Wort, das nur aus ``?`` oder ``*`` besteht (etwa das
+    einzelne ``?`` in ``miso soup ?``). Ein Platzhalter (``*`` ``?``), ein Präfix oder eine
+    unscharfe Suche (``~``) mit mindestens einem Buchstaben oder einer Ziffer wird nicht
+    übersprungen: Die Zeichen werden so eingebettet, wie sie eingegeben wurden. Daher läuft die
+    semantische Suche auch bei einem natürlichsprachlichen Satz, der mit einem ASCII-Fragezeichen
+    endet (etwa „Was ist ...?"), weiter.
   - Das Ausschließen eines Wortes (``-wort``, ``NOT wort``, einschließlich der Ausschlusswörter
     der erweiterten Suche) oder dessen Gewichtung (``wort^2``)
   - Eine Anfrage, deren Bedingungen sich nicht als Filter abtrennen lassen, etwa ein Wort und eine

@@ -668,11 +668,12 @@ Limitaciones
 
   - Un criterio de ordenación (el pseudocampo ``sort:``, o el parámetro ``sort``, que también se
     añade internamente como ``sort:...``)
-  - Una frase (``"..."``), un comodín (``*`` ``?``), una búsqueda difusa (``~``) o un rango sobre
-    palabras que no indican ningún campo, incluida la frase de la búsqueda avanzada. El ``?`` de
-    medio ancho (ASCII) se interpreta como comodín, por lo que una pregunta en lenguaje natural
-    terminada en signo de interrogación ASCII, como «¿Qué es …?», también se omite (el ``？`` de
-    ancho completo no se ve afectado).
+  - Una frase (``"..."``) o un rango sobre palabras que no indican ningún campo, incluida la frase
+    de la búsqueda avanzada, y una palabra formada solo por ``?`` o ``*`` (como el ``?`` suelto de
+    ``miso soup ?``). Un comodín (``*`` ``?``), un prefijo o una búsqueda difusa (``~``) que
+    contenga una letra o un dígito no se omite: sus caracteres se incrustan tal como se
+    escribieron, por lo que una pregunta en lenguaje natural terminada en signo de interrogación
+    ASCII, como «¿Qué es …?», sigue ejecutando la búsqueda semántica.
   - Excluir una palabra (``-palabra``, ``NOT palabra``, incluidos los términos excluidos de la
     búsqueda avanzada) o potenciarla (``palabra^2``)
   - Una consulta cuyas condiciones no pueden separarse como filtro, como una palabra y una

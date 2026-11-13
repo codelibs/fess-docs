@@ -457,7 +457,7 @@ Los resultados de búsqueda difieren de lo esperado
    todos los documentos muestran únicamente ``["default"]``, el buscador semántico no está
    devolviendo resultados.
 2. Comprobar si la búsqueda semántica se está omitiendo. En las consultas que contienen sintaxis
-   de búsqueda como frases o comodines, así como en las búsquedas con ordenación, la búsqueda por
+   de búsqueda como frases, así como en las búsquedas con ordenación, la búsqueda por
    ubicación y la búsqueda de documentos similares, el buscador semántico no devuelve resultados
    y solo se obtienen los de la búsqueda por palabras clave. Consulte :doc:`search-semantic` para
    más detalles sobre las condiciones de omisión.
