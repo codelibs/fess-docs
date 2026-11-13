@@ -673,11 +673,12 @@ Limitations
 
   - Un critère de tri (le pseudo-champ ``sort:``, ou le paramètre ``sort``, qui est lui aussi
     ajouté en interne sous la forme ``sort:...``)
-  - Une phrase (``"..."``), un caractère générique (``*`` ``?``), une recherche floue (``~``) ou
-    une plage sur des mots qui ne désignent aucun champ, y compris la phrase de la recherche
-    avancée. Le ``?`` ASCII étant interprété comme un caractère générique, une phrase en langage
-    naturel qui se termine par un point d'interrogation ASCII est elle aussi ignorée (le point
-    d'interrogation pleine chasse ``？`` n'est pas concerné).
+  - Une phrase (``"..."``) ou une plage sur des mots qui ne désignent aucun champ, y compris la
+    phrase de la recherche avancée, ainsi qu'un mot composé uniquement de ``?`` ou de ``*`` (comme
+    le ``?`` isolé de ``miso soup ?``). Un caractère générique (``*`` ``?``), un préfixe ou une
+    recherche floue (``~``) contenant une lettre ou un chiffre n'est pas ignoré : ses caractères
+    sont intégrés tels qu'ils ont été saisis, de sorte qu'une phrase en langage naturel qui se
+    termine par un point d'interrogation ASCII déclenche toujours la recherche sémantique.
   - L'exclusion d'un mot (``-mot``, ``NOT mot``, y compris les termes exclus de la recherche
     avancée) ou son renforcement (``mot^2``)
   - Une requête dont les conditions ne peuvent pas être séparées sous forme de filtre, comme un

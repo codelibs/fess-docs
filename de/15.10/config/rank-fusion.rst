@@ -456,7 +456,7 @@ Suchergebnisse weichen von Erwartungen ab
 1. Prüfen Sie das Feld ``searcher`` (siehe „Fusionsergebnisse überprüfen"). Enthält es bei allen
    Dokumenten nur ``["default"]``, liefert der semantische Sucher keine Ergebnisse.
 2. Prüfen Sie, ob die semantische Suche übersprungen wird. Neben Anfragen, die Suchsyntax wie
-   Phrasen oder Platzhalter enthalten, liefert der semantische Sucher auch bei sortierten Suchen,
+   Phrasen enthalten, liefert der semantische Sucher auch bei sortierten Suchen,
    bei der Geolokalisierungssuche und bei der Suche nach ähnlichen Dokumenten keine Ergebnisse;
    zurückgegeben werden dann nur die Ergebnisse der Schlüsselwortsuche. Einzelheiten zu den
    Bedingungen für das Überspringen finden Sie unter :doc:`search-semantic`.

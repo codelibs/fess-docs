@@ -462,7 +462,7 @@ Les résultats de recherche diffèrent des attentes
    documents ne contiennent que ``["default"]``, le moteur de recherche sémantique ne retourne
    aucun résultat.
 2. Vérifier que la recherche sémantique n'est pas ignorée. Outre les requêtes contenant une
-   syntaxe de recherche telle que des phrases ou des caractères génériques, les recherches triées,
+   syntaxe de recherche telle que des phrases, les recherches triées,
    la recherche par géolocalisation et la recherche de documents similaires font que le moteur de
    recherche sémantique ne retourne aucun résultat : seuls les résultats de la recherche par
    mots-clés sont alors renvoyés. Voir :doc:`search-semantic` pour le détail des conditions
