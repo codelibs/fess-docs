@@ -66,8 +66,10 @@ SPA が必要とする初期設定を返します。
           "login_link": true,
           "sso_enabled": false,
           "osdd_link": true,
-          "rag_chat_enabled": false
+          "rag_chat_enabled": false,
+          "passkey_enabled": false
         },
+        "result_link_schemes": ["http", "https", "ftp", "ftps", "file", "smb", "smb1", "storage", "s3", "gcs"],
         "page_size_default": 20,
         "page_size_max": 100,
         "sort_options": [
@@ -130,6 +132,9 @@ SPA が必要とする初期設定を返します。
    * - ``features``
      - object
      - 機能フラグ。詳細は後述の表を参照してください。
+   * - ``result_link_schemes``
+     - string[]
+     - 検索結果のリンクと ``/go/`` のリダイレクトに使える URL のスキーム（小文字、コロンなし）。 ``fess_config.properties`` の ``search.result.link.schemes`` の値で、空のときは空配列です（ :ref:`search-result-link-schemes` を参照）。
    * - ``page_size_default``
      - integer
      - デフォルトのページサイズ。
@@ -281,6 +286,9 @@ features
    * - ``rag_chat_enabled``
      - boolean
      - RAG チャット機能が利用可能かどうか。
+   * - ``passkey_enabled``
+     - boolean
+     - パスキー（WebAuthn）でのログインが利用できるかどうか（ ``passkey.enabled`` が ``true`` で、 ``passkey.rp.id`` と ``passkey.origins`` が使える値のとき ``true`` ）。 ``false`` の間、 ``/api/v2/auth/passkey`` 以下は ``404`` を返します（ :doc:`../config/security-passkey` を参照）。
 
 sort_options
 ~~~~~~~~~~~~

@@ -544,7 +544,7 @@ Index
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
     - HTML-Tags, die bei der Dokumentverarbeitung beschnitten (entfernt) werden.
-    - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+    - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
     - Maximale Länge des aus HTML-Dokumenten extrahierten Digest.
     - ``120``
@@ -1567,6 +1567,9 @@ Web
   * - clipboard.copy.icon.enabled
     - Gibt an, ob das Symbol zum Kopieren in die Zwischenablage aktiviert werden soll.
     - ``true``
+  * - search.result.link.schemes
+    - URL-Schemata, auf die ein Suchergebnis verlinken und auf die /go/ weiterleiten darf (durch Komma getrennt, ohne ":"). Führen Sie javascript, data und vbscript nicht auf. Ein leerer Wert lässt kein Schema zu.
+    - ``http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs``
   * - authentication.admin.users
     - Administrator-Benutzernamen für die Authentifizierung.
     - ``admin``
@@ -2491,4 +2494,16 @@ Web
   * - api.chat.stream.keepalive.interval.ms
     - Intervall zwischen den SSE-Keep-alive-Pings, die von /api/v2/chat/stream ausgegeben werden. Der Ping ist eine reine Kommentarzeile (": keepalive\\n\\n"), die den Event-Stream nicht beeinflusst, aber Zwischeninstanzen umgeht (der nginx-Standardwert für proxy_read_timeout ist 60s), die inaktive Verbindungen während langer LLM-Phasen trennen. Setzen Sie <=0 zum Deaktivieren. Einheit: Millisekunden.
     - ``15000``
+  * - passkey.enabled
+    - Anmeldung lokaler Benutzer mit Passkey (WebAuthn). Die Funktion ist standardmäßig deaktiviert. Sie bleibt auch dann deaktiviert, wenn sie aktiviert ist, aber passkey.rp.id oder passkey.origins leer ist (eine Warnung wird einmal protokolliert); die Relying Party muss also ausdrücklich benannt werden.
+    - ``false``
+  * - passkey.rp.id
+    - Relying-Party-ID: die registrierbare Domain, an die die Passkeys gebunden sind, z. B. example.com. Ein Passkey funktioniert nur auf diesem Host und seinen Subdomains und kann später nicht auf eine andere ID übertragen werden.
+    - (empty)
+  * - passkey.rp.name
+    - Name der Relying Party, den der Browser beim Erstellen eines Passkeys anzeigt.
+    - ``Fess``
+  * - passkey.origins
+    - Origins (durch Komma getrennt), von denen ein Passkey-Vorgang angenommen wird, z. B. https://fess.example.com. Jeder Eintrag ist eine http- oder https-Origin mit Hostnamen; ohne Eintrag oder bei einem Eintrag, der das nicht ist, bleibt die Funktion deaktiviert.
+    - (empty)
 .. GENERATED-END: properties

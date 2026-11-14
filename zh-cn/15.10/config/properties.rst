@@ -544,7 +544,7 @@ one, fill in ``properties.po`` beside this file.
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
     - 文档处理时要裁剪（删除）的 HTML 标签。
-    - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+    - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
     - 从 HTML 文档中提取的摘要的最大长度。
     - ``120``
@@ -1567,6 +1567,9 @@ Web
   * - clipboard.copy.icon.enabled
     - 是否启用剪贴板复制图标。
     - ``true``
+  * - search.result.link.schemes
+    - 搜索结果可以链接、/go/ 可以重定向的 URL 协议（以逗号分隔，不带“:”）。请不要列出 javascript、data 或 vbscript。值为空表示不允许任何协议。
+    - ``http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs``
   * - authentication.admin.users
     - 用于认证的管理员用户名。
     - ``admin``
@@ -2491,4 +2494,16 @@ Web
   * - api.chat.stream.keepalive.interval.ms
     - /api/v2/chat/stream 发出的 SSE keep-alive ping 的间隔。该 ping 是仅含注释的一行（": keepalive\\n\\n"），不会影响事件流，但能够规避在长时间的 LLM 阶段断开空闲连接的中间设备（nginx 默认的 proxy_read_timeout 为 60s）。设置为 <=0 表示禁用。单位：毫秒。
     - ``15000``
+  * - passkey.enabled
+    - 本地用户的通行密钥（WebAuthn）登录。该功能默认关闭。即使已启用，只要 passkey.rp.id 或 passkey.origins 为空，它仍保持关闭（会输出一次警告），因此必须明确指定依赖方。
+    - ``false``
+  * - passkey.rp.id
+    - 依赖方 ID：通行密钥所绑定的可注册域名，例如 example.com。通行密钥只能在该主机及其子域名上使用，之后无法转移到其他 ID。
+    - (empty)
+  * - passkey.rp.name
+    - 创建通行密钥时浏览器显示的依赖方名称。
+    - ``Fess``
+  * - passkey.origins
+    - 接受通行密钥操作的来源（以逗号分隔），例如 https://fess.example.com。每一项都是带有主机名的 http 或 https 来源；没有任何来源，或者有不符合要求的条目时，该功能保持关闭。
+    - (empty)
 .. GENERATED-END: properties

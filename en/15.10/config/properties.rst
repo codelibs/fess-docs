@@ -544,7 +544,7 @@ Index
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
     - HTML tags to prune (remove) during document processing.
-    - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+    - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
     - Maximum length of digest extracted from HTML documents.
     - ``120``
@@ -1567,6 +1567,9 @@ Web
   * - clipboard.copy.icon.enabled
     - Whether to enable the clipboard copy icon.
     - ``true``
+  * - search.result.link.schemes
+    - URL schemes a search result may link to and /go/ may redirect to (comma-separated, no ":"). Do not list javascript, data or vbscript. A blank value allows none.
+    - ``http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs``
   * - authentication.admin.users
     - Admin user names for authentication.
     - ``admin``
@@ -2491,4 +2494,16 @@ Web
   * - api.chat.stream.keepalive.interval.ms
     - Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (": keepalive\\n\\n") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds.
     - ``15000``
+  * - passkey.enabled
+    - Passkey (WebAuthn) login for local users. The feature is off by default. It also stays off when it is enabled but passkey.rp.id or passkey.origins is empty (a warning is logged once), so the relying party has to be named explicitly.
+    - ``false``
+  * - passkey.rp.id
+    - Relying party ID: the registrable domain the passkeys are bound to, e.g. example.com. A passkey works on this host and its subdomains only, and cannot be moved to another ID later.
+    - (empty)
+  * - passkey.rp.name
+    - Relying party name shown by the browser when a passkey is created.
+    - ``Fess``
+  * - passkey.origins
+    - Origins (comma separated) a passkey ceremony is accepted from, e.g. https://fess.example.com. Each is an http or https origin with a host name; with none, or an entry that is not, the feature stays off.
+    - (empty)
 .. GENERATED-END: properties
