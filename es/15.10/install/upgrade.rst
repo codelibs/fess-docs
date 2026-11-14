@@ -620,7 +620,7 @@ El procedimiento ZIP del paso 3 copia ``fess_config.properties`` de la instalaci
      - ``esreq``
      - El icono de ayuda de la pantalla "Solicitud a OpenSearch" (``/admin/sereq/``) abre ``sereq-guide.html``, que no existe. Use ``esreq``, el nombre de la guía de esa pantalla.
 
-La versión 15.10 también añade a ``fess_config.properties`` las siguientes claves: ``api.search.similar.rate.limit.per.minute``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``query.boost.fuzzy.cjk.enabled`` y ``query.boost.fuzzy.digit.enabled``. Faltan en un archivo heredado de 15.9, por lo que 15.10 usa el valor que incluye para cada una y escribe una advertencia en ``fess.log`` una vez por clave. No se rompe nada; añada las claves del archivo de 15.10 para que dejen de aparecer las advertencias.
+La versión 15.10 también añade a ``fess_config.properties`` las siguientes claves: ``api.search.similar.rate.limit.per.minute``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``passkey.enabled``, ``passkey.origins``, ``passkey.rp.id``, ``passkey.rp.name``, ``password.changed.check.interval``, ``query.boost.fuzzy.cjk.enabled``, ``query.boost.fuzzy.digit.enabled`` y ``search.result.link.schemes``. Faltan en un archivo heredado de 15.9, por lo que 15.10 usa el valor que incluye para cada una y escribe una advertencia en ``fess.log`` una vez por clave. No se rompe nada; añada las claves del archivo de 15.10 para que dejen de aparecer las advertencias.
 
 .. _upgrade-1510-failure-url:
 
@@ -641,6 +641,28 @@ Agente de usuario guardado por la pantalla General
 El agente de usuario por defecto del rastreador contiene la versión de |Fess| (``Mozilla/5.0 (compatible; Fess/<version>; +http://fess.codelibs.org/bot.html)``). Si guardó "Sistema" → "General" en la interfaz de administración en 15.8 o 15.9, la cadena mostrada en el campo "Agente de usuario" se guardó como ``crawling.user.agent`` en ``system.properties``, y un valor guardado tiene prioridad sobre el valor por defecto. Después de la actualización, el rastreador sigue por tanto anunciando la versión con la que se guardó, no 15.10.
 
 Para usar el nuevo valor por defecto, elimine la línea ``crawling.user.agent`` de ``system.properties`` (``app/WEB-INF/conf/`` en el paquete ZIP, ``/etc/fess/`` en el paquete RPM/DEB), o borre el campo "Agente de usuario" de la pantalla General y guárdela (un campo vacío elimina la clave). Si guarda la pantalla sin borrar el campo, se vuelve a escribir el valor antiguo. Esto se aplica siempre que ``system.properties`` se traslade a 15.10, como en los procedimientos ZIP, RPM/DEB y Docker cuando conserva el archivo.
+
+.. _upgrade-1510-link-schemes:
+
+Esquemas de los enlaces de los resultados de búsqueda
+-----------------------------------------------------
+
+15.10 decide los esquemas que pueden usar un enlace de resultado de búsqueda y una redirección de ``/go/`` mediante ``search.result.link.schemes`` en ``fess_config.properties``. El valor predeterminado coincide con los esquemas que la pantalla de búsqueda incluida (el tema ``bootstrap``) permitía en una lista fija hasta 15.9.
+
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+Un resultado de búsqueda cuya URL tiene un esquema que no figura en la lista no se convierte en enlace. ``/go/`` responde ``404`` para un documento cuya URL, tras los mapeos de ruta de «Visualización», tiene un esquema que no figura en la lista (se escribe una advertencia en ``fess.log``). Hasta 15.9, ``/go/`` redirigía a un esquema propio (como ``hammerspoon://``) producido por un mapeo de ruta de «Visualización». Si usa un esquema así, añádalo a ``search.result.link.schemes`` sin los dos puntos. No añada ``javascript``, ``data`` ni ``vbscript``. Un valor en blanco no permite ningún esquema. Para el formato y el comportamiento, consulte :ref:`search-result-link-schemes`.
+
+.. _upgrade-1510-passkey:
+
+El índice ``fess_user.passkey`` para las llaves de acceso
+---------------------------------------------------------
+
+15.10 añade el inicio de sesión de un usuario local con una llave de acceso (WebAuthn). Está desactivado de forma predeterminada; para los ajustes, consulte :doc:`../config/security-passkey`.
+
+Aunque la función esté desactivada, |Fess| crea al arrancar el nuevo índice ``fess_user.passkey``, porque lo usan la eliminación, la creación y el cambio de nombre de un usuario y la página de detalles del usuario de la pantalla de administración. Si |Fess| no tiene permiso para crear índices, cree ``fess_user.passkey`` antes de la actualización a partir de ``fess_indices/fess_user.passkey.json`` y ``fess_indices/fess_user.passkey/passkey.json`` (el prefijo es ``index.user.index``, ``fess_user`` de forma predeterminada). El índice no se une al alias ``fess_user``, por lo que las llaves de acceso no están en la copia de seguridad ``fess_user.bulk``. Tras una restauración, los usuarios deben registrar de nuevo sus llaves de acceso.
 
 Otros cambios de comportamiento
 -------------------------------
@@ -671,6 +693,8 @@ API añadidas en 15.10
 - ``theme_settings`` en ``GET /api/v2/ui/config``: el contenido de «Configuración del tema» en Sistema > General de la pantalla de administración (:doc:`../api/api-uiconfig`).
 - ``GET /api/admin/crawlinginfo/progress``: el progreso de cada configuración de rastreo en ejecución (:doc:`../api/admin/api-admin-crawlinginfo`).
 - ``mime_type``, ``http_status_code`` y ``content_length`` en ``/api/admin/failureurl``: información sobre la respuesta de la URL fallida (:doc:`../api/admin/api-admin-failureurl`).
+- ``/api/v2/auth/passkey``: inicio de sesión con una llave de acceso (WebAuthn) y registro, listado y eliminación de llaves de acceso. Desactivado de forma predeterminada; todos los endpoints responden ``404`` mientras está desactivado (:doc:`../config/security-passkey`).
+- ``result_link_schemes`` y ``features.passkey_enabled`` en ``GET /api/v2/ui/config``: los esquemas a los que puede enlazar un resultado de búsqueda y si las llaves de acceso están disponibles (:doc:`../api/api-uiconfig`).
 
 .. _upgrade-1510-implicit-fuzzy:
 

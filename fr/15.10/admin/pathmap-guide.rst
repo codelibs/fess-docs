@@ -145,6 +145,10 @@ Ceci est un exemple de configuration pour conserver le chemin de fichier origina
 
 Avec cette configuration, les URLs sont enregistrées dans l'index comme ``file:/srv/documents/...`` et converties en ``http://...`` lors du clic sur les résultats de recherche.
 
+.. note::
+
+   Si une conversion « Affichage » remplace le schéma d'une URL par un schéma qui vous est propre, ajoutez ce schéma à ``search.result.link.schemes`` dans ``fess_config.properties``. Un résultat de recherche dont le schéma ne figure pas dans la liste ne devient pas un lien, et ``/go/`` répond ``404`` (voir :doc:`../config/search-advanced`).
+
 Conversion de liens lors de la migration de serveur
 ---------------------------------------------------
 

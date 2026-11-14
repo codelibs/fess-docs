@@ -1224,6 +1224,9 @@ msgstr "是否启用 OSDD 链接（OpenSearch Description Document）。"
 msgid "Whether to enable the clipboard copy icon."
 msgstr "是否启用剪贴板复制图标。"
 
+msgid "URL schemes a search result may link to and /go/ may redirect to (comma-separated, no \":\"). Do not list javascript, data or vbscript. A blank value allows none."
+msgstr "搜索结果可以链接、/go/ 可以重定向的 URL 协议（以逗号分隔，不带“:”）。请不要列出 javascript、data 或 vbscript。值为空表示不允许任何协议。"
+
 msgid "Admin user names for authentication."
 msgstr "用于认证的管理员用户名。"
 
@@ -2135,3 +2138,15 @@ msgstr "内存中保留的登录速率限制桶的最大数量；达到上限时
 
 msgid "Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (\": keepalive\\n\\n\") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds."
 msgstr "/api/v2/chat/stream 发出的 SSE keep-alive ping 的间隔。该 ping 是仅含注释的一行（\": keepalive\\n\\n\"），不会影响事件流，但能够规避在长时间的 LLM 阶段断开空闲连接的中间设备（nginx 默认的 proxy_read_timeout 为 60s）。设置为 <=0 表示禁用。单位：毫秒。"
+
+msgid "Passkey (WebAuthn) login for local users. The feature is off by default. It also stays off when it is enabled but passkey.rp.id or passkey.origins is empty (a warning is logged once), so the relying party has to be named explicitly."
+msgstr "本地用户的通行密钥（WebAuthn）登录。该功能默认关闭。即使已启用，只要 passkey.rp.id 或 passkey.origins 为空，它仍保持关闭（会输出一次警告），因此必须明确指定依赖方。"
+
+msgid "Relying party ID: the registrable domain the passkeys are bound to, e.g. example.com. A passkey works on this host and its subdomains only, and cannot be moved to another ID later."
+msgstr "依赖方 ID：通行密钥所绑定的可注册域名，例如 example.com。通行密钥只能在该主机及其子域名上使用，之后无法转移到其他 ID。"
+
+msgid "Relying party name shown by the browser when a passkey is created."
+msgstr "创建通行密钥时浏览器显示的依赖方名称。"
+
+msgid "Origins (comma separated) a passkey ceremony is accepted from, e.g. https://fess.example.com. Each is an http or https origin with a host name; with none, or an entry that is not, the feature stays off."
+msgstr "接受通行密钥操作的来源（以逗号分隔），例如 https://fess.example.com。每一项都是带有主机名的 http 或 https 来源；没有任何来源，或者有不符合要求的条目时，该功能保持关闭。"

@@ -544,7 +544,7 @@ one, fill in ``properties.po`` beside this file.
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
     - 문서 처리 중에 프루닝(제거)할 HTML 태그.
-    - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+    - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
     - HTML 문서에서 추출하는 다이제스트의 최대 길이.
     - ``120``
@@ -1567,6 +1567,9 @@ one, fill in ``properties.po`` beside this file.
   * - clipboard.copy.icon.enabled
     - 클립보드 복사 아이콘 활성화 여부.
     - ``true``
+  * - search.result.link.schemes
+    - 검색 결과가 링크할 수 있고 /go/ 가 리다이렉트할 수 있는 URL 스킴(쉼표 구분, ":" 없음). javascript, data, vbscript는 나열하지 마십시오. 값이 비어 있으면 어떤 스킴도 허용하지 않습니다.
+    - ``http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs``
   * - authentication.admin.users
     - 인증용 관리자 사용자 이름.
     - ``admin``
@@ -2491,4 +2494,16 @@ one, fill in ``properties.po`` beside this file.
   * - api.chat.stream.keepalive.interval.ms
     - /api/v2/chat/stream 이 내보내는 SSE keep-alive ping의 간격입니다. ping은 주석만 있는 행(": keepalive\\n\\n")으로 이벤트 스트림에 영향을 주지 않으며, 긴 LLM 단계 동안 유휴 연결을 끊는 중간 장치(nginx의 기본 proxy_read_timeout은 60s)를 무력화합니다. 비활성화하려면 <=0으로 설정하십시오. 단위: 밀리초.
     - ``15000``
+  * - passkey.enabled
+    - 로컬 사용자의 패스키(WebAuthn) 로그인. 기본적으로 꺼져 있습니다. 활성화해도 passkey.rp.id 또는 passkey.origins가 비어 있으면 꺼진 채로 유지되므로(경고가 한 번 출력됩니다) 신뢰 당사자를 명시적으로 지정해야 합니다.
+    - ``false``
+  * - passkey.rp.id
+    - 신뢰 당사자(Relying Party) ID: 패스키가 연결되는 등록 가능한 도메인(예: example.com). 패스키는 이 호스트와 그 하위 도메인에서만 동작하며, 나중에 다른 ID로 옮길 수 없습니다.
+    - (empty)
+  * - passkey.rp.name
+    - 패스키를 만들 때 브라우저에 표시되는 신뢰 당사자 이름.
+    - ``Fess``
+  * - passkey.origins
+    - 패스키 처리(ceremony)를 받아들이는 오리진(쉼표 구분)(예: https://fess.example.com). 각 항목은 호스트 이름이 있는 http 또는 https 오리진이며, 항목이 없거나 그렇지 않은 항목이 있으면 기능은 꺼진 채로 유지됩니다.
+    - (empty)
 .. GENERATED-END: properties

@@ -145,6 +145,10 @@ Dies ist eine Beispielkonfiguration zum Beibehalten des ursprünglichen Dateipfa
 
 Mit dieser Konfiguration werden URLs als ``file:/srv/documents/...`` im Index gespeichert und beim Klicken auf Suchergebnisse in ``http://...`` konvertiert.
 
+.. note::
+
+   Ändert eine Konvertierung für „Anzeige" das Schema einer URL in ein eigenes Schema, ergänzen Sie dieses Schema in ``search.result.link.schemes`` in ``fess_config.properties``. Ein Suchergebnis, dessen Schema nicht in der Liste steht, wird nicht zum Link, und ``/go/`` antwortet mit ``404`` (siehe :doc:`../config/search-advanced`).
+
 Link-Konvertierung bei Server-Migration
 ---------------------------------------
 

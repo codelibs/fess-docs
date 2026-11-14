@@ -66,8 +66,10 @@ SPA 가 필요로 하는 초기 설정을 반환합니다.
           "login_link": true,
           "sso_enabled": false,
           "osdd_link": true,
-          "rag_chat_enabled": false
+          "rag_chat_enabled": false,
+          "passkey_enabled": false
         },
+        "result_link_schemes": ["http", "https", "ftp", "ftps", "file", "smb", "smb1", "storage", "s3", "gcs"],
         "page_size_default": 20,
         "page_size_max": 100,
         "sort_options": [
@@ -130,6 +132,9 @@ SPA 가 필요로 하는 초기 설정을 반환합니다.
    * - ``features``
      - object
      - 기능 플래그. 자세한 내용은 아래 표를 참조하십시오.
+   * - ``result_link_schemes``
+     - string[]
+     - 검색 결과 링크와 ``/go/`` 리다이렉트가 사용할 수 있는 URL 스킴(소문자, 콜론 없음)입니다. ``fess_config.properties`` 의 ``search.result.link.schemes`` 값이며, 값이 비어 있으면 빈 배열입니다( :ref:`search-result-link-schemes` 참조).
    * - ``page_size_default``
      - integer
      - 기본 페이지 크기.
@@ -281,6 +286,9 @@ features
    * - ``rag_chat_enabled``
      - boolean
      - RAG 채팅 기능이 사용 가능한지 여부.
+   * - ``passkey_enabled``
+     - boolean
+     - 패스키(WebAuthn) 로그인을 사용할 수 있는지 여부입니다. ``passkey.enabled`` 가 ``true`` 이고 ``passkey.rp.id`` 와 ``passkey.origins`` 에 사용 가능한 값이 있으면 ``true`` 입니다. ``false`` 인 동안에는 ``/api/v2/auth/passkey`` 아래의 모든 엔드포인트가 ``404`` 를 반환합니다( :doc:`../config/security-passkey` 참조).
 
 sort_options
 ~~~~~~~~~~~~

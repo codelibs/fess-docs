@@ -490,6 +490,38 @@ Spécifie le comportement par défaut de la recherche par facettes.
 L'écran de recherche fourni avec |Fess| ne demande que la facette ``label``, quelle que soit la
 valeur de ``query.facet.fields`` ; voir :ref:`search-custom-field-facet-sort-range`.
 
+.. _search-result-link-schemes:
+
+Schémas d'URL vers lesquels un résultat de recherche peut pointer
+=================================================================
+
+Le titre d'un résultat de recherche est un lien vers l'URL du document. ``search.result.link.schemes`` énumère les schémas d'URL (la partie avant ``:``, comme ``http``) vers lesquels un résultat peut pointer.
+La valeur par défaut est la liste ci-dessous, identique aux schémas que l'écran de recherche fourni (le thème ``bootstrap``) autorisait dans une liste fixe jusqu'à la 15.9.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+- Indiquez les schémas séparés par des virgules, sans ``:`` (un ``:`` est supprimé si vous l'écrivez). Les espaces autour de chaque entrée sont supprimés et la casse est ignorée (``HTTP`` équivaut à ``http``). Un schéma écrit deux fois ne compte qu'une fois.
+- Une valeur vide n'autorise aucun schéma. Aucun résultat de recherche ne devient un lien, et ``/go/`` répond ``404`` pour un document dont l'URL a un schéma.
+- Une URL sans schéma (une URL relative) est toujours autorisée par ``/go/``.
+- Ce paramètre ne figure pas dans « Système » > « Général » de l'écran d'administration. C'est une clé de ``fess_config.properties``.
+
+La liste est utilisée aux endroits suivants.
+
+- L'écran de recherche fourni (le thème ``bootstrap``) reçoit la liste sous le nom ``result_link_schemes`` dans ``/api/v2/ui/config`` (voir :doc:`../api/api-uiconfig`). Un résultat de recherche dont l'URL a un schéma non autorisé ne devient pas un lien.
+- ``/go/`` vérifie le schéma de l'URL après application des mappages de chemin « Affichage ». Pour un schéma non autorisé, il répond ``404`` et écrit dans ``fess.log`` l'avertissement ``The scheme of the redirect URL is not allowed by search.result.link.schemes``.
+- Les liens des titres de « Rechercher » (« Liste de recherche ») dans l'écran d'administration utilisent la même liste.
+- Le thème ``docsearch`` de fess-themes suit lui aussi ``result_link_schemes``. Certains autres thèmes conservent leur propre liste fixe de schémas. Pour un tel thème, modifier ce paramètre ne change pas le fait qu'un résultat devienne ou non un lien ; vérifiez-le donc avec le thème que vous utilisez.
+
+Si un mappage de chemin « Affichage » (:doc:`../admin/pathmap-guide`) réécrit des URL vers un schéma qui vous est propre (par exemple ``hammerspoon://...``), ajoutez ce schéma.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs,hammerspoon
+
+.. warning::
+
+   N'ajoutez pas ``javascript``, ``data`` ni ``vbscript``. ``/go/`` répond ``404`` pour un document dont l'URL commence par l'un d'eux, de sorte qu'un clic ne l'exécute pas. En revanche, « Rechercher » dans l'écran d'administration utilise telle quelle l'URL d'un document dont le schéma est autorisé comme cible du lien ; si vous en ajoutez un, un document dont l'URL a ce schéma y apparaît donc comme un lien.
+
 Paramètres pour obtenir les résultats de recherche au format XML compatible GSA
 ================================================================================
 

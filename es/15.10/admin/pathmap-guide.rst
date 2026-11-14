@@ -145,6 +145,10 @@ Este es un ejemplo de configuración para mantener la ruta de archivo original e
 
 Con esta configuración, las URLs se guardan en el índice como ``file:/srv/documents/...`` y se convierten a ``http://...`` al hacer clic en los resultados de búsqueda.
 
+.. note::
+
+   Si una conversión de «Visualización» cambia el esquema de una URL a uno propio, añada ese esquema a ``search.result.link.schemes`` en ``fess_config.properties``. Un resultado de búsqueda cuyo esquema no figura en la lista no se convierte en enlace, y ``/go/`` responde ``404`` (consulte :doc:`../config/search-advanced`).
+
 Conversión de enlaces durante la migración del servidor
 -------------------------------------------------------
 

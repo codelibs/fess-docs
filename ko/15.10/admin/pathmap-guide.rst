@@ -60,6 +60,10 @@
 * 크롤링/표시: 크롤링과 표시 모두에서 URL을 치환합니다.
 * 추출된 URL 변환: 크롤링 시 문서 획득 전에 URL을 치환합니다.
 
+.. note::
+
+   "표시" 변환으로 URL의 스킴을 독자적인 스킴으로 바꾸는 경우에는, 그 스킴을 ``fess_config.properties`` 의 ``search.result.link.schemes`` 에 추가하십시오. 스킴이 목록에 없는 검색 결과는 링크가 되지 않으며 ``/go/`` 는 ``404`` 를 반환합니다( :doc:`../config/search-advanced` 참조).
+
 표시 순서
 ::::::
 

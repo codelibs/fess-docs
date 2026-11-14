@@ -599,7 +599,7 @@ Docker 버전::
      - ``esreq``
      - "OpenSearch에 요청" 화면(``/admin/sereq/``)의 도움말 아이콘이 존재하지 않는 ``sereq-guide.html`` 을 엽니다. 이 화면의 가이드 이름인 ``esreq`` 를 사용하십시오.
 
-15.10은 ``fess_config.properties`` 에 다음 키도 추가합니다: ``api.search.similar.rate.limit.per.minute`` , ``crawler.progress.interval`` , ``crawler.metadata.content.image.includes`` , ``query.boost.fuzzy.cjk.enabled`` , ``query.boost.fuzzy.digit.enabled`` . 15.9에서 이어받은 파일에는 이 키들이 없으므로 15.10은 각 키에 대해 기본 제공 값을 사용하고 키마다 한 번씩 ``fess.log`` 에 경고를 출력합니다. 동작에는 문제가 없습니다. 경고를 없애려면 15.10 파일의 키를 추가하십시오.
+15.10은 ``fess_config.properties`` 에 다음 키도 추가합니다: ``api.search.similar.rate.limit.per.minute`` , ``crawler.progress.interval`` , ``crawler.metadata.content.image.includes`` , ``passkey.enabled`` , ``passkey.origins`` , ``passkey.rp.id`` , ``passkey.rp.name`` , ``password.changed.check.interval`` , ``query.boost.fuzzy.cjk.enabled`` , ``query.boost.fuzzy.digit.enabled`` , ``search.result.link.schemes`` . 15.9에서 이어받은 파일에는 이 키들이 없으므로 15.10은 각 키에 대해 기본 제공 값을 사용하고 키마다 한 번씩 ``fess.log`` 에 경고를 출력합니다. 동작에는 문제가 없습니다. 경고를 없애려면 15.10 파일의 키를 추가하십시오.
 
 .. _upgrade-1510-failure-url:
 
@@ -620,6 +620,28 @@ Tika 추출기가 zip 폭탄으로 의심하여 거부한 문서는 ``crawler.ig
 크롤러의 기본 사용자 에이전트에는 |Fess|\ 의 버전이 포함됩니다(``Mozilla/5.0 (compatible; Fess/<version>; +http://fess.codelibs.org/bot.html)``). 15.8 또는 15.9에서 관리 화면의 "시스템" → "일반" 을 저장했다면, "사용자 에이전트" 필드에 표시된 문자열이 ``crawling.user.agent`` 로 ``system.properties`` 에 저장되어 있으며, 저장된 값이 기본값보다 우선합니다. 따라서 업그레이드 후에도 크롤러는 15.10이 아니라 저장될 때의 버전을 계속 알립니다.
 
 새 기본값을 사용하려면 ``system.properties`` (ZIP 패키지는 ``app/WEB-INF/conf/`` , RPM/DEB 패키지는 ``/etc/fess/`` )에서 ``crawling.user.agent`` 줄을 삭제하거나, 일반 화면의 "사용자 에이전트" 필드를 비우고 저장하십시오(빈 필드는 키를 삭제합니다). 필드를 비우지 않고 화면을 저장하면 이전 값이 다시 기록됩니다. 이는 ``system.properties`` 를 15.10으로 이어받는 모든 경우(파일을 유지하는 ZIP, RPM/DEB, Docker 절차)에 해당합니다.
+
+.. _upgrade-1510-link-schemes:
+
+검색 결과 링크의 스킴
+---------------------
+
+15.10은 검색 결과 링크와 ``/go/`` 리다이렉트가 사용할 수 있는 스킴을 ``fess_config.properties`` 의 ``search.result.link.schemes`` 로 정합니다. 기본값은 15.9까지 번들된 검색 화면(``bootstrap`` 테마)이 고정 목록으로 허용하던 스킴과 같습니다.
+
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+URL의 스킴이 목록에 없는 검색 결과는 링크가 되지 않습니다. "표시" 경로 매핑을 적용한 후의 URL 스킴이 목록에 없는 문서에 대해 ``/go/`` 는 ``404`` 를 반환합니다(``fess.log`` 에 경고가 출력됩니다). 15.9까지 ``/go/`` 는 "표시" 경로 매핑이 만든 독자적인 스킴(``hammerspoon://`` 등)으로도 리다이렉트했습니다. 그러한 스킴을 사용한다면 콜론 없이 ``search.result.link.schemes`` 에 추가하십시오. ``javascript``, ``data``, ``vbscript`` 는 추가하지 마십시오. 값이 비어 있으면 어떤 스킴도 허용하지 않습니다. 형식과 동작은 :ref:`search-result-link-schemes` 를 참조하십시오.
+
+.. _upgrade-1510-passkey:
+
+패스키용 ``fess_user.passkey`` 인덱스
+-------------------------------------
+
+15.10은 패스키(WebAuthn)를 사용한 로컬 사용자의 로그인을 추가합니다. 기본적으로 꺼져 있습니다. 설정은 :doc:`../config/security-passkey` 를 참조하십시오.
+
+기능이 꺼져 있어도 |Fess| 는 시작할 때 새 인덱스 ``fess_user.passkey`` 를 만듭니다. 사용자의 삭제, 생성, 이름 변경과 관리 화면의 사용자 상세 페이지가 이 인덱스를 사용하기 때문입니다. |Fess| 가 인덱스를 만들 수 없는 환경에서는 업그레이드 전에 ``fess_indices/fess_user.passkey.json`` 과 ``fess_indices/fess_user.passkey/passkey.json`` 으로 ``fess_user.passkey`` 를 직접 만드십시오(접두사는 ``index.user.index`` 이며 기본값은 ``fess_user`` ). 이 인덱스는 ``fess_user`` 별칭에 포함되지 않으므로 패스키는 ``fess_user.bulk`` 백업에 들어 있지 않습니다. 복원한 후에는 사용자가 패스키를 다시 등록합니다.
 
 그 밖의 동작 변경
 -----------------
@@ -650,6 +672,8 @@ Tika 추출기가 zip 폭탄으로 의심하여 거부한 문서는 ``crawler.ig
 - ``GET /api/v2/ui/config`` 의 ``theme_settings``: 관리 화면 "시스템" → "일반"의 "테마 설정" 내용입니다(:doc:`../api/api-uiconfig`).
 - ``GET /api/admin/crawlinginfo/progress``: 실행 중인 크롤 설정별 진행 상황입니다(:doc:`../api/admin/api-admin-crawlinginfo`).
 - ``/api/admin/failureurl`` 의 ``mime_type``, ``http_status_code``, ``content_length``: 실패한 URL의 응답 정보입니다(:doc:`../api/admin/api-admin-failureurl`).
+- ``/api/v2/auth/passkey``: 패스키(WebAuthn)로 로그인하고 패스키를 등록, 나열, 삭제합니다. 기본적으로 꺼져 있으며, 꺼져 있는 동안 모든 엔드포인트가 ``404`` 를 반환합니다(:doc:`../config/security-passkey`).
+- ``GET /api/v2/ui/config`` 의 ``result_link_schemes`` 와 ``features.passkey_enabled``: 검색 결과가 링크할 수 있는 스킴과 패스키 사용 가능 여부입니다(:doc:`../api/api-uiconfig`).
 
 .. _upgrade-1510-implicit-fuzzy:
 

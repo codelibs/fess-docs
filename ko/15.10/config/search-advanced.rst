@@ -476,6 +476,38 @@ JSON 형식의 API 검색 시 OpenSearch 에 전달하는 프리퍼런스(검색
 |Fess| 에 번들된 검색 화면은 ``query.facet.fields`` 의 값과 관계없이 ``label`` 패싯만 요청합니다.
 :ref:`search-custom-field-facet-sort-range` 를 참조하십시오.
 
+.. _search-result-link-schemes:
+
+검색 결과가 링크할 수 있는 URL 스킴
+===================================
+
+검색 결과의 제목은 문서의 URL로 링크됩니다. ``search.result.link.schemes`` 는 검색 결과가 링크할 수 있는 URL 스킴(``http`` 와 같이 ``:`` 앞의 부분)을 나열합니다.
+기본값은 아래 목록이며, 15.9까지 번들된 검색 화면(``bootstrap`` 테마)이 고정 목록으로 허용하던 스킴과 같습니다.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+- 스킴은 ``:`` 없이 쉼표로 구분하여 지정합니다(``:`` 를 적으면 제거됩니다). 각 항목 앞뒤의 공백은 제거되고 대소문자는 구분하지 않습니다(``HTTP`` 는 ``http`` 와 같습니다). 같은 스킴을 두 번 적어도 한 번으로 취급합니다.
+- 값이 비어 있으면 어떤 스킴도 허용하지 않습니다. 검색 결과는 어느 것도 링크가 되지 않으며, 스킴이 있는 URL의 문서에 대해 ``/go/`` 는 ``404`` 를 반환합니다.
+- 스킴이 없는 URL(상대 URL)은 ``/go/`` 에서 항상 허용됩니다.
+- 이 설정은 관리 화면의 "시스템" > "일반"에 없습니다. ``fess_config.properties`` 의 키입니다.
+
+이 목록은 다음 위치에서 사용됩니다.
+
+- 번들된 검색 화면(``bootstrap`` 테마)은 목록을 ``/api/v2/ui/config`` 의 ``result_link_schemes`` 로 받습니다( :doc:`../api/api-uiconfig` 참조). URL의 스킴이 허용되지 않는 검색 결과는 링크가 되지 않습니다.
+- ``/go/`` 는 "표시" 경로 매핑을 적용한 후의 URL 스킴을 확인합니다. 허용되지 않는 스킴에는 ``404`` 를 반환하고 ``fess.log`` 에 경고 ``The scheme of the redirect URL is not allowed by search.result.link.schemes`` 를 기록합니다.
+- 관리 화면 "검색"("검색 목록")의 제목 링크도 같은 목록을 사용합니다.
+- fess-themes의 ``docsearch`` 테마도 ``result_link_schemes`` 를 따릅니다. 일부 다른 테마는 자체 고정 스킴 목록을 유지합니다. 그러한 테마에서는 이 설정을 바꿔도 결과가 링크가 되는지 여부가 바뀌지 않으므로, 사용하는 테마에서 확인하십시오.
+
+"표시" 경로 매핑(:doc:`../admin/pathmap-guide` )이 URL을 독자적인 스킴(예: ``hammerspoon://...`` )으로 바꾸는 경우에는 그 스킴을 추가하십시오.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs,hammerspoon
+
+.. warning::
+
+   ``javascript``, ``data``, ``vbscript`` 는 나열하지 마십시오. 이러한 스킴으로 시작하는 URL의 문서에 대해 ``/go/`` 는 ``404`` 를 반환하므로 클릭해도 실행되지 않습니다. 다만 관리 화면의 "검색"은 허용된 스킴을 가진 문서의 URL을 링크 대상으로 그대로 사용하므로, 이들 중 하나를 나열하면 그 스킴의 URL을 가진 문서가 그곳에 링크로 표시됩니다.
+
 검색 결과를 GSA 호환 XML 형식으로 가져올 때의 설정
 ===================================
 

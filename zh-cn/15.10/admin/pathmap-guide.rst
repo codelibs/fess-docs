@@ -138,6 +138,10 @@
 
 使用此配置,URL将作为 ``file:/srv/documents/...`` 保存到索引中,点击搜索结果时转换为 ``http://...``\ 。
 
+.. note::
+
+   如果「显示」转换将 URL 的协议改成了您自己的协议，请将该协议添加到 ``fess_config.properties`` 的 ``search.result.link.schemes`` 中。协议不在列表中的搜索结果不会成为链接，并且 ``/go/`` 返回 ``404`` （参见 :doc:`../config/search-advanced` ）。
+
 服务器迁移时的链接转换
 --------------------
 

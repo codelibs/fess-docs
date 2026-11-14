@@ -609,7 +609,7 @@ The ZIP procedure in Step 3 copies ``fess_config.properties`` from the old insta
      - ``esreq``
      - The help icon of the "Request to OpenSearch" screen (``/admin/sereq/``) opens ``sereq-guide.html``, which does not exist. Use ``esreq``, the name of the guide of that screen.
 
-15.10 also adds the following keys to ``fess_config.properties``: ``api.search.similar.rate.limit.per.minute``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``query.boost.fuzzy.cjk.enabled`` and ``query.boost.fuzzy.digit.enabled``. They are missing from a file carried over from 15.9, so 15.10 uses the value it ships for each of them and writes a warning to ``fess.log`` once per key. Nothing breaks; add the keys from the 15.10 file to stop the warnings.
+15.10 also adds the following keys to ``fess_config.properties``: ``api.search.similar.rate.limit.per.minute``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``passkey.enabled``, ``passkey.origins``, ``passkey.rp.id``, ``passkey.rp.name``, ``password.changed.check.interval``, ``query.boost.fuzzy.cjk.enabled``, ``query.boost.fuzzy.digit.enabled`` and ``search.result.link.schemes``. They are missing from a file carried over from 15.9, so 15.10 uses the value it ships for each of them and writes a warning to ``fess.log`` once per key. Nothing breaks; add the keys from the 15.10 file to stop the warnings.
 
 .. _upgrade-1510-failure-url:
 
@@ -630,6 +630,28 @@ User Agent Saved by the General Screen
 The default user agent of the crawler contains the version of |Fess| (``Mozilla/5.0 (compatible; Fess/<version>; +http://fess.codelibs.org/bot.html)``). If you saved "System" → "General" in the admin UI in 15.8 or 15.9, the string shown in the "User Agent" field was stored as ``crawling.user.agent`` in ``system.properties``, and a stored value takes precedence over the default. After the upgrade, the crawler therefore keeps announcing the version it was saved with, not 15.10.
 
 To use the new default, delete the ``crawling.user.agent`` line from ``system.properties`` (``app/WEB-INF/conf/`` of the ZIP package, ``/etc/fess/`` of the RPM/DEB package), or clear the "User Agent" field of the General screen and save it (a blank field removes the key). Saving the screen without clearing the field writes the old value again. This applies wherever ``system.properties`` is carried over to 15.10, such as the ZIP, RPM/DEB and Docker procedures when you keep the file.
+
+.. _upgrade-1510-link-schemes:
+
+Schemes of Search Result Links
+------------------------------
+
+15.10 decides the schemes a search result link and a ``/go/`` redirect may use with ``search.result.link.schemes`` in ``fess_config.properties``. The default is the same as the schemes the bundled search screen (the ``bootstrap`` theme) allowed in a fixed list up to 15.9.
+
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+A search result whose URL has a scheme that is not in the list does not become a link. ``/go/`` answers ``404`` for a document whose URL, after the "Displaying" path mappings, has a scheme that is not in the list (a warning is written to ``fess.log``). Up to 15.9, ``/go/`` redirected to a scheme of your own (such as ``hammerspoon://``) that a "Displaying" path mapping produced. If you use such a scheme, add it to ``search.result.link.schemes`` without the colon. Do not add ``javascript``, ``data`` or ``vbscript``. A blank value allows no scheme. For the format and the behavior, see :ref:`search-result-link-schemes`.
+
+.. _upgrade-1510-passkey:
+
+The ``fess_user.passkey`` Index for Passkeys
+--------------------------------------------
+
+15.10 adds login of a local user with a passkey (WebAuthn). It is off by default; see :doc:`../config/security-passkey` for the settings.
+
+Even while the feature is off, |Fess| creates the new index ``fess_user.passkey`` at startup, because deleting, creating and renaming a user and the user details page of the administration screen use it. Where |Fess| is not allowed to create indices, create ``fess_user.passkey`` before the upgrade from ``fess_indices/fess_user.passkey.json`` and ``fess_indices/fess_user.passkey/passkey.json`` (the prefix is ``index.user.index``, ``fess_user`` by default). The index does not join the ``fess_user`` alias, so passkeys are not in the ``fess_user.bulk`` backup. After a restore, users register their passkeys again.
 
 Other Behavior Changes
 ----------------------
@@ -660,6 +682,8 @@ API added in 15.10
 - ``theme_settings`` in ``GET /api/v2/ui/config``: the contents of "Theme Settings" under System > General in the admin screen (:doc:`../api/api-uiconfig`).
 - ``GET /api/admin/crawlinginfo/progress``: the progress of each running crawl configuration (:doc:`../api/admin/api-admin-crawlinginfo`).
 - ``mime_type``, ``http_status_code`` and ``content_length`` in ``/api/admin/failureurl``: information about the response of the failed URL (:doc:`../api/admin/api-admin-failureurl`).
+- ``/api/v2/auth/passkey``: login with a passkey (WebAuthn) and registering, listing and deleting passkeys. Off by default; every endpoint answers ``404`` while it is off (:doc:`../config/security-passkey`).
+- ``result_link_schemes`` and ``features.passkey_enabled`` in ``GET /api/v2/ui/config``: the schemes a search result may link to, and whether passkeys are available (:doc:`../api/api-uiconfig`).
 
 .. _upgrade-1510-implicit-fuzzy:
 

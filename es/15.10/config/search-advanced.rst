@@ -482,6 +482,38 @@ Especifica el comportamiento predeterminado de la búsqueda por facetas.
 La pantalla de búsqueda incluida con |Fess| solo solicita la faceta ``label``, independientemente de
 lo que indique ``query.facet.fields``; consulte :ref:`search-custom-field-facet-sort-range`.
 
+.. _search-result-link-schemes:
+
+Esquemas de URL a los que puede enlazar un resultado de búsqueda
+================================================================
+
+El título de un resultado de búsqueda enlaza con la URL del documento. ``search.result.link.schemes`` enumera los esquemas de URL (la parte anterior a ``:``, como ``http``) a los que puede enlazar un resultado.
+El valor predeterminado es la lista siguiente, que coincide con los esquemas que la pantalla de búsqueda incluida (el tema ``bootstrap``) permitía en una lista fija hasta 15.9.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+- Indique los esquemas separados por comas y sin ``:`` (si lo escribe, se elimina). Se eliminan los espacios alrededor de cada entrada y se ignoran las mayúsculas y minúsculas (``HTTP`` equivale a ``http``). Un esquema escrito dos veces cuenta una sola vez.
+- Un valor en blanco no permite ningún esquema. Ningún resultado de búsqueda se convierte en enlace y ``/go/`` responde ``404`` para un documento cuya URL tiene un esquema.
+- ``/go/`` siempre permite una URL sin esquema (una URL relativa).
+- El ajuste no está en «Sistema» > «General» de la pantalla de administración. Es una clave de ``fess_config.properties``.
+
+La lista se usa en estos lugares.
+
+- La pantalla de búsqueda incluida (el tema ``bootstrap``) recibe la lista como ``result_link_schemes`` de ``/api/v2/ui/config`` (consulte :doc:`../api/api-uiconfig`). Un resultado de búsqueda cuya URL tiene un esquema no permitido no se convierte en enlace.
+- ``/go/`` comprueba el esquema de la URL después de aplicar los mapeos de ruta de «Visualización». Para un esquema no permitido responde ``404`` y escribe en ``fess.log`` la advertencia ``The scheme of the redirect URL is not allowed by search.result.link.schemes``.
+- Los enlaces de título de «Búsqueda» («Lista de búsqueda») en la pantalla de administración usan la misma lista.
+- El tema ``docsearch`` de fess-themes también sigue ``result_link_schemes``. Otros temas mantienen su propia lista fija de esquemas. Con un tema así, cambiar este ajuste no cambia si un resultado se convierte en enlace, así que compruébelo con el tema que utilice.
+
+Si un mapeo de ruta de «Visualización» (:doc:`../admin/pathmap-guide`) reescribe las URL con un esquema propio (por ejemplo, ``hammerspoon://...``), añada ese esquema.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs,hammerspoon
+
+.. warning::
+
+   No incluya ``javascript``, ``data`` ni ``vbscript``. ``/go/`` responde ``404`` para un documento cuya URL empieza por alguno de ellos, de modo que un clic no lo ejecuta. Sin embargo, «Búsqueda» en la pantalla de administración usa tal cual como destino del enlace la URL de un documento con un esquema permitido, así que si incluye alguno de ellos, un documento cuya URL tenga ese esquema aparece allí como un enlace.
+
 Configuración para Obtener Resultados en Formato XML Compatible con GSA
 ========================================================================
 

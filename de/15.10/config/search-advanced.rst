@@ -484,6 +484,38 @@ Gibt das Standardverhalten der Facettensuche an.
 Die mit |Fess| mitgelieferte Suchoberfläche fordert unabhängig von ``query.facet.fields`` nur die
 Facette ``label`` an; siehe :ref:`search-custom-field-facet-sort-range`.
 
+.. _search-result-link-schemes:
+
+URL-Schemata, auf die ein Suchergebnis verlinken darf
+=====================================================
+
+Der Titel eines Suchergebnisses verlinkt auf die URL des Dokuments. ``search.result.link.schemes`` listet die URL-Schemata (den Teil vor ``:``, etwa ``http``) auf, auf die ein Ergebnis verlinken darf.
+Der Standardwert ist die folgende Liste, die den Schemata entspricht, die der mitgelieferte Suchbildschirm (das Theme ``bootstrap``) bis 15.9 in einer festen Liste zuließ.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+- Geben Sie die Schemata durch Komma getrennt und ohne ``:`` an (ein ``:`` wird entfernt, wenn Sie es schreiben). Leerzeichen um jeden Eintrag werden entfernt, und die Groß- und Kleinschreibung wird ignoriert (``HTTP`` entspricht ``http``). Ein doppelt geschriebenes Schema zählt einmal.
+- Ein leerer Wert lässt kein Schema zu. Kein Suchergebnis wird zum Link, und ``/go/`` antwortet für ein Dokument, dessen URL ein Schema hat, mit ``404``.
+- Eine URL ohne Schema (eine relative URL) lässt ``/go/`` immer zu.
+- Die Einstellung steht nicht unter „System" > „Allgemein" der Administrationsoberfläche. Es ist ein Schlüssel von ``fess_config.properties``.
+
+Die Liste wird an diesen Stellen verwendet.
+
+- Der mitgelieferte Suchbildschirm (das Theme ``bootstrap``) erhält die Liste als ``result_link_schemes`` von ``/api/v2/ui/config`` (siehe :doc:`../api/api-uiconfig`). Ein Suchergebnis, dessen URL ein nicht zugelassenes Schema hat, wird nicht zum Link.
+- ``/go/`` prüft das Schema der URL, nachdem die Pfadzuordnungen für „Anzeige" angewendet wurden. Bei einem nicht zugelassenen Schema antwortet es mit ``404`` und schreibt die Warnung ``The scheme of the redirect URL is not allowed by search.result.link.schemes`` in ``fess.log``.
+- Die Titellinks von „Suche" („Suchliste") in der Administrationsoberfläche verwenden dieselbe Liste.
+- Das Theme ``docsearch`` von fess-themes folgt ebenfalls ``result_link_schemes``. Einige andere Themes behalten ihre eigene feste Liste von Schemata. Bei einem solchen Theme ändert diese Einstellung nicht, ob ein Ergebnis zum Link wird; prüfen Sie es daher mit dem Theme, das Sie verwenden.
+
+Schreibt eine Pfadzuordnung für „Anzeige" (:doc:`../admin/pathmap-guide`) URLs auf ein eigenes Schema um (zum Beispiel ``hammerspoon://...``), ergänzen Sie dieses Schema.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs,hammerspoon
+
+.. warning::
+
+   Führen Sie ``javascript``, ``data`` und ``vbscript`` nicht auf. ``/go/`` antwortet für ein Dokument, dessen URL mit einem davon beginnt, mit ``404``, sodass ein Klick es nicht ausführt. „Suche" in der Administrationsoberfläche verwendet jedoch die URL eines Dokuments mit zugelassenem Schema unverändert als Linkziel. Wenn Sie eines davon aufführen, erscheint dort ein Dokument, dessen URL dieses Schema hat, als Link.
+
 Konfiguration für GSA-kompatibles XML-Format bei Suchergebnissen
 =================================================================
 

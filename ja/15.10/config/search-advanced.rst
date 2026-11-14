@@ -477,6 +477,38 @@ JSON形式のAPI検索時に、OpenSearchへ渡すプリファレンス(検索�
 |Fess| に同梱の検索画面は、 ``query.facet.fields`` の値にかかわらず ``label`` のファセットだけを要求します。
 :ref:`search-custom-field-facet-sort-range` を参照してください。
 
+.. _search-result-link-schemes:
+
+検索結果のリンクに使えるスキーム
+================================
+
+検索結果のタイトルは、文書の URL へのリンクになります。リンクにしてよい URL のスキーム（ ``http`` など、 ``:`` の前の部分）を ``search.result.link.schemes`` に指定します。
+初期値は次のとおりで、15.9 までの同梱の検索画面（テーマ ``bootstrap`` ）が固定で許可していたスキームと同じです。
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+- カンマ区切りで指定し、スキームに ``:`` は付けません（付けても取り除かれます）。各項目の前後の空白は取り除かれ、大文字と小文字は区別されません（ ``HTTP`` は ``http`` と同じです）。同じスキームを重ねて書いても 1 つとして扱われます。
+- 値を空にすると、どのスキームも許可されません。検索結果はリンクにならず、 ``/go/`` もスキームを持つ URL の文書には ``404`` を返します。
+- スキームを持たない URL（相対 URL）は、 ``/go/`` では常に許可されます。
+- この設定は管理画面の「システム」→「全般」にはありません。 ``fess_config.properties`` のキーです。
+
+この設定は次の場所で使われます。
+
+- 同梱の検索画面（テーマ ``bootstrap`` ）は、 ``/api/v2/ui/config`` の ``result_link_schemes`` から一覧を受け取ります（ :doc:`../api/api-uiconfig` を参照）。許可されないスキームの URL を持つ検索結果は、リンクになりません。
+- ``/go/`` は、「表示」のパスマッピングを適用した後の URL のスキームを確認します。許可されないスキームの場合は ``404`` を返し、 ``fess.log`` に ``The scheme of the redirect URL is not allowed by search.result.link.schemes`` の警告を出力します。
+- 管理画面の「検索リスト」の、タイトルのリンクにも同じ一覧が使われます。
+- fess-themes の ``docsearch`` テーマも ``result_link_schemes`` に従います。ほかのテーマには、許可するスキームを自分で固定して持つものがあります。そのようなテーマでは、この設定を変えてもリンクになるかどうかは変わらないため、使っているテーマで確認してください。
+
+パスマッピング（ :doc:`../admin/pathmap-guide` ）の「表示」で URL を独自のスキーム（たとえば ``hammerspoon://...`` ）に書き換える場合は、そのスキームを追加します。
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs,hammerspoon
+
+.. warning::
+
+   ``javascript`` 、 ``data`` 、 ``vbscript`` は指定しないでください。 ``/go/`` は URL がこれらのスキームで始まる文書に ``404`` を返すため、クリックしても実行されません。しかし管理画面の「検索リスト」は、許可されたスキームの URL をそのままリンク先に使うため、指定すると、そのスキームの URL を持つ文書が管理画面にリンクとして表示されます。
+
 検索結果をGSA互換のXML形式で取得する際の設定
 ===================================
 

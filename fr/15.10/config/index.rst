@@ -51,6 +51,7 @@ Ce guide complet couvre la configuration de |Fess|. Chaque section est organisé
 
    security-role
    security-virtual-host
+   security-passkey
    ldap-integration
    multitenancy
 

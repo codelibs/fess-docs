@@ -66,8 +66,10 @@ HTTP 方法            GET
           "login_link": true,
           "sso_enabled": false,
           "osdd_link": true,
-          "rag_chat_enabled": false
+          "rag_chat_enabled": false,
+          "passkey_enabled": false
         },
+        "result_link_schemes": ["http", "https", "ftp", "ftps", "file", "smb", "smb1", "storage", "s3", "gcs"],
         "page_size_default": 20,
         "page_size_max": 100,
         "sort_options": [
@@ -130,6 +132,9 @@ HTTP 方法            GET
    * - ``features``
      - object
      - 功能开关。详见下方表格。
+   * - ``result_link_schemes``
+     - string[]
+     - 搜索结果链接和 ``/go/`` 重定向可以使用的 URL 协议（小写，不带冒号）。其值为 ``fess_config.properties`` 中 ``search.result.link.schemes`` 的值，值为空时是空数组（参见 :ref:`search-result-link-schemes` ）。
    * - ``page_size_default``
      - integer
      - 默认每页条数。
@@ -281,6 +286,9 @@ features
    * - ``rag_chat_enabled``
      - boolean
      - RAG 聊天功能是否可用。
+   * - ``passkey_enabled``
+     - boolean
+     - 是否可以使用通行密钥（WebAuthn）登录： ``passkey.enabled`` 为 ``true`` ，且 ``passkey.rp.id`` 和 ``passkey.origins`` 有可用的值时为 ``true`` 。为 ``false`` 时， ``/api/v2/auth/passkey`` 下的所有端点都返回 ``404`` （参见 :doc:`../config/security-passkey` ）。
 
 sort_options
 ~~~~~~~~~~~~
