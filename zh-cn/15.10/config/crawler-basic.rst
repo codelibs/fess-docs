@@ -433,16 +433,83 @@ URL模式限制
    增加处理文件大小时,也需要增加爬虫的内存配置。
 
 .. note::
-   当文档大小超过50MB时,还需要更改OpenSearch端的设置。
-   OpenSearch默认将JSON内容中字符串字段的最大长度限制为50MB。
+   如果从文档中提取的文本超过约 37MB（例如非常大的 Excel 文件），默认上限会截断文本或跳过该文档。
+   提高上限的方法请参见 `提高超大提取文本的上限`_ 。该设置是 OpenSearch 的 JVM 系统属性，而不是 ``opensearch.yml`` 的设置。
 
-   请在 ``opensearch.yml`` 中添加以下内容:
+提高超大提取文本的上限
+======================
+
+概述
+----
+
+OpenSearch 无法读取 JSON 文档中超过 50,000,000 个字符的字符串。
+爬虫会将文档提取的文本作为 base64 字符串（大小为 UTF-8 文本的 4/3 倍）保存到爬取数据索引中，
+因此提取文本达到约 37MB 以上（例如非常大的 Excel 文件）时就会触及该上限。
+多字节文本在 UTF-8 中每个字符占 3 个字节，因此用更少的字符数就会触及上限。
+
+默认情况下，|Fess| 在上限范围内工作:
+
+- ``TikaExtractor`` 将提取的文本在 UTF-8 的 36,000,000 字节处截断（ ``maxTextBytes`` ）。截断点之前的文本会被索引，并记录警告日志。
+- ``OpenSearchDataService`` 不保存超过 37,000,000 字节的爬取数据（ ``maxDataSize`` ）。会记录警告日志，该文档不会被索引。
+- 如果已经保存了 OpenSearch 无法读取的爬取数据，索引更新处理会在记录警告后将其删除，避免一个文档使爬取停滞。
+
+提高上限
+--------
+
+要索引更大的文本，请同时提高以下四项设置。示例将上限设置为 100MB（104857600）。
+
+1. **OpenSearch**: 将以下行添加到 OpenSearch 的 ``config/jvm.options`` （或环境变量 ``OPENSEARCH_JAVA_OPTS`` ，容器环境中例如 compose 文件），并重启所有 OpenSearch 节点。这是 JVM 系统属性，写入 ``opensearch.yml`` 会导致 OpenSearch 因 ``unknown setting`` 错误而无法启动。
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
-   以上是设置为100MB的示例。详细信息请参阅 `OpenSearch文档 <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_ 。
+2. **爬虫进程**: 爬虫也会回读数据，因此请将相同的选项添加到 ``fess_config.properties`` 的 ``jvm.crawler.options`` 中（参见 :doc:`setup-memory` ）。保留该值中的其他默认选项，并同时提高 ``-Xmx`` 。
+
+   ::
+
+       -Dopensearch.xcontent.string.length.max=104857600\n\
+
+3. ``maxDataSize``: 按如下内容创建 ``app/WEB-INF/classes/crawler_opensearch+dataService.xml`` 。
+
+   ::
+
+       <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+               "http://dbflute.org/meta/lastadi10.dtd">
+       <components namespace="fessCrawler">
+               <component name="dataService"
+                       class="org.codelibs.fess.crawler.service.impl.OpenSearchDataService">
+                       <arg>crawlerConfig</arg>
+                       <property name="maxDataSize">74000000</property>
+               </component>
+       </components>
+
+4. ``maxTextBytes``: 在 ``app/WEB-INF/classes/crawler/extractor+tikaExtractor.xml`` 中添加属性。
+
+   ::
+
+       <component name="tikaExtractor"
+               class="org.codelibs.fess.crawler.extractor.impl.TikaExtractor">
+               <property name="maxCompressionRatio">2</property>
+               <property name="maxUncompressionSize">10000000</property>
+               <property name="maxTextBytes">72000000</property>
+       </component>
+
+取值方法
+--------
+
+base64 会将 n 字节变为 4 * ceil(n / 3) 个字符，因此请保持以下大小关系:
+
+``maxTextBytes`` < ``maxDataSize`` <= （ ``opensearch.xcontent.string.length.max`` 的值） * 3/4
+
+在 100MB 的示例中，104857600 * 3/4 = 78,643,200，因此将 ``maxDataSize`` 设为 74,000,000、 ``maxTextBytes`` 设为 72,000,000，即可为元数据留出余量。
+``opensearch.xcontent.string.length.max`` 的值是不超过 2,147,483,647 的整数。
+
+.. warning::
+   OpenSearch 每次解析此类文档时都会在内存中保留与上限同样大小的字符串，爬虫也是如此，因此请同时增大 OpenSearch 和爬虫的堆内存。
+   索引文档时也适用同样的上限，因此被索引的提取文本也必须在该范围内。
+   要爬取的文件大小上限是另一项设置（参见 `索引文件大小上限`_ ）。
 
 单词长度限制
 ==============

@@ -456,14 +456,17 @@ Vous pouvez définir la limite supérieure de la taille à indexer pour chaque t
 
 .. note::
    Si la taille du document dépasse 50 Mo, vous devez également modifier les paramètres d'OpenSearch.
-   OpenSearch limite par défaut la longueur maximale des champs de chaîne dans le contenu JSON à 50 Mo.
+   OpenSearch limite par défaut la longueur maximale d'une chaîne dans le contenu JSON à 50 000 000 de caractères.
+   Le robot d'exploration stocke le texte extrait sous forme de chaîne base64, qui est 4/3 fois plus grande que le texte en UTF-8 ; la limite doit donc être relevée en conséquence.
 
-   Ajoutez ce qui suit dans ``opensearch.yml`` :
+   Il s'agit d'une propriété système de la JVM et non d'un paramètre de ``opensearch.yml`` ; si elle est écrite dans ``opensearch.yml``, OpenSearch ne démarre pas (``unknown setting``).
+   Ajoutez la ligne suivante à ``config/jvm.options`` d'OpenSearch (ou à la variable d'environnement ``OPENSEARCH_JAVA_OPTS``), puis redémarrez tous les nœuds OpenSearch :
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
+   Le processus du robot relit les mêmes données ; ajoutez donc la même option à ``jvm.crawler.options`` dans ``fess_config.properties`` (conservez les autres options par défaut de la valeur).
    L'exemple ci-dessus définit la limite à 100 Mo. Pour plus de détails, consultez la `documentation OpenSearch <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
 
 Limitation de la longueur des mots

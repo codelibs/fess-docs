@@ -448,16 +448,83 @@ URL 패턴에 의한 제한
    처리할 파일 크기를 늘리는 경우 크롤러의 메모리 설정도 늘리십시오.
 
 .. note::
-   문서 크기가 50MB를 초과하는 경우 OpenSearch 측의 설정도 변경해야 합니다.
-   OpenSearch는 JSON 콘텐츠의 문자열 필드 최대 길이를 기본적으로 50MB로 제한하고 있습니다.
+   문서에서 추출한 텍스트가 약 37MB를 초과하면(매우 큰 Excel 파일 등) 기본 상한에 따라 텍스트가 잘리거나 문서가 건너뛰어집니다.
+   상한을 올리는 방법은 `매우 큰 추출 텍스트의 상한 올리기`_ 를 참조하십시오. 이 설정은 ``opensearch.yml`` 이 아니라 OpenSearch의 JVM 시스템 속성입니다.
 
-   ``opensearch.yml`` 에 다음을 추가하십시오:
+매우 큰 추출 텍스트의 상한 올리기
+=================================
+
+개요
+----
+
+OpenSearch는 JSON 문서 안의 50,000,000자를 초과하는 문자열을 읽을 수 없습니다.
+크롤러는 문서에서 추출한 텍스트를 base64 문자열(UTF-8 텍스트의 4/3배 크기)로 크롤 데이터 인덱스에 저장하므로,
+추출 텍스트가 약 37MB 이상이 되면(매우 큰 Excel 파일 등) 이 상한에 도달합니다.
+멀티바이트 텍스트는 UTF-8에서 한 글자가 3바이트이므로 더 적은 글자 수로 상한에 도달합니다.
+
+기본적으로 |Fess| 는 다음과 같이 상한 범위 안에서 동작합니다:
+
+- ``TikaExtractor`` 는 추출 텍스트를 UTF-8 기준 36,000,000바이트에서 자릅니다( ``maxTextBytes`` ). 그 지점까지의 텍스트는 인덱싱되고 경고가 로그에 기록됩니다.
+- ``OpenSearchDataService`` 는 37,000,000바이트를 초과하는 크롤 데이터를 저장하지 않습니다( ``maxDataSize`` ). 경고가 로그에 기록되고 해당 문서는 인덱싱되지 않습니다.
+- OpenSearch가 읽을 수 없는 크롤 데이터가 이미 저장되어 있으면 인덱스 갱신 처리가 경고를 기록하고 삭제하므로, 문서 한 건 때문에 크롤이 멈추지 않습니다.
+
+상한 올리기
+-----------
+
+더 큰 텍스트를 인덱싱하려면 다음 네 가지 설정을 함께 올립니다. 예시는 상한을 100MB(104857600)로 설정합니다.
+
+1. **OpenSearch**: OpenSearch의 ``config/jvm.options`` (또는 환경 변수 ``OPENSEARCH_JAVA_OPTS`` . 컨테이너의 경우 compose 파일 등)에 다음 줄을 추가하고 모든 OpenSearch 노드를 재시작합니다. 이것은 JVM 시스템 속성이며 ``opensearch.yml`` 에 적으면 ``unknown setting`` 오류로 OpenSearch가 시작되지 않습니다.
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
-   위의 예는 100MB로 설정하는 것입니다. 자세한 내용은 `OpenSearch 문서 <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_ 를 참조하십시오.
+2. **크롤러 프로세스**: 크롤러도 데이터를 다시 읽으므로 ``fess_config.properties`` 의 ``jvm.crawler.options`` 에 같은 옵션을 추가합니다(:doc:`setup-memory` 참조). 값의 다른 기본 옵션은 유지하고 ``-Xmx`` 도 함께 올리십시오.
+
+   ::
+
+       -Dopensearch.xcontent.string.length.max=104857600\n\
+
+3. ``maxDataSize``: ``app/WEB-INF/classes/crawler_opensearch+dataService.xml`` 을 다음 내용으로 만듭니다.
+
+   ::
+
+       <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+               "http://dbflute.org/meta/lastadi10.dtd">
+       <components namespace="fessCrawler">
+               <component name="dataService"
+                       class="org.codelibs.fess.crawler.service.impl.OpenSearchDataService">
+                       <arg>crawlerConfig</arg>
+                       <property name="maxDataSize">74000000</property>
+               </component>
+       </components>
+
+4. ``maxTextBytes``: ``app/WEB-INF/classes/crawler/extractor+tikaExtractor.xml`` 에 속성을 추가합니다.
+
+   ::
+
+       <component name="tikaExtractor"
+               class="org.codelibs.fess.crawler.extractor.impl.TikaExtractor">
+               <property name="maxCompressionRatio">2</property>
+               <property name="maxUncompressionSize">10000000</property>
+               <property name="maxTextBytes">72000000</property>
+       </component>
+
+설정값 정하는 방법
+------------------
+
+base64에서는 n바이트가 4 * ceil(n / 3) 문자가 되므로 다음 대소 관계를 유지하십시오:
+
+``maxTextBytes`` < ``maxDataSize`` <= ( ``opensearch.xcontent.string.length.max`` 값) * 3/4
+
+100MB 예시에서는 104857600 * 3/4 = 78,643,200 이므로 ``maxDataSize`` 를 74,000,000, ``maxTextBytes`` 를 72,000,000으로 하면 메타데이터를 위한 여유가 남습니다.
+``opensearch.xcontent.string.length.max`` 의 값은 2,147,483,647까지의 정수입니다.
+
+.. warning::
+   OpenSearch는 이러한 문서를 파싱할 때마다 상한 크기의 문자열을 메모리에 보관하며 크롤러도 마찬가지이므로, OpenSearch와 크롤러의 힙도 함께 늘리십시오.
+   문서를 인덱싱할 때도 같은 상한이 적용되므로 인덱싱되는 추출 텍스트도 그 범위에 들어와야 합니다.
+   크롤 대상 파일 크기의 상한은 별도의 설정입니다( `인덱싱할 파일 크기 상한`_ 참조).
 
 단어 길이 제한
 ==============

@@ -433,15 +433,18 @@ URL模式限制
    增加处理文件大小时,也需要增加爬虫的内存配置。
 
 .. note::
-   当文档大小超过50MB时,还需要更改OpenSearch端的设置。
-   OpenSearch默认将JSON内容中字符串字段的最大长度限制为50MB。
+   如果文档大小超过 50MB，还需要更改 OpenSearch 的设置。
+   OpenSearch 默认将 JSON 内容中字符串的最大长度限制为 50,000,000 个字符。
+   爬虫会将提取的文本保存为 base64 字符串（大小为 UTF-8 文本的 4/3 倍），因此需要相应地提高上限。
 
-   请在 ``opensearch.yml`` 中添加以下内容:
+   这是 JVM 系统属性，而不是 ``opensearch.yml`` 的设置，写入 ``opensearch.yml`` 会导致 OpenSearch 因 ``unknown setting`` 错误而无法启动。
+   请将以下行添加到 OpenSearch 的 ``config/jvm.options`` （或环境变量 ``OPENSEARCH_JAVA_OPTS`` ），并重启所有 OpenSearch 节点:
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
+   爬虫进程也会回读同样的数据，因此请同时将相同的选项添加到 ``fess_config.properties`` 的 ``jvm.crawler.options`` 中（保留该值中的其他默认选项）。
    以上是设置为100MB的示例。详细信息请参阅 `OpenSearch文档 <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_ 。
 
 单词长度限制

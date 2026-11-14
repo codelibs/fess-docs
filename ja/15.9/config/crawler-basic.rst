@@ -441,14 +441,17 @@ URL は次のバッチに回ります。キュー全体が 1 つのバッチに�
 
 .. note::
    ドキュメントサイズが50MBを超える場合は、OpenSearch側の設定も変更する必要があります。
-   OpenSearchではJSONコンテンツの文字列フィールドの最大長がデフォルトで50MBに制限されています。
+   OpenSearchではJSONコンテンツの文字列の最大長がデフォルトで50,000,000文字に制限されています。
+   クローラーは抽出したテキストをbase64文字列(UTF-8のテキストの4/3倍のサイズ)で保存するため、それに合わせて上限を引き上げる必要があります。
 
-   ``opensearch.yml`` に以下を追加してください:
+   これはJVMのシステムプロパティであり、 ``opensearch.yml`` の設定ではありません。 ``opensearch.yml`` に記述すると ``unknown setting`` エラーでOpenSearchが起動しません。
+   OpenSearchの ``config/jvm.options`` (または環境変数 ``OPENSEARCH_JAVA_OPTS`` )に以下の行を追加し、すべてのOpenSearchノードを再起動してください:
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
+   クローラープロセスも同じデータを読み戻すため、 ``fess_config.properties`` の ``jvm.crawler.options`` にも同じオプションを追加してください(値の他の既定オプションは残してください)。
    上記は100MBに設定する例です。詳細は `OpenSearchのドキュメント <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_ を参照してください。
 
 単語の長さ制限

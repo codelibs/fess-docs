@@ -440,16 +440,83 @@ URL は次のバッチに回ります。キュー全体が 1 つのバッチに�
    扱うファイルサイズを増やす場合は、クローラーのメモリ設定も増やしてください。
 
 .. note::
-   ドキュメントサイズが50MBを超える場合は、OpenSearch側の設定も変更する必要があります。
-   OpenSearchではJSONコンテンツの文字列フィールドの最大長がデフォルトで50MBに制限されています。
+   ドキュメントから抽出したテキストが約37MBを超える場合(非常に大きなExcelファイルなど)、既定の上限によりテキストが切り詰められるか、ドキュメントがスキップされます。
+   上限を引き上げる方法は `非常に大きな抽出テキストの上限を引き上げる`_ を参照してください。この設定は ``opensearch.yml`` ではなく、OpenSearchのJVMシステムプロパティです。
 
-   ``opensearch.yml`` に以下を追加してください:
+非常に大きな抽出テキストの上限を引き上げる
+==========================================
+
+概要
+----
+
+OpenSearchは、JSONドキュメント内の50,000,000文字を超える文字列を読み込めません。
+クローラーはドキュメントから抽出したテキストをbase64文字列(UTF-8のテキストの4/3倍のサイズ)としてクロールデータのインデックスに保存するため、
+抽出テキストが約37MB以上になる場合(非常に大きなExcelファイルなど)にこの上限に達します。
+マルチバイトのテキストはUTF-8で1文字3バイトのため、より少ない文字数で上限に達します。
+
+既定では、 |Fess| は次のようにして上限の範囲内で動作します:
+
+- ``TikaExtractor`` は抽出テキストをUTF-8で36,000,000バイトで切り詰めます( ``maxTextBytes`` )。そこまでのテキストはインデックスされ、警告がログに出力されます。
+- ``OpenSearchDataService`` は37,000,000バイトを超えるクロールデータを保存しません( ``maxDataSize`` )。警告がログに出力され、そのドキュメントはインデックスされません。
+- OpenSearchが読み込めないクロールデータがすでに保存されている場合は、インデックス更新処理が警告を出力して削除するため、1件のドキュメントでクロールが止まることはありません。
+
+上限の引き上げ
+--------------
+
+より大きなテキストをインデックスするには、次の4つの設定をあわせて引き上げます。例では上限を100MB(104857600)にします。
+
+1. **OpenSearch**: OpenSearchの ``config/jvm.options`` (または環境変数 ``OPENSEARCH_JAVA_OPTS`` 。コンテナの場合はcomposeファイルなど)に以下の行を追加し、すべてのOpenSearchノードを再起動します。これはJVMのシステムプロパティであり、 ``opensearch.yml`` に記述すると ``unknown setting`` エラーで起動しなくなります。
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
-   上記は100MBに設定する例です。詳細は `OpenSearchのドキュメント <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_ を参照してください。
+2. **クローラープロセス**: クローラーもデータを読み戻すため、 ``fess_config.properties`` の ``jvm.crawler.options`` に同じオプションを追加します(:doc:`setup-memory` を参照)。値の他の既定オプションは残し、 ``-Xmx`` もあわせて引き上げてください。
+
+   ::
+
+       -Dopensearch.xcontent.string.length.max=104857600\n\
+
+3. ``maxDataSize``: ``app/WEB-INF/classes/crawler_opensearch+dataService.xml`` を次の内容で作成します。
+
+   ::
+
+       <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+               "http://dbflute.org/meta/lastadi10.dtd">
+       <components namespace="fessCrawler">
+               <component name="dataService"
+                       class="org.codelibs.fess.crawler.service.impl.OpenSearchDataService">
+                       <arg>crawlerConfig</arg>
+                       <property name="maxDataSize">74000000</property>
+               </component>
+       </components>
+
+4. ``maxTextBytes``: ``app/WEB-INF/classes/crawler/extractor+tikaExtractor.xml`` にプロパティを追加します。
+
+   ::
+
+       <component name="tikaExtractor"
+               class="org.codelibs.fess.crawler.extractor.impl.TikaExtractor">
+               <property name="maxCompressionRatio">2</property>
+               <property name="maxUncompressionSize">10000000</property>
+               <property name="maxTextBytes">72000000</property>
+       </component>
+
+設定値の決め方
+--------------
+
+base64ではnバイトが 4 * ceil(n / 3) 文字になるため、次の大小関係を保ってください:
+
+``maxTextBytes`` < ``maxDataSize`` <= ( ``opensearch.xcontent.string.length.max`` の値) * 3/4
+
+100MBの例では 104857600 * 3/4 = 78,643,200 のため、 ``maxDataSize`` を74,000,000、 ``maxTextBytes`` を72,000,000にするとメタデータ分の余裕が残ります。
+``opensearch.xcontent.string.length.max`` の値は2,147,483,647までの整数です。
+
+.. warning::
+   OpenSearchはこのようなドキュメントを解析するたびに上限サイズの文字列をメモリに保持し、クローラーも同様のため、OpenSearchとクローラーのヒープもあわせて増やしてください。
+   ドキュメントをインデックスするときにも同じ上限が適用されるため、インデックスされる抽出テキストもその範囲に収まる必要があります。
+   クロール対象のファイルサイズの上限は別の設定です( `インデックスするファイルサイズの上限`_ を参照)。
 
 単語の長さ制限
 ==============
