@@ -446,16 +446,83 @@ You can set upper limits for indexing sizes by file type.
    When increasing file sizes to handle, also increase crawler memory settings.
 
 .. note::
-   If the document size exceeds 50MB, you also need to change the OpenSearch settings.
-   OpenSearch limits the maximum length of string fields in JSON content to 50MB by default.
+   If the extracted text of a document exceeds about 37MB (very large Excel files, for example), the default limits cut the text or skip the document.
+   See `Raising the Limit for Very Large Extracted Text`_ for how to raise them. Note that the setting is a JVM system property of OpenSearch, not a setting of ``opensearch.yml``.
 
-   Add the following to ``opensearch.yml``:
+Raising the Limit for Very Large Extracted Text
+===============================================
+
+Overview
+--------
+
+OpenSearch cannot read a string of more than 50,000,000 characters in a JSON document.
+The crawler stores the extracted text of a document in the crawl data index as a base64 string, which is 4/3 times the size of the text in UTF-8,
+so an extracted text of about 37MB or more (a very large Excel file, for example) reaches the limit.
+A multibyte text takes 3 bytes per character in UTF-8, so it reaches the limit with fewer characters.
+
+By default, |Fess| works within the limit:
+
+- ``TikaExtractor`` cuts the extracted text at 36,000,000 bytes in UTF-8 (``maxTextBytes``). The text up to there is indexed, and a warning is logged.
+- ``OpenSearchDataService`` does not store the crawl data over 37,000,000 bytes (``maxDataSize``). A warning is logged, and the document is not indexed.
+- If crawl data that OpenSearch cannot read is already stored, the index updater deletes it with a warning, so that one document does not stop the crawl.
+
+Raising the Limit
+-----------------
+
+To index larger texts, raise the following four settings together. The examples set the limit to 100MB (104857600).
+
+1. **OpenSearch**: add the following line to ``config/jvm.options`` of OpenSearch (or to the ``OPENSEARCH_JAVA_OPTS`` environment variable, for example in the compose file of the container), and restart all the OpenSearch nodes. It is a JVM system property; written in ``opensearch.yml``, it stops OpenSearch from starting (``unknown setting``).
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
-   The above example sets the limit to 100MB. For details, see the `OpenSearch documentation <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
+2. **Crawler process**: the crawler also reads the data back, so add the same option to ``jvm.crawler.options`` in ``fess_config.properties`` (see :doc:`setup-memory`). Keep the other default options of the value, and raise ``-Xmx`` as well.
+
+   ::
+
+       -Dopensearch.xcontent.string.length.max=104857600\n\
+
+3. ``maxDataSize``: create ``app/WEB-INF/classes/crawler_opensearch+dataService.xml`` as follows.
+
+   ::
+
+       <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+               "http://dbflute.org/meta/lastadi10.dtd">
+       <components namespace="fessCrawler">
+               <component name="dataService"
+                       class="org.codelibs.fess.crawler.service.impl.OpenSearchDataService">
+                       <arg>crawlerConfig</arg>
+                       <property name="maxDataSize">74000000</property>
+               </component>
+       </components>
+
+4. ``maxTextBytes``: add the property to ``app/WEB-INF/classes/crawler/extractor+tikaExtractor.xml``.
+
+   ::
+
+       <component name="tikaExtractor"
+               class="org.codelibs.fess.crawler.extractor.impl.TikaExtractor">
+               <property name="maxCompressionRatio">2</property>
+               <property name="maxUncompressionSize">10000000</property>
+               <property name="maxTextBytes">72000000</property>
+       </component>
+
+Values to choose
+----------------
+
+Base64 makes n bytes into 4 * ceil(n / 3) characters, so keep the following order:
+
+``maxTextBytes`` < ``maxDataSize`` <= (limit of ``opensearch.xcontent.string.length.max``) * 3/4
+
+For the 100MB example, 104857600 * 3/4 = 78,643,200, so ``maxDataSize`` of 74,000,000 and ``maxTextBytes`` of 72,000,000 leave room for the metadata.
+The value of ``opensearch.xcontent.string.length.max`` is an integer up to 2,147,483,647.
+
+.. warning::
+   OpenSearch holds a string as big as the limit in memory each time it parses such a document, and the crawler does the same, so raise the heap of OpenSearch and the crawler as well.
+   The same limit applies when the document is indexed, so the extracted text that is indexed has to fit in it too.
+   The upper limit of the size of the file to crawl is a separate setting (see `Maximum File Size to Index`_).
 
 Word Length Restrictions
 =========================

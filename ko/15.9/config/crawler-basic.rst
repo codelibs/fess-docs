@@ -448,15 +448,18 @@ URL 패턴에 의한 제한
    처리할 파일 크기를 늘리는 경우 크롤러의 메모리 설정도 늘리십시오.
 
 .. note::
-   문서 크기가 50MB를 초과하는 경우 OpenSearch 측의 설정도 변경해야 합니다.
-   OpenSearch는 JSON 콘텐츠의 문자열 필드 최대 길이를 기본적으로 50MB로 제한하고 있습니다.
+   문서 크기가 50MB를 초과하는 경우 OpenSearch 설정도 변경해야 합니다.
+   OpenSearch는 JSON 콘텐츠의 문자열 최대 길이를 기본적으로 50,000,000자로 제한합니다.
+   크롤러는 추출한 텍스트를 base64 문자열(UTF-8 텍스트의 4/3배 크기)로 저장하므로, 그에 맞게 상한을 올려야 합니다.
 
-   ``opensearch.yml`` 에 다음을 추가하십시오:
+   이것은 JVM 시스템 속성이며 ``opensearch.yml`` 의 설정이 아닙니다. ``opensearch.yml`` 에 적으면 ``unknown setting`` 오류로 OpenSearch가 시작되지 않습니다.
+   OpenSearch의 ``config/jvm.options`` (또는 환경 변수 ``OPENSEARCH_JAVA_OPTS`` )에 다음 줄을 추가하고 모든 OpenSearch 노드를 재시작하십시오:
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
+   크롤러 프로세스도 같은 데이터를 다시 읽으므로, ``fess_config.properties`` 의 ``jvm.crawler.options`` 에도 같은 옵션을 추가하십시오(값의 다른 기본 옵션은 유지하십시오).
    위의 예는 100MB로 설정하는 것입니다. 자세한 내용은 `OpenSearch 문서 <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_ 를 참조하십시오.
 
 단어 길이 제한

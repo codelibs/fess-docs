@@ -447,14 +447,17 @@ You can set upper limits for indexing sizes by file type.
 
 .. note::
    If the document size exceeds 50MB, you also need to change the OpenSearch settings.
-   OpenSearch limits the maximum length of string fields in JSON content to 50MB by default.
+   OpenSearch limits the maximum length of a string in JSON content to 50,000,000 characters by default.
+   The crawler stores the extracted text as a base64 string, which is 4/3 times the size of the text in UTF-8, so the limit has to be raised accordingly.
 
-   Add the following to ``opensearch.yml``:
+   This is a JVM system property, not a setting of ``opensearch.yml``, and OpenSearch does not start with an ``unknown setting`` error if it is written in ``opensearch.yml``.
+   Add the following line to ``config/jvm.options`` of OpenSearch (or to the ``OPENSEARCH_JAVA_OPTS`` environment variable), and restart all the OpenSearch nodes:
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
+   The crawler process reads the same data back, so add the same option to ``jvm.crawler.options`` in ``fess_config.properties`` as well (keep the other default options of the value).
    The above example sets the limit to 100MB. For details, see the `OpenSearch documentation <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
 
 Word Length Restrictions

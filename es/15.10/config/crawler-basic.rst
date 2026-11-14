@@ -454,16 +454,83 @@ Puede configurar el límite superior del tamaño a indexar para cada tipo de arc
    Si aumenta el tamaño de archivo a manejar, también aumente la configuración de memoria del rastreador.
 
 .. note::
-   Si el tamaño del documento supera los 50 MB, también debe cambiar la configuración de OpenSearch.
-   OpenSearch limita la longitud máxima de los campos de cadena en el contenido JSON a 50 MB de forma predeterminada.
+   Si el texto extraído de un documento supera unos 37 MB (por ejemplo, archivos de Excel muy grandes), los límites predeterminados recortan el texto u omiten el documento.
+   Consulte `Aumentar el límite para textos extraídos muy grandes`_ para saber cómo aumentarlos. El ajuste es una propiedad del sistema de la JVM de OpenSearch, no un ajuste de ``opensearch.yml``.
 
-   Agregue lo siguiente a ``opensearch.yml``:
+Aumentar el límite para textos extraídos muy grandes
+====================================================
+
+Descripción general
+-------------------
+
+OpenSearch no puede leer una cadena de más de 50.000.000 de caracteres en un documento JSON.
+El rastreador guarda el texto extraído de un documento en el índice de datos de rastreo como una cadena base64 (4/3 veces el tamaño del texto en UTF-8),
+por lo que un texto extraído de unos 37 MB o más (por ejemplo, un archivo de Excel muy grande) alcanza el límite.
+Un texto multibyte ocupa 3 bytes por carácter en UTF-8, así que alcanza el límite con menos caracteres.
+
+De forma predeterminada, |Fess| funciona dentro del límite:
+
+- ``TikaExtractor`` recorta el texto extraído en 36.000.000 de bytes en UTF-8 (``maxTextBytes``). El texto hasta ese punto se indexa y se registra una advertencia.
+- ``OpenSearchDataService`` no guarda los datos de rastreo de más de 37.000.000 de bytes (``maxDataSize``). Se registra una advertencia y el documento no se indexa.
+- Si ya hay datos de rastreo guardados que OpenSearch no puede leer, el actualizador de índice los elimina con una advertencia, para que un solo documento no detenga el rastreo.
+
+Aumentar el límite
+------------------
+
+Para indexar textos más grandes, aumente juntos los cuatro ajustes siguientes. Los ejemplos fijan el límite en 100 MB (104857600).
+
+1. **OpenSearch**: añada la siguiente línea a ``config/jvm.options`` de OpenSearch (o a la variable de entorno ``OPENSEARCH_JAVA_OPTS``, por ejemplo en el archivo compose del contenedor) y reinicie todos los nodos de OpenSearch. Es una propiedad del sistema de la JVM; si se escribe en ``opensearch.yml``, OpenSearch no arranca (``unknown setting``).
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
-   El ejemplo anterior establece el límite en 100 MB. Para más detalles, consulte la `documentación de OpenSearch <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
+2. **Proceso del rastreador**: el rastreador también vuelve a leer los datos, así que añada la misma opción a ``jvm.crawler.options`` en ``fess_config.properties`` (consulte :doc:`setup-memory`). Conserve las demás opciones predeterminadas del valor y aumente también ``-Xmx``.
+
+   ::
+
+       -Dopensearch.xcontent.string.length.max=104857600\n\
+
+3. ``maxDataSize``: cree ``app/WEB-INF/classes/crawler_opensearch+dataService.xml`` de la siguiente forma.
+
+   ::
+
+       <?xml version="1.0" encoding="UTF-8"?>
+       <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+               "http://dbflute.org/meta/lastadi10.dtd">
+       <components namespace="fessCrawler">
+               <component name="dataService"
+                       class="org.codelibs.fess.crawler.service.impl.OpenSearchDataService">
+                       <arg>crawlerConfig</arg>
+                       <property name="maxDataSize">74000000</property>
+               </component>
+       </components>
+
+4. ``maxTextBytes``: añada la propiedad a ``app/WEB-INF/classes/crawler/extractor+tikaExtractor.xml``.
+
+   ::
+
+       <component name="tikaExtractor"
+               class="org.codelibs.fess.crawler.extractor.impl.TikaExtractor">
+               <property name="maxCompressionRatio">2</property>
+               <property name="maxUncompressionSize">10000000</property>
+               <property name="maxTextBytes">72000000</property>
+       </component>
+
+Valores que elegir
+------------------
+
+Base64 convierte n bytes en 4 * ceil(n / 3) caracteres, así que mantenga este orden:
+
+``maxTextBytes`` < ``maxDataSize`` <= (valor de ``opensearch.xcontent.string.length.max``) * 3/4
+
+En el ejemplo de 100 MB, 104857600 * 3/4 = 78.643.200; con ``maxDataSize`` de 74.000.000 y ``maxTextBytes`` de 72.000.000 queda margen para los metadatos.
+El valor de ``opensearch.xcontent.string.length.max`` es un entero de hasta 2.147.483.647.
+
+.. warning::
+   OpenSearch mantiene en memoria una cadena tan grande como el límite cada vez que analiza un documento así, y el rastreador hace lo mismo, así que aumente también el heap de OpenSearch y del rastreador.
+   El mismo límite se aplica al indexar el documento, por lo que el texto extraído que se indexa también debe caber en él.
+   El límite superior del tamaño del archivo que se rastrea es un ajuste distinto (consulte `Límite Superior del Tamaño de Archivo a Indexar`_).
 
 Limitación de Longitud de Palabras
 ===================================

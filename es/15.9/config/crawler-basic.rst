@@ -455,14 +455,17 @@ Puede configurar el límite superior del tamaño a indexar para cada tipo de arc
 
 .. note::
    Si el tamaño del documento supera los 50 MB, también debe cambiar la configuración de OpenSearch.
-   OpenSearch limita la longitud máxima de los campos de cadena en el contenido JSON a 50 MB de forma predeterminada.
+   OpenSearch limita por defecto la longitud máxima de una cadena en el contenido JSON a 50.000.000 de caracteres.
+   El rastreador guarda el texto extraído como una cadena base64, que es 4/3 veces más grande que el texto en UTF-8, por lo que el límite debe aumentarse en consecuencia.
 
-   Agregue lo siguiente a ``opensearch.yml``:
+   Es una propiedad del sistema de la JVM y no un ajuste de ``opensearch.yml``; si se escribe en ``opensearch.yml``, OpenSearch no arranca (``unknown setting``).
+   Añada la siguiente línea a ``config/jvm.options`` de OpenSearch (o a la variable de entorno ``OPENSEARCH_JAVA_OPTS``) y reinicie todos los nodos de OpenSearch:
 
    ::
 
-       opensearch.xcontent.string.length.max: 104857600
+       -Dopensearch.xcontent.string.length.max=104857600
 
+   El proceso del rastreador vuelve a leer los mismos datos, por lo que debe añadir la misma opción también a ``jvm.crawler.options`` en ``fess_config.properties`` (conserve las demás opciones predeterminadas del valor).
    El ejemplo anterior establece el límite en 100 MB. Para más detalles, consulte la `documentación de OpenSearch <https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/#important-system-properties>`_.
 
 Limitación de Longitud de Palabras
