@@ -21,7 +21,7 @@ Wofür OCR gilt
 
 Bei aktivierter OCR gilt sie für Folgendes:
 
-- Bilddateien (PNG, JPEG, TIFF, GIF, BMP usw.)
+- Bilddateien (PNG, JPEG, TIFF, GIF, BMP, WebP usw.)
 - In Dokumente eingebettete Bilder, die Tika verarbeitet (z. B. Office-Dateien)
 - PDFs mit leerer Textebene (gescannte PDFs)
 
@@ -182,6 +182,7 @@ Betriebshinweise
 - Bei neuen Web-Crawl-Konfigurationen schließt das standardmäßige Ausschlussmuster Bild-URLs (jpg, png, gif usw.) aus. Um Bilder auf einer Website zu crawlen, entfernen Sie diese aus „Vom Crawlen ausgeschlossene URL“. Beim Dateisystem-Crawl werden Bilder berücksichtigt.
 - Auch die Größenbeschränkungen des Crawlers gelten. Die Größenbeschränkung für die Indexierung je Dateityp (Standard: 10 MB) finden Sie unter :doc:`crawler-basic`.
 - Die OCR-Genauigkeit hängt von der Qualität des Scans ab. Handschrift wird im Allgemeinen nicht gut erkannt.
+- Tesseract erkennt die Ausrichtung einer auf dem Kopf stehenden Seite mit wenig Text unter Umständen nicht; scannen Sie Seiten daher aufrecht.
 - Dateien, die vor dem Aktivieren von OCR indexiert wurden, werden nicht automatisch per OCR verarbeitet. Bei aktiviertem inkrementellem Crawling ("Letzte Änderung prüfen" in :doc:`../admin/general-guide`) wird eine Datei, deren Änderungszeit sich nicht geändert hat, beim erneuten Crawlen nicht noch einmal abgerufen. Um OCR auf diese Dateien anzuwenden, deaktivieren Sie "Letzte Änderung prüfen" für einen Crawl, oder löschen Sie die Dokumente aus dem Index und crawlen Sie erneut.
 
 Hinweise zum Upgrade
