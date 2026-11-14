@@ -145,6 +145,10 @@ This is an example configuration for keeping the original file path in the index
 
 With this configuration, URLs are saved to the index as ``file:/srv/documents/...``, and converted to ``http://...`` when clicking search results.
 
+.. note::
+
+   If a "Displaying" conversion changes the scheme of a URL to one of your own, add that scheme to ``search.result.link.schemes`` in ``fess_config.properties``. A search result whose scheme is not in the list does not become a link, and ``/go/`` answers ``404`` (see :doc:`../config/search-advanced`).
+
 Link Conversion During Server Migration
 ---------------------------------------
 

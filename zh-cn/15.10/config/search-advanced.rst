@@ -471,6 +471,38 @@ OpenSearch 会根据该字段首次被索引的值来创建定义：
 |Fess| 内置的搜索界面无论 ``query.facet.fields`` 如何设置，都只请求 ``label`` 分面；参见
 :ref:`search-custom-field-facet-sort-range`\ 。
 
+.. _search-result-link-schemes:
+
+搜索结果可链接的 URL 协议
+=========================
+
+搜索结果的标题会链接到文档的 URL。 ``search.result.link.schemes`` 列出了搜索结果可以链接的 URL 协议（ ``:`` 之前的部分，例如 ``http`` ）。
+默认值为下面的列表，与 15.9 及更早版本中内置搜索界面（ ``bootstrap`` 主题）以固定列表允许的协议相同。
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+- 协议以逗号分隔，不带 ``:`` （如果写了 ``:`` 会被去掉）。每一项前后的空格会被去掉，并且不区分大小写（ ``HTTP`` 与 ``http`` 相同）。重复写的协议只算一次。
+- 值为空表示不允许任何协议。没有任何搜索结果会成为链接，并且对于 URL 带有协议的文档， ``/go/`` 返回 ``404`` 。
+- 不带协议的 URL（相对 URL）始终被 ``/go/`` 允许。
+- 该设置不在管理界面的「系统」→「常规」中，而是 ``fess_config.properties`` 的一个键。
+
+该列表用于以下位置。
+
+- 内置搜索界面（ ``bootstrap`` 主题）通过 ``/api/v2/ui/config`` 的 ``result_link_schemes`` 获取该列表（参见 :doc:`../api/api-uiconfig` ）。URL 的协议不被允许的搜索结果不会成为链接。
+- ``/go/`` 会在应用「显示」路径映射之后检查 URL 的协议。对于不被允许的协议，它返回 ``404`` ，并向 ``fess.log`` 输出警告 ``The scheme of the redirect URL is not allowed by search.result.link.schemes`` 。
+- 管理界面「搜索」（「搜索列表」）中的标题链接使用同一个列表。
+- fess-themes 的 ``docsearch`` 主题也遵循 ``result_link_schemes`` 。其他一些主题保留自己固定的协议列表。对于这样的主题，更改此设置不会改变结果是否成为链接，请使用您所用的主题确认。
+
+如果「显示」路径映射（ :doc:`../admin/pathmap-guide` ）将 URL 改写为您自己的协议（例如 ``hammerspoon://...`` ），请添加该协议。
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs,hammerspoon
+
+.. warning::
+
+   请不要列出 ``javascript`` 、 ``data`` 或 ``vbscript`` 。对于 URL 以其中之一开头的文档， ``/go/`` 返回 ``404`` ，因此点击不会执行它。但是，管理界面的「搜索」会将协议被允许的文档的 URL 原样用作链接目标，因此如果列出其中之一，URL 带有该协议的文档会在那里显示为链接。
+
 以GSA兼容XML格式获取搜索结果的配置
 ===================================
 

@@ -623,7 +623,7 @@ Das ZIP-Verfahren in Schritt 3 kopiert die ``fess_config.properties`` aus der al
      - ``esreq``
      - Das Hilfesymbol des Bildschirms „Anfrage an OpenSearch" (``/admin/sereq/``) öffnet ``sereq-guide.html``, das nicht existiert. Verwenden Sie ``esreq``, den Namen der Anleitung dieses Bildschirms.
 
-15.10 fügt der ``fess_config.properties`` außerdem die folgenden Schlüssel hinzu: ``api.search.similar.rate.limit.per.minute``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``query.boost.fuzzy.cjk.enabled`` und ``query.boost.fuzzy.digit.enabled``. In einer aus 15.9 übernommenen Datei fehlen sie, daher verwendet 15.10 für jeden von ihnen den mitgelieferten Wert und schreibt pro Schlüssel einmal eine Warnung in ``fess.log``. Es geht nichts kaputt; übernehmen Sie die Schlüssel aus der Datei von 15.10, um die Warnungen zu beenden.
+15.10 fügt der ``fess_config.properties`` außerdem die folgenden Schlüssel hinzu: ``api.search.similar.rate.limit.per.minute``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``passkey.enabled``, ``passkey.origins``, ``passkey.rp.id``, ``passkey.rp.name``, ``password.changed.check.interval``, ``query.boost.fuzzy.cjk.enabled``, ``query.boost.fuzzy.digit.enabled`` und ``search.result.link.schemes``. In einer aus 15.9 übernommenen Datei fehlen sie, daher verwendet 15.10 für jeden von ihnen den mitgelieferten Wert und schreibt pro Schlüssel einmal eine Warnung in ``fess.log``. Es geht nichts kaputt; übernehmen Sie die Schlüssel aus der Datei von 15.10, um die Warnungen zu beenden.
 
 .. _upgrade-1510-failure-url:
 
@@ -644,6 +644,28 @@ Vom Bildschirm „Allgemein" gespeicherter User-Agent
 Der Standard-User-Agent des Crawlers enthält die Version von |Fess| (``Mozilla/5.0 (compatible; Fess/<version>; +http://fess.codelibs.org/bot.html)``). Wenn Sie in 15.8 oder 15.9 in der Administrationsoberfläche „System" → „Allgemein" gespeichert haben, wurde die im Feld „Benutzer-Agent" angezeigte Zeichenfolge als ``crawling.user.agent`` in ``system.properties`` gespeichert, und ein gespeicherter Wert hat Vorrang vor dem Standardwert. Nach dem Upgrade meldet sich der Crawler deshalb weiterhin mit der Version, mit der er gespeichert wurde, nicht mit 15.10.
 
 Um den neuen Standardwert zu verwenden, löschen Sie die Zeile ``crawling.user.agent`` aus ``system.properties`` (``app/WEB-INF/conf/`` beim ZIP-Paket, ``/etc/fess/`` beim RPM/DEB-Paket), oder leeren Sie das Feld „Benutzer-Agent" des Bildschirms „Allgemein" und speichern Sie ihn (ein leeres Feld entfernt den Schlüssel). Speichern Sie den Bildschirm, ohne das Feld zu leeren, wird der alte Wert erneut geschrieben. Das gilt überall dort, wo ``system.properties`` nach 15.10 übernommen wird, etwa bei den Verfahren für ZIP, RPM/DEB und Docker, wenn Sie die Datei behalten.
+
+.. _upgrade-1510-link-schemes:
+
+Schemata von Suchergebnis-Links
+-------------------------------
+
+15.10 legt die Schemata, die ein Suchergebnis-Link und eine ``/go/``-Weiterleitung verwenden dürfen, mit ``search.result.link.schemes`` in ``fess_config.properties`` fest. Der Standardwert entspricht den Schemata, die der mitgelieferte Suchbildschirm (das Theme ``bootstrap``) bis 15.9 in einer festen Liste zuließ.
+
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+Ein Suchergebnis, dessen URL ein Schema hat, das nicht in der Liste steht, wird nicht zum Link. ``/go/`` antwortet für ein Dokument, dessen URL nach den Pfadzuordnungen für „Anzeige" ein Schema hat, das nicht in der Liste steht, mit ``404`` (eine Warnung wird in ``fess.log`` geschrieben). Bis 15.9 leitete ``/go/`` auf ein eigenes Schema (etwa ``hammerspoon://``) weiter, das eine Pfadzuordnung für „Anzeige" erzeugt hatte. Wenn Sie ein solches Schema verwenden, ergänzen Sie es ohne Doppelpunkt in ``search.result.link.schemes``. Führen Sie ``javascript``, ``data`` und ``vbscript`` nicht auf. Ein leerer Wert lässt kein Schema zu. Zum Format und zum Verhalten siehe :ref:`search-result-link-schemes`.
+
+.. _upgrade-1510-passkey:
+
+Der Index ``fess_user.passkey`` für Passkeys
+--------------------------------------------
+
+15.10 fügt die Anmeldung eines lokalen Benutzers mit einem Passkey (WebAuthn) hinzu. Sie ist standardmäßig deaktiviert; zu den Einstellungen siehe :doc:`../config/security-passkey`.
+
+Auch bei deaktivierter Funktion legt |Fess| beim Start den neuen Index ``fess_user.passkey`` an, weil das Löschen, Anlegen und Umbenennen eines Benutzers sowie die Benutzerdetailseite der Administrationsoberfläche ihn verwenden. Darf |Fess| keine Indizes anlegen, legen Sie ``fess_user.passkey`` vor dem Upgrade aus ``fess_indices/fess_user.passkey.json`` und ``fess_indices/fess_user.passkey/passkey.json`` an (das Präfix ist ``index.user.index``, standardmäßig ``fess_user``). Der Index gehört nicht zum Alias ``fess_user``, daher sind Passkeys nicht in der Sicherung ``fess_user.bulk`` enthalten. Nach einer Wiederherstellung registrieren die Benutzer ihre Passkeys erneut.
 
 Weitere Verhaltensänderungen
 ----------------------------
@@ -674,6 +696,8 @@ In 15.10 hinzugefügte APIs
 - ``theme_settings`` in ``GET /api/v2/ui/config``: der Inhalt der „Theme-Einstellungen“ unter System > Allgemein in der Administrationsoberfläche (:doc:`../api/api-uiconfig`).
 - ``GET /api/admin/crawlinginfo/progress``: der Fortschritt jeder laufenden Crawl-Konfiguration (:doc:`../api/admin/api-admin-crawlinginfo`).
 - ``mime_type``, ``http_status_code`` und ``content_length`` in ``/api/admin/failureurl``: Informationen zur Antwort der fehlgeschlagenen URL (:doc:`../api/admin/api-admin-failureurl`).
+- ``/api/v2/auth/passkey``: Anmeldung mit einem Passkey (WebAuthn) sowie Registrieren, Auflisten und Löschen von Passkeys. Standardmäßig deaktiviert; solange sie deaktiviert ist, antwortet jeder Endpunkt mit ``404`` (:doc:`../config/security-passkey`).
+- ``result_link_schemes`` und ``features.passkey_enabled`` in ``GET /api/v2/ui/config``: die Schemata, auf die ein Suchergebnis verlinken darf, und ob Passkeys verfügbar sind (:doc:`../api/api-uiconfig`).
 
 .. _upgrade-1510-implicit-fuzzy:
 

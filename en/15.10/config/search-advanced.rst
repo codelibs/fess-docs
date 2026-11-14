@@ -482,6 +482,38 @@ Specifies the default behavior of faceted search.
 The search screen bundled with |Fess| requests only the ``label`` facet, whatever
 ``query.facet.fields`` says; see :ref:`search-custom-field-facet-sort-range`.
 
+.. _search-result-link-schemes:
+
+URL Schemes a Search Result May Link To
+=======================================
+
+The title of a search result links to the URL of the document. ``search.result.link.schemes`` lists the URL schemes (the part before ``:``, such as ``http``) a result may link to.
+The default is the list below, which is the same as the schemes the bundled search screen (the ``bootstrap`` theme) allowed in a fixed list up to 15.9.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+- Give the schemes comma-separated, without ``:`` (a ``:`` is removed if you write it). Spaces around each entry are removed and the case is ignored (``HTTP`` is the same as ``http``). A scheme written twice counts once.
+- A blank value allows no scheme. No search result becomes a link, and ``/go/`` answers ``404`` for a document whose URL has a scheme.
+- A URL without a scheme (a relative URL) is always allowed by ``/go/``.
+- The setting is not on "System" > "General" of the administration screen. It is a key of ``fess_config.properties``.
+
+The list is used in these places.
+
+- The bundled search screen (the ``bootstrap`` theme) receives the list as ``result_link_schemes`` of ``/api/v2/ui/config`` (see :doc:`../api/api-uiconfig`). A search result whose URL has a scheme that is not allowed does not become a link.
+- ``/go/`` checks the scheme of the URL after the "Displaying" path mappings are applied. For a scheme that is not allowed it answers ``404`` and writes a warning ``The scheme of the redirect URL is not allowed by search.result.link.schemes`` to ``fess.log``.
+- The title links of "Search" ("Search List") in the administration screen use the same list.
+- The ``docsearch`` theme of fess-themes also follows ``result_link_schemes``. Some other themes keep their own fixed list of schemes. For such a theme, changing this setting does not change whether a result becomes a link, so check it with the theme you use.
+
+If a "Displaying" path mapping (:doc:`../admin/pathmap-guide`) rewrites URLs to a scheme of your own (for example ``hammerspoon://...``), add that scheme.
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs,hammerspoon
+
+.. warning::
+
+   Do not list ``javascript``, ``data`` or ``vbscript``. ``/go/`` answers ``404`` for a document whose URL starts with one of them, so a click does not run it. However, "Search" in the administration screen uses the URL of a document with an allowed scheme as the link target as it is, so if you list one of them, a document whose URL has that scheme appears there as a link.
+
 Settings for Retrieving Search Results in GSA-Compatible XML Format
 ====================================================================
 

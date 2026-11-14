@@ -51,6 +51,7 @@
 
    security-role
    security-virtual-host
+   security-passkey
    ldap-integration
    multitenancy
 

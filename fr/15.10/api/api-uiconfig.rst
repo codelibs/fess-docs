@@ -66,8 +66,10 @@ En cas de succès (HTTP 200, UiConfigResponse), une réponse au format d'envelop
           "login_link": true,
           "sso_enabled": false,
           "osdd_link": true,
-          "rag_chat_enabled": false
+          "rag_chat_enabled": false,
+          "passkey_enabled": false
         },
+        "result_link_schemes": ["http", "https", "ftp", "ftps", "file", "smb", "smb1", "storage", "s3", "gcs"],
         "page_size_default": 20,
         "page_size_max": 100,
         "sort_options": [
@@ -130,6 +132,9 @@ Les détails de chaque élément de ``response`` sont les suivants. Tous les cha
    * - ``features``
      - object
      - Indicateurs de fonctionnalités. Voir le tableau ci-dessous.
+   * - ``result_link_schemes``
+     - string[]
+     - Les schémas d'URL (en minuscules, sans les deux-points) qu'un lien de résultat de recherche et une redirection ``/go/`` peuvent utiliser. C'est la valeur de ``search.result.link.schemes`` dans ``fess_config.properties`` ; le tableau est vide lorsque la valeur est vide (voir :ref:`search-result-link-schemes`).
    * - ``page_size_default``
      - integer
      - Taille de page par défaut.
@@ -281,6 +286,9 @@ Tous les champs sont obligatoires.
    * - ``rag_chat_enabled``
      - boolean
      - Indique si la fonctionnalité de chat RAG est disponible.
+   * - ``passkey_enabled``
+     - boolean
+     - Indique si la connexion avec une clé d'accès (WebAuthn) est disponible : ``true`` lorsque ``passkey.enabled`` vaut ``true`` et que ``passkey.rp.id`` et ``passkey.origins`` contiennent des valeurs utilisables. Tant que la valeur est ``false``, tous les points d'accès sous ``/api/v2/auth/passkey`` répondent ``404`` (voir :doc:`../config/security-passkey`).
 
 sort_options
 ~~~~~~~~~~~~

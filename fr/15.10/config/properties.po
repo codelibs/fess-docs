@@ -1224,6 +1224,9 @@ msgstr "Indique s'il faut activer le lien OSDD (OpenSearch Description Document)
 msgid "Whether to enable the clipboard copy icon."
 msgstr "Indique s'il faut activer l'icône de copie dans le presse-papiers."
 
+msgid "URL schemes a search result may link to and /go/ may redirect to (comma-separated, no \":\"). Do not list javascript, data or vbscript. A blank value allows none."
+msgstr "Schémas d'URL vers lesquels un résultat de recherche peut pointer et vers lesquels /go/ peut rediriger (séparés par des virgules, sans \":\"). N'indiquez pas javascript, data ni vbscript. Une valeur vide n'en autorise aucun."
+
 msgid "Admin user names for authentication."
 msgstr "Noms des utilisateurs administrateurs pour l'authentification."
 
@@ -2135,3 +2138,15 @@ msgstr "Nombre maximum de buckets de limitation de débit de connexion conservé
 
 msgid "Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (\": keepalive\\n\\n\") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds."
 msgstr "Intervalle entre les pings keep-alive SSE émis par /api/v2/chat/stream. Le ping est une ligne de commentaire uniquement (\": keepalive\\n\\n\") qui n'affecte pas le flux d'événements mais contourne les intermédiaires (le proxy_read_timeout par défaut de nginx est de 60s) qui coupent les connexions inactives pendant les longues phases LLM. Définissez <=0 pour désactiver. Unité : millisecondes."
+
+msgid "Passkey (WebAuthn) login for local users. The feature is off by default. It also stays off when it is enabled but passkey.rp.id or passkey.origins is empty (a warning is logged once), so the relying party has to be named explicitly."
+msgstr "Connexion par clé d'accès (WebAuthn) pour les utilisateurs locaux. La fonctionnalité est désactivée par défaut. Elle reste aussi désactivée lorsqu'elle est activée mais que passkey.rp.id ou passkey.origins est vide (un avertissement est écrit une seule fois) ; la partie de confiance doit donc être nommée explicitement."
+
+msgid "Relying party ID: the registrable domain the passkeys are bound to, e.g. example.com. A passkey works on this host and its subdomains only, and cannot be moved to another ID later."
+msgstr "ID de la partie de confiance : le domaine enregistrable auquel les clés d'accès sont liées, par exemple example.com. Une clé d'accès ne fonctionne que sur cet hôte et ses sous-domaines, et ne peut pas être déplacée vers un autre ID par la suite."
+
+msgid "Relying party name shown by the browser when a passkey is created."
+msgstr "Nom de la partie de confiance affiché par le navigateur lors de la création d'une clé d'accès."
+
+msgid "Origins (comma separated) a passkey ceremony is accepted from, e.g. https://fess.example.com. Each is an http or https origin with a host name; with none, or an entry that is not, the feature stays off."
+msgstr "Origines (séparées par des virgules) dont une cérémonie de clé d'accès est acceptée, par exemple https://fess.example.com. Chacune est une origine http ou https avec un nom d'hôte ; sans origine, ou avec une entrée qui n'en est pas une, la fonctionnalité reste désactivée."

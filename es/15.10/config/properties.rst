@@ -544,7 +544,7 @@ Límite de tasa
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
     - Etiquetas HTML que se podan (eliminan) durante el procesamiento de documentos.
-    - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+    - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
     - Longitud máxima del digest extraído de los documentos HTML.
     - ``120``
@@ -1567,6 +1567,9 @@ Web
   * - clipboard.copy.icon.enabled
     - Indica si se habilita el icono de copia al portapapeles.
     - ``true``
+  * - search.result.link.schemes
+    - Esquemas de URL a los que puede enlazar un resultado de búsqueda y a los que puede redirigir /go/ (separados por comas, sin ":"). No incluya javascript, data ni vbscript. Un valor en blanco no permite ninguno.
+    - ``http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs``
   * - authentication.admin.users
     - Nombres de los usuarios administradores para la autenticación.
     - ``admin``
@@ -2491,4 +2494,16 @@ Web
   * - api.chat.stream.keepalive.interval.ms
     - Intervalo entre los pings de keep-alive de SSE que emite /api/v2/chat/stream. El ping es una línea de solo comentario (": keepalive\\n\\n") que no afecta al flujo de eventos pero neutraliza a los intermediarios (el proxy_read_timeout predeterminado de nginx es 60s) que descartan las conexiones inactivas durante las fases largas del LLM. Establezca <=0 para deshabilitarlo. Unidad: milisegundos.
     - ``15000``
+  * - passkey.enabled
+    - Inicio de sesión con llave de acceso (WebAuthn) para usuarios locales. La función está desactivada de forma predeterminada. También permanece desactivada cuando está habilitada pero passkey.rp.id o passkey.origins está vacío (se registra una advertencia una sola vez), por lo que la parte confiante debe indicarse de forma explícita.
+    - ``false``
+  * - passkey.rp.id
+    - ID de la parte confiante: el dominio registrable al que quedan vinculadas las llaves de acceso, p. ej. example.com. Una llave de acceso funciona solo en este host y en sus subdominios, y no se puede trasladar después a otro ID.
+    - (empty)
+  * - passkey.rp.name
+    - Nombre de la parte confiante que muestra el navegador al crear una llave de acceso.
+    - ``Fess``
+  * - passkey.origins
+    - Orígenes (separados por comas) desde los que se acepta una ceremonia de llave de acceso, p. ej. https://fess.example.com. Cada uno es un origen http o https con un nombre de host; si no hay ninguno, o si alguna entrada no lo es, la función permanece desactivada.
+    - (empty)
 .. GENERATED-END: properties

@@ -544,7 +544,7 @@ one, fill in ``properties.po`` beside this file.
     - ``//LINK[@rel='canonical'][1]/@href``
   * - crawler.document.html.pruned.tags
     - ドキュメント処理中に削除（プルーニング）するHTMLタグ。
-    - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+    - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
   * - crawler.document.html.max.digest.length
     - HTMLドキュメントから抽出するダイジェストの最大長。
     - ``120``
@@ -1567,6 +1567,9 @@ Web
   * - clipboard.copy.icon.enabled
     - クリップボードへのコピーアイコンを有効にするかどうか。
     - ``true``
+  * - search.result.link.schemes
+    - 検索結果がリンクでき、/go/ がリダイレクトできる URL のスキーム（カンマ区切り、「:」は付けない）。javascript、data、vbscript は指定しないでください。空にするとどのスキームも許可されません。
+    - ``http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs``
   * - authentication.admin.users
     - 認証用の管理者ユーザー名。
     - ``admin``
@@ -2491,4 +2494,16 @@ Web
   * - api.chat.stream.keepalive.interval.ms
     - /api/v2/chat/streamが送信するSSEキープアライブpingの間隔。pingはコメントのみの行（": keepalive\\n\\n"）で、イベントストリームには影響しませんが、長いLLMフェーズの間にアイドル接続を切断する中間装置（nginxのデフォルトのproxy_read_timeoutは60s）を回避します。<=0を設定すると無効になります。単位: ミリ秒。
     - ``15000``
+  * - passkey.enabled
+    - ローカルユーザー向けのパスキー（WebAuthn）ログイン。既定では無効です。有効にしても passkey.rp.id または passkey.origins が空の場合は無効のままです（警告を 1 回ログに出力します）。リライングパーティーは明示的に指定する必要があります。
+    - ``false``
+  * - passkey.rp.id
+    - リライングパーティー ID: パスキーを結びつける登録可能なドメイン（例: example.com）。パスキーはこのホストとそのサブドメインでだけ使え、後から別の ID に移すことはできません。
+    - (empty)
+  * - passkey.rp.name
+    - パスキーを作るときにブラウザが表示するリライングパーティーの名前。
+    - ``Fess``
+  * - passkey.origins
+    - パスキーの操作を受け付けるオリジン（カンマ区切り。例: https://fess.example.com）。各項目はホスト名を持つ http または https のオリジンにします。1 つもない場合や、そうでない項目がある場合、機能は無効のままです。
+    - (empty)
 .. GENERATED-END: properties

@@ -1224,6 +1224,9 @@ msgstr "OSDD 링크(OpenSearch Description Document) 활성화 여부."
 msgid "Whether to enable the clipboard copy icon."
 msgstr "클립보드 복사 아이콘 활성화 여부."
 
+msgid "URL schemes a search result may link to and /go/ may redirect to (comma-separated, no \":\"). Do not list javascript, data or vbscript. A blank value allows none."
+msgstr "검색 결과가 링크할 수 있고 /go/ 가 리다이렉트할 수 있는 URL 스킴(쉼표 구분, \":\" 없음). javascript, data, vbscript는 나열하지 마십시오. 값이 비어 있으면 어떤 스킴도 허용하지 않습니다."
+
 msgid "Admin user names for authentication."
 msgstr "인증용 관리자 사용자 이름."
 
@@ -2135,3 +2138,15 @@ msgstr "메모리에 보관하는 로그인 속도 제한 버킷의 최대 수�
 
 msgid "Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (\": keepalive\\n\\n\") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds."
 msgstr "/api/v2/chat/stream 이 내보내는 SSE keep-alive ping의 간격입니다. ping은 주석만 있는 행(\": keepalive\\n\\n\")으로 이벤트 스트림에 영향을 주지 않으며, 긴 LLM 단계 동안 유휴 연결을 끊는 중간 장치(nginx의 기본 proxy_read_timeout은 60s)를 무력화합니다. 비활성화하려면 <=0으로 설정하십시오. 단위: 밀리초."
+
+msgid "Passkey (WebAuthn) login for local users. The feature is off by default. It also stays off when it is enabled but passkey.rp.id or passkey.origins is empty (a warning is logged once), so the relying party has to be named explicitly."
+msgstr "로컬 사용자의 패스키(WebAuthn) 로그인. 기본적으로 꺼져 있습니다. 활성화해도 passkey.rp.id 또는 passkey.origins가 비어 있으면 꺼진 채로 유지되므로(경고가 한 번 출력됩니다) 신뢰 당사자를 명시적으로 지정해야 합니다."
+
+msgid "Relying party ID: the registrable domain the passkeys are bound to, e.g. example.com. A passkey works on this host and its subdomains only, and cannot be moved to another ID later."
+msgstr "신뢰 당사자(Relying Party) ID: 패스키가 연결되는 등록 가능한 도메인(예: example.com). 패스키는 이 호스트와 그 하위 도메인에서만 동작하며, 나중에 다른 ID로 옮길 수 없습니다."
+
+msgid "Relying party name shown by the browser when a passkey is created."
+msgstr "패스키를 만들 때 브라우저에 표시되는 신뢰 당사자 이름."
+
+msgid "Origins (comma separated) a passkey ceremony is accepted from, e.g. https://fess.example.com. Each is an http or https origin with a host name; with none, or an entry that is not, the feature stays off."
+msgstr "패스키 처리(ceremony)를 받아들이는 오리진(쉼표 구분)(예: https://fess.example.com). 각 항목은 호스트 이름이 있는 http 또는 https 오리진이며, 항목이 없거나 그렇지 않은 항목이 있으면 기능은 꺼진 채로 유지됩니다."

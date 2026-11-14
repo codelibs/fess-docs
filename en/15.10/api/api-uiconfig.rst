@@ -66,8 +66,10 @@ On success (HTTP 200, UiConfigResponse), the following response is returned in t
           "login_link": true,
           "sso_enabled": false,
           "osdd_link": true,
-          "rag_chat_enabled": false
+          "rag_chat_enabled": false,
+          "passkey_enabled": false
         },
+        "result_link_schemes": ["http", "https", "ftp", "ftps", "file", "smb", "smb1", "storage", "s3", "gcs"],
         "page_size_default": 20,
         "page_size_max": 100,
         "sort_options": [
@@ -130,6 +132,9 @@ Each element of ``response`` is as follows. All fields are required.
    * - ``features``
      - object
      - Feature flags. See the table below for details.
+   * - ``result_link_schemes``
+     - string[]
+     - The URL schemes (lower case, without the colon) a search result link and a ``/go/`` redirect may use. It is the value of ``search.result.link.schemes`` in ``fess_config.properties``, and an empty array when the value is blank (see :ref:`search-result-link-schemes`).
    * - ``page_size_default``
      - integer
      - Default page size.
@@ -281,6 +286,9 @@ All fields are required.
    * - ``rag_chat_enabled``
      - boolean
      - Whether the RAG chat feature is available.
+   * - ``passkey_enabled``
+     - boolean
+     - Whether login with a passkey (WebAuthn) is available: ``true`` when ``passkey.enabled`` is ``true`` and ``passkey.rp.id`` and ``passkey.origins`` hold usable values. While ``false``, every endpoint under ``/api/v2/auth/passkey`` answers ``404`` (see :doc:`../config/security-passkey`).
 
 sort_options
 ~~~~~~~~~~~~

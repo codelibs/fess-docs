@@ -589,7 +589,7 @@ Docker 版::
      - ``esreq``
      - “对OpenSearch的请求”页面（ ``/admin/sereq/`` ）的帮助图标会打开不存在的 ``sereq-guide.html`` 。请使用该页面指南的名称 ``esreq`` 。
 
-15.10 还会向 ``fess_config.properties`` 添加下列键： ``api.search.similar.rate.limit.per.minute`` 、 ``crawler.progress.interval`` 、 ``crawler.metadata.content.image.includes`` 、 ``query.boost.fuzzy.cjk.enabled`` 和 ``query.boost.fuzzy.digit.enabled`` 。沿用自 15.9 的文件中没有这些键，因此 15.10 对每个键使用其内置值，并为每个键向 ``fess.log`` 输出一次警告。不会出现故障；如需消除警告，请从 15.10 的文件中添加这些键。
+15.10 还会向 ``fess_config.properties`` 添加下列键： ``api.search.similar.rate.limit.per.minute`` 、 ``crawler.progress.interval`` 、 ``crawler.metadata.content.image.includes`` 、 ``passkey.enabled`` 、 ``passkey.origins`` 、 ``passkey.rp.id`` 、 ``passkey.rp.name`` 、 ``password.changed.check.interval`` 、 ``query.boost.fuzzy.cjk.enabled`` 、 ``query.boost.fuzzy.digit.enabled`` 和 ``search.result.link.schemes`` 。沿用自 15.9 的文件中没有这些键，因此 15.10 对每个键使用其内置值，并为每个键向 ``fess.log`` 输出一次警告。不会出现故障；如需消除警告，请从 15.10 的文件中添加这些键。
 
 .. _upgrade-1510-failure-url:
 
@@ -610,6 +610,28 @@ Docker 版::
 爬虫的默认用户代理包含 |Fess| 的版本（ ``Mozilla/5.0 (compatible; Fess/<version>; +http://fess.codelibs.org/bot.html)`` ）。如果您在 15.8 或 15.9 中保存过管理界面的“系统”→“常规”，“用户代理”字段中显示的字符串就会作为 ``crawling.user.agent`` 保存在 ``system.properties`` 中，已保存的值优先于默认值。因此升级后，爬虫仍会沿用保存时的版本，而不是 15.10。
 
 要使用新的默认值，请从 ``system.properties`` （ZIP 包为 ``app/WEB-INF/conf/`` ，RPM/DEB 包为 ``/etc/fess/`` ）中删除 ``crawling.user.agent`` 这一行，或者清空常规页面的“用户代理”字段后保存（空字段会删除该键）。如果不清空字段就保存页面，旧值会被再次写入。凡是把 ``system.properties`` 沿用到 15.10 的情况都适用，例如保留该文件的 ZIP、RPM/DEB 和 Docker 步骤。
+
+.. _upgrade-1510-link-schemes:
+
+搜索结果链接的协议
+------------------
+
+15.10 通过 ``fess_config.properties`` 中的 ``search.result.link.schemes`` 决定搜索结果链接和 ``/go/`` 重定向可以使用的协议。默认值与 15.9 及更早版本中内置搜索界面（ ``bootstrap`` 主题）以固定列表允许的协议相同。
+
+::
+
+    search.result.link.schemes=http,https,ftp,ftps,file,smb,smb1,storage,s3,gcs
+
+URL 的协议不在列表中的搜索结果不会成为链接。对于经过「显示」路径映射之后 URL 的协议不在列表中的文档， ``/go/`` 返回 ``404`` （并向 ``fess.log`` 输出警告）。直到 15.9， ``/go/`` 会重定向到「显示」路径映射生成的您自己的协议（例如 ``hammerspoon://`` ）。如果您使用这样的协议，请将其不带冒号添加到 ``search.result.link.schemes`` 中。请不要添加 ``javascript`` 、 ``data`` 或 ``vbscript`` 。值为空表示不允许任何协议。格式和行为请参见 :ref:`search-result-link-schemes` 。
+
+.. _upgrade-1510-passkey:
+
+用于通行密钥的 ``fess_user.passkey`` 索引
+-----------------------------------------
+
+15.10 新增了本地用户使用通行密钥（WebAuthn）登录的功能。该功能默认关闭，设置请参见 :doc:`../config/security-passkey` 。
+
+即使该功能处于关闭状态， |Fess| 也会在启动时创建新的索引 ``fess_user.passkey`` ，因为删除、创建和重命名用户以及管理界面的用户详情页面都会用到它。如果不允许 |Fess| 创建索引，请在升级之前根据 ``fess_indices/fess_user.passkey.json`` 和 ``fess_indices/fess_user.passkey/passkey.json`` 创建 ``fess_user.passkey`` （前缀为 ``index.user.index`` ，默认值为 ``fess_user`` ）。该索引不属于 ``fess_user`` 别名，因此通行密钥不在 ``fess_user.bulk`` 备份中。恢复之后，用户需要重新注册通行密钥。
 
 其他行为变更
 ------------
@@ -640,6 +662,8 @@ Docker 版::
 - ``GET /api/v2/ui/config`` 中的 ``theme_settings``：管理界面“系统”→“常规”中“主题设置”的内容（:doc:`../api/api-uiconfig`）。
 - ``GET /api/admin/crawlinginfo/progress``：正在运行的爬取设置各自的进度（:doc:`../api/admin/api-admin-crawlinginfo`）。
 - ``/api/admin/failureurl`` 中的 ``mime_type``、``http_status_code``、``content_length``：失败 URL 的响应信息（:doc:`../api/admin/api-admin-failureurl`）。
+- ``/api/v2/auth/passkey``：使用通行密钥（WebAuthn）登录，以及注册、列出和删除通行密钥。默认关闭；关闭时所有端点都返回 ``404`` （:doc:`../config/security-passkey`）。
+- ``GET /api/v2/ui/config`` 中的 ``result_link_schemes`` 和 ``features.passkey_enabled``：搜索结果可以链接的协议，以及通行密钥是否可用（:doc:`../api/api-uiconfig`）。
 
 .. _upgrade-1510-implicit-fuzzy:
 

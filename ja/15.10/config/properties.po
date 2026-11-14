@@ -1224,6 +1224,9 @@ msgstr "OSDDリンク（OpenSearch Description Document）を有効にするか�
 msgid "Whether to enable the clipboard copy icon."
 msgstr "クリップボードへのコピーアイコンを有効にするかどうか。"
 
+msgid "URL schemes a search result may link to and /go/ may redirect to (comma-separated, no \":\"). Do not list javascript, data or vbscript. A blank value allows none."
+msgstr "検索結果がリンクでき、/go/ がリダイレクトできる URL のスキーム（カンマ区切り、「:」は付けない）。javascript、data、vbscript は指定しないでください。空にするとどのスキームも許可されません。"
+
 msgid "Admin user names for authentication."
 msgstr "認証用の管理者ユーザー名。"
 
@@ -2135,3 +2138,15 @@ msgstr "メモリ上に保持するログインレート制限バケットの最
 
 msgid "Interval between SSE keep-alive pings emitted by /api/v2/chat/stream. The ping is a comment-only line (\": keepalive\\n\\n\") that does not affect the event stream but defeats intermediaries (nginx default proxy_read_timeout is 60s) that drop idle connections during long LLM phases. Set <=0 to disable. Unit: milliseconds."
 msgstr "/api/v2/chat/streamが送信するSSEキープアライブpingの間隔。pingはコメントのみの行（\": keepalive\\n\\n\"）で、イベントストリームには影響しませんが、長いLLMフェーズの間にアイドル接続を切断する中間装置（nginxのデフォルトのproxy_read_timeoutは60s）を回避します。<=0を設定すると無効になります。単位: ミリ秒。"
+
+msgid "Passkey (WebAuthn) login for local users. The feature is off by default. It also stays off when it is enabled but passkey.rp.id or passkey.origins is empty (a warning is logged once), so the relying party has to be named explicitly."
+msgstr "ローカルユーザー向けのパスキー（WebAuthn）ログイン。既定では無効です。有効にしても passkey.rp.id または passkey.origins が空の場合は無効のままです（警告を 1 回ログに出力します）。リライングパーティーは明示的に指定する必要があります。"
+
+msgid "Relying party ID: the registrable domain the passkeys are bound to, e.g. example.com. A passkey works on this host and its subdomains only, and cannot be moved to another ID later."
+msgstr "リライングパーティー ID: パスキーを結びつける登録可能なドメイン（例: example.com）。パスキーはこのホストとそのサブドメインでだけ使え、後から別の ID に移すことはできません。"
+
+msgid "Relying party name shown by the browser when a passkey is created."
+msgstr "パスキーを作るときにブラウザが表示するリライングパーティーの名前。"
+
+msgid "Origins (comma separated) a passkey ceremony is accepted from, e.g. https://fess.example.com. Each is an http or https origin with a host name; with none, or an entry that is not, the feature stays off."
+msgstr "パスキーの操作を受け付けるオリジン（カンマ区切り。例: https://fess.example.com）。各項目はホスト名を持つ http または https のオリジンにします。1 つもない場合や、そうでない項目がある場合、機能は無効のままです。"
