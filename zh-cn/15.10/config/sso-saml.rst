@@ -11,6 +11,7 @@ SAML认证SSO配置
 .. note::
    SAML认证的支持由 ``fess-sso-saml`` 插件提供，该插件不随发行包分发。请从管理界面的
    「系统 > 插件」页面安装，或执行 ``bin/fess-setup install plugin fess-sso-saml`` 。
+   该插件使用SAML库 `saml4j <https://github.com/codelibs/saml4j>`__ 处理SAML消息。
    在安装之前，即使设置 ``sso.type=saml``\ ，对 ``/sso/`` 的请求也只会重定向回登录页面。
 
 SAML认证的工作原理
@@ -76,7 +77,7 @@ SAML认证的工作原理
 .. note::
    以\ ``saml.``\ 开头的设置仅从\ ``system.properties``\ 中读取。
    通过JVM系统属性（如\ ``-Dsaml.security....``\ 或\ ``-Dfess.saml.security....``\ ）指定不会被读取。
-   特别是\ ``saml.security.*``\ 、\ ``saml.strict``\ 和\ ``saml.debug``\ 在管理界面中也没有对应项，
+   特别是\ ``saml.security.*``\ 在管理界面中也没有对应项，
    因此只能直接写入\ ``system.properties``\ 。
 
 会话Cookie配置
@@ -172,6 +173,14 @@ IdP（身份提供者）配置
    * - ``saml.idp.single_logout_service.url``
      - IdP SLO服务URL
      - （可选）
+   * - ``saml.idp.x509certMulti.1``, ``.2``, ...
+     - 额外的IdP签名证书（例如密钥轮换期间）
+     - （可选）
+
+.. note::
+   IdP证书是签名验证唯一的信任锚点；消息内携带的证书一律不予信任。
+   IdP和SP的证书必须是至少2048位的RSA密钥。
+   设置了 ``saml.idp.x509certMulti.N`` 时，可以省略 ``saml.idp.x509cert``\ 。
 
 .. note::
    对于\ ``saml.idp.x509cert``，仅指定证书的Base64编码内容，单行无换行。
@@ -217,6 +226,12 @@ IdP侧配置
 - **IdP Entity ID**：标识IdP的URI
 - **SSO URL（HTTP-Redirect）**：单点登录端点URL
 - **X.509证书**：用于SAML断言签名验证的公钥证书
+
+.. note::
+   |Fess| 会对每个断言检查以下内容。这些URL由 ``saml.sp.base.url`` （或各个单独的URL属性）推导得出，而不是取自收到的请求。
+
+   - 断言带有指明SP Entity ID的 ``AudienceRestriction``
+   - 已签名Response的 ``Destination`` 以及SubjectConfirmation的 ``Recipient`` 是断言消费者服务URL
 
 用户属性映射
 ============
@@ -285,39 +300,20 @@ IdP侧配置
 属性名重复的 IdP
 ----------------
 
-如果 IdP 将同一个属性名拆分到多个 ``<Attribute>`` 元素中发送，|Fess|\ 会拒绝该断言，登录本身
-随之失败。
+如果 IdP 将同一个属性名拆分到多个 ``<Attribute>`` 元素中发送，|Fess|\ 会合并它们的值。
 
 Keycloak 默认发送这种形式的断言：除非启用其角色映射器和组映射器的 ``single`` 选项，否则每个值
-都会输出为独立的 ``<Attribute>`` 元素，而每个 Keycloak 账户默认都带有多个领域角色。
-
-有以下两种处理方式：
-
-- 在 IdP 侧将属性合并为单个元素（在 Keycloak 中启用映射器的 ``single`` 选项）
-- 在 |Fess|\ 侧允许重复并合并其值
-
-.. list-table::
-   :header-rows: 1
-   :widths: 45 40 15
-
-   * - 属性
-     - 描述
-     - 默认值
-   * - ``saml.security.allow_duplicated_attribute_name``
-     - 允许同一属性名出现在多个元素中并合并其值
-     - ``false``
-
-示例::
-
-    saml.security.allow_duplicated_attribute_name=true
+都会输出为独立的 ``<Attribute>`` 元素，而每个 Keycloak 账户默认都带有多个领域角色。|Fess|\ 侧无需任何设置。
 
 安全配置
 ========
 
-对于生产环境，建议启用以下安全设置。
+以下安全设置从\ ``system.properties``\ 中读取。
 
 .. note::
-   如果保留了不推荐的设置，在加载SAML设置时会向日志输出\ ``Insecure SAML settings: ...``\ 警告。
+   如果保留了会削弱默认值的设置（配置了单点登出时的\ ``saml.security.want_logout_signed=false``\ 、
+   ``saml.security.allow_deprecated_alg=true``\ 或\ ``saml.security.allow_rsa_1_5=true``\ ），
+   在加载SAML设置时会向日志输出\ ``Insecure SAML settings: ...``\ 警告。
 
 签名设置
 --------
@@ -330,38 +326,37 @@ Keycloak 默认发送这种形式的断言：除非启用其角色映射器和�
      - 描述
      - 默认值
    * - ``saml.security.authnrequest_signed``
-     - 对认证请求签名
+     - 对认证请求签名（需要 ``saml.sp.privatekey``）
      - ``false``
    * - ``saml.security.want_messages_signed``
-     - 要求消息签名
+     - 要求Response已签名
      - ``false``
    * - ``saml.security.want_assertions_signed``
-     - 要求断言签名
+     - 要求Assertion已签名
      - ``false``
-   * - ``saml.security.logoutrequest_signed``
-     - 对登出请求签名
+   * - ``saml.security.want_logout_signed``
+     - 要求IdP发来的登出消息已签名
+     - ``true``
+   * - ``saml.security.allow_deprecated_alg``
+     - 接受SHA-1签名
      - ``false``
-   * - ``saml.security.logoutresponse_signed``
-     - 对登出响应签名
-     - ``false``
-   * - ``saml.security.reject_deprecated_alg``
-     - 拒绝SHA-1等已弃用的签名算法
-     - ``false``
-
-.. warning::
-   安全功能默认是禁用的。
-   对于生产环境，强烈建议至少设置\ ``saml.security.want_assertions_signed=true``\ 。
+   * - ``saml.security.signature_algorithm``
+     - 发出签名的算法：``rsa-sha256``、``rsa-sha384`` 或 ``rsa-sha512`` 的URI
+     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
 
 .. note::
-   当\ ``saml.security.reject_deprecated_alg``\ 为\ ``false``\ 时，使用SHA-1（``rsa-sha1``\ 和\ ``dsa-sha1``\ ）
-   签名的断言和消息同样会被接受。之所以默认不启用，是因为启用后会拒绝仍使用SHA-1签名的IdP。
-   请先确认IdP使用SHA-256或更强的算法签名，然后再设置\ ``saml.security.reject_deprecated_alg=true``\ 。
+   无论这些设置如何，Response或Assertion都必须有一方已签名。
+   请使用\ ``saml.security.want_messages_signed``\ 或\ ``saml.security.want_assertions_signed``\ ，要求IdP实际签名的元素带有签名。
+   签名必须通过元素自身的ID引用被签名的元素，并使用\ ``rsa-sha256``\ 、\ ``rsa-sha384``\ 或\ ``rsa-sha512``\ （或ECDSA变体）。
+   除非设置\ ``saml.security.allow_deprecated_alg=true``\ ，否则SHA-1签名会被拒绝，因此请确认IdP使用SHA-256或更强的算法签名。
 
-.. warning::
-   配置单点登出（``saml.idp.single_logout_service.url``）时，请务必同时设置\
-   ``saml.security.want_messages_signed=true``\ 。
-   若保持为\ ``false``\ ，则会接受未签名的LogoutRequest，攻击者可诱导用户访问构造的URL，从而终止其已认证会话。
-   其影响是强制登出（拒绝服务），而不是账户接管。
+.. note::
+   配置单点登出（``saml.idp.single_logout_service.url``）时，IdP发送的LogoutRequest和
+   LogoutResponse必须使用\ ``saml.idp.x509cert``\ 的密钥签名
+   （默认为\ ``saml.security.want_logout_signed=true``\ ）。
+   仅当IdP无法对其签名时，才设置\ ``saml.security.want_logout_signed=false``\ 。
+   单点登出服务（``/sso/logout``）接受重定向绑定（GET）和POST绑定。
+   请同时在IdP侧为POST绑定注册\ ``/sso/logout``\ URL；IdP向断言消费者服务POST的LogoutResponse不会被识别。
 
 加密设置
 --------
@@ -374,35 +369,19 @@ Keycloak 默认发送这种形式的断言：除非启用其角色映射器和�
      - 描述
      - 默认值
    * - ``saml.security.want_assertions_encrypted``
-     - 要求断言加密
+     - 要求断言加密（需要 ``saml.sp.privatekey``）
      - ``false``
-   * - ``saml.security.want_nameid_encrypted``
-     - 要求NameID加密
+   * - ``saml.security.allow_rsa_1_5``
+     - 接受RSA 1.5密钥传输（需要 ``saml.sp.privatekey``）。否则仅接受OAEP
      - ``false``
-   * - ``saml.security.allowed_key_transport_algorithms``
-     - 解密断言时接受的密钥传输算法（以逗号分隔的 URI）
-     - （空：接受所有算法）
 
 .. note::
-   |Fess| 可以验证使用 XML Encryption 1.1 加密的响应。例如当前的 Keycloak 使用
-   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` 并在响应中包含 ``<xenc11:MGF>`` 元素，
-   在启用架构验证的情况下也能接受此类响应。早期版本会以
-   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd`` 拒绝。
-   如果为此设置过 ``saml.security.want_xml_validation=false``，请将其删除。
-
-.. note::
-   配置 SP 私钥时，请同时设置 ``saml.security.allowed_key_transport_algorithms``。
-   未设置时会接受所有密钥传输算法，包括旧的 ``http://www.w3.org/2001/04/xmlenc#rsa-1_5``。
-   断言消费端点无需认证，且解密在响应验证之前执行，因此未经认证的调用方可以让 SP 私钥
-   解密其选择的密文。处于这种状态时，|Fess| 会在启动时的 ``Insecure SAML settings``
-   一行中输出 ``key_transport_algorithms_not_restricted``。请将其限制为 IdP 实际使用的算法::
-
-      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
+   除非IdP只能使用RSA 1.5加密，否则请将\ ``saml.security.allow_rsa_1_5``\ 保持为\ ``false``\ 。
 
 SP证书与私钥配置
 ----------------
 
-当SP对认证请求或登出消息进行签名时（例如 ``saml.security.authnrequest_signed``），或请求对断言或NameID进行加密时（例如 ``saml.security.want_assertions_encrypted``），需要配置SP的私钥和X.509证书。
+当SP对认证请求或登出消息进行签名时（例如 ``saml.security.authnrequest_signed``），或请求对断言或NameID进行加密时（例如 ``saml.security.want_assertions_encrypted``），需要配置SP的私钥（PKCS#8）和X.509证书。
 
 .. list-table::
    :header-rows: 1
@@ -432,33 +411,54 @@ SP证书与私钥配置
    * - 属性
      - 描述
      - 默认值
-   * - ``saml.strict``
-     - 严格模式（执行严格验证）
-     - ``true``
-   * - ``saml.security.want_xml_validation``
-     - 验证消息的XML模式
-     - ``true``
-   * - ``saml.security.signature_algorithm``
-     - 签名算法
-     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
    * - ``saml.security.requested_authncontext``
-     - 请求的认证上下文
+     - 请求的认证上下文（留空则不请求）
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
-   * - ``saml.security.reject_missing_audience``
-     - 拒绝没有 Audience（``AudienceRestriction``）的断言
-     - ``false``
+   * - ``saml.security.requested_authncontextcomparison``
+     - 请求的认证上下文的比较方式（``exact``、``minimum``、``maximum`` 或 ``better``）
+     - ``exact``
+   * - ``saml.security.clock_drift``
+     - 检查有效期时允许的时钟偏差（秒，0至600）
+     - ``120``
+   * - ``saml.security.max_message_size``
+     - 接受的解码后消息的最大大小（字节，1024至16777216）
+     - ``1048576``
    * - ``saml.sp.nameidformat``
      - NameID格式
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
 
 .. note::
-   ``saml.security.reject_missing_audience`` 为 ``false`` 时，没有 Audience（``AudienceRestriction``）的断言也会被接受。列出了 Audience 但不包含 SP 实体 ID 的断言，无论此设置如何都会被拒绝。
-   设置为 ``true`` 后，没有 Audience 的断言也会被拒绝，错误与 Audience 不匹配时相同。
-   fess-sso-saml 使用 java-saml 3.1.3 或更高版本时可使用此设置。
+   断言的Audience、Recipient、Destination、Issuer和有效期始终会被检查，
+   并且响应必须是对\ |Fess|\ 发起的登录的应答。
+   没有Audience或Audience不包含SP Entity ID的断言会被拒绝。
+   验证始终是严格的：``saml.strict=false`` 会被拒绝。
 
-.. note::
-   |Fess| 内部使用SAML库（java-saml），以 ``saml.`` 开头的属性将映射到该库对应的设置（``onelogin.saml2.`` 前缀）。
-   因此，除此处列出的设置外，还可以在 ``system.properties`` 中指定绑定（例如 ``saml.sp.assertion_consumer_service.binding``）、组织信息（``saml.organization.*``）、联系人信息（``saml.contacts.*``）等详细设置。
+不再使用的属性
+--------------
+
+以下属性会被忽略。日志中会输出一条列出它们名称的警告。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - 属性
+     - 现在
+   * - ``saml.security.reject_deprecated_alg``
+     - SHA-1签名默认被拒绝；``saml.security.allow_deprecated_alg=true`` 可接受
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - 默认仅接受OAEP；``saml.security.allow_rsa_1_5=true`` 可同时接受RSA 1.5
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - 重复的属性始终会被合并
+   * - ``saml.security.reject_missing_audience``
+     - 没有Audience的断言始终会被拒绝
+   * - ``saml.idp.certfingerprint``, ``saml.idp.certfingerprint_algorithm``
+     - 请设置 ``saml.idp.x509cert``；指纹不是信任锚点
+   * - ``saml.security.sign_metadata``, ``saml.security.want_nameid_encrypted``, ``saml.security.want_xml_validation``, ``saml.security.logoutrequest_signed``, ``saml.security.logoutresponse_signed``, ``saml.security.digest_algorithm``, ``saml.keystore.*``, ``saml.contacts.*``, ``saml.organization.*``, ``saml.compress.*``, ``saml.parsing.*``, ``saml.unique_id_prefix``，以及 ``*.binding`` 和 ``*.response.url`` 属性
+     - 不再使用
+
+库不认识的其他 ``saml.`` 属性会使SAML登录中止，并给出指明该属性名称的消息，
+以免拼写错误的安全设置被忽视。``saml.debug`` 会被接受，但没有任何效果。
 
 AuthnRequest有效期
 ==================
@@ -529,11 +529,9 @@ IdP返回的SAML响应会根据记录的ID进行校验。
     saml.default.groups=user
 
     # 安全设置（生产环境推荐）
+    # 要求IdP实际签名的元素带有签名
+    # （对Response则设置 saml.security.want_messages_signed=true）
     saml.security.want_assertions_signed=true
-    saml.security.want_messages_signed=true
-
-    # 确认IdP使用SHA-256或更强的算法签名后再启用
-    saml.security.reject_deprecated_alg=true
 
 故障排除
 ========
@@ -555,36 +553,17 @@ IdP返回的SAML响应会根据记录的ID进行校验。
   该值短于\ ``saml.request.id.ttl``\ 的3600秒，会话会先被丢弃，
   因此仅调大\ ``saml.request.id.ttl``\ 并不能延长用户在IdP完成登录的时间，还需要同时延长会话超时时间
 
-通过反向代理时Destination验证失败
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Destination或Recipient验证失败
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-当\ |Fess|\ 运行在终结TLS的反向代理或负载均衡器之后时，
-即使\ ``saml.sp.base.url``\ 设置正确，断言验证也可能失败。
+已签名Response的\ ``Destination``\ 和SubjectConfirmation的\ ``Recipient``\ 必须是\ |Fess|\ 的
+断言消费者服务URL。该URL来自\ ``saml.sp.base.url``\ （或
+``saml.sp.assertion_consumer_service.url``\ ），而不是到达\ |Fess|\ 的请求，因此
+终结TLS的反向代理不会影响该比较。
 
-断言的\ ``Destination``\ 属性会与请求到达\ |Fess|\ 时的URL进行比较。
-在终结TLS的代理之后，该URL是内部的\ ``http://``\ 地址，而不是IdP发送断言时使用的外部地址。
-``saml.sp.base.url``\ 不参与该比较，因此仅设置它无法解决问题。
-
-设置\ ``saml.debug=true``\ 后，日志中会输出如下原因：
-
-::
-
-    The response was received at http://... instead of https://fess.example.com/sso/
-
-此时请将\ ``tomcat_config.properties``\ 中的连接器设置调整为对外可见的协议和端口。
-以下设置默认处于注释状态：
-
-::
-
-    tomcat.secure=true
-    tomcat.scheme=https
-    tomcat.proxyPort=443
-
-同时请配置反向代理，将原始的\ ``Host``\ 请求头透传给\ |Fess|\ ，
-因为请求URL中的主机名部分是根据该请求头构建的。
-修改\ ``tomcat_config.properties``\ 后需要重启\ |Fess|\ 。
-
-同样的验证也适用于单点登出消息，因此使用SLO时请一并配置。
+- 将\ ``saml.sp.base.url``\ 设置为对外可见的URL，包括协议和端口
+- 在IdP侧注册相同的ACS URL（``{saml.sp.base.url}/sso/``）
+- 如果覆盖了\ ``saml.sp.entityid``\ ，IdP必须将该值用作Audience
 
 签名验证错误
 ~~~~~~~~~~~~
@@ -592,14 +571,10 @@ IdP返回的SAML响应会根据记录的ID进行校验。
 - 验证IdP证书是否正确配置
 - 确保证书未过期
 - 证书应仅指定为Base64编码的内容，无换行
-
-因属性名重复而无法登录
-~~~~~~~~~~~~~~~~~~~~~~
-
-- 如果日志中出现以 ``The IdP repeated an attribute name in the SAML assertion`` 开头的警告，
-  说明 IdP 将同一个属性名拆分到了多个 ``<Attribute>`` 元素中
-- 断言本身已通过校验，因此证书和时间偏差都不是原因
-- 请在 IdP 侧合并属性，或设置 ``saml.security.allow_duplicated_attribute_name=true``
+- IdP证书必须是至少2048位的RSA密钥
+- Response或Assertion必须有一方已签名，且签名必须使用SHA-256或更强的算法
+  （仅在设置\ ``saml.security.allow_deprecated_alg=true``\ 时才接受SHA-1）
+- 响应被拒绝的原因会以\ ``Authentication failed: <reason> - <detail>``\ 的形式输出到日志
 
 用户组/角色未生效
 ~~~~~~~~~~~~~~~~~
@@ -609,20 +584,15 @@ IdP返回的SAML响应会根据记录的ID进行校验。
 - 使用Microsoft Entra ID时，除非选择了其他源属性，否则组声明的值为组的\ ``ObjectId``\ （GUID），与组名不一致
 - 当用户所属的组超过150个时，Microsoft Entra ID将完全省略组声明（嵌套组也计入此上限），
   此时 |Fess| 将回退到\ ``saml.default.groups``
-- 启用调试模式以检查SAML断言内容
+- 将属性名与IdP实际发送的断言中的属性名进行比较
 
-调试设置
+日志设置
 --------
 
-要调查问题，您可以使用以下设置启用调试模式：
+当SAML认证失败时，原因始终会作为警告输出到日志中。
+``saml.debug`` 属性没有任何效果。
 
-::
-
-    saml.debug=true
-
-设置 ``saml.debug=true`` 后，当SAML认证失败时，详细原因将输出到日志中。
-
-此外，通过在 ``app/WEB-INF/classes/log4j2.xml`` 中添加以下logger，可以输出详细的SAML相关日志：
+要输出详细的SAML相关日志，请在 ``app/WEB-INF/classes/log4j2.xml`` 中添加以下logger：
 
 ::
 

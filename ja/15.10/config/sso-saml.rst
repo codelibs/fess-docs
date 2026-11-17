@@ -12,6 +12,7 @@ SAML認証を使用することで、IdP（Identity Provider）で認証され�
    SAML認証への対応は ``fess-sso-saml`` プラグインから提供されます。配布物には同梱されて
    いないため、管理画面の「システム > プラグイン」ページ、または
    ``bin/fess-setup install plugin fess-sso-saml`` で導入してください。
+   このプラグインは、SAMLライブラリ `saml4j <https://github.com/codelibs/saml4j>`__ でSAMLメッセージを処理します。
    導入するまで、 ``sso.type=saml`` を設定しても ``/sso/`` へのリクエストはログインページへ
    リダイレクトされるだけです。
 
@@ -79,7 +80,7 @@ SAML認証を有効にするには、``app/WEB-INF/conf/system.properties`` に�
 .. note::
    ``saml.`` で始まる設定は ``system.properties`` からのみ読み込まれます。
    JVMのシステムプロパティ（``-Dsaml.security....`` や ``-Dfess.saml.security....``）で指定しても参照されません。
-   特に ``saml.security.*`` 、 ``saml.strict`` 、 ``saml.debug`` は管理画面にも項目がないため、
+   特に ``saml.security.*`` は管理画面にも項目がないため、
    ``system.properties`` に直接記述する以外に設定する方法はありません。
 
 セッションCookieの設定
@@ -176,6 +177,14 @@ IdPから取得した情報を設定します。
    * - ``saml.idp.single_logout_service.url``
      - IdPのSLOサービスURL
      - （オプション）
+   * - ``saml.idp.x509certMulti.1``, ``.2``, ...
+     - 追加のIdP署名用証明書（たとえば鍵のロールオーバー時）
+     - （オプション）
+
+.. note::
+   IdPの証明書は署名に対する唯一のトラストアンカーであり、メッセージに含まれる証明書が信頼されることはありません。
+   IdPおよびSPの証明書は、2048ビット以上のRSA鍵である必要があります。
+   ``saml.idp.x509certMulti.N`` を設定している場合は、``saml.idp.x509cert`` を省略できます。
 
 .. note::
    ``saml.idp.x509cert`` には、証明書のBase64エンコードされた内容を改行なしの1行で指定します。
@@ -221,6 +230,12 @@ IdPの設定画面またはメタデータから以下の情報を取得し、|F
 - **IdP Entity ID**: IdPを識別するためのURI
 - **SSO URL（HTTP-Redirect）**: シングルサインオンのエンドポイントURL
 - **X.509証明書**: SAMLアサーションの署名検証に使用する公開鍵証明書
+
+.. note::
+   |Fess| はすべてのアサーションについて以下を検証します。URLは受信したリクエストではなく、``saml.sp.base.url``（または個別のURLプロパティ）から導出されます。
+
+   - アサーションに、SPのEntity IDを指す ``AudienceRestriction`` が含まれていること
+   - 署名されたResponseの ``Destination`` と、SubjectConfirmationの ``Recipient`` が、Assertion Consumer ServiceのURLであること
 
 ユーザー属性マッピング
 ======================
@@ -291,41 +306,21 @@ SAMLアサーションから取得したユーザー属性を、|Fess| のグル
 属性名が重複するIdP
 -------------------
 
-IdPが同じ属性名を複数の ``<Attribute>`` 要素に分けて送信した場合、|Fess| はそのアサーションを
-受け付けず、ログイン自体が失敗します。
+IdPが同じ属性名を複数の ``<Attribute>`` 要素に分けて送信した場合、|Fess| は値をマージします。
 
 Keycloakは既定でこの形式のアサーションを送信します。ロールマッパーとグループマッパーは
 ``single`` オプションを有効にしない限り値ごとに別々の ``<Attribute>`` 要素を出力し、
-Keycloakのアカウントは既定で複数のレルムロールを持つためです。
-
-対処方法は次のいずれかです。
-
-- IdP側で属性を1つの要素にまとめる（Keycloakではマッパーの ``single`` オプションを有効にします）
-- |Fess| 側で重複を許可し、値をマージする
-
-.. list-table::
-   :header-rows: 1
-   :widths: 45 40 15
-
-   * - プロパティ
-     - 説明
-     - デフォルト
-   * - ``saml.security.allow_duplicated_attribute_name``
-     - 同じ属性名が複数の要素に現れることを許可し、値をマージします
-     - ``false``
-
-設定例::
-
-    saml.security.allow_duplicated_attribute_name=true
+Keycloakのアカウントは既定で複数のレルムロールを持つためです。|Fess| 側で必要な設定はありません。
 
 セキュリティ設定
 ================
 
-本番環境では、以下のセキュリティ設定を有効にすることを推奨します。
+以下のセキュリティ設定は ``system.properties`` から読み込まれます。
 
 .. note::
-   推奨されない設定が残っている場合、SAMLの設定を読み込んだ時点で
-   ``Insecure SAML settings: ...`` という警告がログに出力されます。
+   既定値を弱める設定が残っている場合（シングルログアウトを設定したうえでの ``saml.security.want_logout_signed=false`` 、
+   ``saml.security.allow_deprecated_alg=true`` 、``saml.security.allow_rsa_1_5=true``）、
+   SAMLの設定を読み込んだ時点で ``Insecure SAML settings: ...`` という警告がログに出力されます。
 
 署名の設定
 ----------
@@ -338,40 +333,38 @@ Keycloakのアカウントは既定で複数のレルムロールを持つため
      - 説明
      - デフォルト
    * - ``saml.security.authnrequest_signed``
-     - 認証リクエストに署名する
+     - 認証リクエストに署名する（``saml.sp.privatekey`` が必要）
      - ``false``
    * - ``saml.security.want_messages_signed``
-     - メッセージの署名を要求する
+     - Responseの署名を要求する
      - ``false``
    * - ``saml.security.want_assertions_signed``
-     - アサーションの署名を要求する
+     - Assertionの署名を要求する
      - ``false``
-   * - ``saml.security.logoutrequest_signed``
-     - ログアウトリクエストに署名する
+   * - ``saml.security.want_logout_signed``
+     - IdPからのログアウトメッセージの署名を要求する
+     - ``true``
+   * - ``saml.security.allow_deprecated_alg``
+     - SHA-1の署名を受け付ける
      - ``false``
-   * - ``saml.security.logoutresponse_signed``
-     - ログアウトレスポンスに署名する
-     - ``false``
-   * - ``saml.security.reject_deprecated_alg``
-     - SHA-1などの非推奨署名アルゴリズムを拒否する
-     - ``false``
-
-.. warning::
-   デフォルトではセキュリティ機能が無効になっています。
-   本番環境では、少なくとも ``saml.security.want_assertions_signed=true`` を設定することを強く推奨します。
+   * - ``saml.security.signature_algorithm``
+     - 送信する署名のアルゴリズム（``rsa-sha256`` 、``rsa-sha384`` または ``rsa-sha512`` のURI）
+     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
 
 .. note::
-   ``saml.security.reject_deprecated_alg`` が ``false`` の間は、SHA-1（``rsa-sha1`` および ``dsa-sha1``）で
-   署名されたアサーションやメッセージも受け入れられます。既定で有効になっていないのは、
-   有効にするとSHA-1で署名を行うIdPを拒否してしまうためです。
-   IdPがSHA-256以上で署名していることを確認したうえで、``saml.security.reject_deprecated_alg=true`` を設定してください。
+   これらの設定にかかわらず、ResponseまたはAssertionのいずれかは署名されている必要があります。
+   IdPが署名する要素に対して署名を要求するには、``saml.security.want_messages_signed`` または ``saml.security.want_assertions_signed`` を使用してください。
+   署名は、署名対象の要素をその要素自身のIDで参照し、``rsa-sha256`` 、``rsa-sha384`` または ``rsa-sha512``（あるいはそのECDSA版）を使用している必要があります。
+   SHA-1の署名は ``saml.security.allow_deprecated_alg=true`` を設定しない限り拒否されるため、IdPがSHA-256以上で署名していることを確認してください。
 
-.. warning::
+.. note::
    シングルログアウト（``saml.idp.single_logout_service.url``）を設定する場合は、
-   ``saml.security.want_messages_signed=true`` を必ず併せて設定してください。
-   ``false`` のままでは署名のないLogoutRequestが受理されるため、
-   細工されたURLを踏ませることで認証済みセッションを終了させられます。
-   影響は強制ログアウト（サービス妨害）であり、アカウントの乗っ取りではありません。
+   IdPが送信するLogoutRequestとLogoutResponseを ``saml.idp.x509cert`` の鍵で署名する必要があります
+   （既定で ``saml.security.want_logout_signed=true`` です）。
+   ``saml.security.want_logout_signed=false`` は、署名できないIdPに対してのみ設定してください。
+   シングルログアウトサービス（``/sso/logout``）は、リダイレクトバインディング（GET）とPOSTバインディングを受け付けます。
+   IdP側にも、POSTバインディング用として ``/sso/logout`` のURLを登録してください。
+   IdPがAssertion Consumer ServiceにPOSTしてくるLogoutResponseは認識されません。
 
 暗号化の設定
 ------------
@@ -384,38 +377,21 @@ Keycloakのアカウントは既定で複数のレルムロールを持つため
      - 説明
      - デフォルト
    * - ``saml.security.want_assertions_encrypted``
-     - アサーションの暗号化を要求する
+     - アサーションの暗号化を要求する（``saml.sp.privatekey`` が必要）
      - ``false``
-   * - ``saml.security.want_nameid_encrypted``
-     - NameIDの暗号化を要求する
+   * - ``saml.security.allow_rsa_1_5``
+     - RSA 1.5の鍵輸送を受け付ける（``saml.sp.privatekey`` が必要）。設定しない場合はOAEPのみ受け付けます
      - ``false``
-   * - ``saml.security.allowed_key_transport_algorithms``
-     - アサーションの復号時に受け付ける鍵輸送アルゴリズム（カンマ区切りのURI）
-     - （空文字：すべて受け付ける）
 
 .. note::
-   |Fess| はXML Encryption 1.1で暗号化された応答を検証できます。たとえば現行のKeycloakは
-   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` を使い応答に ``<xenc11:MGF>`` 要素を含めますが、
-   スキーマ検証を有効にしたまま受け付けられます。以前のバージョンでは
-   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd`` で拒否されていました。
-   その回避策として ``saml.security.want_xml_validation=false`` を設定していた場合は、削除してください。
-
-.. note::
-   SPの秘密鍵を設定する場合は、``saml.security.allowed_key_transport_algorithms`` も設定してください。
-   未設定の間は、古い ``http://www.w3.org/2001/04/xmlenc#rsa-1_5`` を含むすべての鍵輸送アルゴリズムを
-   受け付けます。アサーションコンシューマのエンドポイントは認証不要であり、復号は応答の検証より前に
-   実行されるため、未認証の相手が任意の暗号文をSPの秘密鍵で復号させることができます。この状態では
-   起動時の ``Insecure SAML settings`` の行に ``key_transport_algorithms_not_restricted`` が出力されます。
-   IdPが実際に使うアルゴリズムだけに限定してください::
-
-      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
+   IdPがRSA 1.5でしか暗号化できない場合を除き、``saml.security.allow_rsa_1_5`` は ``false`` のままにしてください。
 
 SP証明書・秘密鍵の設定
 ----------------------
 
 SP側で認証リクエストやログアウトメッセージに署名する場合（``saml.security.authnrequest_signed`` など）、
 またはアサーションやNameIDの暗号化を要求する場合（``saml.security.want_assertions_encrypted`` など）は、
-SPの秘密鍵とX.509証明書を設定する必要があります。
+SPの秘密鍵（PKCS#8）とX.509証明書を設定する必要があります。
 
 .. list-table::
    :header-rows: 1
@@ -446,36 +422,54 @@ SPの秘密鍵とX.509証明書を設定する必要があります。
    * - プロパティ
      - 説明
      - デフォルト
-   * - ``saml.strict``
-     - 厳密モード（検証を厳密に行う）
-     - ``true``
-   * - ``saml.security.want_xml_validation``
-     - メッセージのXMLスキーマ検証を行う
-     - ``true``
-   * - ``saml.security.signature_algorithm``
-     - 署名アルゴリズム
-     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
    * - ``saml.security.requested_authncontext``
-     - 要求する認証コンテキスト
+     - 要求する認証コンテキスト（空にすると何も要求しない）
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
-   * - ``saml.security.reject_missing_audience``
-     - Audience（``AudienceRestriction``）を持たないアサーションを拒否する
-     - ``false``
+   * - ``saml.security.requested_authncontextcomparison``
+     - 要求する認証コンテキストの比較方法（``exact`` 、``minimum`` 、``maximum`` または ``better``）
+     - ``exact``
+   * - ``saml.security.clock_drift``
+     - 有効期間の検証で許容する時刻のずれ（秒、0〜600）
+     - ``120``
+   * - ``saml.security.max_message_size``
+     - 受け付けるデコード後のメッセージの最大サイズ（バイト、1024〜16777216）
+     - ``1048576``
    * - ``saml.sp.nameidformat``
      - NameIDフォーマット
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
 
 .. note::
-   ``saml.security.reject_missing_audience`` が ``false`` の間は、Audience（``AudienceRestriction``）を持たないアサーションも受け入れられます。Audienceを持つアサーションでSPのエンティティIDが含まれないものは、この設定にかかわらず拒否されます。
-   ``true`` にすると、Audienceを持たないアサーションも、Audienceが一致しない場合と同じエラーで拒否されます。
-   この設定は、java-saml 3.1.3以降を使用するfess-sso-samlで利用できます。
+   アサーションのAudience、Recipient、Destination、Issuer、有効期間は常に検証され、
+   レスポンスは |Fess| が開始したログインに対するものでなければなりません。
+   Audienceを持たないアサーション、またはAudienceにSPのEntity IDが含まれないアサーションは拒否されます。
+   検証は常に厳密に行われ、``saml.strict=false`` は拒否されます。
 
-.. note::
-   |Fess| は内部的にSAMLライブラリ（java-saml）を使用しており、``saml.`` で始まるプロパティは
-   ライブラリの対応する設定（``onelogin.saml2.`` プレフィックス）にマッピングされます。
-   このため、ここで挙げた以外にも、バインディング（``saml.sp.assertion_consumer_service.binding`` など）、
-   組織情報（``saml.organization.*``）、連絡先情報（``saml.contacts.*``）といった詳細な設定を
-   ``system.properties`` で指定できます。
+使用されなくなったプロパティ
+----------------------------
+
+以下のプロパティは無視されます。これらを挙げた警告が1件ログに出力されます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - プロパティ
+     - 現在の扱い
+   * - ``saml.security.reject_deprecated_alg``
+     - SHA-1の署名は既定で拒否されます。``saml.security.allow_deprecated_alg=true`` で受け付けます
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - 既定ではOAEPのみ受け付けます。``saml.security.allow_rsa_1_5=true`` でRSA 1.5も受け付けます
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - 重複した属性は常にマージされます
+   * - ``saml.security.reject_missing_audience``
+     - Audienceを持たないアサーションは常に拒否されます
+   * - ``saml.idp.certfingerprint``, ``saml.idp.certfingerprint_algorithm``
+     - ``saml.idp.x509cert`` を設定してください。フィンガープリントはトラストアンカーではありません
+   * - ``saml.security.sign_metadata``, ``saml.security.want_nameid_encrypted``, ``saml.security.want_xml_validation``, ``saml.security.logoutrequest_signed``, ``saml.security.logoutresponse_signed``, ``saml.security.digest_algorithm``, ``saml.keystore.*``, ``saml.contacts.*``, ``saml.organization.*``, ``saml.compress.*``, ``saml.parsing.*``, ``saml.unique_id_prefix``、``*.binding`` および ``*.response.url`` のプロパティ
+     - 使用されなくなりました
+
+ライブラリが認識しないその他の ``saml.`` プロパティがあると、そのプロパティ名を示すメッセージとともにSAMLログインが停止します。
+これは、セキュリティ設定の記述ミスを見逃さないようにするためです。``saml.debug`` は受け付けられますが、効果はありません。
 
 AuthnRequestの有効期限
 ======================
@@ -547,10 +541,9 @@ IdPから返されたSAMLレスポンスは、記録されたIDと対応付け�
 
     # セキュリティ設定（本番環境では有効化を推奨）
     saml.security.want_assertions_signed=true
-    saml.security.want_messages_signed=true
-
-    # IdPがSHA-256以上で署名していることを確認してから有効化する
-    saml.security.reject_deprecated_alg=true
+    # IdPが署名する要素に対して署名を要求する
+    # （Responseの場合は saml.security.want_messages_signed=true）
+    saml.security.want_assertions_signed=true
 
 トラブルシューティング
 ======================
@@ -574,36 +567,17 @@ IdPから返されたSAMLレスポンスは、記録されたIDと対応付け�
   セッションが先に破棄されます。このため ``saml.request.id.ttl`` だけを大きくしても猶予は延びません。
   猶予を延ばしたい場合は、セッションタイムアウトも合わせて延長してください
 
-リバースプロキシ経由でDestinationの検証に失敗する
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DestinationまたはRecipientの検証に失敗する
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TLSを終端するリバースプロキシやロードバランサーの背後に |Fess| を配置すると、
-``saml.sp.base.url`` を正しく設定していてもアサーションの検証に失敗することがあります。
+署名されたResponseの ``Destination`` と、SubjectConfirmationの ``Recipient`` は、
+|Fess| のAssertion Consumer ServiceのURLである必要があります。このURLは |Fess| に届いたリクエストではなく
+``saml.sp.base.url``（または ``saml.sp.assertion_consumer_service.url``）から導出されるため、
+TLSを終端するリバースプロキシがあっても比較には影響しません。
 
-アサーションの ``Destination`` 属性は、|Fess| に届いた時点のリクエストURLと比較されます。
-TLSを終端するプロキシの背後では、これはIdPがアサーションを送った外部URLではなく内部の ``http://`` のURLです。
-``saml.sp.base.url`` はこの比較には使われないため、この設定だけでは解決しません。
-
-``saml.debug=true`` を設定すると、ログに以下のような理由が出力されます。
-
-::
-
-    The response was received at http://... instead of https://fess.example.com/sso/
-
-この場合は ``tomcat_config.properties`` のコネクタ設定を、外部から見えるスキームとポートに合わせてください。
-以下の設定は既定ではコメントアウトされています。
-
-::
-
-    tomcat.secure=true
-    tomcat.scheme=https
-    tomcat.proxyPort=443
-
-あわせて、リバースプロキシが元の ``Host`` ヘッダーをそのまま |Fess| へ渡すように設定してください。
-リクエストURLのホスト名部分は ``Host`` ヘッダーから組み立てられます。
-``tomcat_config.properties`` を変更した後は |Fess| の再起動が必要です。
-
-同じ検証はシングルログアウトのメッセージにも適用されるため、SLOを利用する場合も同様に設定してください。
+- ``saml.sp.base.url`` に、スキームとポートを含む外部から見えるURLを設定してください
+- IdP側にも同じACS URL（``{saml.sp.base.url}/sso/``）を登録してください
+- ``saml.sp.entityid`` を上書きしている場合は、IdPがその値をAudienceとして使用する必要があります
 
 署名検証エラー
 ~~~~~~~~~~~~~~
@@ -611,15 +585,10 @@ TLSを終端するプロキシの背後では、これはIdPがアサーショ�
 - IdPの証明書が正しく設定されているか確認してください
 - 証明書の有効期限が切れていないか確認してください
 - 証明書はBase64エンコードされた内容のみを改行なしで設定してください
-
-属性名の重複でログインできない
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-- ログに ``The IdP repeated an attribute name in the SAML assertion`` で始まる警告が出力されている場合、
-  IdPが同じ属性名を複数の ``<Attribute>`` 要素に分けて送信しています
-- アサーションの検証自体は成功しているため、証明書や時刻のずれは原因ではありません
-- IdP側で属性を1つの要素にまとめるか、``saml.security.allow_duplicated_attribute_name=true`` を
-  設定してください
+- IdPの証明書は、2048ビット以上のRSA鍵である必要があります
+- ResponseまたはAssertionのいずれかが署名されており、その署名がSHA-256以上を使用している必要があります
+  （SHA-1は ``saml.security.allow_deprecated_alg=true`` の場合のみ受け付けられます）
+- レスポンスが拒否された理由は、``Authentication failed: <reason> - <detail>`` としてログに出力されます
 
 ユーザーのグループ・ロールが反映されない
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -630,20 +599,15 @@ TLSを終端するプロキシの背後では、これはIdPがアサーショ�
   グループ名とは一致しません
 - ユーザーが150を超えるグループに所属している場合、Microsoft Entra IDはグループクレーム自体を送信しません
   （ネストされたグループもこの上限に数えられます）。このとき |Fess| は ``saml.default.groups`` にフォールバックします
-- SAMLアサーションの内容を確認するには、デバッグモードを有効にしてください
+- IdPが実際に送信するアサーションの属性名と比較してください
 
-デバッグ設定
-------------
+ログ設定
+--------
 
-問題を調査する際は、以下の設定でデバッグモードを有効にできます。
+SAML認証に失敗した場合、その理由は常に警告としてログに出力されます。
+``saml.debug`` プロパティは効果がありません。
 
-::
-
-    saml.debug=true
-
-``saml.debug=true`` を設定すると、SAML認証に失敗した際の詳細な理由がログに出力されます。
-
-また、``app/WEB-INF/classes/log4j2.xml`` に以下のロガーを追加することで、SAML関連の詳細なログを出力できます。
+SAML関連の詳細なログを出力するには、``app/WEB-INF/classes/log4j2.xml`` に以下のロガーを追加します。
 
 ::
 
