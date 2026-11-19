@@ -58,6 +58,8 @@ Fess は Apache ライセンスで提供され、無料 (フリーソフト) で
 
 -  Web、ファイルシステム、Windows共有フォルダ、データベースをクロール
 
+-  :doc:`ファイルサーバの全文検索 <articles/file-server-search>`\ を、既存のアクセス権限を引き継いだまま実現
+
 -  MS Office(Word/Excel/PowerPoint) や PDF など多くのファイル形式に対応
 
 -  OS 非依存 (Java ベースで構築)
