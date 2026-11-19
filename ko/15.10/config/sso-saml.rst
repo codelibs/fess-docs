@@ -12,6 +12,7 @@ SAML 인증을 사용하면 IdP（Identity Provider）에서 인증된 사용자
    SAML 인증 지원은 ``fess-sso-saml`` 플러그인에서 제공됩니다. 배포물에 포함되어 있지
    않으므로 관리 화면의 「시스템 > 플러그인」 페이지 또는
    ``bin/fess-setup install plugin fess-sso-saml`` 로 설치하십시오.
+   이 플러그인은 SAML 라이브러리 `saml4j <https://github.com/codelibs/saml4j>`__ 로 SAML 메시지를 처리합니다.
    설치하기 전에는 ``sso.type=saml`` 설정만으로는 ``/sso/`` 요청이 로그인 페이지로
    리디렉션될 뿐입니다.
 
@@ -79,7 +80,7 @@ SAML 인증을 활성화하려면 ``app/WEB-INF/conf/system.properties`` 에 다
 .. note::
    ``saml.`` 로 시작하는 설정은 ``system.properties`` 에서만 읽어 들입니다.
    JVM 시스템 프로퍼티（``-Dsaml.security....`` 나 ``-Dfess.saml.security....``）로 지정해도 참조되지 않습니다.
-   특히 ``saml.security.*`` , ``saml.strict`` , ``saml.debug`` 는 관리 화면에도 항목이 없으므로
+   특히 ``saml.security.*`` 는 관리 화면에도 항목이 없으므로
    ``system.properties`` 에 직접 기술하는 것 외에는 설정할 방법이 없습니다.
 
 세션 쿠키 설정
@@ -176,6 +177,14 @@ IdP에서 취득한 정보를 설정합니다.
    * - ``saml.idp.single_logout_service.url``
      - IdP의 SLO 서비스 URL
      - （선택 사항）
+   * - ``saml.idp.x509certMulti.1``, ``.2``, ...
+     - 추가 IdP 서명용 인증서（예: 키 롤오버 중）
+     - （선택 사항）
+
+.. note::
+   IdP 인증서는 서명에 대한 유일한 신뢰 기점이며, 메시지에 포함된 인증서는 결코 신뢰하지 않습니다.
+   IdP 및 SP 인증서는 2048비트 이상의 RSA 키여야 합니다.
+   ``saml.idp.x509certMulti.N`` 을 설정한 경우에는 ``saml.idp.x509cert`` 를 생략할 수 있습니다.
 
 .. note::
    ``saml.idp.x509cert`` 에는 인증서의 Base64 인코딩된 내용을 줄 바꿈 없이 1행으로 지정합니다.
@@ -221,6 +230,12 @@ IdP의 설정 화면 또는 메타데이터에서 다음 정보를 취득하여 
 - **IdP Entity ID**: IdP를 식별하기 위한 URI
 - **SSO URL（HTTP-Redirect）**: 싱글 사인온의 엔드포인트 URL
 - **X.509 인증서**: SAML 어서션의 서명 검증에 사용하는 공개 키 인증서
+
+.. note::
+   |Fess| 는 모든 어서션에 대해 다음을 검사합니다. URL은 수신한 요청이 아니라 ``saml.sp.base.url`` （또는 개별 URL 프로퍼티）에서 도출됩니다.
+
+   - 어서션에 SP의 Entity ID를 지정하는 ``AudienceRestriction`` 이 있을 것
+   - 서명된 Response의 ``Destination`` 과 SubjectConfirmation의 ``Recipient`` 가 Assertion Consumer Service URL일 것
 
 사용자 속성 매핑
 ================
@@ -290,41 +305,22 @@ SAML 어서션에서 취득한 사용자 속성을 |Fess| 의 그룹이나 역�
 속성 이름이 중복되는 IdP
 ------------------------
 
-IdP가 동일한 속성 이름을 여러 ``<Attribute>`` 요소로 나누어 보내면 |Fess| 는 해당 어서션을
-거부하며 로그인 자체가 실패합니다.
+IdP가 동일한 속성 이름을 여러 ``<Attribute>`` 요소로 나누어 보내면 |Fess| 는 그 값들을
+병합합니다.
 
 Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역할 매퍼와 그룹 매퍼는 ``single``
 옵션을 활성화하지 않는 한 값마다 별도의 ``<Attribute>`` 요소를 출력하며, Keycloak 계정은
-기본적으로 여러 개의 렐름 역할을 가지기 때문입니다.
-
-대처 방법은 다음 중 하나입니다.
-
-- IdP 측에서 속성을 하나의 요소로 합칩니다(Keycloak에서는 매퍼의 ``single`` 옵션을 활성화합니다)
-- |Fess| 측에서 중복을 허용하고 값을 병합합니다
-
-.. list-table::
-   :header-rows: 1
-   :widths: 45 40 15
-
-   * - 프로퍼티
-     - 설명
-     - 기본값
-   * - ``saml.security.allow_duplicated_attribute_name``
-     - 동일한 속성 이름이 여러 요소에 나타나는 것을 허용하고 값을 병합합니다
-     - ``false``
-
-설정 예::
-
-    saml.security.allow_duplicated_attribute_name=true
+기본적으로 여러 개의 렐름 역할을 가지기 때문입니다. 이를 위해 |Fess| 에서 설정할 것은 없습니다.
 
 보안 설정
 =========
 
-운영 환경에서는 다음 보안 설정을 활성화하는 것을 권장합니다.
+다음 보안 설정은 ``system.properties`` 에서 읽어 들입니다.
 
 .. note::
-   권장되지 않는 설정이 남아 있으면 SAML 설정을 읽어 들일 때 ``Insecure SAML settings: ...``
-   경고가 로그에 출력됩니다.
+   기본값을 약화시키는 설정（싱글 로그아웃을 설정한 상태에서의 ``saml.security.want_logout_signed=false``,
+   ``saml.security.allow_deprecated_alg=true`` 또는 ``saml.security.allow_rsa_1_5=true``）이 남아 있으면
+   SAML 설정을 읽어 들일 때 ``Insecure SAML settings: ...`` 경고가 로그에 출력됩니다.
 
 서명 설정
 ---------
@@ -337,40 +333,38 @@ Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역�
      - 설명
      - 기본값
    * - ``saml.security.authnrequest_signed``
-     - 인증 요청에 서명한다
+     - 인증 요청에 서명한다（``saml.sp.privatekey`` 필요）
      - ``false``
    * - ``saml.security.want_messages_signed``
-     - 메시지의 서명을 요구한다
+     - Response의 서명을 요구한다
      - ``false``
    * - ``saml.security.want_assertions_signed``
-     - 어서션의 서명을 요구한다
+     - Assertion의 서명을 요구한다
      - ``false``
-   * - ``saml.security.logoutrequest_signed``
-     - 로그아웃 요청에 서명한다
+   * - ``saml.security.want_logout_signed``
+     - IdP가 보내는 로그아웃 메시지의 서명을 요구한다
+     - ``true``
+   * - ``saml.security.allow_deprecated_alg``
+     - SHA-1 서명을 허용한다
      - ``false``
-   * - ``saml.security.logoutresponse_signed``
-     - 로그아웃 응답에 서명한다
-     - ``false``
-   * - ``saml.security.reject_deprecated_alg``
-     - SHA-1 등 사용이 권장되지 않는 서명 알고리즘을 거부한다
-     - ``false``
-
-.. warning::
-   기본값에서는 보안 기능이 비활성화되어 있습니다.
-   운영 환경에서는 최소한 ``saml.security.want_assertions_signed=true`` 를 설정하도록 강력히 권장합니다.
+   * - ``saml.security.signature_algorithm``
+     - 송신하는 서명의 알고리즘: ``rsa-sha256``, ``rsa-sha384`` 또는 ``rsa-sha512`` 의 URI
+     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
 
 .. note::
-   ``saml.security.reject_deprecated_alg`` 가 ``false`` 인 동안에는 SHA-1（``rsa-sha1`` 및 ``dsa-sha1``）로
-   서명된 어서션이나 메시지도 허용됩니다. 기본적으로 활성화되어 있지 않은 이유는, 활성화하면 아직 SHA-1로
-   서명하는 IdP를 거부하게 되기 때문입니다.
-   IdP가 SHA-256 이상으로 서명하는지 확인한 후 ``saml.security.reject_deprecated_alg=true`` 를 설정하십시오.
+   이 설정들과 관계없이 Response 또는 Assertion 중 하나는 반드시 서명되어 있어야 합니다.
+   IdP가 서명하는 요소에 대해 서명을 요구하려면 ``saml.security.want_messages_signed`` 또는 ``saml.security.want_assertions_signed`` 를 사용하십시오.
+   서명은 서명 대상 요소를 해당 요소 자신의 ID로 참조해야 하며, ``rsa-sha256``, ``rsa-sha384`` 또는 ``rsa-sha512`` （또는 ECDSA 변형）를 사용해야 합니다.
+   ``saml.security.allow_deprecated_alg=true`` 가 아니면 SHA-1 서명은 거부되므로, IdP가 SHA-256 이상으로 서명하는지 확인하십시오.
 
-.. warning::
-   싱글 로그아웃（``saml.idp.single_logout_service.url``）을 설정하는 경우에는
-   ``saml.security.want_messages_signed=true`` 도 반드시 함께 설정하십시오.
-   ``false`` 인 상태에서는 서명이 없는 LogoutRequest가 수락되므로, 조작된 URL로 인증된 사용자의
-   세션을 종료시킬 수 있습니다.
-   영향은 강제 로그아웃（서비스 거부）이며, 계정 탈취는 아닙니다.
+.. note::
+   싱글 로그아웃（``saml.idp.single_logout_service.url``）을 설정한 경우, IdP가 보내는 LogoutRequest와
+   LogoutResponse는 ``saml.idp.x509cert`` 의 키로 서명되어 있어야 합니다
+   （``saml.security.want_logout_signed=true`` 가 기본값입니다）.
+   서명할 수 없는 IdP에 대해서만 ``saml.security.want_logout_signed=false`` 를 설정하십시오.
+   싱글 로그아웃 서비스（``/sso/logout``）는 리디렉션 바인딩（GET）과 POST 바인딩을 받아들입니다.
+   IdP 측에도 ``/sso/logout`` URL을 POST 바인딩용으로 등록하십시오. IdP가 Assertion Consumer Service로
+   POST하는 LogoutResponse는 인식되지 않습니다.
 
 암호화 설정
 -----------
@@ -383,39 +377,21 @@ Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역�
      - 설명
      - 기본값
    * - ``saml.security.want_assertions_encrypted``
-     - 어서션의 암호화를 요구한다
+     - 어서션의 암호화를 요구한다（``saml.sp.privatekey`` 필요）
      - ``false``
-   * - ``saml.security.want_nameid_encrypted``
-     - NameID의 암호화를 요구한다
+   * - ``saml.security.allow_rsa_1_5``
+     - RSA 1.5 키 전송을 허용한다（``saml.sp.privatekey`` 필요）. 설정하지 않으면 OAEP만 허용됩니다
      - ``false``
-   * - ``saml.security.allowed_key_transport_algorithms``
-     - 어설션을 복호화할 때 허용할 키 전송 알고리즘 (쉼표로 구분된 URI)
-     - (빈 값: 모든 알고리즘을 허용)
 
 .. note::
-   |Fess| 는 XML Encryption 1.1로 암호화된 응답을 검증합니다. 예를 들어 현재 Keycloak은
-   ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` 를 사용하고 응답에 ``<xenc11:MGF>`` 요소를
-   포함하지만, 스키마 검증을 켠 상태로도 이러한 응답을 받아들입니다. 이전 버전에서는
-   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd`` 로 거부되었습니다.
-   그 회피책으로 ``saml.security.want_xml_validation=false`` 를 설정했다면 제거하십시오.
-
-.. note::
-   SP 개인 키를 설정할 때는 ``saml.security.allowed_key_transport_algorithms`` 도 함께
-   설정하십시오. 설정하지 않으면 오래된 ``http://www.w3.org/2001/04/xmlenc#rsa-1_5`` 를 포함한
-   모든 키 전송 알고리즘을 허용합니다. 어설션 컨슈머 엔드포인트는 인증이 필요 없고 복호화는
-   응답 검증보다 먼저 실행되므로, 인증되지 않은 호출자가 임의의 암호문을 SP 개인 키로 복호화하게
-   만들 수 있습니다. 이 상태에서는 시작 시 ``Insecure SAML settings`` 줄에
-   ``key_transport_algorithms_not_restricted`` 가 출력됩니다. IdP가 실제로 사용하는 것으로
-   제한하십시오::
-
-      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
+   IdP가 RSA 1.5로만 암호화할 수 있는 경우가 아니면 ``saml.security.allow_rsa_1_5`` 를 ``false`` 로 두십시오.
 
 SP 인증서 및 비밀 키 설정
 --------------------------
 
 SP 측에서 인증 요청이나 로그아웃 메시지에 서명하는 경우（``saml.security.authnrequest_signed`` 등）,
 또는 어서션이나 NameID의 암호화를 요구하는 경우（``saml.security.want_assertions_encrypted`` 등）는,
-SP의 비밀 키와 X.509 인증서를 설정해야 합니다.
+SP의 비밀 키（PKCS#8）와 X.509 인증서를 설정해야 합니다.
 
 .. list-table::
    :header-rows: 1
@@ -446,36 +422,54 @@ SP의 비밀 키와 X.509 인증서를 설정해야 합니다.
    * - 프로퍼티
      - 설명
      - 기본값
-   * - ``saml.strict``
-     - 엄격 모드（검증을 엄격하게 수행）
-     - ``true``
-   * - ``saml.security.want_xml_validation``
-     - 메시지의 XML 스키마 검증을 수행한다
-     - ``true``
-   * - ``saml.security.signature_algorithm``
-     - 서명 알고리즘
-     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
    * - ``saml.security.requested_authncontext``
-     - 요구하는 인증 컨텍스트
+     - 요구하는 인증 컨텍스트（빈 값이면 요구하지 않음）
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
-   * - ``saml.security.reject_missing_audience``
-     - Audience(``AudienceRestriction``)가 없는 어서션을 거부한다
-     - ``false``
+   * - ``saml.security.requested_authncontextcomparison``
+     - 요구하는 인증 컨텍스트의 비교 방식（``exact``, ``minimum``, ``maximum`` 또는 ``better``）
+     - ``exact``
+   * - ``saml.security.clock_drift``
+     - 유효 기간을 확인할 때 허용하는 시계 오차（초, 0~600）
+     - ``120``
+   * - ``saml.security.max_message_size``
+     - 허용하는 디코딩 후 메시지의 최대 크기（바이트, 1024~16777216）
+     - ``1048576``
    * - ``saml.sp.nameidformat``
      - NameID 형식
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
 
 .. note::
-   ``saml.security.reject_missing_audience`` 가 ``false`` 인 동안에는 Audience(``AudienceRestriction``)가 없는 어서션도 허용됩니다. Audience가 있지만 SP의 엔티티 ID가 포함되지 않은 어서션은 이 설정과 관계없이 거부됩니다.
-   ``true`` 로 설정하면 Audience가 없는 어서션도 Audience가 일치하지 않을 때와 같은 오류로 거부됩니다.
-   이 설정은 fess-sso-saml이 java-saml 3.1.3 이상을 사용할 때 사용할 수 있습니다.
+   어서션의 Audience, Recipient, Destination, Issuer 및 유효 기간은 항상 검사되며,
+   응답은 |Fess| 가 시작한 로그인에 대한 것이어야 합니다.
+   Audience가 없거나 Audience에 SP의 Entity ID가 지정되어 있지 않은 어서션은 거부됩니다.
+   검증은 항상 엄격합니다: ``saml.strict=false`` 는 거부됩니다.
 
-.. note::
-   |Fess| 는 내부적으로 SAML 라이브러리（java-saml）를 사용하며, ``saml.`` 로 시작하는 프로퍼티는
-   라이브러리의 대응하는 설정（``onelogin.saml2.`` 프리픽스）에 매핑됩니다.
-   이 때문에 여기서 소개한 것 외에도, 바인딩（``saml.sp.assertion_consumer_service.binding`` 등）,
-   조직 정보（``saml.organization.*``）, 연락처 정보（``saml.contacts.*``）와 같은 상세 설정을
-   ``system.properties`` 에 지정할 수 있습니다.
+더 이상 사용되지 않는 프로퍼티
+------------------------------
+
+다음 프로퍼티는 무시됩니다. 해당 프로퍼티를 명시하는 경고가 로그에 한 번 출력됩니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - 프로퍼티
+     - 현재 동작
+   * - ``saml.security.reject_deprecated_alg``
+     - SHA-1 서명은 기본적으로 거부됩니다. ``saml.security.allow_deprecated_alg=true`` 로 허용합니다
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - 기본적으로 OAEP만 허용됩니다. ``saml.security.allow_rsa_1_5=true`` 로 RSA 1.5도 허용합니다
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - 중복된 속성은 항상 병합됩니다
+   * - ``saml.security.reject_missing_audience``
+     - Audience가 없는 어서션은 항상 거부됩니다
+   * - ``saml.idp.certfingerprint``, ``saml.idp.certfingerprint_algorithm``
+     - ``saml.idp.x509cert`` 를 설정하십시오. 핑거프린트는 신뢰 기점이 아닙니다
+   * - ``saml.security.sign_metadata``, ``saml.security.want_nameid_encrypted``, ``saml.security.want_xml_validation``, ``saml.security.logoutrequest_signed``, ``saml.security.logoutresponse_signed``, ``saml.security.digest_algorithm``, ``saml.keystore.*``, ``saml.contacts.*``, ``saml.organization.*``, ``saml.compress.*``, ``saml.parsing.*``, ``saml.unique_id_prefix``, the ``*.binding`` and ``*.response.url`` properties
+     - 더 이상 사용되지 않습니다
+
+라이브러리가 알지 못하는 그 밖의 ``saml.`` 프로퍼티가 있으면 해당 프로퍼티명을 명시하는 메시지와 함께
+SAML 로그인이 중단되므로, 잘못 입력한 보안 설정을 놓치는 일이 없습니다. ``saml.debug`` 는 허용되지만 아무 효과가 없습니다.
 
 AuthnRequest 유효 기간
 ======================
@@ -546,11 +540,9 @@ IdP 로그인 화면을 열어둔 채로 방치하는 등의 이유로 유효 �
     saml.default.groups=user
 
     # 보안 설정（운영 환경에서는 활성화 권장）
+    # IdP가 서명하는 요소에 대해 서명을 요구한다
+    # （Response의 경우 saml.security.want_messages_signed=true）
     saml.security.want_assertions_signed=true
-    saml.security.want_messages_signed=true
-
-    # IdP가 SHA-256 이상으로 서명하는지 확인한 후 활성화한다
-    saml.security.reject_deprecated_alg=true
 
 문제 해결
 =========
@@ -574,36 +566,17 @@ IdP 로그인 화면을 열어둔 채로 방치하는 등의 이유로 유효 �
   따라서 ``saml.request.id.ttl`` 만 늘려도 사용자가 IdP에서 로그인을 마칠 수 있는 시간은 늘어나지
   않으므로, 세션 타임아웃도 함께 늘리십시오
 
-리버스 프록시 환경에서 Destination 검증에 실패함
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Destination 또는 Recipient 검증에 실패함
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TLS를 종단하는 리버스 프록시나 로드 밸런서 뒤에 |Fess| 를 배치하면,
-``saml.sp.base.url`` 을 올바르게 설정했더라도 어설션 검증에 실패할 수 있습니다.
+서명된 Response의 ``Destination`` 과 SubjectConfirmation의 ``Recipient`` 는 |Fess| 의
+Assertion Consumer Service URL이어야 합니다. 이 URL은 |Fess| 에 도달한 요청이 아니라
+``saml.sp.base.url`` （또는 ``saml.sp.assertion_consumer_service.url``）에서 도출되므로,
+TLS를 종단하는 리버스 프록시는 이 비교에 영향을 주지 않습니다.
 
-어설션의 ``Destination`` 속성은 |Fess| 에 도달한 시점의 요청 URL과 비교됩니다.
-TLS를 종단하는 프록시 뒤에서는 이 값이 IdP가 어설션을 보낸 외부 URL이 아니라 내부 ``http://`` URL입니다.
-``saml.sp.base.url`` 은 이 비교에 사용되지 않으므로 이 설정만으로는 해결되지 않습니다.
-
-``saml.debug=true`` 를 설정하면 로그에 다음과 같은 이유가 출력됩니다.
-
-::
-
-    The response was received at http://... instead of https://fess.example.com/sso/
-
-이 경우 ``tomcat_config.properties`` 의 커넥터 설정을 외부에서 보이는 스킴과 포트에 맞추십시오.
-다음 설정은 기본적으로 주석 처리되어 있습니다.
-
-::
-
-    tomcat.secure=true
-    tomcat.scheme=https
-    tomcat.proxyPort=443
-
-아울러 리버스 프록시가 원래의 ``Host`` 헤더를 그대로 |Fess| 로 전달하도록 설정하십시오.
-요청 URL의 호스트명 부분은 ``Host`` 헤더로부터 조립됩니다.
-``tomcat_config.properties`` 를 변경한 후에는 |Fess| 의 재시작이 필요합니다.
-
-같은 검증이 싱글 로그아웃 메시지에도 적용되므로, SLO를 사용하는 경우에도 동일하게 설정하십시오.
+- ``saml.sp.base.url`` 을 스킴과 포트를 포함한 외부에서 보이는 URL로 설정하십시오
+- IdP 측에도 같은 ACS URL（``{saml.sp.base.url}/sso/``）을 등록하십시오
+- ``saml.sp.entityid`` 를 덮어쓴 경우 IdP는 그 값을 Audience로 사용해야 합니다
 
 서명 검증 오류
 ~~~~~~~~~~~~~~
@@ -611,15 +584,10 @@ TLS를 종단하는 프록시 뒤에서는 이 값이 IdP가 어설션을 보낸
 - IdP의 인증서가 올바르게 설정되어 있는지 확인하십시오
 - 인증서의 유효 기간이 만료되지 않았는지 확인하십시오
 - 인증서는 Base64 인코딩된 내용만 줄 바꿈 없이 설정하십시오
-
-속성 이름 중복으로 로그인할 수 없음
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-- 로그에 ``The IdP repeated an attribute name in the SAML assertion`` 으로 시작하는 경고가
-  출력된다면, IdP가 동일한 속성 이름을 여러 ``<Attribute>`` 요소로 나누어 보내고 있습니다
-- 어서션 검증 자체는 성공했으므로 인증서나 시각 오차는 원인이 아닙니다
-- IdP 측에서 속성을 하나로 합치거나 ``saml.security.allow_duplicated_attribute_name=true`` 를
-  설정하세요
+- IdP 인증서는 2048비트 이상의 RSA 키여야 합니다
+- Response 또는 Assertion 중 하나는 서명되어 있어야 하며, 서명은 SHA-256 이상을 사용해야 합니다
+  （SHA-1은 ``saml.security.allow_deprecated_alg=true`` 인 경우에만 허용됩니다）
+- 응답이 거부된 이유는 ``Authentication failed: <reason> - <detail>`` 형식으로 로그에 출력됩니다
 
 사용자의 그룹·역할이 반영되지 않음
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -630,20 +598,15 @@ TLS를 종단하는 프록시 뒤에서는 이 값이 IdP가 어설션을 보낸
   그룹 이름과 일치하지 않습니다
 - 사용자가 150개를 초과하는 그룹에 소속된 경우 Microsoft Entra ID는 그룹 클레임 자체를 보내지 않으며
   (중첩 그룹도 이 상한에 포함됩니다), 이때 |Fess| 는 ``saml.default.groups`` 로 폴백합니다
-- SAML 어서션의 내용을 확인하려면 디버그 모드를 활성화하십시오
+- 속성명을 IdP가 실제로 보내는 어서션의 속성명과 비교하십시오
 
-디버그 설정
------------
+로그 설정
+---------
 
-문제를 조사할 때는 다음 설정으로 디버그 모드를 활성화할 수 있습니다.
+SAML 인증에 실패하면 그 이유는 항상 경고로 로그에 출력됩니다.
+``saml.debug`` 프로퍼티는 아무 효과가 없습니다.
 
-::
-
-    saml.debug=true
-
-``saml.debug=true`` 를 설정하면 SAML 인증에 실패했을 때의 상세한 이유가 로그에 출력됩니다.
-
-또한 ``app/WEB-INF/classes/log4j2.xml`` 에 다음 로거를 추가하면 SAML 관련 상세 로그를 출력할 수 있습니다.
+SAML 관련 상세 로그를 출력하려면 ``app/WEB-INF/classes/log4j2.xml`` 에 다음 로거를 추가하십시오.
 
 ::
 

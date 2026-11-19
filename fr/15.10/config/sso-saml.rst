@@ -12,6 +12,7 @@ En utilisant l'authentification SAML, les informations utilisateur authentifiée
    La prise en charge de l'authentification SAML provient du plugin ``fess-sso-saml``, qui ne
    fait pas partie de la distribution. Installez-le depuis la page **Système > Plugin** de
    l'écran d'administration ou avec ``bin/fess-setup install plugin fess-sso-saml``.
+   Le plugin traite les messages SAML avec la bibliothèque SAML `saml4j <https://github.com/codelibs/saml4j>`__.
    Jusque-là, avec ``sso.type=saml``, toute requête vers ``/sso/`` est simplement redirigée
    vers la page de connexion.
 
@@ -80,8 +81,8 @@ Pour activer l'authentification SAML, ajoutez le paramètre suivant dans ``app/W
 .. note::
    Les paramètres commençant par ``saml.`` sont lus uniquement depuis ``system.properties``.
    Les propriétés système de la JVM telles que ``-Dsaml.security....`` ou ``-Dfess.saml.security....`` ne sont pas consultées.
-   En particulier, ``saml.security.*``, ``saml.strict`` et ``saml.debug`` n'ont pas non plus de champ dans l'interface d'administration :
-   les écrire directement dans ``system.properties`` est le seul moyen de les définir.
+   En particulier, ``saml.security.*`` n'a pas non plus de champ dans l'interface d'administration :
+   l'écrire directement dans ``system.properties`` est le seul moyen de le définir.
 
 Configuration du cookie de session
 ----------------------------------
@@ -176,6 +177,14 @@ Configurez les informations obtenues de votre IdP.
    * - ``saml.idp.single_logout_service.url``
      - URL du service SLO de l'IdP
      - (Optionnel)
+   * - ``saml.idp.x509certMulti.1``, ``.2``, ...
+     - Certificats de signature supplémentaires de l'IdP (par exemple lors d'une rotation de clés)
+     - (Optionnel)
+
+.. note::
+   Le certificat de l'IdP est la seule ancre de confiance pour les signatures ; un certificat contenu dans un message n'est jamais considéré comme fiable.
+   Les certificats de l'IdP et du SP doivent être des clés RSA d'au moins 2048 bits.
+   ``saml.idp.x509cert`` peut être omis lorsque ``saml.idp.x509certMulti.N`` est défini.
 
 .. note::
    Pour ``saml.idp.x509cert``, spécifiez uniquement le contenu encodé en Base64 du certificat sur une seule ligne sans sauts de ligne.
@@ -221,6 +230,12 @@ Obtenez les informations suivantes depuis l'écran de configuration ou les méta
 - **Entity ID de l'IdP** : URI identifiant l'IdP
 - **URL SSO (HTTP-Redirect)** : URL du point d'accès Single Sign-On
 - **Certificat X.509** : Certificat de clé publique utilisé pour la vérification de signature de l'assertion SAML
+
+.. note::
+   |Fess| vérifie les points suivants pour chaque assertion. Les URL sont dérivées de ``saml.sp.base.url`` (ou des propriétés d'URL individuelles), et non de la requête entrante.
+
+   - L'assertion contient un ``AudienceRestriction`` qui désigne l'entity ID du SP
+   - Le ``Destination`` d'une Response signée et le ``Recipient`` du SubjectConfirmation correspondent à l'URL du service Assertion Consumer
 
 Mappage des attributs utilisateur
 =================================
@@ -293,42 +308,24 @@ Exemple ::
 IdP qui répètent un nom d'attribut
 ----------------------------------
 
-Si l'IdP répartit le même nom d'attribut sur plusieurs éléments ``<Attribute>``, |Fess| refuse
-l'assertion et la connexion échoue.
+Si l'IdP répartit le même nom d'attribut sur plusieurs éléments ``<Attribute>``, |Fess| fusionne
+leurs valeurs.
 
 Keycloak envoie par défaut des assertions de cette forme : ses mappeurs de rôles et de groupes
 émettent un élément ``<Attribute>`` par valeur tant que leur option ``single`` n'est pas activée, et
-tout compte Keycloak possède plusieurs rôles de royaume par défaut.
-
-Deux solutions sont possibles :
-
-- Regrouper les valeurs dans un seul élément côté IdP (dans Keycloak, activez l'option ``single``
-  des mappeurs)
-- Accepter les répétitions dans |Fess| et fusionner leurs valeurs
-
-.. list-table::
-   :header-rows: 1
-   :widths: 45 40 15
-
-   * - Propriété
-     - Description
-     - Par défaut
-   * - ``saml.security.allow_duplicated_attribute_name``
-     - Autorise le même nom d'attribut sur plusieurs éléments et fusionne leurs valeurs
-     - ``false``
-
-Exemple ::
-
-    saml.security.allow_duplicated_attribute_name=true
+tout compte Keycloak possède plusieurs rôles de royaume par défaut. Aucun paramètre n'est nécessaire
+dans |Fess| pour cela.
 
 Configuration de sécurité
 =========================
 
-Pour les environnements de production, il est recommandé d'activer les paramètres de sécurité suivants.
+Les paramètres de sécurité suivants sont lus depuis ``system.properties``.
 
 .. note::
-   Si des paramètres déconseillés subsistent, un avertissement ``Insecure SAML settings: ...`` est
-   écrit dans le journal lors du chargement des paramètres SAML.
+   Si des paramètres qui affaiblissent les valeurs par défaut subsistent (``saml.security.want_logout_signed=false``
+   avec la déconnexion unique configurée, ``saml.security.allow_deprecated_alg=true`` ou
+   ``saml.security.allow_rsa_1_5=true``), un avertissement ``Insecure SAML settings: ...`` est écrit dans le
+   journal lors du chargement des paramètres SAML.
 
 Paramètres de signature
 -----------------------
@@ -341,41 +338,38 @@ Paramètres de signature
      - Description
      - Par défaut
    * - ``saml.security.authnrequest_signed``
-     - Signer les demandes d'authentification
+     - Signer les demandes d'authentification (nécessite ``saml.sp.privatekey``)
      - ``false``
    * - ``saml.security.want_messages_signed``
-     - Exiger les signatures de messages
+     - Exiger que la Response soit signée
      - ``false``
    * - ``saml.security.want_assertions_signed``
-     - Exiger les signatures d'assertions
+     - Exiger que l'Assertion soit signée
      - ``false``
-   * - ``saml.security.logoutrequest_signed``
-     - Signer les demandes de déconnexion
+   * - ``saml.security.want_logout_signed``
+     - Exiger que les messages de déconnexion de l'IdP soient signés
+     - ``true``
+   * - ``saml.security.allow_deprecated_alg``
+     - Accepter les signatures SHA-1
      - ``false``
-   * - ``saml.security.logoutresponse_signed``
-     - Signer les réponses de déconnexion
-     - ``false``
-   * - ``saml.security.reject_deprecated_alg``
-     - Rejeter les algorithmes de signature obsolètes tels que SHA-1
-     - ``false``
-
-.. warning::
-   Les fonctionnalités de sécurité sont désactivées par défaut.
-   Pour les environnements de production, il est fortement recommandé de définir au moins ``saml.security.want_assertions_signed=true``.
+   * - ``saml.security.signature_algorithm``
+     - Algorithme des signatures sortantes : l'URI de ``rsa-sha256``, ``rsa-sha384`` ou ``rsa-sha512``
+     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
 
 .. note::
-   Tant que ``saml.security.reject_deprecated_alg`` vaut ``false``, les assertions et messages signés
-   avec SHA-1 (``rsa-sha1`` et ``dsa-sha1``) sont également acceptés. Ce paramètre n'est pas activé par
-   défaut, car son activation entraîne le rejet des IdP qui signent encore avec SHA-1.
-   Vérifiez que votre IdP signe avec SHA-256 ou plus fort, puis définissez
-   ``saml.security.reject_deprecated_alg=true``.
+   Quels que soient ces paramètres, soit la Response, soit l'Assertion doit être signée.
+   Utilisez ``saml.security.want_messages_signed`` ou ``saml.security.want_assertions_signed`` pour exiger la signature sur l'élément que signe votre IdP.
+   La signature doit référencer l'élément signé par son propre ID et utiliser ``rsa-sha256``, ``rsa-sha384`` ou ``rsa-sha512`` (ou les variantes ECDSA).
+   Les signatures SHA-1 sont rejetées sauf si ``saml.security.allow_deprecated_alg=true`` ; vérifiez donc que votre IdP signe avec SHA-256 ou plus fort.
 
-.. warning::
-   Lorsque la déconnexion unique est configurée (``saml.idp.single_logout_service.url``), définissez
-   impérativement aussi ``saml.security.want_messages_signed=true``.
-   Tant que ce paramètre vaut ``false``, une LogoutRequest sans signature est acceptée : une URL
-   forgée peut donc mettre fin à la session d'un utilisateur authentifié.
-   L'impact est une déconnexion forcée (déni de service), et non une prise de contrôle du compte.
+.. note::
+   Lorsque la déconnexion unique est configurée (``saml.idp.single_logout_service.url``), la LogoutRequest et la
+   LogoutResponse envoyées par l'IdP doivent être signées avec la clé de ``saml.idp.x509cert``
+   (``saml.security.want_logout_signed=true`` est la valeur par défaut).
+   Définissez ``saml.security.want_logout_signed=false`` uniquement pour un IdP qui ne peut pas les signer.
+   Le service de déconnexion unique (``/sso/logout``) accepte la liaison par redirection (GET) et la liaison POST.
+   Enregistrez aussi l'URL ``/sso/logout`` pour la liaison POST côté IdP ; une LogoutResponse que l'IdP
+   envoie par POST au service Assertion Consumer n'est pas reconnue.
 
 Paramètres de chiffrement
 -------------------------
@@ -388,40 +382,19 @@ Paramètres de chiffrement
      - Description
      - Par défaut
    * - ``saml.security.want_assertions_encrypted``
-     - Exiger le chiffrement des assertions
+     - Exiger le chiffrement des assertions (nécessite ``saml.sp.privatekey``)
      - ``false``
-   * - ``saml.security.want_nameid_encrypted``
-     - Exiger le chiffrement du NameID
+   * - ``saml.security.allow_rsa_1_5``
+     - Accepter le transport de clé RSA 1.5 (nécessite ``saml.sp.privatekey``). Sinon, seul OAEP est accepté
      - ``false``
-   * - ``saml.security.allowed_key_transport_algorithms``
-     - Algorithmes de transport de clé acceptés lors du déchiffrement d'une assertion (URI séparés par des virgules)
-     - (vide : tous les algorithmes sont acceptés)
 
 .. note::
-   |Fess| valide les réponses chiffrées avec XML Encryption 1.1. Keycloak actuel, par exemple,
-   utilise ``http://www.w3.org/2009/xmlenc11#rsa-oaep`` et inclut un élément ``<xenc11:MGF>``
-   dans sa réponse ; une telle réponse est acceptée avec la validation de schéma activée. Les
-   versions antérieures la rejetaient avec
-   ``Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd``. Si
-   ``saml.security.want_xml_validation=false`` avait été défini pour contourner ce problème,
-   supprimez ce paramètre.
-
-.. note::
-   Définissez ``saml.security.allowed_key_transport_algorithms`` dès qu'une clé privée de SP
-   est configurée. Tant qu'il n'est pas défini, tous les algorithmes de transport de clé sont
-   acceptés, y compris l'ancien ``http://www.w3.org/2001/04/xmlenc#rsa-1_5``. Le point de
-   terminaison du consommateur d'assertions est anonyme et le déchiffrement s'exécute avant la
-   validation de la réponse : un appelant non authentifié peut donc faire déchiffrer par la clé
-   privée du SP un texte chiffré de son choix. Dans ce cas, |Fess| signale
-   ``key_transport_algorithms_not_restricted`` dans la ligne ``Insecure SAML settings`` au
-   démarrage. Limitez le paramètre à ce que l'IdP utilise réellement::
-
-      saml.security.allowed_key_transport_algorithms=http://www.w3.org/2009/xmlenc11#rsa-oaep
+   Laissez ``saml.security.allow_rsa_1_5`` à ``false`` sauf si votre IdP ne peut chiffrer qu'avec RSA 1.5.
 
 Configuration du certificat SP et de la clé privée
 ---------------------------------------------------
 
-Lorsque le SP signe les demandes d'authentification ou les messages de déconnexion (par ex. ``saml.security.authnrequest_signed``), ou demande le chiffrement des assertions ou du NameID (par ex. ``saml.security.want_assertions_encrypted``), vous devez configurer la clé privée et le certificat X.509 du SP.
+Lorsque le SP signe les demandes d'authentification ou les messages de déconnexion (par ex. ``saml.security.authnrequest_signed``), ou demande le chiffrement des assertions ou du NameID (par ex. ``saml.security.want_assertions_encrypted``), vous devez configurer la clé privée (PKCS#8) et le certificat X.509 du SP.
 
 .. list-table::
    :header-rows: 1
@@ -451,33 +424,54 @@ Autres paramètres de sécurité
    * - Propriété
      - Description
      - Par défaut
-   * - ``saml.strict``
-     - Mode strict (effectuer une validation stricte)
-     - ``true``
-   * - ``saml.security.want_xml_validation``
-     - Valider le schéma XML des messages
-     - ``true``
-   * - ``saml.security.signature_algorithm``
-     - Algorithme de signature
-     - ``http://www.w3.org/2001/04/xmldsig-more#rsa-sha256``
    * - ``saml.security.requested_authncontext``
-     - Contexte d'authentification demandé
+     - Contexte d'authentification demandé (une valeur vide n'en demande aucun)
      - ``urn:oasis:names:tc:SAML:2.0:ac:classes:Password``
-   * - ``saml.security.reject_missing_audience``
-     - Rejeter une assertion sans Audience (``AudienceRestriction``)
-     - ``false``
+   * - ``saml.security.requested_authncontextcomparison``
+     - Comparaison pour le contexte d'authentification demandé (``exact``, ``minimum``, ``maximum`` ou ``better``)
+     - ``exact``
+   * - ``saml.security.clock_drift``
+     - Décalage d'horloge toléré lors de la vérification des périodes de validité (secondes, 0 à 600)
+     - ``120``
+   * - ``saml.security.max_message_size``
+     - Taille maximale d'un message décodé accepté (octets, 1024 à 16777216)
+     - ``1048576``
    * - ``saml.sp.nameidformat``
      - Format du NameID
      - ``urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress``
 
 .. note::
-   Tant que ``saml.security.reject_missing_audience`` vaut ``false``, une assertion sans Audience (``AudienceRestriction``) est acceptée. Une assertion qui liste des Audiences sans l'entity ID du SP est rejetée quel que soit ce paramètre.
-   Avec ``true``, une assertion sans Audience est également rejetée, avec la même erreur qu'une Audience qui ne correspond pas.
-   Ce paramètre est disponible lorsque fess-sso-saml utilise java-saml 3.1.3 ou ultérieur.
+   L'audience, le destinataire, la destination, l'émetteur et la période de validité d'une assertion sont toujours vérifiés,
+   et une réponse doit correspondre à une connexion démarrée par |Fess|.
+   Une assertion sans Audience, ou dont l'Audience ne désigne pas l'entity ID du SP, est rejetée.
+   La validation est toujours stricte : ``saml.strict=false`` est refusé.
 
-.. note::
-   |Fess| utilise en interne une bibliothèque SAML (java-saml), et les propriétés commençant par ``saml.`` sont mappées aux paramètres correspondants de la bibliothèque (préfixe ``onelogin.saml2.``).
-   Ainsi, en plus de celles répertoriées ici, vous pouvez spécifier des paramètres détaillés dans ``system.properties`` tels que les liaisons (par ex. ``saml.sp.assertion_consumer_service.binding``), les informations d'organisation (``saml.organization.*``) et les informations de contact (``saml.contacts.*``).
+Propriétés qui ne sont plus utilisées
+-------------------------------------
+
+Les propriétés suivantes sont ignorées. Un seul avertissement qui les nomme est écrit dans le journal.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - Propriété
+     - Désormais
+   * - ``saml.security.reject_deprecated_alg``
+     - Les signatures SHA-1 sont rejetées par défaut ; ``saml.security.allow_deprecated_alg=true`` les accepte
+   * - ``saml.security.allowed_key_transport_algorithms``
+     - Seul OAEP est accepté par défaut ; ``saml.security.allow_rsa_1_5=true`` accepte également RSA 1.5
+   * - ``saml.security.allow_duplicated_attribute_name``
+     - Les attributs répétés sont toujours fusionnés
+   * - ``saml.security.reject_missing_audience``
+     - Une assertion sans audience est toujours rejetée
+   * - ``saml.idp.certfingerprint``, ``saml.idp.certfingerprint_algorithm``
+     - Définissez ``saml.idp.x509cert`` ; une empreinte n'est pas une ancre de confiance
+   * - ``saml.security.sign_metadata``, ``saml.security.want_nameid_encrypted``, ``saml.security.want_xml_validation``, ``saml.security.logoutrequest_signed``, ``saml.security.logoutresponse_signed``, ``saml.security.digest_algorithm``, ``saml.keystore.*``, ``saml.contacts.*``, ``saml.organization.*``, ``saml.compress.*``, ``saml.parsing.*``, ``saml.unique_id_prefix``, les propriétés ``*.binding`` et ``*.response.url``
+     - N'est plus utilisé
+
+Toute autre propriété ``saml.`` inconnue de la bibliothèque interrompt les connexions SAML avec un message qui la nomme,
+afin qu'un paramètre de sécurité mal orthographié ne passe pas inaperçu. ``saml.debug`` est accepté et n'a aucun effet.
 
 Expiration de l'AuthnRequest
 ============================
@@ -548,11 +542,9 @@ Voici un exemple de configuration recommandée pour les environnements de produc
     saml.default.groups=user
 
     # Paramètres de sécurité (recommandés pour la production)
+    # Exiger la signature sur l'élément que signe l'IdP
+    # (saml.security.want_messages_signed=true pour la Response)
     saml.security.want_assertions_signed=true
-    saml.security.want_messages_signed=true
-
-    # À activer après avoir vérifié que l'IdP signe avec SHA-256 ou plus fort
-    saml.security.reject_deprecated_alg=true
 
 Dépannage
 =========
@@ -577,38 +569,17 @@ Impossible de retourner à Fess après l'authentification
   ``saml.request.id.ttl`` ne laisse pas plus de temps aux utilisateurs pour terminer la connexion
   chez l'IdP : allongez aussi le délai d'expiration de session
 
-La validation de Destination échoue derrière un proxy inverse
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+La validation de Destination ou de Recipient échoue
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Lorsque |Fess| s'exécute derrière un proxy inverse ou un répartiteur de charge qui termine TLS, la
-validation de l'assertion peut échouer même si ``saml.sp.base.url`` est correctement défini.
+Le ``Destination`` d'une Response signée et le ``Recipient`` du SubjectConfirmation doivent correspondre à
+l'URL du service Assertion Consumer de |Fess|. Cette URL provient de ``saml.sp.base.url`` (ou de
+``saml.sp.assertion_consumer_service.url``), et non de la requête qui parvient à |Fess| ; un proxy
+inverse qui termine TLS n'affecte donc pas la comparaison.
 
-L'attribut ``Destination`` de l'assertion est comparé à l'URL de la requête telle qu'elle parvient
-à |Fess| : derrière un proxy qui termine TLS, il s'agit d'une URL interne en ``http://`` et non de
-l'URL externe à laquelle l'IdP a envoyé l'assertion. ``saml.sp.base.url`` n'intervient pas dans
-cette comparaison ; le définir seul ne résout donc pas le problème.
-
-Définissez ``saml.debug=true`` pour que la raison soit écrite dans le journal :
-
-::
-
-    The response was received at http://... instead of https://fess.example.com/sso/
-
-Alignez les paramètres du connecteur dans ``tomcat_config.properties`` sur le schéma et le port
-visibles depuis l'extérieur. Ces paramètres sont livrés commentés :
-
-::
-
-    tomcat.secure=true
-    tomcat.scheme=https
-    tomcat.proxyPort=443
-
-Configurez également le proxy inverse pour qu'il transmette l'en-tête ``Host`` d'origine à |Fess|, car
-la partie nom d'hôte de l'URL de requête est construite à partir de cet en-tête. |Fess| doit être
-redémarré après modification de ``tomcat_config.properties``.
-
-La même validation s'applique aux messages de déconnexion unique ; configurez-la également si vous
-utilisez le SLO.
+- Définissez ``saml.sp.base.url`` sur l'URL visible depuis l'extérieur, schéma et port compris
+- Enregistrez la même URL ACS (``{saml.sp.base.url}/sso/``) côté IdP
+- Si ``saml.sp.entityid`` est surchargé, l'IdP doit utiliser cette valeur comme Audience
 
 Erreur de vérification de signature
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -616,14 +587,10 @@ Erreur de vérification de signature
 - Vérifiez que le certificat IdP est correctement configuré
 - Assurez-vous que le certificat n'a pas expiré
 - Le certificat doit être spécifié uniquement comme contenu encodé en Base64, sans sauts de ligne
-
-La connexion échoue en raison d'un nom d'attribut répété
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-- Si le journal contient un avertissement commençant par ``The IdP repeated an attribute name in the
-  SAML assertion``, l'IdP répartit le même nom d'attribut sur plusieurs éléments ``<Attribute>``
-- L'assertion elle-même a passé la validation : le certificat et le décalage d'horloge ne sont pas en cause
-- Regroupez les attributs côté IdP ou définissez ``saml.security.allow_duplicated_attribute_name=true``
+- Le certificat de l'IdP doit être une clé RSA d'au moins 2048 bits
+- Soit la Response, soit l'Assertion doit être signée, et la signature doit utiliser SHA-256 ou plus fort
+  (SHA-1 n'est accepté qu'avec ``saml.security.allow_deprecated_alg=true``)
+- La raison du rejet d'une réponse est écrite dans le journal sous la forme ``Authentication failed: <reason> - <detail>``
 
 Groupes/rôles utilisateur non reflétés
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -636,20 +603,15 @@ Groupes/rôles utilisateur non reflétés
 - Microsoft Entra ID omet entièrement le claim de groupes lorsque l'utilisateur appartient à plus
   de 150 groupes (les groupes imbriqués comptent dans cette limite) ; |Fess| se rabat alors sur
   ``saml.default.groups``
-- Activez le mode débogage pour inspecter le contenu de l'assertion SAML
+- Comparez les noms d'attributs avec ceux de l'assertion réellement envoyée par l'IdP
 
-Paramètres de débogage
-----------------------
+Paramètres de journalisation
+----------------------------
 
-Pour investiguer les problèmes, vous pouvez activer le mode débogage avec le paramètre suivant :
+Lorsque l'authentification SAML échoue, la raison est toujours écrite dans le journal sous forme d'avertissement.
+La propriété ``saml.debug`` n'a aucun effet.
 
-::
-
-    saml.debug=true
-
-La configuration ``saml.debug=true`` enregistre dans le journal la raison détaillée lorsque l'authentification SAML échoue.
-
-Vous pouvez également afficher des journaux détaillés liés à SAML en ajoutant le logger suivant dans ``app/WEB-INF/classes/log4j2.xml`` :
+Pour afficher des journaux détaillés liés à SAML, ajoutez le logger suivant dans ``app/WEB-INF/classes/log4j2.xml`` :
 
 ::
 
