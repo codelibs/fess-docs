@@ -26,7 +26,7 @@ Inicio de OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.9.0
+    $ cd /path/to/opensearch-3.10.0
     $ ./bin/opensearch
 
 Para iniciar en segundo plano::
@@ -35,7 +35,7 @@ Para iniciar en segundo plano::
 
 .. note::
 
-   ``bin/fess-setup install opensearch`` coloca OpenSearch en ``opensearch/opensearch-3.9.0``
+   ``bin/fess-setup install opensearch`` coloca OpenSearch en ``opensearch/opensearch-3.10.0``
    dentro del directorio de |Fess|.
 
 .. important::
@@ -46,7 +46,7 @@ Para iniciar en segundo plano::
    usuario normal falla con ``AccessDeniedException``. Devuelva el directorio de OpenSearch a ese
    usuario antes de volver a iniciarlo, por ejemplo::
 
-       $ sudo chown -R <user> /path/to/opensearch-3.9.0
+       $ sudo chown -R <user> /path/to/opensearch-3.10.0
 
 Inicio de Fess
 ~~~~~~~~~~~~~~
@@ -78,8 +78,8 @@ Inicio de OpenSearch
 
 O desde el Símbolo del sistema::
 
-    C:\> cd C:\opensearch-3.9.0
-    C:\opensearch-3.9.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.10.0
+    C:\opensearch-3.10.0> bin\opensearch.bat
 
 Inicio de Fess
 ~~~~~~~~~~~~~~

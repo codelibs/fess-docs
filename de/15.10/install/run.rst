@@ -26,7 +26,7 @@ Start von OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.9.0
+    $ cd /path/to/opensearch-3.10.0
     $ ./bin/opensearch
 
 Für Hintergrundstart::
@@ -35,7 +35,7 @@ Für Hintergrundstart::
 
 .. note::
 
-   ``bin/fess-setup install opensearch`` legt OpenSearch in ``opensearch/opensearch-3.9.0`` im
+   ``bin/fess-setup install opensearch`` legt OpenSearch in ``opensearch/opensearch-3.10.0`` im
    |Fess|-Verzeichnis ab.
 
 .. important::
@@ -46,7 +46,7 @@ Für Hintergrundstart::
    Benutzer schlägt dann mit ``AccessDeniedException`` fehl. Übertragen Sie das
    OpenSearch-Verzeichnis vor dem nächsten Start wieder an diesen Benutzer, zum Beispiel::
 
-       $ sudo chown -R <user> /path/to/opensearch-3.9.0
+       $ sudo chown -R <user> /path/to/opensearch-3.10.0
 
 Start von Fess
 ~~~~~~~~~~~~~~
@@ -78,8 +78,8 @@ Start von OpenSearch
 
 Oder von der Eingabeaufforderung::
 
-    C:\> cd C:\opensearch-3.9.0
-    C:\opensearch-3.9.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.10.0
+    C:\opensearch-3.10.0> bin\opensearch.bat
 
 Start von Fess
 ~~~~~~~~~~~~~~

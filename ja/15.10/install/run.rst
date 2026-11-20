@@ -26,7 +26,7 @@ OpenSearch の起動
 
 ::
 
-    $ cd /path/to/opensearch-3.9.0
+    $ cd /path/to/opensearch-3.10.0
     $ ./bin/opensearch
 
 バックグラウンドで起動する場合::
@@ -35,13 +35,13 @@ OpenSearch の起動
 
 .. note::
 
-   ``bin/fess-setup install opensearch`` で導入した OpenSearch は、 |Fess| のディレクトリの ``opensearch/opensearch-3.9.0`` にあります。
+   ``bin/fess-setup install opensearch`` で導入した OpenSearch は、 |Fess| のディレクトリの ``opensearch/opensearch-3.10.0`` にあります。
 
 .. important::
 
    OpenSearch は一般ユーザーで起動してください。 ``root`` で起動すると ``can not run opensearch as root`` と表示して終了します。拒否された起動でも ``config/opensearch.keystore`` などのファイルが ``root`` の所有で残り、次に一般ユーザーで起動すると ``AccessDeniedException`` で失敗します。再度起動する前に、OpenSearch のディレクトリの所有者をそのユーザーに戻してください。例::
 
-       $ sudo chown -R <user> /path/to/opensearch-3.9.0
+       $ sudo chown -R <user> /path/to/opensearch-3.10.0
 
 Fess の起動
 ~~~~~~~~~~
@@ -72,8 +72,8 @@ OpenSearch の起動
 
 または、コマンドプロンプトから::
 
-    C:\> cd C:\opensearch-3.9.0
-    C:\opensearch-3.9.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.10.0
+    C:\opensearch-3.10.0> bin\opensearch.bat
 
 Fess の起動
 ~~~~~~~~~~

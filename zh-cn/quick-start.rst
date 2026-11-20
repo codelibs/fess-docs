@@ -141,13 +141,13 @@ Fess 不内置搜索引擎，ZIP 包中附带的 ``fess-setup`` 命令会下载 
 ::
 
     # Linux
-    $ opensearch/opensearch-3.9.0/bin/opensearch -d
+    $ opensearch/opensearch-3.10.0/bin/opensearch -d
     $ bin/fess
 
 .. code-block:: bat
 
     :: Windows（请分别在各自的命令提示符中执行）
-    opensearch\opensearch-3.9.0\bin\opensearch.bat
+    opensearch\opensearch-3.10.0\bin\opensearch.bat
     bin\fess.bat
 
 访问管理界面

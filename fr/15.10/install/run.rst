@@ -26,7 +26,7 @@ Démarrage d'OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.9.0
+    $ cd /path/to/opensearch-3.10.0
     $ ./bin/opensearch
 
 Pour un démarrage en arrière-plan ::
@@ -35,7 +35,7 @@ Pour un démarrage en arrière-plan ::
 
 .. note::
 
-   ``bin/fess-setup install opensearch`` place OpenSearch dans ``opensearch/opensearch-3.9.0`` du
+   ``bin/fess-setup install opensearch`` place OpenSearch dans ``opensearch/opensearch-3.10.0`` du
    répertoire de |Fess|.
 
 .. important::
@@ -46,7 +46,7 @@ Pour un démarrage en arrière-plan ::
    avec un utilisateur ordinaire échoue alors avec ``AccessDeniedException``. Rendez le répertoire
    d'OpenSearch à cet utilisateur avant de le démarrer à nouveau, par exemple ::
 
-       $ sudo chown -R <user> /path/to/opensearch-3.9.0
+       $ sudo chown -R <user> /path/to/opensearch-3.10.0
 
 Démarrage de Fess
 ~~~~~~~~~~~~~~~~~
@@ -78,8 +78,8 @@ Démarrage d'OpenSearch
 
 Ou depuis l'invite de commandes ::
 
-    C:\> cd C:\opensearch-3.9.0
-    C:\opensearch-3.9.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.10.0
+    C:\opensearch-3.10.0> bin\opensearch.bat
 
 Démarrage de Fess
 ~~~~~~~~~~~~~~~~~

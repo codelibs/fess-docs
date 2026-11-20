@@ -145,13 +145,13 @@ Inicie primero OpenSearch y después Fess:
 .. code-block:: bash
 
     # Linux
-    opensearch/opensearch-3.9.0/bin/opensearch -d
+    opensearch/opensearch-3.10.0/bin/opensearch -d
     bin/fess
 
 .. code-block:: bat
 
     :: Windows (ejecute cada uno en su propio Símbolo del sistema)
-    opensearch\opensearch-3.9.0\bin\opensearch.bat
+    opensearch\opensearch-3.10.0\bin\opensearch.bat
     bin\fess.bat
 
 Espere aproximadamente 30 segundos para que Fess se inicie, luego acceda a:

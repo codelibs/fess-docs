@@ -24,7 +24,7 @@ Cette procédure de mise à niveau est compatible avec les mises à niveau entre
 .. important::
 
    |Fess| 14.x est compatible avec la série OpenSearch 2.x, tandis que |Fess| 15.10 est compatible
-   avec OpenSearch 3.9.0. Les plugins OpenSearch pour |Fess| doivent correspondre exactement à la
+   avec OpenSearch 3.10.0. Les plugins OpenSearch pour |Fess| doivent correspondre exactement à la
    version d'OpenSearch ; une mise à niveau depuis la 14.x implique donc obligatoirement une mise
    à niveau majeure d'OpenSearch également. Voir :ref:`upgrade-opensearch`.
 
@@ -399,7 +399,7 @@ Version Docker
 Étape 4 : Mise à niveau d'OpenSearch
 ====================================
 
-|Fess| 15.10 est compatible avec OpenSearch 3.9.0. Si l'OpenSearch auquel vous vous connectez est
+|Fess| 15.10 est compatible avec OpenSearch 3.10.0. Si l'OpenSearch auquel vous vous connectez est
 antérieur à cette version, effectuez la mise à niveau en suivant la procédure ci-dessous.
 
 .. note::
@@ -432,7 +432,7 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
    |Fess| 14.x utilise la série OpenSearch 2.x ; une mise à niveau depuis la 14.x correspond donc
    toujours à ce cas de figure.
 
-   Un snapshot pris avec OpenSearch 3.9.0 ne peut pas être restauré dans OpenSearch 3.8.0 ou
+   Un snapshot pris avec OpenSearch 3.10.0 ne peut pas être restauré dans OpenSearch 3.9.x ou
    antérieur. Conservez le snapshot pris avant la mise à niveau au cas où vous devriez revenir en
    arrière.
 
@@ -440,15 +440,15 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
 
 2. Réinstallez les plugins ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
    .. note::
 
       La version de ces plugins doit correspondre à la version d'OpenSearch utilisée.
-      |Fess| 15.10 est compatible avec OpenSearch 3.9.0. Si les versions ne correspondent pas,
+      |Fess| 15.10 est compatible avec OpenSearch 3.10.0. Si les versions ne correspondent pas,
       l'installation du plugin échouera.
 
       Les quatre plugins de |Fess| sont publiés sur maven.codelibs.org ; ils s'installent donc par
@@ -556,7 +556,7 @@ En cas de mise à niveau majeure, il est recommandé de recréer l'index.
 
 .. warning::
 
-   OpenSearch 3.9.0 refuse des entrées de dictionnaire que la 15.8 acceptait, comme la même entrée
+   OpenSearch 3.10.0 refuse des entrées de dictionnaire que la 15.8 acceptait, comme la même entrée
    ``mapping`` enregistrée deux fois ou un token ``kuromoji`` qui contient une espace. Avec une telle
    entrée, la « Réindexation » ne crée pas le nouvel index de documents : ``fess.log`` indique
    seulement ``Failed to create index`` et l'ancien index continue de servir les recherches.
@@ -1990,9 +1990,9 @@ Q : Est-il nécessaire de mettre à niveau OpenSearch également ?
 ----------------------------------------------------------------
 
 R : La version d'OpenSearch compatible est déterminée pour chaque version de |Fess|.
-|Fess| 15.10 est compatible avec OpenSearch 3.9.0.
+|Fess| 15.10 est compatible avec OpenSearch 3.10.0.
 Les plugins OpenSearch pour |Fess| tels que ``opensearch-analysis-fess`` doivent correspondre exactement à la version d'OpenSearch ;
-si vous mettez à niveau OpenSearch, mettez également à jour les plugins vers la version correspondante (3.9.0).
+si vous mettez à niveau OpenSearch, mettez également à jour les plugins vers la version correspondante (3.10.0).
 
 Notez par ailleurs que |Fess| 15.10 rend le plugin k-NN obligatoire et envoie toujours
 ``knn.derived_source.enabled`` dans les réglages de l'index. Avec un OpenSearch ancien, la

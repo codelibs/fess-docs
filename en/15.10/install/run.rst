@@ -26,7 +26,7 @@ Start OpenSearch
 
 ::
 
-    $ cd /path/to/opensearch-3.9.0
+    $ cd /path/to/opensearch-3.10.0
     $ ./bin/opensearch
 
 To start in the background::
@@ -35,7 +35,7 @@ To start in the background::
 
 .. note::
 
-   ``bin/fess-setup install opensearch`` puts OpenSearch in ``opensearch/opensearch-3.9.0`` in the
+   ``bin/fess-setup install opensearch`` puts OpenSearch in ``opensearch/opensearch-3.10.0`` in the
    |Fess| directory.
 
 .. important::
@@ -46,7 +46,7 @@ To start in the background::
    fails with ``AccessDeniedException``. Give the OpenSearch directory back to that user before
    starting it again, for example::
 
-       $ sudo chown -R <user> /path/to/opensearch-3.9.0
+       $ sudo chown -R <user> /path/to/opensearch-3.10.0
 
 Start Fess
 ~~~~~~~~~~
@@ -78,8 +78,8 @@ Start OpenSearch
 
 Or from Command Prompt::
 
-    C:\> cd C:\opensearch-3.9.0
-    C:\opensearch-3.9.0> bin\opensearch.bat
+    C:\> cd C:\opensearch-3.10.0
+    C:\opensearch-3.10.0> bin\opensearch.bat
 
 Start Fess
 ~~~~~~~~~~
