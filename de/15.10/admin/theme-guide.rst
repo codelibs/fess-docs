@@ -73,7 +73,7 @@ Tabelle: Spalten der Themenliste
 Standardtheme festlegen
 -----------------------
 
-Wählen Sie im Dropdown-Menü oben auf der Übersichtsseite ein Theme aus und klicken Sie auf die Schaltfläche [Als Standard festlegen], um das Standardtheme für den Suchbildschirm festzulegen. Wenn Sie [(kein Standard)] auswählen und bestätigen, wird die Standardtheme-Zuweisung aufgehoben, und das mitgelieferte Theme ``bootstrap`` wird wieder verwendet. Nach dem Speichern werden die Theme-Informationen neu geladen und die Änderung tritt sofort in Kraft.
+Wählen Sie im Dropdown-Menü [Standard-Theme] oben auf der Übersichtsseite ein Theme aus und klicken Sie auf die Schaltfläche [Festlegen], um das Standardtheme für den Suchbildschirm festzulegen. Wenn Sie [(kein Standard)] auswählen und bestätigen, wird die Standardtheme-Zuweisung aufgehoben, und das mitgelieferte Theme ``bootstrap`` wird wieder verwendet. Nach dem Speichern werden die Theme-Informationen neu geladen und die Änderung tritt sofort in Kraft.
 
 
 
@@ -82,8 +82,12 @@ Aus dem Repository installieren
 
 Die Übersichtsseite installiert auch Themes, die im Theme-Repository veröffentlicht sind (``theme.repositories``, standardmäßig https://maven.codelibs.org/release/org/codelibs/fess/themes/ ).
 
-* [Verfügbare Themes] listet die vom Repository veröffentlichten Themes mit jeweils einer Version auf. Klicken Sie in einer Zeile auf [Installieren], um diese Version zu installieren.
-* [Nach Name installieren] installiert ein Theme anhand seines Namens und seiner Version, unabhängig davon, ob es in dieser Liste erscheint. Geben Sie [Name] und [Version] ein und klicken Sie auf [Installieren].
+Im Abschnitt „Theme installieren" unterhalb der Liste wählen Sie das Theme und anschließend seine Version.
+
+1. Wählen Sie das Theme im Dropdown-Menü [Name] aus und klicken Sie auf [Auswählen]. Die Seite zeigt dann den Namen des Themes und ein Dropdown-Menü [Version] an.
+2. Wählen Sie die Version aus und klicken Sie auf [Installieren]. Die neueste stabile Version ist vorausgewählt; eine Vorabversion ist nur dann vorausgewählt, wenn das Theme keine stabile Version hat.
+
+Kann der Index des Repositorys nicht gelesen werden oder ist kein Theme veröffentlicht, zeigt der Abschnitt stattdessen eine Meldung. Installieren Sie das Theme in diesem Fall, indem Sie seine ZIP-Datei hochladen (siehe `Theme hochladen`_).
 
 Das ZIP wird aus dem Repository heruntergeladen, gegen seine veröffentlichte ``.sha1``-Prüfsumme geprüft und dann auf dieselbe Weise wie ein Upload installiert, sodass dieselben Prüfungen gelten. Legen Sie das Theme anschließend als Standard fest, um es zu verwenden.
 
