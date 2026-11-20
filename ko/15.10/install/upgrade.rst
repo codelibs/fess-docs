@@ -643,6 +643,20 @@ URL의 스킴이 목록에 없는 검색 결과는 링크가 되지 않습니다
 
 기능이 꺼져 있어도 |Fess| 는 시작할 때 새 인덱스 ``fess_user.passkey`` 를 만듭니다. 사용자의 삭제, 생성, 이름 변경과 관리 화면의 사용자 상세 페이지가 이 인덱스를 사용하기 때문입니다. |Fess| 가 인덱스를 만들 수 없는 환경에서는 업그레이드 전에 ``fess_indices/fess_user.passkey.json`` 과 ``fess_indices/fess_user.passkey/passkey.json`` 으로 ``fess_user.passkey`` 를 직접 만드십시오(접두사는 ``index.user.index`` 이며 기본값은 ``fess_user`` ). 이 인덱스는 ``fess_user`` 별칭에 포함되지 않으므로 패스키는 ``fess_user.bulk`` 백업에 들어 있지 않습니다. 복원한 후에는 사용자가 패스키를 다시 등록합니다.
 
+.. _upgrade-1510-libraries:
+
+관리 화면과 테마의 라이브러리
+-----------------------------
+
+15.10의 관리 화면은 Bootstrap, AdminLTE, jQuery, Popper, moment.js, 날짜·시간 선택기, 폼 검증 라이브러리를 더 이상 포함하지 않습니다. 자체 ``css/admin/admin.css`` 와 ``js/admin/admin.js`` (순수 JavaScript), Font Awesome 7 Free를 사용하며, 운영체제의 다크 또는 라이트 설정을 따릅니다. 데이터와 설정은 바뀌지 않습니다. 제거된 라이브러리에 의존하는 관리 화면 페이지, 테마 조정, 스크립트를 추가했다면 수정하십시오. 관리 화면의 페이지에서는 ``$`` , ``jQuery`` , ``moment`` , ``.modal()`` , ``.tooltip()`` , ``.daterangepicker()`` , ``.timepicker()`` 가 정의되어 있지 않습니다. Bootstrap의 ``data-toggle`` (``modal`` , ``collapse`` , ``tab`` ), ``data-target`` , ``data-dismiss="modal"`` 은 계속 사용할 수 있습니다. 툴팁은 브라우저의 ``title`` 표시가 되며, ``admin.css`` 가 정의하지 않은 Bootstrap 클래스는 효과가 없습니다. 「검색 로그」 화면의 기간은 브라우저의 날짜·시간 입력 2개로 지정합니다. 서버로 전송되는 값은 바뀌지 않습니다.
+
+검색 테마는 Bootstrap, Popper, Font Awesome을 웹 애플리케이션의 루트에서 받지 않게 되었습니다. ``css/bootstrap.min.css`` , ``css/font-awesome.min.css`` , ``css/fonts/`` , ``js/bootstrap.min.js`` , ``js/popper.min.js`` 는 삭제되었으며 ``404`` 를 반환합니다. 번들 테마 ``bootstrap`` 은 ``themes/bootstrap/assets/vendor/`` 아래에 자체 사본(Bootstrap 5.3.9, Popper 2.11.8, Font Awesome Free 7.3.1)을 가지며, 아이콘을 표시하는 ``fess-themes`` 저장소의 테마도 마찬가지입니다. Font Awesome 7은 버전 5와 6의 아이콘 이름을 이어받고, ``v4-shims.min.css`` 를 읽어 들이면 예전의 ``-o`` 이름(``fa fa-star-o`` )도 표시합니다. 글꼴은 ``woff2`` 만 포함됩니다.
+
+삭제된 파일을 계속 링크하는 테마는 스타일, 스크립트, 아이콘을 잃습니다. 15.9에서 직접 만들었거나 업로드한 테마를 업그레이드 절차에 따라 15.10으로 복사한 경우도 마찬가지입니다( :doc:`../dev/theme-development` 참조).
+
+- |Fess| 프로젝트가 공개하는 테마는 Font Awesome 7을 포함한 15.10용 빌드를 설치하십시오( ``bin/fess-setup install theme <name>`` , 또는 「시스템」→「테마」→「설치」에서 목록의 최신 버전). 버전 목록에는 이전 15.10 빌드도 표시됩니다. 이 빌드는 삭제된 ``css/font-awesome.min.css`` 를 링크하고 있어 아이콘이 표시되지 않습니다.
+- 직접 만든 테마는 라이브러리를 테마 안(예: ``assets/vendor/`` )에 복사하고 ``index.html`` 에서 ``{{themePath}}/assets/vendor/...`` 로 링크하십시오.
+
 그 밖의 동작 변경
 -----------------
 
@@ -660,6 +674,7 @@ URL의 스킴이 목록에 없는 검색 결과는 링크가 되지 않습니다
 - LDAP 로그인은 입력한 사용자 이름의 앞뒤 공백을 제거한 후에 처리합니다. 15.9까지는 입력한 그대로의 이름(예: 앞에 공백이 있는 이름)이 세션의 사용자 ID, 감사 로그, 로그인 횟수 제한에 사용되어 같은 계정의 다른 표기로 취급되었습니다. 또한 ``ldap.max.username.length`` 에 의한 잘라내기는 15.9까지 바인드에만 적용되었고, 사용자 이름, 역할 검색, 권한 이름, 세션에는 잘라내기 전의 이름이 사용되었습니다. 15.10은 이 모두에 잘라낸 이름을 사용합니다(:doc:`../config/ldap-integration` 참조).
 - UTF-8로 72바이트를 넘는 비밀번호는 설정하거나 변경할 때 거부됩니다(사용자 관리 화면, 로그인 폼의 강제 비밀번호 변경, ``/api/v2/auth/password`` , Admin API). ``password.max.length`` (기본값 ``100`` )가 허용하는 길이와 관계없이 적용됩니다. BCrypt는 앞의 72바이트만 읽으므로, 15.9까지는 그보다 긴 비밀번호도 받아들여진 뒤 앞의 72바이트만으로 검증되었습니다. 즉 뒷부분이 무엇이든 로그인할 수 있었습니다. ASCII가 아닌 문자는 한 글자가 여러 바이트를 차지합니다(일본어, 중국어, 한국어 문자 대부분은 3바이트). 거부 메시지는 최소 길이의 메시지와 같습니다(``password.min.length`` 가 기본값이면 "비밀번호는 최소 8자 이상이어야 합니다."). ``/api/v2/auth/password`` 는 ``reason`` 으로 ``errors.password_length`` 를 반환합니다. 기존 계정은 영향을 받지 않습니다. 로그인할 때는 길이를 확인하지 않으므로 업그레이드 전에 설정한 72바이트를 넘는 비밀번호도 계속 로그인할 수 있습니다. 다만 앞의 72바이트만으로 검증되므로 변경하십시오.
 - 15.10의 ``audit.log`` 레코드는 15.9와 세 가지가 다릅니다(:doc:`security` 참조). ``ACCESS`` 레코드에 ``method`` (HTTP 메서드)와 ``id`` (``id`` 요청 파라미터. 있는 경우만)가 추가되었습니다. 새 액션 ``UPDATE_PASSWORD`` 는 비밀번호 변경을 조작한 사용자(``user``)와 비밀번호가 변경된 사용자(``target``)와 함께 기록합니다. 액세스 토큰 확인에서 거부된 Admin REST API 요청은 이제 ``ACCESS_DENIED`` 로 기록됩니다. ``audit.log`` 를 분석하는 프로그램이 있다면 이 변경에 대응하는지 확인하십시오.
+- 다른 사이트에 있는 ``/logout/`` 링크는 더 이상 세션을 종료하지 않습니다. 그 링크를 따라간 브라우저는 요청 헤더 ``Sec-Fetch-Site`` ( ``cross-site`` , 같은 사이트의 다른 호스트 이름이면 ``same-site`` )로 이를 알리며, |Fess| 는 세션을 종료하지 않고 로그아웃 기록도 남기지 않은 채 로그인 페이지로의 리다이렉트를 반환합니다. 주소 직접 입력, 북마크, |Fess| 내부 링크, 검색 화면과 관리 화면의 로그아웃은 바뀌지 않습니다. 따라서 자사 포털 등에 둔 |Fess| 로그아웃 링크는 동작하지 않게 됩니다. 로그아웃은 |Fess| 화면에서 하십시오. 브라우저가 이 헤더를 보내는 것은 HTTPS 주소와 ``localhost`` 뿐이므로, 다른 호스트에서 HTTP로 제공하는 |Fess| 의 동작은 바뀌지 않습니다.
 
 .. _upgrade-1510-new-api:
 

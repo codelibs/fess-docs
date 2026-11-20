@@ -633,6 +633,20 @@ URL 的协议不在列表中的搜索结果不会成为链接。对于经过「�
 
 即使该功能处于关闭状态， |Fess| 也会在启动时创建新的索引 ``fess_user.passkey`` ，因为删除、创建和重命名用户以及管理界面的用户详情页面都会用到它。如果不允许 |Fess| 创建索引，请在升级之前根据 ``fess_indices/fess_user.passkey.json`` 和 ``fess_indices/fess_user.passkey/passkey.json`` 创建 ``fess_user.passkey`` （前缀为 ``index.user.index`` ，默认值为 ``fess_user`` ）。该索引不属于 ``fess_user`` 别名，因此通行密钥不在 ``fess_user.bulk`` 备份中。恢复之后，用户需要重新注册通行密钥。
 
+.. _upgrade-1510-libraries:
+
+管理页面和主题的库
+------------------
+
+15.10 的管理页面不再自带 Bootstrap、AdminLTE、jQuery、Popper、moment.js、日期和时间选择器以及表单验证库。它使用自己的 ``css/admin/admin.css`` 和 ``js/admin/admin.js`` （原生 JavaScript）以及 Font Awesome 7 Free，并遵循操作系统的深色或浅色设置。数据和设置不受影响。如果您添加了依赖已移除库的管理页面、主题调整或脚本，请修改它们：在管理页面中， ``$`` 、 ``jQuery`` 、 ``moment`` 、 ``.modal()`` 、 ``.tooltip()`` 、 ``.daterangepicker()`` 和 ``.timepicker()`` 均未定义。Bootstrap 的 ``data-toggle`` （ ``modal`` 、 ``collapse`` 、 ``tab`` ）、 ``data-target`` 和 ``data-dismiss="modal"`` 属性仍然可用，工具提示是浏览器的 ``title`` 文本， ``admin.css`` 未定义的 Bootstrap 类没有任何效果。「搜索日志」页面的期间由浏览器的两个日期时间输入框指定；发送给服务器的值不变。
+
+搜索主题不再从 Web 应用程序的根目录获取 Bootstrap、Popper 和 Font Awesome。 ``css/bootstrap.min.css`` 、 ``css/font-awesome.min.css`` 、 ``css/fonts/`` 、 ``js/bootstrap.min.js`` 和 ``js/popper.min.js`` 已被删除，访问时返回 ``404`` 。内置主题 ``bootstrap`` 在 ``themes/bootstrap/assets/vendor/`` 下带有自己的副本（Bootstrap 5.3.9、Popper 2.11.8、Font Awesome Free 7.3.1）， ``fess-themes`` 仓库中显示图标的主题也是如此。Font Awesome 7 沿用版本 5 和 6 的图标名称，并在加载 ``v4-shims.min.css`` 后也显示旧的 ``-o`` 名称（ ``fa fa-star-o`` ），只附带 ``woff2`` 字体。
+
+仍链接已删除文件的主题会丢失样式、脚本或图标。在 15.9 中自行创建或上传的主题，按升级步骤复制到 15.10 时也是如此（参见 :doc:`../dev/theme-development` ）：
+
+- 对于 |Fess| 项目发布的主题，请安装包含 Font Awesome 7 的 15.10 版构建（ ``bin/fess-setup install theme <name>`` ，或在「系统」→「主题」→「安装」中选择列表里最新的版本）。版本列表中也会显示较早的 15.10 构建，它们链接的是已删除的 ``css/font-awesome.min.css`` ，不会显示图标。
+- 对于自己的主题，请将这些库复制到主题内（例如 ``assets/vendor/`` 下），并在 ``index.html`` 中以 ``{{themePath}}/assets/vendor/...`` 的形式链接。
+
 其他行为变更
 ------------
 
@@ -650,6 +664,7 @@ URL 的协议不在列表中的搜索结果不会成为链接。对于经过「�
 - LDAP 登录会先去除输入的用户名前后的空白再进行处理。15.9 及更早版本中，会话的用户 ID、审计日志和登录次数限制使用的是输入原样的名称（例如前面带有空白的名称），因此被视为同一账户的另一种写法。另外，``ldap.max.username.length`` 的截断在 15.9 及更早版本中只应用于绑定，用户名、角色搜索、权限名称和会话仍使用截断前的名称。15.10 在所有这些地方都使用截断后的名称（参见 :doc:`../config/ldap-integration`）。
 - 以 UTF-8 计超过 72 字节的密码在设置或修改时会被拒绝（用户管理页面、登录表单中的强制修改密码、 ``/api/v2/auth/password`` 和 Admin API），与 ``password.max.length`` （默认 ``100`` ）允许的长度无关。BCrypt 只读取前 72 字节，因此直到 15.9，更长的密码也会被接受，并且只用前 72 字节进行验证：无论后面是什么都可以登录。非 ASCII 字符占用多个字节（大多数日文、中文和韩文字符占 3 字节）。拒绝时使用的是最小长度的消息（ ``password.min.length`` 为默认值时是“密码长度必须至少为 8 个字符。”）， ``/api/v2/auth/password`` 会把 ``errors.password_length`` 作为 ``reason`` 返回。现有账户不受影响：登录时不检查长度，因此升级前设置的超过 72 字节的密码仍可登录。但它仍只用前 72 字节验证，请修改它。
 - 15.10 的 ``audit.log`` 记录与 15.9 有三点不同（请参阅 :doc:`security` ）。 ``ACCESS`` 记录新增了字段 ``method`` （HTTP 方法）和 ``id`` （请求参数 ``id`` ，仅在存在时）。新的操作 ``UPDATE_PASSWORD`` 会记录密码修改，以及执行操作的用户（ ``user`` ）和被修改密码的用户（ ``target`` ）。被访问令牌检查拒绝的 Admin REST API 请求现在会记录为 ``ACCESS_DENIED`` 。如果有解析 ``audit.log`` 的程序，请确认它能处理这些变化。
+- 其他网站上指向 ``/logout/`` 的链接不再结束会话。跟随这种链接的浏览器会在请求头 ``Sec-Fetch-Site`` 中说明这一点（ ``cross-site`` ，同一站点的其他主机名则为 ``same-site`` ）， |Fess| 会返回重定向到登录页面的响应，既不结束会话，也不写入注销记录。直接输入的地址、书签、 |Fess| 内部的链接，以及搜索页面和管理页面的注销都不变。因此，自家门户等为 |Fess| 提供的注销链接将不再起作用，用户请在 |Fess| 自身的页面中注销。浏览器只向 HTTPS 地址和 ``localhost`` 发送该请求头，因此从其他主机以普通 HTTP 提供的 |Fess| 不受影响。
 
 .. _upgrade-1510-new-api:
 
