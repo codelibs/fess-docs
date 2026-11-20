@@ -74,7 +74,7 @@ Tableau : Colonnes de la liste des thèmes
 Définition du thème par défaut
 -------------------------------
 
-Sélectionnez un thème dans le menu déroulant situé en haut de la page de liste, puis cliquez sur le bouton [Définir par défaut] pour définir le thème par défaut appliqué à l'écran de recherche. En sélectionnant [(aucun par défaut)] et en confirmant, vous annulez la désignation du thème par défaut, et le thème fourni ``bootstrap`` est de nouveau utilisé. Après la mise à jour, les informations de thème sont rechargées et les modifications prennent effet immédiatement.
+Sélectionnez un thème dans le menu déroulant [Thème par défaut] situé en haut de la page de liste, puis cliquez sur le bouton [Définir] pour définir le thème par défaut appliqué à l'écran de recherche. En sélectionnant [(aucun par défaut)] et en confirmant, vous annulez la désignation du thème par défaut, et le thème fourni ``bootstrap`` est de nouveau utilisé. Après la mise à jour, les informations de thème sont rechargées et les modifications prennent effet immédiatement.
 
 
 Installation depuis le dépôt
@@ -82,8 +82,12 @@ Installation depuis le dépôt
 
 La page de liste installe aussi les thèmes publiés dans le dépôt de thèmes (``theme.repositories``, par défaut https://maven.codelibs.org/release/org/codelibs/fess/themes/ ).
 
-* [Thèmes disponibles] liste les thèmes publiés par le dépôt, avec une version pour chacun. Cliquez sur [Installer] sur une ligne pour installer cette version.
-* [Installer par nom] installe un thème à partir de son nom et de sa version, qu'il figure ou non dans cette liste. Saisissez le [Nom] et la [Version], puis cliquez sur [Installer].
+Dans la section « Installer le thème » située sous la liste, choisissez le thème, puis sa version.
+
+1. Sélectionnez le thème dans le menu déroulant [Nom] et cliquez sur [Sélectionner]. La page affiche alors le nom du thème et un menu déroulant [Version].
+2. Sélectionnez la version et cliquez sur [Installer]. La version stable la plus récente est présélectionnée ; une préversion n'est présélectionnée que lorsque le thème n'a aucune version stable.
+
+Lorsque l'index du dépôt ne peut pas être lu ou qu'aucun thème n'est publié, la section affiche un message à la place. Installez alors le thème en téléversant son fichier ZIP (voir `Téléversement d'un thème`_).
 
 Le ZIP est téléchargé depuis le dépôt, vérifié contre sa somme ``.sha1`` publiée, puis installé de la même manière qu'un téléversement ; les mêmes vérifications s'appliquent donc. Définissez ensuite le thème comme thème par défaut pour l'utiliser.
 

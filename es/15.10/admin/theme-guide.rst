@@ -73,7 +73,7 @@ Tabla: Columnas de la lista de temas
 Establecer el tema predeterminado
 ----------------------------------
 
-Seleccione un tema en el menú desplegable de la parte superior de la página de lista y haga clic en el botón [Establecer como predeterminado] para configurar el tema predeterminado que se aplica a la pantalla de búsqueda. Al seleccionar [(sin predeterminado)] y confirmar la configuración, se cancela la asignación del tema predeterminado y se vuelve a utilizar el tema incluido ``bootstrap``. Una vez guardado, la información del tema se recarga y los cambios se aplican de inmediato.
+Seleccione un tema en el menú desplegable [Tema predeterminado] de la parte superior de la página de lista y haga clic en el botón [Establecer] para configurar el tema predeterminado que se aplica a la pantalla de búsqueda. Al seleccionar [(sin predeterminado)] y confirmar la configuración, se cancela la asignación del tema predeterminado y se vuelve a utilizar el tema incluido ``bootstrap``. Una vez guardado, la información del tema se recarga y los cambios se aplican de inmediato.
 
 
 Instalar desde el repositorio
@@ -81,8 +81,12 @@ Instalar desde el repositorio
 
 La página de lista también instala los temas publicados en el repositorio de temas (``theme.repositories``, de forma predeterminada https://maven.codelibs.org/release/org/codelibs/fess/themes/ ).
 
-* [Temas disponibles] muestra los temas que publica el repositorio, con una versión para cada uno. Haga clic en [Instalar] en una fila para instalar esa versión.
-* [Instalar por nombre] instala un tema por su nombre y versión, aparezca o no en esa lista. Introduzca el [Nombre] y la [Versión] y haga clic en [Instalar].
+En la sección "Instalar tema" situada debajo de la lista, elija el tema y después su versión.
+
+1. Seleccione el tema en el menú desplegable [Nombre] y haga clic en [Seleccionar]. La página muestra entonces el nombre del tema y un menú desplegable [Versión].
+2. Seleccione la versión y haga clic en [Instalar]. La versión estable más reciente aparece seleccionada de antemano; una versión preliminar solo se selecciona de antemano cuando el tema no tiene ninguna versión estable.
+
+Si no se puede leer el índice del repositorio o no hay ningún tema publicado, la sección muestra un mensaje en su lugar. En ese caso, instale el tema subiendo su archivo ZIP (consulte `Subir un tema`_).
 
 El ZIP se descarga del repositorio, se comprueba contra su suma de verificación ``.sha1`` publicada y después se instala de la misma forma que una subida, por lo que se aplican las mismas comprobaciones. Después, establezca el tema como predeterminado para utilizarlo.
 

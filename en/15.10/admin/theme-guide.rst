@@ -72,7 +72,7 @@ Table: Theme List Columns
 Setting the Default Theme
 --------------------------
 
-Select a theme from the pull-down menu at the top of the list page and click the [Set Default] button to set the default theme applied to the search interface. Selecting [(no default)] and clicking [Set Default] clears the default theme assignment, and the bundled ``bootstrap`` theme is used again. After saving, the theme information is reloaded and the change takes effect immediately.
+Select a theme from the [Default Theme] pull-down menu at the top of the list page and click the [Set] button to set the default theme applied to the search interface. Selecting [(no default)] and clicking [Set] clears the default theme assignment, and the bundled ``bootstrap`` theme is used again. After saving, the theme information is reloaded and the change takes effect immediately.
 
 
 Installing from the Repository
@@ -80,8 +80,12 @@ Installing from the Repository
 
 The list page also installs themes published in the theme repository (``theme.repositories``, by default https://maven.codelibs.org/release/org/codelibs/fess/themes/ ).
 
-* [Available Themes] lists the themes the repository publishes, with a version for each. Click [Install] on a row to install that version.
-* [Install by Name] installs a theme by its name and version, whether or not it appears in that list. Enter the [Name] and [Version] and click [Install].
+In the "Install Theme" section below the list, pick the theme and then its version.
+
+1. Select the theme in the [Name] pull-down and click [Select]. The page then shows the name of the theme and a [Version] pull-down.
+2. Select the version and click [Install]. The newest stable version is selected beforehand; a prerelease version is selected beforehand only when the theme has no stable version.
+
+When the repository's index cannot be read, or no theme is published, the section shows a message instead. Install the theme by uploading its ZIP file in that case (see `Uploading a Theme`_).
 
 The ZIP is downloaded from the repository, checked against its published ``.sha1`` checksum and then installed in the same way as an upload, so the same checks apply. Set the theme as the default afterwards to use it.
 
