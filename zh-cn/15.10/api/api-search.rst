@@ -34,7 +34,7 @@ HTTP 方法            GET
    * - ``start``
      - 从 0 开始的起始位置（integer，\ ``>=0``\ ，默认值 ``0``\ ）。
    * - ``offset``
-     - 相对于 ``start`` 的偏移量（integer，\ ``>=0``\ ，默认值 ``0``\ ）。
+     - 请求 ``start`` 落在 ``rank.fusion.window_size`` （默认 ``200`` ）及其之后的页面时，原样发送上一页响应中的 ``offset`` （integer，\ ``>=0``\ ，默认值 ``0``\ ）。使用排名融合时，前面的页面是融合后的结果，后面的页面是关键词结果。 ``offset`` 是融合后靠前的结果中不在关键词结果范围内的条数，会把 ``start`` 相应往回移，使后面的页面与融合结果衔接，既无遗漏也无重复。省略时为 ``0`` 。
    * - ``num``
      - 每页条数（integer，\ ``>=1``\ ，默认值 ``10``\ ）。\ ``<= 0`` 会返回 ``invalid_request``\ 。超过配置最大值的数值会被静默截断。是否被截断可通过比较请求中的 ``num`` 与响应中的 ``page_size`` 来判断。
    * - ``sort``
@@ -89,6 +89,7 @@ HTTP 方法            GET
         "record_count": 42,
         "record_count_relation": "EQUAL_TO",
         "page_count": 3,
+        "offset": 0,
         "highlight_params": "&hq=Fess",
         "next_page": true,
         "prev_page": false,
@@ -149,6 +150,8 @@ HTTP 方法            GET
      - ``EQUAL_TO`` 表示精确计数，\ ``GREATER_THAN_OR_EQUAL_TO`` 表示仅知下限。
    * - ``page_count``
      - 总页数。
+   * - ``offset``
+     - 请求后面的页面时要发送的请求参数 ``offset`` 的值（integer，\ ``>=0``\ ）。请参见请求参数中的 ``offset`` 。结果未经融合时为 ``0`` 。
    * - ``highlight_params``
      - 用于高亮的查询参数字符串。
    * - ``next_page``

@@ -34,7 +34,7 @@ Request Parameters
    * - ``start``
      - Zero-based start position (integer, ``>=0``, default ``0``).
    * - ``offset``
-     - Offset from ``start`` (integer, ``>=0``, default ``0``).
+     - Send back the ``offset`` of the response to the previous page when you request a page that starts at or beyond ``rank.fusion.window_size`` (``200`` by default) (integer, ``>=0``, default ``0``). With rank fusion, the first pages are fused results and the later pages are keyword results. ``offset`` is how many of the top fused results are not in the window of the keyword results; it shifts ``start`` back so that the later pages follow the fused ones without a gap or a repeat. If omitted, it is ``0``.
    * - ``num``
      - Page size (integer, ``>=1``, default ``10``). A value of ``<= 0`` results in ``invalid_request``. Values exceeding the configured maximum are silently clamped. Whether clamping occurred can be detected by comparing the request ``num`` with the response ``page_size``.
    * - ``sort``
@@ -89,6 +89,7 @@ On success (200), the following fields are returned directly under ``response`` 
         "record_count": 42,
         "record_count_relation": "EQUAL_TO",
         "page_count": 3,
+        "offset": 0,
         "highlight_params": "&hq=Fess",
         "next_page": true,
         "prev_page": false,
@@ -149,6 +150,8 @@ Each field is described below.
      - When ``EQUAL_TO``, the count is exact; when ``GREATER_THAN_OR_EQUAL_TO``, only the lower bound is known.
    * - ``page_count``
      - Total number of pages.
+   * - ``offset``
+     - The value of the request parameter ``offset`` to send with a request for a later page (integer, ``>=0``); see ``offset`` in the request parameters. ``0`` when the results are not fused.
    * - ``highlight_params``
      - Query parameter string for highlighting.
    * - ``next_page``

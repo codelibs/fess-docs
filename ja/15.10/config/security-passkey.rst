@@ -122,7 +122,7 @@
 API
 ===
 
-パスキーの API は ``/api/v2/auth/passkey`` 以下にあります。パスキーが無効の間は、すべて ``404`` を返します。機能が使えるかどうかは、 ``/api/v2/ui/config`` の ``features.passkey_enabled`` で分かります（ :doc:`../api/api-uiconfig` を参照）。
+パスキーの API は ``/api/v2/auth/passkey`` 以下にあります。パスキーが無効の間は、すべて ``404`` を返します。ただし、他の v2 のエンドポイントと同じく、その前に CSRF トークンの検査があります。ログインの 2 つ（ ``login/options`` ・ ``login/verify`` ）は CSRF トークンを必要としないため、常に ``404`` です。それ以外の経路は、セッションと有効な CSRF トークンを持たない ``POST`` ・ ``DELETE`` に ``403`` を返し、セッションと CSRF トークンを付けた要求と ``GET`` には ``404`` を返します。 ``login.required`` が有効なときは、ログインの 2 つ以外への匿名の要求に ``401`` を返します。機能が使えるかどうかは、 ``/api/v2/ui/config`` の ``features.passkey_enabled`` で分かります（ :doc:`../api/api-uiconfig` を参照）。
 
 .. list-table::
    :header-rows: 1

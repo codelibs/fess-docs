@@ -122,7 +122,7 @@
 API
 ===
 
-패스키 API는 ``/api/v2/auth/passkey`` 아래에 있습니다. 패스키가 꺼져 있는 동안에는 모두 ``404`` 를 반환합니다. 기능을 사용할 수 있는지는 ``/api/v2/ui/config`` 의 ``features.passkey_enabled`` 로 알 수 있습니다( :doc:`../api/api-uiconfig` 참조).
+패스키 API는 ``/api/v2/auth/passkey`` 아래에 있습니다. 패스키가 꺼져 있는 동안에는 모두 ``404`` 를 반환합니다. 다만 다른 v2 엔드포인트와 마찬가지로 그 전에 CSRF 토큰 검사가 먼저 수행됩니다. 로그인 2개( ``login/options`` , ``login/verify`` )는 CSRF 토큰이 필요하지 않으므로 항상 ``404`` 입니다. 그 밖의 엔드포인트는 세션과 유효한 CSRF 토큰이 없는 ``POST`` ・ ``DELETE`` 에 ``403`` 을 반환하고, 세션과 CSRF 토큰을 붙인 요청과 ``GET`` 에는 ``404`` 를 반환합니다. ``login.required`` 가 활성화되어 있으면 로그인 2개 이외의 엔드포인트에 대한 익명 요청에는 ``401`` 을 반환합니다. 기능을 사용할 수 있는지는 ``/api/v2/ui/config`` 의 ``features.passkey_enabled`` 로 알 수 있습니다( :doc:`../api/api-uiconfig` 참조).
 
 .. list-table::
    :header-rows: 1

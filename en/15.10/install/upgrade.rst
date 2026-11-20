@@ -1886,6 +1886,10 @@ contents::
    The import runs asynchronously; the screen only shows that it has started. Check
    ``fess.log`` to confirm whether it actually succeeded.
 
+.. warning::
+
+   15.10 writes a numeric field ``password_changed_at`` (the time of the password change) to the user document (index ``fess_user``) when a user is created and when a user's password is changed. 15.9 and earlier, including the released 15.9.0, cannot read this field. If you start them against an index that still holds a user created or given a new password in 15.10, the login of that user and the user list of the Admin API fail with HTTP 500 (``ClassCastException``). A snapshot taken before the upgrade, restored in Step 3, does not contain such users. Otherwise, delete the users created or changed in 15.10 and create them again, or remove ``password_changed_at`` from the user index before the rollback.
+
 Step 4: Start and Verify Service
 ---------------------------------
 

@@ -34,7 +34,7 @@ HTTPメソッド         GET
    * - ``start``
      - 0始まりの開始位置（integer, ``>=0`` , 既定値 ``0`` ）。
    * - ``offset``
-     - ``start`` からのオフセット（integer, ``>=0`` , 既定値 ``0`` ）。
+     - ``start`` が ``rank.fusion.window_size`` （既定 ``200`` ）以降になるページを要求するときに、前のページのレスポンスの ``offset`` をそのまま送ります（integer, ``>=0`` , 既定値 ``0`` ）。ランク融合では、先頭のページは融合した結果、後のページはキーワードの結果になります。 ``offset`` は、融合した上位の結果のうちキーワード結果の範囲に含まれない件数で、 ``start`` をその分だけ戻して、後のページが融合した結果と隙間も重複もなく続くようにします。省略すると ``0`` です。
    * - ``num``
      - ページサイズ（integer, ``>=1`` , 既定値 ``10`` ）。 ``<= 0`` は ``invalid_request`` になります。設定された最大値を超える値は無言でクランプされます。クランプされたかどうかは、リクエストの ``num`` とレスポンスの ``page_size`` を比較することで検出できます。
    * - ``sort``
@@ -89,6 +89,7 @@ HTTPメソッド         GET
         "record_count": 42,
         "record_count_relation": "EQUAL_TO",
         "page_count": 3,
+        "offset": 0,
         "highlight_params": "&hq=Fess",
         "next_page": true,
         "prev_page": false,
@@ -149,6 +150,8 @@ HTTPメソッド         GET
      - ``EQUAL_TO`` のときは正確なカウント、 ``GREATER_THAN_OR_EQUAL_TO`` のときは下限のみ判明していることを示します。
    * - ``page_count``
      - 総ページ数。
+   * - ``offset``
+     - 後のページを要求するときに送るリクエストパラメーター ``offset`` の値（integer, ``>=0`` ）。リクエストの ``offset`` を参照してください。結果が融合されていないときは ``0`` です。
    * - ``highlight_params``
      - ハイライト用のクエリパラメーター文字列。
    * - ``next_page``
