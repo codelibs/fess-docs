@@ -72,7 +72,7 @@ Java n'est pas installé, ou la variable d'environnement PATH n'est pas correcte
 
 2. Adaptez la version du plugin à celle d'OpenSearch ::
 
-       $ /path/to/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
+       $ /path/to/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
 
 3. Vérifiez les permissions ::
 
@@ -202,7 +202,7 @@ Dans les deux cas, l'erreur suivante est enregistrée dans ``fess.log`` ::
 1. Modifiez ``configsync.config_path`` et ``FESS_DICTIONARY_PATH`` pour qu'ils pointent vers un répertoire situé sous le répertoire de configuration d'OpenSearch.
 
    - Version RPM/DEB : ``/etc/opensearch/dictionary/``
-   - Version ZIP : ``/path/to/opensearch-3.9.0/config/dictionary/``
+   - Version ZIP : ``/path/to/opensearch-3.10.0/config/dictionary/``
 
 2. Si des fichiers de dictionnaire existent déjà, copiez-les dans le nouveau répertoire.
 3. Redémarrez OpenSearch, puis |Fess|.

@@ -23,7 +23,7 @@
 
 .. important::
 
-   |Fess| 14.x は OpenSearch 2.x 系、\ |Fess| 15.10 は OpenSearch 3.9.0 に対応しています。
+   |Fess| 14.x は OpenSearch 2.x 系、\ |Fess| 15.10 は OpenSearch 3.10.0 に対応しています。
    |Fess| 用の OpenSearch プラグインは OpenSearch のバージョンと完全に一致している必要があるため、
    14.x からアップグレードする場合は OpenSearch のメジャーバージョンアップも必須です。
    :ref:`upgrade-opensearch` を参照してください。
@@ -385,7 +385,7 @@ Docker 版
 ステップ 4: OpenSearch のアップグレード
 =======================================
 
-|Fess| 15.10 は OpenSearch 3.9.0 に対応しています。接続先の OpenSearch がこれより古い場合は、
+|Fess| 15.10 は OpenSearch 3.10.0 に対応しています。接続先の OpenSearch がこれより古い場合は、
 以下の手順でアップグレードしてください。
 
 .. note::
@@ -413,21 +413,21 @@ Docker 版
    インデックスの互換性に問題が発生する可能性があります。
    |Fess| 14.x は OpenSearch 2.x 系のため、14.x からのアップグレードでは必ずこのケースに該当します。
 
-   OpenSearch 3.9.0 で取得したスナップショットは、3.8.0 以前の OpenSearch には復元できません。切り戻しに備えて、アップグレード前に取得したスナップショットを残しておいてください。
+   OpenSearch 3.10.0 で取得したスナップショットは、3.9.x 以前の OpenSearch には復元できません。切り戻しに備えて、アップグレード前に取得したスナップショットを残しておいてください。
 
 1. 新しいバージョンの OpenSearch をインストール
 
 2. プラグインを再インストール::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
    .. note::
 
       これらのプラグインのバージョンは、使用する OpenSearch のバージョンと一致させる必要があります。
-      |Fess| 15.10 は OpenSearch 3.9.0 に対応しています。バージョンが一致しない場合、
+      |Fess| 15.10 は OpenSearch 3.10.0 に対応しています。バージョンが一致しない場合、
       プラグインのインストールに失敗します。
 
       |Fess| 用の 4 つのプラグインは maven.codelibs.org で公開しているため、URL で指定します。 ``opensearch-plugin install`` の ``groupId:artifactId:version`` 形式は Maven Central だけを参照します。
@@ -531,7 +531,7 @@ Docker 版::
 
 .. warning::
 
-   15.8 が受け付けた辞書のエントリーのうち、OpenSearch 3.9.0 が拒否するものがあります。たとえば
+   15.8 が受け付けた辞書のエントリーのうち、OpenSearch 3.10.0 が拒否するものがあります。たとえば
    同じ ``mapping`` のエントリーを 2 回保存している場合や、 ``kuromoji`` のトークンに空白が含まれる
    場合です。そのようなエントリーがあると「再インデクシング」は新しい文書インデックスを作成しません。
    ``fess.log`` には ``Failed to create index`` としか出力されず、古いインデックスが検索を提供し続けます。
@@ -1887,10 +1887,10 @@ Q: OpenSearch もアップグレードする必要がありますか？
 ----------------------------------------------------
 
 A: |Fess| のバージョンごとに対応する OpenSearch のバージョンが決まっています。
-|Fess| 15.10 は OpenSearch 3.9.0 に対応しています。
+|Fess| 15.10 は OpenSearch 3.10.0 に対応しています。
 ``opensearch-analysis-fess`` などの |Fess| 用 OpenSearch プラグインは OpenSearch のバージョンと
 完全に一致している必要があるため、OpenSearch をアップグレードする場合は、
-対応するバージョン（3.9.0）のプラグインに更新してください。
+対応するバージョン（3.10.0）のプラグインに更新してください。
 
 なお |Fess| 15.10 は k-NN プラグインを必須とし、インデックス設定に ``knn.derived_source.enabled``
 を常に送信します。古い OpenSearch のままでは新しいインデックスの作成に失敗するため、

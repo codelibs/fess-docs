@@ -15,7 +15,7 @@ ZIP、RPM、DEB の各パッケージ形式に対応しています。
 
 - :doc:`prerequisites` に記載されているシステム要件を満たしていること
 - Java 21 がインストールされていること
-- OpenSearch 3.9.0 を利用可能な状態にすること（または新規インストール）
+- OpenSearch 3.10.0 を利用可能な状態にすること（または新規インストール）
 
 インストール方法の選択
 ======================
@@ -114,16 +114,16 @@ ZIP 版でのインストール
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.tar.gz
-       $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
-       $ cd opensearch-3.9.0
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.10.0-linux-x64.tar.gz
+       $ cd opensearch-3.10.0
 
-   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.tar.gz``）。
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.10.0-linux-arm64.tar.gz``）。
 
    .. note::
 
-      この例では OpenSearch 3.9.0 を使用しています。
-      |Fess| 15.10 は OpenSearch 3.9.0 に対応しています。
+      この例では OpenSearch 3.10.0 を使用しています。
+      |Fess| 15.10 は OpenSearch 3.10.0 に対応しています。
 
 2. OpenSearch プラグインのインストール
 
@@ -131,16 +131,16 @@ ZIP 版でのインストール
 
    ::
 
-       $ cd /path/to/opensearch-3.9.0
-       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ cd /path/to/opensearch-3.10.0
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
    .. important::
 
       プラグインのバージョンは OpenSearch のバージョンと一致させる必要があります。
-      上記の例では、すべて 3.9.0 を指定しています。
+      上記の例では、すべて 3.10.0 を指定しています。
 
       |Fess| 用の 4 つのプラグインは maven.codelibs.org で公開しているため、URL で指定します。 ``opensearch-plugin install`` の ``groupId:artifactId:version`` 形式は Maven Central だけを参照します。
 
@@ -151,16 +151,16 @@ ZIP 版でのインストール
    ::
 
        # 設定同期用のパス（絶対パスで指定）
-       configsync.config_path: /path/to/opensearch-3.9.0/config/dictionary/
+       configsync.config_path: /path/to/opensearch-3.10.0/config/dictionary/
 
        # セキュリティプラグインの無効化（開発環境のみ）
        plugins.security.disabled: true
 
    .. important::
 
-      ``configsync.config_path`` には、OpenSearch の設定ディレクトリ（この例では ``/path/to/opensearch-3.9.0/config/``）の下のディレクトリを指定してください。
+      ``configsync.config_path`` には、OpenSearch の設定ディレクトリ（この例では ``/path/to/opensearch-3.10.0/config/``）の下のディレクトリを指定してください。
       OpenSearch 3.8.0 以降は、辞書ファイルが設定ディレクトリの外にあるとインデックスの作成を拒否します。
-      ``/path/to/opensearch-3.9.0/data/config/`` など設定ディレクトリの外を指定すると、 |Fess| はインデックスを作成できず、起動しません。
+      ``/path/to/opensearch-3.10.0/data/config/`` など設定ディレクトリの外を指定すると、 |Fess| はインデックスを作成できず、起動しません。
 
    .. warning::
 
@@ -227,7 +227,7 @@ ZIP 版でのインストール
    変更後::
 
        SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.9.0/config/dictionary/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.10.0/config/dictionary/
 
    .. note::
 
@@ -268,10 +268,10 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.10.0-linux-x64.rpm
 
-   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.rpm``）。
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.10.0-linux-arm64.rpm``）。
 
    または、リポジトリを追加してインストールすることもできます。
    詳細は `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__ を参照してください。
@@ -280,10 +280,10 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
 3. OpenSearch の設定
 
@@ -380,10 +380,10 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.10.0-linux-x64.deb
 
-   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.9.0-linux-arm64.deb``）。
+   arm64（aarch64）のマシンでは、上のファイル名の ``linux-x64`` を ``linux-arm64`` に置き換えてください（例: ``opensearch-3.10.0-linux-arm64.deb``）。
 
    または、リポジトリを追加してインストールすることもできます。
    詳細は `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__ を参照してください。
@@ -392,10 +392,10 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
 3. OpenSearch の設定
 
@@ -492,7 +492,7 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
 
    ZIP 版の場合::
 
-       $ ls -ld /path/to/opensearch-3.9.0/config/dictionary/
+       $ ls -ld /path/to/opensearch-3.10.0/config/dictionary/
 
    RPM/DEB 版の場合::
 
@@ -530,7 +530,7 @@ Q: OpenSearch のバージョンは他のバージョンでも動作しますか
 ------------------------------------------------------------------
 
 A: |Fess| は特定のバージョンの OpenSearch に依存しています。
-プラグインの互換性を確保するため、推奨されるバージョン（3.9.0）を使用することを強く推奨します。
+プラグインの互換性を確保するため、推奨されるバージョン（3.10.0）を使用することを強く推奨します。
 他のバージョンを使用する場合は、プラグインのバージョンも適切に調整する必要があります。
 
 Q: 複数の Fess インスタンスで同じ OpenSearch を共有できますか？

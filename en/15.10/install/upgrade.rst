@@ -23,7 +23,7 @@ This upgrade procedure supports upgrades between the following versions:
 
 .. important::
 
-   |Fess| 14.x supports the OpenSearch 2.x series, while |Fess| 15.10 supports OpenSearch 3.9.0.
+   |Fess| 14.x supports the OpenSearch 2.x series, while |Fess| 15.10 supports OpenSearch 3.10.0.
    Because the OpenSearch plugins for |Fess| must exactly match the OpenSearch version, upgrading
    from 14.x also requires a major version upgrade of OpenSearch.
    See :ref:`upgrade-opensearch` for details.
@@ -387,7 +387,7 @@ Docker Version
 Step 4: Upgrade OpenSearch
 ==========================
 
-|Fess| 15.10 supports OpenSearch 3.9.0. If the OpenSearch you connect to is older than that,
+|Fess| 15.10 supports OpenSearch 3.10.0. If the OpenSearch you connect to is older than that,
 upgrade it using the following procedure.
 
 .. note::
@@ -419,22 +419,22 @@ upgrade it using the following procedure.
    |Fess| 14.x uses the OpenSearch 2.x series, so upgrading from 14.x always falls into this
    case.
 
-   A snapshot taken on OpenSearch 3.9.0 cannot be restored to OpenSearch 3.8.0 or earlier. Keep the
+   A snapshot taken on OpenSearch 3.10.0 cannot be restored to OpenSearch 3.9.x or earlier. Keep the
    snapshot you took before the upgrade in case you need to roll back.
 
 1. Install the new version of OpenSearch
 
 2. Reinstall plugins::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
    .. note::
 
       The version of these plugins must match the version of OpenSearch you use. |Fess| 15.10
-      supports OpenSearch 3.9.0. Installation fails if the versions do not match.
+      supports OpenSearch 3.10.0. Installation fails if the versions do not match.
 
       The four |Fess| plugins are published on maven.codelibs.org, so they are installed by URL. The
       ``groupId:artifactId:version`` form of ``opensearch-plugin install`` looks only at Maven
@@ -540,7 +540,7 @@ For major version upgrades, it is recommended to recreate the index.
 
 .. warning::
 
-   OpenSearch 3.9.0 refuses dictionary entries that 15.8 accepted, such as the same ``mapping``
+   OpenSearch 3.10.0 refuses dictionary entries that 15.8 accepted, such as the same ``mapping``
    entry saved twice or a ``kuromoji`` token that contains a space. With such an entry, "Re-indexing"
    does not create the new document index: ``fess.log`` only says ``Failed to create index``, and
    the old index keeps serving searches. Download the dictionary under "System" → "Dictionary",
@@ -1897,10 +1897,10 @@ Q: Do I need to upgrade OpenSearch too?
 ----------------------------------------
 
 A: Each version of |Fess| requires a specific version of OpenSearch.
-|Fess| 15.10 requires OpenSearch 3.9.0.
+|Fess| 15.10 requires OpenSearch 3.10.0.
 The |Fess| OpenSearch plugins such as ``opensearch-analysis-fess`` must exactly match the
 OpenSearch version, so if you upgrade OpenSearch, also update the plugins to the corresponding
-version (3.9.0).
+version (3.10.0).
 
 Also, |Fess| 15.10 requires the k-NN plugin and always sends ``knn.derived_source.enabled`` in the
 index settings. With an older OpenSearch, creating a new index fails, so upgrading OpenSearch is

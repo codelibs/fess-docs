@@ -145,13 +145,13 @@ Step 3: OpenSearch와 Fess 시작
 .. code-block:: bash
 
     # Linux
-    opensearch/opensearch-3.9.0/bin/opensearch -d
+    opensearch/opensearch-3.10.0/bin/opensearch -d
     bin/fess
 
 .. code-block:: bat
 
     :: Windows (각각 별도의 명령 프롬프트에서 실행)
-    opensearch\opensearch-3.9.0\bin\opensearch.bat
+    opensearch\opensearch-3.10.0\bin\opensearch.bat
     bin\fess.bat
 
 약 30초 후 다음 주소에 접속할 수 있습니다:

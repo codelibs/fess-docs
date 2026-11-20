@@ -23,7 +23,7 @@
 
 .. important::
 
-   |Fess| 14.x 对应 OpenSearch 2.x 系列，\ |Fess| 15.10 对应 OpenSearch 3.9.0。
+   |Fess| 14.x 对应 OpenSearch 2.x 系列，\ |Fess| 15.10 对应 OpenSearch 3.10.0。
    由于 |Fess| 专用的 OpenSearch 插件必须与 OpenSearch 版本完全一致，
    因此从 14.x 升级时，也必须同时对 OpenSearch 进行主版本升级。
    请参阅 :ref:`upgrade-opensearch`。
@@ -378,7 +378,7 @@ Docker 版
 步骤 4: 升级 OpenSearch
 ====================================
 
-|Fess| 15.10 对应 OpenSearch 3.9.0。如果所连接的 OpenSearch 版本比这更旧，
+|Fess| 15.10 对应 OpenSearch 3.10.0。如果所连接的 OpenSearch 版本比这更旧，
 请按照以下步骤升级。
 
 .. note::
@@ -406,21 +406,21 @@ Docker 版
    可能会出现索引兼容性问题。
    |Fess| 14.x 对应 OpenSearch 2.x 系列，因此从 14.x 升级时必然属于这种情况。
 
-   在 OpenSearch 3.9.0 上创建的快照无法恢复到 OpenSearch 3.8.0 及更早版本。请保留升级前创建的快照，以备回滚。
+   在 OpenSearch 3.10.0 上创建的快照无法恢复到 OpenSearch 3.9.x 及更早版本。请保留升级前创建的快照，以备回滚。
 
 1. 安装新版本的 OpenSearch
 
 2. 重新安装插件::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
    .. note::
 
       这些插件的版本必须与所使用的 OpenSearch 版本一致。
-      |Fess| 15.10 对应 OpenSearch 3.9.0。如果版本不一致，
+      |Fess| 15.10 对应 OpenSearch 3.10.0。如果版本不一致，
       插件安装将会失败。
 
       |Fess| 的 4 个插件发布在 maven.codelibs.org 上，因此通过 URL 指定。 ``opensearch-plugin install`` 的 ``groupId:artifactId:version`` 形式只查找 Maven Central。
@@ -521,7 +521,7 @@ Docker 版::
 
 .. warning::
 
-   OpenSearch 3.9.0 会拒绝 15.8 曾接受的字典条目，例如重复保存的同一条 ``mapping`` 条目，或
+   OpenSearch 3.10.0 会拒绝 15.8 曾接受的字典条目，例如重复保存的同一条 ``mapping`` 条目，或
    含有空格的 ``kuromoji`` 词元。存在此类条目时，「重新索引」不会创建新的文档索引：``fess.log``
    中只会输出 ``Failed to create index`` ，旧索引继续提供搜索。请在「系统」→「字典」下载字典，
    删除重复或无效的行后重新上传，然后再次运行「重新索引」。15.10 不再保存的条目请参阅
@@ -1767,9 +1767,9 @@ Q: 需要升级 OpenSearch 吗？
 -------------------------------------------------
 
 A: 每个 |Fess| 版本对应特定的 OpenSearch 版本。
-|Fess| 15.10 对应 OpenSearch 3.9.0。
+|Fess| 15.10 对应 OpenSearch 3.10.0。
 由于 ``opensearch-analysis-fess`` 等 |Fess| 专用 OpenSearch 插件必须与 OpenSearch 版本完全一致，
-因此在升级 OpenSearch 时，请同时将插件更新为对应版本（3.9.0）。
+因此在升级 OpenSearch 时，请同时将插件更新为对应版本（3.10.0）。
 
 另外，|Fess| 15.10 强制要求安装 k-NN 插件，并会在索引设置中始终发送
 ``knn.derived_source.enabled``。如果 OpenSearch 版本过旧，会导致新索引创建失败，

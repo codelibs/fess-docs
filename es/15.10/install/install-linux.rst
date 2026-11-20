@@ -15,7 +15,7 @@ Requisitos Previos
 
 - Cumplir con los requisitos del sistema descritos en :doc:`prerequisites`
 - Java 21 instalado
-- OpenSearch 3.9.0 disponible (o nueva instalación)
+- OpenSearch 3.10.0 disponible (o nueva instalación)
 
 Selección del Método de Instalación
 =====================================
@@ -130,16 +130,16 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.tar.gz
-       $ tar -xzf opensearch-3.9.0-linux-x64.tar.gz
-       $ cd opensearch-3.9.0
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.tar.gz
+       $ tar -xzf opensearch-3.10.0-linux-x64.tar.gz
+       $ cd opensearch-3.10.0
 
-   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.9.0-linux-arm64.tar.gz``).
+   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.10.0-linux-arm64.tar.gz``).
 
    .. note::
 
-      En este ejemplo se utiliza OpenSearch 3.9.0.
-      |Fess| 15.10 es compatible con OpenSearch 3.9.0.
+      En este ejemplo se utiliza OpenSearch 3.10.0.
+      |Fess| 15.10 es compatible con OpenSearch 3.10.0.
 
 2. Instalación de plugins de OpenSearch
 
@@ -147,16 +147,16 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ cd /path/to/opensearch-3.9.0
-       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ cd /path/to/opensearch-3.10.0
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
    .. important::
 
       Las versiones de los plugins deben coincidir con la versión de OpenSearch.
-      En el ejemplo anterior, se especifica 3.9.0 para todos.
+      En el ejemplo anterior, se especifica 3.10.0 para todos.
 
       Los cuatro plugins de |Fess| se publican en maven.codelibs.org, por lo que se instalan
       mediante su URL. La forma ``groupId:artifactId:version`` de ``opensearch-plugin install`` solo
@@ -169,16 +169,16 @@ Paso 1: Instalación de OpenSearch
    ::
 
        # Ruta para sincronización de configuración (especificar ruta absoluta)
-       configsync.config_path: /path/to/opensearch-3.9.0/config/dictionary/
+       configsync.config_path: /path/to/opensearch-3.10.0/config/dictionary/
 
        # Desactivación del plugin de seguridad (solo entorno de desarrollo)
        plugins.security.disabled: true
 
    .. important::
 
-      Especifique en ``configsync.config_path`` un directorio dentro del directorio de configuración de OpenSearch (``/path/to/opensearch-3.9.0/config/`` en este ejemplo).
+      Especifique en ``configsync.config_path`` un directorio dentro del directorio de configuración de OpenSearch (``/path/to/opensearch-3.10.0/config/`` en este ejemplo).
       OpenSearch 3.8.0 y versiones posteriores rechazan la creación de índices cuando los archivos de diccionario están fuera del directorio de configuración.
-      Si especifica un directorio fuera del directorio de configuración, como ``/path/to/opensearch-3.9.0/data/config/``, |Fess| no puede crear sus índices y no se inicia.
+      Si especifica un directorio fuera del directorio de configuración, como ``/path/to/opensearch-3.10.0/data/config/``, |Fess| no puede crear sus índices y no se inicia.
 
    .. warning::
 
@@ -253,7 +253,7 @@ Paso 2: Instalación de Fess
    Después del cambio::
 
        SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://localhost:9200}
-       FESS_DICTIONARY_PATH=/path/to/opensearch-3.9.0/config/dictionary/
+       FESS_DICTIONARY_PATH=/path/to/opensearch-3.10.0/config/dictionary/
 
    .. note::
 
@@ -297,10 +297,10 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.9.0-linux-x64.rpm
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.rpm
+       $ sudo rpm -ivh opensearch-3.10.0-linux-x64.rpm
 
-   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.9.0-linux-arm64.rpm``).
+   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.10.0-linux-arm64.rpm``).
 
    Alternativamente, también puede agregar un repositorio para instalarlo.
    Para más detalles, consulte `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__.
@@ -309,10 +309,10 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
 3. Configuración de OpenSearch
 
@@ -409,10 +409,10 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.9.0/opensearch-3.9.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.9.0-linux-x64.deb
+       $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.deb
+       $ sudo dpkg -i opensearch-3.10.0-linux-x64.deb
 
-   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.9.0-linux-arm64.deb``).
+   En un equipo arm64 (aarch64), reemplace ``linux-x64`` por ``linux-arm64`` en los nombres de archivo anteriores (por ejemplo, ``opensearch-3.10.0-linux-arm64.deb``).
 
    Alternativamente, también puede agregar un repositorio para instalarlo.
    Para más detalles, consulte `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__.
@@ -421,10 +421,10 @@ Paso 1: Instalación de OpenSearch
 
    ::
 
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.9.0/opensearch-analysis-fess-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.9.0/opensearch-analysis-extension-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.9.0/opensearch-minhash-3.9.0.zip
-       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.9.0/opensearch-configsync-3.9.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
 3. Configuración de OpenSearch
 
@@ -521,7 +521,7 @@ Después de completar la instalación, verifique lo siguiente:
 
    Para la versión ZIP::
 
-       $ ls -ld /path/to/opensearch-3.9.0/config/dictionary/
+       $ ls -ld /path/to/opensearch-3.10.0/config/dictionary/
 
    Para las versiones RPM/DEB::
 
@@ -559,7 +559,7 @@ P: ¿Funciona con otras versiones de OpenSearch?
 --------------------------------------------------
 
 R: |Fess| depende de una versión específica de OpenSearch.
-Para garantizar la compatibilidad de los plugins, se recomienda encarecidamente utilizar la versión recomendada (3.9.0).
+Para garantizar la compatibilidad de los plugins, se recomienda encarecidamente utilizar la versión recomendada (3.10.0).
 Si utiliza otra versión, también deberá ajustar adecuadamente las versiones de los plugins.
 
 P: ¿Se puede compartir el mismo OpenSearch entre varias instancias de Fess?

@@ -141,13 +141,13 @@ Fess に必要な 4 つのプラグインをインストールして、Fess に�
 ::
 
     # Linux
-    $ opensearch/opensearch-3.9.0/bin/opensearch -d
+    $ opensearch/opensearch-3.10.0/bin/opensearch -d
     $ bin/fess
 
 .. code-block:: bat
 
     :: Windows（それぞれ別のコマンドプロンプトで実行）
-    opensearch\opensearch-3.9.0\bin\opensearch.bat
+    opensearch\opensearch-3.10.0\bin\opensearch.bat
     bin\fess.bat
 
 Fess の起動まで 30 秒ほど待ってから、以下にアクセスします。
