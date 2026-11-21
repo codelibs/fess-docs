@@ -598,7 +598,7 @@ Docker 版::
 
 直到 15.9，返回 HTTP 500 的页面既不会被索引，也不会被记录为失败 URL，因为 ``crawler.failure.url.status.codes`` 的默认值是 ``404,403,410,401`` 。15.10 添加了代表 500 到 599 所有状态的 ``5xx`` ，因此这类 URL 会显示在“系统信息”→“失败URL”中（请参阅 :doc:`../admin/failureurl-guide` 和 :doc:`../config/crawler-advanced` ）。503 会在爬虫放弃重试之后被记录。
 
-沿用自 15.9 的 ``fess_config.properties`` 仍保留旧列表，此时返回 HTTP 500 的页面仍不会被记录。请在列表中添加 ``5xx`` ，或与 15.10 的文件对比，然后重启 |Fess| 。您自行设置的列表不会因升级而改变，如果希望记录这些页面，也请在其中添加 ``5xx`` 。15.9 及更早版本会把列表的每一项都当作数字读取，无法读取 ``5xx`` ，因此回滚之前请将其删除。
+沿用自 15.9 的 ``fess_config.properties`` 仍保留旧列表，此时返回 HTTP 500 的页面仍不会被记录。请在列表中添加 ``5xx`` ，或与 15.10 的文件对比，然后重启 |Fess| 。您自行设置的列表不会因升级而改变，如果希望记录这些页面，也请在其中添加 ``5xx`` 。15.9 及更早版本会把列表的每一项都当作数字读取，无法读取 ``5xx`` ，因此回滚之前请将其删除（请参阅 :ref:`回滚步骤 <upgrade-1510-rollback-5xx>` 中的警告）。
 
 被 Tika 提取器判定为疑似 zip 炸弹而拒绝的文档，即使 ``crawler.ignore.content.exception`` 为 ``true`` （默认），现在也会被记录为失败 URL，并且不会被索引。直到 15.9，这类文档会以没有内容的状态被索引。该设置所忽略的其他内容错误保持不变。
 
@@ -1680,9 +1680,18 @@ RPM/DEB 版的情况::
    15.8.0 的 DEB 软件包没有将 ``/etc/fess/*`` 注册为 conffile，因此 ``dpkg -i`` 会覆盖编辑过的
    ``/etc/fess/fess_config.properties`` 等文件，且不保留副本。请从步骤 1 中获取的备份恢复。
 
-.. note::
+.. _upgrade-1510-rollback-5xx:
 
-   如果旧版本使用的 ``fess_config.properties`` 中 ``crawler.failure.url.status.codes`` 含有 ``5xx`` ，请将其删除。15.9 及更早版本会把列表的每一项都当作数字读取，无法读取 ``5xx`` （请参阅“失败 URL: HTTP 5xx 与疑似 zip 炸弹”）。
+.. warning::
+
+   **启动旧版本之前，请从失败 URL 的状态码列表中删除 5xx。**
+   15.10 随附的 ``crawler.failure.url.status.codes`` 为 ``404,403,410,401,5xx`` 。|Fess| 15.9.0 及更早版本会把该列表的
+   每一项都当作数字读取，因此如果 ``fess_config.properties`` 中含有 ``5xx`` ，则每爬取一个页面都会抛出
+   ``NumberFormatException`` ，所有页面（包括成功获取的页面）都会被记录为失败 URL（日志中会出现 ``NumberFormatException`` ）。
+   请打开旧版本使用的 ``fess_config.properties`` （RPM/DEB 版为 ``/etc/fess/fess_config.properties`` ，ZIP 版为
+   ``app/WEB-INF/classes/fess_config.properties`` ），删除 ``5xx`` ，使该行为 ``crawler.failure.url.status.codes=404,403,410,401``
+   （15.9 的值）；如果设置了 ``-Dfess.config.crawler.failure.url.status.codes`` JVM 参数，也请从中删除。
+   请在启动 |Fess| 之前完成此操作；修改在重启后才会生效。从升级前所做的备份中恢复的文件保留的是 15.9 的值，无需修改。
 
 步骤 3: 恢复数据
 ----------------------

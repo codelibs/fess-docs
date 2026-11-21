@@ -635,7 +635,7 @@ URL en échec : HTTP 5xx et bombes zip suspectées
 
 Jusqu'à 15.9, une page qui répondait avec HTTP 500 n'était ni indexée ni enregistrée comme URL en échec, car la valeur par défaut de ``crawler.failure.url.status.codes`` était ``404,403,410,401``. La version 15.10 ajoute ``5xx``, qui représente tous les statuts de 500 à 599 ; une telle URL apparaît donc sous « Informations système » → « URL en échec » (voir :doc:`../admin/failureurl-guide` et :doc:`../config/crawler-advanced`). Un 503 est enregistré une fois que le crawler a renoncé à le réessayer.
 
-Un ``fess_config.properties`` repris de 15.9 contient encore l'ancienne liste, et une page qui répond avec HTTP 500 n'est alors toujours pas enregistrée. Ajoutez ``5xx`` à la liste, ou comparez le fichier avec celui de 15.10, puis redémarrez |Fess|. Une liste que vous avez définie vous-même n'est pas modifiée par la mise à niveau ; ajoutez-y aussi ``5xx`` si vous voulez que ces pages soient enregistrées. Les versions 15.9 et antérieures lisent chaque entrée de la liste comme un nombre et ne peuvent pas lire ``5xx`` ; supprimez donc l'entrée avant un retour en arrière.
+Un ``fess_config.properties`` repris de 15.9 contient encore l'ancienne liste, et une page qui répond avec HTTP 500 n'est alors toujours pas enregistrée. Ajoutez ``5xx`` à la liste, ou comparez le fichier avec celui de 15.10, puis redémarrez |Fess|. Une liste que vous avez définie vous-même n'est pas modifiée par la mise à niveau ; ajoutez-y aussi ``5xx`` si vous voulez que ces pages soient enregistrées. Les versions 15.9 et antérieures lisent chaque entrée de la liste comme un nombre et ne peuvent pas lire ``5xx`` ; supprimez donc l'entrée avant un retour en arrière (voir l'avertissement de :ref:`Procédure de retour arrière <upgrade-1510-rollback-5xx>`).
 
 Un document que l'extracteur Tika rejette comme une bombe zip suspectée est désormais enregistré comme URL en échec et n'est pas indexé, même lorsque ``crawler.ignore.content.exception`` vaut ``true`` (valeur par défaut). Jusqu'à 15.9, il était indexé sans contenu. Les autres erreurs de contenu que ce paramètre ignore sont inchangées.
 
@@ -1895,9 +1895,22 @@ Ou ::
    donc les fichiers que vous avez modifiés, tels que ``/etc/fess/fess_config.properties``, sans en
    conserver de copie. Restaurez-les depuis la sauvegarde effectuée à l'étape 1.
 
-.. note::
+.. _upgrade-1510-rollback-5xx:
 
-   Si le ``fess_config.properties`` qu'utilise l'ancienne version contient ``5xx`` dans ``crawler.failure.url.status.codes``, supprimez cette entrée. Les versions 15.9 et antérieures lisent chaque entrée de la liste comme un nombre et ne peuvent pas lire ``5xx`` (voir « URL en échec : HTTP 5xx et bombes zip suspectées »).
+.. warning::
+
+   **Retirez 5xx de la liste des statuts des URL en échec avant de démarrer l'ancienne version.**
+   La version 15.10 fournit ``crawler.failure.url.status.codes`` avec la valeur ``404,403,410,401,5xx``. Les
+   versions |Fess| 15.9.0 et antérieures lisent chaque entrée de cette liste comme un nombre ; avec un
+   ``fess_config.properties`` qui contient ``5xx``, elles lèvent une ``NumberFormatException`` pour chaque page
+   explorée, et toutes les pages, y compris celles qui ont été récupérées correctement, sont enregistrées comme
+   URL en échec (le journal affiche la ``NumberFormatException``). Ouvrez le ``fess_config.properties`` qu'utilise
+   l'ancienne version (``/etc/fess/fess_config.properties`` pour RPM/DEB, ``app/WEB-INF/classes/fess_config.properties``
+   pour ZIP), retirez ``5xx`` pour que la ligne soit ``crawler.failure.url.status.codes=404,403,410,401`` (la
+   valeur de 15.9), et retirez-le aussi de l'argument JVM ``-Dfess.config.crawler.failure.url.status.codes`` si
+   vous en avez défini un. Faites-le avant de démarrer |Fess| ; une modification ne prend effet qu'après un
+   redémarrage. Un fichier que vous restaurez depuis la sauvegarde faite avant la mise à niveau contient la
+   valeur de 15.9 et n'a pas besoin d'être modifié.
 
 Étape 3 : Restauration des données
 ------------------------------------

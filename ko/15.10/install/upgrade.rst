@@ -608,7 +608,7 @@ Docker 버전::
 
 15.9까지는 ``crawler.failure.url.status.codes`` 의 기본값이 ``404,403,410,401`` 이었으므로 HTTP 500을 반환한 페이지는 색인되지도, 장애 URL로 기록되지도 않았습니다. 15.10은 500부터 599까지의 모든 상태를 나타내는 ``5xx`` 를 추가했으므로 이러한 URL은 "시스템 정보" → "장애 URL" 에 표시됩니다(:doc:`../admin/failureurl-guide` 와 :doc:`../config/crawler-advanced` 참조). 503은 크롤러가 재시도를 포기한 후에 기록됩니다.
 
-15.9에서 이어받은 ``fess_config.properties`` 에는 이전 목록이 남아 있어, HTTP 500을 반환하는 페이지는 계속 기록되지 않습니다. 목록에 ``5xx`` 를 추가하거나 15.10의 파일과 비교한 다음 |Fess|\ 를 다시 시작하십시오. 직접 설정한 목록은 업그레이드로 바뀌지 않으므로, 이러한 페이지를 기록하려면 그 목록에도 ``5xx`` 를 추가하십시오. 15.9 이전 버전은 목록의 각 항목을 숫자로 읽기 때문에 ``5xx`` 를 읽지 못합니다. 롤백하기 전에 제거하십시오.
+15.9에서 이어받은 ``fess_config.properties`` 에는 이전 목록이 남아 있어, HTTP 500을 반환하는 페이지는 계속 기록되지 않습니다. 목록에 ``5xx`` 를 추가하거나 15.10의 파일과 비교한 다음 |Fess|\ 를 다시 시작하십시오. 직접 설정한 목록은 업그레이드로 바뀌지 않으므로, 이러한 페이지를 기록하려면 그 목록에도 ``5xx`` 를 추가하십시오. 15.9 이전 버전은 목록의 각 항목을 숫자로 읽기 때문에 ``5xx`` 를 읽지 못합니다. 롤백하기 전에 제거하십시오(:ref:`롤백 절차 <upgrade-1510-rollback-5xx>` 의 경고 참조).
 
 Tika 추출기가 zip 폭탄으로 의심하여 거부한 문서는 ``crawler.ignore.content.exception`` 이 ``true`` (기본값)여도 이제 장애 URL로 기록되며 색인되지 않습니다. 15.9까지는 콘텐츠 없이 색인되었습니다. 이 설정이 무시하는 그 밖의 콘텐츠 오류는 바뀌지 않습니다.
 
@@ -1785,9 +1785,20 @@ RPM/DEB 버전의 경우::
    ``/etc/fess/fess_config.properties`` 등을 사본을 남기지 않고 덮어씁니다. 단계 1 에서 취득한
    백업에서 복원하십시오.
 
-.. note::
+.. _upgrade-1510-rollback-5xx:
 
-   이전 버전이 사용하는 ``fess_config.properties`` 의 ``crawler.failure.url.status.codes`` 에 ``5xx`` 가 있다면 제거하십시오. 15.9 이전 버전은 목록의 각 항목을 숫자로 읽기 때문에 ``5xx`` 를 읽지 못합니다("장애 URL: HTTP 5xx와 zip 폭탄 의심" 참조).
+.. warning::
+
+   **이전 버전을 시작하기 전에 장애 URL 상태 코드 목록에서 5xx를 제거하십시오.**
+   15.10은 ``crawler.failure.url.status.codes`` 를 ``404,403,410,401,5xx`` 로 제공합니다. |Fess| 15.9.0 이전 버전은
+   이 목록의 각 항목을 숫자로 읽기 때문에, ``5xx`` 가 들어 있는 ``fess_config.properties`` 에서는 크롤링하는 페이지마다
+   ``NumberFormatException`` 이 발생하고, 정상적으로 가져온 페이지를 포함한 모든 페이지가 장애 URL로 기록됩니다
+   (로그에 ``NumberFormatException`` 이 출력됩니다). 이전 버전이 사용하는 ``fess_config.properties``
+   (RPM/DEB는 ``/etc/fess/fess_config.properties`` , ZIP은 ``app/WEB-INF/classes/fess_config.properties`` )를 열어
+   ``5xx`` 를 제거하여 ``crawler.failure.url.status.codes=404,403,410,401`` (15.9의 값) 행으로 만드십시오.
+   ``-Dfess.config.crawler.failure.url.status.codes`` JVM 인수를 지정했다면 거기에서도 제거하십시오.
+   이 작업은 |Fess|\ 를 시작하기 전에 하십시오. 변경은 다시 시작해야 반영됩니다. 업그레이드 전에 만든 백업에서
+   복원한 파일에는 15.9의 값이 들어 있으므로 변경할 필요가 없습니다.
 
 단계 3: 데이터 복원
 ----------------------

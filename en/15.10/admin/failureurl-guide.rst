@@ -33,6 +33,7 @@ The MIME type, HTTP status and size are recorded only when the crawler knew them
 - Not recorded when: no response was obtained, such as a timeout or a connection error, and for failures of data store crawls. A failure to extract the text (for example an unreadable PDF) is not recorded either while ``crawler.ignore.content.exception`` is ``true`` (the default): the document is indexed without a body. It is recorded only when this key is ``false``. However, a document rejected as a suspected zip bomb is recorded as a failure URL and is not indexed even when this key is ``true``.
 - The HTTP status is recorded only for ``http`` / ``https`` URLs. It is blank for files, SMB and other protocols.
 - For a failure URL recorded before |Fess| 15.10, these items stay blank until the URL fails again.
+- ``5xx`` in ``crawler.failure.url.status.codes`` can be read only by |Fess| 15.10 and later. 15.9 and earlier cannot read it and record every page as a failure URL, so remove it before you roll back (see :ref:`Rollback Procedure <upgrade-1510-rollback-5xx>`).
 
 CSV Download
 ------------
