@@ -30,6 +30,9 @@ Windows統合認証では、 |Fess| はSPNEGO（Simple and Protected GSSAPI Nego
 
 ロールベース検索との連携については、 :doc:`security-role` を参照してください。
 
+.. note::
+   Kerberos チケットはログインにだけ使われます。 |Fess| のログインセッションは、チケットの有効期限が切れても終了せず、ユーザーがログアウトするか、セッションタイムアウトに達するまで続きます。SAML は異なり、IdP のセッションとともに終了します（ :doc:`sso-saml` を参照）。
+
 前提条件
 ========
 

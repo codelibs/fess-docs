@@ -31,6 +31,9 @@ Bei der Windows-integrierten Authentifizierung verwendet |Fess| das SPNEGO-Proto
 
 Informationen zur Integration mit der rollenbasierten Suche finden Sie unter :doc:`security-role`.
 
+.. note::
+   Das Kerberos-Ticket wird nur für die Anmeldung verwendet. Die |Fess|-Anmeldesitzung endet nicht, wenn das Ticket abläuft; sie besteht, bis sich der Benutzer abmeldet oder das Sitzungs-Timeout erreicht ist. Bei SAML ist das anders: Die Sitzung endet mit der Sitzung des IdP (siehe :doc:`sso-saml`).
+
 Voraussetzungen
 ===============
 

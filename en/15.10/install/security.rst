@@ -234,6 +234,9 @@ Each audit record is one line of tab-separated ``key:value`` fields (LTSV). A re
    * - ``LOGOUT``
      - ``user``, ``permissions``
      - A user logs out.
+   * - ``SESSION_END``
+     - ``user``, ``reason``
+     - |Fess| ends a login session on its own, as opposed to a logout that the user asked for (that is ``LOGOUT``). One record is written for each ended session.
    * - ``LOGIN_FAILURE``
      - ``class``, ``user``
      - A login is rejected, on the login form, in the login API or by SSO. A login that an SSO authenticator rejects with an exception is recorded as well.
@@ -257,6 +260,7 @@ Each audit record is one line of tab-separated ``key:value`` fields (LTSV). A re
 - ``ACCESS``: ``method`` is the HTTP method. ``id`` is the value of the ``id`` request parameter and is written only when the request has one (it is not read from an upload request). No other request parameter is written, because the admin forms carry passwords and keys.
 - ``ACCESS_DENIED``: for a rejected admin REST API request, only the request path is written. Neither the access token nor the parameter that carried it is recorded.
 - ``UPDATE_PASSWORD``: ``user`` is the user who changed the password and ``target`` is the name of the user whose password was changed. The password and its hash are never written, and a rejected change writes nothing.
+- ``SESSION_END``: ``user`` is the user whose session ended and ``reason`` is why it ended. ``password_changed``: the password of the user was changed after the session was opened. ``user_not_found``: the document of the local user no longer exists, for example because the user was deleted or renamed. ``idp_session_ended``: the identity provider ended its session (the ``SessionNotOnOrAfter`` of SAML, see :doc:`../config/sso-saml`).
 
 Regular Security Updates
 ------------------------

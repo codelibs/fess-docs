@@ -31,6 +31,9 @@ En la Autenticación Integrada de Windows, |Fess| utiliza el protocolo SPNEGO (S
 
 Para la integración con la búsqueda basada en roles, consulte :doc:`security-role`.
 
+.. note::
+   El ticket de Kerberos solo se usa para iniciar sesión. La sesión de inicio de sesión de |Fess| no termina cuando caduca el ticket; dura hasta que el usuario cierra sesión o se alcanza el tiempo de espera de la sesión. SAML es distinto: su sesión termina con la sesión del IdP (consulte :doc:`sso-saml`).
+
 Prerrequisitos
 ==============
 

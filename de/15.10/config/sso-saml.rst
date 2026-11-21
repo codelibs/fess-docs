@@ -342,7 +342,7 @@ Die folgenden Sicherheitseinstellungen werden aus ``system.properties`` gelesen.
      - ``true``
 
 .. note::
-   Die Einstellung hat keine Wirkung, wenn der IdP kein ``SessionNotOnOrAfter`` sendet. Wenn der IdP seine Sitzung auf eine kurze Zeit begrenzt (der Standard in Keycloak ist 10 Stunden), können Benutzer früher als bisher abgemeldet werden. Eine Abmeldung am IdP beendet die |Fess|-Anmeldung nicht vor diesem Zeitpunkt.
+   Die Einstellung hat keine Wirkung, wenn der IdP kein ``SessionNotOnOrAfter`` sendet. Wenn der IdP seine Sitzung auf eine kurze Zeit begrenzt (der Standard in Keycloak ist 10 Stunden), können Benutzer früher als bisher abgemeldet werden. Eine Abmeldung am IdP beendet die |Fess|-Anmeldung nicht vor diesem Zeitpunkt. Endet die Anmeldung auf diese Weise, wird im Audit-Log ein ``SESSION_END``-Eintrag mit dem Grund ``idp_session_ended`` geschrieben (siehe :doc:`../install/security`).
 
 Signatureinstellungen
 ---------------------

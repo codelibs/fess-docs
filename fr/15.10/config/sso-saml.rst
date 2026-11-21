@@ -344,7 +344,7 @@ Les paramètres de sécurité suivants sont lus depuis ``system.properties``.
      - ``true``
 
 .. note::
-   Ce paramètre n'a aucun effet lorsque l'IdP n'envoie pas de ``SessionNotOnOrAfter``. Lorsque l'IdP limite sa session à une durée courte (la valeur par défaut dans Keycloak est de 10 heures), les utilisateurs peuvent être déconnectés plus tôt qu'auparavant. Se déconnecter de l'IdP ne met pas fin à la connexion à |Fess| avant cet instant.
+   Ce paramètre n'a aucun effet lorsque l'IdP n'envoie pas de ``SessionNotOnOrAfter``. Lorsque l'IdP limite sa session à une durée courte (la valeur par défaut dans Keycloak est de 10 heures), les utilisateurs peuvent être déconnectés plus tôt qu'auparavant. Se déconnecter de l'IdP ne met pas fin à la connexion à |Fess| avant cet instant. Lorsque la connexion prend fin ainsi, un enregistrement ``SESSION_END`` avec la raison ``idp_session_ended`` est écrit dans le journal d'audit (voir :doc:`../install/security`).
 
 Paramètres de signature
 -----------------------

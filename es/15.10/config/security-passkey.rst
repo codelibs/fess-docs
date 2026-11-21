@@ -91,7 +91,7 @@ Después de volver a establecer ``passkey.enabled`` en ``false``, la página de 
 Relación con la contraseña
 ==========================
 
-- Una llave de acceso y una contraseña son credenciales independientes. Cambiar la contraseña de un usuario, o que un administrador establezca una nueva, no elimina las llaves de acceso registradas, y siguen pudiendo usarse para iniciar sesión.
+- Una llave de acceso y una contraseña son credenciales independientes. Cambiar la contraseña de un usuario, o que un administrador establezca una nueva, no elimina las llaves de acceso registradas, y siguen pudiendo usarse para iniciar sesión. Un administrador las elimina una por una con «Restablecer» en la página de detalles del usuario (consulte «Acciones del administrador» más arriba).
 - Cuando se cambia una contraseña, las demás sesiones de inicio de sesión del usuario terminan (consulte :doc:`../install/security`). Esto incluye una sesión abierta con una llave de acceso. Cada sesión comprueba como máximo una vez cada ``password.changed.check.interval`` segundos (valor predeterminado ``60``), por lo que las sesiones terminan dentro de ese tiempo.
 - Eliminar una llave de acceso cierra las demás sesiones de la misma manera (véase más arriba).
 
