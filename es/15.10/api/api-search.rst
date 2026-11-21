@@ -193,6 +193,10 @@ Tabla: Campos de respuesta
 
    Cuando un plugin envía la búsqueda a otro lugar en vez de ejecutarla (por ejemplo, un bang al estilo de DuckDuckGo como ``!g``), la respuesta correcta contiene solo ``q`` y ``redirect_url``. El cliente debe navegar a ``redirect_url``.
 
+.. note::
+
+   Un resultado con ``partial: true``, ``record_count: 0`` y ``data`` vacío no significa que ningún documento coincida. |Fess| responde de esta forma, con el estado HTTP 200, cuando el motor de búsqueda no puede ejecutar la búsqueda, por ejemplo porque está detenido o no es accesible; la página de búsqueda del tema incluido lo muestra como una búsqueda incompleta, no como un error. Compruebe ``partial`` antes de que un cliente trate 0 resultados como «sin resultados», y use :doc:`api-health` para saber si el motor de búsqueda está disponible: mientras no lo esté, ``/api/v2/health`` responde 503. Cuando el motor de búsqueda rechaza la búsqueda por falta de capacidad o el índice está cerrado, la respuesta es en cambio el 503 descrito en la tabla siguiente.
+
 Respuesta de error
 ------------------
 

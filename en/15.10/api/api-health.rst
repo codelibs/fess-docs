@@ -27,6 +27,10 @@ This endpoint respects the envelope invariant "``status >= 1`` ⇔ HTTP status `
 - When ``RED``: returns an error envelope (``status: 9``, ``error.code: service_unavailable``) with the engine snapshot embedded under ``error.details.engine`` (to allow monitoring tools to parse cluster metadata).
 - When the search engine cannot be reached: returns an error envelope in the same way as ``RED`` (``error.code: service_unavailable``, ``error.message: search engine is not reachable``), with ``status: UNAVAILABLE`` and ``ping_status: 1`` in ``error.details.engine``.
 
+.. note::
+
+   ``/api/v2/search`` does not answer 503 when the search engine cannot be reached. It answers 200 with ``partial: true`` and no hits (see :doc:`api-search`). A client that must tell "no results" from "the search engine is down" should check ``partial`` in the search response, and can confirm the state of the search engine with this endpoint.
+
 The fields of ``engine`` are as follows:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|

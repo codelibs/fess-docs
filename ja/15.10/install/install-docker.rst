@@ -606,3 +606,4 @@ Q: マルチノード構成は可能ですか？
 A: 可能です。\ ``docker-fess`` リポジトリの ``snapshot/compose-cluster.yaml`` を参考に OpenSearch を複数ノードで構成したり、
 ``multi-instance/`` を参考に 1 つの OpenSearch を共有する複数の Fess インスタンスを構成したりできます。
 ただし、本番環境では Kubernetes などのオーケストレーションツールの使用を推奨します。
+複数の |Fess| インスタンスをロードバランサーの背後で動かす場合は、 :doc:`../config/session-store` でHTTPセッションの共有を確認してください。
