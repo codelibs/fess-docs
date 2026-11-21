@@ -140,6 +140,14 @@ Suppression de configuration
 
 Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation. Appuyer sur le bouton Supprimer supprimera la configuration.
 
+.. note::
+
+   La suppression d'une configuration ne supprime pas les documents qu'elle a déjà enregistrés dans l'index. Ils restent consultables jusqu'à leur expiration. Un document expire après le nombre de jours indiqué par « Supprimer les anciens documents » dans :doc:`general-guide` (``day.for.cleanup``, ``3`` par défaut), compté à partir du début du dernier crawl qui l'a enregistré ou mis à jour ; le travail Doc Purger le supprime alors de l'index. Avec ``-1``, les documents enregistrés sans expiration ne sont jamais supprimés de cette façon.
+
+   Pour supprimer les documents immédiatement, supprimez-les vous-même de l'index. Dans l'écran Recherche (:doc:`searchlist-guide`), recherchez les documents de la configuration (par exemple avec ``url:`` ou ``host:``), vérifiez les résultats, puis cliquez sur le bouton « Tout supprimer par cette requête ». Vous pouvez faire de même avec ``DELETE /api/admin/searchlist/query`` (voir :doc:`../api/admin/api-admin-searchlist`).
+
+   Il en va autrement lorsque vous modifiez les autorisations d'une configuration et relancez le crawl : l'ID du document dépend des autorisations, et lorsque le crawler enregistre un document, il supprime les documents de même URL et d'ID différent que la même configuration avait enregistrés auparavant .
+
 Exemples
 ========
 

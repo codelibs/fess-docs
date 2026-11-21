@@ -52,6 +52,7 @@ Ein umfassender Leitfaden zur Konfiguration von |Fess|. Jeder Abschnitt ist nach
    security-role
    security-virtual-host
    security-passkey
+   session-store
    ldap-integration
    multitenancy
 
