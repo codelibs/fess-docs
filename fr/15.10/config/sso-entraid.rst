@@ -39,6 +39,9 @@ Dans l'authentification Entra ID, |Fess| opère en tant que client OAuth 2.0/Ope
 
 Pour l'intégration avec la recherche basée sur les rôles, consultez :doc:`security-role`.
 
+.. note::
+   Lorsque vous exécutez plusieurs nœuds, définissez la variable d'environnement ``FESS_SESSION_STORE=opensearch`` pour partager la session HTTP entre eux ; une connexion commencée sur un nœud peut alors être terminée sur un autre. Mettez à jour le plugin sur chaque nœud en 15.10 avant de l'activer : un plugin 15.9.0 ne partage pas l'état de la connexion, et un utilisateur qui revient sur un autre nœud reste anonyme. Sans session partagée, configurez le répartiteur de charge pour qu'il rattache chaque session à un seul nœud.
+
 Prérequis
 =========
 

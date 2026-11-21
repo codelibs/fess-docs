@@ -41,6 +41,9 @@ SAML認証では、|Fess| がSP（Service Provider）として動作し、外部
 
 ロールベース検索との連携については、:doc:`security-role` を参照してください。
 
+.. note::
+   複数のノードを動かす場合は、ノード間でHTTPセッションを共有する環境変数 ``FESS_SESSION_STORE=opensearch`` を設定すると、あるノードで始めたログインを別のノードで完了できます。有効にする前に、すべてのノードのプラグインを15.10に更新してください。15.9.0のプラグインはログインの状態を共有せず、別のノードに戻ってきた利用者は未ログインのままになります。セッションを共有しない場合は、ロードバランサーで同じセッションを同じノードに固定してください。
+
 前提条件
 ========
 
@@ -365,6 +368,20 @@ Keycloakのアカウントは既定で複数のレルムロールを持つため
    シングルログアウトサービス（``/sso/logout``）は、リダイレクトバインディング（GET）とPOSTバインディングを受け付けます。
    IdP側にも、POSTバインディング用として ``/sso/logout`` のURLを登録してください。
    IdPがAssertion Consumer ServiceにPOSTしてくるLogoutResponseは認識されません。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - プロパティ
+     - 説明
+     - デフォルト
+   * - ``saml.session.end_with_idp``
+     - IdPのセッションが終了したら |Fess| のログインも終了する。Assertionの ``SessionNotOnOrAfter`` に ``saml.security.clock_drift`` を加えた時刻に終了します。``false`` で無効
+     - ``true``
+
+.. note::
+   IdPが ``SessionNotOnOrAfter`` を指定しない場合、この設定は働きません。IdPのセッションの上限が短い場合（Keycloakの既定は10時間）、以前より早くログアウトされることがあります。IdP側でログアウトしても、 |Fess| のログインはこの時刻まで続きます。
 
 暗号化の設定
 ------------

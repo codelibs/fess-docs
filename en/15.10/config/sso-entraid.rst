@@ -37,6 +37,9 @@ In Entra ID authentication, |Fess| operates as an OAuth 2.0/OpenID Connect clien
 
 For role-based search integration, see :doc:`security-role`.
 
+.. note::
+   When you run several nodes, set the environment variable ``FESS_SESSION_STORE=opensearch`` to share the HTTP session between them; a login started on one node can then be completed on another. Update the plugin on every node to 15.10 before you enable it: a 15.9.0 plugin does not share the login state, and a user who returns to another node stays anonymous. Without a shared session, pin each session to one node on the load balancer.
+
 Prerequisites
 =============
 

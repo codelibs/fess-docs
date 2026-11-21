@@ -41,6 +41,9 @@ SAML 인증에서는 |Fess| 가 SP（Service Provider）로 동작하여 외부 
 
 역할 기반 검색과의 연동에 대해서는 :doc:`security-role` 을 참조하십시오.
 
+.. note::
+   여러 노드를 실행하는 경우에는 노드 간에 HTTP 세션을 공유하는 환경 변수 ``FESS_SESSION_STORE=opensearch`` 를 설정하면, 한 노드에서 시작한 로그인을 다른 노드에서 완료할 수 있습니다. 활성화하기 전에 모든 노드의 플러그인을 15.10으로 업데이트하십시오. 15.9.0 플러그인은 로그인 상태를 공유하지 않으며, 다른 노드로 돌아온 사용자는 로그인하지 않은 상태로 남습니다. 세션을 공유하지 않는 경우에는 로드 밸런서가 세션마다 하나의 노드에 고정되도록 하십시오.
+
 전제 조건
 =========
 
@@ -321,6 +324,20 @@ Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역�
    기본값을 약화시키는 설정（싱글 로그아웃을 설정한 상태에서의 ``saml.security.want_logout_signed=false``,
    ``saml.security.allow_deprecated_alg=true`` 또는 ``saml.security.allow_rsa_1_5=true``）이 남아 있으면
    SAML 설정을 읽어 들일 때 ``Insecure SAML settings: ...`` 경고가 로그에 출력됩니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 프로퍼티
+     - 설명
+     - 기본값
+   * - ``saml.session.end_with_idp``
+     - IdP의 세션이 끝나면 |Fess| 의 로그인도 종료한다. Assertion의 ``SessionNotOnOrAfter`` 에 ``saml.security.clock_drift`` 를 더한 시각에 종료됩니다. ``false`` 로 비활성화한다
+     - ``true``
+
+.. note::
+   IdP가 ``SessionNotOnOrAfter`` 를 보내지 않는 경우 이 설정은 동작하지 않습니다. IdP가 세션의 상한을 짧게 두는 경우（Keycloak의 기본값은 10시간）, 이전보다 일찍 로그아웃될 수 있습니다. IdP에서 로그아웃해도 |Fess| 의 로그인은 이 시각까지 유지됩니다.
 
 서명 설정
 ---------

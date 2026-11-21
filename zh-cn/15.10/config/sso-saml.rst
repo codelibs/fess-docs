@@ -38,6 +38,9 @@ SAML认证的工作原理
 
 有关基于角色的搜索集成，请参阅:doc:`security-role`。
 
+.. note::
+   运行多个节点时，请设置环境变量 ``FESS_SESSION_STORE=opensearch`` 以在节点之间共享HTTP会话；这样在一个节点上发起的登录就可以在另一个节点上完成。启用之前，请将每个节点上的插件更新到15.10：15.9.0的插件不会共享登录状态，返回到另一个节点的用户会保持匿名。未共享会话时，请在负载均衡器上将每个会话固定到一个节点。
+
 前提条件
 ========
 
@@ -314,6 +317,20 @@ Keycloak 默认发送这种形式的断言：除非启用其角色映射器和�
    如果保留了会削弱默认值的设置（配置了单点登出时的\ ``saml.security.want_logout_signed=false``\ 、
    ``saml.security.allow_deprecated_alg=true``\ 或\ ``saml.security.allow_rsa_1_5=true``\ ），
    在加载SAML设置时会向日志输出\ ``Insecure SAML settings: ...``\ 警告。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - 属性
+     - 描述
+     - 默认值
+   * - ``saml.session.end_with_idp``
+     - IdP会话结束时，同时结束 |Fess| 的登录，结束时间为断言的 ``SessionNotOnOrAfter`` 加上 ``saml.security.clock_drift``。``false`` 表示关闭
+     - ``true``
+
+.. note::
+   IdP不发送 ``SessionNotOnOrAfter`` 时，此设置不起作用。当IdP将其会话上限设为较短时间时（Keycloak的默认值为10小时），用户可能比以前更早被登出。在IdP处登出并不会在该时间之前结束 |Fess| 的登录。
 
 签名设置
 --------

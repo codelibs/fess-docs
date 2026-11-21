@@ -38,6 +38,9 @@ En la autenticación de Entra ID, |Fess| opera como un cliente OAuth 2.0/OpenID 
 
 Para la integración con la búsqueda basada en roles, consulte :doc:`security-role`.
 
+.. note::
+   Si ejecuta varios nodos, defina la variable de entorno ``FESS_SESSION_STORE=opensearch`` para compartir la sesión HTTP entre ellos; un inicio de sesión iniciado en un nodo podrá entonces completarse en otro. Actualice el plugin en cada nodo a 15.10 antes de activarlo: un plugin 15.9.0 no comparte el estado del inicio de sesión, y un usuario que vuelve a otro nodo permanece como anónimo. Sin una sesión compartida, haga que el balanceador de carga fije cada sesión a un nodo.
+
 Prerrequisitos
 ==============
 

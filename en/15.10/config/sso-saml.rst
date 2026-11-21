@@ -40,6 +40,9 @@ In SAML authentication, |Fess| operates as an SP (Service Provider) and collabor
 
 For role-based search integration, see :doc:`security-role`.
 
+.. note::
+   When you run several nodes, set the environment variable ``FESS_SESSION_STORE=opensearch`` to share the HTTP session between them; a login started on one node can then be completed on another. Update the plugin on every node to 15.10 before you enable it: a 15.9.0 plugin does not share the login state, and a user who returns to another node stays anonymous. Without a shared session, pin each session to one node on the load balancer.
+
 Prerequisites
 =============
 
@@ -321,6 +324,20 @@ The following security settings are read from ``system.properties``.
    with Single Logout configured, ``saml.security.allow_deprecated_alg=true`` or
    ``saml.security.allow_rsa_1_5=true``), an ``Insecure SAML settings: ...`` warning is written to the
    log as the SAML settings are loaded.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Property
+     - Description
+     - Default
+   * - ``saml.session.end_with_idp``
+     - End the |Fess| login when the IdP session ends, at the ``SessionNotOnOrAfter`` of the assertion plus ``saml.security.clock_drift``. ``false`` turns it off
+     - ``true``
+
+.. note::
+   The setting has no effect when the IdP sends no ``SessionNotOnOrAfter``. When the IdP caps its session at a short time (the default in Keycloak is 10 hours), users can be logged out sooner than before. Logging out at the IdP does not end the |Fess| login before that time.
 
 Signature Settings
 ------------------
