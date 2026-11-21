@@ -383,6 +383,8 @@ The ``X-Fess-CSRF-Token`` header is required.
 
 A per-user rate limit is applied to this endpoint; when the limit is exceeded, ``429 Too Many Requests`` is returned together with a ``Retry-After`` header (the settings are shared with login).
 
+If two requests of a local user with the same ``current_password`` arrive at the same moment, only the first one changes the password. The later one answers ``409`` (``conflict``) and does not change it. This compares with the stored password of the local user. For a user who logs in through the directory (LDAP), the current password is not compared with a local hash and the password is changed in the directory, so two simultaneous requests can both succeed.
+
 Request Body (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -460,6 +462,8 @@ Error Response
      - The CSRF token is missing or expired.
    * - 405 Method Not Allowed
      - An unsupported HTTP method was specified.
+   * - 409 Conflict
+     - Another request changed the password of a local user after ``current_password`` was verified (for example two requests with the same ``current_password`` sent at once), so nothing was changed. ``error.code`` is ``conflict``. Check the current password and try again.
    * - 413 Payload Too Large
      - The request body exceeds the size limit.
    * - 415 Unsupported Media Type

@@ -177,6 +177,16 @@ L'état d'authentification actuel peut être consulté via ``GET /auth/me``. Pou
 
 Les points de terminaison qui ne nécessitent pas de connexion, comme la recherche, peuvent être utilisés de manière anonyme (selon l'option « Connexion requise » des Paramètres système).
 
+Informations d'authentification
+-------------------------------
+
+La définition OpenAPI de l'API v2 (``openapi-user.yaml``) énumère, dans l'entrée ``security`` de chaque opération, les informations d'authentification qu'elle accepte. Il en existe deux sortes :
+
+- ``sessionCookie`` : le cookie de session ``JSESSIONID`` que définit la réponse de ``POST /auth/login`` (ou de la connexion par clé d'accès). Envoyez-le avec chaque requête après la connexion. La connexion renouvelle l'ID de session ; conservez donc le cookie de la réponse de connexion. Le cookie est ``HttpOnly`` ; l'attribut ``Secure`` est ajouté lorsque ``session.cookie.secure`` est activé, et ``SameSite`` vaut ``Lax`` par défaut (``tomcat.sameSiteCookies``). Son nom ne change pas lorsque les sessions sont conservées dans le moteur de recherche (``FESS_SESSION_STORE``).
+- ``accessToken`` : un jeton d'accès créé par un administrateur, envoyé sous la forme ``Authorization: Bearer <jeton>`` (un simple ``Authorization: <jeton>`` est également accepté). Seules les opérations de recherche l'énumèrent : ``/search``, ``/documents/all``, ``/documents/export``, ``/documents/{docId}/similar``, ``/suggest-words``, ``/labels`` et ``/popular-words``. Le jeton détermine les documents qu'elles renvoient et, tant que « Connexion requise » est activé, il tient lieu de connexion. Il ne tient pas lieu de connexion sur les autres points de terminaison (favoris, tags, historique de recherche, changement de mot de passe, clés d'accès, chat, clic, cache). Un jeton mal formé, non enregistré ou expiré reçoit la réponse ``401 auth_required``.
+
+Une entrée vide dans ``security`` signifie que l'opération fonctionne aussi sans information d'authentification, ce qui n'est vrai que tant que « Connexion requise » est désactivé. L'en-tête ``X-Fess-CSRF-Token`` n'est pas une information d'authentification, mais une exigence distincte (voir ci-dessous).
+
 Jeton CSRF
 ----------
 

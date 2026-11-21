@@ -177,6 +177,16 @@ v2 API 采用基于会话的认证方式。
 
 无需登录的搜索等端点可以匿名使用（取决于系统设置中的"需要登录"选项）。
 
+认证信息
+--------
+
+v2 API 的 OpenAPI 定义（ ``openapi-user.yaml`` ）在每个操作的 ``security`` 条目中列出了该操作接受的认证信息。认证信息有两种：
+
+- ``sessionCookie`` ：由 ``POST /auth/login`` （或通行密钥登录）的响应设置的会话 Cookie ``JSESSIONID`` 。登录后请在每个请求中发送它。登录会更新会话 ID，因此请继续使用登录响应中的 Cookie。该 Cookie 带有 ``HttpOnly`` ；启用 ``session.cookie.secure`` 时会添加 ``Secure`` 属性， ``SameSite`` 默认为 ``Lax`` （ ``tomcat.sameSiteCookies`` ）。即使会话保存在搜索引擎中（ ``FESS_SESSION_STORE`` ），其名称也不会改变。
+- ``accessToken`` ：由管理员创建的访问令牌，以 ``Authorization: Bearer <令牌>`` 的形式发送（也接受仅有 ``Authorization: <令牌>`` 的形式）。只有搜索类操作列出了它： ``/search`` 、 ``/documents/all`` 、 ``/documents/export`` 、 ``/documents/{docId}/similar`` 、 ``/suggest-words`` 、 ``/labels`` 和 ``/popular-words`` 。令牌决定这些操作返回哪些文档，并且在“需要登录”启用期间可代替登录。在其他端点（收藏、标签、搜索历史、修改密码、通行密钥、聊天、点击、缓存）上，它不能代替登录。格式不正确、未注册或已过期的令牌会得到 ``401 auth_required`` 响应。
+
+``security`` 中有空条目的操作，在没有认证信息时也可使用，但这仅在“需要登录”被禁用期间成立。 ``X-Fess-CSRF-Token`` 头不是认证信息，而是一个独立的要求（见下文）。
+
 CSRF 令牌
 ---------
 

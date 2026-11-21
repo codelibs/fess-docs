@@ -254,6 +254,55 @@ REST APIの追加(fess_api++.xml)
 `fess-webapp-classic-api <https://github.com/codelibs/fess-webapp-classic-api>`__ が
 参考になります。
 
+.. _webapp-plugin-password-encoder:
+
+パスワードハッシュアルゴリズムの追加(fess++.xml)
+------------------------------------------------
+
+ローカルユーザーのパスワードのハッシュは、コンポーネントが作ります。保存されたパスワードは ``{id}hash`` の形式です。 |Fess| は、保存された値の ``id`` と、新しいパスワードについては ``app.password.algorithm`` の値（既定は ``bcrypt`` ）から、DI コンポーネント ``<id>PasswordEncoder`` を探します。 ``<sso.type>Authenticator`` や ``<storage.type>StorageClient`` の解決と同じ方法です。 |Fess| は ``bcryptPasswordEncoder`` を自分で登録します。アルゴリズムを追加するには、 ``org.codelibs.fess.crypto.password.PasswordEncoder`` を実装し、そのクラスを ``fess++.xml`` に登録します。 ``fess++.xml`` は、Lasta Di が |Fess| 本体の ``fess.xml`` にマージします。
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="argon2PasswordEncoder"
+            class="com.example.Argon2PasswordEncoder">
+        </component>
+    </components>
+
+インターフェースには次のメソッドがあります。
+
+.. list-table:: PasswordEncoder のメソッド
+   :header-rows: 1
+   :widths: 35 65
+
+   * - メソッド
+     - 説明
+   * - ``String encode(String rawPassword)``
+     - パスワードをハッシュ化します。結果は、 |Fess| が付ける ``{id}`` の後ろに保存されます。元のパスワードを正しく表せないパスワードには ``IllegalArgumentException`` を投げてください。メッセージにパスワードを含めてはいけません。
+   * - ``boolean matches(String rawPassword, String encodedPassword)``
+     - このエンコーダーが作ったハッシュに対してパスワードを検証します。パスワードが違う場合と、ハッシュの形式が壊れている場合は ``false`` を返してください。
+   * - ``boolean needsUpgrade(String encodedPassword)``
+     - 省略可（既定は ``false`` ）。保存されているハッシュが、現在の ``encode`` が作るものより弱いかどうかを返します。 ``true`` の場合、そのユーザーの次のログイン時にハッシュを作り直します。BCrypt は、コストが ``app.password.bcrypt.cost`` より小さい場合に ``true`` を返します。
+   * - ``int getMaxPasswordBytes()``
+     - 省略可（既定は ``0`` で、制限なし）。 ``encode`` が受け付ける、UTF-8 でのパスワードの最大バイト数です。BCrypt は ``72`` を返します。
+   * - ``boolean isVerificationCostly()`` と ``void applyTimingPadding()``
+     - 省略可（既定は ``false`` と何もしない）。意図的に遅いアルゴリズムは ``true`` を返し、 ``applyTimingPadding()`` で ``matches`` 1 回分ほどの時間を使います。ハッシュを検証しないままログインが失敗したとき（たとえばユーザーが存在しない場合）に |Fess| がこれを呼ぶため、応答時間からユーザーの有無は分かりません。
+
+エンコーダーを使うには、次のようにします。
+
+#. jar を ``WEB-INF/plugin`` ディレクトリに置きます。Web アプリプラグインと同じく、マニフェストに ``Fess-WebAppJar: true`` が必要です（「pom.xmlとマニフェスト」を参照）。これがないとコンポーネントが見つかりません。
+#. ``fess_config.properties`` の ``app.password.algorithm`` に ID を設定します（ ``argon2PasswordEncoder`` なら ``argon2`` ）。ID は小文字で、 ``}`` を含めてはいけません。以後、新規または変更されたパスワードはこのエンコーダーでハッシュ化されます。別の ID で保存されたパスワードや、ID のない従来のハッシュは、 ``app.password.upgrade.enabled`` が ``true`` （既定）の間、そのユーザーの次のログイン成功時にハッシュを作り直します。
+
+次の点に注意してください。
+
+- エンコーダーは全スレッドで共有されるシングルトンなので、スレッドセーフにしてください。
+- 長さの制限はエンコーダーのものです。パスワードを設定するとき（ユーザー管理画面、強制パスワード変更、 ``/api/v2/auth/password`` 、Admin API）、 |Fess| は ``app.password.algorithm`` のアルゴリズムの ``getMaxPasswordBytes()`` を超えるパスワードを「パスワードは N バイト以内である必要があります。」として拒否します。 ``0`` 以下の場合は ``password.max.length`` だけを確認します。保存されたハッシュを検証するときに、 |Fess| は長さの制限を適用しません。長いパスワードが一致してよいかどうかは ``matches`` に任されます。
+- その ID で保存されたパスワードがある間は、プラグインを入れたままにしてください。コンポーネントがないと、その ID のハッシュはどのパスワードにも一致せず、そのユーザーはログインできません。ハッシュも作り直されません。
+- ``app.password.algorithm`` にコンポーネントのない ID を指定した場合（たとえばプラグインの jar を削除したあとなど）、 |Fess| は起動し、別の ID のハッシュを持つユーザーはログインできますが、パスワードの設定は ``app.password.algorithm`` を示すエラーで失敗します。
+
 検索画面のカスタマイズ
 ======================
 

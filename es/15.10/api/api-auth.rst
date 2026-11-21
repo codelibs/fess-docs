@@ -383,6 +383,8 @@ Se requiere la cabecera ``X-Fess-CSRF-Token``.
 
 Este endpoint tiene un límite de velocidad por usuario; cuando se supera, se devuelve ``429 Too Many Requests`` junto con una cabecera ``Retry-After`` (la configuración es compartida con el inicio de sesión).
 
+Si dos solicitudes de un usuario local con el mismo ``current_password`` llegan en el mismo instante, solo la primera cambia la contraseña. La posterior responde ``409`` (``conflict``) y no la cambia. La comparación se hace con la contraseña almacenada del usuario local. En un usuario que inicia sesión a través del directorio (LDAP), la contraseña actual no se compara con un hash local y la contraseña se cambia en el directorio, por lo que dos solicitudes simultáneas pueden tener éxito las dos.
+
 Cuerpo de la solicitud (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -460,6 +462,8 @@ Respuesta de error
      - Cuando el token CSRF está ausente o ha expirado.
    * - 405 Method Not Allowed
      - Cuando se especifica un método HTTP no admitido.
+   * - 409 Conflict
+     - Otra solicitud cambió la contraseña de un usuario local después de verificar ``current_password`` (por ejemplo, dos solicitudes con el mismo ``current_password`` enviadas a la vez), por lo que no se cambió nada. ``error.code`` es ``conflict``. Compruebe la contraseña actual e inténtelo de nuevo.
    * - 413 Payload Too Large
      - Cuando el cuerpo de la solicitud supera el límite de tamaño.
    * - 415 Unsupported Media Type

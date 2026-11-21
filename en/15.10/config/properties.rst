@@ -1576,6 +1576,9 @@ Web
   * - authentication.admin.users.ignore.case
     - Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set.
     - ``auto``
+  * - authentication.local.username.policy
+    - Whether creating or renaming a local user also refuses a name that differs from another name only in case, width or Unicode composition: preserved or mapped. preserved compares names exactly as typed. mapped refuses a name that equals the name of another user or of an authentication.admin.users entry (other than the entry as written) once folded (Alice and alice, fullwidth and ASCII letters). Login, user IDs, stored names and permissions are not changed. An unknown value is treated as preserved.
+    - ``preserved``
   * - authentication.admin.roles
     - Admin role names for authentication.
     - ``admin``
@@ -2345,7 +2348,7 @@ Web
     - Minimum password length (0 to disable).
     - ``8``
   * - password.max.length
-    - Maximum length of a password field. A password is also limited to 72 bytes in UTF-8 whatever this value is, because BCrypt ignores the rest.
+    - Maximum length of a password field. A password is also limited in UTF-8 bytes whatever this value is. The byte limit belongs to the password hash algorithm (app.password.algorithm): BCrypt reads only the first 72 bytes and refuses a longer password.
     - ``100``
   * - password.require.uppercase
     - Require uppercase letters in password.

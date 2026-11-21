@@ -177,6 +177,16 @@ El estado de autenticación actual puede verificarse con ``GET /auth/me``. Consu
 
 Los endpoints que no requieren inicio de sesión, como la búsqueda, pueden utilizarse de forma anónima (dependiendo de la opción "Inicio de sesión obligatorio" en la Configuración del sistema).
 
+Credenciales
+------------
+
+La definición OpenAPI de la API v2 (``openapi-user.yaml``) enumera en la entrada ``security`` de cada operación las credenciales que acepta. Hay dos tipos:
+
+- ``sessionCookie``: la cookie de sesión ``JSESSIONID`` que establece la respuesta de ``POST /auth/login`` (o del inicio de sesión con llave de acceso). Envíela con cada solicitud posterior al inicio de sesión. El inicio de sesión rota el ID de sesión, así que conserve la cookie de la respuesta del inicio de sesión. La cookie es ``HttpOnly``; se añade el atributo ``Secure`` cuando ``session.cookie.secure`` está habilitado, y ``SameSite`` es ``Lax`` por defecto (``tomcat.sameSiteCookies``). Su nombre no cambia cuando las sesiones se guardan en el motor de búsqueda (``FESS_SESSION_STORE``).
+- ``accessToken``: un token de acceso creado por un administrador, enviado como ``Authorization: Bearer <token>`` (también se acepta un simple ``Authorization: <token>``). Solo lo enumeran las operaciones de búsqueda: ``/search``, ``/documents/all``, ``/documents/export``, ``/documents/{docId}/similar``, ``/suggest-words``, ``/labels`` y ``/popular-words``. El token determina qué documentos devuelven y, mientras "Inicio de sesión obligatorio" esté habilitado, sustituye al inicio de sesión. No sustituye al inicio de sesión en los demás endpoints (favoritos, etiquetas, historial de búsqueda, cambio de contraseña, llaves de acceso, chat, clic, caché). Un token mal formado, no registrado o caducado recibe la respuesta ``401 auth_required``.
+
+Una entrada vacía en ``security`` significa que la operación también funciona sin credencial, lo cual solo es cierto mientras "Inicio de sesión obligatorio" esté deshabilitado. La cabecera ``X-Fess-CSRF-Token`` no es una credencial, sino un requisito aparte (véase más abajo).
+
 Token CSRF
 ----------
 

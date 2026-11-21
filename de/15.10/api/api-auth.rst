@@ -383,6 +383,8 @@ Der ``X-Fess-CSRF-Token``-Header ist erforderlich.
 
 Für diesen Endpunkt gilt ein benutzerseitiges Rate-Limit; bei Überschreitung wird ``429 Too Many Requests`` zusammen mit einem ``Retry-After``-Header zurückgegeben (die Einstellungen sind gemeinsam mit der Anmeldung).
 
+Treffen zwei Anfragen eines lokalen Benutzers mit demselben ``current_password`` gleichzeitig ein, ändert nur die erste das Passwort. Die spätere antwortet mit ``409`` (``conflict``) und ändert es nicht. Verglichen wird mit dem gespeicherten Passwort des lokalen Benutzers. Bei einem Benutzer, der sich über das Verzeichnis (LDAP) anmeldet, wird das aktuelle Passwort nicht mit einem lokalen Hash verglichen, und sein Passwort wird im Verzeichnis geändert; zwei gleichzeitige Anfragen können daher beide erfolgreich sein.
+
 Anfrage-Body (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -460,6 +462,8 @@ Fehlerantwort
      - Wenn der CSRF-Token fehlt oder abgelaufen ist.
    * - 405 Method Not Allowed
      - Wenn eine nicht unterstützte HTTP-Methode angegeben wurde.
+   * - 409 Conflict
+     - Eine andere Anfrage hat das Passwort eines lokalen Benutzers geändert, nachdem ``current_password`` geprüft wurde (zum Beispiel zwei gleichzeitig gesendete Anfragen mit demselben ``current_password``); es wurde nichts geändert. ``error.code`` ist ``conflict``. Prüfen Sie das aktuelle Passwort und versuchen Sie es erneut.
    * - 413 Payload Too Large
      - Wenn der Request-Body die Größenbegrenzung überschreitet.
    * - 415 Unsupported Media Type

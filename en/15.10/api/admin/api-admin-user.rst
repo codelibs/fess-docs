@@ -331,7 +331,7 @@ Field Description
 
    On update, ``id``, ``name``, and ``version_no`` are required.
    ``version_no`` is the value returned when getting the target user (GET), and it corresponds to the OpenSearch document version.
-   If it does not match the current version, the request is treated as a conflict and the update is rejected.
+   If it does not match the current version, because the user was changed after it was read (by someone else, by the user, or by |Fess| itself, for example when a login hashes the password again), the update is refused before anything is written: the response is HTTP 400 with ``status`` ``1`` and the message "The user was changed by someone else. Reload it and try again.". The list (``GET /api/admin/user/settings``) returns the real ``version_no`` of each user as well, so a value read from the list can be sent back. After a refusal, read the user again and apply the change to what you read. Up to 15.9, any ``version_no`` was accepted.
 
 Response
 --------

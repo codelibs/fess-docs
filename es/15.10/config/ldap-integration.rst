@@ -264,6 +264,37 @@ comparan.
 .. note::
    Cuando ``ldap.provider.url`` está definido, ``auto`` ignora mayúsculas y minúsculas. Una cuenta del directorio cuyo nombre difiera de uno reservado solo en mayúsculas y minúsculas deja de poder iniciar sesión y ya no se sincroniza con el directorio desde la interfaz de administración. Defina ``authentication.admin.users.ignore.case=false`` para seguir comparando de forma exacta.
 
+.. _local-username-policy:
+
+Política de Nombres de Usuarios Locales
+---------------------------------------
+
+|Fess| compara los nombres de los usuarios locales (los usuarios de la pantalla de gestión de usuarios, no los de LDAP ni SSO) exactamente como se escriben. ``Alice``, ``alice`` y ``ＡＬＩＣＥ`` (letras de ancho completo) son tres usuarios, cada uno con su propio inicio de sesión. ``authentication.local.username.policy`` decide si al crear o renombrar un usuario local también se rechaza un nombre que se diferencia del de otro usuario solo en mayúsculas y minúsculas, ancho de los caracteres o composición Unicode.
+
+.. list-table:: Política de nombres de usuarios locales
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Propiedad
+     - Valor por defecto
+     - Descripción
+   * - ``authentication.local.username.policy``
+     - ``preserved``
+     - ``preserved`` compara los nombres exactamente como se escriben, como en 15.9. ``mapped`` rechaza un nombre nuevo o renombrado que, una vez transformado (véase más abajo), coincide con el nombre de otro usuario. El valor se compara sin distinguir mayúsculas de minúsculas. Un valor desconocido se trata como ``preserved`` y se registra una vez como advertencia.
+
+Con ``mapped``, la creación o el cambio de nombre de un usuario en la pantalla de gestión de usuarios o con la API de administración (``POST`` y ``PUT`` de ``/api/admin/user/setting``) se rechaza en dos casos:
+
+- El nombre transformado coincide con el nombre transformado de otro usuario. La transformación es la de ``UsernameCaseMapped`` de RFC 8265: las formas de ancho completo y de medio ancho (como el katakana de medio ancho) y el espacio ideográfico se sustituyen por su correspondencia de descomposición, las mayúsculas se pasan a minúsculas con la configuración regional raíz y el resultado se normaliza a la forma de normalización Unicode C (no NFKC). ``Alice``, ``alice`` y ``ＡＬＩＣＥ`` son el mismo nombre una vez transformados.
+- El nombre es otra grafía de una entrada de ``authentication.admin.users`` (véase más arriba). ``admin`` todavía se puede volver a crear, porque es la entrada tal como está escrita, mientras que ``Admin``, ``ADMIN`` y la grafía de ancho completo se rechazan.
+
+Un usuario que se guarda con el nombre que ya tiene nunca se rechaza, de modo que los usuarios que hoy colisionan siguen pudiendo editarse. Cuando |Fess| arranca con ``mapped``, escribe en ``fess.log`` una advertencia que enumera hasta 20 grupos de nombres almacenados que son iguales una vez transformados y hasta 20 nombres almacenados que contienen espacios en blanco o caracteres de control. No se cambia nada: esos usuarios pueden seguir iniciando sesión y editándose.
+
+.. note::
+
+   La política solo decide si se acepta un nombre. No cambia el inicio de sesión, que busca un usuario por el nombre exactamente como se escribe, ni el ID de usuario ni el nombre almacenado. Tampoco cambia las cadenas de permisos formadas a partir de un nombre (``{user}Alice`` y ``{user}alice`` en un filtro de roles, en los permisos de una configuración de rastreo o en un documento) ni los documentos ya indexados. Tampoco impone las reglas de caracteres de RFC 8265: un nombre con espacios, símbolos o caracteres de control se sigue aceptando.
+
+   La comprobación no se aplica en la restauración de una copia de seguridad, en la creación del usuario ``admin`` inicial en el primer arranque ni en una escritura directa en el índice de usuarios. Si dos administradores crean ``Alice`` y ``alice`` en el mismo instante, ambos pueden tener éxito, porque no se almacena ningún nombre transformado. Unificar los nombres en el inicio de sesión y en los permisos exigiría migrar los usuarios, roles y documentos indexados almacenados, y no forma parte de este ajuste.
+
 Mapeo de atributos
 --------------------
 

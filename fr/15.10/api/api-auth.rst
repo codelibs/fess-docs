@@ -383,6 +383,8 @@ L'en-tête ``X-Fess-CSRF-Token`` est requis.
 
 Une limite de débit par utilisateur est appliquée à ce point de terminaison ; lorsque la limite est dépassée, ``429 Too Many Requests`` est retourné accompagné d'un en-tête ``Retry-After`` (les paramètres sont partagés avec la connexion).
 
+Si deux requêtes d'un utilisateur local portant le même ``current_password`` arrivent au même instant, seule la première modifie le mot de passe. La suivante répond ``409`` (``conflict``) et ne le modifie pas. La comparaison se fait avec le mot de passe stocké de l'utilisateur local. Pour un utilisateur qui se connecte via l'annuaire (LDAP), le mot de passe actuel n'est pas comparé à un hachage local et le mot de passe est modifié dans l'annuaire ; deux requêtes simultanées peuvent donc réussir toutes les deux.
+
 Corps de la requête (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -460,6 +462,8 @@ Réponse d'erreur
      - Jeton CSRF manquant ou expiré.
    * - 405 Method Not Allowed
      - Une méthode HTTP non prise en charge a été spécifiée.
+   * - 409 Conflict
+     - Une autre requête a modifié le mot de passe d'un utilisateur local après la vérification de ``current_password`` (par exemple deux requêtes portant le même ``current_password`` envoyées en même temps) ; rien n'a donc été modifié. ``error.code`` vaut ``conflict``. Vérifiez le mot de passe actuel et réessayez.
    * - 413 Payload Too Large
      - Le corps de la requête dépasse la limite de taille.
    * - 415 Unsupported Media Type

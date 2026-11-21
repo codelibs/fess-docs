@@ -62,7 +62,7 @@ one, fill in ``properties.po`` beside this file.
     - 用于计算摘要的算法。
     - ``sha256``
   * - app.password.algorithm
-    - 密码哈希（新机制，兼容 Spring Security v5.8）。支持：bcrypt（目前仅此一种）
+    - 密码哈希（新机制，兼容 Spring Security v5.8）。支持：bcrypt（内置）；其他算法由插件以 <id>PasswordEncoder 组件提供
     - ``bcrypt``
   * - app.password.bcrypt.cost
     - BCrypt 的 cost（对数轮数）。10 与 Spring Security v5.8 的默认值一致。范围：4-31。
@@ -1576,6 +1576,9 @@ Web
   * - authentication.admin.users.ignore.case
     - 是否不区分大小写地匹配 authentication.admin.users：auto、true 或 false。设置了 ldap.provider.url 时，auto 会忽略大小写。
     - ``auto``
+  * - authentication.local.username.policy
+    - 创建或重命名本地用户时，是否也拒绝与其他用户的名称仅在大小写、字符宽度或 Unicode 组合方式上不同的名称：preserved 或 mapped。preserved 按输入原样比较名称。mapped 会拒绝统一处理后与其他用户的名称或 authentication.admin.users 条目（按原样书写的条目除外）相同的名称（Alice 与 alice，全角与 ASCII 字母）。登录、用户 ID、保存的名称和权限不会改变。未知的值按 preserved 处理。
+    - ``preserved``
   * - authentication.admin.roles
     - 用于认证的管理员角色名称。
     - ``admin``
@@ -2345,7 +2348,7 @@ Web
     - 最小密码长度（0 表示禁用）。
     - ``8``
   * - password.max.length
-    - 密码字段的最大长度。无论该值为多少，由于 BCrypt 会忽略其余部分，密码在 UTF-8 下还限制为 72 字节。
+    - 密码字段的最大长度。无论该值为多少，密码还会受到按 UTF-8 字节数的限制。字节数限制属于密码哈希算法（app.password.algorithm）：BCrypt 只读取前 72 字节，并拒绝更长的密码。
     - ``100``
   * - password.require.uppercase
     - 密码中要求包含大写字母。

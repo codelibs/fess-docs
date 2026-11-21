@@ -258,6 +258,55 @@ REST API 추가(fess_api++.xml)
 `fess-webapp-classic-api <https://github.com/codelibs/fess-webapp-classic-api>`__
 가 참고가 됩니다.
 
+.. _webapp-plugin-password-encoder:
+
+비밀번호 해시 알고리즘 추가(fess++.xml)
+---------------------------------------
+
+로컬 사용자의 비밀번호 해시는 컴포넌트가 만듭니다. 저장된 비밀번호는 ``{id}hash`` 형식입니다. |Fess| 는 저장된 값의 ``id`` 와, 새 비밀번호의 경우 ``app.password.algorithm`` 의 값(기본값은 ``bcrypt`` )으로 DI 컴포넌트 ``<id>PasswordEncoder`` 를 찾습니다. ``<sso.type>Authenticator`` 와 ``<storage.type>StorageClient`` 를 해석하는 방식과 같습니다. |Fess| 는 ``bcryptPasswordEncoder`` 를 직접 등록합니다. 알고리즘을 추가하려면 ``org.codelibs.fess.crypto.password.PasswordEncoder`` 를 구현하고 그 클래스를 ``fess++.xml`` 에 등록합니다. ``fess++.xml`` 은 Lasta Di가 |Fess| 코어의 ``fess.xml`` 에 병합합니다.
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="argon2PasswordEncoder"
+            class="com.example.Argon2PasswordEncoder">
+        </component>
+    </components>
+
+인터페이스에는 다음 메서드가 있습니다.
+
+.. list-table:: PasswordEncoder의 메서드
+   :header-rows: 1
+   :widths: 35 65
+
+   * - 메서드
+     - 설명
+   * - ``String encode(String rawPassword)``
+     - 비밀번호를 해시합니다. 결과는 |Fess| 가 붙이는 ``{id}`` 접두사 뒤에 저장됩니다. 원래 비밀번호를 충실히 해시할 수 없는 비밀번호에는 ``IllegalArgumentException`` 을 던지십시오. 메시지에 비밀번호를 포함해서는 안 됩니다.
+   * - ``boolean matches(String rawPassword, String encodedPassword)``
+     - 이 인코더가 만든 해시에 대해 비밀번호를 검증합니다. 비밀번호가 틀렸거나 해시 형식이 잘못된 경우 ``false`` 를 반환하십시오.
+   * - ``boolean needsUpgrade(String encodedPassword)``
+     - 선택 사항(기본값 ``false`` ). 저장된 해시가 현재 ``encode`` 가 만드는 것보다 약한지를 반환합니다. ``true`` 이면 그 사용자의 다음 로그인 때 해시를 다시 만듭니다. BCrypt는 비용이 ``app.password.bcrypt.cost`` 보다 낮으면 ``true`` 를 반환합니다.
+   * - ``int getMaxPasswordBytes()``
+     - 선택 사항(기본값 ``0`` 이며 제한 없음). ``encode`` 가 받아들이는 비밀번호의 최대 길이(UTF-8 바이트)입니다. BCrypt는 ``72`` 를 반환합니다.
+   * - ``boolean isVerificationCostly()`` 와 ``void applyTimingPadding()``
+     - 선택 사항(기본값은 ``false`` 와 아무것도 하지 않음). 의도적으로 느린 알고리즘은 ``true`` 를 반환하고 ``applyTimingPadding()`` 에서 ``matches`` 한 번 정도의 시간을 사용합니다. |Fess| 는 해시를 검증하지 않은 채 로그인이 실패했을 때(예: 존재하지 않는 사용자) 이것을 호출하므로, 응답 시간으로 사용자의 존재 여부를 알 수 없습니다.
+
+인코더를 사용하려면 다음과 같이 합니다.
+
+#. jar를 ``WEB-INF/plugin`` 디렉터리에 둡니다. 웹앱 플러그인과 마찬가지로 매니페스트에 ``Fess-WebAppJar: true`` 가 필요합니다("pom.xml과 매니페스트" 참조). 이것이 없으면 컴포넌트를 찾을 수 없습니다.
+#. ``fess_config.properties`` 의 ``app.password.algorithm`` 에 ID를 설정합니다( ``argon2PasswordEncoder`` 라면 ``argon2`` ). ID는 소문자여야 하며 ``}`` 를 포함해서는 안 됩니다. 이후 새로 설정하거나 변경한 비밀번호는 이 인코더로 해시됩니다. 다른 ID로 저장된 비밀번호나 ID가 없는 이전 해시는 ``app.password.upgrade.enabled`` 가 ``true`` (기본값)인 동안, 그 사용자의 다음 로그인 성공 시 해시를 다시 만듭니다.
+
+다음 사항에 유의하십시오.
+
+- 인코더는 모든 스레드가 공유하는 싱글턴이므로 스레드 안전해야 합니다.
+- 길이 제한은 인코더의 것입니다. 비밀번호를 설정할 때(사용자 관리 화면, 강제 비밀번호 변경, ``/api/v2/auth/password`` , Admin API), |Fess| 는 ``app.password.algorithm`` 알고리즘의 ``getMaxPasswordBytes()`` 보다 긴 비밀번호를 "비밀번호는 N바이트 이하여야 합니다."로 거부합니다. ``0`` 이하이면 ``password.max.length`` 만 확인합니다. 저장된 해시를 검증할 때 |Fess| 는 길이 제한을 적용하지 않습니다. 더 긴 비밀번호가 일치해도 되는지는 ``matches`` 가 정합니다.
+- 그 ID로 저장된 비밀번호가 있는 동안에는 플러그인을 설치해 두십시오. 컴포넌트가 없으면 그 ID의 해시는 어떤 비밀번호와도 일치하지 않으므로 해당 사용자는 로그인할 수 없고, 해시도 다시 만들어지지 않습니다.
+- ``app.password.algorithm`` 에 컴포넌트가 없는 ID를 지정한 경우(예: 플러그인 jar를 삭제한 뒤), |Fess| 는 시작되고 다른 ID의 해시를 가진 사용자는 계속 로그인할 수 있지만, 비밀번호 설정은 ``app.password.algorithm`` 을 지목하는 오류로 실패합니다.
+
 검색 화면 커스터마이즈
 ======================
 

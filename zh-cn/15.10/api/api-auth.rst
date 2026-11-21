@@ -383,6 +383,8 @@ HTTP 方法            POST
 
 本端点应用用户单位速率限制；超过限制时，返回 ``429 Too Many Requests`` 并附带 ``Retry-After`` 头（设置与登录共用）。
 
+如果同一本地用户的两个携带相同 ``current_password`` 的请求同时到达，只有先处理的那个会更改密码。后处理的请求返回 ``409`` （ ``conflict`` ），且不会更改密码。这是与已保存的本地用户密码进行的比较。对于通过目录（LDAP）登录的用户，当前密码不会与本地哈希比较，密码在目录中修改，因此同时到达的两个请求可能都成功。
+
 请求体 (PasswordChangeRequest)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -460,6 +462,8 @@ Content-Type 为 ``application/json``\ （字符集 UTF-8）。请求体大小�
      - CSRF 令牌缺失或过期时。
    * - 405 Method Not Allowed
      - 指定了不支持的 HTTP 方法时。
+   * - 409 Conflict
+     - 在验证 ``current_password`` 之后，另一个请求更改了本地用户的密码（例如同时发送了两个具有相同 ``current_password`` 的请求），因此没有进行任何更改。 ``error.code`` 为 ``conflict`` 。请确认当前密码后重试。
    * - 413 Payload Too Large
      - 请求体超过大小限制时。
    * - 415 Unsupported Media Type
