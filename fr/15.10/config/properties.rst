@@ -62,7 +62,7 @@ Cœur
     - Algorithme pour le calcul du digest.
     - ``sha256``
   * - app.password.algorithm
-    - Hachage des mots de passe (nouveau mécanisme, compatible Spring Security v5.8) Pris en charge : bcrypt (uniquement, pour l'instant)
+    - Hachage des mots de passe (nouveau mécanisme, compatible Spring Security v5.8) Pris en charge : bcrypt (intégré) ; un plugin peut fournir d'autres algorithmes sous la forme d'un composant <id>PasswordEncoder
     - ``bcrypt``
   * - app.password.bcrypt.cost
     - Coût BCrypt (log rounds). 10 correspond à la valeur par défaut de Spring Security v5.8. Plage : 4-31.
@@ -1576,6 +1576,9 @@ Web
   * - authentication.admin.users.ignore.case
     - Indique s'il faut comparer authentication.admin.users sans tenir compte de la casse : auto, true ou false. auto ignore la casse lorsque ldap.provider.url est défini.
     - ``auto``
+  * - authentication.local.username.policy
+    - Indique si la création ou le renommage d'un utilisateur local refuse aussi un nom qui ne diffère du nom d'un autre utilisateur que par la casse, la largeur des caractères ou la composition Unicode : preserved ou mapped. preserved compare les noms exactement tels qu'ils sont saisis. mapped refuse un nom qui, une fois uniformisé, est identique au nom d'un autre utilisateur ou à une entrée de authentication.admin.users (autre que l'entrée telle qu'elle est écrite) (Alice et alice, lettres pleine chasse et ASCII). La connexion, les ID d'utilisateur, les noms stockés et les permissions ne sont pas modifiés. Une valeur inconnue est traitée comme preserved.
+    - ``preserved``
   * - authentication.admin.roles
     - Noms des rôles administrateurs pour l'authentification.
     - ``admin``
@@ -2345,7 +2348,7 @@ Web
     - Longueur minimale du mot de passe (0 pour désactiver).
     - ``8``
   * - password.max.length
-    - Longueur maximale d'un champ de mot de passe. Quelle que soit cette valeur, un mot de passe est aussi limité à 72 octets en UTF-8, car BCrypt ignore le reste.
+    - Longueur maximale d'un champ de mot de passe. Quelle que soit cette valeur, un mot de passe est aussi limité en octets UTF-8. La limite en octets appartient à l'algorithme de hachage des mots de passe (app.password.algorithm) : BCrypt ne lit que les 72 premiers octets et refuse un mot de passe plus long.
     - ``100``
   * - password.require.uppercase
     - Exiger des lettres majuscules dans le mot de passe.

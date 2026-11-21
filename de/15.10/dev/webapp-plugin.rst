@@ -273,6 +273,55 @@ das ``/api/v1`` bereitstellt, sowie
 `fess-webapp-classic-api <https://github.com/codelibs/fess-webapp-classic-api>`__,
 das ``/json`` / ``/suggest`` bereitstellt, als Referenz an.
 
+.. _webapp-plugin-password-encoder:
+
+Hinzufügen eines Passwort-Hash-Algorithmus (fess++.xml)
+-------------------------------------------------------
+
+Der Hash des Passworts eines lokalen Benutzers wird von einer Komponente erzeugt. Ein gespeichertes Passwort wird als ``{id}hash`` geschrieben. |Fess| nimmt die ``id`` des gespeicherten Werts und für ein neues Passwort den Wert von ``app.password.algorithm`` (standardmäßig ``bcrypt``) und sucht die DI-Komponente mit dem Namen ``<id>PasswordEncoder``, auf dieselbe Weise, wie ``<sso.type>Authenticator`` und ``<storage.type>StorageClient`` aufgelöst werden. |Fess| registriert ``bcryptPasswordEncoder`` selbst. Um einen Algorithmus hinzuzufügen, implementieren Sie ``org.codelibs.fess.crypto.password.PasswordEncoder`` und registrieren die Klasse in ``fess++.xml``, die Lasta Di in die ``fess.xml`` des |Fess|-Kerns einmischt:
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="argon2PasswordEncoder"
+            class="com.example.Argon2PasswordEncoder">
+        </component>
+    </components>
+
+Das Interface hat die folgenden Methoden:
+
+.. list-table:: Methoden von PasswordEncoder
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Methode
+     - Beschreibung
+   * - ``String encode(String rawPassword)``
+     - Berechnet den Hash eines Passworts. Das Ergebnis wird hinter dem Präfix ``{id}`` gespeichert, das |Fess| ergänzt. Werfen Sie ``IllegalArgumentException`` für ein Passwort, das sich nicht originalgetreu hashen lässt; die Meldung darf das Passwort nicht enthalten.
+   * - ``boolean matches(String rawPassword, String encodedPassword)``
+     - Prüft ein Passwort gegen einen Hash, den dieser Encoder erzeugt hat. Geben Sie ``false`` für ein falsches Passwort und für einen fehlerhaften Hash zurück.
+   * - ``boolean needsUpgrade(String encodedPassword)``
+     - Optional (Standard ``false``). Gibt an, ob ein gespeicherter Hash schwächer ist als das, was ``encode`` jetzt erzeugt, sodass er bei der nächsten Anmeldung seines Benutzers neu berechnet wird. BCrypt gibt ``true`` zurück, wenn der Kostenfaktor unter ``app.password.bcrypt.cost`` liegt.
+   * - ``int getMaxPasswordBytes()``
+     - Optional (Standard ``0``, keine Begrenzung). Das längste Passwort in UTF-8-Bytes, das ``encode`` akzeptiert. BCrypt gibt ``72`` zurück.
+   * - ``boolean isVerificationCostly()`` und ``void applyTimingPadding()``
+     - Optional (Standard ``false`` und keine Aktion). Ein absichtlich langsamer Algorithmus gibt ``true`` zurück und verbraucht in ``applyTimingPadding()`` etwa die Zeit eines ``matches``. |Fess| ruft die Methode auf, wenn eine Anmeldung scheitert, ohne dass ein Hash geprüft wurde (zum Beispiel bei einem unbekannten Benutzer), damit die Antwortzeit nicht verrät, ob der Benutzer existiert.
+
+So verwenden Sie den Encoder:
+
+#. Legen Sie die JAR-Datei im Verzeichnis ``WEB-INF/plugin`` ab. Wie bei jedem Webanwendungs-Plugin benötigt das Manifest ``Fess-WebAppJar: true`` (siehe „pom.xml und Manifest"); ohne diesen Eintrag wird die Komponente nicht gefunden.
+#. Setzen Sie ``app.password.algorithm`` in ``fess_config.properties`` auf die ID (``argon2`` für ``argon2PasswordEncoder``). Die ID muss in Kleinbuchstaben geschrieben sein und darf kein ``}`` enthalten. Neue und geänderte Passwörter werden danach mit diesem Encoder gehasht. Passwörter, die mit einer anderen ID oder als alter Hash ohne ID gespeichert sind, werden bei der nächsten erfolgreichen Anmeldung ihres Benutzers neu gehasht, solange ``app.password.upgrade.enabled`` den Wert ``true`` hat (Standard).
+
+Beachten Sie Folgendes:
+
+- Der Encoder ist ein Singleton, das von allen Threads gemeinsam genutzt wird, und muss daher threadsicher sein.
+- Die Längenbegrenzung gehört zum Encoder. Wenn ein Passwort festgelegt wird (Benutzerverwaltung, erzwungene Passwortänderung, ``/api/v2/auth/password`` und Admin-API), lehnt |Fess| ein Passwort ab, das länger ist als ``getMaxPasswordBytes()`` des Algorithmus aus ``app.password.algorithm``, mit „Das Passwort darf höchstens N Bytes lang sein."; bei ``0`` oder weniger wird nur ``password.max.length`` geprüft. Beim Prüfen eines gespeicherten Hashes wendet |Fess| keine Längenbegrenzung an; ob ein längeres Passwort passen darf, entscheidet ``matches``.
+- Lassen Sie das Plugin installiert, solange Passwörter mit seiner ID gespeichert sind. Ohne die Komponente passt ein Hash mit dieser ID nie: Diese Benutzer können sich nicht anmelden, und ihre Hashes werden nicht neu berechnet.
+- Nennt ``app.password.algorithm`` eine ID ohne Komponente (zum Beispiel nach dem Entfernen der Plugin-JAR), startet |Fess| trotzdem, und Benutzer, deren Hash eine andere ID hat, können sich weiterhin anmelden, aber das Festlegen eines Passworts schlägt mit einem Fehler fehl, der ``app.password.algorithm`` nennt.
+
 Anpassung der Suchoberfläche
 ============================
 

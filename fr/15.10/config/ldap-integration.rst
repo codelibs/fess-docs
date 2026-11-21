@@ -267,6 +267,37 @@ un simple changement de graphie. ``authentication.admin.users.ignore.case`` déc
 .. note::
    Lorsque ``ldap.provider.url`` est défini, ``auto`` ignore la casse. Un compte de l'annuaire dont le nom ne diffère d'un nom réservé que par la casse ne peut alors plus se connecter et n'est plus synchronisé vers l'annuaire depuis l'interface d'administration. Définissez ``authentication.admin.users.ignore.case=false`` pour continuer à comparer exactement.
 
+.. _local-username-policy:
+
+Politique des noms d'utilisateurs locaux
+----------------------------------------
+
+|Fess| compare les noms des utilisateurs locaux (les utilisateurs de l'écran de gestion des utilisateurs, et non ceux de LDAP ou du SSO) exactement tels qu'ils sont saisis. ``Alice``, ``alice`` et ``ＡＬＩＣＥ`` (lettres pleine chasse) sont trois utilisateurs, chacun avec sa propre connexion. ``authentication.local.username.policy`` détermine si la création ou le renommage d'un utilisateur local refuse aussi un nom qui ne diffère du nom d'un autre utilisateur que par la casse, la largeur des caractères ou la composition Unicode.
+
+.. list-table:: Politique des noms d'utilisateurs locaux
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Propriété
+     - Valeur par défaut
+     - Description
+   * - ``authentication.local.username.policy``
+     - ``preserved``
+     - ``preserved`` compare les noms exactement tels qu'ils sont saisis, comme en 15.9. ``mapped`` refuse un nom nouveau ou renommé qui, une fois transformé (voir ci-dessous), est identique au nom d'un autre utilisateur. La valeur est comparée sans tenir compte de la casse. Une valeur inconnue est traitée comme ``preserved`` et consignée une fois sous forme d'avertissement.
+
+Avec ``mapped``, la création ou le renommage d'un utilisateur sur l'écran de gestion des utilisateurs ou avec l'API d'administration (``POST`` et ``PUT`` de ``/api/admin/user/setting``) est refusé dans deux cas :
+
+- Le nom transformé est le nom transformé d'un autre utilisateur. La transformation est celle de ``UsernameCaseMapped`` de la RFC 8265 : les formes pleine chasse et demi-chasse (comme les katakana demi-chasse) et l'espace idéographique sont remplacés par leur correspondance de décomposition, la casse est abaissée avec la locale racine, et le résultat est mis en forme de normalisation Unicode C (pas NFKC). ``Alice``, ``alice`` et ``ＡＬＩＣＥ`` forment le même nom une fois transformés.
+- Le nom est une autre graphie d'une entrée de ``authentication.admin.users`` (voir plus haut). ``admin`` peut toujours être recréé, car il s'agit de l'entrée telle qu'elle est écrite, alors que ``Admin``, ``ADMIN`` et la graphie pleine chasse sont refusés.
+
+Un utilisateur enregistré sous le nom qu'il porte déjà n'est jamais refusé ; les utilisateurs qui entrent déjà en collision peuvent donc toujours être modifiés. Lorsque |Fess| démarre avec ``mapped``, il écrit dans ``fess.log`` un avertissement qui énumère jusqu'à 20 groupes de noms stockés identiques une fois transformés et jusqu'à 20 noms stockés contenant des espaces ou des caractères de contrôle. Rien n'est modifié : ces utilisateurs peuvent toujours se connecter et être modifiés.
+
+.. note::
+
+   La politique décide uniquement si un nom est accepté. Elle ne modifie ni la connexion, qui recherche un utilisateur par son nom exactement tel qu'il est saisi, ni l'ID d'utilisateur, ni le nom stocké. Elle ne modifie pas non plus les chaînes de permissions construites à partir d'un nom (``{user}Alice`` et ``{user}alice`` dans un filtre de rôles, dans les permissions d'une configuration d'exploration ou dans un document), ni les documents déjà indexés. Elle n'impose pas non plus les règles de caractères de la RFC 8265 : un nom contenant des espaces, des symboles ou des caractères de contrôle est toujours accepté.
+
+   La vérification n'est pas appliquée lors d'une restauration de sauvegarde, lors de la création de l'utilisateur ``admin`` initial au premier démarrage ni lors d'une écriture directe dans l'index des utilisateurs. Si deux administrateurs créent ``Alice`` et ``alice`` au même instant, les deux peuvent réussir, car aucun nom transformé n'est stocké. Uniformiser les noms à la connexion et dans les permissions exigerait une migration des utilisateurs, des rôles et des documents indexés stockés ; cela ne fait pas partie de ce paramètre.
+
 Correspondance des attributs
 -----------------------------
 

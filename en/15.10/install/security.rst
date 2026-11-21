@@ -36,7 +36,7 @@ The default administrator password (``admin`` / ``admin``) must be changed.
 |Fess| provides a built-in feature that enforces the minimum/maximum password length and character-type requirements. Configure the following properties in ``fess_config.properties`` (defaults in parentheses):
 
 - ``password.min.length`` (default: ``8``): Minimum length. 12 or more is recommended.
-- ``password.max.length`` (default: ``100``): Maximum length.
+- ``password.max.length`` (default: ``100``): Maximum length in characters. A password is also limited in UTF-8 bytes by the password hash algorithm, whatever this value is (see below).
 - ``password.require.uppercase`` (default: ``false``): Require uppercase letters.
 - ``password.require.lowercase`` (default: ``false``): Require lowercase letters.
 - ``password.require.digit`` (default: ``false``): Require digits.
@@ -45,6 +45,12 @@ The default administrator password (``admin`` / ``admin``) must be changed.
 .. note::
 
    By default, the minimum length is ``8`` and all character-type requirements are disabled. To strengthen passwords, set the properties above explicitly. Note that |Fess| has no password expiration (forced periodic change) feature; if you want to enforce periodic password changes as an operational rule, do so manually.
+
+**Password hashing and the byte limit:**
+
+|Fess| stores the password of a local user as a hash. ``app.password.algorithm`` (default: ``bcrypt``) selects the algorithm for new and changed passwords, and ``app.password.bcrypt.cost`` (default: ``10``) sets the cost of BCrypt. While ``app.password.upgrade.enabled`` is ``true`` (default), a user whose stored hash is older (a legacy hash without an ``{id}`` prefix, the hash of another algorithm or a BCrypt hash with a lower cost) gets a new hash at the next successful login. The algorithm is a component, so a plugin can supply another one (see :ref:`webapp-plugin-password-encoder`).
+
+The byte limit belongs to the algorithm. BCrypt reads only the first 72 bytes of a password in UTF-8, so since 15.10 a password longer than 72 bytes is refused when it is set (user management screen, forced password change on the login form, ``/api/v2/auth/password`` and the Admin API) with "Password must be no longer than 72 bytes.", whatever ``password.max.length`` (100 characters by default) allows. A character other than ASCII takes more than one byte (3 bytes for most Japanese, Chinese and Korean characters). An account whose password was set longer than 72 bytes before keeps logging in, because verifying a password applies no length limit. Only its first 72 bytes are compared, so any ending after the 72nd byte is accepted. Setting a new password (at most 72 bytes) removes this.
 
 **Sessions after a password change:**
 

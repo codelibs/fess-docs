@@ -62,7 +62,7 @@ Núcleo
     - Algoritmo para el cálculo del digest.
     - ``sha256``
   * - app.password.algorithm
-    - Hash de contraseñas (nuevo mecanismo, compatible con Spring Security v5.8) Admitido: bcrypt (únicamente, por ahora)
+    - Hash de contraseñas (nuevo mecanismo, compatible con Spring Security v5.8) Admitido: bcrypt (integrado); otros algoritmos los proporciona un plugin como componente <id>PasswordEncoder
     - ``bcrypt``
   * - app.password.bcrypt.cost
     - Costo de BCrypt (rondas logarítmicas). 10 coincide con el valor predeterminado de Spring Security v5.8. Rango: 4-31.
@@ -1576,6 +1576,9 @@ Web
   * - authentication.admin.users.ignore.case
     - Indica si authentication.admin.users se compara sin distinguir mayúsculas y minúsculas: auto, true o false. auto ignora las mayúsculas y minúsculas cuando ldap.provider.url está establecido.
     - ``auto``
+  * - authentication.local.username.policy
+    - Indica si al crear o renombrar un usuario local también se rechaza un nombre que se diferencia del de otro usuario solo en mayúsculas y minúsculas, ancho de los caracteres o composición Unicode: preserved o mapped. preserved compara los nombres exactamente como se escriben. mapped rechaza un nombre que, una vez unificado, coincide con el nombre de otro usuario o de una entrada de authentication.admin.users (distinta de la entrada tal como está escrita) (Alice y alice, letras de ancho completo y ASCII). No se cambian el inicio de sesión, los ID de usuario, los nombres almacenados ni los permisos. Un valor desconocido se trata como preserved.
+    - ``preserved``
   * - authentication.admin.roles
     - Nombres de los roles de administrador para la autenticación.
     - ``admin``
@@ -2345,7 +2348,7 @@ Web
     - Longitud mínima de la contraseña (0 para deshabilitar).
     - ``8``
   * - password.max.length
-    - Longitud máxima de un campo de contraseña. Con independencia de este valor, una contraseña también está limitada a 72 bytes en UTF-8, porque BCrypt ignora el resto.
+    - Longitud máxima de un campo de contraseña. Con independencia de este valor, una contraseña también está limitada en bytes UTF-8. El límite en bytes pertenece al algoritmo de hash de contraseñas (app.password.algorithm): BCrypt solo lee los primeros 72 bytes y rechaza una contraseña más larga.
     - ``100``
   * - password.require.uppercase
     - Exigir letras mayúsculas en la contraseña.

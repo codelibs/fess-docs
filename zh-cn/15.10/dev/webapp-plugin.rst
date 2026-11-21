@@ -248,6 +248,55 @@ REST API的添加（fess_api++.xml）
 以及提供 ``/json`` / ``/suggest`` 的
 `fess-webapp-classic-api <https://github.com/codelibs/fess-webapp-classic-api>`__\ 。
 
+.. _webapp-plugin-password-encoder:
+
+密码哈希算法的添加（fess++.xml）
+--------------------------------
+
+本地用户密码的哈希由组件生成。保存的密码以 ``{id}hash`` 的形式写入。 |Fess| 会根据保存值中的 ``id`` （对于新密码，则根据 ``app.password.algorithm`` 的值，默认为 ``bcrypt`` ）查找名为 ``<id>PasswordEncoder`` 的 DI 组件，其方式与解析 ``<sso.type>Authenticator`` 和 ``<storage.type>StorageClient`` 相同。 |Fess| 自行注册 ``bcryptPasswordEncoder`` 。要添加算法，请实现 ``org.codelibs.fess.crypto.password.PasswordEncoder`` ，并将该类注册到 ``fess++.xml`` 中，Lasta Di 会将它合并到 |Fess| 核心的 ``fess.xml`` 中：
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="argon2PasswordEncoder"
+            class="com.example.Argon2PasswordEncoder">
+        </component>
+    </components>
+
+该接口有以下方法：
+
+.. list-table:: PasswordEncoder 的方法
+   :header-rows: 1
+   :widths: 35 65
+
+   * - 方法
+     - 说明
+   * - ``String encode(String rawPassword)``
+     - 对密码进行哈希。结果保存在由 |Fess| 添加的 ``{id}`` 前缀之后。对于无法如实哈希的密码，请抛出 ``IllegalArgumentException`` ；消息中不得包含密码。
+   * - ``boolean matches(String rawPassword, String encodedPassword)``
+     - 对照该编码器生成的哈希验证密码。密码错误或哈希格式不正确时，请返回 ``false`` 。
+   * - ``boolean needsUpgrade(String encodedPassword)``
+     - 可选（默认 ``false`` ）。返回保存的哈希是否弱于 ``encode`` 现在生成的哈希；若返回 ``true`` ，则在该用户下次登录时重新生成哈希。BCrypt 在成本低于 ``app.password.bcrypt.cost`` 时返回 ``true`` 。
+   * - ``int getMaxPasswordBytes()``
+     - 可选（默认 ``0`` ，表示无限制）。 ``encode`` 接受的密码的最大长度（UTF-8 字节数）。BCrypt 返回 ``72`` 。
+   * - ``boolean isVerificationCostly()`` 和 ``void applyTimingPadding()``
+     - 可选（默认 ``false`` 和不执行任何操作）。刻意设计得很慢的算法返回 ``true`` ，并在 ``applyTimingPadding()`` 中花费大约一次 ``matches`` 的时间。当登录在未验证任何哈希的情况下失败时（例如用户不存在）， |Fess| 会调用它，使响应时间无法暴露用户是否存在。
+
+使用编码器的步骤如下：
+
+#. 将 jar 放入 ``WEB-INF/plugin`` 目录。与任何 Web应用插件一样，清单中需要 ``Fess-WebAppJar: true`` （参见“pom.xml与清单文件”）；否则找不到该组件。
+#. 将 ``fess_config.properties`` 中的 ``app.password.algorithm`` 设为该 ID（对于 ``argon2PasswordEncoder`` 为 ``argon2`` ）。ID 必须为小写，且不得包含 ``}`` 。此后，新设置和修改的密码都会用它进行哈希。以其他 ID 保存的密码，或没有 ID 的旧哈希，只要 ``app.password.upgrade.enabled`` 为 ``true`` （默认），就会在其用户下次成功登录时重新生成哈希。
+
+请注意以下几点：
+
+- 编码器是由所有线程共享的单例，因此必须是线程安全的。
+- 长度限制属于编码器。设置密码时（用户管理页面、强制修改密码、 ``/api/v2/auth/password`` 和 Admin API）， |Fess| 会以“密码长度不能超过 N 个字节。”拒绝长于 ``app.password.algorithm`` 所指算法的 ``getMaxPasswordBytes()`` 的密码；为 ``0`` 或更小时，只检查 ``password.max.length`` 。验证已保存的哈希时， |Fess| 不应用任何长度限制；较长的密码是否可以匹配由 ``matches`` 决定。
+- 只要仍保存着带有该 ID 的密码，就请保持插件处于安装状态。没有该组件，带有该 ID 的哈希永远无法匹配：这些用户无法登录，其哈希也不会被重新生成。
+- 如果 ``app.password.algorithm`` 指定了没有组件的 ID（例如删除插件 jar 之后）， |Fess| 仍会启动，哈希带有其他 ID 的用户仍可登录，但设置密码会失败，并给出指明 ``app.password.algorithm`` 的错误。
+
 搜索界面的自定义
 ================
 

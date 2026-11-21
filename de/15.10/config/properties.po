@@ -46,7 +46,7 @@ msgid "Algorithm for digest calculation."
 msgstr "Algorithmus für die Digest-Berechnung."
 
 msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
-msgstr "Passwort-Hashing (neuer Mechanismus, kompatibel mit Spring Security v5.8) Unterstützt: bcrypt (derzeit nur dieser)"
+msgstr "Passwort-Hashing (neuer Mechanismus, kompatibel mit Spring Security v5.8) Unterstützt: bcrypt (eingebaut); weitere Algorithmen liefert ein Plugin als Komponente <id>PasswordEncoder"
 
 msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
 msgstr "BCrypt-Kostenfaktor (Log-Runden). 10 entspricht dem Standardwert von Spring Security v5.8. Bereich: 4-31."
@@ -1233,6 +1233,9 @@ msgstr "Administrator-Benutzernamen für die Authentifizierung."
 msgid "Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set."
 msgstr "Gibt an, ob authentication.admin.users ohne Beachtung der Groß-/Kleinschreibung abgeglichen wird: auto, true oder false. auto ignoriert die Groß-/Kleinschreibung, wenn ldap.provider.url gesetzt ist."
 
+msgid "Whether creating or renaming a local user also refuses a name that differs from another name only in case, width or Unicode composition: preserved or mapped. preserved compares names exactly as typed. mapped refuses a name that equals the name of another user or of an authentication.admin.users entry (other than the entry as written) once folded (Alice and alice, fullwidth and ASCII letters). Login, user IDs, stored names and permissions are not changed. An unknown value is treated as preserved."
+msgstr "Gibt an, ob beim Anlegen oder Umbenennen eines lokalen Benutzers auch ein Name abgelehnt wird, der sich vom Namen eines anderen Benutzers nur in Groß-/Kleinschreibung, Zeichenbreite oder Unicode-Zusammensetzung unterscheidet: preserved oder mapped. preserved vergleicht Namen genau wie eingegeben. mapped lehnt einen Namen ab, der nach dem Vereinheitlichen mit dem Namen eines anderen Benutzers oder eines Eintrags von authentication.admin.users (außer dem Eintrag in genau dieser Schreibweise) übereinstimmt (Alice und alice, Buchstaben in Vollbreite und ASCII). Anmeldung, Benutzer-IDs, gespeicherte Namen und Berechtigungen werden nicht geändert. Ein unbekannter Wert wird wie preserved behandelt."
+
 msgid "Admin role names for authentication."
 msgstr "Administrator-Rollennamen für die Authentifizierung."
 
@@ -1989,8 +1992,8 @@ msgstr "Liste ungültiger Administratorpasswörter."
 msgid "Minimum password length (0 to disable)."
 msgstr "Minimale Passwortlänge (0 zum Deaktivieren)."
 
-msgid "Maximum length of a password field. A password is also limited to 72 bytes in UTF-8 whatever this value is, because BCrypt ignores the rest."
-msgstr "Maximale Länge eines Passwortfelds. Unabhängig von diesem Wert ist ein Passwort auf 72 Bytes in UTF-8 begrenzt, weil BCrypt den Rest ignoriert."
+msgid "Maximum length of a password field. A password is also limited in UTF-8 bytes whatever this value is. The byte limit belongs to the password hash algorithm (app.password.algorithm): BCrypt reads only the first 72 bytes and refuses a longer password."
+msgstr "Maximale Länge eines Passwortfelds. Unabhängig von diesem Wert ist ein Passwort auch in UTF-8-Bytes begrenzt. Die Byte-Begrenzung gehört zum Passwort-Hash-Algorithmus (app.password.algorithm): BCrypt liest nur die ersten 72 Bytes und lehnt ein längeres Passwort ab."
 
 msgid "Require uppercase letters in password."
 msgstr "Großbuchstaben im Passwort verlangen."

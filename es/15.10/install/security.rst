@@ -34,7 +34,7 @@ Asegúrese de cambiar la contraseña de administrador predeterminada (``admin`` 
 |Fess| ofrece una función integrada que aplica los requisitos de longitud mínima/máxima y de tipos de caracteres de la contraseña. Configure las siguientes propiedades en ``fess_config.properties`` (los valores predeterminados se indican entre paréntesis):
 
 - ``password.min.length`` (valor predeterminado: ``8``): Longitud mínima. Se recomienda 12 o más.
-- ``password.max.length`` (valor predeterminado: ``100``): Longitud máxima.
+- ``password.max.length`` (valor predeterminado: ``100``): Longitud máxima en caracteres. Con independencia de este valor, una contraseña también está limitada en bytes UTF-8 por el algoritmo de hash de contraseñas (véase más abajo).
 - ``password.require.uppercase`` (valor predeterminado: ``false``): Requerir letras mayúsculas.
 - ``password.require.lowercase`` (valor predeterminado: ``false``): Requerir letras minúsculas.
 - ``password.require.digit`` (valor predeterminado: ``false``): Requerir dígitos.
@@ -43,6 +43,12 @@ Asegúrese de cambiar la contraseña de administrador predeterminada (``admin`` 
 .. note::
 
    De forma predeterminada, la longitud mínima es ``8`` y todos los requisitos de tipo de carácter están deshabilitados. Para reforzar las contraseñas, configure explícitamente las propiedades anteriores. Tenga en cuenta que |Fess| no cuenta con una función de expiración de contraseñas (cambio periódico forzado); si desea aplicar cambios periódicos de contraseña como regla operativa, hágalo manualmente.
+
+**Hash de contraseñas y límite en bytes:**
+
+|Fess| almacena la contraseña de un usuario local como un hash. ``app.password.algorithm`` (valor predeterminado: ``bcrypt``) selecciona el algoritmo para las contraseñas nuevas y modificadas, y ``app.password.bcrypt.cost`` (valor predeterminado: ``10``) establece el coste de BCrypt. Mientras ``app.password.upgrade.enabled`` sea ``true`` (valor predeterminado), un usuario cuyo hash almacenado es más antiguo (un hash antiguo sin prefijo ``{id}``, el hash de otro algoritmo o un hash BCrypt con un coste menor) recibe un hash nuevo en su siguiente inicio de sesión correcto. El algoritmo es un componente, por lo que un plugin puede proporcionar otro (consulte :ref:`webapp-plugin-password-encoder`).
+
+El límite en bytes pertenece al algoritmo. BCrypt solo lee los primeros 72 bytes de una contraseña en UTF-8, por lo que, desde 15.10, una contraseña de más de 72 bytes se rechaza al establecerla (pantalla de gestión de usuarios, cambio de contraseña forzado en el formulario de inicio de sesión, ``/api/v2/auth/password`` y la API de administración) con "La contraseña no debe superar los 72 bytes.", con independencia de lo que permita ``password.max.length`` (100 caracteres por defecto). Un carácter que no es ASCII ocupa más de un byte (3 bytes la mayoría de los caracteres japoneses, chinos y coreanos). Una cuenta cuya contraseña se estableció antes con más de 72 bytes sigue iniciando sesión, porque la verificación de una contraseña no aplica ningún límite de longitud. Sin embargo, solo se comparan sus primeros 72 bytes, por lo que se acepta cualquier final después del byte 72. Establecer una contraseña nueva (de 72 bytes como máximo) lo elimina.
 
 **Sesiones tras un cambio de contraseña:**
 

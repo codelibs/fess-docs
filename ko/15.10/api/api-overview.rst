@@ -177,6 +177,16 @@ v2 API 는 세션 기반 인증을 채택하고 있습니다.
 
 로그인이 불필요한 검색 등의 엔드포인트는 익명으로도 사용할 수 있습니다 (시스템 설정의 "로그인 필수" 옵션에 따라 다릅니다).
 
+인증 정보
+---------
+
+v2 API의 OpenAPI 정의( ``openapi-user.yaml`` )는 각 작업이 받아들이는 인증 정보를 ``security`` 에 나열합니다. 인증 정보는 다음 두 가지입니다.
+
+- ``sessionCookie``: ``POST /auth/login`` (또는 패스키 로그인)의 응답이 설정하는 세션 쿠키 ``JSESSIONID`` 입니다. 로그인 후의 모든 요청에서 보내십시오. 로그인으로 세션 ID가 갱신되므로 로그인 응답의 쿠키를 계속 사용하십시오. 이 쿠키는 ``HttpOnly`` 이며, ``session.cookie.secure`` 가 활성화되어 있으면 ``Secure`` 속성이 붙고, ``SameSite`` 는 기본적으로 ``Lax`` 입니다( ``tomcat.sameSiteCookies`` ). 세션을 검색 엔진에 저장해도( ``FESS_SESSION_STORE`` ) 이름은 바뀌지 않습니다.
+- ``accessToken``: 관리자가 만든 액세스 토큰으로, ``Authorization: Bearer <토큰>`` 으로 보냅니다( ``Authorization: <토큰>`` 만 보내는 형식도 받아들입니다). 검색 계열 작업만 이것을 나열합니다. ``/search`` , ``/documents/all`` , ``/documents/export`` , ``/documents/{docId}/similar`` , ``/suggest-words`` , ``/labels`` , ``/popular-words`` 입니다. 토큰은 이들이 반환하는 문서를 결정하며, "로그인 필수"가 활성화되어 있는 동안에는 로그인을 대신합니다. 다른 엔드포인트(즐겨찾기, 태그, 검색 기록, 비밀번호 변경, 패스키, 채팅, 클릭, 캐시)에서는 로그인을 대신하지 않습니다. 형식이 올바르지 않거나, 등록되지 않았거나, 만료된 토큰에는 ``401 auth_required`` 가 반환됩니다.
+
+``security`` 에 빈 항목이 있는 작업은 인증 정보 없이도 사용할 수 있습니다. 이것은 "로그인 필수"가 비활성화되어 있는 동안에만 성립합니다. ``X-Fess-CSRF-Token`` 헤더는 인증 정보가 아니라 별도의 요건입니다(아래 참조).
+
 CSRF 토큰
 ---------
 

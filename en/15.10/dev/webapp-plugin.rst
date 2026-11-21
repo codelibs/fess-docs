@@ -268,6 +268,55 @@ which provides ``/api/v1``, and
 `fess-webapp-classic-api <https://github.com/codelibs/fess-webapp-classic-api>`__,
 which provides ``/json`` / ``/suggest``.
 
+.. _webapp-plugin-password-encoder:
+
+Adding a Password Hash Algorithm (fess++.xml)
+---------------------------------------------
+
+The hash of the password of a local user is made by a component. A stored password is written as ``{id}hash``. |Fess| takes the ``id`` of the stored value, and for a new password the value of ``app.password.algorithm`` (``bcrypt`` by default), and looks up the DI component named ``<id>PasswordEncoder``, the same way ``<sso.type>Authenticator`` and ``<storage.type>StorageClient`` are resolved. |Fess| registers ``bcryptPasswordEncoder`` itself. To add an algorithm, implement ``org.codelibs.fess.crypto.password.PasswordEncoder`` and register the class in ``fess++.xml``, which Lasta Di merges into the ``fess.xml`` of the |Fess| core:
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="argon2PasswordEncoder"
+            class="com.example.Argon2PasswordEncoder">
+        </component>
+    </components>
+
+The interface has the following methods:
+
+.. list-table:: Methods of PasswordEncoder
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Method
+     - Description
+   * - ``String encode(String rawPassword)``
+     - Hashes a password. The result is stored after the ``{id}`` prefix, which |Fess| adds. Throw ``IllegalArgumentException`` for a password that cannot be hashed faithfully; the message must not contain the password.
+   * - ``boolean matches(String rawPassword, String encodedPassword)``
+     - Verifies a password against a hash made by this encoder. Return ``false`` for a wrong password and for a malformed hash.
+   * - ``boolean needsUpgrade(String encodedPassword)``
+     - Optional (default ``false``). Tells whether a stored hash is weaker than what ``encode`` makes now, so that it is hashed again at the next login of its user. BCrypt returns ``true`` for a cost below ``app.password.bcrypt.cost``.
+   * - ``int getMaxPasswordBytes()``
+     - Optional (default ``0``, no limit). The longest password, in UTF-8 bytes, that ``encode`` accepts. BCrypt returns ``72``.
+   * - ``boolean isVerificationCostly()`` and ``void applyTimingPadding()``
+     - Optional (default ``false`` and nothing). A deliberately slow algorithm returns ``true`` and spends about the time of one ``matches`` in ``applyTimingPadding()``. |Fess| calls it when a login fails without a hash being verified (for example for an unknown user), so that the response time does not tell whether the user exists.
+
+To use the encoder:
+
+#. Put the jar in the ``WEB-INF/plugin`` directory. As for any Web App plugin, the manifest needs ``Fess-WebAppJar: true`` (see "pom.xml and Manifest"); without it the component is not found.
+#. Set ``app.password.algorithm`` in ``fess_config.properties`` to the id (``argon2`` for ``argon2PasswordEncoder``). The id must be lower case and must not contain ``}``. New and changed passwords are then hashed with it. Passwords stored with another id, or as a legacy hash without an id, are hashed again at the next successful login of their user while ``app.password.upgrade.enabled`` is ``true`` (the default).
+
+Keep the following in mind:
+
+- The encoder is a singleton shared by all threads, so it must be thread-safe.
+- The length limit belongs to the encoder. When a password is set (user management screen, forced password change, ``/api/v2/auth/password`` and the Admin API), |Fess| refuses a password longer than ``getMaxPasswordBytes()`` of the algorithm of ``app.password.algorithm`` with "Password must be no longer than N bytes."; with ``0`` or less it checks only ``password.max.length``. |Fess| applies no length limit when it verifies a stored hash; whether a longer password may match is up to ``matches``.
+- Keep the plugin installed as long as passwords with its id are stored. Without the component, a hash with that id never matches: those users cannot log in, and their hashes are not hashed again.
+- If ``app.password.algorithm`` names an id without a component (for example after the plugin jar was removed), |Fess| still starts and users whose hash has another id can still log in, but setting a password fails with an error that names ``app.password.algorithm``.
+
 Customizing the Search Screen
 ==============================
 

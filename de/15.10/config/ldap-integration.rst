@@ -268,6 +268,37 @@ bestimmt, wie verglichen wird.
 .. note::
    Ist ``ldap.provider.url`` gesetzt, ignoriert ``auto`` die Groß- und Kleinschreibung. Ein Verzeichniskonto, dessen Name sich von einem reservierten nur in der Schreibweise unterscheidet, kann sich dann nicht mehr anmelden und wird nicht mehr aus der Administrationsoberfläche in das Verzeichnis synchronisiert. Setzen Sie ``authentication.admin.users.ignore.case=false``, um weiterhin exakt zu vergleichen.
 
+.. _local-username-policy:
+
+Richtlinie für Namen lokaler Benutzer
+-------------------------------------
+
+|Fess| vergleicht die Namen lokaler Benutzer (der Benutzer der Benutzerverwaltung, nicht der LDAP- oder SSO-Benutzer) genau so, wie sie eingegeben werden. ``Alice``, ``alice`` und ``ＡＬＩＣＥ`` (Buchstaben in Vollbreite) sind drei Benutzer mit jeweils eigener Anmeldung. ``authentication.local.username.policy`` legt fest, ob beim Anlegen oder Umbenennen eines lokalen Benutzers auch ein Name abgelehnt wird, der sich vom Namen eines anderen Benutzers nur in Groß-/Kleinschreibung, Zeichenbreite oder Unicode-Zusammensetzung unterscheidet.
+
+.. list-table:: Richtlinie für Namen lokaler Benutzer
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Eigenschaft
+     - Standard
+     - Beschreibung
+   * - ``authentication.local.username.policy``
+     - ``preserved``
+     - ``preserved`` vergleicht Namen genau wie eingegeben, wie in 15.9. ``mapped`` lehnt einen neuen oder umbenannten Namen ab, der nach der Abbildung (siehe unten) mit dem Namen eines anderen Benutzers übereinstimmt. Der Wert wird ohne Beachtung der Groß-/Kleinschreibung verglichen. Ein unbekannter Wert wird wie ``preserved`` behandelt und einmal als Warnung protokolliert.
+
+Mit ``mapped`` wird das Anlegen oder Umbenennen eines Benutzers in der Benutzerverwaltung oder mit der Admin-API (``POST`` und ``PUT`` von ``/api/admin/user/setting``) in zwei Fällen abgelehnt:
+
+- Der abgebildete Name ist der abgebildete Name eines anderen Benutzers. Die Abbildung ist die von RFC 8265 ``UsernameCaseMapped``: Vollbreiten- und Halbbreitenformen (etwa Halbbreiten-Katakana) und das ideographische Leerzeichen werden durch ihre Zerlegungsabbildung ersetzt, die Groß-/Kleinschreibung wird mit dem Root-Locale in Kleinbuchstaben umgewandelt, und das Ergebnis wird in die Unicode-Normalisierungsform C gebracht (nicht NFKC). ``Alice``, ``alice`` und ``ＡＬＩＣＥ`` sind nach der Abbildung derselbe Name.
+- Der Name ist eine andere Schreibweise eines Eintrags von ``authentication.admin.users`` (siehe oben). ``admin`` kann weiterhin erneut angelegt werden, weil es der Eintrag in genau dieser Schreibweise ist, während ``Admin``, ``ADMIN`` und die Vollbreiten-Schreibweise abgelehnt werden.
+
+Ein Benutzer, der unter dem Namen gespeichert wird, den er bereits hat, wird nie abgelehnt; Benutzer, die heute schon kollidieren, lassen sich daher weiter bearbeiten. Startet |Fess| mit ``mapped``, schreibt es eine Warnung in ``fess.log``, die bis zu 20 Gruppen gespeicherter Namen auflistet, die nach der Abbildung gleich sind, sowie bis zu 20 gespeicherte Namen mit Leerraum oder Steuerzeichen. Dabei wird nichts geändert: Diese Benutzer können sich weiterhin anmelden und bearbeitet werden.
+
+.. note::
+
+   Die Richtlinie entscheidet nur, ob ein Name akzeptiert wird. Sie ändert weder die Anmeldung, die einen Benutzer über den Namen genau wie eingegeben sucht, noch die Benutzer-ID oder den gespeicherten Namen. Sie ändert auch nicht die aus einem Namen gebildeten Berechtigungszeichenfolgen (``{user}Alice`` und ``{user}alice`` in einem Rollenfilter, in den Berechtigungen einer Crawl-Konfiguration oder in einem Dokument) und nicht die bereits indexierten Dokumente. Die Zeichenregeln von RFC 8265 werden ebenfalls nicht erzwungen: Ein Name mit Leerzeichen, Symbolen oder Steuerzeichen wird weiterhin akzeptiert.
+
+   Die Prüfung wird bei einer Wiederherstellung aus einem Backup, beim Anlegen des anfänglichen Benutzers ``admin`` beim ersten Start und bei einem direkten Schreibzugriff auf den Benutzerindex nicht angewendet. Legen zwei Administratoren gleichzeitig ``Alice`` und ``alice`` an, können beide erfolgreich sein, weil kein abgebildeter Name gespeichert wird. Das Vereinheitlichen von Namen bei der Anmeldung und in Berechtigungen würde eine Migration der gespeicherten Benutzer, Rollen und indexierten Dokumente erfordern und ist nicht Teil dieser Einstellung.
+
 Attributzuordnung
 -----------------
 

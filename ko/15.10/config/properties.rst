@@ -62,7 +62,7 @@ one, fill in ``properties.po`` beside this file.
     - 다이제스트 계산용 알고리즘.
     - ``sha256``
   * - app.password.algorithm
-    - 비밀번호 해싱(새로운 방식, Spring Security v5.8 호환) 지원: bcrypt(현 시점에서는 bcrypt만)
+    - 비밀번호 해싱(새로운 방식, Spring Security v5.8 호환) 지원: bcrypt(내장). 다른 알고리즘은 플러그인이 <id>PasswordEncoder 컴포넌트로 제공
     - ``bcrypt``
   * - app.password.bcrypt.cost
     - BCrypt 코스트(로그 라운드)입니다. 10은 Spring Security v5.8의 기본값과 같습니다. 범위: 4-31.
@@ -1576,6 +1576,9 @@ one, fill in ``properties.po`` beside this file.
   * - authentication.admin.users.ignore.case
     - authentication.admin.users 를 대소문자 구분 없이 일치시킬지 여부입니다: auto, true 또는 false. auto는 ldap.provider.url 이 설정되어 있으면 대소문자를 무시합니다.
     - ``auto``
+  * - authentication.local.username.policy
+    - 로컬 사용자를 만들거나 이름을 바꿀 때, 다른 사용자의 이름과 대소문자, 문자 폭, 유니코드 합성 방식만 다른 이름도 거부할지 여부: preserved 또는 mapped. preserved는 이름을 입력된 그대로 비교합니다. mapped는 통일한 결과가 다른 사용자의 이름 또는 authentication.admin.users 항목(적힌 그대로의 항목은 제외)과 같아지는 이름을 거부합니다(Alice와 alice, 전각과 ASCII 영문자). 로그인, 사용자 ID, 저장되는 이름, 권한은 변경되지 않습니다. 알 수 없는 값은 preserved로 취급됩니다.
+    - ``preserved``
   * - authentication.admin.roles
     - 인증용 관리자 역할 이름.
     - ``admin``
@@ -2345,7 +2348,7 @@ one, fill in ``properties.po`` beside this file.
     - 비밀번호의 최소 길이(0이면 비활성화).
     - ``8``
   * - password.max.length
-    - 비밀번호 필드의 최대 길이입니다. 이 값과 관계없이 BCrypt가 나머지를 무시하므로 비밀번호는 UTF-8로 72바이트까지로 제한됩니다.
+    - 비밀번호 필드의 최대 길이입니다. 이 값과 관계없이 비밀번호는 UTF-8 바이트 수로도 제한됩니다. 바이트 수 제한은 비밀번호 해시 알고리즘(app.password.algorithm)의 것입니다. BCrypt는 앞의 72바이트만 읽으며 그보다 긴 비밀번호를 거부합니다.
     - ``100``
   * - password.require.uppercase
     - 비밀번호에 대문자를 요구합니다.

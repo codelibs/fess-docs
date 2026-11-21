@@ -62,7 +62,7 @@ one, fill in ``properties.po`` beside this file.
     - ダイジェスト計算のアルゴリズム。
     - ``sha256``
   * - app.password.algorithm
-    - パスワードのハッシュ化（新しい仕組み、Spring Security v5.8互換）。サポート: bcrypt（現時点ではbcryptのみ）。
+    - パスワードのハッシュ化（新しい仕組み、Spring Security v5.8互換）。サポート: bcrypt（組み込み）。ほかのアルゴリズムは、プラグインが<id>PasswordEncoderコンポーネントとして提供します。
     - ``bcrypt``
   * - app.password.bcrypt.cost
     - BCryptのコスト（ログラウンド数）。10はSpring Security v5.8のデフォルトと一致します。範囲: 4-31。
@@ -1576,6 +1576,9 @@ Web
   * - authentication.admin.users.ignore.case
     - authentication.admin.usersを大文字小文字を区別せずに照合するかどうか: auto、true、falseのいずれか。autoはldap.provider.urlが設定されている場合に大文字小文字を区別しません。
     - ``auto``
+  * - authentication.local.username.policy
+    - ローカルユーザーの作成や名前の変更で、ほかのユーザーの名前と大文字小文字、文字幅、Unicodeの合成の違いしかない名前も拒否するかどうか: preservedまたはmapped。preservedは名前を入力されたとおりに比較します。mappedは、折り畳んだ結果が、ほかのユーザーの名前、またはauthentication.admin.usersのエントリ（書かれているとおりのエントリを除く）と同じになる名前を拒否します（Aliceとalice、全角と半角の英字）。ログイン、ユーザーID、保存される名前、パーミッションは変わりません。不明な値はpreservedとして扱われます。
+    - ``preserved``
   * - authentication.admin.roles
     - 認証用の管理者ロール名。
     - ``admin``
@@ -2345,7 +2348,7 @@ Web
     - パスワードの最小長（0で無効）。
     - ``8``
   * - password.max.length
-    - パスワードフィールドの最大長。この値にかかわらず、BCryptは残りを無視するため、パスワードはUTF-8で72バイトまでに制限されます。
+    - パスワードフィールドの最大長。この値にかかわらず、パスワードはUTF-8のバイト数でも制限されます。バイト数の制限はパスワードのハッシュアルゴリズム（app.password.algorithm）のものです。BCryptは先頭の72バイトしか読まず、それより長いパスワードを拒否します。
     - ``100``
   * - password.require.uppercase
     - パスワードに大文字を必須にします。
