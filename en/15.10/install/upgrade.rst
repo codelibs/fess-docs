@@ -620,7 +620,7 @@ Up to 15.9, a page that answered with HTTP 500 was not indexed and was not recor
 
 A ``fess_config.properties`` carried over from 15.9 still holds the old list, and then a page that answers with HTTP 500 is still not recorded. Add ``5xx`` to the list, or compare the file with the one of 15.10, and restart |Fess|. A list that you set yourself is not changed by the upgrade, so add ``5xx`` to it, too, if you want these pages recorded. 15.9 and earlier read every entry of the list as a number and cannot read ``5xx``, so remove it before you roll back.
 
-A document that the Tika extractor rejects as a suspected zip bomb is now recorded as a failure URL and is not indexed, even when ``crawler.ignore.content.exception`` is ``true`` (the default). Up to 15.9, it was indexed with no content. Other content errors that this setting ignores are unchanged.
+A document that the Tika extractor rejects as a suspected zip bomb is now recorded as a failure URL and is not indexed, even when ``crawler.ignore.content.exception`` is ``true`` (the default). Up to 15.9, it was indexed with no content. Other content errors that this setting ignores are unchanged. The extractor takes a document for a zip bomb when its extracted text is longer than ``maxUncompressionSize`` (10,000,000 characters) and also more than ``maxCompressionRatio`` times as long as the bytes it was read from; both are set in ``crawler/extractor+tikaExtractor.xml``. The ratio is 100 (the default of Tika), so an ordinary archive or office document of text, which expands by a factor of a few to a few tens, is indexed whatever its size. Raise ``maxCompressionRatio`` if you have to index a more compressible document, or lower it to be stricter.
 
 .. _upgrade-1510-user-agent:
 
