@@ -554,6 +554,8 @@ base_url-Muster
 
 Die URL wird durch einfache Verkettung von ``base_url`` und dem Dateipfad generiert (ohne eingefügtes Trennzeichen). Daher muss ``base_url`` mit einem abschließenden ``/`` enden.
 
+Im Dateipfad werden nur ``%``, ``#`` und ``?`` prozentkodiert (``%`` wird zu ``%25``, ``#`` zu ``%23`` und ``?`` zu ``%3F``), damit ein Dateiname, der diese Zeichen enthält, nicht als Escape-Sequenz, Fragment oder Abfrage interpretiert wird. Beispielsweise wird ``100%.txt`` zu ``100%25.txt``. Alle anderen Zeichen, einschließlich ``/``, Leerzeichen und Nicht-ASCII-Zeichen, bleiben unverändert, und ``base_url`` wird nicht verändert. Die Kodierung wird nur einmal angewendet, sodass ein bereits im Dateinamen enthaltenes ``%23`` zu ``%2523`` wird. Dieselbe URL wird auch zum Löschen entfernter Dateien verwendet. Das Feld ``path`` wird nicht kodiert, daher wird auch eine im Skript zusammengesetzte URL (``"https://..." + path``) nicht kodiert.
+
 URL-Generierung im Skript
 -------------------------
 

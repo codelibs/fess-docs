@@ -555,6 +555,8 @@ Patterns de configuration base_url
 
 L'URL est générée en concaténant simplement ``base_url`` et le chemin du fichier (aucun séparateur n'est inséré). Par conséquent, ``base_url`` doit se terminer par un ``/`` final.
 
+Dans le chemin du fichier, seuls ``%``, ``#`` et ``?`` sont encodés en pourcentage (``%`` devient ``%25``, ``#`` devient ``%23`` et ``?`` devient ``%3F``), afin qu'un nom de fichier qui les contient ne soit pas interprété comme une séquence d'échappement, un fragment ou une requête. Par exemple, ``100%.txt`` devient ``100%25.txt``. Tous les autres caractères, y compris ``/``, les espaces et les caractères non ASCII, sont conservés tels quels, et ``base_url`` n'est pas modifié. L'encodage n'est appliqué qu'une seule fois, de sorte qu'un ``%23`` déjà présent dans un nom de fichier devient ``%2523``. La même URL est utilisée pour supprimer les fichiers supprimés. Le champ ``path`` n'est pas encodé : une URL construite dans un script (``"https://..." + path``) ne l'est donc pas non plus.
+
 Génération d'URL dans le script
 ---------------------
 
