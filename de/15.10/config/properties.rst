@@ -62,7 +62,7 @@ Kern
     - Algorithmus für die Digest-Berechnung.
     - ``sha256``
   * - app.password.algorithm
-    - Passwort-Hashing (neuer Mechanismus, kompatibel mit Spring Security v5.8) Unterstützt: bcrypt (derzeit nur dieser)
+    - Passwort-Hashing (neuer Mechanismus, kompatibel mit Spring Security v5.8) Unterstützt: bcrypt (eingebaut); weitere Algorithmen liefert ein Plugin als Komponente <id>PasswordEncoder
     - ``bcrypt``
   * - app.password.bcrypt.cost
     - BCrypt-Kostenfaktor (Log-Runden). 10 entspricht dem Standardwert von Spring Security v5.8. Bereich: 4-31.
@@ -1576,6 +1576,9 @@ Web
   * - authentication.admin.users.ignore.case
     - Gibt an, ob authentication.admin.users ohne Beachtung der Groß-/Kleinschreibung abgeglichen wird: auto, true oder false. auto ignoriert die Groß-/Kleinschreibung, wenn ldap.provider.url gesetzt ist.
     - ``auto``
+  * - authentication.local.username.policy
+    - Gibt an, ob beim Anlegen oder Umbenennen eines lokalen Benutzers auch ein Name abgelehnt wird, der sich vom Namen eines anderen Benutzers nur in Groß-/Kleinschreibung, Zeichenbreite oder Unicode-Zusammensetzung unterscheidet: preserved oder mapped. preserved vergleicht Namen genau wie eingegeben. mapped lehnt einen Namen ab, der nach dem Vereinheitlichen mit dem Namen eines anderen Benutzers oder eines Eintrags von authentication.admin.users (außer dem Eintrag in genau dieser Schreibweise) übereinstimmt (Alice und alice, Buchstaben in Vollbreite und ASCII). Anmeldung, Benutzer-IDs, gespeicherte Namen und Berechtigungen werden nicht geändert. Ein unbekannter Wert wird wie preserved behandelt.
+    - ``preserved``
   * - authentication.admin.roles
     - Administrator-Rollennamen für die Authentifizierung.
     - ``admin``
@@ -2345,7 +2348,7 @@ Web
     - Minimale Passwortlänge (0 zum Deaktivieren).
     - ``8``
   * - password.max.length
-    - Maximale Länge eines Passwortfelds. Unabhängig von diesem Wert ist ein Passwort auf 72 Bytes in UTF-8 begrenzt, weil BCrypt den Rest ignoriert.
+    - Maximale Länge eines Passwortfelds. Unabhängig von diesem Wert ist ein Passwort auch in UTF-8-Bytes begrenzt. Die Byte-Begrenzung gehört zum Passwort-Hash-Algorithmus (app.password.algorithm): BCrypt liest nur die ersten 72 Bytes und lehnt ein längeres Passwort ab.
     - ``100``
   * - password.require.uppercase
     - Großbuchstaben im Passwort verlangen.

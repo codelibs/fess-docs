@@ -177,6 +177,16 @@ The current authentication state can be checked with ``GET /auth/me``. See :doc:
 
 Endpoints such as search that do not require login can be used anonymously (depending on the System Settings "Login Required" option).
 
+Credentials
+-----------
+
+The OpenAPI definition of the v2 API (``openapi-user.yaml``) lists the credentials that each operation accepts in its ``security`` entry. There are two kinds:
+
+- ``sessionCookie``: the session cookie ``JSESSIONID`` that the response of ``POST /auth/login`` (or of the passkey login) sets. Send it with every request after the login. The login rotates the session ID, so keep the cookie of the login response. The cookie is ``HttpOnly``; the ``Secure`` attribute is added when ``session.cookie.secure`` is enabled, and ``SameSite`` is ``Lax`` by default (``tomcat.sameSiteCookies``). Its name does not change when sessions are kept in the search engine (``FESS_SESSION_STORE``).
+- ``accessToken``: an access token that an administrator created, sent as ``Authorization: Bearer <token>`` (a bare ``Authorization: <token>`` is accepted too). Only the search operations list it: ``/search``, ``/documents/all``, ``/documents/export``, ``/documents/{docId}/similar``, ``/suggest-words``, ``/labels`` and ``/popular-words``. The token decides which documents they return and, while "Login Required" is enabled, it stands in for the login. It does not stand in for a login on the other endpoints (favorites, tags, search history, password change, passkeys, chat, click, cache). A token that is malformed, not registered or expired is answered ``401 auth_required``.
+
+An empty entry in ``security`` means that the operation also works without a credential, which holds only while "Login Required" is disabled. The ``X-Fess-CSRF-Token`` header is not a credential but a separate requirement (see below).
+
 CSRF Token
 ----------
 

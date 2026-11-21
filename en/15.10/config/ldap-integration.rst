@@ -266,6 +266,37 @@ changing the spelling. ``authentication.admin.users.ignore.case`` decides how th
 .. note::
    Where ``ldap.provider.url`` is set, ``auto`` ignores case. A directory account whose name differs from a reserved one only in case can then no longer log in, and is no longer synchronised to the directory from the admin UI. Set ``authentication.admin.users.ignore.case=false`` to keep comparing the names exactly.
 
+.. _local-username-policy:
+
+Local User Name Policy
+----------------------
+
+|Fess| compares the names of local users (the users of the user management screen, not the users of LDAP or SSO) exactly as typed. ``Alice``, ``alice`` and ``ＡＬＩＣＥ`` (full-width letters) are three users, each with its own login. ``authentication.local.username.policy`` decides whether creating or renaming a local user also refuses a name that differs from the name of another user only in case, width or Unicode composition.
+
+.. list-table:: Policy for Local User Names
+   :header-rows: 1
+   :widths: 40 15 45
+
+   * - Property
+     - Default
+     - Description
+   * - ``authentication.local.username.policy``
+     - ``preserved``
+     - ``preserved`` compares names exactly as typed, as in 15.9. ``mapped`` refuses a new or renamed name that is the same as the name of another user once it is mapped (see below). The value is compared without regard to case. An unknown value is treated as ``preserved`` and logged once as a warning.
+
+With ``mapped``, creating or renaming a user on the user management screen or with the Admin API (``POST`` and ``PUT`` of ``/api/admin/user/setting``) is refused in two cases:
+
+- The mapped name is the mapped name of another user. The mapping is that of RFC 8265 ``UsernameCaseMapped``: the full-width and half-width forms (such as half-width katakana) and the ideographic space are replaced by their decomposition mapping, the case is lowered with the root locale, and the result is put in Unicode normalization form C (not NFKC). ``Alice``, ``alice`` and ``ＡＬＩＣＥ`` are the same name once mapped.
+- The name is a different spelling of an entry of ``authentication.admin.users`` (see above). ``admin`` can still be created again, because it is the entry as written, while ``Admin``, ``ADMIN`` and the full-width spelling are refused.
+
+A user who is saved under the name it already has is never refused, so users that collide today can still be edited. When |Fess| starts with ``mapped``, it writes one warning to ``fess.log`` that lists up to 20 groups of stored names that are the same once mapped and up to 20 stored names that contain whitespace or control characters. Nothing is changed by it: those users can still log in and be edited.
+
+.. note::
+
+   The policy only decides whether a name is accepted. It does not change login, which looks a user up by the name exactly as typed, the user ID or the stored name. It does not change the permission strings made from a name (``{user}Alice`` and ``{user}alice`` in a role filter, in the permissions of a crawl configuration or in a document) or the documents already indexed. It does not enforce the character rules of RFC 8265 either: a name with spaces, symbols or control characters is still accepted.
+
+   The check is not applied by a backup restore, by the creation of the initial ``admin`` user at the first start or by a direct write to the user index. Two administrators who create ``Alice`` and ``alice`` at the same moment can both succeed, because no mapped name is stored. Folding names at login and in permissions would need a migration of the stored users, roles and indexed documents, and is not part of this setting.
+
 Attribute Mapping
 -----------------
 

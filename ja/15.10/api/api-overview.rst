@@ -177,6 +177,16 @@ v2 API はセッションベースの認証を採用しています。
 
 ログインが不要な検索などのエンドポイントは、匿名のまま利用できます（システム設定の「ログイン必須」に依存します）。
 
+認証情報
+--------
+
+v2 API の OpenAPI 定義（ ``openapi-user.yaml`` ）では、各操作が受け付ける認証情報を ``security`` に列挙しています。認証情報は次の 2 種類です。
+
+- ``sessionCookie``: ``POST /auth/login`` （またはパスキーのログイン）のレスポンスが設定するセッション Cookie ``JSESSIONID`` です。ログイン後のすべてのリクエストで送ってください。ログインでセッション ID が更新されるため、ログインのレスポンスの Cookie を使い続けてください。この Cookie は ``HttpOnly`` で、 ``session.cookie.secure`` が有効なときは ``Secure`` 属性が付き、 ``SameSite`` は既定で ``Lax`` です（ ``tomcat.sameSiteCookies`` ）。セッションを検索エンジンに保存しても（ ``FESS_SESSION_STORE`` ）、名前は変わりません。
+- ``accessToken``: 管理者が作成したアクセストークンで、 ``Authorization: Bearer <トークン>`` として送ります（ ``Authorization: <トークン>`` だけの形式も受け付けます）。検索系の操作だけがこれを列挙しています。 ``/search`` 、 ``/documents/all`` 、 ``/documents/export`` 、 ``/documents/{docId}/similar`` 、 ``/suggest-words`` 、 ``/labels`` 、 ``/popular-words`` です。トークンはこれらが返す文書を決め、「ログイン必須」が有効な間は、ログインの代わりになります。ほかのエンドポイント（お気に入り、タグ、検索履歴、パスワード変更、パスキー、チャット、クリック、キャッシュ）では、ログインの代わりになりません。形式が正しくない、登録されていない、または期限切れのトークンには ``401 auth_required`` が返ります。
+
+``security`` に空のエントリがある操作は、認証情報なしでも使えます。これが成り立つのは「ログイン必須」が無効な間だけです。 ``X-Fess-CSRF-Token`` ヘッダーは認証情報ではなく、別の要件です（後述）。
+
 CSRF トークン
 -----------
 

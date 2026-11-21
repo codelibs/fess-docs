@@ -178,6 +178,16 @@ Den aktuellen Authentifizierungsstatus kann man mit ``GET /auth/me`` abfragen. D
 
 Endpunkte wie die Suche, für die keine Anmeldung erforderlich ist, können anonym genutzt werden (abhängig von der Option „Anmeldung erforderlich" in den Systemeinstellungen).
 
+Anmeldedaten
+------------
+
+Die OpenAPI-Definition der v2-API (``openapi-user.yaml``) listet im Eintrag ``security`` jeder Operation die Anmeldedaten auf, die sie akzeptiert. Es gibt zwei Arten:
+
+- ``sessionCookie``: das Sitzungs-Cookie ``JSESSIONID``, das die Antwort von ``POST /auth/login`` (oder der Passkey-Anmeldung) setzt. Senden Sie es nach der Anmeldung mit jeder Anfrage. Die Anmeldung erneuert die Sitzungs-ID; behalten Sie daher das Cookie der Anmeldeantwort. Das Cookie ist ``HttpOnly``; das Attribut ``Secure`` wird ergänzt, wenn ``session.cookie.secure`` aktiviert ist, und ``SameSite`` ist standardmäßig ``Lax`` (``tomcat.sameSiteCookies``). Sein Name ändert sich nicht, wenn Sitzungen in der Suchmaschine gespeichert werden (``FESS_SESSION_STORE``).
+- ``accessToken``: ein von einem Administrator erstelltes Zugriffstoken, gesendet als ``Authorization: Bearer <Token>`` (ein bloßes ``Authorization: <Token>`` wird ebenfalls akzeptiert). Nur die Suchoperationen führen es auf: ``/search``, ``/documents/all``, ``/documents/export``, ``/documents/{docId}/similar``, ``/suggest-words``, ``/labels`` und ``/popular-words``. Das Token bestimmt, welche Dokumente sie zurückgeben, und ersetzt, solange „Anmeldung erforderlich" aktiviert ist, die Anmeldung. Bei den übrigen Endpunkten (Favoriten, Tags, Suchverlauf, Passwortänderung, Passkeys, Chat, Klick, Cache) ersetzt es die Anmeldung nicht. Ein Token, das fehlerhaft, nicht registriert oder abgelaufen ist, wird mit ``401 auth_required`` beantwortet.
+
+Ein leerer Eintrag in ``security`` bedeutet, dass die Operation auch ohne Anmeldedaten funktioniert; das gilt nur, solange „Anmeldung erforderlich" deaktiviert ist. Der Header ``X-Fess-CSRF-Token`` gehört nicht zu den Anmeldedaten, sondern ist eine eigene Anforderung (siehe unten).
+
 CSRF-Token
 ----------
 

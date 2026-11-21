@@ -275,6 +275,55 @@ qui fournit ``/api/v1``, ou à
 `fess-webapp-classic-api <https://github.com/codelibs/fess-webapp-classic-api>`__,
 qui fournit ``/json`` / ``/suggest``.
 
+.. _webapp-plugin-password-encoder:
+
+Ajout d'un algorithme de hachage de mot de passe (fess++.xml)
+-------------------------------------------------------------
+
+Le hachage du mot de passe d'un utilisateur local est produit par un composant. Un mot de passe stocké est écrit sous la forme ``{id}hash``. |Fess| prend l'``id`` de la valeur stockée et, pour un nouveau mot de passe, la valeur de ``app.password.algorithm`` (``bcrypt`` par défaut), puis recherche le composant DI nommé ``<id>PasswordEncoder``, de la même manière que ``<sso.type>Authenticator`` et ``<storage.type>StorageClient`` sont résolus. |Fess| enregistre lui-même ``bcryptPasswordEncoder``. Pour ajouter un algorithme, implémentez ``org.codelibs.fess.crypto.password.PasswordEncoder`` et enregistrez la classe dans ``fess++.xml``, que Lasta Di fusionne dans le ``fess.xml`` du cœur de |Fess| :
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+        "http://dbflute.org/meta/lastadi10.dtd">
+    <components>
+        <component name="argon2PasswordEncoder"
+            class="com.example.Argon2PasswordEncoder">
+        </component>
+    </components>
+
+L'interface comporte les méthodes suivantes :
+
+.. list-table:: Méthodes de PasswordEncoder
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Méthode
+     - Description
+   * - ``String encode(String rawPassword)``
+     - Calcule le hachage d'un mot de passe. Le résultat est stocké après le préfixe ``{id}``, que |Fess| ajoute. Levez ``IllegalArgumentException`` pour un mot de passe qui ne peut pas être haché fidèlement ; le message ne doit pas contenir le mot de passe.
+   * - ``boolean matches(String rawPassword, String encodedPassword)``
+     - Vérifie un mot de passe par rapport à un hachage produit par cet encodeur. Retournez ``false`` pour un mot de passe incorrect et pour un hachage mal formé.
+   * - ``boolean needsUpgrade(String encodedPassword)``
+     - Facultatif (``false`` par défaut). Indique si un hachage stocké est plus faible que ce que ``encode`` produit maintenant, afin qu'il soit recalculé à la prochaine connexion de son utilisateur. BCrypt retourne ``true`` pour un coût inférieur à ``app.password.bcrypt.cost``.
+   * - ``int getMaxPasswordBytes()``
+     - Facultatif (``0`` par défaut, sans limite). Le mot de passe le plus long, en octets UTF-8, que ``encode`` accepte. BCrypt retourne ``72``.
+   * - ``boolean isVerificationCostly()`` et ``void applyTimingPadding()``
+     - Facultatif (``false`` par défaut et aucune action). Un algorithme volontairement lent retourne ``true`` et consacre dans ``applyTimingPadding()`` un temps proche de celui d'un ``matches``. |Fess| l'appelle lorsqu'une connexion échoue sans qu'aucun hachage n'ait été vérifié (par exemple pour un utilisateur inconnu), afin que le temps de réponse ne révèle pas si l'utilisateur existe.
+
+Pour utiliser l'encodeur :
+
+#. Placez le jar dans le répertoire ``WEB-INF/plugin``. Comme pour tout plugin d'application Web, le manifeste doit contenir ``Fess-WebAppJar: true`` (voir « pom.xml et manifeste ») ; sans cela, le composant est introuvable.
+#. Définissez ``app.password.algorithm`` dans ``fess_config.properties`` avec l'id (``argon2`` pour ``argon2PasswordEncoder``). L'id doit être en minuscules et ne doit pas contenir ``}``. Les nouveaux mots de passe et les mots de passe modifiés sont alors hachés avec lui. Les mots de passe stockés avec un autre id, ou sous la forme d'un ancien hachage sans id, sont recalculés à la prochaine connexion réussie de leur utilisateur tant que ``app.password.upgrade.enabled`` vaut ``true`` (valeur par défaut).
+
+Gardez les points suivants à l'esprit :
+
+- L'encodeur est un singleton partagé par tous les threads ; il doit donc être thread-safe.
+- La limite de longueur appartient à l'encodeur. Lorsqu'un mot de passe est défini (écran de gestion des utilisateurs, changement de mot de passe forcé, ``/api/v2/auth/password`` et API d'administration), |Fess| refuse un mot de passe plus long que ``getMaxPasswordBytes()`` de l'algorithme de ``app.password.algorithm`` avec « Le mot de passe ne doit pas dépasser N octets. » ; avec ``0`` ou moins, il ne vérifie que ``password.max.length``. |Fess| n'applique aucune limite de longueur lorsqu'il vérifie un hachage stocké ; c'est à ``matches`` de décider si un mot de passe plus long peut correspondre.
+- Gardez le plugin installé tant que des mots de passe portant son id sont stockés. Sans le composant, un hachage portant cet id ne correspond jamais : ces utilisateurs ne peuvent pas se connecter et leurs hachages ne sont pas recalculés.
+- Si ``app.password.algorithm`` désigne un id sans composant (par exemple après la suppression du jar du plugin), |Fess| démarre quand même et les utilisateurs dont le hachage porte un autre id peuvent toujours se connecter, mais la définition d'un mot de passe échoue avec une erreur qui nomme ``app.password.algorithm``.
+
 Personnalisation de l'écran de recherche
 =========================================
 

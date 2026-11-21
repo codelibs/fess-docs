@@ -331,7 +331,7 @@ Description des champs
 
    Lors de la mise à jour, ``id``, ``name`` et ``version_no`` sont obligatoires.
    ``version_no`` est la valeur retournée lors de la récupération de l'utilisateur cible (GET), et correspond à la version du document OpenSearch.
-   Si elle ne correspond pas à la version actuelle, la requête est traitée comme un conflit et la mise à jour est rejetée.
+   Si elle ne correspond pas à la version actuelle, parce que l'utilisateur a été modifié après avoir été lu (par quelqu'un d'autre, par l'utilisateur lui-même ou par |Fess| lui-même, par exemple lorsqu'une connexion recalcule le hachage du mot de passe), la mise à jour est refusée avant que quoi que ce soit ne soit écrit : la réponse est HTTP 400 avec ``status`` ``1`` et le message « L'utilisateur a été modifié par quelqu'un d'autre. Rechargez-le et réessayez. ». La liste (``GET /api/admin/user/settings``) renvoie elle aussi le ``version_no`` réel de chaque utilisateur ; une valeur lue dans la liste peut donc être renvoyée telle quelle. Après un refus, relisez l'utilisateur et appliquez la modification à ce que vous avez lu. Jusqu'à 15.9, n'importe quel ``version_no`` était accepté.
 
 Réponse
 -------

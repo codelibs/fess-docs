@@ -331,7 +331,7 @@ Feldbeschreibungen
 
    Bei der Aktualisierung sind ``id``, ``name`` und ``version_no`` erforderlich.
    ``version_no`` ist der Wert, der beim Abrufen des Zielbenutzers (GET) zurückgegeben wird, und entspricht der OpenSearch-Dokumentversion.
-   Stimmt er nicht mit der aktuellen Version überein, wird die Anfrage als Konflikt behandelt und die Aktualisierung abgelehnt.
+   Stimmt er nicht mit der aktuellen Version überein, weil der Benutzer nach dem Lesen geändert wurde (durch jemand anderen, durch den Benutzer selbst oder durch |Fess| selbst, zum Beispiel wenn eine Anmeldung das Passwort neu hasht), wird die Aktualisierung abgelehnt, bevor etwas geschrieben wird: Die Antwort ist HTTP 400 mit ``status`` ``1`` und der Meldung „Der Benutzer wurde von einer anderen Person geändert. Laden Sie ihn neu und versuchen Sie es erneut.". Die Liste (``GET /api/admin/user/settings``) liefert ebenfalls die tatsächliche ``version_no`` jedes Benutzers, sodass ein aus der Liste gelesener Wert zurückgesendet werden kann. Lesen Sie den Benutzer nach einer Ablehnung erneut und wenden Sie die Änderung auf das Gelesene an. Bis 15.9 wurde jede beliebige ``version_no`` akzeptiert.
 
 Antwort
 -------

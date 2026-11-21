@@ -36,7 +36,7 @@ Veuillez obligatoirement modifier le mot de passe administrateur par défaut (``
 |Fess| dispose d'une fonctionnalité intégrée qui impose des exigences de longueur minimale/maximale et de types de caractères pour le mot de passe. Configurez les propriétés suivantes dans ``fess_config.properties`` (les valeurs par défaut sont indiquées entre parenthèses) :
 
 - ``password.min.length`` (par défaut : ``8``) : Longueur minimale. Une valeur de 12 caractères ou plus est recommandée.
-- ``password.max.length`` (par défaut : ``100``) : Longueur maximale.
+- ``password.max.length`` (par défaut : ``100``) : longueur maximale en caractères. Quelle que soit cette valeur, un mot de passe est aussi limité en octets UTF-8 par l'algorithme de hachage des mots de passe (voir ci-dessous).
 - ``password.require.uppercase`` (par défaut : ``false``) : Exiger des lettres majuscules.
 - ``password.require.lowercase`` (par défaut : ``false``) : Exiger des lettres minuscules.
 - ``password.require.digit`` (par défaut : ``false``) : Exiger des chiffres.
@@ -45,6 +45,12 @@ Veuillez obligatoirement modifier le mot de passe administrateur par défaut (``
 .. note::
 
    Par défaut, la longueur minimale est de ``8`` caractères et toutes les exigences de type de caractères sont désactivées. Pour renforcer la sécurité des mots de passe, définissez explicitement les propriétés ci-dessus. Notez que |Fess| ne dispose pas de fonctionnalité d'expiration des mots de passe (changement périodique forcé) ; si vous souhaitez imposer un changement périodique du mot de passe comme règle opérationnelle, faites-le manuellement.
+
+**Hachage des mots de passe et limite en octets :**
+
+|Fess| stocke le mot de passe d'un utilisateur local sous forme de hachage. ``app.password.algorithm`` (par défaut : ``bcrypt``) sélectionne l'algorithme des mots de passe nouveaux et modifiés, et ``app.password.bcrypt.cost`` (par défaut : ``10``) définit le coût de BCrypt. Tant que ``app.password.upgrade.enabled`` vaut ``true`` (par défaut), un utilisateur dont le hachage stocké est plus ancien (un ancien hachage sans préfixe ``{id}``, le hachage d'un autre algorithme ou un hachage BCrypt de coût inférieur) reçoit un nouveau hachage à sa prochaine connexion réussie. L'algorithme est un composant : un plugin peut donc en fournir un autre (voir :ref:`webapp-plugin-password-encoder`).
+
+La limite en octets appartient à l'algorithme. BCrypt ne lit que les 72 premiers octets d'un mot de passe en UTF-8 ; depuis 15.10, un mot de passe de plus de 72 octets est donc refusé lorsqu'on le définit (écran de gestion des utilisateurs, changement de mot de passe forcé du formulaire de connexion, ``/api/v2/auth/password`` et API d'administration) avec « Le mot de passe ne doit pas dépasser 72 octets. », quelle que soit la valeur que ``password.max.length`` (100 caractères par défaut) autorise. Un caractère non ASCII occupe plus d'un octet (3 octets pour la plupart des caractères japonais, chinois et coréens). Un compte dont le mot de passe a été défini auparavant avec plus de 72 octets continue de se connecter, car la vérification d'un mot de passe n'applique aucune limite de longueur. Toutefois, seuls ses 72 premiers octets sont comparés : n'importe quelle fin après le 72e octet est donc acceptée. Définir un nouveau mot de passe (72 octets au maximum) supprime ce défaut.
 
 **Sessions après un changement de mot de passe :**
 

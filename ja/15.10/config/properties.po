@@ -46,7 +46,7 @@ msgid "Algorithm for digest calculation."
 msgstr "ダイジェスト計算のアルゴリズム。"
 
 msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
-msgstr "パスワードのハッシュ化（新しい仕組み、Spring Security v5.8互換）。サポート: bcrypt（現時点ではbcryptのみ）。"
+msgstr "パスワードのハッシュ化（新しい仕組み、Spring Security v5.8互換）。サポート: bcrypt（組み込み）。ほかのアルゴリズムは、プラグインが<id>PasswordEncoderコンポーネントとして提供します。"
 
 msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
 msgstr "BCryptのコスト（ログラウンド数）。10はSpring Security v5.8のデフォルトと一致します。範囲: 4-31。"
@@ -1233,6 +1233,9 @@ msgstr "認証用の管理者ユーザー名。"
 msgid "Whether to match authentication.admin.users without regard to case: auto, true or false. auto ignores case when ldap.provider.url is set."
 msgstr "authentication.admin.usersを大文字小文字を区別せずに照合するかどうか: auto、true、falseのいずれか。autoはldap.provider.urlが設定されている場合に大文字小文字を区別しません。"
 
+msgid "Whether creating or renaming a local user also refuses a name that differs from another name only in case, width or Unicode composition: preserved or mapped. preserved compares names exactly as typed. mapped refuses a name that equals the name of another user or of an authentication.admin.users entry (other than the entry as written) once folded (Alice and alice, fullwidth and ASCII letters). Login, user IDs, stored names and permissions are not changed. An unknown value is treated as preserved."
+msgstr "ローカルユーザーの作成や名前の変更で、ほかのユーザーの名前と大文字小文字、文字幅、Unicodeの合成の違いしかない名前も拒否するかどうか: preservedまたはmapped。preservedは名前を入力されたとおりに比較します。mappedは、折り畳んだ結果が、ほかのユーザーの名前、またはauthentication.admin.usersのエントリ（書かれているとおりのエントリを除く）と同じになる名前を拒否します（Aliceとalice、全角と半角の英字）。ログイン、ユーザーID、保存される名前、パーミッションは変わりません。不明な値はpreservedとして扱われます。"
+
 msgid "Admin role names for authentication."
 msgstr "認証用の管理者ロール名。"
 
@@ -1989,8 +1992,8 @@ msgstr "無効な管理者パスワードのリスト。"
 msgid "Minimum password length (0 to disable)."
 msgstr "パスワードの最小長（0で無効）。"
 
-msgid "Maximum length of a password field. A password is also limited to 72 bytes in UTF-8 whatever this value is, because BCrypt ignores the rest."
-msgstr "パスワードフィールドの最大長。この値にかかわらず、BCryptは残りを無視するため、パスワードはUTF-8で72バイトまでに制限されます。"
+msgid "Maximum length of a password field. A password is also limited in UTF-8 bytes whatever this value is. The byte limit belongs to the password hash algorithm (app.password.algorithm): BCrypt reads only the first 72 bytes and refuses a longer password."
+msgstr "パスワードフィールドの最大長。この値にかかわらず、パスワードはUTF-8のバイト数でも制限されます。バイト数の制限はパスワードのハッシュアルゴリズム（app.password.algorithm）のものです。BCryptは先頭の72バイトしか読まず、それより長いパスワードを拒否します。"
 
 msgid "Require uppercase letters in password."
 msgstr "パスワードに大文字を必須にします。"
