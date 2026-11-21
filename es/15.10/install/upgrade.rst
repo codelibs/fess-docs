@@ -629,7 +629,7 @@ URL de fallo: HTTP 5xx y sospecha de zip bomb
 
 Hasta la versión 15.9, una página que respondía con HTTP 500 no se indexaba ni se registraba como URL de fallo, porque el valor por defecto de ``crawler.failure.url.status.codes`` era ``404,403,410,401``. La versión 15.10 añade ``5xx``, que representa todos los estados de 500 a 599, por lo que esa URL aparece en "Información del sistema" → "URL de fallo" (consulte :doc:`../admin/failureurl-guide` y :doc:`../config/crawler-advanced`). Un 503 se registra después de que el rastreador haya dejado de reintentarlo.
 
-Un ``fess_config.properties`` heredado de 15.9 conserva la lista antigua, y entonces una página que responde con HTTP 500 sigue sin registrarse. Añada ``5xx`` a la lista, o compare el archivo con el de 15.10, y reinicie |Fess|. Una lista que haya definido usted mismo no la cambia la actualización, así que añada también ``5xx`` en ella si quiere que se registren esas páginas. Las versiones 15.9 y anteriores leen cada entrada de la lista como un número y no pueden leer ``5xx``, así que elimínela antes de volver atrás.
+Un ``fess_config.properties`` heredado de 15.9 conserva la lista antigua, y entonces una página que responde con HTTP 500 sigue sin registrarse. Añada ``5xx`` a la lista, o compare el archivo con el de 15.10, y reinicie |Fess|. Una lista que haya definido usted mismo no la cambia la actualización, así que añada también ``5xx`` en ella si quiere que se registren esas páginas. Las versiones 15.9 y anteriores leen cada entrada de la lista como un número y no pueden leer ``5xx``, así que elimínela antes de volver atrás (consulte la advertencia de :ref:`Procedimientos de Reversión <upgrade-1510-rollback-5xx>`).
 
 Un documento que el extractor Tika rechaza por sospecha de zip bomb se registra ahora como URL de fallo y no se indexa, incluso con ``crawler.ignore.content.exception`` en ``true`` (el valor por defecto). Hasta la versión 15.9 se indexaba sin contenido. Los demás errores de contenido que ignora este ajuste no cambian.
 
@@ -1879,9 +1879,22 @@ O::
    los archivos que haya editado, como ``/etc/fess/fess_config.properties``, sin conservar una copia.
    Restáurelos desde el respaldo que hizo en el Paso 1.
 
-.. note::
+.. _upgrade-1510-rollback-5xx:
 
-   Si el ``fess_config.properties`` que usa la versión antigua contiene ``5xx`` en ``crawler.failure.url.status.codes``, elimínelo. Las versiones 15.9 y anteriores leen cada entrada de la lista como un número y no pueden leer ``5xx`` (consulte "URL de fallo: HTTP 5xx y sospecha de zip bomb").
+.. warning::
+
+   **Elimine 5xx de la lista de estados de las URL de fallo antes de iniciar la versión antigua.**
+   La versión 15.10 incluye ``crawler.failure.url.status.codes`` con el valor ``404,403,410,401,5xx``. Las
+   versiones |Fess| 15.9.0 y anteriores leen cada entrada de esta lista como un número, así que, con un
+   ``fess_config.properties`` que contiene ``5xx``, lanzan una ``NumberFormatException`` por cada página
+   rastreada, y todas las páginas, incluso las que se obtuvieron correctamente, se registran como URL de
+   fallo (el registro muestra la ``NumberFormatException``). Abra el ``fess_config.properties`` que usa la
+   versión antigua (``/etc/fess/fess_config.properties`` en RPM/DEB, ``app/WEB-INF/classes/fess_config.properties``
+   en ZIP), elimine ``5xx`` para que la línea sea ``crawler.failure.url.status.codes=404,403,410,401`` (el
+   valor de 15.9) y elimínelo también del argumento de JVM ``-Dfess.config.crawler.failure.url.status.codes``
+   si lo ha definido. Hágalo antes de iniciar |Fess|; un cambio solo surte efecto tras reiniciar. Un archivo
+   que restaure desde la copia de seguridad hecha antes de la actualización contiene el valor de 15.9 y no
+   necesita cambios.
 
 Paso 3: Restauración de Datos
 ------------------------------

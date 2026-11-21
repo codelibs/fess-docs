@@ -31,6 +31,7 @@ Le type MIME, le statut HTTP et la taille ne sont enregistrés que si le crawler
 - Non enregistrés lorsque : aucune réponse n'a été obtenue (délai dépassé, erreur de connexion, etc.), et pour les échecs des explorations de magasins de données. Un échec de l'extraction du texte (par exemple un PDF illisible) n'est pas non plus enregistré avec la valeur par défaut ``crawler.ignore.content.exception=true`` : le document est indexé sans corps. Il n'est enregistré que lorsque cette clé vaut ``false``. Toutefois, un document rejeté comme bombe zip suspectée est enregistré comme URL en échec et n'est pas indexé, même lorsque cette clé vaut ``true``.
 - Le statut HTTP n'est enregistré que pour les URL ``http`` / ``https``. Il reste vide pour les fichiers, SMB et les autres protocoles.
 - Pour une URL en échec enregistrée avant |Fess| 15.10, ces éléments restent vides jusqu'à ce que l'URL échoue à nouveau.
+- ``5xx`` dans ``crawler.failure.url.status.codes`` ne peut être lu que par |Fess| 15.10 et les versions suivantes. Les versions 15.9 et antérieures ne peuvent pas le lire et enregistrent toutes les pages comme URL en échec ; supprimez donc l'entrée avant un retour en arrière (voir :ref:`Procédure de retour arrière <upgrade-1510-rollback-5xx>`).
 
 Téléchargement CSV
 ------------------

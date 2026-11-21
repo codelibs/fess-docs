@@ -632,7 +632,7 @@ Fehler-URLs: HTTP 5xx und vermutete Zip-Bomben
 
 Bis 15.9 wurde eine Seite, die mit HTTP 500 antwortete, weder indiziert noch als Fehler-URL aufgezeichnet, weil der Standardwert von ``crawler.failure.url.status.codes`` ``404,403,410,401`` lautete. 15.10 ergänzt ``5xx``, das für alle Status von 500 bis 599 steht, sodass eine solche URL unter „Systeminformationen" → „Fehler-URL" angezeigt wird (siehe :doc:`../admin/failureurl-guide` und :doc:`../config/crawler-advanced`). Ein 503 wird aufgezeichnet, nachdem der Crawler die Wiederholungsversuche aufgegeben hat.
 
-Eine aus 15.9 übernommene ``fess_config.properties`` enthält noch die alte Liste, und dann wird eine Seite, die mit HTTP 500 antwortet, weiterhin nicht aufgezeichnet. Ergänzen Sie ``5xx`` in der Liste oder vergleichen Sie die Datei mit der von 15.10, und starten Sie |Fess| neu. Eine Liste, die Sie selbst festgelegt haben, ändert das Upgrade nicht; ergänzen Sie ``5xx`` auch dort, wenn diese Seiten aufgezeichnet werden sollen. 15.9 und früher lesen jeden Eintrag der Liste als Zahl und können ``5xx`` nicht lesen; entfernen Sie den Eintrag daher, bevor Sie zurückrollen.
+Eine aus 15.9 übernommene ``fess_config.properties`` enthält noch die alte Liste, und dann wird eine Seite, die mit HTTP 500 antwortet, weiterhin nicht aufgezeichnet. Ergänzen Sie ``5xx`` in der Liste oder vergleichen Sie die Datei mit der von 15.10, und starten Sie |Fess| neu. Eine Liste, die Sie selbst festgelegt haben, ändert das Upgrade nicht; ergänzen Sie ``5xx`` auch dort, wenn diese Seiten aufgezeichnet werden sollen. 15.9 und früher lesen jeden Eintrag der Liste als Zahl und können ``5xx`` nicht lesen; entfernen Sie den Eintrag daher, bevor Sie zurückrollen (siehe die Warnung unter :ref:`Rollback-Verfahren <upgrade-1510-rollback-5xx>`).
 
 Ein Dokument, das der Tika-Extraktor als vermutete Zip-Bombe ablehnt, wird jetzt als Fehler-URL aufgezeichnet und nicht indiziert, auch wenn ``crawler.ignore.content.exception`` ``true`` ist (Standard). Bis 15.9 wurde es ohne Inhalt indiziert. Andere Inhaltsfehler, die diese Einstellung ignoriert, bleiben unverändert.
 
@@ -1889,9 +1889,22 @@ oder::
    Ihnen bearbeiteten Dateien wie ``/etc/fess/fess_config.properties`` ohne Sicherungskopie
    überschreibt. Stellen Sie sie aus dem Backup wieder her, das Sie in Schritt 1 erstellt haben.
 
-.. note::
+.. _upgrade-1510-rollback-5xx:
 
-   Enthält die ``fess_config.properties``, die die alte Version verwendet, in ``crawler.failure.url.status.codes`` den Eintrag ``5xx``, entfernen Sie ihn. 15.9 und früher lesen jeden Eintrag der Liste als Zahl und können ``5xx`` nicht lesen (siehe „Fehler-URLs: HTTP 5xx und vermutete Zip-Bomben").
+.. warning::
+
+   **Entfernen Sie 5xx aus der Liste der Status der Fehler-URLs, bevor Sie die alte Version starten.**
+   15.10 liefert ``crawler.failure.url.status.codes`` mit ``404,403,410,401,5xx`` aus. |Fess| 15.9.0 und
+   früher lesen jeden Eintrag dieser Liste als Zahl; enthält die ``fess_config.properties`` ``5xx``, lösen
+   sie für jede gecrawlte Seite eine ``NumberFormatException`` aus, und jede Seite, auch eine erfolgreich
+   abgerufene, wird als Fehler-URL aufgezeichnet (im Log steht die ``NumberFormatException``). Öffnen Sie die
+   ``fess_config.properties``, die die alte Version verwendet (``/etc/fess/fess_config.properties`` bei
+   RPM/DEB, ``app/WEB-INF/classes/fess_config.properties`` bei ZIP), entfernen Sie ``5xx``, sodass die Zeile
+   ``crawler.failure.url.status.codes=404,403,410,401`` lautet (der Wert von 15.9), und entfernen Sie den
+   Eintrag auch aus dem JVM-Argument ``-Dfess.config.crawler.failure.url.status.codes``, falls Sie eines
+   gesetzt haben. Tun Sie das, bevor Sie |Fess| starten; eine Änderung wirkt erst nach einem Neustart. Eine
+   Datei, die Sie aus der Sicherung vor dem Upgrade wiederherstellen, enthält den Wert von 15.9 und muss
+   nicht geändert werden.
 
 Schritt 3: Datenwiederherstellung
 ----------------------------------

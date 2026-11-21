@@ -31,6 +31,7 @@ El tipo MIME, el estado HTTP y el tamaño se registran solo cuando el rastreador
 - No se registran cuando: no se obtuvo respuesta, como en un tiempo de espera agotado o un error de conexión, ni en los fallos de rastreos de almacenes de datos. Un fallo al extraer el texto (por ejemplo, un PDF ilegible) tampoco se registra con el valor predeterminado ``crawler.ignore.content.exception=true``: el documento se indexa sin cuerpo. Solo se registra cuando esta clave es ``false``. No obstante, un documento rechazado por sospecha de zip bomb se registra como URL de fallo y no se indexa, incluso si esta clave es ``true``.
 - El estado HTTP solo se registra para URL ``http`` / ``https``. Queda en blanco para archivos, SMB y otros protocolos.
 - En una URL de fallo registrada antes de |Fess| 15.10, estos elementos quedan en blanco hasta que la URL vuelva a fallar.
+- ``5xx`` en ``crawler.failure.url.status.codes`` solo puede leerlo |Fess| 15.10 o posterior. Las versiones 15.9 y anteriores no pueden leerlo y registran todas las páginas como URL de fallo, así que elimínelo antes de volver atrás (consulte :ref:`Procedimientos de Reversión <upgrade-1510-rollback-5xx>`).
 
 Descarga de CSV
 ---------------

@@ -117,7 +117,7 @@ Requirements
 - **HTTPS**: Browsers allow WebAuthn only in a secure context (HTTPS, or ``localhost``). |Fess| also accepts an ``http`` origin in ``passkey.origins``, but in production serve |Fess| over HTTPS and give ``https://`` origins (see "Enable HTTPS" in :doc:`../install/security`).
 - **Browser**: A browser that provides the WebAuthn API (``PublicKeyCredential``) is required. In a browser without it, neither the login button nor the registration section is shown.
 - **Authenticator**: It must support discoverable credentials and user verification (a PIN, biometrics, and so on). |Fess| requires both, supports the ES256 and RS256 signature algorithms, and does not use attestation.
-- **Multiple nodes**: The challenge of a passkey ceremony is kept in the HTTP session for 5 minutes. When you run several nodes behind a load balancer, share sessions between the nodes (environment variable ``FESS_SESSION_STORE=opensearch``) or make the load balancer pin each session to one node.
+- **Multiple nodes**: The challenge of a passkey ceremony is kept in the HTTP session for 5 minutes. When you run several nodes behind a load balancer, share sessions between the nodes (environment variable ``FESS_SESSION_STORE=opensearch``) or make the load balancer pin each session to one node. With the shared store, adding or removing an SSO plugin invalidates every stored session (see the note in :doc:`sso-saml`).
 
 API
 ===

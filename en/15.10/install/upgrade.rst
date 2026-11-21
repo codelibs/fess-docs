@@ -618,7 +618,7 @@ Failure URLs: HTTP 5xx and Suspected Zip Bombs
 
 Up to 15.9, a page that answered with HTTP 500 was not indexed and was not recorded as a failure URL, because the default of ``crawler.failure.url.status.codes`` was ``404,403,410,401``. 15.10 adds ``5xx``, which stands for every status from 500 to 599, so such a URL is listed under "System Info" → "Failure URL" (see :doc:`../admin/failureurl-guide` and :doc:`../config/crawler-advanced`). A 503 is recorded after the crawler has given up retrying it.
 
-A ``fess_config.properties`` carried over from 15.9 still holds the old list, and then a page that answers with HTTP 500 is still not recorded. Add ``5xx`` to the list, or compare the file with the one of 15.10, and restart |Fess|. A list that you set yourself is not changed by the upgrade, so add ``5xx`` to it, too, if you want these pages recorded. 15.9 and earlier read every entry of the list as a number and cannot read ``5xx``, so remove it before you roll back.
+A ``fess_config.properties`` carried over from 15.9 still holds the old list, and then a page that answers with HTTP 500 is still not recorded. Add ``5xx`` to the list, or compare the file with the one of 15.10, and restart |Fess|. A list that you set yourself is not changed by the upgrade, so add ``5xx`` to it, too, if you want these pages recorded. 15.9 and earlier read every entry of the list as a number and cannot read ``5xx``, so remove it before you roll back (see the warning in :ref:`Rollback Procedure <upgrade-1510-rollback-5xx>`).
 
 A document that the Tika extractor rejects as a suspected zip bomb is now recorded as a failure URL and is not indexed, even when ``crawler.ignore.content.exception`` is ``true`` (the default). Up to 15.9, it was indexed with no content. Other content errors that this setting ignores are unchanged.
 
@@ -1803,11 +1803,22 @@ Or::
    the files you edited, such as ``/etc/fess/fess_config.properties``, without keeping a copy. Restore
    them from the backup you took in Step 1.
 
-.. note::
+.. _upgrade-1510-rollback-5xx:
 
-   If the ``fess_config.properties`` that the old version uses contains ``5xx`` in
-   ``crawler.failure.url.status.codes``, remove it. 15.9 and earlier read every entry of the list as a
-   number and cannot read ``5xx`` (see "Failure URLs: HTTP 5xx and Suspected Zip Bombs").
+.. warning::
+
+   **Remove 5xx from the failure URL status codes before you start the old version.**
+   15.10 ships ``crawler.failure.url.status.codes`` as ``404,403,410,401,5xx``. |Fess| 15.9.0 and
+   earlier read every entry of this list as a number, so with a ``fess_config.properties`` that
+   contains ``5xx`` they throw a ``NumberFormatException`` for every crawled page, and every page,
+   including a page that was fetched successfully, is recorded as a failure URL (the log shows the
+   ``NumberFormatException``). Open the ``fess_config.properties`` that the old version uses
+   (``/etc/fess/fess_config.properties`` for RPM/DEB, ``app/WEB-INF/classes/fess_config.properties``
+   for ZIP), remove ``5xx`` so that the line reads ``crawler.failure.url.status.codes=404,403,410,401``
+   (the 15.9 value), and remove it from the ``-Dfess.config.crawler.failure.url.status.codes`` JVM
+   argument as well if you set one. Do this before you start |Fess|; a change takes effect only after
+   a restart. A file that you restore from the backup you took before the upgrade holds the 15.9
+   value and needs no change.
 
 Step 3: Restore Data
 ---------------------

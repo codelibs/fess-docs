@@ -31,6 +31,7 @@ MIME-Typ, HTTP-Status und Größe werden nur aufgezeichnet, wenn der Crawler sie
 - Nicht aufgezeichnet bei: keine Antwort erhalten, etwa bei Zeitüberschreitung oder Verbindungsfehler, sowie bei Fehlern von Datenspeicher-Crawls. Ein Fehler bei der Textextraktion (z. B. bei einer nicht lesbaren PDF-Datei) wird mit dem Standardwert ``crawler.ignore.content.exception=true`` ebenfalls nicht aufgezeichnet: Das Dokument wird ohne Textkörper indiziert. Aufgezeichnet wird er nur, wenn dieser Schlüssel ``false`` ist. Ausgenommen sind Dokumente, die als vermutete Zip-Bombe abgelehnt wurden: Sie werden auch bei ``true`` als Fehler-URL aufgezeichnet und nicht indiziert.
 - Der HTTP-Status wird nur für ``http``-/``https``-URLs aufgezeichnet. Für Dateien, SMB und andere Protokolle bleibt er leer.
 - Bei einer Fehler-URL, die vor |Fess| 15.10 aufgezeichnet wurde, bleiben diese Angaben leer, bis die URL erneut fehlschlägt.
+- ``5xx`` in ``crawler.failure.url.status.codes`` kann nur |Fess| 15.10 und später lesen. 15.9 und früher können es nicht lesen und zeichnen jede Seite als Fehler-URL auf; entfernen Sie den Eintrag daher, bevor Sie zurückrollen (siehe :ref:`Rollback-Verfahren <upgrade-1510-rollback-5xx>`).
 
 CSV-Download
 ------------
