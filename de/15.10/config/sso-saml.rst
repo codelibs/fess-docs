@@ -42,6 +42,9 @@ Bei der SAML-Authentifizierung fungiert |Fess| als SP (Service Provider) und arb
 
 Für die Integration mit rollenbasierter Suche siehe :doc:`security-role`.
 
+.. note::
+   Wenn Sie mehrere Knoten betreiben, setzen Sie die Umgebungsvariable ``FESS_SESSION_STORE=opensearch``, um die HTTP-Sitzung zwischen ihnen zu teilen; eine auf einem Knoten begonnene Anmeldung kann dann auf einem anderen abgeschlossen werden. Aktualisieren Sie das Plugin auf jedem Knoten auf 15.10, bevor Sie dies aktivieren: Ein Plugin 15.9.0 teilt den Anmeldestatus nicht, und ein Benutzer, der zu einem anderen Knoten zurückkehrt, bleibt anonym. Ohne gemeinsame Sitzung binden Sie jede Sitzung am Load Balancer an einen Knoten.
+
 Voraussetzungen
 ===============
 
@@ -324,6 +327,20 @@ Die folgenden Sicherheitseinstellungen werden aus ``system.properties`` gelesen.
    bei konfiguriertem Single Logout, ``saml.security.allow_deprecated_alg=true`` oder
    ``saml.security.allow_rsa_1_5=true``), wird beim Laden der SAML-Einstellungen eine
    Warnung ``Insecure SAML settings: ...`` in das Protokoll geschrieben.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Eigenschaft
+     - Beschreibung
+     - Standard
+   * - ``saml.session.end_with_idp``
+     - Die |Fess|-Anmeldung beenden, wenn die IdP-Sitzung endet, und zwar zum ``SessionNotOnOrAfter`` der Assertion plus ``saml.security.clock_drift``. ``false`` schaltet dies ab
+     - ``true``
+
+.. note::
+   Die Einstellung hat keine Wirkung, wenn der IdP kein ``SessionNotOnOrAfter`` sendet. Wenn der IdP seine Sitzung auf eine kurze Zeit begrenzt (der Standard in Keycloak ist 10 Stunden), können Benutzer früher als bisher abgemeldet werden. Eine Abmeldung am IdP beendet die |Fess|-Anmeldung nicht vor diesem Zeitpunkt.
 
 Signatureinstellungen
 ---------------------

@@ -30,9 +30,12 @@ OpenID Connect认证的工作原理
 .. note::
    |Fess| 使用授权码流程（Authorization Code Flow）。ID Token不经过浏览器，而是通过 |Fess| 与OP之间的后端通道（服务器间通信）直接从令牌端点获取。
    |Fess| 通过解码ID Token来提取声明（如 ``email`` 和 ``groups``）以构建用户信息，但不对JWT签名进行密码学验证。由于令牌是通过TLS直接从令牌端点接收的，OpenID Connect Core允许这样做，因此令牌端点URL（``oic.token.server.url``）必须为HTTPS。只有 ``localhost``、``127.x.x.x`` 和 ``::1`` 可以使用 ``http``。
-   |Fess| 会校验声明：``aud`` 必须包含 ``oic.client.id``\ （``azp`` 存在时也必须与其一致），``exp`` 必须存在且尚未过期（允许最多300秒的时钟偏差），设置了 ``oic.issuer`` 时 ``iss`` 必须与其一致。未设置 ``oic.issuer`` 时不校验 ``iss``，并会在每次启动后的首次登录时记录一条警告。每次授权请求都会发送 ``nonce``，ID Token 中的 ``nonce`` 声明必须与其一致；缺少该声明或值不同的令牌会被拒绝。不返回 ``nonce`` 的OP无法使用，也没有关闭此校验的设置。不使用PKCE，也不校验 ``iat`` 和 ``nbf``。
+   |Fess| 会校验声明：``aud`` 必须包含 ``oic.client.id``\ （``azp`` 存在时也必须与其一致），``exp`` 必须存在且尚未过期（允许最多300秒的时钟偏差），设置了 ``oic.issuer`` 时 ``iss`` 必须与其一致。未设置 ``oic.issuer`` 时不校验 ``iss``，并会在每次启动后的首次登录时记录一条警告。每次授权请求都会发送 ``nonce``，ID Token 中的 ``nonce`` 声明必须与其一致；缺少该声明或值不同的令牌会被拒绝。不返回 ``nonce`` 的OP无法使用，也没有关闭此校验的设置。默认使用PKCE（S256）：每个授权请求都带有 ``code_challenge``，令牌请求会发送 ``code_verifier``。仅当OP拒绝PKCE时，才在 ``system.properties`` 中设置 ``oic.pkce=false``（管理画面中没有对应的项目；每次登录都会读取该键，因此无需重启）。不校验 ``iat`` 和 ``nbf``。
 
 有关基于角色的搜索集成，请参阅 :doc:`security-role`。
+
+.. note::
+   运行多个节点时，请设置环境变量 ``FESS_SESSION_STORE=opensearch`` 以在节点之间共享HTTP会话；这样在一个节点上发起的登录就可以在另一个节点上完成。启用之前，请将每个节点上的插件更新到15.10：15.9.0的插件不会共享登录状态，返回到另一个节点的用户会保持匿名。未共享会话时，请在负载均衡器上将每个会话固定到一个节点。
 
 前提条件
 ========

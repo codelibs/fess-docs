@@ -42,6 +42,9 @@ Dans l'authentification SAML, |Fess| fonctionne comme un SP (Service Provider) e
 
 Pour l'intégration avec la recherche basée sur les rôles, voir :doc:`security-role`.
 
+.. note::
+   Lorsque vous exécutez plusieurs nœuds, définissez la variable d'environnement ``FESS_SESSION_STORE=opensearch`` pour partager la session HTTP entre eux ; une connexion commencée sur un nœud peut alors être terminée sur un autre. Mettez à jour le plugin sur chaque nœud en 15.10 avant de l'activer : un plugin 15.9.0 ne partage pas l'état de la connexion, et un utilisateur qui revient sur un autre nœud reste anonyme. Sans session partagée, configurez le répartiteur de charge pour qu'il rattache chaque session à un seul nœud.
+
 Prérequis
 =========
 
@@ -326,6 +329,20 @@ Les paramètres de sécurité suivants sont lus depuis ``system.properties``.
    avec la déconnexion unique configurée, ``saml.security.allow_deprecated_alg=true`` ou
    ``saml.security.allow_rsa_1_5=true``), un avertissement ``Insecure SAML settings: ...`` est écrit dans le
    journal lors du chargement des paramètres SAML.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propriété
+     - Description
+     - Par défaut
+   * - ``saml.session.end_with_idp``
+     - Mettre fin à la connexion à |Fess| lorsque la session de l'IdP se termine, au ``SessionNotOnOrAfter`` de l'assertion plus ``saml.security.clock_drift``. ``false`` le désactive
+     - ``true``
+
+.. note::
+   Ce paramètre n'a aucun effet lorsque l'IdP n'envoie pas de ``SessionNotOnOrAfter``. Lorsque l'IdP limite sa session à une durée courte (la valeur par défaut dans Keycloak est de 10 heures), les utilisateurs peuvent être déconnectés plus tôt qu'auparavant. Se déconnecter de l'IdP ne met pas fin à la connexion à |Fess| avant cet instant.
 
 Paramètres de signature
 -----------------------

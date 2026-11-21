@@ -42,6 +42,9 @@ En la autenticación SAML, |Fess| opera como un SP (Service Provider) y colabora
 
 Para la integración con búsqueda basada en roles, consulte :doc:`security-role`.
 
+.. note::
+   Si ejecuta varios nodos, defina la variable de entorno ``FESS_SESSION_STORE=opensearch`` para compartir la sesión HTTP entre ellos; un inicio de sesión iniciado en un nodo podrá entonces completarse en otro. Actualice el plugin en cada nodo a 15.10 antes de activarlo: un plugin 15.9.0 no comparte el estado del inicio de sesión, y un usuario que vuelve a otro nodo permanece como anónimo. Sin una sesión compartida, haga que el balanceador de carga fije cada sesión a un nodo.
+
 Prerrequisitos
 ==============
 
@@ -324,6 +327,20 @@ Los siguientes ajustes de seguridad se leen de ``system.properties``.
    con el cierre de sesión único configurado, ``saml.security.allow_deprecated_alg=true`` o
    ``saml.security.allow_rsa_1_5=true``), se escribe en el registro una advertencia
    ``Insecure SAML settings: ...`` al cargar la configuración SAML.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 45 20
+
+   * - Propiedad
+     - Descripción
+     - Por defecto
+   * - ``saml.session.end_with_idp``
+     - Finalizar el inicio de sesión de |Fess| cuando termina la sesión del IdP, en el ``SessionNotOnOrAfter`` de la aserción más ``saml.security.clock_drift``. ``false`` lo desactiva
+     - ``true``
+
+.. note::
+   El ajuste no tiene efecto cuando el IdP no envía ``SessionNotOnOrAfter``. Cuando el IdP limita su sesión a un tiempo corto (el valor predeterminado en Keycloak es de 10 horas), los usuarios pueden ver cerrada su sesión antes que antes. Cerrar la sesión en el IdP no finaliza el inicio de sesión de |Fess| antes de ese momento.
 
 Configuración de firma
 ----------------------
