@@ -240,6 +240,9 @@ Jeder Audit-Eintrag ist eine Zeile aus tabulatorgetrennten ``key:value``-Feldern
    * - ``LOGOUT``
      - ``user``, ``permissions``
      - sich ein Benutzer abmeldet.
+   * - ``SESSION_END``
+     - ``user``, ``reason``
+     - |Fess| von sich aus eine Anmeldesitzung beendet, im Unterschied zu einer Abmeldung, die der Benutzer verlangt hat (das ist ``LOGOUT``). Für jede beendete Sitzung wird ein Eintrag geschrieben.
    * - ``LOGIN_FAILURE``
      - ``class``, ``user``
      - eine Anmeldung abgelehnt wird, im Anmeldeformular, in der Anmelde-API oder per SSO. Auch eine Anmeldung, die ein SSO-Authentifikator mit einer Ausnahme ablehnt, wird erfasst.
@@ -263,6 +266,7 @@ Jeder Audit-Eintrag ist eine Zeile aus tabulatorgetrennten ``key:value``-Feldern
 - ``ACCESS``: ``method`` ist die HTTP-Methode. ``id`` ist der Wert des Anfrageparameters ``id`` und wird nur geschrieben, wenn die Anfrage ihn enthält (bei einer Upload-Anfrage wird er nicht gelesen). Kein anderer Anfrageparameter wird geschrieben, weil die Verwaltungsformulare Passwörter und Schlüssel enthalten.
 - ``ACCESS_DENIED``: Bei einer abgelehnten Anfrage an die Admin-REST-API wird nur der Pfad der Anfrage geschrieben. Weder das Zugriffstoken noch der Parameter, der es übermittelt hat, wird erfasst.
 - ``UPDATE_PASSWORD``: ``user`` ist der Benutzer, der das Passwort geändert hat, und ``target`` der Name des Benutzers, dessen Passwort geändert wurde. Das Passwort und sein Hash werden nie geschrieben, und eine abgelehnte Änderung erzeugt keinen Eintrag.
+- ``SESSION_END``: ``user`` ist der Benutzer, dessen Sitzung endete, und ``reason`` der Grund. ``password_changed``: Das Passwort des Benutzers wurde geändert, nachdem die Sitzung geöffnet wurde. ``user_not_found``: Das Dokument des lokalen Benutzers existiert nicht mehr, zum Beispiel weil der Benutzer gelöscht oder umbenannt wurde. ``idp_session_ended``: Der Identity Provider hat seine Sitzung beendet (das ``SessionNotOnOrAfter`` von SAML, siehe :doc:`../config/sso-saml`).
 
 Regelmäßige Sicherheitsupdates
 -------------------------------

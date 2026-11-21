@@ -91,7 +91,7 @@ Nachdem ``passkey.enabled`` wieder auf ``false`` gesetzt wurde, listet die Detai
 Beziehung zum Passwort
 ======================
 
-- Ein Passkey und ein Passwort sind getrennte Zugangsdaten. Wird das Passwort eines Benutzers geändert oder von einem Administrator neu gesetzt, werden die registrierten Passkeys nicht gelöscht, und sie können weiterhin zur Anmeldung verwendet werden.
+- Ein Passkey und ein Passwort sind getrennte Zugangsdaten. Wird das Passwort eines Benutzers geändert oder von einem Administrator neu gesetzt, werden die registrierten Passkeys nicht gelöscht, und sie können weiterhin zur Anmeldung verwendet werden. Ein Administrator löscht sie einzeln mit „Zurücksetzen“ auf der Detailseite des Benutzers (siehe „Aktionen des Administrators“ oben).
 - Wird ein Passwort geändert, enden die übrigen Anmeldesitzungen des Benutzers (siehe :doc:`../install/security`). Das schließt eine mit einem Passkey geöffnete Sitzung ein. Jede Sitzung prüft höchstens einmal je ``password.changed.check.interval`` Sekunden (Standard ``60``), sodass die Sitzungen innerhalb dieser Zeit enden.
 - Das Löschen eines Passkeys beendet die übrigen Sitzungen auf dieselbe Weise (siehe oben).
 

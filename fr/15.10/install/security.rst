@@ -240,6 +240,9 @@ Chaque enregistrement d'audit est une ligne de champs ``key:value`` séparés pa
    * - ``LOGOUT``
      - ``user``, ``permissions``
      - un utilisateur se déconnecte.
+   * - ``SESSION_END``
+     - ``user``, ``reason``
+     - |Fess| met fin de lui-même à une session de connexion, par opposition à une déconnexion demandée par l'utilisateur (c'est ``LOGOUT``). Un enregistrement est écrit pour chaque session terminée.
    * - ``LOGIN_FAILURE``
      - ``class``, ``user``
      - une connexion est refusée, sur le formulaire de connexion, dans l'API de connexion ou par SSO. Une connexion qu'un authentificateur SSO refuse par une exception est également enregistrée.
@@ -263,6 +266,7 @@ Chaque enregistrement d'audit est une ligne de champs ``key:value`` séparés pa
 - ``ACCESS`` : ``method`` est la méthode HTTP. ``id`` est la valeur du paramètre de requête ``id``, écrit uniquement si la requête en comporte un (il n'est pas lu dans une requête de téléversement). Aucun autre paramètre de requête n'est écrit, car les formulaires d'administration contiennent des mots de passe et des clés.
 - ``ACCESS_DENIED`` : pour une requête refusée vers l'API REST d'administration, seul le chemin de la requête est écrit. Ni le jeton d'accès ni le paramètre qui le transportait ne sont enregistrés.
 - ``UPDATE_PASSWORD`` : ``user`` est l'utilisateur qui a modifié le mot de passe et ``target`` le nom de l'utilisateur dont le mot de passe a été modifié. Le mot de passe et son empreinte ne sont jamais écrits, et une modification refusée n'écrit rien.
+- ``SESSION_END`` : ``user`` est l'utilisateur dont la session a pris fin et ``reason`` en est la raison. ``password_changed`` : le mot de passe de l'utilisateur a été modifié après l'ouverture de la session. ``user_not_found`` : le document de l'utilisateur local n'existe plus, par exemple parce que l'utilisateur a été supprimé ou renommé. ``idp_session_ended`` : le fournisseur d'identité (IdP) a mis fin à sa session (le ``SessionNotOnOrAfter`` de SAML, voir :doc:`../config/sso-saml`).
 
 Mises à jour de sécurité régulières
 ------------------------------------

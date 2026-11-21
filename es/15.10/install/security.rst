@@ -238,6 +238,9 @@ Cada registro de auditoría es una línea de campos ``key:value`` separados por 
    * - ``LOGOUT``
      - ``user``, ``permissions``
      - un usuario cierra sesión.
+   * - ``SESSION_END``
+     - ``user``, ``reason``
+     - |Fess| finaliza por sí mismo una sesión de inicio de sesión, a diferencia de un cierre de sesión que solicita el usuario (este es ``LOGOUT``). Se escribe un registro por cada sesión finalizada.
    * - ``LOGIN_FAILURE``
      - ``class``, ``user``
      - se rechaza un inicio de sesión, en el formulario de inicio de sesión, en la API de inicio de sesión o mediante SSO. También se registra un inicio de sesión que un autenticador SSO rechaza con una excepción.
@@ -261,6 +264,7 @@ Cada registro de auditoría es una línea de campos ``key:value`` separados por 
 - ``ACCESS``: ``method`` es el método HTTP. ``id`` es el valor del parámetro de solicitud ``id`` y solo se escribe cuando la solicitud lo incluye (no se lee en una solicitud de carga de archivos). No se escribe ningún otro parámetro de la solicitud, porque los formularios de administración contienen contraseñas y claves.
 - ``ACCESS_DENIED``: en una solicitud rechazada a la API REST de administración, solo se escribe la ruta de la solicitud. No se registra ni el token de acceso ni el parámetro que lo transportaba.
 - ``UPDATE_PASSWORD``: ``user`` es el usuario que cambió la contraseña y ``target`` es el nombre del usuario cuya contraseña se cambió. La contraseña y su hash nunca se escriben, y un cambio rechazado no escribe nada.
+- ``SESSION_END``: ``user`` es el usuario cuya sesión terminó y ``reason`` es el motivo. ``password_changed``: la contraseña del usuario se cambió después de abrirse la sesión. ``user_not_found``: el documento del usuario local ya no existe, por ejemplo porque el usuario se eliminó o se renombró. ``idp_session_ended``: el proveedor de identidad (IdP) finalizó su sesión (el ``SessionNotOnOrAfter`` de SAML, consulte :doc:`../config/sso-saml`).
 
 Actualizaciones de Seguridad Periódicas
 ----------------------------------------

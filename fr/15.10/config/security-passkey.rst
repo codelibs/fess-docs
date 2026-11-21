@@ -91,7 +91,7 @@ Une fois ``passkey.enabled`` remis à ``false``, la page de détails liste encor
 Relation avec le mot de passe
 =============================
 
-- Une clé d'accès et un mot de passe sont des identifiants distincts. Modifier le mot de passe d'un utilisateur, ou qu'un administrateur en définisse un nouveau, ne supprime pas les clés d'accès enregistrées, et elles peuvent toujours servir à se connecter.
+- Une clé d'accès et un mot de passe sont des identifiants distincts. Modifier le mot de passe d'un utilisateur, ou qu'un administrateur en définisse un nouveau, ne supprime pas les clés d'accès enregistrées, et elles peuvent toujours servir à se connecter. Un administrateur les supprime une par une avec « Réinitialiser » sur la page de détails de l'utilisateur (voir « Actions de l'administrateur » ci-dessus).
 - Lorsqu'un mot de passe est modifié, les autres sessions de connexion de l'utilisateur prennent fin (voir :doc:`../install/security`). Cela inclut une session ouverte avec une clé d'accès. Chaque session vérifie au plus une fois toutes les ``password.changed.check.interval`` secondes (``60`` par défaut), de sorte que les sessions prennent fin dans ce délai.
 - La suppression d'une clé d'accès met fin aux autres sessions de la même façon (voir ci-dessus).
 

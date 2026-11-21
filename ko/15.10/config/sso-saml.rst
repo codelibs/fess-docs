@@ -339,7 +339,7 @@ Keycloak은 기본적으로 이러한 형태의 어서션을 보냅니다. 역�
      - ``true``
 
 .. note::
-   IdP가 ``SessionNotOnOrAfter`` 를 보내지 않는 경우 이 설정은 동작하지 않습니다. IdP가 세션의 상한을 짧게 두는 경우（Keycloak의 기본값은 10시간）, 이전보다 일찍 로그아웃될 수 있습니다. IdP에서 로그아웃해도 |Fess| 의 로그인은 이 시각까지 유지됩니다.
+   IdP가 ``SessionNotOnOrAfter`` 를 보내지 않는 경우 이 설정은 동작하지 않습니다. IdP가 세션의 상한을 짧게 두는 경우（Keycloak의 기본값은 10시간）, 이전보다 일찍 로그아웃될 수 있습니다. IdP에서 로그아웃해도 |Fess| 의 로그인은 이 시각까지 유지됩니다. 이렇게 로그인이 종료되면 감사 로그에 이유가 ``idp_session_ended`` 인 ``SESSION_END`` 레코드가 기록됩니다(:doc:`../install/security` 참조).
 
 서명 설정
 ---------

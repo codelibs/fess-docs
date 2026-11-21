@@ -30,6 +30,9 @@ Windows 통합 인증에서는 |Fess| 가 SPNEGO(Simple and Protected GSSAPI Neg
 
 역할 기반 검색과의 연계에 대해서는 :doc:`security-role` 을 참조하십시오.
 
+.. note::
+   Kerberos 티켓은 로그인에만 사용됩니다. |Fess| 의 로그인 세션은 티켓이 만료되어도 종료되지 않으며, 사용자가 로그아웃하거나 세션 타임아웃에 도달할 때까지 유지됩니다. SAML은 다르며, IdP 세션과 함께 종료됩니다(:doc:`sso-saml` 참조).
+
 전제조건
 ========
 
