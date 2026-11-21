@@ -342,7 +342,7 @@ Los siguientes ajustes de seguridad se leen de ``system.properties``.
      - ``true``
 
 .. note::
-   El ajuste no tiene efecto cuando el IdP no envía ``SessionNotOnOrAfter``. Cuando el IdP limita su sesión a un tiempo corto (el valor predeterminado en Keycloak es de 10 horas), los usuarios pueden ver cerrada su sesión antes que antes. Cerrar la sesión en el IdP no finaliza el inicio de sesión de |Fess| antes de ese momento.
+   El ajuste no tiene efecto cuando el IdP no envía ``SessionNotOnOrAfter``. Cuando el IdP limita su sesión a un tiempo corto (el valor predeterminado en Keycloak es de 10 horas), los usuarios pueden ver cerrada su sesión antes que antes. Cerrar la sesión en el IdP no finaliza el inicio de sesión de |Fess| antes de ese momento. Cuando el inicio de sesión termina de esta forma, se escribe en el registro de auditoría un registro ``SESSION_END`` con el motivo ``idp_session_ended`` (consulte :doc:`../install/security`).
 
 Configuración de firma
 ----------------------

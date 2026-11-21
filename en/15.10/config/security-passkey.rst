@@ -91,7 +91,7 @@ After ``passkey.enabled`` is set back to ``false``, the details page still lists
 Relation to the password
 ========================
 
-- A passkey and a password are separate credentials. Changing a user's password, or an administrator setting a new one, does not delete the registered passkeys, and they can still be used to log in.
+- A passkey and a password are separate credentials. Changing a user's password, or an administrator setting a new one, does not delete the registered passkeys, and they can still be used to log in. An administrator deletes them one by one with "Reset" on the details page of the user (see "Administrator actions" above).
 - When a password is changed, the other login sessions of the user end (see :doc:`../install/security`). This includes a session opened with a passkey. Each session checks at most once every ``password.changed.check.interval`` seconds (default ``60``), so the sessions end within that time.
 - Deleting a passkey ends the other sessions the same way (see above).
 

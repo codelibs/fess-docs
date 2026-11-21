@@ -339,7 +339,7 @@ The following security settings are read from ``system.properties``.
      - ``true``
 
 .. note::
-   The setting has no effect when the IdP sends no ``SessionNotOnOrAfter``. When the IdP caps its session at a short time (the default in Keycloak is 10 hours), users can be logged out sooner than before. Logging out at the IdP does not end the |Fess| login before that time.
+   The setting has no effect when the IdP sends no ``SessionNotOnOrAfter``. When the IdP caps its session at a short time (the default in Keycloak is 10 hours), users can be logged out sooner than before. Logging out at the IdP does not end the |Fess| login before that time. When the login ends this way, a ``SESSION_END`` record with the reason ``idp_session_ended`` is written to the audit log (see :doc:`../install/security`).
 
 Signature Settings
 ------------------

@@ -30,6 +30,9 @@ In Windows Integrated Authentication, |Fess| uses the SPNEGO (Simple and Protect
 
 For role-based search integration, see :doc:`security-role`.
 
+.. note::
+   The Kerberos ticket is used only to log in. The |Fess| login session does not end when the ticket expires; it lasts until the user logs out or the session timeout is reached. SAML differs: its session ends with the IdP session (see :doc:`sso-saml`).
+
 Prerequisites
 =============
 

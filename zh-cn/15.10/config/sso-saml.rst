@@ -332,7 +332,7 @@ Keycloak 默认发送这种形式的断言：除非启用其角色映射器和�
      - ``true``
 
 .. note::
-   IdP不发送 ``SessionNotOnOrAfter`` 时，此设置不起作用。当IdP将其会话上限设为较短时间时（Keycloak的默认值为10小时），用户可能比以前更早被登出。在IdP处登出并不会在该时间之前结束 |Fess| 的登录。
+   IdP不发送 ``SessionNotOnOrAfter`` 时，此设置不起作用。当IdP将其会话上限设为较短时间时（Keycloak的默认值为10小时），用户可能比以前更早被登出。在IdP处登出并不会在该时间之前结束 |Fess| 的登录。登录以这种方式结束时，审计日志中会写入原因为 ``idp_session_ended`` 的 ``SESSION_END`` 记录（参见 :doc:`../install/security` ）。
 
 签名设置
 --------
