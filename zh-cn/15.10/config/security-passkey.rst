@@ -122,7 +122,7 @@
 API
 ===
 
-通行密钥 API 位于 ``/api/v2/auth/passkey`` 下。通行密钥处于关闭状态时，所有 API 都返回 ``404`` 。 ``/api/v2/ui/config`` 的 ``features.passkey_enabled`` 表示该功能是否可用（参见 :doc:`../api/api-uiconfig` ）。
+通行密钥 API 位于 ``/api/v2/auth/passkey`` 下。通行密钥处于关闭状态时，所有 API 都返回 ``404`` ，但请求要先通过所有 v2 端点最先进行的检查。登录的 2 个端点（ ``login/options`` 和 ``login/verify`` ）不需要 CSRF 令牌，因此始终返回 ``404`` 。其他端点对没有会话和有效 CSRF 令牌的 ``POST`` 、 ``DELETE`` 返回 ``403`` ，对带有会话和 CSRF 令牌的请求以及 ``GET`` 返回 ``404`` 。启用 ``login.required`` 时，对登录 2 个端点以外的端点发出的匿名请求返回 ``401`` 。 ``/api/v2/ui/config`` 的 ``features.passkey_enabled`` 表示该功能是否可用（参见 :doc:`../api/api-uiconfig` ）。
 
 .. list-table::
    :header-rows: 1

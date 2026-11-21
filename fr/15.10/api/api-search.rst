@@ -34,7 +34,7 @@ Paramètres de requête
    * - ``start``
      - Position de départ à base zéro (entier, ``>=0``, valeur par défaut ``0``).
    * - ``offset``
-     - Décalage depuis ``start`` (entier, ``>=0``, valeur par défaut ``0``).
+     - Renvoyez le ``offset`` de la réponse de la page précédente lorsque vous demandez une page qui commence à ``rank.fusion.window_size`` (``200`` par défaut) ou au-delà (entier, ``>=0``, valeur par défaut ``0``). Avec la fusion des classements, les premières pages sont des résultats fusionnés et les suivantes des résultats par mots-clés. ``offset`` est le nombre des premiers résultats fusionnés qui ne figurent pas dans la fenêtre des résultats par mots-clés ; il ramène ``start`` en arrière de cette valeur pour que les pages suivantes prolongent les pages fusionnées sans trou ni répétition. S'il est omis, il vaut ``0``.
    * - ``num``
      - Taille de la page (entier, ``>=1``, valeur par défaut ``10``). Une valeur ``<= 0`` provoque une erreur ``invalid_request``. Les valeurs dépassant la limite maximale configurée sont réduites silencieusement. Vous pouvez détecter ce rognage en comparant ``num`` dans la requête avec ``page_size`` dans la réponse.
    * - ``sort``
@@ -89,6 +89,7 @@ En cas de succès (200), les champs suivants sont retournés directement sous ``
         "record_count": 42,
         "record_count_relation": "EQUAL_TO",
         "page_count": 3,
+        "offset": 0,
         "highlight_params": "&hq=Fess",
         "next_page": true,
         "prev_page": false,
@@ -149,6 +150,8 @@ Les détails de chaque champ sont les suivants.
      - ``EQUAL_TO`` indique un comptage exact ; ``GREATER_THAN_OR_EQUAL_TO`` indique que seule la borne inférieure est connue.
    * - ``page_count``
      - Nombre total de pages.
+   * - ``offset``
+     - Valeur du paramètre de requête ``offset`` à envoyer pour demander une page ultérieure (entier, ``>=0``) ; voir ``offset`` dans les paramètres de requête. ``0`` lorsque les résultats ne sont pas fusionnés.
    * - ``highlight_params``
      - Chaîne de paramètres de requête pour la mise en évidence.
    * - ``next_page``

@@ -34,7 +34,7 @@ Anfrageparameter
    * - ``start``
      - Startposition (0-basiert; integer, ``>=0``, Standardwert ``0``).
    * - ``offset``
-     - Offset von ``start`` (integer, ``>=0``, Standardwert ``0``).
+     - Senden Sie den ``offset`` der Antwort auf die vorherige Seite zurück, wenn Sie eine Seite anfordern, die bei oder hinter ``rank.fusion.window_size`` (Standardwert ``200``) beginnt (integer, ``>=0``, Standardwert ``0``). Bei der Rank-Fusion sind die ersten Seiten fusionierte Ergebnisse und die späteren Seiten Schlüsselwort-Ergebnisse. ``offset`` gibt an, wie viele der obersten fusionierten Ergebnisse nicht im Fenster der Schlüsselwort-Ergebnisse liegen; er verschiebt ``start`` entsprechend zurück, sodass die späteren Seiten ohne Lücke und ohne Wiederholung an die fusionierten anschließen. Ohne Angabe gilt ``0``.
    * - ``num``
      - Seitengröße (integer, ``>=1``, Standardwert ``10``). ``<= 0`` ergibt ``invalid_request``. Werte über dem konfigurierten Maximum werden stillschweigend begrenzt. Ob eine Begrenzung stattfand, lässt sich durch Vergleich von ``num`` im Request und ``page_size`` im Response feststellen.
    * - ``sort``
@@ -89,6 +89,7 @@ Bei Erfolg (200) werden die folgenden Felder direkt unter ``response`` im gemein
         "record_count": 42,
         "record_count_relation": "EQUAL_TO",
         "page_count": 3,
+        "offset": 0,
         "highlight_params": "&hq=Fess",
         "next_page": true,
         "prev_page": false,
@@ -149,6 +150,8 @@ Die einzelnen Felder sind wie folgt beschrieben:
      - Bei ``EQUAL_TO`` ist die Anzahl exakt; bei ``GREATER_THAN_OR_EQUAL_TO`` ist nur eine Untergrenze bekannt.
    * - ``page_count``
      - Gesamtanzahl der Seiten.
+   * - ``offset``
+     - Wert des Anfrageparameters ``offset``, der bei der Anforderung einer späteren Seite mitzusenden ist (integer, ``>=0``); siehe ``offset`` in den Anfrageparametern. ``0``, wenn die Ergebnisse nicht fusioniert sind.
    * - ``highlight_params``
      - Abfrageparameter-Zeichenkette für die Hervorhebung.
    * - ``next_page``

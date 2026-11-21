@@ -122,7 +122,7 @@ Anforderungen
 API
 ===
 
-Die Passkey-APIs liegen unter ``/api/v2/auth/passkey``. Alle antworten mit ``404``, solange Passkeys deaktiviert sind. ``features.passkey_enabled`` von ``/api/v2/ui/config`` zeigt an, ob die Funktion verfügbar ist (siehe :doc:`../api/api-uiconfig`).
+Die Passkey-APIs liegen unter ``/api/v2/auth/passkey``. Alle antworten mit ``404``, solange Passkeys deaktiviert sind, sofern die Anfrage zuvor die Prüfungen bestanden hat, die jeder v2-Endpunkt als Erstes durchführt. Die beiden Login-Endpunkte (``login/options`` und ``login/verify``) benötigen kein CSRF-Token und antworten daher immer mit ``404``. Die übrigen Endpunkte antworten auf ein ``POST`` oder ``DELETE`` ohne Sitzung und gültiges CSRF-Token mit ``403``, auf eine Anfrage mit Sitzung und CSRF-Token sowie auf ein ``GET`` mit ``404``. Mit ``login.required`` antworten diese Endpunkte auf einen anonymen Aufruf, der nicht an einen der beiden Login-Endpunkte geht, mit ``401``. ``features.passkey_enabled`` von ``/api/v2/ui/config`` zeigt an, ob die Funktion verfügbar ist (siehe :doc:`../api/api-uiconfig`).
 
 .. list-table::
    :header-rows: 1

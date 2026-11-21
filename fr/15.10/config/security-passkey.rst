@@ -122,7 +122,7 @@ Prérequis
 API
 ===
 
-Les API de clés d'accès se trouvent sous ``/api/v2/auth/passkey``. Toutes répondent ``404`` tant que les clés d'accès sont désactivées. ``features.passkey_enabled`` de ``/api/v2/ui/config`` indique si la fonctionnalité est disponible (voir :doc:`../api/api-uiconfig`).
+Les API de clés d'accès se trouvent sous ``/api/v2/auth/passkey``. Toutes répondent ``404`` tant que les clés d'accès sont désactivées, une fois que la requête a passé les contrôles que tout endpoint v2 effectue en premier. Les deux endpoints de connexion (``login/options`` et ``login/verify``) n'exigent pas de jeton CSRF et répondent donc toujours ``404``. Les autres endpoints répondent ``403`` à un ``POST`` ou un ``DELETE`` sans session ni jeton CSRF valide, et ``404`` à une requête avec session et jeton CSRF ainsi qu'à un ``GET``. Avec ``login.required``, un appel anonyme à un endpoint autre que les deux endpoints de connexion répond ``401``. ``features.passkey_enabled`` de ``/api/v2/ui/config`` indique si la fonctionnalité est disponible (voir :doc:`../api/api-uiconfig`).
 
 .. list-table::
    :header-rows: 1

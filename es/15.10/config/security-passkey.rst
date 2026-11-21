@@ -122,7 +122,7 @@ Requisitos
 API
 ===
 
-Las API de llaves de acceso están bajo ``/api/v2/auth/passkey``. Todas responden ``404`` mientras las llaves de acceso están desactivadas. ``features.passkey_enabled`` de ``/api/v2/ui/config`` indica si la función está disponible (consulte :doc:`../api/api-uiconfig`).
+Las API de llaves de acceso están bajo ``/api/v2/auth/passkey``. Todas responden ``404`` mientras las llaves de acceso están desactivadas, una vez que la solicitud ha superado las comprobaciones que todo endpoint v2 realiza primero. Los dos endpoints de inicio de sesión (``login/options`` y ``login/verify``) no necesitan token CSRF, por lo que siempre responden ``404``. Los demás endpoints responden ``403`` a un ``POST`` o ``DELETE`` sin sesión ni token CSRF válido, y ``404`` a una solicitud con sesión y token CSRF y a un ``GET``. Con ``login.required``, una llamada anónima a un endpoint distinto de los dos de inicio de sesión responde ``401``. ``features.passkey_enabled`` de ``/api/v2/ui/config`` indica si la función está disponible (consulte :doc:`../api/api-uiconfig`).
 
 .. list-table::
    :header-rows: 1

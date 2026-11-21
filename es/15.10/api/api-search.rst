@@ -34,7 +34,7 @@ Parámetros de solicitud
    * - ``start``
      - Posición de inicio desde 0 (integer, ``>=0``, valor predeterminado ``0``).
    * - ``offset``
-     - Desplazamiento desde ``start`` (integer, ``>=0``, valor predeterminado ``0``).
+     - Devuelva el ``offset`` de la respuesta de la página anterior cuando solicite una página que empiece en ``rank.fusion.window_size`` (``200`` de forma predeterminada) o más allá (integer, ``>=0``, valor predeterminado ``0``). Con la fusión de rankings, las primeras páginas son resultados fusionados y las posteriores son resultados de palabras clave. ``offset`` es el número de los primeros resultados fusionados que no están en la ventana de los resultados de palabras clave; retrasa ``start`` en esa medida para que las páginas posteriores continúen las fusionadas sin huecos ni repeticiones. Si se omite, es ``0``.
    * - ``num``
      - Tamaño de página (integer, ``>=1``, valor predeterminado ``10``). ``<= 0`` resulta en ``invalid_request``. Los valores que superen el máximo configurado se ajustan silenciosamente. El ajuste puede detectarse comparando ``num`` en la solicitud con ``page_size`` en la respuesta.
    * - ``sort``
@@ -89,6 +89,7 @@ En caso de éxito (200), se devuelven los siguientes campos directamente bajo ``
         "record_count": 42,
         "record_count_relation": "EQUAL_TO",
         "page_count": 3,
+        "offset": 0,
         "highlight_params": "&hq=Fess",
         "next_page": true,
         "prev_page": false,
@@ -149,6 +150,8 @@ Los campos son los siguientes:
      - Cuando es ``EQUAL_TO``, indica un recuento exacto; cuando es ``GREATER_THAN_OR_EQUAL_TO``, indica que solo se conoce el límite inferior.
    * - ``page_count``
      - Número total de páginas.
+   * - ``offset``
+     - Valor del parámetro de solicitud ``offset`` que debe enviarse al solicitar una página posterior (integer, ``>=0``); consulte ``offset`` en los parámetros de solicitud. ``0`` cuando los resultados no están fusionados.
    * - ``highlight_params``
      - Cadena de parámetros de consulta para resaltado.
    * - ``next_page``

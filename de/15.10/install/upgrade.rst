@@ -1975,6 +1975,10 @@ stellen Sie dann den Inhalt der Volumes wieder her::
    gestartet wurde. Ob der Import tatsächlich erfolgreich war, überprüfen Sie anhand von
    ``fess.log``.
 
+.. warning::
+
+   15.10 schreibt beim Anlegen eines Benutzers und bei der Änderung seines Passworts ein numerisches Feld ``password_changed_at`` (den Zeitpunkt der Passwortänderung) in das Benutzerdokument (Index ``fess_user``). 15.9 und früher, einschließlich der veröffentlichten Version 15.9.0, können dieses Feld nicht lesen. Starten Sie diese Versionen mit einem Index, der noch einen in 15.10 angelegten oder mit neuem Passwort versehenen Benutzer enthält, schlagen die Anmeldung dieses Benutzers und die Benutzerliste der Admin-API mit HTTP 500 (``ClassCastException``) fehl. Ein vor dem Upgrade erstellter Snapshot, der in Schritt 3 wiederhergestellt wird, enthält solche Benutzer nicht. Andernfalls löschen Sie die in 15.10 angelegten oder geänderten Benutzer und legen sie neu an, oder entfernen Sie vor dem Rollback ``password_changed_at`` aus dem Benutzerindex.
+
 Schritt 4: Start und Überprüfung des Dienstes
 ----------------------------------------------
 

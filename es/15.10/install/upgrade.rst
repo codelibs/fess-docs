@@ -1962,6 +1962,10 @@ de los volúmenes::
    La importación se ejecuta de forma asíncrona y la pantalla solo muestra que se inició el
    proceso. Para confirmar si realmente se completó con éxito, consulte ``fess.log``.
 
+.. warning::
+
+   15.10 escribe un campo numérico ``password_changed_at`` (la hora del cambio de contraseña) en el documento de usuario (índice ``fess_user``) cuando se crea un usuario y cuando se cambia su contraseña. Las versiones 15.9 y anteriores, incluida la 15.9.0 publicada, no pueden leer este campo. Si las inicia con un índice que aún contiene un usuario creado o con la contraseña cambiada en 15.10, el inicio de sesión de ese usuario y la lista de usuarios de la Admin API fallan con HTTP 500 (``ClassCastException``). Una instantánea tomada antes de la actualización y restaurada en el Paso 3 no contiene esos usuarios. En caso contrario, elimine los usuarios creados o modificados en 15.10 y créelos de nuevo, o elimine ``password_changed_at`` del índice de usuarios antes de la reversión.
+
 Paso 4: Inicio y Verificación del Servicio
 -------------------------------------------
 

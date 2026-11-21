@@ -1979,6 +1979,10 @@ contenu du volume ::
    L'importation s'exécute de façon asynchrone ; l'écran indique seulement qu'elle a démarré.
    Vérifiez ``fess.log`` pour savoir si elle a réellement réussi.
 
+.. warning::
+
+   15.10 écrit un champ numérique ``password_changed_at`` (l'heure du changement de mot de passe) dans le document utilisateur (index ``fess_user``) lorsqu'un utilisateur est créé et lorsque son mot de passe est modifié. Les versions 15.9 et antérieures, y compris la 15.9.0 publiée, ne peuvent pas lire ce champ. Si vous les démarrez sur un index qui contient encore un utilisateur créé ou dont le mot de passe a été modifié en 15.10, la connexion de cet utilisateur et la liste des utilisateurs de l'Admin API échouent avec HTTP 500 (``ClassCastException``). Un instantané pris avant la mise à niveau et restauré à l'étape 3 ne contient pas ces utilisateurs. Sinon, supprimez les utilisateurs créés ou modifiés en 15.10 et recréez-les, ou retirez ``password_changed_at`` de l'index des utilisateurs avant le retour arrière.
+
 Étape 4 : Démarrage et vérification du service
 -----------------------------------------------
 

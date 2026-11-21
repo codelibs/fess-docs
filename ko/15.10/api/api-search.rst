@@ -34,7 +34,7 @@ HTTP 메서드          GET
    * - ``start``
      - 0 시작 시작 위치 (integer, ``>=0`` , 기본값 ``0`` ).
    * - ``offset``
-     - ``start`` 로부터의 오프셋 (integer, ``>=0`` , 기본값 ``0`` ).
+     - ``start`` 가 ``rank.fusion.window_size`` (기본값 ``200`` ) 이후가 되는 페이지를 요청할 때 이전 페이지 응답의 ``offset`` 을 그대로 보냅니다 (integer, ``>=0`` , 기본값 ``0`` ). 랭크 융합에서는 앞쪽 페이지는 융합된 결과이고 뒤쪽 페이지는 키워드 결과입니다. ``offset`` 은 융합된 상위 결과 중 키워드 결과의 범위에 포함되지 않는 개수이며, ``start`` 를 그만큼 되돌려 뒤쪽 페이지가 융합된 결과와 빈틈이나 중복 없이 이어지게 합니다. 생략하면 ``0`` 입니다.
    * - ``num``
      - 페이지 크기 (integer, ``>=1`` , 기본값 ``10`` ). ``<= 0`` 은 ``invalid_request`` 가 됩니다. 설정된 최대값을 초과하는 값은 자동으로 클램프됩니다. 클램프 여부는 요청의 ``num`` 과 응답의 ``page_size`` 를 비교하여 감지할 수 있습니다.
    * - ``sort``
@@ -89,6 +89,7 @@ HTTP 메서드          GET
         "record_count": 42,
         "record_count_relation": "EQUAL_TO",
         "page_count": 3,
+        "offset": 0,
         "highlight_params": "&hq=Fess",
         "next_page": true,
         "prev_page": false,
@@ -149,6 +150,8 @@ HTTP 메서드          GET
      - ``EQUAL_TO`` 일 때는 정확한 카운트, ``GREATER_THAN_OR_EQUAL_TO`` 일 때는 하한만 확인된 것을 나타냅니다.
    * - ``page_count``
      - 총 페이지 수.
+   * - ``offset``
+     - 이후 페이지를 요청할 때 보내는 요청 파라미터 ``offset`` 의 값 (integer, ``>=0`` ). 요청 파라미터의 ``offset`` 을 참조하십시오. 결과가 융합되지 않은 경우에는 ``0`` 입니다.
    * - ``highlight_params``
      - 하이라이트용 쿼리 파라미터 문자열.
    * - ``next_page``
