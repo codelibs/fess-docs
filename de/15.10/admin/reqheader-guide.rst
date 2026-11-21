@@ -50,8 +50,8 @@ Der Anforderungsheader wird nur zu den ausgewählten Crawl-Konfigurationen hinzu
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/reqheader-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/reqheader-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/reqheader-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/reqheader-2.png

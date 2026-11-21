@@ -13,7 +13,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-To access the list page for configuring duplicate hosts shown below, click on "[Crawler > Duplicate Hosts]" in the left menu.
+To access the list page for configuring duplicate hosts shown below, click on "[Crawler > Duplicate Host]" in the left menu.
 
 |image0|
 
@@ -50,7 +50,7 @@ Specify the duplicate hostname that you want to replace.
 Delete Configuration
 --------------------
 
-Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation dialog will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/duplicatehost-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/duplicatehost-2.png

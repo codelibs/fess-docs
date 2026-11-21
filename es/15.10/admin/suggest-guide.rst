@@ -17,7 +17,7 @@ Para abrir la página de lista de palabras de sugerencia que se muestra a contin
 
 |image0|
 
-Si desea eliminar, haga clic en el botón de eliminar.
+Si desea eliminar las palabras de un tipo de palabra, haga clic en el botón Eliminar de ese tipo. Aparecerá un cuadro de diálogo de confirmación.
 
 
 Tipo de palabra
@@ -33,5 +33,5 @@ Número de palabras
 Número de palabras registradas
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/suggest-1.png
 

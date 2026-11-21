@@ -13,7 +13,10 @@ Método de gestión
 Configuración del servidor de almacenamiento de objetos
 --------------------------------------------------------
 
-Abra la configuración de almacenamiento desde [Sistema > General] y configure los siguientes elementos según su tipo de almacenamiento.
+Abra la pestaña [Almacenamiento] de [Sistema > General] y configure los siguientes elementos según su tipo de almacenamiento.
+El menú [Sistema > Almacenamiento] aparece cuando se han configurado un cubo y un punto final (o el tipo es GCS).
+
+|image0|
 
 Configuración común
 ~~~~~~~~~~~~~~~~~~~
@@ -61,7 +64,7 @@ Método de visualización
 
 Para abrir la página de lista de objetos que se muestra a continuación, haga clic en [Sistema > Almacenamiento] en el menú izquierdo.
 
-|image0|
+|image1|
 
 
 Nombre
@@ -96,13 +99,14 @@ Puede eliminar el objeto haciendo clic en el botón de eliminar.
 Carga
 -----
 
-Puede abrir la ventana de carga de archivos haciendo clic en el botón de carga de archivos en la esquina superior derecha.
+Puede abrir la ventana de carga de archivos haciendo clic en el botón Subir en la esquina superior derecha.
 
 
 Crear carpeta
 -------------
 
-Puede abrir la ventana de creación de carpeta haciendo clic en el botón de crear carpeta a la derecha de la visualización de ruta. Tenga en cuenta que no se pueden crear carpetas vacías.
+Puede abrir la ventana de creación de carpeta haciendo clic en el icono de carpeta a la derecha de la visualización de ruta. Tenga en cuenta que no se pueden crear carpetas vacías.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/general-12.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/storage-1.png

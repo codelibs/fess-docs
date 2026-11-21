@@ -34,21 +34,27 @@ Konfiguration erstellen
 -----------------------
 
 Um die Datei-Crawl-Konfigurationsseite zu öffnen, klicken Sie auf die Schaltfläche „Neu erstellen".
+Die Seite ist in vier Registerkarten unterteilt: „Allgemein", „Ein- und Ausschlüsse", „Crawl-Einstellungen" und „Zugriff und Status". Klicken Sie auf den Namen einer Registerkarte, um zu wechseln. Enthält eine Eingabe einen Fehler, wird automatisch die Registerkarte geöffnet, die sie enthält. Die Felder der einzelnen Registerkarten werden nachfolgend beschrieben.
+
+Registerkarte „Allgemein"
+-------------------------
 
 |image1|
-
-Konfigurationsparameter
------------------------
 
 Name
 ::::
 
 Der Name der Konfiguration.
 
-Pfad
-::::
+Pfade
+:::::
 
-In diesem Pfad geben Sie an, wo das Crawlen beginnen soll (z. B. file:/, smb://, s3://, gcs://).
+Diese Pfade geben an, wo das Crawlen beginnen soll (z. B. file:/, smb://, s3://, gcs://). Geben Sie einen Pfad pro Zeile an.
+
+Registerkarte „Ein- und Ausschlüsse"
+------------------------------------
+
+|image2|
 
 Zu crawlender Pfad
 ::::::::::::::::::
@@ -72,6 +78,11 @@ Von der Suche ausgeschlossener Pfad
 ::::::::::::::::::::::::::::::::::::
 
 Pfade, die mit dem regulären Ausdruck (Java-Format) übereinstimmen, der in diesem Element angegeben ist, werden von der Suche ausgeschlossen.
+
+Registerkarte „Crawl-Einstellungen"
+-----------------------------------
+
+|image3|
 
 Konfigurationsparameter
 :::::::::::::::::::::::
@@ -102,24 +113,29 @@ Geben Sie die Anzahl der für diese Konfiguration zu verwendenden Threads an.
 Intervall
 :::::::::
 
-Geben Sie die Wartezeit an, die jeder Thread nach dem Crawlen eines Pfads wartet.
+Geben Sie die Wartezeit an, die jeder Thread nach dem Crawlen eines Pfads wartet, in Millisekunden.
 
-Boost-Wert
-::::::::::
+Boost
+:::::
 
 Der Boost-Wert ist die Priorität von Dokumenten, die durch diese Konfiguration indiziert werden.
 
-Berechtigung
-::::::::::::
+Registerkarte „Zugriff und Status"
+----------------------------------
+
+|image4|
+
+Berechtigungen
+::::::::::::::
 
 Geben Sie die Berechtigung für diese Konfiguration an.
 Um beispielsweise Suchergebnisse für Benutzer anzuzeigen, die zur Gruppe „developer" gehören, geben Sie {group}developer an.
 Für Benutzerebene geben Sie {user}Benutzername an, für Rollenebene {role}Rollenname und für Gruppenebene {group}Gruppenname.
 
-Virtueller Host
+Virtuelle Hosts
 :::::::::::::::
 
-Geben Sie den Hostnamen des virtuellen Hosts an.
+Geben Sie die Hostnamen der virtuellen Hosts an, einen pro Zeile.
 Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/security-virtual-host>`.
 
 Status
@@ -135,7 +151,7 @@ Sie können eine Beschreibung eingeben.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt. Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt. Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 Beispiele
 =========
@@ -153,7 +169,7 @@ Um Dateien unter /home/share zu crawlen, würde die Konfiguration wie folgt auss
      - Wert
    * - Name
      - Freigabeverzeichnis
-   * - Pfad
+   * - Pfade
      - file:/home/share
 
 Andere Parameter können mit Standardeinstellungen belassen werden.
@@ -171,7 +187,7 @@ Um Dateien unter \\SERVER\SharedFolder zu crawlen, würde die Konfiguration wie 
      - Wert
    * - Name
      - Freigabeordner
-   * - Pfad
+   * - Pfade
      - smb://SERVER/SharedFolder/
 
 Wenn für den Zugriff auf den Freigabeordner ein Benutzername/Passwort erforderlich ist, müssen Sie eine Dateiauthentifizierungskonfiguration über [Crawler > Datei-Authentifizierung] im linken Menü erstellen.
@@ -186,7 +202,7 @@ Die Konfiguration dafür würde wie folgt aussehen:
    * - Hostname
      - SERVER
    * - Schema
-     - SAMBA
+     - Samba
    * - Benutzername
      - (Bitte eingeben)
    * - Passwort
@@ -205,7 +221,7 @@ Um Dateien im Bucket my-bucket zu crawlen, würde die Konfiguration wie folgt au
      - Wert
    * - Name
      - S3-Bucket
-   * - Pfad
+   * - Pfade
      - s3://my-bucket/
 
 Für den S3-Zugriff sind Anmeldeinformationen erforderlich. Fügen Sie Folgendes zu „Konfigurationsparameter" hinzu:
@@ -236,7 +252,7 @@ Um Dateien im Bucket my-gcs-bucket zu crawlen, würde die Konfiguration wie folg
      - Wert
    * - Name
      - GCS-Bucket
-   * - Pfad
+   * - Pfade
      - gcs://my-gcs-bucket/
 
 Für den GCS-Zugriff sind Anmeldeinformationen erforderlich. Fügen Sie Folgendes zu „Konfigurationsparameter" hinzu:
@@ -261,6 +277,9 @@ Verwandte Seiten
 - :doc:`../user/index`
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/fileconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/fileconfig-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/fileconfig-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/fileconfig-2.png
+.. |image2| image:: ../../../resources/images/de/15.10/admin/fileconfig-3.png
+.. |image3| image:: ../../../resources/images/de/15.10/admin/fileconfig-4.png
+.. |image4| image:: ../../../resources/images/de/15.10/admin/fileconfig-5.png
 .. pdf            :height: 940 px

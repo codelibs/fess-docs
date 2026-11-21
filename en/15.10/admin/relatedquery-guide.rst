@@ -24,22 +24,22 @@ Click the configuration name to edit it.
 Creating Configuration
 ----------------------
 
-To open the related query configuration page, click the New button.
+To open the related query configuration page, click the "Create New" button.
 
 |image1|
 
 Configuration Items
 -------------------
 
-Search Term
-:::::::::::
+Term
+::::
 
 Specifies the search term to match with the search query.
 
-Query
-:::::
+Queries
+:::::::
 
-Specifies the query.
+Specifies the queries.
 
 Virtual Host
 ::::::::::::
@@ -50,7 +50,7 @@ For details, refer to :doc:`Virtual Host in the Configuration Guide <../config/s
 Deleting Configuration
 ----------------------
 
-Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the configuration name on the list page, then click the Delete button to display a confirmation dialog.
 Click the Delete button to remove the configuration.
 
 Generating from Search Logs

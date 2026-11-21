@@ -23,7 +23,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration du boost de document.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration du boost de document.
 
 |image1|
 
@@ -76,8 +76,8 @@ Si « Vérifier la dernière modification » est désactivé, chaque document es
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation. Appuyer sur le bouton Supprimer supprimera la configuration.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation. Appuyer sur le bouton Supprimer supprimera la configuration.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/boostdoc-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/boostdoc-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/boostdoc-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/boostdoc-2.png

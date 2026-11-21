@@ -34,25 +34,43 @@ Onglets
   période précédente ; un graphique de tendance avec choix de la métrique (la période précédente est
   tracée en pointillés lors d'une comparaison) ; ainsi que les requêtes les plus fréquentes et les
   requêtes sans résultat.
+
+  |image0|
+
 - **Requêtes** : par requête, les recherches, les utilisateurs, le nombre moyen de résultats, les
   clics, le taux de clics et la position moyenne des clics. Il affiche aussi les requêtes sans
   résultat (avec la date de la dernière recherche) et les requêtes sans clic, qui avaient des
   résultats jamais ouverts.
+
+  |image1|
+
 - **Clics** : les URL les plus cliquées, les URL les plus ajoutées aux favoris, la distribution des
   positions de clic et la proportion de consultations de la page 2 et suivantes.
+
+  |image2|
+
 - **Performances** : le temps de réponse moyen, médian (p50), p95 et p99, la distribution des temps
   de réponse, les requêtes les plus lentes et le temps de requête.
+
+  |image3|
+
 - **Audience** : les utilisateurs nouveaux et récurrents, les types d'accès, les recherches par jour
-  de la semaine et par heure, ainsi que les principaux user agents, référents, langues et hôtes
+  et par heure, ainsi que les principaux user agents, référents, langues et hôtes
   virtuels. « Recherches par rôle et par groupe » affiche les recherches, les utilisateurs et le taux
   de zéro résultat de chaque rôle et groupe. Une recherche compte pour chaque rôle et groupe de
   l'utilisateur qui l'a lancée, de sorte que la somme des lignes peut dépasser le total. Aucun
   utilisateur individuel n'est affiché.
+
+  |image4|
+
 - **Chat IA** : les requêtes, les utilisateurs, le total de tokens, le temps de réponse moyen et le
   taux d'erreur du mode de recherche IA (chat RAG), avec les principaux utilisateurs et les requêtes
   par intention et par modèle. L'utilisation du chat est enregistrée tant que
   ``rag.chat.log.enabled`` (par défaut : ``true``) est activé. Les questions et les réponses ne sont
   pas enregistrées. Le nombre de tokens n'est enregistré que si le plugin LLM le communique.
+
+  |image5|
+
 - **Journaux** : la liste des journaux individuels ; voir « Liste des journaux » ci-dessous.
 
 .. note::
@@ -82,11 +100,11 @@ Liste des journaux
 ==================
 
 L'onglet « Journaux » liste les journaux de recherche, de clics, de favoris et utilisateur. Vous
-pouvez les filtrer par type de journal, ID de requête, ID utilisateur, plage horaire, type d'accès et
-mot recherché, et les journaux de recherche aussi par nombre de résultats (« Tous », « Sans résultat
-uniquement », « Un résultat ou plus »). Pour voir les détails d'un journal, cliquez dessus.
+pouvez les filtrer par type de journal, ID de requête, ID utilisateur, type d'accès, mot recherché et
+plage horaire (une date et une heure de début et de fin), et les journaux de recherche aussi par nombre de résultats (« Tous », « Sans résultat
+uniquement », « Un résultat ou plus »). Cliquez sur [Rechercher] pour appliquer les conditions et sur [Réinitialiser] pour les effacer. Pour voir les détails d'un journal, cliquez dessus.
 
-|image0|
+|image6|
 
 Cliquez sur [Télécharger le CSV] pour télécharger en CSV les journaux qui correspondent au filtre en
 cours, du plus récent au plus ancien et sans limite de lignes. La ligne d'en-tête contient les noms
@@ -100,10 +118,16 @@ afin qu'un tableur ne l'exécute pas comme une formule.
 Détails
 -------
 
-Cliquez sur un journal de la liste pour afficher ses détails.
+Cliquez sur un journal de la liste pour afficher ses détails. Query ID, User Info ID et User Session ID dans les détails sont des liens qui ouvrent la liste filtrée sur cet ID. Pour supprimer le journal, cliquez sur le bouton Supprimer ; une boîte de dialogue de confirmation s'affiche.
 
-|image1|
+|image7|
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/searchlog-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/searchlog-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/searchlog-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/searchlog-2.png
+.. |image2| image:: ../../../resources/images/fr/15.10/admin/searchlog-3.png
+.. |image3| image:: ../../../resources/images/fr/15.10/admin/searchlog-4.png
+.. |image4| image:: ../../../resources/images/fr/15.10/admin/searchlog-5.png
+.. |image5| image:: ../../../resources/images/fr/15.10/admin/searchlog-6.png
+.. |image6| image:: ../../../resources/images/fr/15.10/admin/searchlog-7.png
+.. |image7| image:: ../../../resources/images/fr/15.10/admin/searchlog-8.png

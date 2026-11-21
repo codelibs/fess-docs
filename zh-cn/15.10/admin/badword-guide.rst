@@ -31,8 +31,8 @@
 配置项目
 ------
 
-建议候选词
-:::::::::::
+不良词
+::::::
 
 注册禁用词汇。
 在此注册的词汇将不会显示在建议中。
@@ -43,13 +43,14 @@
 删除配置
 --------
 
-点击列表页面中的配置名称，然后点击删除按钮将显示确认屏幕。
-点击删除按钮后，配置将被删除。
+点击列表页面中的配置名称，然后点击删除按钮将显示确认对话框。
+点击对话框中的删除按钮后，配置将被删除。
 
 下载
 =========
 
 以CSV格式下载已注册的词汇。
+点击页面右上角的下载打开下载页面，然后点击下载按钮。
 
 |image2|
 
@@ -68,6 +69,7 @@ CSV内容
 =========
 
 以CSV格式注册词汇。
+点击页面右上角的上传打开上传页面，在不良词文件中选择CSV文件，然后点击上传按钮。
 
 |image3|
 
@@ -82,7 +84,7 @@ CSV内容
 "BadWord"
 "检索エンジン"
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/zh-cn/15.10/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/zh-cn/15.10/admin/badword-4.png

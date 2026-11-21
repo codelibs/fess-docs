@@ -22,6 +22,8 @@ Kuromoji词典
 
 单击配置名称进行编辑。
 
+页面右上角的按钮依次为字典(返回字典列表)、列表、新建、下载和上传(打开下载页面和上传页面)。
+
 配置方法
 ------
 
@@ -85,5 +87,5 @@ Kuromoji 的词典格式以逗号(,)分隔,格式为"标记,分割标记,分割�
    要确认注册的效果，请使用词典中没有、且不含会被 ``ja/mapping.txt`` 替换的字符的词。
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/kuromoji-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/kuromoji-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/kuromoji-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/kuromoji-2.png

@@ -23,7 +23,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration d'authentification Web.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration d'authentification Web.
 
 |image1|
 
@@ -122,8 +122,8 @@ Notez qu'un 401 ne supprime pas les documents déjà présents dans l'index.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/webauth-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/webauth-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/webauth-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/webauth-2.png

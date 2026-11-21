@@ -7,15 +7,15 @@ Overview
 
 The wizard page provides a simple setup tool for registering crawl configurations.
 
-Quick Setup
------------
+Easy Setup
+----------
 
-This page serves as the starting point for registering crawl configurations.
+This page serves as the starting point for registering crawl configurations. Click the Start Setup button to open the crawl configuration page.
 
 |image0|
 
-Crawl Configuration
--------------------
+Crawl Config
+------------
 
 This page allows you to create crawl configurations.
 
@@ -29,8 +29,8 @@ Name
 
 Specifies the configuration name (e.g., Fess Site).
 
-Crawling Path
-:::::::::::::
+Crawl Path
+::::::::::
 
 Specifies the starting URL or file path for crawling (e.g., https://fess.codelibs.org/).
 
@@ -43,6 +43,13 @@ Depth
 :::::
 
 Sets the depth of links to follow when crawling documents.
+
+Buttons
+:::::::
+
+- **Create**: Registers the crawl configuration and proceeds to the Start Crawling page.
+- **Create Continuously**: Registers the crawl configuration and returns to this form so that you can register another one.
+- **Cancel**: Returns to the Easy Setup page without registering.
 
 Crawler
 -------

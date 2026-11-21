@@ -22,6 +22,7 @@ Pour ouvrir la page de liste des dictionnaires gérables illustrée ci-dessous, 
 
 |image0|
 
+La liste affiche le nom (chemin du fichier) et le type de chaque dictionnaire. Cliquez sur une ligne pour ouvrir la liste de mots de ce dictionnaire.
 
 Portée de chaque dictionnaire et moment de prise en compte
 ===========================================================
@@ -168,5 +169,4 @@ Gère le dictionnaire de remplacement de stemmer.
 stemmer_override.txt est placé pour chaque langue et est un fichier de dictionnaire de remplacement de mots pour remplacer le traitement de stemming.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dict-1.png
-            :height: 940px
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/dict-1.png

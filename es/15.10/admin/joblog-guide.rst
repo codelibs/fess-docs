@@ -17,6 +17,9 @@ Para abrir la página de verificación de registro de trabajos que se muestra a 
 
 |image0|
 
+La lista muestra el nombre del trabajo, el estado de ejecución y la hora de inicio/finalización.
+Haga clic en el botón Eliminar todo situado debajo de la lista para eliminar todos los registros de trabajos. Aparecerá un cuadro de diálogo de confirmación.
+
 Detalles del registro de trabajos
 ----------------------------------
 
@@ -42,12 +45,12 @@ Objetivo en el que se ejecuta el trabajo.
 Hora de inicio
 ::::::::::::::
 
-Hora UNIX en la que comenzó el trabajo.
+Fecha y hora en que comenzó el trabajo.
 
 Hora de finalización
 ::::::::::::::::::::
 
-Hora UNIX en la que finalizó el trabajo.
+Fecha y hora en que finalizó el trabajo.
 
 Tipo de ejecución
 :::::::::::::::::
@@ -64,5 +67,7 @@ Resultado
 
 Resultado de la ejecución del trabajo.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/joblog-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/joblog-2.png
+Haga clic en el botón Eliminar de la página de detalles para eliminar el registro de trabajo. Aparecerá un cuadro de diálogo de confirmación.
+
+.. |image0| image:: ../../../resources/images/es/15.10/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/joblog-2.png

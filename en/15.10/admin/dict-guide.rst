@@ -21,6 +21,8 @@ To open the manageable dictionary list page shown below, click [System > Diction
 
 |image0|
 
+The list shows the name (file path) and the type of each dictionary. Click a row to open the word list of that dictionary.
+
 What Each Dictionary Affects, and When It Takes Effect
 ======================================================
 
@@ -161,4 +163,3 @@ Manages the stemmer override dictionary.
 stemmer_override.txt is deployed for each language and is a word replacement dictionary file for overriding stemming processing.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/dict-1.png
-            :height: 940px

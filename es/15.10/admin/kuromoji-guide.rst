@@ -22,10 +22,12 @@ Para abrir la página de lista de configuración de Kuromoji que se muestra a co
 
 Para editar, haga clic en el nombre de la configuración.
 
+Los botones de la parte superior derecha de la página son Diccionario (vuelve a la lista de diccionarios), Lista, Crear nuevo, Descargar y Subir (abren la página de descarga y la página de carga).
+
 Método de configuración
 -----------------------
 
-Para abrir la página de configuración de Kuromoji, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de Kuromoji, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -50,10 +52,10 @@ Ingrese la lectura de la palabra ingresada como token en katakana.
 Si se realizó segmentación, ingrésela segmentada.
 Por ejemplo, ingrese "ゼンブン ケンサク エンジン".
 
-Parte del discurso
-::::::::::::::::::
+Parte de la oración
+:::::::::::::::::::
 
-Ingrese la parte del discurso de la palabra ingresada.
+Ingrese la parte de la oración de la palabra ingresada.
 
 Descarga
 ========
@@ -85,5 +87,5 @@ Por ejemplo, sería como sigue:
    Para comprobar el efecto de un registro, utilice una palabra que no esté en el diccionario y que no contenga ningún carácter sustituido por ``ja/mapping.txt``.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/kuromoji-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/kuromoji-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/kuromoji-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/kuromoji-2.png

@@ -22,6 +22,7 @@
 
 |image0|
 
+목록에는 각 사전의 이름(파일 경로)과 종류가 표시됩니다. 행을 클릭하면 해당 사전의 단어 목록이 열립니다.
 
 각 사전이 적용되는 범위와 반영 시점
 ====================================
@@ -159,5 +160,4 @@ Stemmer 재정의 사전을 관리합니다.
 stemmer_override.txt는 각 언어용으로 배치하여 스테밍 처리를 재정의하기 위한 단어 치환 사전 파일입니다.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dict-1.png
-            :height: 940px
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/dict-1.png

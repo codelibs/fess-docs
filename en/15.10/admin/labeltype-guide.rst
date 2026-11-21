@@ -27,7 +27,7 @@ Click the configuration name to edit it.
 Creating Configuration
 ----------------------
 
-To open the label configuration page, click the New button.
+To open the label configuration page, click the "Create New" button.
 
 |image1|
 
@@ -58,8 +58,8 @@ Excluded Paths
 Configures paths to exclude from crawl targets using regular expressions.
 Multiple paths can be specified by writing on multiple lines.
 
-Permission
-::::::::::
+Permissions
+:::::::::::
 
 Specifies the permission for this configuration.
 To display search results to users belonging to the developer group, specify {group}developer.
@@ -79,15 +79,15 @@ A label can name only one virtual host.
 To show the same label on several virtual hosts, create a label with the same name and value for each virtual host, and put that virtual host name in its Virtual Host field.
 Because the value is the same, each of those labels narrows the results to the same documents.
 
-Display Order
-:::::::::::::
+Sort Order
+::::::::::
 
 Specifies the display order of labels.
 
 Deleting Configuration
 ----------------------
 
-Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the configuration name on the list page, then click the Delete button to display a confirmation dialog.
 Click the Delete button to remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/labeltype-1.png

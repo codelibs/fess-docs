@@ -28,7 +28,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des étiquettes.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration des étiquettes.
 
 |image1|
 
@@ -59,8 +59,8 @@ Chemins exclus
 Configure par expression régulière ce que vous souhaitez exclure des chemins cibles de crawl.
 Vous pouvez en spécifier plusieurs en écrivant sur plusieurs lignes.
 
-Permission
-::::::::::
+Autorisations
+:::::::::::::
 
 Spécifie la permission pour cette configuration.
 Pour la méthode de spécification de permission, par exemple, pour afficher les résultats de recherche aux utilisateurs appartenant au groupe developer, spécifiez {group}developer.
@@ -88,8 +88,8 @@ Spécifie l'ordre d'affichage des étiquettes.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/labeltype-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/labeltype-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/labeltype-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/labeltype-2.png

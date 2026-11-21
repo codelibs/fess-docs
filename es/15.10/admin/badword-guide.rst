@@ -24,7 +24,7 @@ Para editar, haga clic en el nombre de la configuración.
 Crear configuración
 -------------------
 
-Para abrir la página de creación de palabra excluida de sugerencia, haga clic en el botón de nueva creación.
+Para abrir la página de creación de palabra excluida de sugerencia, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -43,13 +43,14 @@ Las palabras registradas aquí no se mostrarán en las sugerencias.
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación.
 Al presionar el botón de eliminar, se eliminará la configuración.
 
 Descarga
 ========
 
 Descarga las palabras registradas en formato CSV.
+Haga clic en Descargar en la parte superior derecha de la página para abrir la página de descarga y haga clic en el botón Descargar.
 
 |image2|
 
@@ -68,6 +69,7 @@ Carga
 =====
 
 Registra palabras en formato CSV.
+Haga clic en Subir en la parte superior derecha de la página para abrir la página de carga, seleccione el archivo CSV en «Archivo de palabras no deseadas» y haga clic en el botón Subir.
 
 |image3|
 
@@ -82,7 +84,7 @@ Desde la segunda línea en adelante se describen las palabras excluidas.
 "BadWord"
 "検索エンジン"
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/es/15.10/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/es/15.10/admin/badword-4.png

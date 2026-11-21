@@ -19,6 +19,9 @@ Um Details der Crawl-Informationen anzuzeigen, klicken Sie auf die entsprechende
 
 |image0|
 
+Die Übersicht zeigt die Sitzungs-ID und die Erstellungszeit jeder Crawl-Information. Um die Liste einzugrenzen, geben Sie im Suchformular eine Sitzungs-ID ein und klicken Sie auf die Schaltfläche „Suchen" (mit der Schaltfläche „Zurücksetzen" wird die Eingabe gelöscht).
+Klicken Sie unter der Liste auf die Schaltfläche „Alle löschen", um alle Crawl-Informationen zu löschen. Es wird ein Bestätigungsdialog angezeigt.
+
 Laufende Crawls
 ===============
 
@@ -41,6 +44,8 @@ Details
 Durch Klicken auf die Sitzungs-ID der Crawl-Informationen in der Übersicht werden die Details der entsprechenden Crawl-Informationen angezeigt.
 
 |image1|
+
+Klicken Sie auf der Detailseite auf die Schaltfläche „Löschen", um die Crawl-Information zu löschen. Es wird ein Bestätigungsdialog angezeigt.
 
 Parameterliste
 --------------
@@ -70,6 +75,21 @@ Crawl-Endzeit (Web/Datei)
 
 Die Uhrzeit, zu der das Web- und Dateisystem-Crawling beendet wurde.
 
+Crawl-Ausführungszeit (Web/Datei)
+:::::::::::::::::::::::::::::::::
+
+Die Ausführungszeit des Web- und Dateisystem-Crawlings (in Millisekunden).
+
+Indizierungs-Ausführungszeit (Web/Datei)
+::::::::::::::::::::::::::::::::::::::::
+
+Die Zeit, die für die Indizierung der Web- und Dateisystem-Crawl-Ergebnisse benötigt wurde (in Millisekunden).
+
+Indexgröße (Web/Datei)
+::::::::::::::::::::::
+
+Die Anzahl der durch das Web- und Dateisystem-Crawling indizierten Dokumente.
+
 Crawl-Ausführungszeit (Datenspeicher)
 ::::::::::::::::::::::::::::::::::::::
 
@@ -78,12 +98,12 @@ Die Ausführungszeit des Datenspeicher-Crawlings (in Millisekunden).
 Indizierungs-Ausführungszeit (Datenspeicher)
 :::::::::::::::::::::::::::::::::::::::::::::
 
-Die Zeit, die für die Indizierung der Web- und Dateisystem-Crawl-Ergebnisse benötigt wurde (in Millisekunden).
+Die Zeit, die für die Indizierung der Datenspeicher-Crawl-Ergebnisse benötigt wurde (in Millisekunden).
 
 Indexgröße (Datenspeicher)
 ::::::::::::::::::::::::::
 
-Die Anzahl der indizierten Dokumente.
+Die Anzahl der durch das Datenspeicher-Crawling indizierten Dokumente.
 
 Crawl-Endzeit (Datenspeicher)
 ::::::::::::::::::::::::::::::
@@ -105,5 +125,5 @@ Crawler-Ausführungszeit
 
 Die Ausführungszeit des gesamten Crawls (in Millisekunden).
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/crawlinginfo-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/crawlinginfo-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/crawlinginfo-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/crawlinginfo-2.png

@@ -26,19 +26,24 @@ Management Operations
 Display Method
 --------------
 
-To open the tag list page, click [Crawler > Tag] in the left menu. Viewing requires the
+To open the tag list page shown below, click [Crawler > Tag] in the left menu. Viewing requires the
 ``admin-tagtype`` or ``admin-tagtype-view`` role; creating, editing and deleting require
 ``admin-tagtype``.
 
-The list shows the name and the owner of each tag, by sort order, name and owner. You can search by
-name and by owner; each matches the tags that contain the text entered.
+|image0|
+
+The list shows the name and the owner of each tag, by sort order, name and owner. When no tag is
+registered, the list shows "Not registered." Click the [Search] button above the list to show the
+search form. You can search by name and by owner; each matches the tags that contain the text entered.
 
 Click a name to edit the tag.
 
 Creating Configuration
 ----------------------
 
-To open the tag creation page, click the New button.
+To open the tag creation page, click the "Create New" button.
+
+|image1|
 
 Configuration Items
 -------------------
@@ -98,7 +103,7 @@ Specifies the display order of the tag.
 Deleting Configuration
 ----------------------
 
-Click a name on the list page and then the Delete button to show a confirmation screen. Clicking
+Click a name on the list page and then the Delete button to show a confirmation dialog. Clicking
 the Delete button deletes the tag, and its value is removed from the documents.
 
 Sharing
@@ -154,3 +159,6 @@ Notes for Operators
   ``tag`` field, it is added as ``keyword``. Existing fields are not changed.
 - The tags are stored in the ``fess_config.tag_type`` index. They are included in ``fess_config.bulk``
   of a backup, but not in ``fess_basic_config.bulk``.
+
+.. |image0| image:: ../../../resources/images/en/15.10/admin/tagtype-1.png
+.. |image1| image:: ../../../resources/images/en/15.10/admin/tagtype-2.png

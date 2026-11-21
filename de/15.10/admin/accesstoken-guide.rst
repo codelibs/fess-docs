@@ -17,7 +17,7 @@ Um die Konfigurationsübersichtsseite für Zugriffstoken zu öffnen, klicken Sie
 
 |image0|
 
-Klicken Sie auf den Konfigurationsnamen, um ihn zu bearbeiten.
+Klicken Sie auf den Konfigurationsnamen, um die Detailseite zu öffnen, und klicken Sie dann auf die Schaltfläche „Bearbeiten", um die Konfiguration zu bearbeiten.
 
 Konfiguration erstellen
 -----------------------
@@ -34,8 +34,8 @@ Name
 
 Geben Sie einen Namen an, um dieses Zugriffstoken zu beschreiben.
 
-Berechtigung
-::::::::::::
+Berechtigungen
+::::::::::::::
 
 Legen Sie die Berechtigung für das Zugriffstoken fest.
 Geben Sie diese im Format „{user\ |group|\ role}name" an.
@@ -71,10 +71,10 @@ Geben Sie das Ablaufdatum des Zugriffstokens an.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
-Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
+Klicken Sie im Dialog auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/accesstoken-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/accesstoken-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/accesstoken-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/accesstoken-2.png

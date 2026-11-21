@@ -19,6 +19,8 @@
 
 单击配置名称进行编辑。
 
+页面右上角的按钮依次为字典(返回字典列表)、列表、新建、下载和上传(打开下载页面和上传页面)。
+
 配置方法
 ------
 
@@ -65,6 +67,6 @@
 
    这些设置适用于新建的文档索引。现有索引在重新索引之前会继续使用以前的分析设置和词典。要应用到现有索引，请在 :doc:`maintenance-guide` 中启用“重置字典”后重新索引。重置字典会覆盖在管理界面中编辑过的 ``mapping.txt`` / ``ja/mapping.txt`` 的内容。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/mapping-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/mapping-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/mapping-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/mapping-2.png
 

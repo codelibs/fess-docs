@@ -7,6 +7,7 @@
 
 이 관리 페이지에서는 |Fess| 의 설정을 관리할 수 있습니다.
 |Fess| 를 재시작하지 않고 |Fess| 의 다양한 설정을 변경할 수 있습니다.
+설정은 탭(시스템, 크롤러, 로깅, 추천, LDAP, OpenID Connect, SAML, SPNEGO, Entra ID, 알림 표시, 알림, 스토리지)으로 나뉘어 있습니다. 각 탭은 폼 하단의 [갱신] 버튼으로 함께 저장됩니다.
 
 설정 내용
 ======
@@ -160,6 +161,8 @@ HTTP/HTTPS URL 에서는 HEAD 의 ``Last-Modified`` 로 판단할 수 없는 경
 로깅
 ------
 
+|image2|
+
 검색 로그
 ::::::
 
@@ -204,6 +207,8 @@ fess.log의 로그 레벨을 지정합니다.
 추천
 --------
 
+|image3|
+
 검색어로 추천
 ::::::::::::::
 
@@ -222,7 +227,7 @@ fess.log의 로그 레벨을 지정합니다.
 LDAP
 ----
 
-|image2|
+|image4|
 
 LDAP URL
 ::::::::
@@ -279,7 +284,7 @@ LDAP의 초기 컨텍스트 팩토리 클래스를 지정합니다 (예: com.sun
 OpenID Connect
 --------------
 
-|image3|
+|image5|
 
 클라이언트 ID
 :::::::::::
@@ -291,8 +296,8 @@ OpenID Connect 공급자의 클라이언트 ID를 지정합니다.
 
 OpenID Connect 공급자의 클라이언트 시크릿을 지정합니다.
 
-인증 서버 URL
-:::::::::::
+권한 부여 서버 URL
+::::::::::::::::::
 
 OpenID Connect의 인증 서버 URL을 지정합니다.
 
@@ -329,7 +334,7 @@ OpenID Connect 인증 시 사용자에게 할당할 기본 역할을 지정합�
 SAML
 ----
 
-|image4|
+|image6|
 
 IdP 엔티티 ID
 :::::::::::::
@@ -403,7 +408,7 @@ SAML 인증 시 사용자에게 할당할 기본 역할을 지정합니다.
 SPNEGO
 ------
 
-|image5|
+|image7|
 
 .. note::
    SPNEGO 관련 설정은 기반 라이브러리 내에서 프로세스 전체에 공유되므로, 변경 사항을 적용하려면 |Fess| 를 재시작해야 합니다.
@@ -466,6 +471,12 @@ NTLM 프롬프트를 활성화할지 여부를 지정합니다.
 
 Kerberos 위임을 허용할지 여부를 지정합니다.
 
+허용된 영역
+:::::::::::
+
+서버 영역 외에 허용할 Kerberos 영역을 쉼표로 구분하여 지정합니다.
+자세한 내용은 :doc:`../config/sso-spnego` 를 참조하십시오.
+
 로거 레벨
 ::::::::
 
@@ -475,7 +486,7 @@ SPNEGO 인증에 관한 로그 출력 레벨을 0~7 사이의 숫자로 지정�
 Entra ID
 --------
 
-|image6|
+|image8|
 
 테넌트 (ID 또는 도메인)
 :::::::::::::::::::::::
@@ -501,6 +512,12 @@ Microsoft Entra ID의 클라이언트 시크릿을 지정합니다.
 ::::::
 
 Microsoft Entra ID의 응답(리다이렉트) URL을 지정합니다.
+
+응답 모드
+:::::::::
+
+인증 응답을 반환하는 방식을 ``query`` 또는 ``form_post`` 로 지정합니다. 기본값은 ``query`` 입니다.
+``form_post`` 가 동작하는 조건은 :doc:`../config/sso-entraid` 를 참조하십시오.
 
 상태 TTL
 ::::::
@@ -530,7 +547,7 @@ Entra ID 도메인 서비스를 사용할지 여부를 지정합니다.
 알림 표시
 ---------
 
-|image7|
+|image9|
 
 .. note::
 
@@ -557,6 +574,8 @@ Entra ID 도메인 서비스를 사용할지 여부를 지정합니다.
 
 알림
 ----
+
+|image10|
 
 알림 메일
 ::::::::
@@ -594,6 +613,8 @@ ERROR 및 WARN 레벨의 로그 이벤트를 자동으로 캡처하여 알림을
 
 스토리지
 --------
+
+|image11|
 
 각 항목을 설정한 후 왼쪽 메뉴에 [시스템 > 스토리지] 메뉴가 표시됩니다.
 파일 관리에 대해서는 :doc:`스토리지 <../admin/storage-guide>` 를 참조하십시오.
@@ -683,12 +704,16 @@ LDAP 설정 예제
      - memberOf
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/general-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/general-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/general-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/general-4.png
-.. |image4| image:: ../../../resources/images/en/15.10/admin/general-5.png
-.. |image5| image:: ../../../resources/images/en/15.10/admin/general-6.png
-.. |image6| image:: ../../../resources/images/en/15.10/admin/general-7.png
-.. |image7| image:: ../../../resources/images/en/15.10/admin/general-8.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/general-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/general-2.png
+.. |image2| image:: ../../../resources/images/ko/15.10/admin/general-3.png
+.. |image3| image:: ../../../resources/images/ko/15.10/admin/general-4.png
+.. |image4| image:: ../../../resources/images/ko/15.10/admin/general-5.png
+.. |image5| image:: ../../../resources/images/ko/15.10/admin/general-6.png
+.. |image6| image:: ../../../resources/images/ko/15.10/admin/general-7.png
+.. |image7| image:: ../../../resources/images/ko/15.10/admin/general-8.png
+.. |image8| image:: ../../../resources/images/ko/15.10/admin/general-9.png
+.. |image9| image:: ../../../resources/images/ko/15.10/admin/general-10.png
+.. |image10| image:: ../../../resources/images/ko/15.10/admin/general-11.png
+.. |image11| image:: ../../../resources/images/ko/15.10/admin/general-12.png
 .. pdf            :height: 940 px

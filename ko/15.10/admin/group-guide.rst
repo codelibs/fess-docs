@@ -44,8 +44,8 @@ gidNumber
 삭제 방법
 --------
 
-목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 화면이 표시됩니다.
-삭제 버튼을 누르면 설정이 삭제됩니다.
+목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 대화상자가 표시됩니다.
+대화상자의 삭제 버튼을 누르면 설정이 삭제됩니다.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/group-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/group-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/group-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/group-2.png

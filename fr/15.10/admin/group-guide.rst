@@ -23,7 +23,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des groupes.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration des groupes.
 
 |image1|
 
@@ -44,8 +44,8 @@ Lorsque |Fess| est configuré pour gérer LDAP depuis les écrans d'administrati
 Méthode de suppression
 ----------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
-Appuyer sur le bouton Supprimer supprimera la configuration.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
+Cliquez sur le bouton Supprimer dans la boîte de dialogue pour supprimer la configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/group-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/group-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/group-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/group-2.png

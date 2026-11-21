@@ -7,6 +7,7 @@
 
 この管理ページでは、 |Fess| の設定を管理することができます。
 |Fess| を再起動せずに |Fess| の様々な設定を変更できます。
+設定項目はタブ（システム、クローラー、ロギング、サジェスト、LDAP、OpenID Connect、SAML、SPNEGO、Entra ID、お知らせ表示、通知、ストレージ）に分かれています。すべてのタブの設定は、フォーム下部の [更新] ボタンでまとめて保存されます。
 
 設定内容
 ======
@@ -160,13 +161,15 @@ HTTP/HTTPS の URL では、HEAD の ``Last-Modified`` で判断できない場�
 ロギング
 ------
 
+|image2|
+
 検索ログ
 ::::::
 
 検索ログの記録を有効にするかを指定します。
 
-ユーザログ
-::::::::
+ユーザーログ
+::::::::::::
 
 ユーザーログの記録を有効にするかを指定します。
 
@@ -204,6 +207,8 @@ fess.logのログレベルを指定します。
 サジェスト
 --------
 
+|image3|
+
 検索語でサジェスト
 ::::::::::::::
 
@@ -222,7 +227,7 @@ fess.logのログレベルを指定します。
 LDAP
 ----
 
-|image2|
+|image4|
 
 LDAP URL
 ::::::::
@@ -279,7 +284,7 @@ LDAPの初期コンテキストファクトリクラスを指定します（例:
 OpenID Connect
 --------------
 
-|image3|
+|image5|
 
 クライアントID
 :::::::::::
@@ -329,7 +334,7 @@ OpenID Connect認証時にユーザーに割り当てるデフォルトロール
 SAML
 ----
 
-|image4|
+|image6|
 
 IdPエンティティID
 :::::::::::::
@@ -403,7 +408,7 @@ SAML認証時にユーザーに割り当てるデフォルトロールを指定�
 SPNEGO
 ------
 
-|image5|
+|image7|
 
 .. note::
    SPNEGO関連の設定は基盤ライブラリ内でプロセス全体に共有されるため、変更を反映するには |Fess| の再起動が必要です。
@@ -466,6 +471,12 @@ NTLMプロンプトを有効にするかを指定します。
 
 Kerberos委任を許可するかを指定します。
 
+許可レルム
+::::::::::
+
+サーバーのレルムに加えて許可するKerberosレルムをカンマ区切りで指定します。
+詳しくは :doc:`../config/sso-spnego` を参照してください。
+
 ロガーレベル
 :::::::::
 
@@ -475,7 +486,7 @@ SPNEGO認証に関するログの出力レベルを0〜7の数値で指定しま
 Entra ID
 --------
 
-|image6|
+|image8|
 
 テナント (IDまたはドメイン)
 ::::::::::::::::::::::::
@@ -501,6 +512,12 @@ Microsoft Entra IDのクライアントシークレットを指定します。
 ::::::
 
 Microsoft Entra IDの応答（リダイレクト）URLを指定します。
+
+応答モード
+::::::::::
+
+認可レスポンスの受け取り方法として ``query`` または ``form_post`` を指定します。デフォルトは ``query`` です。
+``form_post`` が動作する条件については :doc:`../config/sso-entraid` を参照してください。
 
 ステートTTL
 :::::::::
@@ -530,7 +547,7 @@ Entra IDドメインサービスを使用するかを指定します。
 お知らせ表示
 ---------
 
-|image7|
+|image9|
 
 .. note::
 
@@ -557,6 +574,8 @@ Entra IDドメインサービスを使用するかを指定します。
 
 通知
 ----
+
+|image10|
 
 通知メール
 ::::::::
@@ -594,6 +613,8 @@ ERROR や WARN レベルのログイベントを自動的に捕捉して通知�
 
 ストレージ
 --------
+
+|image11|
 
 各項目を設定後、左メニューに [システム > ストレージ] というメニューが表示されるようになります。
 ファイル管理については :doc:`ストレージ <../admin/storage-guide>` を参照してください。
@@ -691,4 +712,8 @@ LDAPの設定例
 .. |image5| image:: ../../../resources/images/ja/15.10/admin/general-6.png
 .. |image6| image:: ../../../resources/images/ja/15.10/admin/general-7.png
 .. |image7| image:: ../../../resources/images/ja/15.10/admin/general-8.png
+.. |image8| image:: ../../../resources/images/ja/15.10/admin/general-9.png
+.. |image9| image:: ../../../resources/images/ja/15.10/admin/general-10.png
+.. |image10| image:: ../../../resources/images/ja/15.10/admin/general-11.png
+.. |image11| image:: ../../../resources/images/ja/15.10/admin/general-12.png
 .. pdf            :height: 940 px

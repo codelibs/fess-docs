@@ -13,7 +13,10 @@ Verwaltung
 Konfiguration des Objektspeicher-Servers
 -----------------------------------------
 
-Öffnen Sie die Speicherkonfiguration unter [System > Allgemein] und konfigurieren Sie die folgenden Elemente entsprechend Ihrem Speichertyp.
+Öffnen Sie die Registerkarte [Speicher] unter [System > Allgemein] und konfigurieren Sie die folgenden Elemente entsprechend Ihrem Speichertyp.
+Das Menü [System > Speicher] wird angezeigt, sobald ein Bucket und ein Endpunkt festgelegt sind (oder der Typ GCS ist).
+
+|image0|
 
 Allgemeine Einstellungen
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,7 +64,7 @@ Anzeige
 
 Um die Objektübersichtsseite zu öffnen, klicken Sie im linken Menü auf [System > Speicher].
 
-|image0|
+|image1|
 
 
 Name
@@ -96,13 +99,14 @@ Durch Klicken auf die Schaltfläche „Löschen" können Sie das Objekt löschen
 Upload
 ------
 
-Klicken Sie oben rechts auf die Schaltfläche „Datei hochladen", um das Datei-Upload-Fenster zu öffnen.
+Klicken Sie oben rechts auf die Schaltfläche „Hochladen", um das Datei-Upload-Fenster zu öffnen.
 
 
 Ordner erstellen
 ----------------
 
-Klicken Sie auf die Schaltfläche „Ordner erstellen" rechts neben der Pfadanzeige, um das Ordnererstellungsfenster zu öffnen. Beachten Sie, dass leere Ordner nicht erstellt werden können.
+Klicken Sie auf das Ordnersymbol rechts neben der Pfadanzeige, um das Ordnererstellungsfenster zu öffnen. Beachten Sie, dass leere Ordner nicht erstellt werden können.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/general-12.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/storage-1.png

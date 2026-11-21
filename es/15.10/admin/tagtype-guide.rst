@@ -29,20 +29,25 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de lista de etiquetas de usuario, haga clic en [Rastreador > Etiqueta de usuario]
+Para abrir la página de lista de etiquetas de usuario que se muestra a continuación, haga clic en [Rastreador > Etiqueta de usuario]
 en el menú izquierdo. Para verla se necesita el rol ``admin-tagtype`` o ``admin-tagtype-view``, y para
 crear, editar y eliminar, ``admin-tagtype``.
 
+|image0|
+
 La lista muestra el nombre y el propietario de cada etiqueta, por orden de clasificación, nombre y
-propietario. Puede buscar por nombre y por propietario; cada uno coincide con las etiquetas que
-contienen el texto introducido.
+propietario. Cuando no hay ninguna etiqueta registrada, la lista muestra "No registrado." Haga clic en el
+botón [Buscar] situado encima de la lista para mostrar el formulario de búsqueda. Puede buscar por nombre
+y por propietario; cada uno coincide con las etiquetas que contienen el texto introducido.
 
 Para editar una etiqueta, haga clic en su nombre.
 
 Crear configuración
 -------------------
 
-Para abrir la página de creación de etiquetas, haga clic en el botón de nueva creación.
+Para abrir la página de creación de etiquetas, haga clic en el botón "Crear nuevo".
+
+|image1|
 
 Parámetros de configuración
 ---------------------------
@@ -106,8 +111,8 @@ Especifica el orden de visualización de la etiqueta.
 Eliminar configuración
 ----------------------
 
-Haga clic en un nombre en la página de lista y luego en el botón de eliminar para que aparezca una
-pantalla de confirmación. Al presionar el botón de eliminar, se elimina la etiqueta y su valor se
+Haga clic en un nombre en la página de lista y luego en el botón de eliminar para que aparezca un
+cuadro de diálogo de confirmación. Al presionar el botón de eliminar, se elimina la etiqueta y su valor se
 quita de los documentos.
 
 Compartir
@@ -170,3 +175,6 @@ Notas para la operación
   asignación para el campo ``tag``, se añade como ``keyword``. Los campos existentes no se modifican.
 - Las etiquetas de usuario se guardan en el índice ``fess_config.tag_type``. Se incluyen en
   ``fess_config.bulk`` de una copia de seguridad, pero no en ``fess_basic_config.bulk``.
+
+.. |image0| image:: ../../../resources/images/es/15.10/admin/tagtype-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/tagtype-2.png

@@ -79,7 +79,7 @@ user_info.ndjson contiene información de usuarios de búsqueda.
 Carga
 -----
 
-Puede cargar e importar información de configuración.
+Puede cargar e importar información de configuración. Seleccione el archivo en "Archivo masivo" en la parte superior de la página y haga clic en el botón Subir.
 Los archivos que se pueden restaurar son los siguientes:
 
 - ``*.bulk``
@@ -98,7 +98,7 @@ siempre se escriben.
 
 .. note::
 
-   La omisión se registra con nivel INFO, por lo que con el nivel de registro predeterminado (``warn``) no se escribe en ``fess.log``. Para ver estas entradas, cambie el nivel de registro a ``info`` antes de la restauración. Puede cambiarlo en "Nivel de Registro" de [Sistema > General] en la pantalla de administración (vuelve al valor configurado al reiniciar |Fess|) o, en Linux, con ``FESS_LOG_LEVEL=info``. Consulte :doc:`../config/admin-logging` para más detalles.
+   La omisión se registra con nivel INFO, por lo que con el nivel de registro predeterminado (``warn``) no se escribe en ``fess.log``. Para ver estas entradas, cambie el nivel de registro a ``info`` antes de la restauración. Puede cambiarlo en "Nivel de registro" de la pestaña [Registro] de [Sistema > General] en la pantalla de administración (vuelve al valor configurado al reiniciar |Fess|) o, en Linux, con ``FESS_LOG_LEVEL=info``. Consulte :doc:`../config/admin-logging` para más detalles.
 
 .. note::
 
@@ -111,4 +111,4 @@ siempre se escriben.
    Los demás valores de un archivo ``*.bulk`` no están cifrados, así que conserve estos archivos como archivos
    confidenciales.
 
-  .. |image0| image:: ../../../resources/images/en/15.10/admin/backup-1.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/backup-1.png

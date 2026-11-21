@@ -17,7 +17,7 @@ Select Suggest > Suggest Word in the left menu to display a list page of Suggest
 
 |image0|
 
-Click Delete button if you want to delete words.
+Click the Delete button of a word type if you want to delete its words. A confirmation dialog will appear.
 
 Word Type
 :::::::::
@@ -26,8 +26,8 @@ Word Type
 - Document: words are registered from indexed documents.
 - Query: words are registered from search logs.
 
-Word Count
-::::::::::
+Number of Words
+:::::::::::::::
 
 The number of registered words.
 

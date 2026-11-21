@@ -17,12 +17,12 @@ Para abrir la página de lista de configuración de tokens de acceso que se mues
 
 |image0|
 
-Para editar, haga clic en el nombre de la configuración.
+Haga clic en el nombre de la configuración para abrir su página de detalles y, a continuación, haga clic en el botón Editar para editarla.
 
 Crear configuración
 -------------------
 
-Para abrir la página de configuración de token de acceso, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de token de acceso, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -63,18 +63,18 @@ Especifique el nombre del parámetro de solicitud al especificar permisos como c
    * No configure un nombre de parámetro cuando Fess esté expuesto a redes no confiables.
    * Asegúrese de que los parámetros de URL no puedan ser manipulados por usuarios externos al usar tokens de acceso.
 
-Fecha de vencimiento
-::::::::::::::::::::
+Caduca
+:::::::
 
 Especifique la fecha de vencimiento del token de acceso.
 
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
-Al presionar el botón de eliminar, se eliminará la configuración.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación.
+Al presionar el botón de eliminar del cuadro de diálogo, se eliminará la configuración.
 
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/accesstoken-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/accesstoken-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/accesstoken-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/accesstoken-2.png

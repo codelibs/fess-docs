@@ -19,10 +19,12 @@
 
 편집하려면 설정 이름을 클릭합니다.
 
+페이지 오른쪽 위의 버튼은 사전(사전 목록으로 돌아갑니다), 목록, 새로 만들기, 다운로드, 업로드(다운로드 페이지와 업로드 페이지를 엽니다)입니다.
+
 설정 방법
 ------
 
-매핑 설정 페이지를 열려면 신규 생성 버튼을 클릭합니다.
+매핑 설정 페이지를 열려면 새로 만들기 버튼을 클릭합니다.
 
 |image1|
 
@@ -65,6 +67,6 @@
 
    이 설정은 새로 생성된 문서 인덱스에 적용됩니다. 기존 인덱스는 재인덱싱할 때까지 이전의 분석 설정과 사전을 사용합니다. 기존 인덱스에 적용하려면 :doc:`maintenance-guide` 에서 「사전 초기화」를 활성화하고 재인덱싱하십시오. 사전 초기화는 관리 화면에서 편집한 ``mapping.txt`` / ``ja/mapping.txt`` 의 내용을 덮어씁니다.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/mapping-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/mapping-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/mapping-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/mapping-2.png
 

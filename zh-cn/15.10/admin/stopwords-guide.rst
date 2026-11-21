@@ -34,6 +34,8 @@
 
 单击配置名称进行编辑。
 
+页面右上角的按钮依次为字典(返回字典列表)、列表、新建、下载和上传(打开下载页面和上传页面)。
+
 配置方法
 ------
 
@@ -60,6 +62,6 @@
 可以上传每行一个词的文本文件。以 ``#`` 开头的行被视为注释。
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/stopwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/stopwords-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/stopwords-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/stopwords-2.png
 

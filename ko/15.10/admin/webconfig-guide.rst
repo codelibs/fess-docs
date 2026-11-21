@@ -25,11 +25,12 @@
 --------
 
 웹 크롤링 설정 페이지를 열려면 생성 버튼을 클릭합니다.
+페이지는 "기본", "포함 및 제외", "크롤 설정", "접근 및 상태"의 4개 탭으로 나뉘어 있습니다. 탭 이름을 클릭하면 탭이 전환됩니다. 입력에 오류가 있으면 해당 입력을 포함한 탭이 자동으로 열립니다. 각 탭의 항목은 아래와 같습니다.
+
+기본 탭
+-------
 
 |image1|
-
-설정 항목
-------
 
 이름
 ::::
@@ -39,7 +40,12 @@
 URL
 ::::
 
-크롤링의 시작점이 되는 URL.
+크롤링의 시작점이 되는 URL. 한 줄에 하나씩 지정합니다.
+
+포함 및 제외 탭
+---------------
+
+|image2|
 
 크롤링 대상 URL
 :::::::::::::::::
@@ -60,6 +66,11 @@ URL
 ::::::::::::::::::
 
 이 항목에 지정한 정규 표현식(Java 형식)과 일치하는 URL은 검색 대상이 되지 않습니다.
+
+크롤 설정 탭
+------------
+
+|image3|
 
 설정 파라미터
 ::::::::::::
@@ -89,12 +100,17 @@ URL
 간격
 ::::
 
-URL을 크롤링할 때 각 스레드의 시간 간격.
+URL을 크롤링할 때 각 스레드의 시간 간격(밀리초 단위).
 
 부스트 값
 ::::::::
 
 이 설정에서 인덱싱된 문서의 가중치.
+
+접근 및 상태 탭
+---------------
+
+|image4|
 
 권한
 :::::::::::
@@ -106,7 +122,7 @@ URL을 크롤링할 때 각 스레드의 시간 간격.
 가상 호스트
 ::::::::
 
-가상 호스트의 호스트명을 지정합니다.
+가상 호스트의 호스트명을 한 줄에 하나씩 지정합니다.
 자세한 내용은 :doc:`../config/security-virtual-host` 를 참조하십시오.
 
 상태
@@ -122,7 +138,7 @@ URL을 크롤링할 때 각 스레드의 시간 간격.
 설정 삭제
 --------
 
-목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 화면이 표시됩니다. 삭제 버튼을 누르면 설정이 삭제됩니다.
+목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 대화상자가 표시됩니다. 삭제 버튼을 누르면 설정이 삭제됩니다.
 
 예
 ==
@@ -196,7 +212,7 @@ Redmine
        | login_method=POST
        | login_url=https://<server>/login
        | login_parameters=username=${username}&password=${password}
-   * - 웹 인증
+   * - 웹 설정
      - Redmine
 
 
@@ -243,7 +259,7 @@ XWiki(예. https://<server>/xwiki/)의 페이지를 크롤링하는 웹 크롤�
        | login_method=POST
        | login_url=http://<server>/xwiki/bin/loginsubmit/XWiki/XWikiLogin
        | login_parameters=j_username=${username}&j_password=${password}
-   * - 웹 인증
+   * - 웹 설정
      - XWiki
 
 관련 항목
@@ -255,6 +271,9 @@ XWiki(예. https://<server>/xwiki/)의 페이지를 크롤링하는 웹 크롤�
 - :doc:`../config/search-basic`
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/webconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/webconfig-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/webconfig-2.png
+.. |image2| image:: ../../../resources/images/ko/15.10/admin/webconfig-3.png
+.. |image3| image:: ../../../resources/images/ko/15.10/admin/webconfig-4.png
+.. |image4| image:: ../../../resources/images/ko/15.10/admin/webconfig-5.png
 .. pdf            :height: 940 px

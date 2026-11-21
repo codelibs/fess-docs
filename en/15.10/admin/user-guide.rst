@@ -32,7 +32,17 @@ Configurations
 Username
 ::::::::
 
-Specify the username of the user.
+Specify the username of the user. It cannot be changed after the user is created.
+
+Password, Password (Confirm)
+::::::::::::::::::::::::::::
+
+Specify the password of the user, and enter it again in Password (Confirm). The password is required when creating a user. When editing a user, leave both fields blank to keep the current password.
+
+Surname, Given Name, Mail
+:::::::::::::::::::::::::
+
+Specify the surname, given name and mail address of the user. These fields are optional.
 
 Roles
 :::::
@@ -51,7 +61,7 @@ Specify the groups to which the user belongs.
 Delete Configuration
 --------------------
 
-Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
+Click on the configuration name on the list page, and when the Delete button is clicked, a confirmation dialog will appear. Clicking the Delete button in the dialog will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/user-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/user-2.png

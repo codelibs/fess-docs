@@ -7,15 +7,15 @@ Descripción general
 
 La página del asistente proporciona una herramienta de configuración simplificada para registrar configuraciones de rastreo.
 
-Configuración simplificada
----------------------------
+Configuración rápida
+--------------------
 
-Esta es una página de inicio para registrar configuraciones de rastreo.
+Esta es una página de inicio para registrar configuraciones de rastreo. Haga clic en el botón Iniciar configuración para abrir la página de configuración de rastreo.
 
 |image0|
 
-Configuración del rastreo
---------------------------
+Configuración de rastreo
+------------------------
 
 En esta página puede crear configuraciones de rastreo.
 
@@ -44,6 +44,13 @@ Profundidad
 
 Establezca la profundidad al seguir enlaces contenidos en documentos rastreados.
 
+Botones
+:::::::
+
+- **Crear**: registra la configuración de rastreo y pasa a la página Iniciar rastreo.
+- **Crear continuamente**: registra la configuración de rastreo y vuelve a este formulario para que pueda registrar otra.
+- **Cancelar**: vuelve a la página Configuración rápida sin registrar.
+
 Rastreador
 ----------
 
@@ -52,6 +59,6 @@ Para iniciar el rastreador de |Fess|, haga clic en el botón "Iniciar rastreo". 
 |image2|
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/wizard-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/wizard-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/wizard-3.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/wizard-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/wizard-2.png
+.. |image2| image:: ../../../resources/images/es/15.10/admin/wizard-3.png

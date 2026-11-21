@@ -25,11 +25,12 @@
 --------
 
 点击创建按钮可打开网页爬取配置页面。
+页面分为四个选项卡:"基本"、"包含与排除"、"爬取设置"和"访问与状态"。单击选项卡名称即可切换。如果某项输入有错误,包含该项的选项卡会自动打开。各选项卡的项目说明如下。
+
+基本选项卡
+----------
 
 |image1|
-
-配置项
-------
 
 名称
 ::::
@@ -39,7 +40,12 @@
 URL
 ::::
 
-爬取的起始URL。
+爬取的起始URL。每行指定一个URL。
+
+包含与排除选项卡
+----------------
+
+|image2|
 
 爬取对象URL
 :::::::::::::::::
@@ -60,6 +66,11 @@ URL
 ::::::::::::::::::
 
 与此项中指定的正则表达式(Java格式)匹配的URL将从搜索对象中排除。
+
+爬取设置选项卡
+--------------
+
+|image3|
 
 配置参数
 ::::::::::::
@@ -89,12 +100,17 @@ URL
 间隔
 ::::
 
-爬取URL时每个线程的时间间隔。
+爬取URL时每个线程的时间间隔(毫秒)。
 
-权重值
-::::::::
+提升值
+::::::
 
 此配置中被索引文档的权重。
+
+访问与状态选项卡
+----------------
+
+|image4|
 
 权限
 :::::::::::
@@ -106,7 +122,7 @@ URL
 虚拟主机
 ::::::::
 
-指定虚拟主机的主机名。
+指定虚拟主机的主机名,每行一个。
 详情请参阅 :doc:`../config/security-virtual-host`。
 
 状态
@@ -122,7 +138,7 @@ URL
 删除配置
 --------
 
-在列表页面点击配置名称,然后点击删除按钮将显示确认画面。点击删除按钮后配置将被删除。
+在列表页面点击配置名称,然后点击删除按钮将显示确认对话框。点击删除按钮后配置将被删除。
 
 示例
 ==
@@ -196,7 +212,7 @@ Redmine
        | login_method=POST
        | login_url=https://<server>/login
        | login_parameters=username=${username}&password=${password}
-   * - 网页认证
+   * - Web配置
      - Redmine
 
 
@@ -243,7 +259,7 @@ XWiki
        | login_method=POST
        | login_url=http://<server>/xwiki/bin/loginsubmit/XWiki/XWikiLogin
        | login_parameters=j_username=${username}&j_password=${password}
-   * - 网页认证
+   * - Web配置
      - XWiki
 
 相关页面
@@ -255,6 +271,9 @@ XWiki
 - :doc:`../config/search-basic`
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/webconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/webconfig-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/webconfig-2.png
+.. |image2| image:: ../../../resources/images/zh-cn/15.10/admin/webconfig-3.png
+.. |image3| image:: ../../../resources/images/zh-cn/15.10/admin/webconfig-4.png
+.. |image4| image:: ../../../resources/images/zh-cn/15.10/admin/webconfig-5.png
 .. pdf            :height: 940 px

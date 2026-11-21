@@ -36,6 +36,8 @@ Um die Stoppwort-Konfigurationsübersichtsseite zu öffnen, wählen Sie im linke
 
 Klicken Sie auf den Konfigurationsnamen, um ihn zu bearbeiten.
 
+Die Schaltflächen oben rechts auf der Seite sind „Wörterbuch" (zurück zur Wörterbuchübersicht), „Liste", „Neu erstellen", „Herunterladen" und „Hochladen" (öffnen die Download-Seite bzw. die Upload-Seite).
+
 Konfigurationsmethode
 ---------------------
 
@@ -62,6 +64,6 @@ Upload
 Sie können eine Textdatei mit einem Wort pro Zeile hochladen. Zeilen, die mit ``#`` beginnen, werden als Kommentare behandelt.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/stopwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/stopwords-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/stopwords-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/stopwords-2.png
 

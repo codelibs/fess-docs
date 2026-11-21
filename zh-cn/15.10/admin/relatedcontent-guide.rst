@@ -41,6 +41,11 @@
 
 指定要在搜索结果中显示的内容。
 
+排序顺序
+::::::::
+
+指定存在多个匹配的相关内容时的显示顺序。按升序显示，默认值为 1。
+
 虚拟主机
 ::::::::
 
@@ -50,8 +55,8 @@
 删除配置
 --------
 
-点击列表页面中的配置名称,然后点击删除按钮,将显示确认画面。
+点击列表页面中的配置名称,然后点击删除按钮,将显示确认对话框。
 点击删除按钮将删除配置。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/relatedcontent-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/relatedcontent-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/relatedcontent-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/relatedcontent-2.png

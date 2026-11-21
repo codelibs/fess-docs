@@ -92,7 +92,7 @@
 删除配置
 --------
 
-点击列表页面中的配置名称,然后点击删除按钮,将显示确认画面。
+点击列表页面中的配置名称,然后点击删除按钮,将显示确认对话框。
 点击删除按钮将删除配置。
 
 示例
@@ -186,5 +186,5 @@
 路径映射按配置的排序顺序(升序)依次应用。
 当多个路径映射匹配时,从第一个匹配项开始应用。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/pathmap-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/pathmap-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/pathmap-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/pathmap-2.png

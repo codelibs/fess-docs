@@ -29,12 +29,15 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste des tags, cliquez sur [Robot d'exploration > Tag] dans le menu de gauche.
+Pour ouvrir la page de liste des tags illustrée ci-dessous, cliquez sur [Robot d'exploration > Tag] dans le menu de gauche.
 L'affichage requiert le rôle ``admin-tagtype`` ou ``admin-tagtype-view`` ; la création, la
 modification et la suppression requièrent ``admin-tagtype``.
 
-La liste affiche le nom et le propriétaire de chaque tag, par ordre de tri, nom et propriétaire. Vous
-pouvez rechercher par nom et par propriétaire ; chacun correspond aux tags qui contiennent le texte
+|image0|
+
+La liste affiche le nom et le propriétaire de chaque tag, par ordre de tri, nom et propriétaire. Lorsqu'aucun
+tag n'est enregistré, la liste affiche « Non enregistré. » Cliquez sur le bouton [Rechercher] au-dessus de la liste pour afficher
+le formulaire de recherche. Vous pouvez rechercher par nom et par propriétaire ; chacun correspond aux tags qui contiennent le texte
 saisi.
 
 Cliquez sur un nom pour modifier le tag.
@@ -42,7 +45,9 @@ Cliquez sur un nom pour modifier le tag.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de création d'un tag.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de création d'un tag.
+
+|image1|
 
 Paramètres de configuration
 ---------------------------
@@ -104,8 +109,8 @@ Spécifie l'ordre d'affichage du tag.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur un nom dans la page de liste, puis sur le bouton Supprimer pour afficher l'écran de
-confirmation. Appuyer sur le bouton Supprimer supprime le tag, et sa valeur est retirée des documents.
+Cliquez sur un nom dans la page de liste, puis sur le bouton Supprimer pour afficher la boîte de
+dialogue de confirmation. Appuyer sur le bouton Supprimer supprime le tag, et sa valeur est retirée des documents.
 
 Partage
 =======
@@ -168,3 +173,6 @@ Remarques pour l'exploitation
   modifiés.
 - Les tags sont stockés dans l'index ``fess_config.tag_type``. Ils sont inclus dans
   ``fess_config.bulk`` d'une sauvegarde, mais pas dans ``fess_basic_config.bulk``.
+
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/tagtype-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/tagtype-2.png

@@ -52,6 +52,11 @@ fess-suggest.log
 
 추천 기능의 로그가 기록됩니다.
 
+fess-llm.log
+::::::::::::
+
+LLM/RAG 채팅의 로그가 기록됩니다.
+
 fess-urls.log
 :::::::::::::
 
@@ -61,7 +66,7 @@ searchlog.log
 :::::::::::::
 
 검색 로그가 기록됩니다.
-[시스템 > 일반] 의 「검색 로그」가 활성화되어 있으면, 기본 설정에서는 검색할 때마다 1행(JSON)이 추가됩니다.
+[시스템 > 일반] 의 [로깅] 탭에 있는 「검색 로그」가 활성화되어 있으면, 기본 설정에서는 검색할 때마다 1행(JSON)이 추가됩니다.
 1행에는 그 검색이 반환한 문서의 필드(``logging.search.docs.fields`` )가 포함되므로, 크기는 반환한 건수에 따라 커집니다(``num=100`` 에서는 1행이 70 KB 정도가 되는 예가 있습니다).
 로그 로테이션과 보존 기간은 :doc:`../config/admin-logging` 을 참조하십시오.
 반환한 문서의 필드를 검색 로그에 포함하지 않으려면 ``fess_config.properties`` 에서 ``logging.search.docs.enabled=false`` 를, 이 파일에 출력하지 않으려면 ``logging.search.use.logfile=false`` 를 설정합니다.
@@ -76,4 +81,4 @@ gc-fess.log
 
 |Fess| 본체의 GC 로그가 기록되어 있습니다. 환경 변수 ``FESS_USE_GC_LOGGING`` 에 비어 있지 않은 값을 설정한 경우에만 출력됩니다(:doc:`../install/run` 참조).
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/log-1.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/log-1.png

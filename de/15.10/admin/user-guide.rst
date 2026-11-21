@@ -32,7 +32,17 @@ Konfigurationsparameter
 Benutzername
 ::::::::::::
 
-Benutzername.
+Geben Sie den Benutzernamen des Benutzers an. Er kann nach dem Erstellen des Benutzers nicht mehr geändert werden.
+
+Passwort, Passwort (bestätigen)
+:::::::::::::::::::::::::::::::
+
+Geben Sie das Passwort des Benutzers an und wiederholen Sie es unter „Passwort (bestätigen)". Beim Erstellen eines Benutzers ist das Passwort erforderlich. Beim Bearbeiten eines Benutzers lassen Sie beide Felder leer, um das aktuelle Passwort beizubehalten.
+
+Nachname, Vorname, E-Mail
+:::::::::::::::::::::::::
+
+Geben Sie den Nachnamen, den Vornamen und die E-Mail-Adresse des Benutzers an. Diese Felder sind optional.
 
 Rolle
 :::::
@@ -51,8 +61,8 @@ Geben Sie die Gruppe an, zu der der Benutzer gehört.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
-Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
+Klicken Sie im Dialog auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/user-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/user-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/user-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/user-2.png

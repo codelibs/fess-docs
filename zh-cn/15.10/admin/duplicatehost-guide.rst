@@ -52,8 +52,8 @@
 删除设置
 --------
 
-点击列表页面的设置名称，然后点击删除按钮，将显示确认画面。
+点击列表页面的设置名称，然后点击删除按钮，将显示确认对话框。
 点击删除按钮将删除该设置。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/duplicatehost-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/duplicatehost-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/duplicatehost-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/duplicatehost-2.png

@@ -29,13 +29,16 @@ Verwaltung
 Anzeige
 -------
 
-Um die Tag-Liste zu öffnen, klicken Sie im linken Menü auf [Crawler > Tag]. Zum Anzeigen ist die
+Um die unten gezeigte Tag-Liste zu öffnen, klicken Sie im linken Menü auf [Crawler > Tag]. Zum Anzeigen ist die
 Rolle ``admin-tagtype`` oder ``admin-tagtype-view`` erforderlich, zum Erstellen, Bearbeiten und
 Löschen ``admin-tagtype``.
 
+|image0|
+
 Die Liste zeigt Name und Besitzer jedes Tags, sortiert nach Sortierreihenfolge, Name und Besitzer.
-Sie können nach Name und nach Besitzer suchen; beide treffen die Tags, die den eingegebenen Text
-enthalten.
+Ist kein Tag registriert, zeigt die Liste „Nicht registriert.“ an. Klicken Sie über der Liste auf die
+Schaltfläche [Suchen], um das Suchformular anzuzeigen. Sie können nach Name und nach Besitzer suchen;
+beide treffen die Tags, die den eingegebenen Text enthalten.
 
 Klicken Sie auf einen Namen, um das Tag zu bearbeiten.
 
@@ -43,6 +46,8 @@ Konfiguration erstellen
 -----------------------
 
 Um die Seite zum Erstellen eines Tags zu öffnen, klicken Sie auf die Schaltfläche „Neu erstellen“.
+
+|image1|
 
 Konfigurationsparameter
 -----------------------
@@ -107,7 +112,7 @@ Konfiguration löschen
 ---------------------
 
 Klicken Sie auf der Listenseite auf einen Namen und dann auf die Schaltfläche „Löschen“, um einen
-Bestätigungsbildschirm anzuzeigen. Ein Klick auf „Löschen“ löscht das Tag, und sein Wert wird aus den
+Bestätigungsdialog anzuzeigen. Ein Klick auf „Löschen“ löscht das Tag, und sein Wert wird aus den
 Dokumenten entfernt.
 
 Freigabe
@@ -172,3 +177,6 @@ Hinweise für den Betrieb
   geändert.
 - Die Tags werden im Index ``fess_config.tag_type`` gespeichert. Sie sind in ``fess_config.bulk``
   einer Sicherung enthalten, nicht aber in ``fess_basic_config.bulk``.
+
+.. |image0| image:: ../../../resources/images/de/15.10/admin/tagtype-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/tagtype-2.png

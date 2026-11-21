@@ -71,6 +71,7 @@
 =========
 
 등록한 단어를 CSV 형식으로 다운로드합니다.
+페이지 오른쪽 위의 다운로드를 클릭하여 다운로드 페이지를 열고, 다운로드 버튼을 클릭합니다.
 
 |image2|
 
@@ -89,6 +90,7 @@ CSV 내용
 =========
 
 CSV 형식으로 단어를 등록합니다.
+페이지 오른쪽 위의 업로드를 클릭하여 업로드 페이지를 열고, 추가 단어 파일에서 CSV 파일을 선택한 후 업로드 버튼을 클릭합니다.
 
 |image3|
 
@@ -107,7 +109,7 @@ CSV 내용
    Permissions 열에는 ``{role}role1`` 처럼 ``{role}``, ``{user}``, ``{group}`` 중 하나를 붙여서 지정합니다(여러 개는 쉼표로 구분). ``role1`` 처럼 접두사가 없는 값은 역할로 취급되지 않으며, 해당 역할을 가진 사용자에게 추천되지 않습니다.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/elevateword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/elevateword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/elevateword-4.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/elevateword-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/elevateword-2.png
+.. |image2| image:: ../../../resources/images/ko/15.10/admin/elevateword-3.png
+.. |image3| image:: ../../../resources/images/ko/15.10/admin/elevateword-4.png

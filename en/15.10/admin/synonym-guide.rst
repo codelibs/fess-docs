@@ -23,10 +23,12 @@ To open the synonym configuration list page shown below, click [System > Diction
 
 Click the configuration name to edit it.
 
+The buttons at the top right of the page are Dictionary (returns to the dictionary list), List, Create New, Download and Upload (open the download page and the upload page).
+
 Configuration Method
 --------------------
 
-To open the synonym configuration page, click the New button.
+To open the synonym configuration page, click the Create New button.
 
 |image1|
 

@@ -14,8 +14,7 @@
 ------
 
 下図のシステム情報ページを開くには、左メニューの [システム情報 > 設定情報] をクリックします。
-
-|image0|
+ページには4つのタブがあり、以下で説明します。
 
 表示項目
 ------
@@ -23,22 +22,33 @@
 環境変数のプロパティ
 :::::::::::::::
 
+|image0|
+
 サーバーの環境変数を一覧できます。
 
 システムのプロパティ
 :::::::::::::::
+
+|image1|
 
 |Fess| に設定されたシステムプロパティを一覧できます。
 
 アプリのプロパティ
 ::::::::::::::
 
+|image2|
+
 |Fess| の設定情報を確認できます。
 
 バグレポートのプロパティ
 ::::::::::::::::::
 
+|image3|
+
 バグを報告する際に添付するためのプロパティ一覧です。
 個人情報が含まれない値を抽出しています。
 
 .. |image0| image:: ../../../resources/images/ja/15.10/admin/systeminfo-1.png
+.. |image1| image:: ../../../resources/images/ja/15.10/admin/systeminfo-2.png
+.. |image2| image:: ../../../resources/images/ja/15.10/admin/systeminfo-3.png
+.. |image3| image:: ../../../resources/images/ja/15.10/admin/systeminfo-4.png

@@ -99,4 +99,4 @@ En ``system.properties`` y ``fess_config.properties``, los valores secretos se s
 
    Los archivos de registro y el contenido de ``fess_basic_config.bulk`` no se enmascaran. Revise el contenido antes de enviar el zip fuera de su organización.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/maintenance-1.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/maintenance-1.png

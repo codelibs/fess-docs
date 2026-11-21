@@ -82,7 +82,7 @@ user_info.ndjson contains information about search users.
 Upload
 ------
 
-Configuration data can be imported by uploading a file.
+Configuration data can be imported by uploading a file. Select the file in "Bulk File" at the top of the page and click the Upload button.
 The files that can be restored are as follows.
 
 - ``*.bulk``
@@ -100,7 +100,7 @@ as they are. Documents without an ``updatedTime`` are always written.
 
 .. note::
 
-   The skip is logged at INFO level, so with the default log level (``warn``) nothing is written to ``fess.log``. To see these entries, set the log level to ``info`` before the restore. You can change it with "Log Level" under [System > General] in the administration screen (it returns to its configured value when |Fess| restarts), or, on Linux, with ``FESS_LOG_LEVEL=info``. See :doc:`../config/admin-logging` for details.
+   The skip is logged at INFO level, so with the default log level (``warn``) nothing is written to ``fess.log``. To see these entries, set the log level to ``info`` before the restore. You can change it with "Log Level" on the [Logging] tab of [System > General] in the administration screen (it returns to its configured value when |Fess| restarts), or, on Linux, with ``FESS_LOG_LEVEL=info``. See :doc:`../config/admin-logging` for details.
 
 .. note::
 

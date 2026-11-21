@@ -13,11 +13,12 @@ Management Operations
 Display Job Logs
 ----------------
 
-Select System > Job Log in the left menu to display job logs.
+Select System Info > Job Log in the left menu to display job logs.
 
 |image0|
 
 The list displays job name, execution status, and start/end time.
+Click the Delete All button below the list to delete all job logs. A confirmation dialog will appear.
 
 Details
 -------
@@ -44,15 +45,15 @@ The target for job execution.
 Start Time
 ::::::::::
 
-UNIX time when the job started.
+Date and time when the job started.
 
 End Time
 ::::::::
 
-UNIX time when the job ended.
+Date and time when the job ended.
 
-Executor
-::::::::
+Execution Method
+::::::::::::::::
 
 The execution environment where the job was executed.
 
@@ -65,6 +66,8 @@ Result
 ::::::
 
 The execution result of the job.
+
+Click the Delete button on the details page to delete the job log. A confirmation dialog will appear.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/joblog-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/joblog-2.png

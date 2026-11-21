@@ -22,6 +22,7 @@
 
 |image0|
 
+列表显示每个词典的名称(文件路径)和类型。单击某一行即可打开该词典的单词列表。
 
 各词典的作用范围与生效时机
 ==========================
@@ -153,5 +154,4 @@ Stemmer覆盖
 stemmer_override.txt 按各语言配置,是用于覆盖词干提取处理的单词替换词典文件。
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dict-1.png
-            :height: 940px
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/dict-1.png

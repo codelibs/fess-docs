@@ -24,15 +24,15 @@ Click the configuration name to edit it.
 Creating Configuration
 ----------------------
 
-To open the path mapping configuration page, click the New button.
+To open the path mapping configuration page, click the "Create New" button.
 
 |image1|
 
 Configuration Items
 -------------------
 
-Regular Expression
-::::::::::::::::::
+Regex
+:::::
 
 Specifies the string to replace.
 Notation follows Java regular expressions.
@@ -83,8 +83,8 @@ Extracted URL Conversion
   URLs saved to the index are not changed.
   Use this when you want to convert link URLs extracted from HTML and add them to the crawl queue.
 
-Display Order
-:::::::::::::
+Sort Order
+::::::::::
 
 Specifies the processing order of path mapping.
 Processed in ascending order.
@@ -99,7 +99,7 @@ If not set, it applies to all requests.
 Deleting Configuration
 ----------------------
 
-Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the configuration name on the list page, then click the Delete button to display a confirmation dialog.
 Click the Delete button to remove the configuration.
 
 Examples
@@ -116,7 +116,7 @@ This is an example configuration for crawling documents from a file server and m
 
    * - Configuration Item
      - Value
-   * - Regular Expression
+   * - Regex
      - ``file:/srv/documents/``
    * - Replacement
      - ``http://fileserver.example.com/documents/``
@@ -136,7 +136,7 @@ This is an example configuration for keeping the original file path in the index
 
    * - Configuration Item
      - Value
-   * - Regular Expression
+   * - Regex
      - ``file:/srv/documents/``
    * - Replacement
      - ``http://fileserver.example.com/documents/``
@@ -160,7 +160,7 @@ This is an example configuration for converting links in HTML from an old server
 
    * - Configuration Item
      - Value
-   * - Regular Expression
+   * - Regex
      - ``http://old-server\\.example\\.com/``
    * - Replacement
      - ``http://new-server.example.com/``

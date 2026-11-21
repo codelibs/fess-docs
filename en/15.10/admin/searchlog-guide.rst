@@ -31,22 +31,40 @@ Tabs
   each with a small trend chart and its change from the previous period; a trend chart with a
   metric switcher (the previous period is drawn as dashed lines when compared); and the top queries
   and zero-hit queries.
+
+  |image0|
+
 - **Queries**: per query, the searches, users, average hits, clicks, click-through rate and average
   click position. It also shows the zero-hit queries (with the time they were last searched) and the
   zero-click queries, which had hits but whose results were never clicked.
+
+  |image1|
+
 - **Clicks**: the most clicked URLs, the most favorited URLs, the click position distribution and the
   rate of viewing page 2 and later.
+
+  |image2|
+
 - **Performance**: the average, median (p50), p95 and p99 response time, the response time
   distribution, the slowest queries and the query time.
-- **Audience**: new and returning users, access types, searches by weekday and hour, and the top
-  user agents, referers, languages and virtual hosts. "Searches by Role and Group" shows the
+
+  |image3|
+
+- **Audience**: new and returning users, access types, searches by day and hour, and the top
+  user agents, referrers, languages and virtual hosts. "Searches by Role and Group" shows the
   searches, users and zero-hit rate of each role and group. A search counts toward every role and
   group of the user who ran it, so the rows can add up to more than the total. Individual users are
   not listed.
+
+  |image4|
+
 - **AI Chat**: the requests, users, total tokens, average response time and error rate of the AI
   search mode (RAG chat), with the top users and the requests by intent and by model. Chat usage is
   recorded while ``rag.chat.log.enabled`` (default: ``true``) is on. Questions and answers are not
   recorded. Token counts are recorded only when the LLM plugin reports them.
+
+  |image5|
+
 - **Logs**: the list of individual logs; see "Log List" below.
 
 .. note::
@@ -74,10 +92,11 @@ Log List
 ========
 
 The "Logs" tab lists search logs, click logs, favorite logs and user logs. You can filter them by
-log type, query ID, user ID, time range, access type and search word, and search logs also by hit
-count ("All", "Zero hits only", "One or more hits"). To see the details of a log, click it.
+log type, query ID, user ID, access type, search word and time range (a start and an end date and
+time), and search logs also by hit count ("All", "Zero hits only", "One or more hits"). Click
+[Search] to apply the conditions and [Reset] to clear them. To see the details of a log, click it.
 
-|image0|
+|image6|
 
 Click [Download CSV] to download the logs that match the current filter as CSV, newest first, with
 no row limit. The header row holds the field names, so it does not depend on the UI language.
@@ -90,10 +109,18 @@ run it as a formula.
 Details
 -------
 
-Click a log in the list to show its details.
+Click a log in the list to show its details. The Query ID, User Info ID and User Session ID in the
+details are links that open the list filtered by that ID. To delete the log, click the Delete button;
+a confirmation dialog will appear.
 
-|image1|
+|image7|
 
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/searchlog-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/searchlog-2.png
+.. |image2| image:: ../../../resources/images/en/15.10/admin/searchlog-3.png
+.. |image3| image:: ../../../resources/images/en/15.10/admin/searchlog-4.png
+.. |image4| image:: ../../../resources/images/en/15.10/admin/searchlog-5.png
+.. |image5| image:: ../../../resources/images/en/15.10/admin/searchlog-6.png
+.. |image6| image:: ../../../resources/images/en/15.10/admin/searchlog-7.png
+.. |image7| image:: ../../../resources/images/en/15.10/admin/searchlog-8.png

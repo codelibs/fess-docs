@@ -7,6 +7,7 @@ Overview
 
 This administration page allows you to manage |Fess| configuration settings.
 You can modify various |Fess| settings without restarting |Fess|.
+The settings are divided into tabs (System, Crawler, Logging, Suggest, LDAP, OpenID Connect, SAML, SPNEGO, Entra ID, Notice, Notify and Storage). The tabs are saved together with the [Update] button at the bottom of the form.
 
 Configuration Options
 =====================
@@ -26,19 +27,19 @@ Login Required
 
 Specify whether to require login for search functionality.
 
-Display Login Link
-::::::::::::::::::
+Show Login Link
+:::::::::::::::
 
 Configures whether to display a link to the login page on the search screen.
 
-Result Collapse
-:::::::::::::::
+Collapse Duplicate Results
+::::::::::::::::::::::::::
 
 Specifies whether to enable collapsing of duplicate results.
 
 This item is not shown, and collapsing stays disabled, when ``search_engine.type`` is ``vanilla`` or ``aws`` (see :doc:`../config/search-engine-type`).
 
-Thumbnail View
+Show Thumbnail
 ::::::::::::::
 
 Specify whether to enable thumbnail display.
@@ -165,6 +166,8 @@ If a crawl target document is recorded in failure URLs more times than specified
 Logging
 -------
 
+|image2|
+
 Search Log
 ::::::::::
 
@@ -209,6 +212,8 @@ Specify the log level for fess.log.
 Suggest
 -------
 
+|image3|
+
 Suggest from Search Terms
 :::::::::::::::::::::::::
 
@@ -227,7 +232,7 @@ Deletes suggest data older than the specified number of days.
 LDAP
 ----
 
-|image2|
+|image4|
 
 LDAP URL
 ::::::::
@@ -284,7 +289,7 @@ Specifies the LDAP initial context factory class (e.g., com.sun.jndi.ldap.LdapCt
 OpenID Connect
 --------------
 
-|image3|
+|image5|
 
 Client ID
 :::::::::
@@ -296,8 +301,8 @@ Client Secret
 
 Specifies the client secret of the OpenID Connect provider.
 
-Auth Server URL
-:::::::::::::::
+Authorization Server URL
+::::::::::::::::::::::::
 
 Specifies the authorization server URL for OpenID Connect.
 
@@ -334,7 +339,7 @@ Specifies the default roles to assign to users during OpenID Connect authenticat
 SAML
 ----
 
-|image4|
+|image6|
 
 IdP Entity ID
 :::::::::::::
@@ -408,7 +413,7 @@ Specifies the default roles to assign to users during SAML authentication.
 SPNEGO
 ------
 
-|image5|
+|image7|
 
 .. note::
    SPNEGO settings are shared process-wide inside the underlying library, so a |Fess| restart is required to apply changes to them.
@@ -471,6 +476,12 @@ Allow Delegation
 
 Specify whether to allow Kerberos delegation.
 
+Allowed Realms
+::::::::::::::
+
+Specifies the Kerberos realms accepted in addition to the server realm, separated by commas.
+For details, see :doc:`../config/sso-spnego`.
+
 Logger Level
 ::::::::::::
 
@@ -480,7 +491,7 @@ If left empty or set to a non-numeric value, the log level is detected automatic
 Entra ID
 --------
 
-|image6|
+|image8|
 
 Tenant (ID or Domain)
 :::::::::::::::::::::
@@ -506,6 +517,12 @@ Reply URL
 :::::::::
 
 Specifies the reply (redirect) URL for Microsoft Entra ID.
+
+Response Mode
+:::::::::::::
+
+Specifies how the authorization response is returned: ``query`` or ``form_post``. The default is ``query``.
+For the conditions under which ``form_post`` works, see :doc:`../config/sso-entraid`.
 
 State TTL
 :::::::::
@@ -535,7 +552,7 @@ Specify whether to use Entra ID Domain Service.
 Notice
 ------
 
-|image7|
+|image9|
 
 .. note::
 
@@ -562,6 +579,8 @@ Enter the message to display on the advanced search screen.
 
 Notify
 ------
+
+|image10|
 
 Notification Mail
 :::::::::::::::::
@@ -599,6 +618,8 @@ Log events at the selected level and above will be notified.
 
 Storage
 -------
+
+|image11|
 
 After configuring each item, a [System > Storage] menu will appear in the left menu.
 For file management, see :doc:`Storage <../admin/storage-guide>`.
@@ -695,4 +716,8 @@ LDAP Configuration Example
 .. |image5| image:: ../../../resources/images/en/15.10/admin/general-6.png
 .. |image6| image:: ../../../resources/images/en/15.10/admin/general-7.png
 .. |image7| image:: ../../../resources/images/en/15.10/admin/general-8.png
+.. |image8| image:: ../../../resources/images/en/15.10/admin/general-9.png
+.. |image9| image:: ../../../resources/images/en/15.10/admin/general-10.png
+.. |image10| image:: ../../../resources/images/en/15.10/admin/general-11.png
+.. |image11| image:: ../../../resources/images/en/15.10/admin/general-12.png
 .. pdf            :height: 940 px

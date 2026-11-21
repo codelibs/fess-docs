@@ -1,11 +1,11 @@
-===============
-Additional Word
-===============
+============
+Elevate Word
+============
 
 Overview
 ========
 
-Additional Word page manages preferred words to display on a keyword suggest.
+Elevate Word page manages preferred words to display on a keyword suggest.
 The keyword suggest words are generated from search queries and indexed contents automatically, and you can add words to them.
 
 Management Operations
@@ -14,7 +14,7 @@ Management Operations
 Display Configurations
 ----------------------
 
-Select Suggest > Additional Word in the left menu to display a list page of Additional Word Configuration, as below.
+Select Suggest > Elevate Word in the left menu to display a list page of Elevate Word Configuration, as below.
 
 |image0|
 
@@ -23,7 +23,7 @@ Click a configuration name if you want to edit it.
 Create Configuration
 --------------------
 
-Click Create New button to display a form page for Additional Word configuration.
+Click Create New button to display a form page for Elevate Word configuration.
 
 |image1|
 
@@ -72,6 +72,7 @@ Download
 ========
 
 You can download a word list file as CSV file.
+Click Download at the top right of the page to open the download page, and click the Download button.
 
 |image2|
 
@@ -79,7 +80,8 @@ You can download a word list file as CSV file.
 Upload
 ======
 
-You can upload CSV file containing a word list to exclude from Suggest.
+You can upload CSV file containing a word list to add to Suggest.
+Click Upload at the top right of the page to open the upload page, select the CSV file in Elevate Word File, and click the Upload button.
 
 |image3|
 

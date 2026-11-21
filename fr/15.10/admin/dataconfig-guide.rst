@@ -29,7 +29,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration du magasin de données.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration du magasin de données.
 
 |image1|
 
@@ -81,8 +81,8 @@ Les expressions sont écrites dans la syntaxe du moteur de script sélectionné 
    champ qui se vide silencieusement. Voir :ref:`javascript-statement-null`
    (dans :doc:`../config/scripting-javascript`).
 
-Valeur de boost
-:::::::::::::::
+Boost
+:::::
 
 Spécifie la valeur de boost des documents lors du crawl avec cette configuration.
 
@@ -93,10 +93,10 @@ Spécifie la permission pour cette configuration.
 Pour la méthode de spécification de permission, par exemple, pour afficher les résultats de recherche aux utilisateurs appartenant au groupe developer, spécifiez {group}developer.
 La spécification par utilisateur est {user}nom_utilisateur, par rôle {role}nom_rôle, par groupe {group}nom_groupe.
 
-Hôte virtuel
-::::::::::::
+Hôtes virtuels
+::::::::::::::
 
-Spécifie le nom d'hôte de l'hôte virtuel.
+Spécifie les noms d'hôte des hôtes virtuels, un par ligne.
 Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le guide de configuration <../config/security-virtual-host>`.
 
 État
@@ -112,7 +112,7 @@ Vous pouvez saisir une description.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
 Exemples
@@ -403,5 +403,5 @@ Pages associées
 - :doc:`../config/datastore/ds-overview`
 - :doc:`../config/crawler-basic`
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/dataconfig-2.png

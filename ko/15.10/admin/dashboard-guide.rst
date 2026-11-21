@@ -46,13 +46,13 @@
 인덱싱된 문서 수 확인
 ================================
 
-인덱싱된 문서의 수는 아래 그림과 같이 fess인덱스에 표시됩니다.
+인덱싱된 문서의 수는 fess 인덱스의 헤더에 표시됩니다. 인덱스를 찾으려면 아래 그림과 같이 인덱스 필터에 ``fess.2`` 를 입력합니다.
 
 |image1|
 
-각 인덱스의 오른쪽 상단 아이콘을 클릭하면 인덱스에 대한 작업 메뉴가 표시됩니다.
+인덱스 이름을 클릭하면 인덱스에 대한 작업 메뉴가 표시됩니다.
 인덱싱된 문서를 삭제하는 경우 관리용 검색 화면에서 삭제합니다. "인덱스 삭제"로 삭제하지 않도록 주의하십시오.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/dashboard-2.png
 .. pdf            :width: 400 px

@@ -24,7 +24,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration du mappage de chemin.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration du mappage de chemin.
 
 |image1|
 
@@ -99,7 +99,7 @@ Si non défini, il s'applique à toutes les requêtes.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
 Exemples
@@ -193,5 +193,5 @@ Les expressions régulières sont écrites au format d'expressions régulières 
 Les mappages de chemin sont appliqués séquentiellement dans l'ordre de tri configuré (croissant).
 Lorsque plusieurs mappages de chemin correspondent, ils sont appliqués en commençant par la première correspondance.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/pathmap-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/pathmap-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/pathmap-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/pathmap-2.png

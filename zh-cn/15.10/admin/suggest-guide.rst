@@ -17,7 +17,7 @@
 
 |image0|
 
-如需删除请点击删除按钮。
+如需删除词汇，请点击对应词汇类型的删除按钮，此时会显示确认对话框。
 
 
 词汇类型
@@ -27,11 +27,11 @@
 - 文档：从已索引的文档生成的词汇
 - 搜索词：从搜索日志生成的词汇
 
-词汇数量
-:::::
+词数
+::::
 
 已注册的词汇数量
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/suggest-1.png
 

@@ -23,10 +23,12 @@
 
 편집하려면 설정 이름을 클릭합니다.
 
+페이지 오른쪽 위의 버튼은 사전(사전 목록으로 돌아갑니다), 목록, 새로 만들기, 다운로드, 업로드(다운로드 페이지와 업로드 페이지를 엽니다)입니다.
+
 설정 방법
 ------
 
-동의어 설정 페이지를 열려면 신규 생성 버튼을 클릭합니다.
+동의어 설정 페이지를 열려면 새로 만들기 버튼을 클릭합니다.
 
 |image1|
 
@@ -94,5 +96,5 @@ Apache Lucene이 제공하는 동의어 사전 형식으로 업로드할 수 있
 - :doc:`dict-guide` - 사전 관리 개요
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/synonym-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/synonym-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/synonym-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/synonym-2.png

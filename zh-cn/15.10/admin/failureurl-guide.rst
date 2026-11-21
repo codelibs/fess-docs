@@ -18,7 +18,9 @@
 
 |image0|
 
-点击失败URL的查看链接将显示详细信息。
+可以通过搜索表单（URL、错误数和类型）和搜索按钮缩小列表范围，重置按钮用于清除条件。
+点击列表中的某一行将显示详细信息。
+点击列表下方的删除全部按钮可删除所有失败URL，此时会显示确认对话框。
 
 列表中的项目
 ------------
@@ -52,6 +54,11 @@ CSV下载
 
 详情内容
 --------
+
+ID
+::::
+
+失败URL的ID。
 
 URL
 ::::
@@ -99,6 +106,8 @@ MIME 类型
 
 此异常发生的时间。
 
+点击详细页面中的删除按钮可删除该失败URL，此时会显示确认对话框。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/failureurl-2.png
+
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/failureurl-2.png

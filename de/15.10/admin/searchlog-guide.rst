@@ -33,24 +33,42 @@ Registerkarten
   vorherigen Zeitraum; ein Verlaufsdiagramm mit umschaltbarer Kennzahl (beim Vergleich wird der
   vorherige Zeitraum gestrichelt dargestellt); sowie die häufigsten Suchbegriffe und die Suchbegriffe
   ohne Treffer.
+
+  |image0|
+
 - **Suchbegriffe**: je Suchbegriff die Suchanfragen, Benutzer, durchschnittlichen Treffer, Klicks,
   Klickrate und durchschnittliche Klickposition. Außerdem die Suchbegriffe ohne Treffer (mit dem
   Zeitpunkt der letzten Suche) und die Suchbegriffe ohne Klicks, die Treffer hatten, deren Ergebnisse
   aber nie angeklickt wurden.
+
+  |image1|
+
 - **Klicks**: die am häufigsten angeklickten URLs, die am häufigsten favorisierten URLs, die
   Verteilung der Klickpositionen und der Anteil der Aufrufe ab Seite 2.
+
+  |image2|
+
 - **Leistung**: durchschnittliche Antwortzeit, Median (p50), p95 und p99, die Verteilung der
   Antwortzeiten, die langsamsten Suchbegriffe und die Abfragezeit.
+
+  |image3|
+
 - **Zielgruppe**: neue und wiederkehrende Benutzer, Zugriffsarten, Suchanfragen nach Wochentag und
-  Stunde sowie die häufigsten User-Agents, Referrer, Sprachen und virtuellen Hosts. „Suchanfragen
+  Uhrzeit sowie die häufigsten User-Agents, Referrer, Sprachen und virtuellen Hosts. „Suchanfragen
   nach Rolle und Gruppe“ zeigt für jede Rolle und Gruppe die Suchanfragen, Benutzer und die Quote ohne
   Treffer. Eine Suche zählt für jede Rolle und Gruppe des ausführenden Benutzers, daher kann die Summe
   der Zeilen über der Gesamtzahl liegen. Einzelne Benutzer werden nicht aufgeführt.
+
+  |image4|
+
 - **KI-Chat**: Anfragen, Benutzer, Tokens insgesamt, durchschnittliche Antwortzeit und Fehlerquote des
   KI-Suchmodus (RAG-Chat) sowie die häufigsten Benutzer und die Anfragen nach Absicht und nach
   Modell. Die Chat-Nutzung wird aufgezeichnet, solange ``rag.chat.log.enabled`` (Standard: ``true``)
   aktiviert ist. Fragen und Antworten werden nicht aufgezeichnet. Token-Zahlen werden nur
   aufgezeichnet, wenn das LLM-Plugin sie meldet.
+
+  |image5|
+
 - **Protokolle**: die Liste der einzelnen Protokolle; siehe „Protokollliste“ unten.
 
 .. note::
@@ -81,11 +99,13 @@ Protokollliste
 ==============
 
 Die Registerkarte „Protokolle“ listet Suchprotokolle, Klickprotokolle, Favoritenprotokolle und
-Benutzerprotokolle auf. Sie lassen sich nach Protokollart, Abfrage-ID, Benutzer-ID, Zeitraum,
-Zugriffsart und Suchbegriff filtern, Suchprotokolle zusätzlich nach Trefferzahl („Alle“, „Nur ohne
-Treffer“, „Mindestens ein Treffer“). Um die Details eines Protokolls anzuzeigen, klicken Sie darauf.
+Benutzerprotokolle auf. Sie lassen sich nach Protokollart, Abfrage-ID, Benutzer-ID, Zugriffsart,
+Suchbegriff und Zeitraum (Start- und Enddatum mit Uhrzeit) filtern, Suchprotokolle zusätzlich nach
+Trefferzahl („Alle“, „Nur ohne Treffer“, „Mindestens ein Treffer“). Mit [Suchen] werden die
+Bedingungen angewendet, mit [Zurücksetzen] gelöscht. Um die Details eines Protokolls anzuzeigen,
+klicken Sie darauf.
 
-|image0|
+|image6|
 
 Klicken Sie auf [CSV herunterladen], um die Protokolle, die dem aktuellen Filter entsprechen, ohne
 Zeilenbegrenzung und neueste zuerst als CSV herunterzuladen. Die Kopfzeile enthält die Feldnamen und
@@ -99,10 +119,16 @@ damit eine Tabellenkalkulation ihn nicht als Formel ausführt.
 Details
 -------
 
-Klicken Sie in der Liste auf ein Protokoll, um seine Details anzuzeigen.
+Klicken Sie in der Liste auf ein Protokoll, um seine Details anzuzeigen. Die Felder „Query ID“, „User Info ID“ und „User Session ID“ in den Details sind Links, die die nach dieser ID gefilterte Liste öffnen. Um das Protokoll zu löschen, klicken Sie auf die Schaltfläche „Löschen“; es wird ein Bestätigungsdialog angezeigt.
 
-|image1|
+|image7|
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/searchlog-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/searchlog-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/searchlog-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/searchlog-2.png
+.. |image2| image:: ../../../resources/images/de/15.10/admin/searchlog-3.png
+.. |image3| image:: ../../../resources/images/de/15.10/admin/searchlog-4.png
+.. |image4| image:: ../../../resources/images/de/15.10/admin/searchlog-5.png
+.. |image5| image:: ../../../resources/images/de/15.10/admin/searchlog-6.png
+.. |image6| image:: ../../../resources/images/de/15.10/admin/searchlog-7.png
+.. |image7| image:: ../../../resources/images/de/15.10/admin/searchlog-8.png

@@ -24,12 +24,13 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Créer pour ouvrir la page de configuration de crawl Web.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration de crawl Web.
+La page est divisée en quatre onglets : « Général », « Inclusions et exclusions », « Paramètres d’exploration » et « Accès et état ». Cliquez sur le nom d'un onglet pour changer d'onglet. Si une saisie comporte une erreur, l'onglet qui la contient s'ouvre automatiquement. Les champs de chaque onglet sont décrits ci-dessous.
+
+Onglet Général
+--------------
 
 |image1|
-
-Paramètres de configuration
----------------------------
 
 Nom
 ::::
@@ -39,7 +40,12 @@ Nom de la configuration.
 URL
 ::::
 
-URL de départ du crawl.
+URL de départ du crawl. Spécifiez une URL par ligne.
+
+Onglet Inclusions et exclusions
+-------------------------------
+
+|image2|
 
 URL à crawler
 :::::::::::::
@@ -61,8 +67,13 @@ URL exclues de l'indexation
 
 Les URL correspondant à l'expression régulière (format Java) spécifiée dans cet élément ne seront pas ciblées pour la recherche.
 
+Onglet Paramètres d’exploration
+-------------------------------
+
+|image3|
+
 Paramètres de configuration
-::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::
 
 Vous pouvez spécifier les informations de configuration du crawl.
 
@@ -89,24 +100,29 @@ Nombre de threads pour crawler dans cette configuration.
 Intervalle
 ::::::::::
 
-Intervalle de temps pour chaque thread lors du crawl d'URL.
+Intervalle de temps pour chaque thread lors du crawl d'URL, en millisecondes.
 
-Valeur de boost
-:::::::::::::::
+Boost
+:::::
 
 Poids des documents indexés dans cette configuration.
 
-Permission
-::::::::::
+Onglet Accès et état
+--------------------
+
+|image4|
+
+Autorisations
+:::::::::::::
 
 Spécifie la permission pour cette configuration.
 Pour la méthode de spécification de permission, par exemple, pour afficher les résultats de recherche aux utilisateurs appartenant au groupe developer, spécifiez {group}developer.
 La spécification par utilisateur est {user}nom_utilisateur, par rôle {role}nom_rôle, par groupe {group}nom_groupe.
 
-Hôte virtuel
-::::::::::::
+Hôtes virtuels
+::::::::::::::
 
-Spécifie le nom d'hôte de l'hôte virtuel.
+Spécifie les noms d'hôte des hôtes virtuels, un par ligne.
 Pour plus de détails, consultez :doc:`../config/security-virtual-host`.
 
 État
@@ -122,7 +138,7 @@ Vous pouvez saisir une description.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation. Appuyer sur le bouton Supprimer supprimera la configuration.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation. Appuyer sur le bouton Supprimer supprimera la configuration.
 
 Exemples
 ========
@@ -196,7 +212,7 @@ Ensuite, créez la configuration d'authentification Web avec les valeurs suivant
        | login_method=POST
        | login_url=https://<serveur>/login
        | login_parameters=username=${username}&password=${password}
-   * - Authentification Web
+   * - Configuration Web
      - Redmine
 
 
@@ -243,7 +259,7 @@ Ensuite, créez la configuration d'authentification Web avec les valeurs suivant
        | login_method=POST
        | login_url=http://<serveur>/xwiki/bin/loginsubmit/XWiki/XWikiLogin
        | login_parameters=j_username=${username}&j_password=${password}
-   * - Authentification Web
+   * - Configuration Web
      - XWiki
 
 Pages associées
@@ -255,6 +271,9 @@ Pages associées
 - :doc:`../config/search-basic`
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/webconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/webconfig-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/webconfig-2.png
+.. |image2| image:: ../../../resources/images/fr/15.10/admin/webconfig-3.png
+.. |image3| image:: ../../../resources/images/fr/15.10/admin/webconfig-4.png
+.. |image4| image:: ../../../resources/images/fr/15.10/admin/webconfig-5.png
 .. pdf            :height: 940 px

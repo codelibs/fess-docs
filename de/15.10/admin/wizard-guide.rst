@@ -7,10 +7,10 @@ Konfigurations-Assistent
 
 Die Assistentenseite bietet ein einfaches Setup-Tool zum Registrieren von Crawl-Konfigurationen.
 
-Einfaches Setup
----------------
+Einfache Einrichtung
+--------------------
 
-Diese Seite ist die Startseite zum Registrieren von Crawl-Konfigurationen.
+Diese Seite ist die Startseite zum Registrieren von Crawl-Konfigurationen. Klicken Sie auf die Schaltfläche „Einrichtung starten", um die Seite für die Crawl-Konfiguration zu öffnen.
 
 |image0|
 
@@ -44,6 +44,13 @@ Tiefe
 
 Legen Sie die Tiefe beim Verfolgen von Links fest, die in gecrawlten Dokumenten enthalten sind.
 
+Schaltflächen
+:::::::::::::
+
+- **Erstellen**: Registriert die Crawl-Konfiguration und wechselt zur Seite „Crawling starten".
+- **Kontinuierlich erstellen**: Registriert die Crawl-Konfiguration und kehrt zu diesem Formular zurück, sodass Sie eine weitere registrieren können.
+- **Abbrechen**: Kehrt ohne Registrierung zur Seite „Einfache Einrichtung" zurück.
+
 Crawler
 -------
 
@@ -52,6 +59,6 @@ Um den |Fess| Crawler zu starten, klicken Sie auf die Schaltfläche „Crawlen s
 |image2|
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/wizard-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/wizard-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/wizard-3.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/wizard-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/wizard-2.png
+.. |image2| image:: ../../../resources/images/de/15.10/admin/wizard-3.png

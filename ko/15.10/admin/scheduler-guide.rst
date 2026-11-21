@@ -17,12 +17,12 @@
 
 |image0|
 
-편집하려면 설정 이름을 클릭합니다.
+설정 이름을 클릭하여 상세 페이지를 열고, 편집 버튼을 클릭하여 편집합니다.
 
 설정 생성
 --------
 
-스케줄러 설정 페이지를 열려면 신규 생성 버튼을 클릭합니다.
+스케줄러 설정 페이지를 열려면 새로 만들기 버튼을 클릭합니다.
 
 |image1|
 
@@ -102,8 +102,8 @@ fess_config.properties에서 job.max.crawler.processes를 설정하면 크롤러
 설정 삭제
 --------
 
-목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 화면이 표시됩니다.
-삭제 버튼을 누르면 설정이 삭제됩니다.
+목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 대화상자가 표시됩니다.
+대화상자의 삭제 버튼을 누르면 설정이 삭제됩니다.
 
 수동 크롤 방법
 ============
@@ -111,5 +111,5 @@ fess_config.properties에서 job.max.crawler.processes를 설정하면 크롤러
 "스케줄러"의 "Default Crawler"를 클릭하고 "지금 시작" 버튼을 클릭합니다.
 크롤러를 중지하려면 "Default Crawler"를 클릭하고 "중지" 버튼을 클릭하십시오.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/scheduler-2.png

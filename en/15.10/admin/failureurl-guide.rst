@@ -18,7 +18,9 @@ Select System Info > Failure URL in the left menu to display a list page of fail
 
 |image0|
 
-Clicking a failure URL link displays the details.
+Narrow the list down with the search form (URL, Error Count and Type) and the Search button; the Reset button clears the conditions.
+Click a row of the list to display the details.
+Click the Delete All button below the list to delete all failure URLs. A confirmation dialog will appear.
 
 Items in the List
 -----------------
@@ -52,6 +54,11 @@ Failure URL details record exceptions that occurred during crawling.
 
 Details Content
 ---------------
+
+ID
+::::
+
+The ID of the failure URL.
 
 URL
 ::::
@@ -98,6 +105,8 @@ Last Access Time
 ::::::::::::::::
 
 The time when this exception occurred.
+
+Click the Delete button on the details page to delete the failure URL. A confirmation dialog will appear.
 
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/failureurl-1.png

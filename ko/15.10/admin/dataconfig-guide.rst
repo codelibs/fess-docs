@@ -95,7 +95,7 @@
 가상 호스트
 ::::::::
 
-가상 호스트의 호스트명을 지정합니다.
+가상 호스트의 호스트명을 한 줄에 하나씩 지정합니다.
 자세한 내용은 :doc:`설정 가이드의 가상 호스트 <../config/security-virtual-host>` 를 참조하십시오.
 
 상태
@@ -111,7 +111,7 @@
 설정 삭제
 --------
 
-목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 화면이 표시됩니다.
+목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 대화상자가 표시됩니다.
 삭제 버튼을 누르면 설정이 삭제됩니다.
 
 예
@@ -404,5 +404,5 @@ CsvListDataStore
 - :doc:`../config/datastore/ds-overview`
 - :doc:`../config/crawler-basic`
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/dataconfig-2.png

@@ -13,7 +13,10 @@ Management Operations
 Object Storage Server Configuration
 ------------------------------------
 
-Open the storage settings from [System > General] and configure the following items according to your storage type.
+Open the [Storage] tab of [System > General] and configure the following items according to your storage type.
+The [System > Storage] menu appears once a bucket is set and an endpoint is set (or the type is GCS).
+
+|image0|
 
 Common Settings
 ~~~~~~~~~~~~~~~
@@ -60,7 +63,7 @@ Display Method
 
 To open the object list page shown below, click [System > Storage] in the left menu.
 
-|image0|
+|image1|
 
 
 Name
@@ -95,14 +98,15 @@ You can delete the object by clicking the Delete button.
 Upload
 ------
 
-You can open the file upload window by clicking the File Upload button in the upper right.
+You can open the file upload window by clicking the Upload button in the upper right.
 
 
 Create Folder
 -------------
 
-You can open the folder creation window by clicking the Create Folder button to the right of the path display. Note that you cannot create empty folders.
+You can open the folder creation window by clicking the folder icon to the right of the path display. Note that you cannot create empty folders.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/en/15.10/admin/general-12.png
+.. |image1| image:: ../../../resources/images/en/15.10/admin/storage-1.png
 

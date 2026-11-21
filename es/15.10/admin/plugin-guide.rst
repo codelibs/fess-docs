@@ -60,5 +60,5 @@ La versión instalada anteriormente de un complemento se elimina una vez instala
 
 ``bin/fess-setup list plugins`` muestra los complementos publicados para este |Fess| y cuáles de ellos están instalados, ``list installed`` muestra los complementos instalados sin consultar el repositorio, ``upgrade plugins`` vuelve a instalar cada complemento instalado en la versión adecuada para este |Fess| y ``remove plugin`` elimina un complemento. Reinicie |Fess| después de instalar, actualizar o eliminar complementos. Consulte :doc:`../install/fess-setup` para ver todos los comandos y opciones.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/plugin-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/plugin-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/plugin-2.png

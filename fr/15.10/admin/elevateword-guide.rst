@@ -1,11 +1,11 @@
-============
-Mots ajoutés
-============
+=============
+Élever un mot
+=============
 
 Présentation
 ============
 
-Cette section explique la configuration des candidats de mots ajoutés pour les suggestions. Les suggestions sont affichées en fonction des termes de recherche, et vous pouvez ajouter ces mots.
+Cette section explique la configuration des candidats de mots à élever pour les suggestions. Les suggestions sont affichées en fonction des termes de recherche, et vous pouvez ajouter ces mots.
 
 Gestion
 =======
@@ -13,7 +13,7 @@ Gestion
 Affichage
 ---------
 
-Pour ouvrir la page de liste pour configurer les mots ajoutés illustrée ci-dessous, cliquez sur [Suggérer > Élever un mot] dans le menu de gauche.
+Pour ouvrir la page de liste pour configurer les mots à élever illustrée ci-dessous, cliquez sur [Suggérer > Élever un mot] dans le menu de gauche.
 
 |image0|
 
@@ -22,7 +22,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des mots ajoutés.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration des mots à élever.
 
 |image1|
 
@@ -63,7 +63,7 @@ Configure la valeur de boost pour le mot.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
 
@@ -71,6 +71,7 @@ Téléchargement
 ==============
 
 Télécharge les mots enregistrés au format CSV.
+Cliquez sur Télécharger en haut à droite de la page pour ouvrir la page de téléchargement, puis cliquez sur le bouton Télécharger.
 
 |image2|
 
@@ -78,7 +79,7 @@ Contenu du CSV
 --------------
 
 La première ligne est l'en-tête.
-Les mots ajoutés sont listés à partir de la deuxième ligne.
+Les mots à élever sont listés à partir de la deuxième ligne.
 
 ::
 
@@ -89,6 +90,7 @@ Téléversement
 =============
 
 Enregistre les mots au format CSV.
+Cliquez sur Téléverser en haut à droite de la page pour ouvrir la page de téléversement, sélectionnez le fichier CSV dans Fichier de mots à élever, puis cliquez sur le bouton Téléverser.
 
 |image3|
 
@@ -96,7 +98,7 @@ Contenu du CSV
 --------------
 
 La première ligne est l'en-tête.
-Décrivez les mots ajoutés à partir de la deuxième ligne.
+Décrivez les mots à élever à partir de la deuxième ligne.
 
 ::
 
@@ -107,7 +109,7 @@ Décrivez les mots ajoutés à partir de la deuxième ligne.
    Dans la colonne Permissions, indiquez chaque valeur avec ``{role}``, ``{user}`` ou ``{group}``, par exemple ``{role}role1`` (séparez plusieurs valeurs par des virgules). Une valeur sans préfixe, comme ``role1``, n'est pas traitée comme un rôle et le mot n'est pas suggéré aux utilisateurs qui ont ce rôle.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/elevateword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/elevateword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/elevateword-4.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/elevateword-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/elevateword-2.png
+.. |image2| image:: ../../../resources/images/fr/15.10/admin/elevateword-3.png
+.. |image3| image:: ../../../resources/images/fr/15.10/admin/elevateword-4.png

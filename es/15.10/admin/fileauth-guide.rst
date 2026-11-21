@@ -23,7 +23,7 @@ Para editar, haga clic en el nombre de la configuración.
 Crear configuración
 -------------------
 
-Para abrir la página de configuración de autenticación de archivos, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de autenticación de archivos, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -43,13 +43,13 @@ Especifique el puerto del sitio que requiere autenticación.
 Si se deja en blanco, la lista muestra "Cualquiera". El significado de un puerto en blanco depende del esquema.
 
 * FTP: Se utiliza para URL con cualquier puerto (una URL sin puerto se trata como el puerto 21).
-* SAMBA: Se utiliza solo para URL que no incluyen un puerto (``smb://servidor/recurso/``). No se utiliza para una URL que incluye un puerto, como ``smb://servidor:445/recurso/``. Para rastrear una URL que incluye un puerto, especifique aquí el mismo puerto.
+* Samba: Se utiliza solo para URL que no incluyen un puerto (``smb://servidor/recurso/``). No se utiliza para una URL que incluye un puerto, como ``smb://servidor:445/recurso/``. Para rastrear una URL que incluye un puerto, especifique aquí el mismo puerto.
 
 Esquema
 :::::::
 
 Seleccione el método de autenticación.
-Puede utilizar FTP o SAMBA (autenticación de carpeta compartida de Windows).
+Puede utilizar FTP o Samba (autenticación de carpeta compartida de Windows).
 
 Nombre de usuario
 :::::::::::::::::
@@ -64,7 +64,7 @@ Especifique la contraseña para iniciar sesión en el sitio de autenticación.
 Parámetros
 ::::::::::
 
-Configure si hay valores de configuración necesarios para iniciar sesión en el sitio de autenticación. Para SAMBA, puede configurar el valor de domain. Si desea configurarlo, descríbalo de la siguiente manera:
+Configure si hay valores de configuración necesarios para iniciar sesión en el sitio de autenticación. Para Samba, puede configurar el valor de domain. Si desea configurarlo, descríbalo de la siguiente manera:
 
 ::
 
@@ -78,8 +78,8 @@ Especifique la configuración de rastreo que utilizará esta configuración de a
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación.
 Al presionar el botón de eliminar, se eliminará la configuración.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/fileauth-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/fileauth-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/fileauth-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/fileauth-2.png

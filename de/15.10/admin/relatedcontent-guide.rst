@@ -41,6 +41,11 @@ Inhalt
 
 Geben Sie den Inhalt an, der in den Suchergebnissen angezeigt werden soll.
 
+Sortierreihenfolge
+::::::::::::::::::
+
+Geben Sie die Anzeigereihenfolge an, wenn mehrere verwandte Inhalte übereinstimmen. Sie werden in aufsteigender Reihenfolge angezeigt. Der Standardwert ist 1.
+
 Virtueller Host
 :::::::::::::::
 
@@ -50,8 +55,8 @@ Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/relatedcontent-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/relatedcontent-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/relatedcontent-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/relatedcontent-2.png

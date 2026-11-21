@@ -24,7 +24,7 @@ Para editar, haga clic en el nombre de la configuración.
 Crear configuración
 -------------------
 
-Para abrir la página de configuración de mapeo de rutas, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de mapeo de rutas, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -99,7 +99,7 @@ Si no se establece, se aplica a todas las solicitudes.
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación.
 Al presionar el botón de eliminar, se eliminará la configuración.
 
 Ejemplos
@@ -193,5 +193,5 @@ Sobre el orden de clasificación
 Los mapeos de rutas se aplican secuencialmente en el orden de clasificación configurado (ascendente).
 Cuando coinciden múltiples mapeos de rutas, se aplican comenzando desde la primera coincidencia.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/pathmap-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/pathmap-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/pathmap-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/pathmap-2.png

@@ -25,7 +25,7 @@ Para editar, haga clic en el nombre de la configuración.
 Crear configuración
 -------------------
 
-Para abrir la página de configuración del almacén de datos, haga clic en el botón de nueva creación.
+Para abrir la página de configuración del almacén de datos, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -93,10 +93,10 @@ Especifique el permiso para esta configuración.
 La forma de especificar permisos es, por ejemplo, para mostrar resultados de búsqueda a usuarios que pertenecen al grupo developer, especifique {group}developer.
 La especificación por usuario es {user}nombre_usuario, la especificación por rol es {role}nombre_rol, y la especificación por grupo es {group}nombre_grupo.
 
-Host virtual
-::::::::::::
+Hosts virtuales
+:::::::::::::::
 
-Especifique el nombre de host del host virtual.
+Especifique los nombres de host de los hosts virtuales, uno por línea.
 Para más detalles, consulte :doc:`Host virtual en la guía de configuración <../config/security-virtual-host>`.
 
 Estado
@@ -112,7 +112,7 @@ Puede ingresar una descripción.
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación.
 Al presionar el botón de eliminar, se eliminará la configuración.
 
 Ejemplo
@@ -403,5 +403,5 @@ Páginas Relacionadas
 - :doc:`../config/datastore/ds-overview`
 - :doc:`../config/crawler-basic`
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/dataconfig-2.png

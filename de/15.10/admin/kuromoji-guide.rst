@@ -22,6 +22,8 @@ Um die Kuromoji-Konfigurationsübersichtsseite zu öffnen, wählen Sie im linken
 
 Klicken Sie auf den Konfigurationsnamen, um ihn zu bearbeiten.
 
+Die Schaltflächen oben rechts auf der Seite sind „Wörterbuch" (zurück zur Wörterbuchübersicht), „Liste", „Neu erstellen", „Herunterladen" und „Hochladen" (öffnen die Download-Seite bzw. die Upload-Seite).
+
 Konfigurationsmethode
 ---------------------
 
@@ -85,5 +87,5 @@ Zum Beispiel:
    Um die Wirkung einer Registrierung zu prüfen, verwenden Sie ein Wort, das nicht im Wörterbuch steht und kein durch ``ja/mapping.txt`` ersetztes Zeichen enthält.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/kuromoji-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/kuromoji-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/kuromoji-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/kuromoji-2.png

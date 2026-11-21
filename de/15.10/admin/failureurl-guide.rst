@@ -18,7 +18,9 @@ Um die Übersichtsseite zur Überprüfung von Fehler-URLs zu öffnen, klicken Si
 
 |image0|
 
-Klicken Sie auf den Bestätigungslink der Fehler-URL, um Details anzuzeigen.
+Grenzen Sie die Liste mit dem Suchformular (URL, Fehleranzahl und Typ) und der Schaltfläche „Suchen" ein; die Schaltfläche „Zurücksetzen" löscht die Bedingungen.
+Klicken Sie auf eine Zeile der Liste, um die Details anzuzeigen.
+Klicken Sie unter der Liste auf die Schaltfläche „Alle löschen", um alle Fehler-URLs zu löschen. Es wird ein Bestätigungsdialog angezeigt.
 
 Angezeigte Spalten
 ------------------
@@ -52,6 +54,11 @@ In den Fehler-URL-Details werden beim Crawlen aufgetretene Ausnahmen aufgezeichn
 
 Detailinhalt
 ------------
+
+ID
+::
+
+Die ID der Fehler-URL.
 
 URL
 :::
@@ -99,6 +106,8 @@ Letzte Zugriffszeit
 
 Die Uhrzeit, zu der diese Ausnahme aufgetreten ist.
 
+Klicken Sie auf der Detailseite auf die Schaltfläche „Löschen", um die Fehler-URL zu löschen. Es wird ein Bestätigungsdialog angezeigt.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/failureurl-2.png
+
+.. |image0| image:: ../../../resources/images/de/15.10/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/failureurl-2.png

@@ -26,18 +26,20 @@ To open the Protwords configuration list page shown below, click [System > Dicti
 
 Click the configuration name to edit it.
 
+The buttons at the top right of the page are Dictionary (returns to the dictionary list), List, Create New, Download and Upload (open the download page and the upload page).
+
 Configuration Method
 --------------------
 
-To open the Protwords configuration page, click the New button.
+To open the Protwords configuration page, click the Create New button.
 
 |image1|
 
 Configuration Items
 -------------------
 
-Word Information
-::::::::::::::::
+Word Info
+:::::::::
 
 Enters words to exclude from stemming processing.
 

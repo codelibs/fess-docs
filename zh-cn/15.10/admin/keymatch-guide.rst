@@ -59,8 +59,8 @@
 删除配置
 --------
 
-点击列表页面中的配置名称,然后点击删除按钮,将显示确认画面。
+点击列表页面中的配置名称,然后点击删除按钮,将显示确认对话框。
 点击删除按钮将删除配置。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/keymatch-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/keymatch-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/keymatch-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/keymatch-2.png

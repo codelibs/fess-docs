@@ -19,6 +19,8 @@ Um die Mapping-Konfigurationsübersichtsseite zu öffnen, wählen Sie im linken 
 
 Klicken Sie auf den Konfigurationsnamen, um ihn zu bearbeiten.
 
+Die Schaltflächen oben rechts auf der Seite sind „Wörterbuch" (zurück zur Wörterbuchübersicht), „Liste", „Neu erstellen", „Herunterladen" und „Hochladen" (öffnen die Download-Seite bzw. die Upload-Seite).
+
 Konfigurationsmethode
 ---------------------
 
@@ -77,6 +79,6 @@ weil die morphologische Analyse sie benötigt, und vereinheitlicht nur Schreibwe
    aktiviertem „Wörterbücher zurücksetzen“ neu. Das Zurücksetzen überschreibt Änderungen an
    ``mapping.txt`` / ``ja/mapping.txt``, die in der Administrationsoberfläche vorgenommen wurden.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/mapping-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/mapping-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/mapping-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/mapping-2.png
 

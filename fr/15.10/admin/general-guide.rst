@@ -7,6 +7,7 @@ Présentation
 
 Cette page d'administration vous permet de gérer les paramètres de |Fess|.
 Vous pouvez modifier divers paramètres de |Fess| sans redémarrer |Fess|.
+Les paramètres sont répartis en onglets (Système, Robot d'exploration, Journalisation, Suggérer, LDAP, OpenID Connect, SAML, SPNEGO, Entra ID, Avis, Notification et Stockage). Les onglets sont enregistrés ensemble avec le bouton [Mettre à jour] au bas du formulaire.
 
 Contenu de la configuration
 ===========================
@@ -82,8 +83,8 @@ Ajouter des paramètres de recherche
 
 Active le passage de paramètres à l'affichage des résultats de recherche.
 
-Proxy de fichier de recherche
-:::::::::::::::::::::::::::::
+Proxy de fichiers de recherche
+::::::::::::::::::::::::::::::
 
 Spécifie s'il faut activer le proxy de fichier pour les résultats de recherche.
 
@@ -165,6 +166,8 @@ Si le document cible de crawl est enregistré dans les URL en échec plus que le
 Journalisation
 --------------
 
+|image2|
+
 Journal de recherche
 ::::::::::::::::::::
 
@@ -209,6 +212,8 @@ Spécifie le niveau de journalisation de fess.log.
 Suggérer
 --------
 
+|image3|
+
 Suggérer à partir des termes de recherche
 ::::::::::::::::::::::::::::::::::::::::::
 
@@ -227,7 +232,7 @@ Supprime les données de suggestion antérieures au nombre de jours spécifié.
 LDAP
 ----
 
-|image2|
+|image4|
 
 URL LDAP
 ::::::::
@@ -284,7 +289,7 @@ Spécifie la classe de fabrique de contexte initial LDAP (ex. : com.sun.jndi.lda
 OpenID Connect
 --------------
 
-|image3|
+|image5|
 
 ID client
 :::::::::
@@ -334,7 +339,7 @@ Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authent
 SAML
 ----
 
-|image4|
+|image6|
 
 ID d'entité IdP
 :::::::::::::::
@@ -408,7 +413,7 @@ Spécifie les rôles par défaut à attribuer aux utilisateurs lors de l'authent
 SPNEGO
 ------
 
-|image5|
+|image7|
 
 .. note::
    Les paramètres SPNEGO sont partagés au niveau du processus au sein de la bibliothèque sous-jacente ; un redémarrage de |Fess| est donc nécessaire pour appliquer les modifications qui leur sont apportées.
@@ -471,6 +476,12 @@ Autoriser la délégation
 
 Spécifie s'il faut autoriser la délégation Kerberos.
 
+Domaines autorisés
+::::::::::::::::::
+
+Spécifie les domaines (realms) Kerberos acceptés en plus du domaine du serveur, séparés par des virgules.
+Pour plus de détails, consultez :doc:`../config/sso-spnego`.
+
 Niveau de journalisation
 ::::::::::::::::::::::::
 
@@ -480,7 +491,7 @@ Si ce champ est laissé vide ou défini sur une valeur non numérique, le niveau
 Entra ID
 --------
 
-|image6|
+|image8|
 
 Locataire (ID ou domaine)
 :::::::::::::::::::::::::
@@ -506,6 +517,12 @@ URL de réponse
 ::::::::::::::
 
 Spécifie l'URL de réponse (redirection) pour Microsoft Entra ID.
+
+Mode de réponse
+:::::::::::::::
+
+Spécifie comment la réponse d'autorisation est renvoyée : ``query`` ou ``form_post``. La valeur par défaut est ``query``.
+Pour connaître les conditions dans lesquelles ``form_post`` fonctionne, consultez :doc:`../config/sso-entraid`.
 
 TTL de l'état
 :::::::::::::
@@ -535,7 +552,7 @@ Spécifie s'il faut utiliser le service de domaine Entra ID.
 Avis
 ----
 
-|image7|
+|image9|
 
 .. note::
 
@@ -562,6 +579,8 @@ Décrit le message à afficher sur l'écran de recherche avancée.
 
 Notification
 ------------
+
+|image10|
 
 E-mail de notification
 ::::::::::::::::::::::
@@ -599,6 +618,8 @@ Les événements de journalisation au niveau sélectionné et au-dessus seront n
 
 Stockage
 --------
+
+|image11|
 
 Après avoir configuré chaque élément, un menu [Système > Stockage] apparaîtra dans le menu de gauche.
 Pour la gestion des fichiers, consultez :doc:`Stockage <../admin/storage-guide>`.
@@ -688,12 +709,16 @@ Exemples de configuration LDAP
      - memberOf
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/general-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/general-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/general-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/general-4.png
-.. |image4| image:: ../../../resources/images/en/15.10/admin/general-5.png
-.. |image5| image:: ../../../resources/images/en/15.10/admin/general-6.png
-.. |image6| image:: ../../../resources/images/en/15.10/admin/general-7.png
-.. |image7| image:: ../../../resources/images/en/15.10/admin/general-8.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/general-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/general-2.png
+.. |image2| image:: ../../../resources/images/fr/15.10/admin/general-3.png
+.. |image3| image:: ../../../resources/images/fr/15.10/admin/general-4.png
+.. |image4| image:: ../../../resources/images/fr/15.10/admin/general-5.png
+.. |image5| image:: ../../../resources/images/fr/15.10/admin/general-6.png
+.. |image6| image:: ../../../resources/images/fr/15.10/admin/general-7.png
+.. |image7| image:: ../../../resources/images/fr/15.10/admin/general-8.png
+.. |image8| image:: ../../../resources/images/fr/15.10/admin/general-9.png
+.. |image9| image:: ../../../resources/images/fr/15.10/admin/general-10.png
+.. |image10| image:: ../../../resources/images/fr/15.10/admin/general-11.png
+.. |image11| image:: ../../../resources/images/fr/15.10/admin/general-12.png
 .. pdf            :height: 940 px

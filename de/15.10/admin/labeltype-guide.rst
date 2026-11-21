@@ -59,8 +59,8 @@ Ausgeschlossener Pfad
 Konfigurieren Sie Pfade, die vom Crawl-Ziel ausgeschlossen werden sollen, mithilfe regulärer Ausdrücke.
 Sie können mehrere Pfade angeben, indem Sie mehrere Zeilen schreiben.
 
-Berechtigung
-::::::::::::
+Berechtigungen
+::::::::::::::
 
 Geben Sie die Berechtigung für diese Konfiguration an.
 Um beispielsweise Suchergebnisse für Benutzer anzuzeigen, die zur Gruppe „developer" gehören, geben Sie {group}developer an.
@@ -80,7 +80,7 @@ Pro Label kann nur ein virtueller Host angegeben werden.
 Um dasselbe Label auf mehreren virtuellen Hosts anzuzeigen, erstellen Sie für jeden virtuellen Host ein Label mit demselben Namen und Wert und tragen im Feld „Virtueller Host" jeweils dessen Namen ein.
 Da der Wert gleich ist, grenzt jedes dieser Labels auf dieselben Dokumente ein.
 
-Anzeigereihenfolge
+Sortierreihenfolge
 ::::::::::::::::::
 
 Geben Sie die Anzeigereihenfolge der Labels an.
@@ -88,8 +88,8 @@ Geben Sie die Anzeigereihenfolge der Labels an.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/labeltype-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/labeltype-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/labeltype-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/labeltype-2.png

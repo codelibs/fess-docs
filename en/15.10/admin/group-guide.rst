@@ -43,7 +43,7 @@ When |Fess| is configured to manage LDAP from the administration screens (``ldap
 Delete Configuration
 --------------------
 
-Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
+Click on the configuration name on the list page, and when the Delete button is clicked, a confirmation dialog will appear. Clicking the Delete button in the dialog will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/group-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/group-2.png

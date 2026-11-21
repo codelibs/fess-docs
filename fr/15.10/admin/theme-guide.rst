@@ -47,6 +47,8 @@ Affichage
 
 Pour ouvrir la page de liste des thèmes enregistrés, cliquez sur [Système > Thème] dans le menu de gauche.
 
+|image0|
+
 Liste des thèmes
 ----------------
 
@@ -95,7 +97,9 @@ Le ZIP est téléchargé depuis le dépôt, vérifié contre sa somme ``.sha1`` 
 Téléversement d'un thème
 -------------------------
 
-Cliquez sur le bouton [Téléverser] pour ouvrir la page de téléversement. Sélectionnez le fichier ZIP du thème, puis cliquez sur le bouton [Téléverser] pour installer le thème.
+Cliquez sur le bouton [Téléverser] pour ouvrir la page de téléversement. Sélectionnez le fichier ZIP du thème dans « Fichier ZIP du thème », puis cliquez sur le bouton [Téléverser] pour installer le thème.
+
+|image1|
 
 * Seules les archives au format ``.zip`` peuvent être téléversées.
 * La taille maximale du fichier compressé est de 50 Mo par défaut (``theme.upload.max.size``).
@@ -184,7 +188,7 @@ Cliquez sur le nom d'un thème dans la page de liste pour afficher la page de d�
 Paramètres du thème
 -------------------
 
-Certains thèmes permettent à un administrateur de modifier leur comportement en leur transmettant des paramètres. Saisissez-les dans « Paramètres du thème » de [Système > Général] dans l'interface d'administration, un ``key=value`` par ligne (voir :doc:`general-guide`). |Fess| ne les interprète pas : il les transmet au thème sous le nom ``theme_settings`` dans ``GET /api/v2/ui/config`` (voir :doc:`../api/api-uiconfig`). Chaque thème définit les clés qu'il accepte et la signification de leurs valeurs.
+Certains thèmes permettent à un administrateur de modifier leur comportement en leur transmettant des paramètres. Saisissez-les dans « Paramètres du thème » sous l'onglet [Système] de [Système > Général] dans l'interface d'administration, un ``key=value`` par ligne (voir :doc:`general-guide`). |Fess| ne les interprète pas : il les transmet au thème sous le nom ``theme_settings`` dans ``GET /api/v2/ui/config`` (voir :doc:`../api/api-uiconfig`). Chaque thème définit les clés qu'il accepte et la signification de leurs valeurs.
 
 Les valeurs sont visibles de tous les utilisateurs de l'interface de recherche : ne saisissez pas de secrets tels que des mots de passe.
 
@@ -244,3 +248,6 @@ Les principaux paramètres liés à la fonctionnalité de thèmes peuvent être 
      - URL des dépôts (séparées par des virgules) depuis lesquels les thèmes sont installés.
 
 Tableau : Propriétés de configuration de la fonctionnalité de thèmes
+
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/theme-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/theme-2.png

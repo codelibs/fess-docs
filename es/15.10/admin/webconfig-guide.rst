@@ -24,22 +24,28 @@ Para editar, haga clic en el nombre de la configuración.
 Crear configuración
 -------------------
 
-Para abrir la página de configuración de rastreo web, haga clic en el botón de creación.
+Para abrir la página de configuración de rastreo web, haga clic en el botón "Crear nuevo".
+La página se divide en cuatro pestañas: "Básico", "Inclusiones y exclusiones", "Configuración de rastreo" y "Acceso y estado". Haga clic en el nombre de una pestaña para cambiar de pestaña. Si una entrada tiene un error, se abre automáticamente la pestaña que la contiene. Los campos de cada pestaña se describen a continuación.
+
+Pestaña Básico
+--------------
 
 |image1|
-
-Parámetros de configuración
-----------------------------
 
 Nombre
 ::::::
 
 Nombre de la configuración.
 
-URL
-:::
+URLs
+::::
 
-URL que será el punto de inicio del rastreo.
+Las URL que serán el punto de inicio del rastreo. Especifique una URL por línea.
+
+Pestaña Inclusiones y exclusiones
+---------------------------------
+
+|image2|
 
 URL a rastrear
 ::::::::::::::
@@ -61,8 +67,13 @@ URL excluidas de la búsqueda
 
 Las URL que coincidan con la expresión regular (formato Java) especificada en este elemento no serán objeto de búsqueda.
 
-Parámetros de configuración
-::::::::::::::::::::::::::::
+Pestaña Configuración de rastreo
+--------------------------------
+
+|image3|
+
+Parámetro de configuración
+::::::::::::::::::::::::::
 
 Puede especificar información de configuración de rastreo.
 
@@ -89,12 +100,17 @@ Número de hilos de rastreo en esta configuración.
 Intervalo
 :::::::::
 
-Intervalo de tiempo en cada hilo al rastrear URLs.
+Intervalo de tiempo en cada hilo al rastrear URLs, en milisegundos.
 
 Valor de impulso
 ::::::::::::::::
 
 Peso de los documentos indexados en esta configuración.
+
+Pestaña Acceso y estado
+-----------------------
+
+|image4|
 
 Permisos
 ::::::::
@@ -103,10 +119,10 @@ Especifique el permiso para esta configuración.
 La forma de especificar permisos es, por ejemplo, para mostrar resultados de búsqueda a usuarios que pertenecen al grupo developer, especifique {group}developer.
 La especificación por usuario es {user}nombre_usuario, la especificación por rol es {role}nombre_rol, y la especificación por grupo es {group}nombre_grupo.
 
-Host virtual
-::::::::::::
+Hosts virtuales
+:::::::::::::::
 
-Especifique el nombre de host del host virtual.
+Especifique los nombres de host de los hosts virtuales, uno por línea.
 Para más detalles, consulte :doc:`../config/security-virtual-host`.
 
 Estado
@@ -122,7 +138,7 @@ Puede ingresar una descripción.
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación. Al presionar el botón de eliminar, se eliminará la configuración.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación. Al presionar el botón de eliminar, se eliminará la configuración.
 
 Ejemplo
 =======
@@ -140,7 +156,7 @@ Para crear una configuración de rastreo web que rastree páginas debajo de http
      - Valor de configuración
    * - Nombre
      - Fess
-   * - URL
+   * - URLs
      - https://fess.codelibs.org/
    * - URL a rastrear
      - https://fess.codelibs.org/.\*
@@ -166,11 +182,11 @@ Para crear una configuración de rastreo web que rastree páginas de Redmine pro
      - Valor de configuración
    * - Nombre
      - Redmine
-   * - URL
+   * - URLs
      - https://<server>/my/page
    * - URL a rastrear
      - https://<server>/.\*
-   * - Parámetros de configuración
+   * - Parámetro de configuración
      - client.robotsTxtEnabled=false (Opcional)
 
 Después de eso, cree la configuración de autenticación web con los siguientes valores de configuración.
@@ -196,7 +212,7 @@ Después de eso, cree la configuración de autenticación web con los siguientes
        | login_method=POST
        | login_url=https://<server>/login
        | login_parameters=username=${username}&password=${password}
-   * - Autenticación web
+   * - Configuración web
      - Redmine
 
 
@@ -213,11 +229,11 @@ Para crear una configuración de rastreo web que rastree páginas de XWiki (ej. 
      - Valor de configuración
    * - Nombre
      - XWiki
-   * - URL
+   * - URLs
      - https://<server>/xwiki/bin/view/Main/
    * - URL a rastrear
      - https://<server>/.\*
-   * - Parámetros de configuración
+   * - Parámetro de configuración
      - client.robotsTxtEnabled=false (Opcional)
 
 Después de eso, cree la configuración de autenticación web con los siguientes valores de configuración.
@@ -243,7 +259,7 @@ Después de eso, cree la configuración de autenticación web con los siguientes
        | login_method=POST
        | login_url=http://<server>/xwiki/bin/loginsubmit/XWiki/XWikiLogin
        | login_parameters=j_username=${username}&j_password=${password}
-   * - Autenticación web
+   * - Configuración web
      - XWiki
 
 Páginas Relacionadas
@@ -254,6 +270,9 @@ Páginas Relacionadas
 - :doc:`fileconfig-guide`
 - :doc:`../config/search-basic`
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/webconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/webconfig-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/webconfig-2.png
+.. |image2| image:: ../../../resources/images/es/15.10/admin/webconfig-3.png
+.. |image3| image:: ../../../resources/images/es/15.10/admin/webconfig-4.png
+.. |image4| image:: ../../../resources/images/es/15.10/admin/webconfig-5.png
 .. pdf            :height: 940 px

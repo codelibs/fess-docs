@@ -24,15 +24,15 @@ Click the configuration name to edit it.
 Creating Configuration
 ----------------------
 
-To open the key match configuration page, click the New button.
+To open the key match configuration page, click the "Create New" button.
 
 |image1|
 
 Configuration Items
 -------------------
 
-Search Term
-:::::::::::
+Term
+::::
 
 Weighting is applied only in search results when searched with this term.
 
@@ -46,8 +46,8 @@ Size
 
 Specifies the maximum number of documents matching the query.
 
-Boost Value
-:::::::::::
+Boost
+:::::
 
 Specifies the weighting value for documents.
 
@@ -60,7 +60,7 @@ For details, refer to :doc:`Virtual Host in the Configuration Guide <../config/s
 Deleting Configuration
 ----------------------
 
-Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
+Click the configuration name on the list page, then click the Delete button to display a confirmation dialog.
 Click the Delete button to remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/keymatch-1.png

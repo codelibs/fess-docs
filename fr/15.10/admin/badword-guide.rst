@@ -24,7 +24,7 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Pour ouvrir la page de création de mots exclus des suggestions, cliquez sur le bouton Nouvelle création.
+Pour ouvrir la page de création de mots exclus des suggestions, cliquez sur le bouton Créer nouveau.
 
 |image1|
 
@@ -43,13 +43,14 @@ Les mots enregistrés ici ne seront plus affichés dans les suggestions.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
 Téléchargement
 ==============
 
 Télécharge les mots enregistrés au format CSV.
+Cliquez sur Télécharger en haut à droite de la page pour ouvrir la page de téléchargement, puis cliquez sur le bouton Télécharger.
 
 |image2|
 
@@ -68,6 +69,7 @@ Téléversement
 =============
 
 Enregistre les mots au format CSV.
+Cliquez sur Téléverser en haut à droite de la page pour ouvrir la page de téléversement, sélectionnez le fichier CSV dans Fichier de mots incorrects, puis cliquez sur le bouton Téléverser.
 
 |image3|
 
@@ -82,7 +84,7 @@ Décrivez les mots exclus à partir de la deuxième ligne.
 "BadWord"
 "検索エンジン"
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/fr/15.10/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/fr/15.10/admin/badword-4.png

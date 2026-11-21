@@ -34,21 +34,27 @@ Creating a Configuration
 ------------------------
 
 Click the "Create New" button to open the File Crawling configuration page.
+The page is divided into four tabs: "Basic", "Include and Exclude", "Crawl Settings" and "Access and Status". Click a tab name to switch tabs. If an input has an error, the tab that contains it opens automatically. The fields of each tab are described below.
+
+Basic Tab
+---------
 
 |image1|
-
-Configuration Options
----------------------
 
 Name
 ::::
 
 Configuration name.
 
-Path
-::::
+Paths
+:::::
 
-This path specifies where to start crawling (e.g., file:/, smb://, s3://, gcs://).
+These paths specify where crawling begins (e.g., file:/, smb://, s3://, gcs://). Specify one path per line.
+
+Include and Exclude Tab
+-----------------------
+
+|image2|
 
 Included Paths for Crawling
 ::::::::::::::::::::::::::::
@@ -73,8 +79,13 @@ Excluded Paths for Indexing
 
 Paths matching this regular expression (Java format) will be excluded from the search index.
 
-Configuration Parameters
-::::::::::::::::::::::::
+Crawl Settings Tab
+------------------
+
+|image3|
+
+Config Parameters
+:::::::::::::::::
 
 Specifies crawl configuration information.
 
@@ -102,12 +113,17 @@ The number of threads to use for this configuration.
 Interval
 ::::::::
 
-The time interval to wait when threads crawl each path.
+The time interval to wait when threads crawl each path, in milliseconds.
 
-Boost Value
-:::::::::::
+Boost
+:::::
 
 The boost value is the priority of documents indexed by this configuration.
+
+Access and Status Tab
+---------------------
+
+|image4|
 
 Permissions
 :::::::::::
@@ -116,10 +132,10 @@ Specifies permissions for this configuration.
 The permission format is as follows: to display search results to users in the developer group, specify {group}developer.
 User-level: {user}username, Role-level: {role}rolename, Group-level: {group}groupname.
 
-Virtual Host
-::::::::::::
+Virtual Hosts
+:::::::::::::
 
-Specifies the virtual host hostname.
+Specifies the virtual host hostnames, one per line.
 For details, see :doc:`Virtual Hosts in the Configuration Guide <../config/security-virtual-host>`.
 
 Status
@@ -135,7 +151,7 @@ Enter a description.
 Deleting a Configuration
 ------------------------
 
-Click the configuration name on the list page, then click the "Delete" button to display a confirmation screen. Click the "Delete" button to remove the configuration.
+Click the configuration name on the list page, then click the "Delete" button to display a confirmation dialog. Click the "Delete" button to remove the configuration.
 
 Examples
 ========
@@ -153,7 +169,7 @@ To crawl files under /home/share, the configuration values are as follows:
      - Value
    * - Name
      - Share Directory
-   * - Path
+   * - Paths
      - file:/home/share
 
 Other parameters can use default settings.
@@ -171,7 +187,7 @@ To crawl files under \\SERVER\SharedFolder, the configuration values are as foll
      - Value
    * - Name
      - Shared Folder
-   * - Path
+   * - Paths
      - smb://SERVER/SharedFolder/
 
 If a username and password are required to access the shared folder, you need to create file authentication settings by clicking [Crawler > File Authentication] in the left menu. The configuration values are as follows:
@@ -185,7 +201,7 @@ If a username and password are required to access the shared folder, you need to
    * - Hostname
      - SERVER
    * - Scheme
-     - SAMBA
+     - Samba
    * - Username
      - (Please enter)
    * - Password
@@ -204,10 +220,10 @@ To crawl files in the my-bucket bucket, the configuration values are as follows:
      - Value
    * - Name
      - S3 Bucket
-   * - Path
+   * - Paths
      - s3://my-bucket/
 
-S3 access requires authentication credentials. Add the following to "Configuration Parameters":
+S3 access requires authentication credentials. Add the following to "Config Parameters":
 
 ::
 
@@ -234,10 +250,10 @@ To crawl files in the my-gcs-bucket bucket, the configuration values are as foll
      - Value
    * - Name
      - GCS Bucket
-   * - Path
+   * - Paths
      - gcs://my-gcs-bucket/
 
-GCS access requires authentication credentials. Add the following to "Configuration Parameters":
+GCS access requires authentication credentials. Add the following to "Config Parameters":
 
 ::
 
@@ -261,4 +277,7 @@ Related Pages
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/fileconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/fileconfig-2.png
+.. |image2| image:: ../../../resources/images/en/15.10/admin/fileconfig-3.png
+.. |image3| image:: ../../../resources/images/en/15.10/admin/fileconfig-4.png
+.. |image4| image:: ../../../resources/images/en/15.10/admin/fileconfig-5.png
 .. pdf            :height: 940 px

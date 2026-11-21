@@ -25,7 +25,7 @@
 설정 생성
 --------
 
-관련 쿼리 설정 페이지를 열려면 신규 생성 버튼을 클릭합니다.
+관련 쿼리 설정 페이지를 열려면 새로 만들기 버튼을 클릭합니다.
 
 |image1|
 
@@ -51,7 +51,7 @@
 설정 삭제
 ----------
 
-목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 화면이 표시됩니다.
+목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 대화상자가 표시됩니다.
 삭제 버튼을 누르면 설정이 삭제됩니다.
 
 검색 로그에서 생성
@@ -112,5 +112,5 @@
      - 검색어와 관련 쿼리의 최대 길이(문자 수)
      - ``50``
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/relatedquery-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/relatedquery-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/relatedquery-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/relatedquery-2.png

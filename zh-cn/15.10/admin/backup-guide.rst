@@ -78,7 +78,7 @@ user_info.ndjson包含搜索用户的信息。
 上传
 ---------
 
-可以上传和导入配置信息。
+可以上传和导入配置信息。请在页面上方的“批量文件”中选择文件，然后点击上传按钮。
 可以恢复的文件如下。
 
 - ``*.bulk``
@@ -94,7 +94,7 @@ user_info.ndjson包含搜索用户的信息。
 
 .. note::
 
-   跳过的记录以 INFO 级别输出，因此在默认的日志级别（ ``warn`` ）下不会写入 ``fess.log`` 。要查看这些记录，请在恢复之前将日志级别改为 ``info`` 。可以在管理页面的 [系统 > 常规] 的“日志级别”中更改（重启 |Fess| 后会恢复原值），在 Linux 上也可以通过 ``FESS_LOG_LEVEL=info`` 指定。详情请参阅 :doc:`../config/admin-logging` 。
+   跳过的记录以 INFO 级别输出，因此在默认的日志级别（ ``warn`` ）下不会写入 ``fess.log`` 。要查看这些记录，请在恢复之前将日志级别改为 ``info`` 。可以在管理页面的 [系统 > 常规] 的 [日志记录] 选项卡的“日志级别”中更改（重启 |Fess| 后会恢复原值），在 Linux 上也可以通过 ``FESS_LOG_LEVEL=info`` 指定。详情请参阅 :doc:`../config/admin-logging` 。
 
 .. note::
 
@@ -105,4 +105,4 @@ user_info.ndjson包含搜索用户的信息。
 
    另外， ``*.bulk`` 中包含的其他值并未加密，请将这些文件作为机密文件妥善保管。
 
-  .. |image0| image:: ../../../resources/images/en/15.10/admin/backup-1.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/backup-1.png

@@ -47,6 +47,11 @@ fess-suggest.log
 
 Suggest log file.
 
+fess-llm.log
+::::::::::::
+
+Log file of LLM/RAG chat.
+
 fess-urls.log
 :::::::::::::
 
@@ -56,7 +61,7 @@ searchlog.log
 :::::::::::::
 
 Search log file.
-When "Search Log" under [System > General] is enabled, one line (JSON) is appended for each search in the default configuration.
+When "Search Log" on the [Logging] tab of [System > General] is enabled, one line (JSON) is appended for each search in the default configuration.
 A line contains the fields of the documents returned by that search (``logging.search.docs.fields``), so its size grows with the number of results returned (with ``num=100``, a line can be around 70 KB).
 For log rotation and retention, see :doc:`../config/admin-logging`.
 To leave the fields of the returned documents out of the search log, set ``logging.search.docs.enabled=false`` in ``fess_config.properties``; to stop writing to this file, set ``logging.search.use.logfile=false``.

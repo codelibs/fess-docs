@@ -50,4 +50,4 @@ Los saltos de línea del cuerpo se eliminan y las líneas se unen antes de envia
    Una solicitud con el método PUT o DELETE también se envía a OpenSearch tal cual.
    Según el contenido del archivo, puede modificar o eliminar los índices que utiliza |Fess| y provocar pérdida de datos. Compruebe el contenido con atención antes de enviarlo.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/esreq-1.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/esreq-1.png

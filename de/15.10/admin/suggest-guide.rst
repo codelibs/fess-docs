@@ -17,7 +17,7 @@ Um die Vorschlagswort-Übersichtsseite zu öffnen, klicken Sie im linken Menü a
 
 |image0|
 
-Klicken Sie zum Löschen auf die Schaltfläche „Löschen".
+Klicken Sie zum Löschen der Wörter eines Worttyps auf die Schaltfläche „Löschen" des jeweiligen Worttyps. Es wird ein Bestätigungsdialog angezeigt.
 
 
 Worttyp
@@ -27,11 +27,11 @@ Worttyp
 - Dokument: Aus indizierten Dokumenten generierte Wörter
 - Suchbegriff: Aus Suchprotokollen generierte Wörter
 
-Wortanzahl
-::::::::::
+Anzahl der Wörter
+:::::::::::::::::
 
 Anzahl der registrierten Wörter
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/suggest-1.png
 

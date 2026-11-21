@@ -23,15 +23,15 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de correspondance de clé.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration de correspondance de clé.
 
 |image1|
 
 Paramètres de configuration
 ---------------------------
 
-Terme de recherche
-::::::::::::::::::
+Terme
+:::::
 
 La pondération n'est appliquée que dans les résultats de recherche pour ce terme de recherche.
 
@@ -45,8 +45,8 @@ Taille
 
 Spécifie le nombre maximum de documents correspondant à la requête.
 
-Valeur de boost
-:::::::::::::::
+Boost
+:::::
 
 Spécifie la valeur de pondération du document.
 
@@ -59,8 +59,8 @@ Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le 
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/keymatch-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/keymatch-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/keymatch-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/keymatch-2.png

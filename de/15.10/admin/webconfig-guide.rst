@@ -24,22 +24,28 @@ Klicken Sie auf den Konfigurationsnamen, um ihn zu bearbeiten.
 Konfiguration erstellen
 -----------------------
 
-Um die Web-Crawl-Konfigurationsseite zu öffnen, klicken Sie auf die Schaltfläche „Erstellen".
+Um die Web-Crawl-Konfigurationsseite zu öffnen, klicken Sie auf die Schaltfläche „Neu erstellen".
+Die Seite ist in vier Registerkarten unterteilt: „Allgemein", „Ein- und Ausschlüsse", „Crawl-Einstellungen" und „Zugriff und Status". Klicken Sie auf den Namen einer Registerkarte, um zu wechseln. Enthält eine Eingabe einen Fehler, wird automatisch die Registerkarte geöffnet, die sie enthält. Die Felder der einzelnen Registerkarten werden nachfolgend beschrieben.
+
+Registerkarte „Allgemein"
+-------------------------
 
 |image1|
-
-Konfigurationsparameter
------------------------
 
 Name
 ::::
 
 Konfigurationsname.
 
-URL
-:::
+URLs
+::::
 
-Die Start-URL für das Crawling.
+Die Start-URLs für das Crawling. Geben Sie eine URL pro Zeile an.
+
+Registerkarte „Ein- und Ausschlüsse"
+------------------------------------
+
+|image2|
 
 Zu crawlende URL
 ::::::::::::::::
@@ -60,6 +66,11 @@ Von der Suche ausgeschlossene URL
 ::::::::::::::::::::::::::::::::::
 
 URLs, die mit dem regulären Ausdruck (Java-Format) übereinstimmen, der in diesem Element angegeben ist, werden von der Suche ausgeschlossen.
+
+Registerkarte „Crawl-Einstellungen"
+-----------------------------------
+
+|image3|
 
 Konfigurationsparameter
 :::::::::::::::::::::::
@@ -89,24 +100,29 @@ Die Anzahl der Crawl-Threads für diese Konfiguration.
 Intervall
 :::::::::
 
-Das Zeitintervall für jeden Thread beim Crawlen von URLs.
+Das Zeitintervall für jeden Thread beim Crawlen von URLs, in Millisekunden.
 
-Boost-Wert
-::::::::::
+Boost
+:::::
 
 Die Gewichtung von Dokumenten, die durch diese Konfiguration indiziert werden.
 
-Berechtigung
-::::::::::::
+Registerkarte „Zugriff und Status"
+----------------------------------
+
+|image4|
+
+Berechtigungen
+::::::::::::::
 
 Geben Sie die Berechtigung für diese Konfiguration an.
 Um beispielsweise Suchergebnisse für Benutzer anzuzeigen, die zur Gruppe „developer" gehören, geben Sie {group}developer an.
 Für Benutzerebene geben Sie {user}Benutzername an, für Rollenebene {role}Rollenname und für Gruppenebene {group}Gruppenname.
 
-Virtueller Host
+Virtuelle Hosts
 :::::::::::::::
 
-Geben Sie den Hostnamen des virtuellen Hosts an.
+Geben Sie die Hostnamen der virtuellen Hosts an, einen pro Zeile.
 Weitere Details finden Sie unter :doc:`../config/security-virtual-host`.
 
 Status
@@ -122,7 +138,7 @@ Sie können eine Beschreibung eingeben.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt. Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt. Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 Beispiele
 =========
@@ -140,7 +156,7 @@ Um eine Web-Crawl-Konfiguration zu erstellen, die Seiten unter https://fess.code
      - Konfigurationswert
    * - Name
      - Fess
-   * - URL
+   * - URLs
      - https://fess.codelibs.org/
    * - Zu crawlende URL
      - https://fess.codelibs.org/.\*
@@ -166,7 +182,7 @@ Um eine Web-Crawl-Konfiguration zu erstellen, die passwortgeschützte Redmine-Se
      - Konfigurationswert
    * - Name
      - Redmine
-   * - URL
+   * - URLs
      - https://<server>/my/page
    * - Zu crawlende URL
      - https://<server>/.\*
@@ -196,7 +212,7 @@ Erstellen Sie dann eine Web-Authentifizierungskonfiguration mit den folgenden Ko
        | login_method=POST
        | login_url=https://<server>/login
        | login_parameters=username=${username}&password=${password}
-   * - Web-Authentifizierung
+   * - Web-Konfiguration
      - Redmine
 
 
@@ -213,7 +229,7 @@ Um eine Web-Crawl-Konfiguration zu erstellen, die XWiki-Seiten (z. B. https://<s
      - Konfigurationswert
    * - Name
      - XWiki
-   * - URL
+   * - URLs
      - https://<server>/xwiki/bin/view/Main/
    * - Zu crawlende URL
      - https://<server>/.\*
@@ -243,7 +259,7 @@ Erstellen Sie dann eine Web-Authentifizierungskonfiguration mit den folgenden Ko
        | login_method=POST
        | login_url=http://<server>/xwiki/bin/loginsubmit/XWiki/XWikiLogin
        | login_parameters=j_username=${username}&j_password=${password}
-   * - Web-Authentifizierung
+   * - Web-Konfiguration
      - XWiki
 
 Verwandte Seiten
@@ -255,6 +271,9 @@ Verwandte Seiten
 - :doc:`../config/search-basic`
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/webconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/webconfig-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/webconfig-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/webconfig-2.png
+.. |image2| image:: ../../../resources/images/de/15.10/admin/webconfig-3.png
+.. |image3| image:: ../../../resources/images/de/15.10/admin/webconfig-4.png
+.. |image4| image:: ../../../resources/images/de/15.10/admin/webconfig-5.png
 .. pdf            :height: 940 px

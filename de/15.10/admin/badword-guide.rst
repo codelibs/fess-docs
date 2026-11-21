@@ -43,13 +43,14 @@ Wörter, die hier registriert sind, werden nicht in den Vorschlägen angezeigt.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 Download
 ========
 
 Laden Sie registrierte Wörter im CSV-Format herunter.
+Klicken Sie oben rechts auf der Seite auf „Herunterladen", um die Download-Seite zu öffnen, und klicken Sie dann auf die Schaltfläche „Herunterladen".
 
 |image2|
 
@@ -68,6 +69,7 @@ Upload
 ======
 
 Registrieren Sie Wörter im CSV-Format.
+Klicken Sie oben rechts auf der Seite auf „Hochladen", um die Upload-Seite zu öffnen, wählen Sie die CSV-Datei unter „Schlechte-Wort-Datei" aus und klicken Sie auf die Schaltfläche „Hochladen".
 
 |image3|
 
@@ -82,7 +84,7 @@ Ab Zeile 2 beschreiben Sie die Ausschlusswörter.
 "BadWord"
 "検索エンジン"
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/de/15.10/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/de/15.10/admin/badword-4.png

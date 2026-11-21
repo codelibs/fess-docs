@@ -26,10 +26,12 @@ Protwords 사전
 
 편집하려면 설정 이름을 클릭합니다.
 
+페이지 오른쪽 위의 버튼은 사전(사전 목록으로 돌아갑니다), 목록, 새로 만들기, 다운로드, 업로드(다운로드 페이지와 업로드 페이지를 엽니다)입니다.
+
 설정 방법
 ------
 
-Protwords 설정 페이지를 열려면 신규 생성 버튼을 클릭합니다.
+Protwords 설정 페이지를 열려면 새로 만들기 버튼을 클릭합니다.
 
 |image1|
 
@@ -59,5 +61,5 @@ Protwords 사전 형식으로 업로드할 수 있습니다.
    업로드하면 사전의 내용이 업로드한 파일의 내용으로 교체됩니다. 화면에서 등록한 단어를 포함하여 파일에 없는 단어는 삭제됩니다. 필요한 경우 먼저 다운로드하여 사본을 보관하고, 그 내용을 포함하여 업로드하십시오.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/protwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/protwords-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/protwords-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/protwords-2.png

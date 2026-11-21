@@ -22,8 +22,8 @@ Exécutez cela lorsque vous souhaitez modifier le mapping de l'index, par exempl
 Paramètres de configuration
 ---------------------------
 
-Mise à jour de l'alias
-::::::::::::::::::::::
+Remplacer les alias
+:::::::::::::::::::
 
 En l'activant, après la fin de la réindexation, vous pouvez réattribuer les alias fess.search et fess.update assignés à l'index existant au nouvel index.
 
@@ -36,14 +36,14 @@ En l'activant, vous pouvez initialiser la configuration du dictionnaire.
 Si ``search_engine.type`` vaut ``vanilla`` ou ``aws``, cet élément n'est pas affiché.
 
 
-Nombre de shards
-::::::::::::::::
+Nombre de partitions
+::::::::::::::::::::
 
 Vous pouvez spécifier le nombre de shards OpenSearch (index.number_of_shards).
 
 
-Nombre maximum de réplicas
-:::::::::::::::::::::::::::
+Développer automatiquement les répliques
+::::::::::::::::::::::::::::::::::::::::
 
 Vous pouvez spécifier le nombre maximum de réplicas OpenSearch (index.auto_expand_replicas).
 
@@ -64,8 +64,8 @@ Charger les données par défaut
 
 En l'activant, les données par défaut seront chargées lors de la reconstruction. Les documents existants ne seront pas écrasés.
 
-Rechargement de l'index de documents
-------------------------------------
+Recharger l'index des documents
+-------------------------------
 
 Vous pouvez recharger l'index de documents pour appliquer la configuration de l'index.
 C'est aussi ainsi que les modifications de dictionnaire sont appliquées aux recherches : les
@@ -76,15 +76,15 @@ interrogé. Voir :ref:`dict-apply-changes`.
 Si ``search_engine.type`` vaut ``vanilla`` ou ``aws``, cette fonction n'est pas affichée.
 
 
-Index Crawler
--------------
+Index du robot d'exploration
+----------------------------
 
 Vous pouvez supprimer l'index fess_crawler (informations de crawl).
 Ne l'exécutez pas pendant l'exécution du crawler.
 
 
-Diagnostic
-----------
+Diagnostics
+-----------
 
 Vous pouvez télécharger un fichier zip de diagnostic. Le zip contient les fichiers suivants dans le répertoire ``log<yyyyMMddHHmm>/``.
 
@@ -99,4 +99,4 @@ Dans ``system.properties`` et ``fess_config.properties``, les valeurs secrètes 
 
    Les fichiers journaux et le contenu de ``fess_basic_config.bulk`` ne sont pas masqués. Vérifiez le contenu avant d'envoyer le zip en dehors de votre organisation.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/maintenance-1.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/maintenance-1.png
