@@ -117,7 +117,7 @@
 - **HTTPS**：浏览器只在安全上下文（HTTPS 或 ``localhost`` ）中允许使用 WebAuthn。\ |Fess|\ 也接受 ``passkey.origins`` 中的 ``http`` 来源，但在生产环境中，请通过 HTTPS 提供\ |Fess|\ 并指定 ``https://`` 来源（参见 :doc:`../install/security` 中的「启用 HTTPS」）。
 - **浏览器**：需要提供 WebAuthn API（ ``PublicKeyCredential`` ）的浏览器。在不支持的浏览器中，登录按钮和注册部分都不会显示。
 - **认证器**：必须支持可发现凭据（discoverable credentials）和用户验证（PIN、生物识别等）。\ |Fess|\ 要求同时具备这两项，支持 ES256 和 RS256 签名算法，并且不使用证明（attestation）。
-- **多节点**：通行密钥操作的质询（challenge）在 HTTP 会话中保存 5 分钟。在负载均衡器后面运行多个节点时，请在节点之间共享会话（环境变量 ``FESS_SESSION_STORE=opensearch`` ），或者让负载均衡器将每个会话固定到一个节点。共享会话时，添加或删除 SSO 插件会使所有已存储的会话失效（请参阅 :doc:`sso-saml` 中的注意事项）。
+- **多节点**：通行密钥操作的质询（challenge）在 HTTP 会话中保存 5 分钟。在负载均衡器后面运行多个节点时，请在节点之间共享会话（环境变量 ``FESS_SESSION_STORE=opensearch`` ），或者让负载均衡器将每个会话固定到一个节点。共享会话时，添加或删除 SSO 插件会使所有已存储的会话失效（请参阅 :doc:`sso-saml` 中的注意事项）。关于共享的内容以及无法连接会话存储时的行为，请参阅 :doc:`session-store`。
 
 API
 ===

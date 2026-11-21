@@ -153,6 +153,14 @@ Konfiguration löschen
 
 Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt. Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
+.. note::
+
+   Beim Löschen einer Konfiguration werden die Dokumente, die sie bereits im Index registriert hat, nicht gelöscht. Sie bleiben durchsuchbar, bis sie ablaufen. Ein Dokument läuft nach der Anzahl von Tagen ab, die unter „Alte Dokumente löschen“ in :doc:`general-guide` (``day.for.cleanup``, standardmäßig ``3``) angegeben ist, gerechnet ab dem Beginn des letzten Crawls, der es registriert oder aktualisiert hat; der Doc-Purger-Job entfernt es dann aus dem Index. Bei ``-1`` werden Dokumente, die ohne Ablaufzeit registriert wurden, auf diesem Weg nie entfernt.
+
+   Um die Dokumente sofort zu entfernen, löschen Sie sie selbst aus dem Index. Suchen Sie auf dem Bildschirm „Suche“ (:doc:`searchlist-guide`) nach den Dokumenten der Konfiguration (zum Beispiel mit ``url:`` oder ``host:``), prüfen Sie die Treffer und klicken Sie auf die Schaltfläche „Alle mit dieser Abfrage löschen“. Dasselbe ist mit ``DELETE /api/admin/searchlist/query`` möglich (siehe :doc:`../api/admin/api-admin-searchlist`).
+
+   Anders verhält es sich, wenn Sie die Berechtigungen einer Konfiguration ändern und erneut crawlen: Die Dokument-ID hängt von den Berechtigungen ab, und beim Registrieren eines Dokuments löscht der Crawler die Dokumente mit derselben URL und einer anderen ID, die dieselbe Konfiguration zuvor registriert hat.
+
 Beispiele
 =========
 

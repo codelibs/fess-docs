@@ -27,6 +27,10 @@ HTTP 方法            GET
 - ``RED`` 时：以错误信封（\ ``status: 9``\ ，\ ``error.code: service_unavailable``\ ）返回，并将引擎快照嵌入 ``error.details.engine`` 中（以便监控工具解析集群元数据）。
 - 无法连接搜索引擎时：与 ``RED`` 一样以错误信封（\ ``error.code: service_unavailable``\ ，\ ``error.message: search engine is not reachable``\ ）返回，\ ``error.details.engine`` 中为 ``status: UNAVAILABLE``\ 、\ ``ping_status: 1``\ 。
 
+.. note::
+
+   无法连接搜索引擎时， ``/api/v2/search`` 不会返回503，而是返回200，并带有 ``partial: true`` 且没有命中（请参阅 :doc:`api-search`）。需要区分“无搜索结果”和“搜索引擎已停止”的客户端，应检查搜索响应中的 ``partial``，并可用此端点确认搜索引擎的状态。
+
 ``engine`` 各字段说明如下。
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|

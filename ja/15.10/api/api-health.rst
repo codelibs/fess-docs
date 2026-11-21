@@ -27,6 +27,10 @@ HTTP ステータスは、クラスターの状態が ``GREEN`` / ``YELLOW`` の
 - ``RED`` の場合: エラーエンベロープ（ ``status: 9`` , ``error.code: service_unavailable`` ）を返し、エンジンスナップショットを ``error.details.engine`` の下に埋め込みます（監視ツールがクラスターメタデータを解析できるようにするため）。
 - 検索エンジンに接続できない場合: ``RED`` と同様にエラーエンベロープ（ ``error.code: service_unavailable`` , ``error.message: search engine is not reachable`` ）を返し、 ``error.details.engine`` は ``status: UNAVAILABLE`` 、 ``ping_status: 1`` になります。
 
+.. note::
+
+   ``/api/v2/search`` は、検索エンジンに接続できないときに503を返しません。HTTPステータス200で、 ``partial: true`` かつヒット0件の応答を返します（ :doc:`api-search` を参照）。「検索結果なし」と「検索エンジンの停止」を区別する必要があるクライアントは、検索応答の ``partial`` を確認し、検索エンジンの状態をこのエンドポイントで確認してください。
+
 ``engine`` の各フィールドは以下の通りです。
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|

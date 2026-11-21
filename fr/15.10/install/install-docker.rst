@@ -607,3 +607,4 @@ Q : Une configuration multi-nœuds est-elle possible ?
 R : Oui, c'est possible. Vous pouvez vous appuyer sur ``snapshot/compose-cluster.yaml`` du dépôt ``docker-fess`` pour configurer OpenSearch avec plusieurs nœuds,
 ou sur ``multi-instance/`` pour configurer plusieurs instances de Fess partageant un seul OpenSearch.
 Cependant, pour les environnements de production, nous recommandons l'utilisation d'outils d'orchestration tels que Kubernetes.
+Si vous exécutez plusieurs instances |Fess| derrière un répartiteur de charge, consultez :doc:`../config/session-store` pour partager les sessions HTTP entre elles.

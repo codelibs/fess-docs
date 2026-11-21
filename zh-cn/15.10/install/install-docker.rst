@@ -606,3 +606,4 @@ Q: 可以配置多节点吗？
 A：可以。可以参考 ``docker-fess`` 仓库中的 ``snapshot/compose-cluster.yaml``，将 OpenSearch 配置为多个节点，
 也可以参考 ``multi-instance/``，配置多个共享同一个 OpenSearch 的 Fess 实例。
 不过，在生产环境中建议使用 Kubernetes 等编排工具。
+在负载均衡器之后运行多个 |Fess| 实例时，请参阅 :doc:`../config/session-store` 了解如何在它们之间共享HTTP会话。
