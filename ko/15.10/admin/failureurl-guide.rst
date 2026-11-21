@@ -18,7 +18,9 @@
 
 |image0|
 
-장애 URL 확인 링크를 클릭하면 세부 정보가 표시됩니다.
+URL, 오류 횟수, 종류의 검색 폼과 검색 버튼으로 목록을 좁힐 수 있으며, 리셋 버튼으로 조건을 초기화합니다.
+목록의 행을 클릭하면 세부 정보가 표시됩니다.
+목록 아래의 모두 삭제 버튼을 클릭하면 모든 장애 URL이 삭제됩니다. 확인 대화상자가 표시됩니다.
 
 목록의 항목
 -----------
@@ -52,6 +54,11 @@ CSV 다운로드
 
 세부 정보 내용
 --------
+
+ID
+::::
+
+장애 URL의 ID.
 
 URL
 ::::
@@ -99,6 +106,8 @@ MIME 유형
 
 이 예외가 발생한 시각.
 
+세부 정보 페이지의 삭제 버튼을 클릭하면 장애 URL이 삭제됩니다. 확인 대화상자가 표시됩니다.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/failureurl-2.png
+
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/failureurl-2.png

@@ -15,13 +15,13 @@ To display this page, select System Info > Maintenance in a left menu.
 Operations
 ==========
 
-Reindex
--------
+Re-indexing
+-----------
 
 Create new fess.YYMMDD index and copy documents from old fess index.
 
-Update Aliases
-::::::::::::::
+Replace Aliases
+:::::::::::::::
 
 Switch fess.search and fess.update aliases after reindexing if enabled.
 
@@ -32,12 +32,12 @@ Select Enabled if using factory default dictionaries.
 
 This item is not shown when ``search_engine.type`` is ``vanilla`` or ``aws``.
 
-The number of shards
-::::::::::::::::::::
+Number of Shards
+::::::::::::::::
 
 Specify the number of shards(index.number_of_shards).
 
-Auto expand replicas
+Auto-expand Replicas
 ::::::::::::::::::::
 
 Specify auto-expand the number of replicas(index.auto_expand_replicas).
@@ -58,8 +58,8 @@ Load Default Data
 
 If enabled, default data will be loaded during the rebuild. Existing documents will not be overwritten.
 
-Reload Doc Index
-----------------
+Reload Document Index
+---------------------
 
 Reload(Close/Open) fess index to apply index settings.
 This is also how dictionary changes are applied to searches: the saved dictionaries are written
@@ -68,14 +68,14 @@ and opened. The index cannot be searched while it is closed. See :ref:`dict-appl
 
 This section is not shown when ``search_engine.type`` is ``vanilla`` or ``aws``.
 
-Crawler Indices
----------------
+Crawler Index
+-------------
 
 Remove Crawler index to clear crawling data.
 Do not execute this task when Crawler is running.
 
-Diagnostic
-----------
+Diagnostics
+-----------
 
 You can download a diagnostic zip file. The zip contains the following files under the ``log<yyyyMMddHHmm>/`` directory.
 

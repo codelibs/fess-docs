@@ -50,6 +50,7 @@
 =========
 
 등록한 단어를 CSV 형식으로 다운로드합니다.
+페이지 오른쪽 위의 다운로드를 클릭하여 다운로드 페이지를 열고, 다운로드 버튼을 클릭합니다.
 
 |image2|
 
@@ -68,6 +69,7 @@ CSV 내용
 =========
 
 CSV 형식으로 단어를 등록합니다.
+페이지 오른쪽 위의 업로드를 클릭하여 업로드 페이지를 열고, 제외 단어 파일에서 CSV 파일을 선택한 후 업로드 버튼을 클릭합니다.
 
 |image3|
 
@@ -82,7 +84,7 @@ CSV 내용
 "BadWord"
 "검색엔진"
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/badword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/badword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/badword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/badword-4.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/badword-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/badword-2.png
+.. |image2| image:: ../../../resources/images/ko/15.10/admin/badword-3.png
+.. |image3| image:: ../../../resources/images/ko/15.10/admin/badword-4.png

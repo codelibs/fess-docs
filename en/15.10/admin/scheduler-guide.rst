@@ -17,12 +17,12 @@ To open the job scheduler configuration list page shown below, click [System > S
 
 |image0|
 
-Click the configuration name to edit it.
+Click the configuration name to open its details page, then click the Edit button to edit it.
 
 Creating Configuration
 ----------------------
 
-To open the scheduler configuration page, click the New button.
+To open the scheduler configuration page, click the Create New button.
 
 |image1|
 
@@ -49,8 +49,8 @@ Jobs written in the script will be executed according to the schedule configured
 The notation format follows CRON format: "minute hour day month day-of-week".
 For example, "0 12 \* \* 3" executes the job every Wednesday at 12:00 PM.
 
-Executor
-::::::::
+Execution Method
+::::::::::::::::
 
 Specifies the script execution environment. You can select ``javascript`` (the
 default for new jobs, determined by the ``job.default.script`` property) or
@@ -95,16 +95,16 @@ Status
 Specifies whether the job is enabled or disabled.
 When disabled, the job will not execute.
 
-Display Order
-:::::::::::::
+Sort Order
+::::::::::
 
 Specifies the display order in the job list.
 
 Deleting Configuration
 ----------------------
 
-Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
-Click the Delete button to remove the configuration.
+Click the configuration name on the list page, then click the Delete button to display a confirmation dialog.
+Click the Delete button in the dialog to remove the configuration.
 
 Manual Crawl Method
 ===================

@@ -7,15 +7,15 @@
 
 向导页面提供了一个简易设置工具,用于注册爬取配置。
 
-简易设置
-------------
+快速设置
+--------
 
-此页面是用于注册爬取配置的启动页面。
+此页面是用于注册爬取配置的启动页面。单击"开始设置"按钮将打开爬取配置页面。
 
 |image0|
 
-爬取配置
------------
+爬网设置
+--------
 
 在此页面可以创建爬取配置。
 
@@ -29,8 +29,8 @@
 
 指定配置名称(例如:Fess网站)。
 
-爬取路径
-:::::::::
+爬网路径
+::::::::
 
 指定爬取起始 URL 或文件路径(例如:https://fess.codelibs.org/)。
 
@@ -44,6 +44,13 @@
 
 设置爬取文档中包含的链接时的跟踪深度。
 
+按钮
+::::
+
+- **创建**: 注册爬取配置并进入开始爬取页面。
+- **连续创建**: 注册爬取配置并返回此表单,以便继续注册其他配置。
+- **取消**: 不注册并返回快速设置页面。
+
 爬虫
 ------
 
@@ -52,6 +59,6 @@
 |image2|
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/wizard-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/wizard-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/wizard-3.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/wizard-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/wizard-2.png
+.. |image2| image:: ../../../resources/images/zh-cn/15.10/admin/wizard-3.png

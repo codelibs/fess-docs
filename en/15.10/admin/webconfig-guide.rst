@@ -25,21 +25,27 @@ Creating a Configuration
 ------------------------
 
 Click the "Create New" button to open the Web Crawling configuration page.
+The page is divided into four tabs: "Basic", "Include and Exclude", "Crawl Settings" and "Access and Status". Click a tab name to switch tabs. If an input has an error, the tab that contains it opens automatically. The fields of each tab are described below.
+
+Basic Tab
+---------
 
 |image1|
-
-Configuration Options
----------------------
 
 Name
 ::::
 
 Configuration name.
 
-URL
+URLs
 ::::
 
-The URL where crawling begins.
+The URLs where crawling begins. Specify one URL per line.
+
+Include and Exclude Tab
+-----------------------
+
+|image2|
 
 Included URLs for Crawling
 ::::::::::::::::::::::::::
@@ -61,8 +67,13 @@ Excluded URLs for Indexing
 
 URLs matching this regular expression (Java format) will be excluded from the search index.
 
-Configuration Parameters
-::::::::::::::::::::::::
+Crawl Settings Tab
+------------------
+
+|image3|
+
+Config Parameters
+:::::::::::::::::
 
 Specifies crawl configuration information.
 
@@ -89,12 +100,17 @@ The number of threads to use for crawling with this configuration.
 Interval
 ::::::::
 
-The time interval between URL crawls for each thread.
+The time interval between URL crawls for each thread, in milliseconds.
 
-Boost Value
-:::::::::::
+Boost
+:::::
 
 The boost value is a weight for documents indexed by this configuration.
+
+Access and Status Tab
+---------------------
+
+|image4|
 
 Permissions
 :::::::::::
@@ -103,10 +119,10 @@ Specifies permissions for this configuration.
 The permission format is as follows: to display search results to users in the developer group, specify {group}developer.
 User-level: {user}username, Role-level: {role}rolename, Group-level: {group}groupname.
 
-Virtual Host
-::::::::::::
+Virtual Hosts
+:::::::::::::
 
-Specifies the virtual host hostname.
+Specifies the virtual host hostnames, one per line.
 For details, see :doc:`../config/security-virtual-host`.
 
 Status
@@ -122,7 +138,7 @@ Enter a description.
 Deleting a Configuration
 ------------------------
 
-Click the configuration name on the list page, then click the "Delete" button to display a confirmation screen. Click the "Delete" button to remove the configuration.
+Click the configuration name on the list page, then click the "Delete" button to display a confirmation dialog. Click the "Delete" button to remove the configuration.
 
 Examples
 ========
@@ -140,7 +156,7 @@ To create a Web Crawling configuration to crawl pages under https://fess.codelib
      - Value
    * - Name
      - Fess
-   * - URL
+   * - URLs
      - https://fess.codelibs.org/
    * - Included URLs for Crawling
      - https://fess.codelibs.org/.\*
@@ -166,11 +182,11 @@ To crawl Redmine pages (ex. https://<server>/) with password protection, create 
      - Value
    * - Name
      - Redmine
-   * - URL
+   * - URLs
      - https://<server>/my/page
    * - Included URLs for Crawling
      - https://<server>/.\*
-   * - Configuration Parameters
+   * - Config Parameters
      - client.robotsTxtEnabled=false (Optional)
 
 and then create the authentication setting on Web Auth page:
@@ -196,7 +212,7 @@ and then create the authentication setting on Web Auth page:
        | login_method=POST
        | login_url=https://<server>/login
        | login_parameters=username=${username}&password=${password}
-   * - Web Configuration
+   * - Web Config
      - Redmine
 
 XWiki
@@ -212,11 +228,11 @@ To crawl XWiki pages (ex. https://<server>/xwiki/), Web Crawling setting is:
      - Value
    * - Name
      - XWiki
-   * - URL
+   * - URLs
      - https://<server>/xwiki/bin/view/Main/
    * - Included URLs for Crawling
      - https://<server>/.\*
-   * - Configuration Parameters
+   * - Config Parameters
      - client.robotsTxtEnabled=false (Optional)
 
 and the authentication setting is:
@@ -242,7 +258,7 @@ and the authentication setting is:
        | login_method=POST
        | login_url=http://<server>/xwiki/bin/loginsubmit/XWiki/XWikiLogin
        | login_parameters=j_username=${username}&j_password=${password}
-   * - Web Configuration
+   * - Web Config
      - XWiki
 
 Related Pages
@@ -256,4 +272,7 @@ Related Pages
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/webconfig-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/webconfig-2.png
+.. |image2| image:: ../../../resources/images/en/15.10/admin/webconfig-3.png
+.. |image3| image:: ../../../resources/images/en/15.10/admin/webconfig-4.png
+.. |image4| image:: ../../../resources/images/en/15.10/admin/webconfig-5.png
 .. pdf            :height: 940 px

@@ -17,6 +17,9 @@ Um die Jobprotokoll-Überprüfungsseite zu öffnen, klicken Sie im linken Menü 
 
 |image0|
 
+Die Übersicht zeigt Jobname, Ausführungsstatus sowie Start- und Endzeit.
+Klicken Sie unter der Liste auf die Schaltfläche „Alle löschen", um alle Jobprotokolle zu löschen. Es wird ein Bestätigungsdialog angezeigt.
+
 Jobprotokoll-Details
 --------------------
 
@@ -42,12 +45,12 @@ Das Ziel, für das der Job ausgeführt wird.
 Startzeit
 :::::::::
 
-Die UNIX-Zeit, zu der der Job gestartet wurde.
+Datum und Uhrzeit, zu der der Job gestartet wurde.
 
 Endzeit
 :::::::
 
-Die UNIX-Zeit, zu der der Job beendet wurde.
+Datum und Uhrzeit, zu der der Job beendet wurde.
 
 Ausführungsmethode
 ::::::::::::::::::
@@ -64,5 +67,7 @@ Ergebnis
 
 Das Ausführungsergebnis des Jobs.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/joblog-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/joblog-2.png
+Klicken Sie auf der Detailseite auf die Schaltfläche „Löschen", um das Jobprotokoll zu löschen. Es wird ein Bestätigungsdialog angezeigt.
+
+.. |image0| image:: ../../../resources/images/de/15.10/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/joblog-2.png

@@ -18,7 +18,9 @@ Para abrir la página de lista para verificar las URL de fallo, haga clic en [In
 
 |image0|
 
-Al hacer clic en el enlace de verificación de URL de fallo, se muestran los detalles.
+Acote la lista con el formulario de búsqueda (URL, Número de errores y Tipo) y el botón Buscar; el botón Restablecer borra las condiciones.
+Haga clic en una fila de la lista para mostrar los detalles.
+Haga clic en el botón Eliminar todo situado debajo de la lista para eliminar todas las URL de fallo. Aparecerá un cuadro de diálogo de confirmación.
 
 Elementos de la lista
 ---------------------
@@ -52,6 +54,11 @@ Los detalles de URL de fallo registran las excepciones que ocurrieron durante el
 
 Contenido de los detalles
 --------------------------
+
+ID
+::
+
+ID de la URL de fallo.
 
 URL
 :::
@@ -99,6 +106,8 @@ Fecha del último acceso
 
 Hora en la que ocurrió esta excepción.
 
+Haga clic en el botón Eliminar de la página de detalles para eliminar la URL de fallo. Aparecerá un cuadro de diálogo de confirmación.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/failureurl-2.png
+
+.. |image0| image:: ../../../resources/images/es/15.10/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/failureurl-2.png

@@ -82,22 +82,22 @@ geschrieben (standardmäßig JavaScript).
    Symptom ist ein still leer bleibendes Feld. Siehe :ref:`javascript-statement-null`
    (in :doc:`../config/scripting-javascript`).
 
-Boost-Wert
-::::::::::
+Boost
+:::::
 
 Geben Sie den Boost-Wert für Dokumente an, die mit dieser Konfiguration gecrawlt werden.
 
-Berechtigung
-::::::::::::
+Berechtigungen
+::::::::::::::
 
 Geben Sie die Berechtigung für diese Konfiguration an.
 Um beispielsweise Suchergebnisse für Benutzer anzuzeigen, die zur Gruppe „developer" gehören, geben Sie {group}developer an.
 Für Benutzerebene geben Sie {user}Benutzername an, für Rollenebene {role}Rollenname und für Gruppenebene {group}Gruppenname.
 
-Virtueller Host
+Virtuelle Hosts
 :::::::::::::::
 
-Geben Sie den Hostnamen des virtuellen Hosts an.
+Geben Sie die Hostnamen der virtuellen Hosts an, einen pro Zeile.
 Weitere Details finden Sie unter :doc:`Virtueller Host im Konfigurationshandbuch <../config/security-virtual-host>`.
 
 Status
@@ -113,7 +113,7 @@ Sie können eine Beschreibung eingeben.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 Beispiele
@@ -404,5 +404,5 @@ Verwandte Seiten
 - :doc:`../config/datastore/ds-overview`
 - :doc:`../config/crawler-basic`
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/dataconfig-2.png

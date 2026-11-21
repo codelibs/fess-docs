@@ -7,6 +7,7 @@ Allgemein
 
 Auf dieser Verwaltungsseite können Sie die Konfiguration von |Fess| verwalten.
 Sie können verschiedene Konfigurationen von |Fess| ändern, ohne |Fess| neu zu starten.
+Die Einstellungen sind auf Registerkarten verteilt (System, Crawler, Protokollierung, Vorschlagen, LDAP, OpenID Connect, SAML, SPNEGO, Entra ID, Ankündigung, Benachrichtigung und Speicher). Die Registerkarten werden zusammen mit der Schaltfläche [Aktualisieren] am Ende des Formulars gespeichert.
 
 Konfigurationsinhalt
 ====================
@@ -165,6 +166,8 @@ Wenn ein zu crawlendes Dokument mehr als die hier angegebene Anzahl in Fehler-UR
 Protokollierung
 ---------------
 
+|image2|
+
 Suchprotokoll
 :::::::::::::
 
@@ -209,6 +212,8 @@ Geben Sie die Protokollebene für fess.log an.
 Vorschlagen
 -----------
 
+|image3|
+
 Vorschläge aus Suchbegriffen
 ::::::::::::::::::::::::::::
 
@@ -227,7 +232,7 @@ Löscht Vorschlagsdaten, die älter als die angegebene Anzahl von Tagen sind.
 LDAP
 ----
 
-|image2|
+|image4|
 
 LDAP-URL
 ::::::::
@@ -284,7 +289,7 @@ Gibt die LDAP-Klasse der initialen Kontextfabrik an (z.B. com.sun.jndi.ldap.Ldap
 OpenID Connect
 --------------
 
-|image3|
+|image5|
 
 Client-ID
 :::::::::
@@ -334,7 +339,7 @@ Gibt die Standardrollen an, die Benutzern bei der OpenID Connect-Authentifizieru
 SAML
 ----
 
-|image4|
+|image6|
 
 IdP-Entitäts-ID
 :::::::::::::::
@@ -408,7 +413,7 @@ Gibt die Standardrollen an, die Benutzern bei der SAML-Authentifizierung zugewie
 SPNEGO
 ------
 
-|image5|
+|image7|
 
 .. note::
    SPNEGO-bezogene Einstellungen werden prozessweit innerhalb der zugrunde liegenden Bibliothek gemeinsam genutzt. Damit Änderungen daran wirksam werden, ist ein Neustart von |Fess| erforderlich.
@@ -471,6 +476,12 @@ Delegation erlauben
 
 Gibt an, ob Kerberos-Delegation erlaubt werden soll.
 
+Zugelassene Realms
+::::::::::::::::::
+
+Gibt die Kerberos-Realms an, die zusätzlich zum Server-Realm akzeptiert werden, durch Kommas getrennt.
+Weitere Details finden Sie unter :doc:`../config/sso-spnego`.
+
 Logger-Ebene
 ::::::::::::
 
@@ -480,7 +491,7 @@ Wird das Feld leer gelassen oder ein nicht-numerischer Wert angegeben, wird die 
 Entra ID
 --------
 
-|image6|
+|image8|
 
 Mandant (ID oder Domäne)
 ::::::::::::::::::::::::
@@ -506,6 +517,12 @@ Antwort-URL
 :::::::::::
 
 Gibt die Antwort-(Weiterleitungs-)URL für Microsoft Entra ID an.
+
+Antwortmodus
+::::::::::::
+
+Gibt an, wie die Autorisierungsantwort zurückgegeben wird: ``query`` oder ``form_post``. Der Standardwert ist ``query``.
+Zu den Bedingungen, unter denen ``form_post`` funktioniert, siehe :doc:`../config/sso-entraid`.
 
 Status-TTL
 ::::::::::
@@ -535,7 +552,7 @@ Gibt an, ob der Entra ID-Domänendienst verwendet werden soll.
 Hinweis
 -------
 
-|image7|
+|image9|
 
 .. note::
 
@@ -562,6 +579,8 @@ Beschreiben Sie die Nachricht, die auf dem erweiterten Suchbildschirm angezeigt 
 
 Benachrichtigung
 ----------------
+
+|image10|
 
 Benachrichtigungs-E-Mail
 :::::::::::::::::::::::::
@@ -599,6 +618,8 @@ Protokollereignisse auf der ausgewählten Ebene und darüber werden benachrichti
 
 Speicher
 --------
+
+|image11|
 
 Nach der Konfiguration dieser Elemente wird das Menü [System > Speicher] im linken Menü angezeigt.
 Informationen zur Dateiverwaltung finden Sie unter :doc:`Speicher <../admin/storage-guide>`.
@@ -687,13 +708,16 @@ LDAP-Konfigurationsbeispiele
      - isMemberOf
      - memberOf
 
-
-.. |image0| image:: ../../../resources/images/en/15.10/admin/general-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/general-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/general-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/general-4.png
-.. |image4| image:: ../../../resources/images/en/15.10/admin/general-5.png
-.. |image5| image:: ../../../resources/images/en/15.10/admin/general-6.png
-.. |image6| image:: ../../../resources/images/en/15.10/admin/general-7.png
-.. |image7| image:: ../../../resources/images/en/15.10/admin/general-8.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/general-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/general-2.png
+.. |image2| image:: ../../../resources/images/de/15.10/admin/general-3.png
+.. |image3| image:: ../../../resources/images/de/15.10/admin/general-4.png
+.. |image4| image:: ../../../resources/images/de/15.10/admin/general-5.png
+.. |image5| image:: ../../../resources/images/de/15.10/admin/general-6.png
+.. |image6| image:: ../../../resources/images/de/15.10/admin/general-7.png
+.. |image7| image:: ../../../resources/images/de/15.10/admin/general-8.png
+.. |image8| image:: ../../../resources/images/de/15.10/admin/general-9.png
+.. |image9| image:: ../../../resources/images/de/15.10/admin/general-10.png
+.. |image10| image:: ../../../resources/images/de/15.10/admin/general-11.png
+.. |image11| image:: ../../../resources/images/de/15.10/admin/general-12.png
 .. pdf            :height: 940 px

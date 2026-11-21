@@ -17,7 +17,7 @@
 
 |image0|
 
-单击配置名称进行编辑。
+单击配置名称打开其详细信息页面,然后单击编辑按钮进行编辑。
 
 创建配置
 --------
@@ -101,8 +101,8 @@
 删除配置
 --------
 
-在列表页面单击配置名称,然后单击"删除"按钮,将显示确认界面。
-单击"删除"按钮后,配置将被删除。
+在列表页面单击配置名称,然后单击"删除"按钮,将显示确认对话框。
+单击对话框中的"删除"按钮后,配置将被删除。
 
 手动爬取方法
 ============
@@ -110,5 +110,5 @@
 在"调度器"中单击"Default Crawler",然后单击"立即开始"按钮。
 要停止爬虫,请单击"Default Crawler",然后单击"停止"按钮。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/scheduler-2.png

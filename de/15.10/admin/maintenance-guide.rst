@@ -22,8 +22,8 @@ Führen Sie dies aus, wenn Sie das Index-Mapping ändern möchten.
 Konfigurationsparameter
 -----------------------
 
-Alias aktualisieren
-:::::::::::::::::::
+Aliase ersetzen
+:::::::::::::::
 
 Durch Aktivierung können Sie nach Abschluss der Neuindizierung die Aliasse fess.search und fess.update, die dem vorhandenen Index zugewiesen sind, auf den neuen Index umstellen.
 
@@ -36,14 +36,14 @@ Durch Aktivierung können Sie die Wörterbuchkonfiguration initialisieren.
 Ist ``search_engine.type`` auf ``vanilla`` oder ``aws`` gesetzt, wird dieser Eintrag nicht angezeigt.
 
 
-Shard-Anzahl
-::::::::::::
+Anzahl der Shards
+:::::::::::::::::
 
 Sie können die OpenSearch-Shard-Anzahl (index.number_of_shards) angeben.
 
 
-Maximale Replikatanzahl
-:::::::::::::::::::::::
+Replikate automatisch erweitern
+:::::::::::::::::::::::::::::::
 
 Sie können die maximale OpenSearch-Replikatanzahl (index.auto_expand_replicas) angeben.
 
@@ -64,8 +64,8 @@ Standarddaten laden
 
 Durch Aktivierung werden bei der Neuerstellung Standarddaten geladen. Vorhandene Dokumente werden nicht überschrieben.
 
-Dokumentindex neu laden
------------------------
+Dokumentenindex neu laden
+-------------------------
 
 Sie können den Dokumentindex neu laden, um die Indexkonfiguration zu übernehmen.
 Auf diesem Weg werden auch Wörterbuchänderungen für die Suche übernommen: Die gespeicherten
@@ -99,4 +99,4 @@ In ``system.properties`` und ``fess_config.properties`` werden geheime Werte nac
 
    Protokolldateien und der Inhalt von ``fess_basic_config.bulk`` werden nicht maskiert. Prüfen Sie den Inhalt, bevor Sie die ZIP-Datei an Dritte weitergeben.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/maintenance-1.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/maintenance-1.png

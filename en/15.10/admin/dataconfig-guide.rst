@@ -80,8 +80,8 @@ Expressions are written in the syntax of the scripting engine selected by the
    is no error and no log line; the only symptom is a field that quietly goes empty. See
    :ref:`javascript-statement-null` (in :doc:`../config/scripting-javascript`).
 
-Boost Value
-:::::::::::
+Boost
+:::::
 
 Specifies the boost value for documents crawled with this configuration.
 
@@ -92,10 +92,10 @@ Specifies permissions for this configuration.
 The permission format is as follows: to display search results to users in the developer group, specify {group}developer.
 User-level: {user}username, Role-level: {role}rolename, Group-level: {group}groupname.
 
-Virtual Host
-::::::::::::
+Virtual Hosts
+:::::::::::::
 
-Specifies the virtual host hostname.
+Specifies the virtual host hostnames, one per line.
 For details, see :doc:`Virtual Hosts in the Configuration Guide <../config/security-virtual-host>`.
 
 Status
@@ -111,7 +111,7 @@ Enter a description.
 Deleting a Configuration
 ------------------------
 
-Click the configuration name on the list page, then click the "Delete" button to display a confirmation screen.
+Click the configuration name on the list page, then click the "Delete" button to display a confirmation dialog.
 Click the "Delete" button to remove the configuration.
 
 Examples

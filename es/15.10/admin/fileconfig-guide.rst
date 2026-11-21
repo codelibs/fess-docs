@@ -33,22 +33,28 @@ Para editar, haga clic en el nombre de la configuración.
 Crear configuración
 -------------------
 
-Para abrir la página de configuración de rastreo de archivos, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de rastreo de archivos, haga clic en el botón "Crear nuevo".
+La página se divide en cuatro pestañas: "Básico", "Inclusiones y exclusiones", "Configuración de rastreo" y "Acceso y estado". Haga clic en el nombre de una pestaña para cambiar de pestaña. Si una entrada tiene un error, se abre automáticamente la pestaña que la contiene. Los campos de cada pestaña se describen a continuación.
+
+Pestaña Básico
+--------------
 
 |image1|
-
-Parámetros de configuración
-----------------------------
 
 Nombre
 ::::::
 
 Es el nombre de la configuración.
 
-Ruta
-::::
+Rutas
+:::::
 
-En esta ruta, especifique dónde comenzar el rastreo (ejemplo: file:/, smb://, s3://, gcs://).
+Estas rutas especifican dónde comenzar el rastreo (ejemplo: file:/, smb://, s3://, gcs://). Especifique una ruta por línea.
+
+Pestaña Inclusiones y exclusiones
+---------------------------------
+
+|image2|
 
 Rutas a rastrear
 ::::::::::::::::
@@ -73,8 +79,13 @@ Rutas excluidas de la búsqueda
 
 Las rutas que coincidan con la expresión regular (formato Java) especificada en este elemento no serán objeto de búsqueda.
 
-Parámetros de configuración
-::::::::::::::::::::::::::::
+Pestaña Configuración de rastreo
+--------------------------------
+
+|image3|
+
+Parámetro de configuración
+::::::::::::::::::::::::::
 
 Puede especificar información de configuración de rastreo.
 
@@ -102,12 +113,17 @@ Especifique el número de hilos a utilizar para esta configuración.
 Intervalo
 :::::::::
 
-Especifique el tiempo de espera cada vez que un hilo rastrea una ruta.
+Especifique el tiempo de espera cada vez que un hilo rastrea una ruta, en milisegundos.
 
 Valor de impulso
 ::::::::::::::::
 
 El valor de impulso es la prioridad de los documentos indexados por esta configuración.
+
+Pestaña Acceso y estado
+-----------------------
+
+|image4|
 
 Permisos
 ::::::::
@@ -116,10 +132,10 @@ Especifique el permiso para esta configuración.
 La forma de especificar permisos es, por ejemplo, para mostrar resultados de búsqueda a usuarios que pertenecen al grupo developer, especifique {group}developer.
 La especificación por usuario es {user}nombre_usuario, la especificación por rol es {role}nombre_rol, y la especificación por grupo es {group}nombre_grupo.
 
-Host virtual
-::::::::::::
+Hosts virtuales
+:::::::::::::::
 
-Especifique el nombre de host del host virtual.
+Especifique los nombres de host de los hosts virtuales, uno por línea.
 Para más detalles, consulte :doc:`Host virtual en la guía de configuración <../config/security-virtual-host>`.
 
 Estado
@@ -135,7 +151,7 @@ Puede ingresar una descripción.
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación. Al presionar el botón de eliminar, se eliminará la configuración.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación. Al presionar el botón de eliminar, se eliminará la configuración.
 
 Ejemplo
 =======
@@ -153,7 +169,7 @@ Para rastrear archivos bajo /home/share, la configuración sería la siguiente.
      - Valor
    * - Nombre
      - Directorio compartido
-   * - Ruta
+   * - Rutas
      - file:/home/share
 
 Los otros parámetros pueden usar la configuración predeterminada.
@@ -171,7 +187,7 @@ Para rastrear archivos bajo \\SERVER\SharedFolder, la configuración sería la s
      - Valor
    * - Nombre
      - Carpeta compartida
-   * - Ruta
+   * - Rutas
      - smb://SERVER/SharedFolder/
 
 Si se requiere nombre de usuario/contraseña para acceder a la carpeta compartida, es necesario crear una configuración de autenticación de archivos desde [Rastreador > Autenticación de archivos] en el menú izquierdo.
@@ -186,7 +202,7 @@ En ese caso, la configuración sería la siguiente.
    * - Nombre de host
      - SERVER
    * - Esquema
-     - SAMBA
+     - Samba
    * - Nombre de usuario
      - (Ingrese)
    * - Contraseña
@@ -205,10 +221,10 @@ Para rastrear archivos en el bucket my-bucket, la configuración sería la sigui
      - Valor
    * - Nombre
      - Bucket S3
-   * - Ruta
+   * - Rutas
      - s3://my-bucket/
 
-El acceso a S3 requiere credenciales de autenticación. Agregue lo siguiente en "Parámetros de configuración":
+El acceso a S3 requiere credenciales de autenticación. Agregue lo siguiente en "Parámetro de configuración":
 
 ::
 
@@ -236,10 +252,10 @@ Para rastrear archivos en el bucket my-gcs-bucket, la configuración sería la s
      - Valor
    * - Nombre
      - Bucket GCS
-   * - Ruta
+   * - Rutas
      - gcs://my-gcs-bucket/
 
-El acceso a GCS requiere credenciales de autenticación. Agregue lo siguiente en "Parámetros de configuración":
+El acceso a GCS requiere credenciales de autenticación. Agregue lo siguiente en "Parámetro de configuración":
 
 ::
 
@@ -260,6 +276,9 @@ Páginas Relacionadas
 - :doc:`../config/search-basic`
 - :doc:`../user/index`
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/fileconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/fileconfig-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/fileconfig-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/fileconfig-2.png
+.. |image2| image:: ../../../resources/images/es/15.10/admin/fileconfig-3.png
+.. |image3| image:: ../../../resources/images/es/15.10/admin/fileconfig-4.png
+.. |image4| image:: ../../../resources/images/es/15.10/admin/fileconfig-5.png
 .. pdf            :height: 940 px

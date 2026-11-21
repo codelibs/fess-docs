@@ -52,6 +52,11 @@ fess-suggest.log
 
 Les journaux de la fonctionnalité de suggestion sont enregistrés.
 
+fess-llm.log
+::::::::::::
+
+Fichier journal du chat LLM/RAG.
+
 fess-urls.log
 :::::::::::::
 
@@ -61,7 +66,7 @@ searchlog.log
 :::::::::::::
 
 Les journaux de recherche sont enregistrés.
-Si « Journal de recherche » de [Système > Général] est activé, une ligne (JSON) est ajoutée à chaque recherche dans la configuration par défaut.
+Si « Journal de recherche » sous l'onglet [Journalisation] de [Système > Général] est activé, une ligne (JSON) est ajoutée à chaque recherche dans la configuration par défaut.
 Une ligne contient les champs des documents retournés par cette recherche (``logging.search.docs.fields``) ; sa taille augmente donc avec le nombre de résultats retournés (avec ``num=100``, une ligne peut atteindre environ 70 Ko).
 Pour la rotation et la conservation des journaux, voir :doc:`../config/admin-logging`.
 Pour ne pas inclure les champs des documents retournés dans le journal de recherche, définissez ``logging.search.docs.enabled=false`` dans ``fess_config.properties`` ; pour ne plus écrire dans ce fichier, définissez ``logging.search.use.logfile=false``.
@@ -76,4 +81,4 @@ gc-fess.log
 
 Les journaux GC de |Fess| lui-même sont enregistrés. Ils ne sont écrits que si la variable d'environnement ``FESS_USE_GC_LOGGING`` a une valeur non vide (voir :doc:`../install/run`).
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/log-1.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/log-1.png

@@ -22,7 +22,7 @@ Para editar, haga clic en el nombre de la configuración.
 Crear configuración
 -------------------
 
-Para abrir la página de configuración de palabra adicional, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de palabra adicional, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -63,7 +63,7 @@ Configure el valor de impulso para la palabra.
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación.
 Al presionar el botón de eliminar, se eliminará la configuración.
 
 
@@ -71,6 +71,7 @@ Descarga
 ========
 
 Descarga las palabras registradas en formato CSV.
+Haga clic en Descargar en la parte superior derecha de la página para abrir la página de descarga y haga clic en el botón Descargar.
 
 |image2|
 
@@ -89,6 +90,7 @@ Carga
 =====
 
 Registra palabras en formato CSV.
+Haga clic en Subir en la parte superior derecha de la página para abrir la página de carga, seleccione el archivo CSV en «Archivo de palabras elevadas» y haga clic en el botón Subir.
 
 |image3|
 
@@ -107,7 +109,7 @@ Desde la segunda línea en adelante se describen las palabras adicionales.
    En la columna Permissions, especifique cada valor con ``{role}``, ``{user}`` o ``{group}``, como ``{role}role1`` (separe varios valores con comas). Un valor sin prefijo, como ``role1``, no se trata como un rol y la palabra no se sugiere a los usuarios que tienen ese rol.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/elevateword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/elevateword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/elevateword-4.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/elevateword-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/elevateword-2.png
+.. |image2| image:: ../../../resources/images/es/15.10/admin/elevateword-3.png
+.. |image3| image:: ../../../resources/images/es/15.10/admin/elevateword-4.png

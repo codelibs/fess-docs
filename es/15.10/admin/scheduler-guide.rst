@@ -17,12 +17,12 @@ Para abrir la página de lista de configuración del programador de tareas que s
 
 |image0|
 
-Para editar, haga clic en el nombre de la configuración.
+Haga clic en el nombre de la configuración para abrir su página de detalles y, a continuación, haga clic en el botón Editar para editarla.
 
 Crear configuración
 -------------------
 
-Para abrir la página de configuración del programador, haga clic en el botón de nueva creación.
+Para abrir la página de configuración del programador, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -104,8 +104,8 @@ Especifique el orden de clasificación en la lista de trabajos.
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
-Al presionar el botón de eliminar, se eliminará la configuración.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación.
+Al presionar el botón de eliminar del cuadro de diálogo, se eliminará la configuración.
 
 Método de rastreo manual
 =========================
@@ -113,5 +113,5 @@ Método de rastreo manual
 Haga clic en "Default Crawler" en "Programador" y luego haga clic en el botón "Iniciar ahora".
 Para detener el rastreador, haga clic en "Default Crawler" y luego haga clic en el botón "Detener".
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/scheduler-2.png

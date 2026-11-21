@@ -13,7 +13,7 @@ Um die Seite zu öffnen, wählen Sie im linken Menü [Systeminformationen > Doku
 Anzeigen ist die Rolle ``admin-docreport`` oder ``admin-docreport-view`` erforderlich. Die Seite
 zeigt Berichte nur an und lädt sie herunter; sie ändert keine Dokumente.
 
-Beide Registerkarten lassen sich mit „URL-Präfix“ eingrenzen, zum Beispiel ``smb://server/share/``.
+Die Seite hat die Registerkarten „Duplikate“ und „Inaktive Dokumente“. Beide Registerkarten lassen sich mit „URL-Präfix“ eingrenzen, zum Beispiel ``smb://server/share/``; mit [Anwenden] wird die Bedingung übernommen.
 
 Duplikate
 =========
@@ -22,6 +22,8 @@ Dokumente mit gleichem oder nahezu gleichem Inhalt werden gruppiert, die größt
 Gruppen beruhen auf der beim Indexieren berechneten Inhaltssignatur (``content_minhash_bits``,
 dieselbe, die doppelte Suchergebnisse zusammenfasst); eine Neuindexierung ist daher nicht nötig.
 Dokumente, deren Inhalt keine Wörter enthält (etwa leere Dateien), werden ausgelassen.
+
+|image0|
 
 Die Seite zeigt bis zu ``docreport.duplicate.group.size`` (Standard: 100) Gruppen und je Gruppe bis zu
 ``docreport.duplicate.docs.size`` (Standard: 10) Dokumente. Mit [CSV herunterladen] erhalten Sie alle
@@ -38,7 +40,10 @@ Inaktive Dokumente
 Dokumente, deren letzte Änderung älter als die angegebene Anzahl von Tagen ist („Nicht geändert seit
 (Tagen)“, Standard 365 aus ``docreport.dormant.days``), werden aufgelistet, die ältesten zuerst.
 Dokumente ohne Änderungsdatum werden nicht aufgeführt. Mit „Nie aus den Suchergebnissen geöffnet“
-werden Dokumente ausgelassen, die aus Suchergebnissen angeklickt wurden.
+werden Dokumente ausgelassen, die aus Suchergebnissen angeklickt wurden. Mit [Anwenden] werden „Nicht geändert seit
+(Tagen)“ und die übrigen Bedingungen übernommen.
+
+|image1|
 
 Die Seite zeigt die Anzahl der passenden Dokumente, ihre Gesamtgröße und eine seitenweise Liste. Das
 Blättern endet bei ``indexer.max.result.window.size``; Dokumente darüber hinaus erhalten Sie mit
@@ -68,3 +73,6 @@ Die folgenden Einstellungen in ``fess_config.properties`` steuern den Bericht.
    * - ``docreport.dormant.days``
      - Standardanzahl der Tage seit der letzten Änderung, ab der ein Dokument als inaktiv gilt
      - ``365``
+
+.. |image0| image:: ../../../resources/images/de/15.10/admin/docreport-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/docreport-2.png

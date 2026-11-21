@@ -22,6 +22,7 @@ Para abrir la página de lista de diccionarios administrables que se muestra a c
 
 |image0|
 
+La lista muestra el nombre (ruta del archivo) y el tipo de cada diccionario. Haga clic en una fila para abrir la lista de palabras de ese diccionario.
 
 Alcance de cada diccionario y cuándo surte efecto
 =================================================
@@ -166,5 +167,4 @@ Administra el diccionario de anulación de Stemmer.
 stemmer_override.txt se coloca para cada idioma y es un archivo de diccionario de sustitución de palabras para anular el procesamiento de stemming.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dict-1.png
-            :height: 940px
+.. |image0| image:: ../../../resources/images/es/15.10/admin/dict-1.png

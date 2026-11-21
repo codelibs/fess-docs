@@ -99,7 +99,7 @@ Wenn nicht gesetzt, gilt es für alle Anfragen.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 Beispiele
@@ -193,5 +193,5 @@ Reguläre Ausdrücke werden im Java-Format für reguläre Ausdrücke geschrieben
 Pfad-Mappings werden sequentiell in der konfigurierten Sortierreihenfolge (aufsteigend) angewendet.
 Wenn mehrere Pfad-Mappings übereinstimmen, werden sie beginnend mit der ersten Übereinstimmung angewendet.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/pathmap-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/pathmap-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/pathmap-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/pathmap-2.png

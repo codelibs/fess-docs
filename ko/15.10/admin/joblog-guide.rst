@@ -17,6 +17,8 @@
 
 |image0|
 
+목록 아래의 모두 삭제 버튼을 클릭하면 모든 작업 로그가 삭제됩니다. 확인 대화상자가 표시됩니다.
+
 작업 로그 세부 정보
 -----------
 
@@ -42,12 +44,12 @@
 시작 시간
 ::::::
 
-작업이 시작한 UNIX 시간.
+작업이 시작한 일시.
 
 종료 시간
 ::::::
 
-작업이 종료한 UNIX 시간.
+작업이 종료한 일시.
 
 실행 방법
 ::::::
@@ -64,5 +66,7 @@
 
 작업의 실행 결과.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/joblog-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/joblog-2.png
+세부 정보 페이지의 삭제 버튼을 클릭하면 작업 로그가 삭제됩니다. 확인 대화상자가 표시됩니다.
+
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/joblog-2.png

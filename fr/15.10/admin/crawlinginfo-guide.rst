@@ -19,6 +19,9 @@ Si vous souhaitez vérifier les détails des informations de crawl, cliquez sur 
 
 |image0|
 
+La liste affiche l'ID de session et l'heure de création de chaque information de crawl. Pour restreindre la liste, saisissez un ID de session dans le formulaire de recherche et cliquez sur le bouton Rechercher (le bouton Réinitialiser l'efface).
+Cliquez sur le bouton Tout supprimer sous la liste pour supprimer toutes les informations de crawl. Une boîte de dialogue de confirmation s'affiche.
+
 Explorations en cours
 =====================
 
@@ -41,6 +44,8 @@ Détails
 En cliquant sur l'ID de session des informations de crawl dans la liste, les détails des informations de crawl cibles s'affichent.
 
 |image1|
+
+Cliquez sur le bouton Supprimer de la page de détails pour supprimer les informations de crawl. Une boîte de dialogue de confirmation s'affiche.
 
 Liste des éléments
 ------------------
@@ -70,6 +75,21 @@ Heure de fin du crawl (Web/Fichier)
 
 Heure de fin du crawl Web et du système de fichiers.
 
+Durée d'exécution du crawl (Web/Fichier)
+::::::::::::::::::::::::::::::::::::::::
+
+Durée d'exécution du crawl Web et du système de fichiers (en millisecondes).
+
+Durée d'exécution de l'indexation (Web/Fichier)
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Temps nécessaire pour indexer les résultats du crawl Web et du système de fichiers (en millisecondes).
+
+Taille de l'index (Web/Fichier)
+:::::::::::::::::::::::::::::::
+
+Nombre de documents indexés par le crawl Web et du système de fichiers.
+
 Durée d'exécution du crawl (Magasin de données)
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -78,12 +98,12 @@ Durée d'exécution du crawl du magasin de données (en millisecondes).
 Durée d'exécution de l'indexation (Magasin de données)
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Temps nécessaire pour indexer les résultats du crawl Web et du système de fichiers (en millisecondes).
+Temps nécessaire pour indexer les résultats du crawl du magasin de données (en millisecondes).
 
 Taille de l'index (Magasin de données)
 :::::::::::::::::::::::::::::::::::::::
 
-Nombre de documents indexés.
+Nombre de documents indexés par le crawl du magasin de données.
 
 Heure de fin du crawl (Magasin de données)
 :::::::::::::::::::::::::::::::::::::::::::
@@ -105,5 +125,5 @@ Durée d'exécution du crawler
 
 Durée d'exécution de l'ensemble du crawl (en millisecondes).
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/crawlinginfo-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/crawlinginfo-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/crawlinginfo-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/crawlinginfo-2.png

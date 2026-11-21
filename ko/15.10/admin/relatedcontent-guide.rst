@@ -24,7 +24,7 @@
 설정 생성
 --------
 
-관련 콘텐츠 설정 페이지를 열려면 신규 생성 버튼을 클릭합니다.
+관련 콘텐츠 설정 페이지를 열려면 새로 만들기 버튼을 클릭합니다.
 
 |image1|
 
@@ -41,6 +41,11 @@
 
 검색 결과에 표시할 콘텐츠를 지정합니다.
 
+표시 순서
+:::::::::
+
+관련 콘텐츠가 여러 개 일치할 때의 표시 순서를 지정합니다. 오름차순으로 표시됩니다. 기본값은 1입니다.
+
 가상 호스트
 ::::::::
 
@@ -50,8 +55,8 @@
 설정 삭제
 --------
 
-목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 화면이 표시됩니다.
+목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 대화상자가 표시됩니다.
 삭제 버튼을 누르면 설정이 삭제됩니다.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/relatedcontent-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/relatedcontent-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/relatedcontent-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/relatedcontent-2.png

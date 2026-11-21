@@ -19,6 +19,9 @@ Si desea verificar los detalles de la información de rastreo, haga clic en la i
 
 |image0|
 
+La lista muestra el ID de sesión y la hora de creación de cada información de rastreo. Para acotar la lista, escriba un ID de sesión en el formulario de búsqueda y haga clic en el botón Buscar (el botón Restablecer lo borra).
+Haga clic en el botón Eliminar todo situado debajo de la lista para eliminar toda la información de rastreo. Aparecerá un cuadro de diálogo de confirmación.
+
 Rastreos en ejecución
 =====================
 
@@ -41,6 +44,8 @@ Detalles
 Al hacer clic en el ID de sesión de la información de rastreo en la lista, se muestran los detalles de la información de rastreo objetivo.
 
 |image1|
+
+Haga clic en el botón Eliminar de la página de detalles para eliminar la información de rastreo. Aparecerá un cuadro de diálogo de confirmación.
 
 Lista de elementos
 ------------------
@@ -70,6 +75,21 @@ Hora de finalización del rastreo (Web/Archivo)
 
 Hora en la que finalizó el rastreo web y del sistema de archivos.
 
+Tiempo de ejecución del rastreo (Web/Archivo)
+:::::::::::::::::::::::::::::::::::::::::::::
+
+Tiempo de ejecución del rastreo web y del sistema de archivos (milisegundos).
+
+Tiempo de ejecución de indexación (Web/Archivo)
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Tiempo que se tardó en indexar los resultados del rastreo web y del sistema de archivos (milisegundos).
+
+Tamaño del índice (Web/Archivo)
+::::::::::::::::::::::::::::::::
+
+Número de documentos indexados por el rastreo web y del sistema de archivos.
+
 Tiempo de ejecución del rastreo (Almacén de datos)
 :::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -78,12 +98,12 @@ Tiempo de ejecución del rastreo del almacén de datos (milisegundos).
 Tiempo de ejecución de indexación (Almacén de datos)
 :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Tiempo que se tardó en indexar los resultados del rastreo web y del sistema de archivos (milisegundos).
+Tiempo que se tardó en indexar los resultados del rastreo del almacén de datos (milisegundos).
 
 Tamaño del índice (Almacén de datos)
 :::::::::::::::::::::::::::::::::::::
 
-Número de documentos indexados.
+Número de documentos indexados por el rastreo del almacén de datos.
 
 Hora de finalización del rastreo (Almacén de datos)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -105,5 +125,5 @@ Tiempo de ejecución del rastreador
 
 Tiempo de ejecución de todo el rastreo (milisegundos).
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/crawlinginfo-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/crawlinginfo-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/crawlinginfo-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/crawlinginfo-2.png

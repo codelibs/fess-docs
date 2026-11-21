@@ -19,10 +19,12 @@ Para abrir la página de lista de configuración de mapeo que se muestra a conti
 
 Para editar, haga clic en el nombre de la configuración.
 
+Los botones de la parte superior derecha de la página son Diccionario (vuelve a la lista de diccionarios), Lista, Crear nuevo, Descargar y Subir (abren la página de descarga y la página de carga).
+
 Método de configuración
 -----------------------
 
-Para abrir la página de configuración de mapeo, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de mapeo, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -77,6 +79,6 @@ cual, porque el analizador morfológico los necesita, y solo unifica grafías co
    Restablecer los diccionarios sobrescribe las modificaciones de ``mapping.txt`` /
    ``ja/mapping.txt`` hechas en la pantalla de administración.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/mapping-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/mapping-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/mapping-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/mapping-2.png
 

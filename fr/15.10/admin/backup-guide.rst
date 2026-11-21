@@ -79,7 +79,7 @@ user_info.ndjson contient les informations des utilisateurs de recherche.
 Téléversement
 -------------
 
-Vous pouvez téléverser et importer les informations de configuration.
+Vous pouvez téléverser et importer les informations de configuration. Sélectionnez le fichier dans « Fichier en vrac » en haut de la page, puis cliquez sur le bouton Téléverser.
 Les fichiers qui peuvent être restaurés sont les suivants :
 
 - ``*.bulk``
@@ -98,7 +98,7 @@ toujours écrits.
 
 .. note::
 
-   L'omission est consignée au niveau INFO ; avec le niveau de journalisation par défaut (``warn``), elle n'apparaît donc pas dans ``fess.log``. Pour voir ces entrées, passez le niveau de journalisation à ``info`` avant la restauration. Vous pouvez le modifier dans « Niveau de journalisation » sous [Système > Général] dans l'interface d'administration (il revient à la valeur configurée au redémarrage de |Fess|) ou, sous Linux, avec ``FESS_LOG_LEVEL=info``. Voir :doc:`../config/admin-logging` pour plus de détails.
+   L'omission est consignée au niveau INFO ; avec le niveau de journalisation par défaut (``warn``), elle n'apparaît donc pas dans ``fess.log``. Pour voir ces entrées, passez le niveau de journalisation à ``info`` avant la restauration. Vous pouvez le modifier dans « Niveau de journalisation » sous l'onglet [Journalisation] de [Système > Général] dans l'interface d'administration (il revient à la valeur configurée au redémarrage de |Fess|) ou, sous Linux, avec ``FESS_LOG_LEVEL=info``. Voir :doc:`../config/admin-logging` pour plus de détails.
 
 .. note::
 
@@ -112,4 +112,4 @@ toujours écrits.
    Les autres valeurs d'un fichier ``*.bulk`` ne sont pas chiffrées ; conservez donc ces fichiers comme des fichiers
    sensibles.
 
-  .. |image0| image:: ../../../resources/images/en/15.10/admin/backup-1.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/backup-1.png

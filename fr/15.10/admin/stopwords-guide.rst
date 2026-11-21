@@ -36,10 +36,12 @@ Pour ouvrir la page de liste de configuration des mots vides illustrée ci-desso
 
 Cliquez sur le nom de la configuration pour la modifier.
 
+Les boutons en haut à droite de la page sont Dictionnaire (retour à la liste des dictionnaires), Liste, Créer nouveau, Télécharger et Téléverser (ils ouvrent la page de téléchargement et la page de téléversement).
+
 Méthode de configuration
 ------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des mots vides.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration des mots vides.
 
 |image1|
 
@@ -62,6 +64,6 @@ Téléversement
 Vous pouvez téléverser un fichier texte contenant un mot par ligne. Les lignes commençant par ``#`` sont traitées comme des commentaires.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/stopwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/stopwords-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/stopwords-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/stopwords-2.png
 

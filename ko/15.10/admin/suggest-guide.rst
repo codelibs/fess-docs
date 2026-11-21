@@ -17,7 +17,7 @@
 
 |image0|
 
-삭제하려면 삭제 버튼을 클릭합니다.
+단어를 삭제하려면 단어 종류의 삭제 버튼을 클릭합니다. 확인 대화상자가 표시됩니다.
 
 
 단어 종류
@@ -33,5 +33,5 @@
 등록된 단어 수
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/suggest-1.png
 

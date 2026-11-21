@@ -13,7 +13,10 @@ Gestion
 Configuration du serveur de stockage d'objets
 ---------------------------------------------
 
-Ouvrez la configuration du stockage depuis [Système > Général] et configurez les éléments suivants en fonction de votre type de stockage.
+Ouvrez l'onglet [Stockage] de [Système > Général] et configurez les éléments suivants en fonction de votre type de stockage.
+Le menu [Système > Stockage] apparaît une fois qu'un compartiment et un point de terminaison sont définis (ou que le type est GCS).
+
+|image0|
 
 Paramètres communs
 ~~~~~~~~~~~~~~~~~~
@@ -61,7 +64,7 @@ Affichage
 
 Pour ouvrir la page de liste d'objets illustrée ci-dessous, cliquez sur [Système > Stockage] dans le menu de gauche.
 
-|image0|
+|image1|
 
 
 Nom
@@ -96,13 +99,14 @@ Vous pouvez supprimer un objet en cliquant sur le bouton Supprimer.
 Téléversement
 -------------
 
-Vous pouvez ouvrir la fenêtre de téléversement de fichier en cliquant sur le bouton Téléverser le fichier en haut à droite.
+Vous pouvez ouvrir la fenêtre de téléversement de fichier en cliquant sur le bouton Téléverser en haut à droite.
 
 
 Création de dossier
 -------------------
 
-Vous pouvez ouvrir la fenêtre de création de dossier en cliquant sur le bouton Créer le dossier à droite de l'affichage du chemin. Notez que vous ne pouvez pas créer de dossiers vides.
+Vous pouvez ouvrir la fenêtre de création de dossier en cliquant sur l'icône de dossier à droite de l'affichage du chemin. Notez que vous ne pouvez pas créer de dossiers vides.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/storage-1.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/general-12.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/storage-1.png

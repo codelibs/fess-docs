@@ -52,6 +52,11 @@ fess-suggest.log
 
 Se registran los registros de la función de sugerencias.
 
+fess-llm.log
+::::::::::::
+
+Se registran los registros del chat LLM/RAG.
+
 fess-urls.log
 :::::::::::::
 
@@ -61,7 +66,7 @@ searchlog.log
 :::::::::::::
 
 Se registran los registros de búsqueda.
-Si "Registro de búsqueda" de [Sistema > General] está habilitado, con la configuración predeterminada se añade una línea (JSON) por cada búsqueda.
+Si "Registro de búsqueda" de la pestaña [Registro] de [Sistema > General] está habilitado, con la configuración predeterminada se añade una línea (JSON) por cada búsqueda.
 Una línea contiene los campos de los documentos devueltos por esa búsqueda (``logging.search.docs.fields``), por lo que su tamaño crece con el número de resultados devueltos (con ``num=100``, una línea puede ocupar unos 70 KB).
 Para la rotación y la retención de los registros, consulte :doc:`../config/admin-logging`.
 Para no incluir los campos de los documentos devueltos en el registro de búsqueda, establezca ``logging.search.docs.enabled=false`` en ``fess_config.properties``; para dejar de escribir en este archivo, establezca ``logging.search.use.logfile=false``.
@@ -76,4 +81,4 @@ gc-fess.log
 
 Se registran los registros de GC de |Fess| en sí. Solo se escriben cuando la variable de entorno ``FESS_USE_GC_LOGGING`` tiene un valor no vacío (consulte :doc:`../install/run`).
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/log-1.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/log-1.png

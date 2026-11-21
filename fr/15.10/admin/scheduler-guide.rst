@@ -17,12 +17,12 @@ Pour ouvrir la page de liste de configuration du planificateur de tâches illust
 
 |image0|
 
-Cliquez sur le nom de la configuration pour la modifier.
+Cliquez sur le nom de la configuration pour ouvrir sa page de détails, puis cliquez sur le bouton Modifier pour la modifier.
 
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration du planificateur.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration du planificateur.
 
 |image1|
 
@@ -104,8 +104,8 @@ Spécifie l'ordre d'affichage dans la liste des tâches.
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
-Appuyer sur le bouton Supprimer supprimera la configuration.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
+Cliquez sur le bouton Supprimer dans la boîte de dialogue pour supprimer la configuration.
 
 Méthode de crawl manuel
 =======================
@@ -113,5 +113,5 @@ Méthode de crawl manuel
 Cliquez sur « Default Crawler » dans « Planificateur », puis cliquez sur le bouton « Démarrer maintenant ».
 Pour arrêter le crawler, cliquez sur « Default Crawler », puis cliquez sur le bouton « Arrêter ».
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/scheduler-2.png

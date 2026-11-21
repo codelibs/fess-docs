@@ -44,8 +44,8 @@ Ist |Fess| so konfiguriert, dass LDAP über die Verwaltungsoberfläche verwaltet
 Löschmethode
 ------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
-Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
+Klicken Sie im Dialog auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/group-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/group-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/group-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/group-2.png

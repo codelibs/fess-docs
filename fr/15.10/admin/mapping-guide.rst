@@ -19,10 +19,12 @@ Pour ouvrir la page de liste de configuration de mapping illustrée ci-dessous, 
 
 Cliquez sur le nom de la configuration pour la modifier.
 
+Les boutons en haut à droite de la page sont Dictionnaire (retour à la liste des dictionnaires), Liste, Créer nouveau, Télécharger et Téléverser (ils ouvrent la page de téléchargement et la page de téléversement).
+
 Méthode de configuration
 ------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de mapping.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration de mapping.
 
 |image1|
 
@@ -77,6 +79,6 @@ tels quels, car l'analyseur morphologique en a besoin, et n'unifie que des graph
    :doc:`maintenance-guide`. La réinitialisation écrase les modifications de ``mapping.txt`` /
    ``ja/mapping.txt`` faites dans l'écran d'administration.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/mapping-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/mapping-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/mapping-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/mapping-2.png
 

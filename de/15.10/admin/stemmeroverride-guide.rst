@@ -25,6 +25,8 @@ Um die Stemmer-Überschreibungs-Konfigurationsübersichtsseite zu öffnen, wähl
 
 Klicken Sie auf den Konfigurationsnamen, um ihn zu bearbeiten.
 
+Die Schaltflächen oben rechts auf der Seite sind „Wörterbuch" (zurück zur Wörterbuchübersicht), „Liste", „Neu erstellen", „Herunterladen" und „Hochladen" (öffnen die Download-Seite bzw. die Upload-Seite).
+
 Konfigurationsmethode
 ---------------------
 
@@ -62,6 +64,6 @@ Sie können im Stemmer-Überschreibungs-Wörterbuchformat hochladen.
    Beim Hochladen wird der Inhalt des Wörterbuchs durch den Inhalt der hochgeladenen Datei ersetzt. Einträge, die nicht in der Datei stehen, werden entfernt, auch solche, die über die Oberfläche registriert wurden. Laden Sie das Wörterbuch bei Bedarf zuerst herunter und nehmen Sie dessen Inhalt in die hochzuladende Datei auf.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/stemmeroverride-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/stemmeroverride-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/stemmeroverride-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/stemmeroverride-2.png
 

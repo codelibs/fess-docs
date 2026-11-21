@@ -22,10 +22,12 @@ To open the Kuromoji configuration list page shown below, click [System > Dictio
 
 Click the configuration name to edit it.
 
+The buttons at the top right of the page are Dictionary (returns to the dictionary list), List, Create New, Download and Upload (open the download page and the upload page).
+
 Configuration Method
 --------------------
 
-To open the Kuromoji configuration page, click the New button.
+To open the Kuromoji configuration page, click the Create New button.
 
 |image1|
 
@@ -50,8 +52,8 @@ Enters the reading of the word entered as a token in katakana.
 If segmentation is used, enter the reading in segmented form.
 For example, enter "ゼンブン ケンサク エンジン".
 
-POS
-:::
+Part-of-speech
+::::::::::::::
 
 Enters the part of speech of the entered word.
 

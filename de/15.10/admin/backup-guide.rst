@@ -79,7 +79,7 @@ user_info.ndjson enthält Informationen zu Suchbenutzern.
 Upload
 ------
 
-Sie können Konfigurationsinformationen hochladen und importieren.
+Sie können Konfigurationsinformationen hochladen und importieren. Wählen Sie dazu oben auf der Seite unter „Bulk-Datei" die Datei aus und klicken Sie auf die Schaltfläche „Hochladen".
 Folgende Dateien können wiederhergestellt werden:
 
 - ``*.bulk``
@@ -98,7 +98,7 @@ Version gelieferten geplanten Jobs (``updatedTime`` 0) bleiben unverändert. Dok
 
 .. note::
 
-   Das Überspringen wird auf INFO-Ebene protokolliert und erscheint daher mit der Standard-Protokollebene (``warn``) nicht in ``fess.log``. Um diese Einträge zu sehen, setzen Sie die Protokollebene vor der Wiederherstellung auf ``info``. Sie können sie in der Verwaltungsoberfläche unter [System > Allgemein] bei „Protokollebene" ändern (nach einem Neustart von |Fess| gilt wieder der konfigurierte Wert) oder unter Linux mit ``FESS_LOG_LEVEL=info``. Details finden Sie unter :doc:`../config/admin-logging`.
+   Das Überspringen wird auf INFO-Ebene protokolliert und erscheint daher mit der Standard-Protokollebene (``warn``) nicht in ``fess.log``. Um diese Einträge zu sehen, setzen Sie die Protokollebene vor der Wiederherstellung auf ``info``. Sie können sie in der Verwaltungsoberfläche unter [System > Allgemein] auf der Registerkarte [Protokollierung] bei „Protokollebene" ändern (nach einem Neustart von |Fess| gilt wieder der konfigurierte Wert) oder unter Linux mit ``FESS_LOG_LEVEL=info``. Details finden Sie unter :doc:`../config/admin-logging`.
 
 .. note::
 
@@ -112,4 +112,4 @@ Version gelieferten geplanten Jobs (``updatedTime`` 0) bleiben unverändert. Dok
    Andere Werte in einer ``*.bulk``-Datei sind nicht verschlüsselt. Bewahren Sie diese Dateien daher als sensible
    Dateien auf.
 
-  .. |image0| image:: ../../../resources/images/en/15.10/admin/backup-1.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/backup-1.png

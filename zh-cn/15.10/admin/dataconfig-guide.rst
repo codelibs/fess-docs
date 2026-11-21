@@ -79,8 +79,8 @@
    除了字段悄然变空之外没有任何症状。请参阅 :ref:`javascript-statement-null`
    （ :doc:`../config/scripting-javascript` ）。
 
-权重值
-::::::::
+提升值
+::::::
 
 指定使用此配置爬取的文档的权重值。
 
@@ -94,7 +94,7 @@
 虚拟主机
 ::::::::
 
-指定虚拟主机的主机名。
+指定虚拟主机的主机名,每行一个。
 详情请参考 :doc:`配置指南的虚拟主机 <../config/security-virtual-host>`。
 
 状态
@@ -110,7 +110,7 @@
 删除配置
 --------
 
-在列表页面点击配置名称,然后点击删除按钮将显示确认界面。
+在列表页面点击配置名称,然后点击删除按钮将显示确认对话框。
 按下删除按钮后配置将被删除。
 
 示例
@@ -401,5 +401,5 @@ CsvListDataStore
 - :doc:`../config/datastore/ds-overview`
 - :doc:`../config/crawler-basic`
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dataconfig-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/dataconfig-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/dataconfig-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/dataconfig-2.png

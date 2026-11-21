@@ -42,13 +42,13 @@ Specify the port of the site that requires authentication.
 If left blank, the list shows "Any". The meaning of a blank port depends on the scheme.
 
 * FTP: Used for URLs with any port (a URL without a port is treated as port 21).
-* SAMBA: Used only for URLs that do not contain a port (``smb://server/share/``). It is not used for a URL that contains a port, such as ``smb://server:445/share/``. To crawl a URL that contains a port, specify the same port here.
+* Samba: Used only for URLs that do not contain a port (``smb://server/share/``). It is not used for a URL that contains a port, such as ``smb://server:445/share/``. To crawl a URL that contains a port, specify the same port here.
 
 Scheme
 ::::::
 
 Select the authentication method.
-You can choose between FTP or SAMBA (Windows shared folder authentication).
+You can choose between FTP or Samba (Windows shared folder authentication).
 
 Username
 ::::::::
@@ -64,22 +64,22 @@ Parameters
 ::::::::::
 
 If there are any additional settings required to log in to the authentication site, specify them here.
-For SAMBA, you can set the value for the domain.
+For Samba, you can set the value for the domain.
 Use the following format to specify the parameters:
 
 ::
 
     domain=FUGA
 
-File System Config
-::::::::::::::::::
+File Crawl Config
+:::::::::::::::::
 
 Specify the crawl configuration that will use this authentication setting.
 
 Delete Configuration
 --------------------
 
-Click on the configuration name on the list page, and when the delete button is clicked, a confirmation screen will appear. Clicking the delete button will remove the configuration.
+Click on the configuration name on the list page, and when the delete button is clicked, a confirmation dialog will appear. Clicking the delete button will remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/fileauth-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/fileauth-2.png

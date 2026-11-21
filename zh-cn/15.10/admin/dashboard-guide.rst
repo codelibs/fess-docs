@@ -41,18 +41,18 @@
 ``fess.`` 和 ``fess.suggest.`` 后面的部分是创建索引的日期和时间（``yyyyMMddHHmmssSSS``，共 17 位）。
 
 以点(.)开头的索引名称是系统索引,因此不会显示。
-要显示系统索引,请启用 Special 复选框。
+要显示系统索引,请启用"特殊"复选框。
 
 确认已索引的文档数
 ================================
 
-已索引的文档数显示在 fess 索引中,如下图所示。
+已索引的文档数显示在 fess 索引的标题中。要查找该索引,请如下图所示在索引筛选栏("按名称筛选索引…")中输入 ``fess.2`` 。
 
 |image1|
 
-单击每个索引右上角的图标,将显示索引操作菜单。
+单击每个索引的名称,将显示索引操作菜单。
 要删除已索引的文档,请在管理搜索界面中删除。请注意不要使用"删除索引"删除。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/dashboard-2.png
 .. pdf            :width: 400 px

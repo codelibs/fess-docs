@@ -22,6 +22,8 @@ Um die Übersichtsseite der verwaltbaren Wörterbücher zu öffnen, klicken Sie 
 
 |image0|
 
+Die Übersicht zeigt den Namen (Dateipfad) und den Typ jedes Wörterbuchs. Klicken Sie auf eine Zeile, um die Wortliste des Wörterbuchs zu öffnen.
+
 
 Geltungsbereich der Wörterbücher und Zeitpunkt der Wirksamkeit
 ==============================================================
@@ -166,5 +168,4 @@ Verwaltet das Stemmer-Überschreibungs-Wörterbuch.
 stemmer_override.txt wird für jede Sprache platziert und ist eine Wortersetzungs-Wörterbuchdatei zum Überschreiben der Stemming-Verarbeitung.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dict-1.png
-            :height: 940px
+.. |image0| image:: ../../../resources/images/de/15.10/admin/dict-1.png

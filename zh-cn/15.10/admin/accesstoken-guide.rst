@@ -17,7 +17,7 @@
 
 |image0|
 
-单击配置名称进行编辑。
+单击配置名称打开其详细信息页面,然后单击编辑按钮进行编辑。
 
 创建配置
 --------
@@ -63,18 +63,18 @@
    * 当Fess暴露于不受信任的网络时,请勿配置参数名称。
    * 使用访问令牌时,请确保外部用户无法操纵URL参数。
 
-有效期
-::::::
+过期
+::::
 
 指定访问令牌的有效期。
 
 删除配置
 --------
 
-在列表页面单击配置名称,然后单击"删除"按钮,将显示确认界面。
-单击"删除"按钮后,配置将被删除。
+在列表页面单击配置名称,然后单击"删除"按钮,将显示确认对话框。
+单击对话框中的"删除"按钮后,配置将被删除。
 
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/accesstoken-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/accesstoken-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/accesstoken-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/accesstoken-2.png

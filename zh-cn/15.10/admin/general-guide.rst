@@ -7,6 +7,7 @@
 
 在此管理页面,可以管理 |Fess| 的配置。
 可以在不重启 |Fess| 的情况下更改各种 |Fess| 配置。
+各项设置分为多个选项卡(系统、爬虫、日志记录、建议、LDAP、OpenID Connect、SAML、SPNEGO、Entra ID、显示通知、通知和存储)。各选项卡的内容将通过表单底部的[更新]按钮一并保存。
 
 配置内容
 ======
@@ -92,8 +93,8 @@ CSV文件编码
 
 指定搜索时是否使用浏览器的区域设置。
 
-SSO类型
-:::::::
+SSO 类型
+::::::::
 
 指定单点登录(Single Sign-On)类型。
 
@@ -160,6 +161,8 @@ SSO类型
 日志记录
 ------
 
+|image2|
+
 搜索日志
 ::::::
 
@@ -204,6 +207,8 @@ SSO类型
 建议
 --------
 
+|image3|
+
 按搜索词建议
 ::::::::::::::
 
@@ -222,7 +227,7 @@ SSO类型
 LDAP
 ----
 
-|image2|
+|image4|
 
 LDAP URL
 ::::::::
@@ -279,7 +284,7 @@ memberOf属性
 OpenID Connect
 --------------
 
-|image3|
+|image5|
 
 客户端ID
 :::::::
@@ -291,10 +296,10 @@ OpenID Connect
 
 指定 OpenID Connect 提供商的客户端密钥。
 
-认证服务器URL
-::::::::::
+授权服务器URL
+::::::::::::
 
-指定 OpenID Connect 的认证服务器 URL。
+指定 OpenID Connect 的授权服务器 URL。
 
 令牌服务器URL
 ::::::::::
@@ -329,7 +334,7 @@ OpenID Connect
 SAML
 ----
 
-|image4|
+|image6|
 
 IdP实体ID
 :::::::::
@@ -403,7 +408,7 @@ SP NameID格式
 SPNEGO
 ------
 
-|image5|
+|image7|
 
 .. note::
    SPNEGO 相关设置在底层库中以进程级别共享，因此更改这些设置后需要重启 |Fess| 才能生效。
@@ -466,6 +471,12 @@ NTLM提示
 
 指定是否允许 Kerberos 委托。
 
+允许的领域
+::::::::::
+
+指定除服务器领域之外允许使用的 Kerberos 领域,多个领域以逗号分隔。
+详情请参阅 :doc:`../config/sso-spnego`。
+
 日志记录级别
 ::::::::::
 
@@ -475,7 +486,7 @@ NTLM提示
 Entra ID
 --------
 
-|image6|
+|image8|
 
 租户（ID或域）
 ::::::::::::::
@@ -501,6 +512,12 @@ Entra ID
 :::::
 
 指定 Microsoft Entra ID 的回复（重定向）URL。
+
+响应模式
+::::::::
+
+指定授权响应的返回方式: ``query`` 或 ``form_post`` 。默认值为 ``query`` 。
+关于 ``form_post`` 可用的条件,请参阅 :doc:`../config/sso-entraid`。
 
 状态TTL
 :::::
@@ -530,7 +547,7 @@ Entra ID
 公告显示
 ---------
 
-|image7|
+|image9|
 
 .. note::
 
@@ -557,6 +574,8 @@ Entra ID
 
 通知
 ----
+
+|image10|
 
 通知邮件
 ::::::
@@ -594,6 +613,8 @@ Google Chat Webhook URLs
 
 存储
 --------
+
+|image11|
 
 配置各项后,左侧菜单将显示[系统 > 存储]菜单。
 有关文件管理,请参考 :doc:`存储 <../admin/storage-guide>`。
@@ -683,12 +704,16 @@ LDAP配置示例
      - memberOf
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/general-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/general-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/general-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/general-4.png
-.. |image4| image:: ../../../resources/images/en/15.10/admin/general-5.png
-.. |image5| image:: ../../../resources/images/en/15.10/admin/general-6.png
-.. |image6| image:: ../../../resources/images/en/15.10/admin/general-7.png
-.. |image7| image:: ../../../resources/images/en/15.10/admin/general-8.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/general-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/general-2.png
+.. |image2| image:: ../../../resources/images/zh-cn/15.10/admin/general-3.png
+.. |image3| image:: ../../../resources/images/zh-cn/15.10/admin/general-4.png
+.. |image4| image:: ../../../resources/images/zh-cn/15.10/admin/general-5.png
+.. |image5| image:: ../../../resources/images/zh-cn/15.10/admin/general-6.png
+.. |image6| image:: ../../../resources/images/zh-cn/15.10/admin/general-7.png
+.. |image7| image:: ../../../resources/images/zh-cn/15.10/admin/general-8.png
+.. |image8| image:: ../../../resources/images/zh-cn/15.10/admin/general-9.png
+.. |image9| image:: ../../../resources/images/zh-cn/15.10/admin/general-10.png
+.. |image10| image:: ../../../resources/images/zh-cn/15.10/admin/general-11.png
+.. |image11| image:: ../../../resources/images/zh-cn/15.10/admin/general-12.png
 .. pdf            :height: 940 px

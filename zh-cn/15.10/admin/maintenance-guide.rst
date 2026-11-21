@@ -101,4 +101,4 @@
 
    日志文件和 ``fess_basic_config.bulk`` 的内容不会被屏蔽。将 zip 发送到外部之前，请先确认其内容。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/maintenance-1.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/maintenance-1.png

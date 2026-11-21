@@ -23,10 +23,12 @@ Pour ouvrir la page de liste de configuration des synonymes illustrée ci-dessou
 
 Cliquez sur le nom de la configuration pour la modifier.
 
+Les boutons en haut à droite de la page sont Dictionnaire (retour à la liste des dictionnaires), Liste, Créer nouveau, Télécharger et Téléverser (ils ouvrent la page de téléchargement et la page de téléversement).
+
 Méthode de configuration
 ------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des synonymes.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration des synonymes.
 
 |image1|
 
@@ -93,5 +95,5 @@ Voir aussi
 - :doc:`../user/search-field`
 - :doc:`dict-guide`
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/synonym-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/synonym-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/synonym-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/synonym-2.png

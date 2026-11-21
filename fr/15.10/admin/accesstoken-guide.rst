@@ -17,12 +17,12 @@ Pour ouvrir la page de liste de configuration des jetons d'accès illustrée ci-
 
 |image0|
 
-Cliquez sur le nom de la configuration pour la modifier.
+Cliquez sur le nom de la configuration pour ouvrir sa page de détails, puis cliquez sur le bouton Modifier pour la modifier.
 
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des jetons d'accès.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration des jetons d'accès.
 
 |image1|
 
@@ -34,8 +34,8 @@ Nom
 
 Spécifiez un nom pour décrire ce jeton d'accès.
 
-Permission
-::::::::::
+Autorisations
+:::::::::::::
 
 Configure la permission du jeton d'accès.
 Décrivez au format « {user\ |group|\ role}nom ».
@@ -63,18 +63,18 @@ Spécifiez le nom du paramètre de requête pour spécifier la permission comme 
    * Ne configurez pas de nom de paramètre lorsque Fess est exposé à des réseaux non fiables.
    * Assurez-vous que les paramètres d'URL ne peuvent pas être manipulés par des utilisateurs externes lors de l'utilisation de jetons d'accès.
 
-Date d'expiration
-:::::::::::::::::
+Expire
+::::::
 
 Spécifie la date d'expiration du jeton d'accès.
 
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
-Appuyer sur le bouton Supprimer supprimera la configuration.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
+Cliquez sur le bouton Supprimer dans la boîte de dialogue pour supprimer la configuration.
 
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/accesstoken-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/accesstoken-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/accesstoken-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/accesstoken-2.png

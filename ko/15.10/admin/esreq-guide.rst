@@ -49,4 +49,4 @@ OpenSearch에 전송하려는 요청을 JSON 파일로 작성하여 "요청 파�
    메서드가 PUT이나 DELETE인 요청도 그대로 OpenSearch에 전송됩니다.
    파일의 내용에 따라서는 |Fess| 가 사용하는 인덱스를 변경하거나 삭제하여 데이터를 잃게 될 수 있습니다. 전송하기 전에 내용을 충분히 확인하십시오.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/esreq-1.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/esreq-1.png

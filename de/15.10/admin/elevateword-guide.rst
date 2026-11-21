@@ -1,11 +1,11 @@
-===============
-Zusätzliche Wörter
-===============
+============
+Wort erhöhen
+============
 
 Übersicht
 =========
 
-Hier wird die Konfiguration zusätzlicher Wörter für Vorschläge erläutert. Vorschläge werden entsprechend den Suchbegriffen angezeigt, aber Sie können zusätzliche Wörter hinzufügen.
+Hier wird die Konfiguration von „Wort erhöhen" (zusätzliche Wörter) für Vorschläge erläutert. Vorschläge werden entsprechend den Suchbegriffen angezeigt, aber Sie können zusätzliche Wörter hinzufügen.
 
 Verwaltung
 ==========
@@ -13,7 +13,7 @@ Verwaltung
 Anzeige
 -------
 
-Um die Übersichtsseite für die Konfiguration zusätzlicher Wörter zu öffnen, klicken Sie im linken Menü auf [Vorschlagen > Wort erhöhen].
+Um die Übersichtsseite für die Konfiguration von „Wort erhöhen" zu öffnen, klicken Sie im linken Menü auf [Vorschlagen > Wort erhöhen].
 
 |image0|
 
@@ -22,7 +22,7 @@ Klicken Sie auf den Konfigurationsnamen, um ihn zu bearbeiten.
 Konfiguration erstellen
 -----------------------
 
-Um die Konfigurationsseite für zusätzliche Wörter zu öffnen, klicken Sie auf die Schaltfläche „Neu erstellen".
+Um die Konfigurationsseite für „Wort erhöhen" zu öffnen, klicken Sie auf die Schaltfläche „Neu erstellen".
 
 |image1|
 
@@ -63,7 +63,7 @@ Legen Sie einen Boost-Wert für das Wort fest.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 
@@ -71,6 +71,7 @@ Download
 ========
 
 Laden Sie registrierte Wörter im CSV-Format herunter.
+Klicken Sie oben rechts auf der Seite auf „Herunterladen", um die Download-Seite zu öffnen, und klicken Sie dann auf die Schaltfläche „Herunterladen".
 
 |image2|
 
@@ -89,6 +90,7 @@ Upload
 ======
 
 Registrieren Sie Wörter im CSV-Format.
+Klicken Sie oben rechts auf der Seite auf „Hochladen", um die Upload-Seite zu öffnen, wählen Sie die CSV-Datei unter „Wortdatei erhöhen" aus und klicken Sie auf die Schaltfläche „Hochladen".
 
 |image3|
 
@@ -107,7 +109,7 @@ Ab Zeile 2 beschreiben Sie die zusätzlichen Wörter.
    Geben Sie in der Spalte „Permissions" jeden Wert mit ``{role}``, ``{user}`` oder ``{group}`` an, etwa ``{role}role1`` (mehrere Werte durch Kommas trennen). Ein Wert ohne Präfix wie ``role1`` wird nicht als Rolle behandelt, und das Wort wird Benutzern mit dieser Rolle nicht vorgeschlagen.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/elevateword-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/elevateword-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/elevateword-3.png
-.. |image3| image:: ../../../resources/images/en/15.10/admin/elevateword-4.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/elevateword-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/elevateword-2.png
+.. |image2| image:: ../../../resources/images/de/15.10/admin/elevateword-3.png
+.. |image3| image:: ../../../resources/images/de/15.10/admin/elevateword-4.png

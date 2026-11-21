@@ -52,8 +52,8 @@ Geben Sie den duplizierenden Hostnamen an. Geben Sie den Hostnamen an, der erset
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/duplicatehost-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/duplicatehost-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/duplicatehost-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/duplicatehost-2.png

@@ -17,7 +17,7 @@ Um die Job-Scheduler-Konfigurationsübersichtsseite zu öffnen, klicken Sie im l
 
 |image0|
 
-Klicken Sie auf den Konfigurationsnamen, um ihn zu bearbeiten.
+Klicken Sie auf den Konfigurationsnamen, um die Detailseite zu öffnen, und klicken Sie dann auf die Schaltfläche „Bearbeiten", um die Konfiguration zu bearbeiten.
 
 Konfiguration erstellen
 -----------------------
@@ -95,7 +95,7 @@ Status
 Geben Sie den aktiven/inaktiven Status des Jobs an.
 Wenn deaktiviert, wird der Job nicht ausgeführt.
 
-Anzeigereihenfolge
+Sortierreihenfolge
 ::::::::::::::::::
 
 Geben Sie die Anzeigereihenfolge in der Job-Übersicht an.
@@ -103,8 +103,8 @@ Geben Sie die Anzeigereihenfolge in der Job-Übersicht an.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
-Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
+Klicken Sie im Dialog auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
 Manuelles Crawlen
 =================
@@ -112,5 +112,5 @@ Manuelles Crawlen
 Klicken Sie unter „Scheduler" auf „Default Crawler" und dann auf die Schaltfläche „Jetzt starten".
 Um den Crawler zu stoppen, klicken Sie auf „Default Crawler" und dann auf die Schaltfläche „Stoppen".
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/scheduler-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/scheduler-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/scheduler-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/scheduler-2.png

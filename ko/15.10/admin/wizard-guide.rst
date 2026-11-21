@@ -10,11 +10,11 @@
 간편 설정
 ------------
 
-이 페이지는 크롤 설정을 등록하기 위한 시작 페이지입니다.
+이 페이지는 크롤 설정을 등록하기 위한 시작 페이지입니다. 설정 시작 버튼을 클릭하면 크롤링 설정 페이지가 열립니다.
 
 |image0|
 
-크롤 설정
+크롤링 설정
 -----------
 
 이 페이지에서 크롤 설정을 생성할 수 있습니다.
@@ -29,8 +29,8 @@
 
 설정 이름 (예: Fess사이트)을 지정합니다.
 
-크롤 경로
-:::::::::
+크롤링 경로
+:::::::::::
 
 크롤 시작점의 URL 또는 파일 경로 (예: https://fess.codelibs.org/)를 지정합니다.
 
@@ -44,6 +44,13 @@
 
 크롤한 문서 내에 포함된 링크를 따라갈 때의 깊이를 설정합니다.
 
+버튼
+::::
+
+- **작성**: 크롤링 설정을 등록하고 크롤링 시작 페이지로 이동합니다.
+- **연속 작성**: 크롤링 설정을 등록하고, 다른 설정을 이어서 등록할 수 있도록 이 폼으로 돌아갑니다.
+- **취소**: 등록하지 않고 간편 설정 페이지로 돌아갑니다.
+
 크롤러
 ------
 
@@ -52,6 +59,6 @@
 |image2|
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/wizard-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/wizard-2.png
-.. |image2| image:: ../../../resources/images/en/15.10/admin/wizard-3.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/wizard-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/wizard-2.png
+.. |image2| image:: ../../../resources/images/ko/15.10/admin/wizard-3.png

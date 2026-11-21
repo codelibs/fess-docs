@@ -50,4 +50,4 @@ Zeilenumbrüche im Körper werden entfernt, und die Zeilen werden vor dem Senden
    Auch eine Anfrage mit der Methode PUT oder DELETE wird unverändert an OpenSearch gesendet.
    Je nach Inhalt der Datei können dadurch die von |Fess| verwendeten Indizes geändert oder gelöscht werden und Daten verloren gehen. Prüfen Sie den Inhalt vor dem Senden sorgfältig.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/esreq-1.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/esreq-1.png

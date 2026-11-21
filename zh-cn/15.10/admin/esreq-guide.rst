@@ -49,4 +49,4 @@
    方法为 PUT 或 DELETE 的请求同样会原样发送到 OpenSearch。
    根据文件内容，可能会修改或删除 |Fess| 使用的索引，导致数据丢失。发送前请仔细确认内容。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/esreq-1.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/esreq-1.png

@@ -17,7 +17,7 @@ Pour ouvrir la page de liste des mots de suggestion illustrée ci-dessous, cliqu
 
 |image0|
 
-Cliquez sur le bouton Supprimer si vous souhaitez supprimer.
+Cliquez sur le bouton Supprimer d'un type de mot si vous souhaitez supprimer ses mots. Une boîte de dialogue de confirmation s'affiche.
 
 
 Type de mot
@@ -33,5 +33,5 @@ Nombre de mots
 Nombre de mots enregistrés
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/suggest-1.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/suggest-1.png
 

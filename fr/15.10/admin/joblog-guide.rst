@@ -17,6 +17,9 @@ Pour ouvrir la page de vérification du journal des tâches illustrée ci-dessou
 
 |image0|
 
+La liste affiche le nom de la tâche, l'état d'exécution et les heures de début et de fin.
+Cliquez sur le bouton Tout supprimer sous la liste pour supprimer tous les journaux de tâches. Une boîte de dialogue de confirmation s'affiche.
+
 Détails du journal des tâches
 -----------------------------
 
@@ -42,12 +45,12 @@ Cible d'exécution de la tâche.
 Heure de début
 ::::::::::::::
 
-Heure UNIX de début de la tâche.
+Date et heure de début de la tâche.
 
 Heure de fin
 ::::::::::::
 
-Heure UNIX de fin de la tâche.
+Date et heure de fin de la tâche.
 
 Méthode d'exécution
 :::::::::::::::::::
@@ -64,5 +67,7 @@ Résultat
 
 Résultat de l'exécution de la tâche.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/joblog-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/joblog-2.png
+Cliquez sur le bouton Supprimer de la page de détails pour supprimer le journal de tâche. Une boîte de dialogue de confirmation s'affiche.
+
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/joblog-2.png

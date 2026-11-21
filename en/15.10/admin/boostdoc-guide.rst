@@ -23,7 +23,7 @@ Click the configuration name to edit it.
 Creating Configuration
 ----------------------
 
-To open the document boost configuration page, click the New button.
+To open the document boost configuration page, click the "Create New" button.
 
 |image1|
 
@@ -37,8 +37,8 @@ Specifies the condition for documents to position at the top.
 For example, to display URLs containing https://www.n2sm.net/ at the top, write url.matches("https://www.n2sm.net/.\*").
 Conditions are written in the syntax of the scripting engine specified in "Script Type" below.
 
-Boost Value Expression
-::::::::::::::::::::::
+Boost Expression
+::::::::::::::::
 
 Specifies the weighting value for documents.
 Expressions are written in the syntax of the scripting engine specified in "Script Type" below.
@@ -76,7 +76,7 @@ If "Check Last Modified" is disabled, every document is registered again on each
 Deleting Configuration
 ----------------------
 
-Click the configuration name on the list page, then click the Delete button to display a confirmation screen. Click the Delete button to remove the configuration.
+Click the configuration name on the list page, then click the Delete button to display a confirmation dialog. Click the Delete button to remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/boostdoc-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/boostdoc-2.png

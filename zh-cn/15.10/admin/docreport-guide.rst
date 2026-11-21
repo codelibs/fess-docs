@@ -9,12 +9,14 @@
 
 要打开该页面，请点击左侧菜单中的 [系统信息 > 文档报告]。查看需要 ``admin-docreport`` 或 ``admin-docreport-view`` 角色。该页面只进行显示和下载，不会修改任何文档。
 
-两个选项卡都可以通过“URL 前缀”（例如 ``smb://server/share/`` ）缩小范围。
+该页面有“重复文档”和“休眠文档”两个选项卡。两个选项卡都可以通过“URL 前缀”（例如 ``smb://server/share/`` ）缩小范围，点击 [应用] 即可应用条件。
 
 重复文档
 ========
 
 将内容相同或几乎相同的文档分组，按文档数量从多到少显示。分组使用在编入索引时计算的内容签名（ ``content_minhash_bits``\ ，与折叠重复搜索结果所用的相同），因此无需重新索引。内容中没有词语的文档（如空文件）不在对象范围内。
+
+|image0|
 
 页面最多显示 ``docreport.duplicate.group.size`` （默认值：100）个组，每个组最多显示 ``docreport.duplicate.docs.size`` （默认值：10）个文档。可以通过 [下载 CSV] 获取所有组。即使索引很大，CSV 也会读取所有组，并输出 ``group, groupSize, url, title, filename, contentLength, lastModified, owner, lastModifier, clickCount, docId`` 列。
 
@@ -25,7 +27,9 @@
 休眠文档
 ========
 
-按从旧到新的顺序显示最后修改时间早于指定天数（“未更新天数”，默认值为 ``docreport.dormant.days`` 的 365）的文档。没有最后修改时间的文档不会显示。启用“从未在搜索结果中被打开”后，会排除曾从搜索结果中被点击过的文档。
+按从旧到新的顺序显示最后修改时间早于指定天数（“未更新天数”，默认值为 ``docreport.dormant.days`` 的 365）的文档。没有最后修改时间的文档不会显示。启用“从未在搜索结果中被打开”后，会排除曾从搜索结果中被点击过的文档。点击 [应用] 即可应用“未更新天数”等条件。
+
+|image1|
 
 页面显示符合条件的文档数量、合计大小和文档列表。列表的翻页有上限（ ``indexer.max.result.window.size`` ），超出该上限的文档请通过 [下载 CSV] 获取。
 
@@ -53,3 +57,6 @@
    * - ``docreport.dormant.days``
      - 视为休眠文档的、距最后修改的默认天数
      - ``365``
+
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/docreport-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/docreport-2.png

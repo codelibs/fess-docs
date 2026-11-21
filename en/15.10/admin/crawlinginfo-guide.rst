@@ -17,6 +17,9 @@ Select System Info > Crawling Info in the left menu to display a list page of Cr
 
 |image0|
 
+The list shows the session ID and the creation time of each crawling info. To narrow the list down, enter a session ID in the search form and click the Search button (the Reset button clears it).
+Click the Delete All button below the list to delete all crawling info. A confirmation dialog will appear.
+
 Running Crawls
 --------------
 
@@ -39,6 +42,8 @@ Details
 To display details for specific crawling session, click the row of crawling info data.
 
 |image1|
+
+Click the Delete button on the details page to delete the crawling info. A confirmation dialog will appear.
 
 Field List
 ----------
@@ -68,6 +73,21 @@ Crawl End Time (Web/File)
 
 The time when web and file system crawling ended.
 
+Crawl Execution Time (Web/File)
+:::::::::::::::::::::::::::::::
+
+The execution time of web and file system crawling (in milliseconds).
+
+Indexing Execution Time (Web/File)
+::::::::::::::::::::::::::::::::::
+
+The time taken to index the results of web and file system crawling (in milliseconds).
+
+Index Size (Web/File)
+:::::::::::::::::::::
+
+The number of documents indexed by web and file system crawling.
+
 Crawl Execution Time (Data Store)
 ::::::::::::::::::::::::::::::::::
 
@@ -76,12 +96,12 @@ The execution time of data store crawling (in milliseconds).
 Indexing Execution Time (Data Store)
 :::::::::::::::::::::::::::::::::::::
 
-The time taken to index the results of web and file system crawling (in milliseconds).
+The time taken to index the results of data store crawling (in milliseconds).
 
 Index Size (Data Store)
 ::::::::::::::::::::::::
 
-The number of indexed documents.
+The number of documents indexed by data store crawling.
 
 Crawl End Time (Data Store)
 ::::::::::::::::::::::::::::

@@ -46,11 +46,11 @@ To display system indices, enable the "Special" checkbox.
 Checking Indexed Document Count
 ================================
 
-The number of indexed documents is displayed in the fess index as shown below.
+The number of indexed documents is displayed in the header of the fess index. To find the index, enter ``fess.2`` in the index filter ("Filter indices by name...") as shown below.
 
 |image1|
 
-Clicking the icon in the upper right corner of each index displays the operation menu for that index.
+Clicking the name of an index displays the operation menu for that index.
 To delete indexed documents, use the administrative search screen. Do not use "delete index" to remove documents.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/dashboard-1.png

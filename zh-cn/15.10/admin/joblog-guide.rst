@@ -17,6 +17,8 @@
 
 |image0|
 
+点击列表下方的删除全部按钮可删除所有作业日志，此时会显示确认对话框。
+
 作业日志详情
 -----------
 
@@ -42,12 +44,12 @@
 开始时间
 ::::::
 
-作业开始的UNIX时间。
+作业开始的日期和时间。
 
 结束时间
 ::::::
 
-作业结束的UNIX时间。
+作业结束的日期和时间。
 
 执行方法
 ::::::
@@ -64,5 +66,7 @@
 
 作业的执行结果。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/joblog-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/joblog-2.png
+点击详细页面中的删除按钮可删除该作业日志，此时会显示确认对话框。
+
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/joblog-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/joblog-2.png

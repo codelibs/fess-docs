@@ -21,10 +21,12 @@ Para abrir la página de lista de configuración de sinónimos que se muestra a 
 
 Para editar, haga clic en el nombre de la configuración.
 
+Los botones de la parte superior derecha de la página son Diccionario (vuelve a la lista de diccionarios), Lista, Crear nuevo, Descargar y Subir (abren la página de descarga y la página de carga).
+
 Método de configuración
 -----------------------
 
-Para abrir la página de configuración de sinónimos, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de sinónimos, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -92,5 +94,5 @@ Véase también
 - :doc:`dict-guide` - Diccionario
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/synonym-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/synonym-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/synonym-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/synonym-2.png

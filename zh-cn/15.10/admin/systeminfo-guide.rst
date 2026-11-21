@@ -14,8 +14,7 @@
 ------
 
 要打开下图所示的系统信息页面，请点击左侧菜单中的 [系统信息 > 配置信息]。
-
-|image0|
+该页面有四个选项卡，说明如下。
 
 显示项目
 ------
@@ -23,22 +22,33 @@
 环境变量属性
 :::::::::::::::
 
+|image0|
+
 可以列出服务器的环境变量。
 
 系统属性
 :::::::::::::::
+
+|image1|
 
 可以列出 |Fess| 中配置的系统属性。
 
 应用程序属性
 ::::::::::::::
 
+|image2|
+
 可以查看 |Fess| 的配置信息。
 
 错误报告属性
 ::::::::::::::::::
 
+|image3|
+
 这是报告错误时要附加的属性列表。
 提取不包含个人信息的值。
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/systeminfo-1.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/systeminfo-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/systeminfo-2.png
+.. |image2| image:: ../../../resources/images/zh-cn/15.10/admin/systeminfo-3.png
+.. |image3| image:: ../../../resources/images/zh-cn/15.10/admin/systeminfo-4.png

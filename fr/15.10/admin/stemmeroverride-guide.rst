@@ -25,10 +25,12 @@ Pour ouvrir la page de liste de configuration de remplacement Stemmer illustrée
 
 Cliquez sur le nom de la configuration pour la modifier.
 
+Les boutons en haut à droite de la page sont Dictionnaire (retour à la liste des dictionnaires), Liste, Créer nouveau, Télécharger et Téléverser (ils ouvrent la page de téléchargement et la page de téléversement).
+
 Méthode de configuration
 ------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration de remplacement Stemmer.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration de remplacement Stemmer.
 
 |image1|
 
@@ -62,6 +64,6 @@ Vous pouvez téléverser au format de dictionnaire de remplacement Stemmer.
    Le téléversement remplace le contenu du dictionnaire par celui du fichier téléversé. Tout ce qui ne figure pas dans le fichier, y compris les entrées enregistrées depuis l'écran, est supprimé. Si nécessaire, téléchargez d'abord le dictionnaire et incluez son contenu dans le fichier à téléverser.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/stemmeroverride-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/stemmeroverride-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/stemmeroverride-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/stemmeroverride-2.png
 

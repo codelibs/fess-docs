@@ -26,10 +26,12 @@ Para abrir la página de lista de configuración de Protwords que se muestra a c
 
 Para editar, haga clic en el nombre de la configuración.
 
+Los botones de la parte superior derecha de la página son Diccionario (vuelve a la lista de diccionarios), Lista, Crear nuevo, Descargar y Subir (abren la página de descarga y la página de carga).
+
 Método de configuración
 -----------------------
 
-Para abrir la página de configuración de Protwords, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de Protwords, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -59,5 +61,5 @@ Puede cargar en el formato de diccionario de Protwords.
    Al cargar un archivo, el contenido del diccionario se sustituye por el contenido del archivo cargado. Se eliminan las palabras que no estén en el archivo, incluidas las registradas desde la pantalla. Si es necesario, descargue primero el diccionario e incluya su contenido en el archivo que va a cargar.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/protwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/protwords-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/protwords-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/protwords-2.png

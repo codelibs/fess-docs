@@ -23,7 +23,7 @@
 설정 생성
 --------
 
-키 매치 설정 페이지를 열려면 신규 생성 버튼을 클릭합니다.
+키 매치 설정 페이지를 열려면 새로 만들기 버튼을 클릭합니다.
 
 |image1|
 
@@ -59,8 +59,8 @@
 설정 삭제
 --------
 
-목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 화면이 표시됩니다.
+목록 페이지의 설정 이름을 클릭하고 삭제 버튼을 클릭하면 확인 대화상자가 표시됩니다.
 삭제 버튼을 누르면 설정이 삭제됩니다.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/keymatch-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/keymatch-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/keymatch-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/keymatch-2.png

@@ -41,18 +41,18 @@ Le tableau de bord fournit un outil d'administration Web pour gérer les cluster
 La partie qui suit ``fess.`` et ``fess.suggest.`` correspond à la date et à l'heure de création de l'index (17 chiffres, ``yyyyMMddHHmmssSSS``).
 
 Les index dont le nom commence par un point (.) sont des index système et ne sont donc pas affichés.
-Pour afficher également les index système, cochez la case « Special ».
+Pour afficher également les index système, cochez la case « Spéciaux ».
 
 Vérification du nombre de documents indexés
 ===========================================
 
-Le nombre de documents indexés est affiché dans l'index fess comme illustré ci-dessous.
+Le nombre de documents indexés est affiché dans l'en-tête de l'index fess. Pour trouver l'index, saisissez ``fess.2`` dans le filtre d'index (« Filtrer les index par nom... ») comme illustré ci-dessous.
 
 |image1|
 
-Cliquer sur l'icône en haut à droite de chaque index affiche un menu d'opérations pour cet index.
+Cliquer sur le nom de chaque index affiche un menu d'opérations pour cet index.
 Pour supprimer des documents indexés, utilisez l'écran de recherche d'administration. Veillez à ne pas supprimer avec « supprimer l'index ».
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/dashboard-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/dashboard-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/dashboard-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/dashboard-2.png
 .. pdf            :width: 400 px

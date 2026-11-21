@@ -26,18 +26,20 @@ Pour ouvrir la page de liste de configuration Protwords illustrée ci-dessous, s
 
 Cliquez sur le nom de la configuration pour la modifier.
 
+Les boutons en haut à droite de la page sont Dictionnaire (retour à la liste des dictionnaires), Liste, Créer nouveau, Télécharger et Téléverser (ils ouvrent la page de téléchargement et la page de téléversement).
+
 Méthode de configuration
 ------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration Protwords.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration Protwords.
 
 |image1|
 
 Paramètres de configuration
 ---------------------------
 
-Informations sur les mots
-::::::::::::::::::::::::::
+Informations sur le mot
+:::::::::::::::::::::::
 
 Entrez les mots à exclure du traitement de stemming.
 
@@ -59,5 +61,5 @@ Vous pouvez téléverser au format de dictionnaire Protwords.
    Le téléversement remplace le contenu du dictionnaire par celui du fichier téléversé. Les mots qui ne figurent pas dans le fichier, y compris ceux enregistrés depuis l'écran, sont supprimés. Si nécessaire, téléchargez d'abord le dictionnaire et incluez son contenu dans le fichier à téléverser.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/protwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/protwords-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/protwords-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/protwords-2.png

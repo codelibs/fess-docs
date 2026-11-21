@@ -60,5 +60,5 @@ La version précédemment installée d'un plugin est supprimée une fois la nouv
 
 ``bin/fess-setup list plugins`` affiche les plugins publiés pour ce |Fess| et indique lesquels sont installés, ``list installed`` affiche les plugins installés sans contacter le dépôt, ``upgrade plugins`` réinstalle chaque plugin installé dans la version adaptée à ce |Fess|, et ``remove plugin`` supprime un plugin. Redémarrez |Fess| après avoir installé, mis à niveau ou supprimé des plugins. Consultez :doc:`../install/fess-setup` pour toutes les commandes et options.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/plugin-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/plugin-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/plugin-2.png

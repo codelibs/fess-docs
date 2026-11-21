@@ -13,7 +13,7 @@ Pour ouvrir la page, sélectionnez [Informations système > Rapport de documents
 gauche. La consultation nécessite le rôle ``admin-docreport`` ou ``admin-docreport-view``. La page ne
 fait qu'afficher et télécharger des rapports ; elle ne modifie aucun document.
 
-Les deux onglets peuvent être restreints avec « Préfixe d’URL », par exemple ``smb://server/share/``.
+La page comporte les onglets « Doublons » et « Documents inactifs ». Les deux onglets peuvent être restreints avec « Préfixe d’URL », par exemple ``smb://server/share/`` ; cliquez sur [Appliquer] pour appliquer la condition.
 
 Doublons
 ========
@@ -23,6 +23,8 @@ premier. Les groupes reposent sur la signature de contenu calculée à l'indexat
 (``content_minhash_bits``, la même qui regroupe les résultats de recherche en double) ; aucune
 réindexation n'est donc nécessaire. Les documents dont le contenu ne contient aucun mot (comme les
 fichiers vides) sont exclus.
+
+|image0|
 
 L'écran affiche au plus ``docreport.duplicate.group.size`` (par défaut : 100) groupes et au plus
 ``docreport.duplicate.docs.size`` (par défaut : 10) documents par groupe. Utilisez [Télécharger le
@@ -41,7 +43,10 @@ Les documents dont la dernière modification est antérieure au nombre de jours 
 depuis (jours) », 365 par défaut d'après ``docreport.dormant.days``) sont listés, du plus ancien au
 plus récent. Les documents sans date de dernière modification ne sont pas listés. Avec « Jamais
 ouverts depuis les résultats de recherche », les documents cliqués depuis les résultats de recherche
-sont exclus.
+sont exclus. Cliquez sur [Appliquer] pour appliquer « Non modifiés depuis (jours) » et les autres
+conditions.
+
+|image1|
 
 L'écran affiche le nombre de documents correspondants, leur taille totale et une liste paginée. La
 pagination s'arrête à ``indexer.max.result.window.size`` ; utilisez [Télécharger le CSV] pour obtenir
@@ -71,3 +76,6 @@ Les réglages suivants de ``fess_config.properties`` ajustent le rapport.
    * - ``docreport.dormant.days``
      - Nombre de jours par défaut depuis la dernière modification au-delà duquel un document est inactif
      - ``365``
+
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/docreport-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/docreport-2.png

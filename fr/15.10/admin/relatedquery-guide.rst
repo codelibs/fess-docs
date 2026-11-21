@@ -25,22 +25,22 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration des requêtes associées.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration des requêtes associées.
 
 |image1|
 
 Paramètres de configuration
 ---------------------------
 
-Terme de recherche
-::::::::::::::::::
+Terme
+:::::
 
 Spécifie le terme de recherche à faire correspondre avec la requête de recherche.
 
-Requête
-:::::::
+Requêtes
+::::::::
 
-Spécifie la requête.
+Spécifie les requêtes.
 
 Hôte virtuel
 ::::::::::::
@@ -51,7 +51,7 @@ Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le 
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
 Générer à partir des journaux de recherche
@@ -126,5 +126,5 @@ Les réglages suivants de ``fess_config.properties`` ajustent la génération.
      - Longueur maximale d’un terme et d’une requête associée (caractères)
      - ``50``
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/relatedquery-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/relatedquery-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/relatedquery-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/relatedquery-2.png

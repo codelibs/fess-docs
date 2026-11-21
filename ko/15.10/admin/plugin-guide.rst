@@ -60,5 +60,5 @@
 
 ``bin/fess-setup list plugins`` 는 이 |Fess| 용으로 공개된 플러그인과 설치 여부를, ``list installed`` 는 저장소에 조회하지 않고 설치된 플러그인을 표시합니다. ``upgrade plugins`` 는 설치된 모든 플러그인을 이 |Fess| 에 맞는 버전으로 다시 설치하고, ``remove plugin`` 은 플러그인을 삭제합니다. 플러그인을 설치, 업그레이드, 삭제한 후에는 |Fess| 를 재시작하십시오. 모든 명령과 옵션은 :doc:`../install/fess-setup` 을 참조하십시오.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/plugin-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/plugin-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/plugin-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/plugin-2.png

@@ -24,15 +24,15 @@ Cliquez sur le nom de la configuration pour la modifier.
 Création de configuration
 -------------------------
 
-Cliquez sur le bouton Nouvelle création pour ouvrir la page de configuration du contenu associé.
+Cliquez sur le bouton Créer nouveau pour ouvrir la page de configuration du contenu associé.
 
 |image1|
 
 Paramètres de configuration
 ---------------------------
 
-Terme de recherche
-::::::::::::::::::
+Terme
+:::::
 
 Spécifie le terme de recherche à faire correspondre avec la requête de recherche.
 
@@ -40,6 +40,11 @@ Contenu
 :::::::
 
 Spécifie le contenu à afficher dans les résultats de recherche.
+
+Ordre de tri
+::::::::::::
+
+Spécifie l'ordre d'affichage lorsque plusieurs contenus associés correspondent. Ils sont affichés par ordre croissant. La valeur par défaut est 1.
 
 Hôte virtuel
 ::::::::::::
@@ -50,8 +55,8 @@ Pour plus de détails, consultez :doc:`Configuration de l'hôte virtuel dans le 
 Suppression de configuration
 ----------------------------
 
-Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher l'écran de confirmation.
+Cliquez sur le nom de la configuration dans la page de liste, puis cliquez sur le bouton Supprimer pour afficher la boîte de dialogue de confirmation.
 Appuyer sur le bouton Supprimer supprimera la configuration.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/relatedcontent-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/relatedcontent-2.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/relatedcontent-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/relatedcontent-2.png

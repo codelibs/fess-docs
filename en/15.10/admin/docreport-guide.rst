@@ -13,7 +13,7 @@ To open the page, select [System Info > Document Report] in the left menu. Viewi
 ``admin-docreport`` or ``admin-docreport-view`` role. The page only shows and downloads reports; it
 does not change any document.
 
-Both tabs can be narrowed with "URL prefix", for example ``smb://server/share/``.
+The page has the "Duplicates" and "Dormant Documents" tabs. Both tabs can be narrowed with "URL prefix", for example ``smb://server/share/``; click [Apply] to apply the condition.
 
 Duplicates
 ==========
@@ -22,6 +22,8 @@ Documents whose content is the same or nearly the same are grouped, largest grou
 use the content signature computed at index time (``content_minhash_bits``, the same one that
 collapses duplicate search results), so no reindex is needed. Documents whose content has no words
 (such as empty files) are left out.
+
+|image0|
 
 The screen shows up to ``docreport.duplicate.group.size`` (default: 100) groups and up to
 ``docreport.duplicate.docs.size`` (default: 10) documents per group. Use [Download CSV] to get every
@@ -38,7 +40,10 @@ Dormant Documents
 Documents whose last modification is older than the given number of days ("Not modified for
 (days)", default 365 from ``docreport.dormant.days``) are listed, oldest first. Documents without a
 last modification date are not listed. With "Never opened from search results", documents that have
-been clicked from search results are left out.
+been clicked from search results are left out. Click [Apply] to apply "Not modified for (days)" and
+the other conditions.
+
+|image1|
 
 The screen shows the number of matching documents, their total size and a paged list. Paging stops
 at ``indexer.max.result.window.size``; use [Download CSV] to get the documents beyond it.
@@ -67,3 +72,6 @@ The following settings in ``fess_config.properties`` adjust the report.
    * - ``docreport.dormant.days``
      - Default number of days since the last modification after which a document is dormant
      - ``365``
+
+.. |image0| image:: ../../../resources/images/en/15.10/admin/docreport-1.png
+.. |image1| image:: ../../../resources/images/en/15.10/admin/docreport-2.png

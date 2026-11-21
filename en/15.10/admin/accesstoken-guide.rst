@@ -17,12 +17,12 @@ To open the access token configuration list page shown below, click [System > Ac
 
 |image0|
 
-Click the configuration name to edit it.
+Click the configuration name to open its details page, then click the Edit button to edit it.
 
 Creating Configuration
 ----------------------
 
-To open the access token configuration page, click the New button.
+To open the access token configuration page, click the Create New button.
 
 |image1|
 
@@ -34,8 +34,8 @@ Name
 
 Specifies the name to describe this access token.
 
-Permission
-::::::::::
+Permissions
+:::::::::::
 
 Sets the permission for the access token.
 Described in "{user\ |group|\ role}name" format.
@@ -63,16 +63,16 @@ Specifies the request parameter name when specifying permission as a search quer
    * Do not configure a parameter name when Fess is exposed to untrusted networks.
    * Ensure that URL parameters cannot be manipulated by external users when using access tokens.
 
-Expiration Date
-:::::::::::::::
+Expires
+:::::::
 
 Specifies the expiration date for the access token.
 
 Deleting Configuration
 ----------------------
 
-Click the configuration name on the list page, then click the Delete button to display a confirmation screen.
-Click the Delete button to remove the configuration.
+Click the configuration name on the list page, then click the Delete button to display a confirmation dialog.
+Click the Delete button in the dialog to remove the configuration.
 
 .. |image0| image:: ../../../resources/images/en/15.10/admin/accesstoken-1.png
 .. |image1| image:: ../../../resources/images/en/15.10/admin/accesstoken-2.png

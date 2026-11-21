@@ -44,7 +44,9 @@ Método de gestión
 Método de visualización
 -----------------------
 
-Para abrir la página de lista de temas registrados, haga clic en [Sistema > Tema] en el menú izquierdo.
+Para abrir la página de lista de temas registrados que se muestra a continuación, haga clic en [Sistema > Tema] en el menú izquierdo.
+
+|image0|
 
 Lista de temas
 --------------
@@ -94,7 +96,9 @@ El ZIP se descarga del repositorio, se comprueba contra su suma de verificación
 Subir un tema
 -------------
 
-Al hacer clic en el botón [Subir] se abre la página de carga. Seleccione el archivo ZIP del tema y haga clic en el botón [Subir] para instalar el tema.
+Al hacer clic en el botón [Subir] se abre la página de carga. Seleccione el archivo ZIP del tema en "Archivo ZIP del tema" y haga clic en el botón [Subir] para instalar el tema.
+
+|image1|
 
 * Solo se admiten archivos en formato ``.zip``.
 * El tamaño máximo del archivo comprimido es 50 MB de forma predeterminada (``theme.upload.max.size``).
@@ -183,7 +187,7 @@ Al hacer clic en el nombre de un tema en la página de lista se muestra la pági
 Configuración del tema
 ----------------------
 
-Algunos temas permiten al administrador cambiar su comportamiento mediante ajustes que se les pasan. Introdúzcalos en "Configuración del tema" de [Sistema > General] en la interfaz de administración, un ``key=value`` por línea (consulte :doc:`general-guide`). |Fess| no los interpreta: los pasa al tema como ``theme_settings`` en ``GET /api/v2/ui/config`` (consulte :doc:`../api/api-uiconfig`). Cada tema define las claves que acepta y el significado de sus valores.
+Algunos temas permiten al administrador cambiar su comportamiento mediante ajustes que se les pasan. Introdúzcalos en "Configuración del tema" de la pestaña [Sistema] de [Sistema > General] en la interfaz de administración, un ``key=value`` por línea (consulte :doc:`general-guide`). |Fess| no los interpreta: los pasa al tema como ``theme_settings`` en ``GET /api/v2/ui/config`` (consulte :doc:`../api/api-uiconfig`). Cada tema define las claves que acepta y el significado de sus valores.
 
 Los valores son visibles para todos los usuarios de la interfaz de búsqueda, por lo que no debe introducir secretos como contraseñas.
 
@@ -243,3 +247,6 @@ Las principales configuraciones relacionadas con la función de temas se pueden 
      - URL de los repositorios (separadas por comas) desde los que se instalan los temas.
 
 Tabla: Propiedades de configuración de la función de temas
+
+.. |image0| image:: ../../../resources/images/es/15.10/admin/theme-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/theme-2.png

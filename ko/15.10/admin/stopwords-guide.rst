@@ -34,10 +34,12 @@
 
 편집하려면 설정 이름을 클릭합니다.
 
+페이지 오른쪽 위의 버튼은 사전(사전 목록으로 돌아갑니다), 목록, 새로 만들기, 다운로드, 업로드(다운로드 페이지와 업로드 페이지를 엽니다)입니다.
+
 설정 방법
 ------
 
-불용어 설정 페이지를 열려면 신규 생성 버튼을 클릭합니다.
+불용어 설정 페이지를 열려면 새로 만들기 버튼을 클릭합니다.
 
 |image1|
 
@@ -60,6 +62,6 @@
 한 줄에 한 단어씩 기술한 텍스트 형식의 파일을 업로드할 수 있습니다. ``#`` 으로 시작하는 줄은 주석으로 취급됩니다.
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/stopwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/stopwords-2.png
+.. |image0| image:: ../../../resources/images/ko/15.10/admin/stopwords-1.png
+.. |image1| image:: ../../../resources/images/ko/15.10/admin/stopwords-2.png
 

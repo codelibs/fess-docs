@@ -50,4 +50,4 @@ Les sauts de ligne du corps sont supprimés et les lignes sont concaténées ava
    Une requête dont la méthode est PUT ou DELETE est également envoyée telle quelle à OpenSearch.
    Selon le contenu du fichier, elle peut modifier ou supprimer les index utilisés par |Fess| et entraîner une perte de données. Vérifiez soigneusement le contenu avant l'envoi.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/esreq-1.png
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/esreq-1.png

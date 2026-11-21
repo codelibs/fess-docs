@@ -13,7 +13,7 @@ Para abrir la página, seleccione [Información del sistema > Informe de documen
 izquierdo. Para verla se necesita el rol ``admin-docreport`` o ``admin-docreport-view``. La página
 solo muestra y descarga informes; no modifica ningún documento.
 
-Ambas pestañas se pueden acotar con "Prefijo de URL", por ejemplo ``smb://server/share/``.
+La página tiene las pestañas "Duplicados" y "Documentos inactivos". Ambas pestañas se pueden acotar con "Prefijo de URL", por ejemplo ``smb://server/share/``; haga clic en [Aplicar] para aplicar la condición.
 
 Duplicados
 ==========
@@ -22,6 +22,8 @@ Los documentos con el mismo contenido, o casi el mismo, se agrupan, empezando po
 grande. Los grupos usan la firma de contenido calculada al indexar (``content_minhash_bits``, la
 misma que agrupa los resultados de búsqueda duplicados), por lo que no hace falta reindexar. Se
 excluyen los documentos cuyo contenido no tiene palabras (como los archivos vacíos).
+
+|image0|
 
 La pantalla muestra hasta ``docreport.duplicate.group.size`` (predeterminado: 100) grupos y hasta
 ``docreport.duplicate.docs.size`` (predeterminado: 10) documentos por grupo. Use [Descargar CSV] para
@@ -39,7 +41,9 @@ Se muestran, del más antiguo al más reciente, los documentos cuya última modi
 número de días indicado ("Sin modificar durante (días)", 365 de forma predeterminada según
 ``docreport.dormant.days``). Los documentos sin fecha de última modificación no se muestran. Con
 "Nunca abiertos desde los resultados de búsqueda" se excluyen los documentos en los que se ha hecho
-clic desde los resultados de búsqueda.
+clic desde los resultados de búsqueda. Haga clic en [Aplicar] para aplicar "Sin modificar durante (días)" y las demás condiciones.
+
+|image1|
 
 La pantalla muestra el número de documentos coincidentes, su tamaño total y una lista paginada. La
 paginación se detiene en ``indexer.max.result.window.size``; use [Descargar CSV] para obtener los
@@ -69,3 +73,6 @@ Los siguientes ajustes de ``fess_config.properties`` ajustan el informe.
    * - ``docreport.dormant.days``
      - Número predeterminado de días desde la última modificación a partir del cual un documento está inactivo
      - ``365``
+
+.. |image0| image:: ../../../resources/images/es/15.10/admin/docreport-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/docreport-2.png

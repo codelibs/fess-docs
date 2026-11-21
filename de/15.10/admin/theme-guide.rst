@@ -46,6 +46,8 @@ Anzeige
 
 Um die Übersichtsseite der registrierten Themes zu öffnen, klicken Sie im linken Menü auf [System > Theme].
 
+|image0|
+
 Themenliste
 -----------
 
@@ -95,7 +97,9 @@ Das ZIP wird aus dem Repository heruntergeladen, gegen seine veröffentlichte ``
 Theme hochladen
 ---------------
 
-Klicken Sie auf die Schaltfläche [Hochladen], um die Upload-Seite zu öffnen. Wählen Sie eine Theme-ZIP-Datei aus und klicken Sie auf die Schaltfläche [Hochladen], um das Theme zu installieren.
+Klicken Sie auf die Schaltfläche [Hochladen], um die Upload-Seite zu öffnen. Wählen Sie eine Theme-ZIP-Datei unter „Theme-ZIP-Datei" aus und klicken Sie auf die Schaltfläche [Hochladen], um das Theme zu installieren.
+
+|image1|
 
 * Es können nur Archive im Format ``.zip`` hochgeladen werden.
 * Die maximale Dateigröße des komprimierten Archivs beträgt standardmäßig 50 MB (``theme.upload.max.size``).
@@ -184,7 +188,7 @@ Durch Klicken auf einen Theme-Namen in der Übersichtsseite wird die Detailseite
 Theme-Einstellungen
 -------------------
 
-Manche Themes lassen sich durch übergebene Einstellungen im Verhalten anpassen. Tragen Sie die Einstellungen in der Verwaltungsoberfläche unter [System > Allgemein] im Feld „Theme-Einstellungen" ein, eine ``key=value``-Angabe pro Zeile (siehe :doc:`general-guide`). |Fess| interpretiert sie nicht, sondern gibt sie als ``theme_settings`` in ``GET /api/v2/ui/config`` an das Theme weiter (siehe :doc:`../api/api-uiconfig`). Welche Schlüssel gelten und was ihre Werte bedeuten, legt jedes Theme selbst fest.
+Manche Themes lassen sich durch übergebene Einstellungen im Verhalten anpassen. Tragen Sie die Einstellungen in der Verwaltungsoberfläche unter [System > Allgemein] auf der Registerkarte [System] im Feld „Theme-Einstellungen" ein, eine ``key=value``-Angabe pro Zeile (siehe :doc:`general-guide`). |Fess| interpretiert sie nicht, sondern gibt sie als ``theme_settings`` in ``GET /api/v2/ui/config`` an das Theme weiter (siehe :doc:`../api/api-uiconfig`). Welche Schlüssel gelten und was ihre Werte bedeuten, legt jedes Theme selbst fest.
 
 Die Werte sind für alle Benutzer der Suchoberfläche sichtbar. Geben Sie daher keine geheimen Daten wie Passwörter ein.
 
@@ -244,3 +248,6 @@ Die wichtigsten Einstellungen der Theme-Funktion können in ``fess_config.proper
      - Die Repository-URLs (kommagetrennt), aus denen Themes installiert werden.
 
 Tabelle: Konfigurationseigenschaften der Theme-Funktion
+
+.. |image0| image:: ../../../resources/images/de/15.10/admin/theme-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/theme-2.png

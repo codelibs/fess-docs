@@ -18,7 +18,9 @@ Pour ouvrir la page de liste pour vérifier les URL en échec, cliquez sur [Info
 
 |image0|
 
-En cliquant sur le lien de vérification de l'URL en échec, les détails s'affichent.
+Restreignez la liste avec le formulaire de recherche (URL, Nombre d'erreurs et Type) et le bouton Rechercher ; le bouton Réinitialiser efface les conditions.
+Cliquez sur une ligne de la liste pour afficher les détails.
+Cliquez sur le bouton Tout supprimer sous la liste pour supprimer toutes les URL en échec. Une boîte de dialogue de confirmation s'affiche.
 
 Éléments de la liste
 --------------------
@@ -52,6 +54,11 @@ Les détails de l'URL en échec enregistrent les exceptions survenues lors du cr
 
 Contenu des détails
 -------------------
+
+ID
+::::
+
+ID de l'URL en échec.
 
 URL
 ::::
@@ -99,6 +106,8 @@ Heure du dernier accès
 
 Heure à laquelle cette exception s'est produite.
 
+Cliquez sur le bouton Supprimer de la page de détails pour supprimer l'URL en échec. Une boîte de dialogue de confirmation s'affiche.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/failureurl-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/failureurl-2.png
+
+.. |image0| image:: ../../../resources/images/fr/15.10/admin/failureurl-1.png
+.. |image1| image:: ../../../resources/images/fr/15.10/admin/failureurl-2.png

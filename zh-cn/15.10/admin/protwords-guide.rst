@@ -26,6 +26,8 @@ Protwords词典
 
 单击配置名称进行编辑。
 
+页面右上角的按钮依次为字典(返回字典列表)、列表、新建、下载和上传(打开下载页面和上传页面)。
+
 配置方法
 ------
 
@@ -36,7 +38,7 @@ Protwords词典
 配置项
 ------
 
-单词信息
+词信息
 ::::::
 
 输入要从词干提取处理中排除的单词。
@@ -59,5 +61,5 @@ Protwords词典
    上传后，词典的内容会被替换为上传文件的内容。不在文件中的词（包括在界面中注册的词）将被删除。如有需要，请先下载词典，并将其内容包含在要上传的文件中。
 
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/protwords-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/protwords-2.png
+.. |image0| image:: ../../../resources/images/zh-cn/15.10/admin/protwords-1.png
+.. |image1| image:: ../../../resources/images/zh-cn/15.10/admin/protwords-2.png

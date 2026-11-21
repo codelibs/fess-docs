@@ -122,8 +122,8 @@ Ein 401 löscht bereits indexierte Dokumente nicht.
 Konfiguration löschen
 ---------------------
 
-Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsbildschirm angezeigt.
+Klicken Sie auf den Konfigurationsnamen auf der Übersichtsseite und dann auf die Schaltfläche „Löschen". Es wird ein Bestätigungsdialog angezeigt.
 Klicken Sie auf die Schaltfläche „Löschen", um die Konfiguration zu löschen.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/webauth-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/webauth-2.png
+.. |image0| image:: ../../../resources/images/de/15.10/admin/webauth-1.png
+.. |image1| image:: ../../../resources/images/de/15.10/admin/webauth-2.png

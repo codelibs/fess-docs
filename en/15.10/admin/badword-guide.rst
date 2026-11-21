@@ -47,6 +47,7 @@ Download
 ========
 
 You can download a word list file as CSV file.
+Click Download at the top right of the page to open the download page, and click the Download button.
 
 |image2|
 
@@ -54,6 +55,7 @@ Upload
 ======
 
 You can upload CSV file containing a word list to exclude from Suggest.
+Click Upload at the top right of the page to open the upload page, select the CSV file in Bad Word File, and click the Upload button.
 
 |image3|
 

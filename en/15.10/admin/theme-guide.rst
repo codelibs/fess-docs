@@ -45,6 +45,8 @@ Display Method
 
 To open the registered theme list page shown below, click [System > Theme] in the left menu.
 
+|image0|
+
 Theme List
 ----------
 
@@ -93,7 +95,9 @@ The ZIP is downloaded from the repository, checked against its published ``.sha1
 Uploading a Theme
 -----------------
 
-Click the [Upload] button to open the upload page. Select a theme ZIP file and click the [Upload] button to install the theme.
+Click the [Upload] button to open the upload page. Select a theme ZIP file in "Theme ZIP File" and click the [Upload] button to install the theme.
+
+|image1|
 
 * Only ``.zip`` archives can be uploaded.
 * The maximum upload size is 50 MB by default (``theme.upload.max.size``).
@@ -182,7 +186,7 @@ Click a theme name on the list page to open the details page. The details page s
 Theme Settings
 --------------
 
-Some themes let an administrator change their behavior by passing settings. Enter the settings in "Theme Settings" in [System > General] of the admin UI, one ``key=value`` per line (see :doc:`general-guide`). |Fess| does not interpret them; it passes them to the theme as ``theme_settings`` in ``GET /api/v2/ui/config`` (see :doc:`../api/api-uiconfig`). Each theme defines the keys it accepts and what their values mean.
+Some themes let an administrator change their behavior by passing settings. Enter the settings in "Theme Settings" on the [System] tab of [System > General] of the admin UI, one ``key=value`` per line (see :doc:`general-guide`). |Fess| does not interpret them; it passes them to the theme as ``theme_settings`` in ``GET /api/v2/ui/config`` (see :doc:`../api/api-uiconfig`). Each theme defines the keys it accepts and what their values mean.
 
 The values are visible to every user of the search UI, so do not enter secrets such as passwords.
 
@@ -242,3 +246,6 @@ The main configuration settings for the Theme feature can be changed in ``fess_c
      - The repository URLs (comma separated) that themes are installed from.
 
 Table: Theme Configuration Properties
+
+.. |image0| image:: ../../../resources/images/en/15.10/admin/theme-1.png
+.. |image1| image:: ../../../resources/images/en/15.10/admin/theme-2.png

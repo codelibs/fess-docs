@@ -24,7 +24,7 @@ Para editar, haga clic en el nombre de la configuración.
 Crear configuración
 -------------------
 
-Para abrir la página de configuración de contenido relacionado, haga clic en el botón de nueva creación.
+Para abrir la página de configuración de contenido relacionado, haga clic en el botón "Crear nuevo".
 
 |image1|
 
@@ -41,6 +41,11 @@ Contenido
 
 Especifique el contenido que desea mostrar en los resultados de búsqueda.
 
+Orden de clasificación
+::::::::::::::::::::::
+
+Especifique el orden de visualización cuando coinciden varios contenidos relacionados. Se muestran en orden ascendente. El valor predeterminado es 1.
+
 Host virtual
 ::::::::::::
 
@@ -50,8 +55,8 @@ Para más detalles, consulte :doc:`Host virtual en la guía de configuración <.
 Eliminar configuración
 ----------------------
 
-Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca una pantalla de confirmación.
+Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación.
 Al presionar el botón de eliminar, se eliminará la configuración.
 
-.. |image0| image:: ../../../resources/images/en/15.10/admin/relatedcontent-1.png
-.. |image1| image:: ../../../resources/images/en/15.10/admin/relatedcontent-2.png
+.. |image0| image:: ../../../resources/images/es/15.10/admin/relatedcontent-1.png
+.. |image1| image:: ../../../resources/images/es/15.10/admin/relatedcontent-2.png
