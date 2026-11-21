@@ -513,7 +513,7 @@ Pour indexer des textes plus volumineux, relevez ensemble les quatre paramètres
 
        <component name="tikaExtractor"
                class="org.codelibs.fess.crawler.extractor.impl.TikaExtractor">
-               <property name="maxCompressionRatio">2</property>
+               <property name="maxCompressionRatio">100</property>
                <property name="maxUncompressionSize">10000000</property>
                <property name="maxTextBytes">72000000</property>
        </component>

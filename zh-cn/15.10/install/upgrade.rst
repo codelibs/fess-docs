@@ -600,7 +600,7 @@ Docker 版::
 
 沿用自 15.9 的 ``fess_config.properties`` 仍保留旧列表，此时返回 HTTP 500 的页面仍不会被记录。请在列表中添加 ``5xx`` ，或与 15.10 的文件对比，然后重启 |Fess| 。您自行设置的列表不会因升级而改变，如果希望记录这些页面，也请在其中添加 ``5xx`` 。15.9 及更早版本会把列表的每一项都当作数字读取，无法读取 ``5xx`` ，因此回滚之前请将其删除（请参阅 :ref:`回滚步骤 <upgrade-1510-rollback-5xx>` 中的警告）。
 
-被 Tika 提取器判定为疑似 zip 炸弹而拒绝的文档，即使 ``crawler.ignore.content.exception`` 为 ``true`` （默认），现在也会被记录为失败 URL，并且不会被索引。直到 15.9，这类文档会以没有内容的状态被索引。该设置所忽略的其他内容错误保持不变。
+被 Tika 提取器判定为疑似 zip 炸弹而拒绝的文档，即使 ``crawler.ignore.content.exception`` 为 ``true`` （默认），现在也会被记录为失败 URL，并且不会被索引。直到 15.9，这类文档会以没有内容的状态被索引。该设置所忽略的其他内容错误保持不变。提取出的文本长度超过 ``maxUncompressionSize`` （10,000,000 个字符），并且超过所读取字节数的 ``maxCompressionRatio`` 倍时，该文档会被判定为疑似 zip 炸弹；这两个值都在 ``crawler/extractor+tikaExtractor.xml`` 中设置。比值为 100（Tika 的默认值），因此展开几倍到几十倍的普通文本压缩包或 Office 文档，无论大小都会被索引。如需索引压缩率更高的文档，请调大 ``maxCompressionRatio``；如需更严格的检查，请调小它。
 
 .. _upgrade-1510-user-agent:
 
