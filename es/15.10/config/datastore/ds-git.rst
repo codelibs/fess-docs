@@ -555,6 +555,8 @@ Patrones de configuración de base_url
 
 La URL se genera concatenando directamente ``base_url`` con la ruta del archivo (sin insertar ningún separador). Por lo tanto, ``base_url`` debe terminar con una barra diagonal ``/``.
 
+En la ruta del archivo, solo ``%``, ``#`` y ``?`` se codifican con porcentaje (``%`` se convierte en ``%25``, ``#`` en ``%23`` y ``?`` en ``%3F``), de modo que un nombre de archivo que los contenga no se interprete como una secuencia de escape, un fragmento o una consulta. Por ejemplo, ``100%.txt`` se convierte en ``100%25.txt``. El resto de los caracteres, incluidos ``/``, los espacios y los caracteres no ASCII, se conservan tal cual, y ``base_url`` no se modifica. La codificación se aplica una sola vez, por lo que un ``%23`` que ya esté en el nombre del archivo se convierte en ``%2523``. La misma URL se utiliza para eliminar los archivos borrados. El campo ``path`` no se codifica, por lo que una URL construida en un script (``"https://..." + path``) tampoco se codifica.
+
 Generación de URL en script
 ---------------------------
 
