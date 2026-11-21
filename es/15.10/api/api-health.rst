@@ -27,6 +27,10 @@ Este endpoint respeta la invariante del sobre: "``status >= 1`` ⇔ estado HTTP 
 - En caso de ``RED``: devuelve el sobre de error (``status: 9``, ``error.code: service_unavailable``) e incorpora la instantánea del motor bajo ``error.details.engine`` (para que las herramientas de monitoreo puedan analizar los metadatos del clúster).
 - Cuando no se puede acceder al motor de búsqueda: devuelve un sobre de error igual que con ``RED`` (``error.code: service_unavailable``, ``error.message: search engine is not reachable``); ``error.details.engine`` contiene ``status: UNAVAILABLE`` y ``ping_status: 1``.
 
+.. note::
+
+   ``/api/v2/search`` no responde 503 cuando no se puede acceder al motor de búsqueda. Responde 200 con ``partial: true`` y sin resultados (consulte :doc:`api-search`). Un cliente que deba distinguir «sin resultados» de «el motor de búsqueda está caído» debe comprobar ``partial`` en la respuesta de búsqueda y puede confirmar el estado del motor de búsqueda con este endpoint.
+
 Los campos de ``engine`` son los siguientes:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|

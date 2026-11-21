@@ -27,6 +27,10 @@ Dieser Endpunkt hält die Envelope-Invariante ein: „``status >= 1`` ⇔ HTTP-S
 - Bei ``RED``: Gibt einen Fehler-Envelope (``status: 9``, ``error.code: service_unavailable``) zurück und bettet den Engine-Schnappschuss unter ``error.details.engine`` ein (damit Überwachungswerkzeuge die Cluster-Metadaten auswerten können).
 - Wenn die Suchmaschine nicht erreichbar ist: Gibt wie bei ``RED`` einen Fehler-Envelope zurück (``error.code: service_unavailable``, ``error.message: search engine is not reachable``); ``error.details.engine`` enthält ``status: UNAVAILABLE`` und ``ping_status: 1``.
 
+.. note::
+
+   ``/api/v2/search`` antwortet nicht mit 503, wenn die Suchmaschine nicht erreichbar ist. Es antwortet mit 200, ``partial: true`` und ohne Treffer (siehe :doc:`api-search`). Ein Client, der „keine Ergebnisse“ von „Suchmaschine ausgefallen“ unterscheiden muss, sollte ``partial`` in der Suchantwort prüfen und den Zustand der Suchmaschine über diesen Endpunkt bestätigen.
+
 Die einzelnen Felder von ``engine`` sind wie folgt:
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|

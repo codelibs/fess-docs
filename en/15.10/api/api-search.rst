@@ -193,6 +193,10 @@ Table: Response Fields
 
    When a plugin sends the search elsewhere instead of running it (for example a DuckDuckGo-style bang such as ``!g``), the success response holds only ``q`` and ``redirect_url``. The client is expected to navigate to ``redirect_url``.
 
+.. note::
+
+   A result with ``partial: true``, ``record_count: 0`` and an empty ``data`` does not mean that no document matches. |Fess| answers in this form, with HTTP status 200, when the search engine cannot run the search, for example when it is stopped or cannot be reached; the search page of the bundled theme shows it as an incomplete search, not as an error. Check ``partial`` before a client treats 0 hits as "no results", and use :doc:`api-health` to find out whether the search engine is available: while it is not, ``/api/v2/health`` answers 503. When the search engine refuses the search for lack of capacity or the index is closed, the answer is the 503 described in the table below instead.
+
 Error Response
 --------------
 

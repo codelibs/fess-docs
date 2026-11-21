@@ -606,3 +606,4 @@ Q: 다중 노드 구성이 가능합니까?
 A: 가능합니다. ``docker-fess`` 리포지토리의 ``snapshot/compose-cluster.yaml`` 을 참고하여 OpenSearch를 여러 노드로 구성하거나,
 ``multi-instance/`` 를 참고하여 하나의 OpenSearch를 공유하는 여러 개의 Fess 인스턴스를 구성할 수 있습니다.
 다만 운영 환경에서는 Kubernetes 등의 오케스트레이션 도구 사용을 권장합니다.
+여러 |Fess| 인스턴스를 로드 밸런서 뒤에서 실행하는 경우에는 :doc:`../config/session-store` 에서 HTTP 세션 공유를 확인하십시오.

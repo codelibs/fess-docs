@@ -140,6 +140,14 @@ Deleting a Configuration
 
 Click the configuration name on the list page, then click the "Delete" button to display a confirmation dialog. Click the "Delete" button to remove the configuration.
 
+.. note::
+
+   Deleting a configuration does not delete the documents that it has already registered in the index. They stay searchable until they expire. A document expires the number of days given by "Delete old documents" in :doc:`general-guide` (``day.for.cleanup``, ``3`` by default) after the start of the last crawl that registered or updated it, and the Doc Purger job then removes it from the index. With ``-1``, documents that were registered without an expiration are never removed this way.
+
+   To remove the documents at once, delete them from the index yourself. On the Search screen (:doc:`searchlist-guide`), search for the documents of the configuration (for example by ``url:`` or ``host:``), check the hits, and click the "Delete All by this Query" button. You can do the same with ``DELETE /api/admin/searchlist/query`` (see :doc:`../api/admin/api-admin-searchlist`).
+
+   This differs from changing the permissions of a configuration and crawling again: the document ID depends on the permissions, and when the crawler registers a document, it deletes the documents with the same URL and a different ID that the same configuration registered before.
+
 Examples
 ========
 

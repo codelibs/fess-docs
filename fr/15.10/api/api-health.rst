@@ -27,6 +27,10 @@ Ce point de terminaison respecte l'invariant de l'enveloppe : « ``status >= 1``
 - En cas d'état ``RED`` : retourne l'enveloppe d'erreur (``status: 9``, ``error.code: service_unavailable``) et intègre l'instantané du moteur sous ``error.details.engine`` (pour permettre aux outils de supervision d'analyser les métadonnées du cluster).
 - Si le moteur de recherche est injoignable : retourne, comme pour ``RED``, l'enveloppe d'erreur (``error.code: service_unavailable``, ``error.message: search engine is not reachable``) ; ``error.details.engine`` contient ``status: UNAVAILABLE`` et ``ping_status: 1``.
 
+.. note::
+
+   ``/api/v2/search`` ne répond pas 503 lorsque le moteur de recherche est injoignable. Il répond 200 avec ``partial: true`` et sans résultat (voir :doc:`api-search`). Un client qui doit distinguer « aucun résultat » de « le moteur de recherche est arrêté » doit vérifier ``partial`` dans la réponse de recherche, et peut confirmer l'état du moteur de recherche avec ce point de terminaison.
+
 Les champs de ``engine`` sont les suivants.
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|

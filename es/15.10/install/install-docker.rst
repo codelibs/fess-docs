@@ -626,3 +626,4 @@ R: Sí, es posible. Puede configurar OpenSearch con múltiples nodos tomando com
 ``snapshot/compose-cluster.yaml`` del repositorio ``docker-fess``, o configurar múltiples instancias de Fess
 que comparten un solo OpenSearch tomando como referencia ``multi-instance/``.
 Sin embargo, para entornos de producción se recomienda usar herramientas de orquestación como Kubernetes.
+Si ejecuta varias instancias de |Fess| detrás de un balanceador de carga, consulte :doc:`../config/session-store` para compartir las sesiones HTTP entre ellas.

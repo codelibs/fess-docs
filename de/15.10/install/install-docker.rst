@@ -606,3 +606,4 @@ F: Ist eine Multi-Node-Konfiguration möglich?
 A: Ja, das ist möglich. Anhand von ``snapshot/compose-cluster.yaml`` im ``docker-fess``-Repository können Sie OpenSearch mit mehreren Knoten konfigurieren,
 oder anhand von ``multi-instance/`` mehrere Fess-Instanzen konfigurieren, die sich ein einzelnes OpenSearch teilen.
 Für Produktionsumgebungen wird jedoch die Verwendung von Orchestrierungs-Tools wie Kubernetes empfohlen.
+Wenn Sie mehrere |Fess|-Instanzen hinter einem Load Balancer betreiben, finden Sie unter :doc:`../config/session-store`, wie Sie HTTP-Sitzungen zwischen ihnen teilen.

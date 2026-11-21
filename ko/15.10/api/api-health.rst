@@ -27,6 +27,10 @@ HTTP 상태는 클러스터 상태가 ``GREEN`` / ``YELLOW`` 인 경우 200, ``R
 - ``RED`` 인 경우: 오류 엔벨로프 ( ``status: 9`` , ``error.code: service_unavailable`` ) 를 반환하고, 엔진 스냅샷을 ``error.details.engine`` 아래에 포함합니다 (모니터링 도구가 클러스터 메타데이터를 분석할 수 있도록 하기 위해서입니다).
 - 검색 엔진에 접속할 수 없는 경우: ``RED`` 와 마찬가지로 오류 엔벨로프 ( ``error.code: service_unavailable`` , ``error.message: search engine is not reachable`` ) 를 반환하며, ``error.details.engine`` 은 ``status: UNAVAILABLE`` , ``ping_status: 1`` 이 됩니다.
 
+.. note::
+
+   ``/api/v2/search`` 는 검색 엔진에 연결할 수 없을 때 503을 반환하지 않습니다. HTTP 상태 200으로 ``partial: true`` 이고 히트가 0건인 응답을 반환합니다(:doc:`api-search` 참조). "검색 결과 없음"과 "검색 엔진 중지"를 구분해야 하는 클라이언트는 검색 응답의 ``partial`` 을 확인하고, 검색 엔진의 상태는 이 엔드포인트로 확인하십시오.
+
 ``engine`` 의 각 필드는 다음과 같습니다.
 
 .. tabularcolumns:: |p{3cm}|p{12cm}|

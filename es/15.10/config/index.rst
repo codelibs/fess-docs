@@ -52,6 +52,7 @@ Guía integral sobre la configuración de |Fess|. Cada sección está organizada
    security-role
    security-virtual-host
    security-passkey
+   session-store
    ldap-integration
    multitenancy
 

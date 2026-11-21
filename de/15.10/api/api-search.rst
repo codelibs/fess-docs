@@ -193,6 +193,10 @@ Tabelle: Antwortfelder
 
    Leitet ein Plugin die Suche um, statt sie auszuführen (zum Beispiel ein Bang im Stil von DuckDuckGo wie ``!g``), enthält die Erfolgsantwort nur ``q`` und ``redirect_url``. Der Client soll zu ``redirect_url`` navigieren.
 
+.. note::
+
+   Ein Ergebnis mit ``partial: true``, ``record_count: 0`` und leerem ``data`` bedeutet nicht, dass kein Dokument passt. |Fess| antwortet in dieser Form mit HTTP-Status 200, wenn die Suchmaschine die Suche nicht ausführen kann, etwa weil sie angehalten wurde oder nicht erreichbar ist; die Suchseite des mitgelieferten Themes zeigt dies als unvollständige Suche und nicht als Fehler an. Prüfen Sie ``partial``, bevor ein Client 0 Treffer als „keine Ergebnisse“ behandelt, und ermitteln Sie über :doc:`api-health`, ob die Suchmaschine verfügbar ist: Solange sie es nicht ist, antwortet ``/api/v2/health`` mit 503. Lehnt die Suchmaschine die Suche wegen fehlender Kapazität ab oder ist der Index geschlossen, lautet die Antwort stattdessen 503, wie in der folgenden Tabelle beschrieben.
+
 Fehlerantwort
 ~~~~~~~~~~~~~
 

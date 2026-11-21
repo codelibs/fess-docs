@@ -140,6 +140,14 @@ Eliminar configuración
 
 Haga clic en el nombre de la configuración en la página de lista y haga clic en el botón de eliminar para que aparezca un cuadro de diálogo de confirmación. Al presionar el botón de eliminar, se eliminará la configuración.
 
+.. note::
+
+   Al eliminar una configuración no se eliminan los documentos que ya ha registrado en el índice. Siguen siendo localizables hasta que caducan. Un documento caduca al cabo del número de días indicado en «Eliminar documentos anteriores» de :doc:`general-guide` (``day.for.cleanup``, ``3`` de forma predeterminada), contados desde el inicio del último rastreo que lo registró o actualizó, y entonces el trabajo Doc Purger lo elimina del índice. Con ``-1``, los documentos registrados sin caducidad nunca se eliminan de esta forma.
+
+   Para eliminar los documentos de inmediato, elimínelos usted mismo del índice. En la pantalla Búsqueda (:doc:`searchlist-guide`), busque los documentos de la configuración (por ejemplo con ``url:`` o ``host:``), compruebe los resultados y haga clic en el botón «Eliminar todo con esta consulta». También puede hacerlo con ``DELETE /api/admin/searchlist/query`` (consulte :doc:`../api/admin/api-admin-searchlist`).
+
+   Es distinto cuando se cambian los permisos de una configuración y se vuelve a rastrear: el ID del documento depende de los permisos y, al registrar un documento, el rastreador elimina los documentos con la misma URL y un ID distinto que la misma configuración registró antes.
+
 Ejemplo
 =======
 
