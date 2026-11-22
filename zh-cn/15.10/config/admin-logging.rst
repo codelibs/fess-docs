@@ -395,6 +395,18 @@ logrotate 轮转
 - ``Slow query``
 - ``Queue full``
 
+索引的文档数与爬取的时效性
+--------------------------
+
+仅凭日志和作业结果，有时无法察觉索引中的文档正在不断丢失，例如站点全部返回错误的情况，或文档有效期已过的情况。
+这是因为爬取作业可能以 ``ok`` 结束，而且 :doc:`Health API <../api/api-health>` 表示的是搜索引擎集群的状态（例如 ``GREEN`` ），而不是索引的内容。
+爬取完成通知邮件中的 ``Status`` 也不会反映个别URL的获取失败（请参阅 :doc:`../admin/general-guide` 中的“通知邮件”）。
+
+请通过外部监控定期确认以下两点。
+
+- 索引的文档数: 通过搜索 API（ :doc:`../api/api-search` ）的 ``record_count`` 确认，查看是否较最近的值急剧减少。需要准确的件数时，请指定 ``track_total_hits=true`` ，并确认 ``record_count_relation`` 为 ``EQUAL_TO`` 。
+- 最后一次爬取完成的时间: 通过作业日志（ ``GET /api/admin/joblog/logs`` 的 ``end_time`` 。请参阅 :doc:`../api/admin/api-admin-joblog` ）确认，如果超过预期间隔仍未更新，则发出警告。
+
 实时监控
 ----------------
 

@@ -31,6 +31,10 @@
 
    一旦将密码从 ``admin`` 更改后，就不能再设置回 ``admin`` 这样的简单字符串（``password.invalid.admin.passwords`` 中配置了管理员密码黑名单）。此外，在首次启动前，可以通过在 ``fess_config.properties`` 中设置 ``index.user.initial_password`` 来更改 ``admin`` 用户的初始密码。也可以用 ``bin/fess-setup init`` 设置（参见 :doc:`fess-setup`）。
 
+.. note::
+
+   使用初始密码以 ``admin`` 登录后，会立即显示修改密码的页面。这只是促使修改的提示，并非服务器端的强制要求（登录已经成立，不修改密码也可以打开管理页面）。为确保修改密码，请在首次启动之前通过 ``bin/fess-setup init`` 或 ``index.user.initial_password`` 设置初始密码。
+
 **推荐密码策略:**
 
 |Fess| 具备强制密码最小/最大长度及字符类型要求的内置功能。请在 ``fess_config.properties`` 中设置以下属性（括号内为默认值）。

@@ -61,6 +61,10 @@ ZIP 版的情况
    可以在 ``logs/`` 目录的日志文件中确认启动状态。``fess.log`` 记录 |Fess| 本身的消息，
    ``server_0.log`` 记录内嵌 Tomcat 的消息（包括启动完成消息）。
 
+.. important::
+
+   ZIP 版会在解压后的目录中写入内容（除 ``logs/`` 、 ``temp/`` 外，还有 ``app/WEB-INF/conf/system.properties`` 等）。请解压到运行 |Fess| 的用户所拥有的位置。解压到只读位置或其他用户所拥有的位置不在支持范围内。即使通过 ``FESS_LOG_PATH`` 和 ``FESS_TEMP_PATH`` 转移日志和临时文件的位置， ``system.properties`` 仍会写入解压目录，因此 |Fess| 会启动失败。无法写入的路径会显示在启动时的错误消息中。
+
 ZIP 版的情况（Windows）
 ---------------------
 
