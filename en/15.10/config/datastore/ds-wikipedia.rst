@@ -161,6 +161,11 @@ Script Configuration
     last_modified=timestamp
     timestamp=timestamp
 
+By default, all pages in the dump are indexed. This includes pages in namespaces (Talk, User, Template, and so on) and redirect pages,
+and you cannot narrow them down with parameters. The namespace number (``ns``) and whether the page is a redirect (``redirect``) of each page are
+passed as values that can be referenced from the script (see "Available Fields" below). Note that a page for which the script does not set ``url``
+is not skipped; it is recorded as a failure URL as a page that cannot be added to the index.
+
 Available Fields
 ~~~~~~~~~~~~~~~~
 

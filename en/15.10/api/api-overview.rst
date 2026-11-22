@@ -122,7 +122,7 @@ The default HTTP status code is determined by ``error.code``.
      - The HTTP method is not allowed. Supported methods are listed in the ``Allow`` header.
    * - ``not_acceptable``
      - 406
-     - The request is not acceptable.
+     - The request is not acceptable. This code is reserved and no endpoint currently returns it (a request is never rejected because of the value of the ``Accept`` header).
    * - ``conflict``
      - 409
      - A resource conflict occurred.

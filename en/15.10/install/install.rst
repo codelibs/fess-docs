@@ -164,13 +164,19 @@ OpenSearch is used as the search engine.
   - opensearch-analysis-extension
   - opensearch-minhash
   - opensearch-configsync
+  - analysis-nori
+  - analysis-smartcn
+
+.. note::
+
+   ``analysis-nori`` and ``analysis-smartcn`` are official OpenSearch plugins that ``opensearch-analysis-fess`` uses for language-specific analysis of Korean and Chinese. Without them, the Korean and Chinese tokenizers of ``opensearch-analysis-fess`` output no terms (they return an empty tokenizer), so language-specific analysis of Korean and Chinese yields no terms. Japanese is not affected. The OpenSearch image used by the Docker version of |Fess| (``ghcr.io/codelibs/fess-opensearch``) does not include these two in the published 3.10.0, and includes them from the next release. For the published image and for non-Docker environments (ZIP, RPM / DEB), run ``bin/opensearch-plugin install analysis-nori`` and ``bin/opensearch-plugin install analysis-smartcn`` in the OpenSearch directory to install them. ``bin/fess-setup install opensearch`` installs only the four plugins for |Fess|.
 
 .. important::
 
    The OpenSearch version and plugin versions must match.
    Version mismatches can cause startup errors or unexpected behavior.
 
-``bin/fess-setup install opensearch`` sets up OpenSearch with these plugins on Linux and Windows. See :doc:`install-linux` for details, including macOS, where OpenSearch has to be installed another way, and :doc:`fess-setup` for all commands.
+``bin/fess-setup install opensearch`` sets up OpenSearch with the four plugins for |Fess| (excluding ``analysis-nori`` and ``analysis-smartcn``) on Linux and Windows. See :doc:`install-linux` for details, including macOS, where OpenSearch has to be installed another way, and :doc:`fess-setup` for all commands.
 
 .. note::
 

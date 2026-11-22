@@ -14,6 +14,10 @@ Run it from the |Fess| directory. Without arguments, it prints the list of comma
     $ cd /path/to/fess-15.10.0
     $ bin/fess-setup <command> [options]
 
+.. note::
+
+   In the RPM / DEB packages, ``fess``, ``fess-setup``, ``fess.in.sh`` and ``generate-thumbnail`` in ``/usr/share/fess/bin`` are owned by the ``fess`` user, and the ``fess`` user can modify them. If an administrator runs ``fess-setup`` with ``sudo``, a script that the ``fess`` user can modify is run as ``root``. Before running it, verify that the script has not been modified.
+
 Exit Codes
 ==========
 

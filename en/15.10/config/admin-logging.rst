@@ -395,6 +395,18 @@ Patterns to Warn On
 - ``Slow query``
 - ``Queue full``
 
+Index Document Count and Crawl Freshness
+----------------------------------------
+
+Logs and job results alone may not reveal that documents in the index are being lost, for example when a site returns errors for every request or when documents expire.
+A crawl job can end with ``ok``, and the :doc:`Health API <../api/api-health>` reports the state of the search engine cluster (such as ``GREEN``), not the contents of the index.
+The ``Status`` of the crawl completion notification mail does not reflect failures to fetch individual URLs either (see "Notification Mail" in :doc:`../admin/general-guide`).
+
+Check the following two points regularly with external monitoring.
+
+- Number of documents in the index: check ``record_count`` of the search API (:doc:`../api/api-search`) and watch for a sudden drop from the recent value. When you need an exact count, specify ``track_total_hits=true`` and confirm that ``record_count_relation`` is ``EQUAL_TO``.
+- Time of the last completed crawl: check the job log (``end_time`` of ``GET /api/admin/joblog/logs``; see :doc:`../api/admin/api-admin-joblog`) and raise an alert if it has not been updated within the expected interval.
+
 Real-Time Monitoring
 --------------------
 

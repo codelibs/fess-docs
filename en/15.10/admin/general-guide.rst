@@ -136,6 +136,8 @@ other than 200/404), the GET is sent as a conditional GET with ``If-None-Match``
 unchanged page and is not fetched again. To fetch everything again, for example after changing crawl
 settings, turn this setting off for a crawl.
 
+A page whose HEAD ``Last-Modified`` is equal to or older than the last modified date recorded in the index is judged unchanged and is not fetched again. If the server has ever returned a ``Last-Modified`` newer than the actual modification time (for example, the time of the response), that value is recorded in the index, and later updates whose ``Last-Modified`` stays at or below that value are not detected. A document judged unchanged has its expiration extended on every crawl, so while crawls continue it is not fetched again even when the period set by "Delete old documents" passes. To apply the change, delete the document from the index and crawl again, or turn this setting off for a crawl.
+
 Concurrent Crawler Config
 :::::::::::::::::::::::::
 
@@ -587,6 +589,8 @@ Notification Mail
 
 Specify the email address to notify when crawling is complete.
 Multiple addresses can be specified separated by commas. A mail server is required to use this feature.
+
+The ``Status`` in the notification mail indicates whether the crawl processing or the registration to the index failed with an exception. A failure to fetch an individual URL is not reflected in ``Status`` (it is ``ok`` even if all URLs fail to be fetched) and is recorded as a failure URL. Check fetch failures in System Info > Failure URL of the admin console.
 
 Slack Webhook URLs
 ::::::::::::::::::

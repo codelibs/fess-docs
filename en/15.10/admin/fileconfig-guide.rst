@@ -79,6 +79,9 @@ Excluded Paths for Indexing
 
 Paths matching this regular expression (Java format) will be excluded from the search index.
 
+.. note::
+   This setting applies to documents indexed by later crawls (matching documents are not indexed). Documents that are already indexed are not deleted when you add this setting, and they remain in the search results. If "Check Last Modified" in General is enabled (the default), a document that has not been updated has its expiration extended on every crawl (see "Check Last Modified" in :doc:`general-guide`), so it is not necessarily removed when the "Delete old documents" period passes. To remove a document from the search results reliably, delete it on the Search page (System Info > Search) of the admin console. A deleted document is not indexed again by the next crawl as long as it matches this setting.
+
 Crawl Settings Tab
 ------------------
 

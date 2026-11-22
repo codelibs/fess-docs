@@ -722,6 +722,40 @@ Filename encoding for file systems:
 
     crawler.document.file.name.encoding=UTF-8
 
+Document Character Encoding Detection
+-------------------------------------
+
+**HTML (web crawling):**
+
+If the page has a character encoding (``charset``) in a ``<meta>`` element, it is used. ``<meta>`` is searched for in the first 2048 bytes (default) of the page.
+If there is no ``<meta>`` specification, the encoding is detected from the leading bytes, using the ``charset`` of the HTTP ``Content-Type`` as a hint.
+The ``charset`` of ``Content-Type`` is not adopted when it contradicts the bytes.
+
+The ``<meta>`` specification takes precedence over the BOM. If the two contradict each other, for example a page with a UTF-8 BOM whose ``<meta>`` says Shift_JIS,
+the page is read with the ``<meta>`` encoding and the text is garbled. Make ``<meta>`` match the actual encoding.
+
+**Markdown:**
+
+Markdown (``.md``) is not subject to encoding detection. If there is a BOM (UTF-8, UTF-16, UTF-32), it is followed; otherwise the file is read with the
+``encoding`` of ``markdownExtractor`` (default ``UTF-8``). Markdown files in an encoding other than UTF-8, such as Shift_JIS or EUC-JP, are therefore garbled unless you set ``encoding``
+(a ``.txt`` file with the same content is detected and read correctly). Set ``encoding`` by creating ``app/WEB-INF/classes/crawler/extractor+markdownExtractor.xml``
+with the following content.
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+            "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+            <include path="crawler/container.xml" />
+            <component name="markdownExtractor"
+                    class="org.codelibs.fess.crawler.extractor.impl.MarkdownExtractor">
+                    <property name="encoding">Shift_JIS</property>
+            </component>
+    </components>
+
+The same ``encoding`` value is used for all Markdown files. If Markdown files in different encodings are mixed, unify them to UTF-8.
+
 Crawl Troubleshooting
 =====================
 

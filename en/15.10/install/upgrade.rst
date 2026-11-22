@@ -1245,6 +1245,11 @@ different key than the one that saved them, because you took the shipped ``fess_
 or restored a backup onto a new server, they cannot be decrypted: ``fess-crawler.log`` records a
 ``CipherFailureException``, and a crawl that includes such a configuration can index nothing.
 
+If even one configuration has a value that cannot be decrypted, the crawl stops at that point. The configuration that cannot be decrypted is not simply skipped;
+the other configurations targeted by the same crawl are not indexed either. The message of the ``CipherFailureException`` shows the type, name and ID of that
+configuration and the key of the parameter that could not be decrypted, and it also says that ``app.cipher.key`` may differ from the key used when the value was saved
+(neither the encrypted value nor the key itself is output). Once you know the cause, either restore ``app.cipher.key`` to the original value or re-enter the password of that configuration.
+
 .. note::
 
    |Fess| 15.9 also stores the ``password`` of web and file authentication encrypted with ``app.cipher.key``, so
