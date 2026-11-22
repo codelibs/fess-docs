@@ -398,6 +398,18 @@ Patrones que Deben Generar Advertencias
 - ``Slow query``
 - ``Queue full``
 
+Número de documentos del índice y actualidad del rastreo
+---------------------------------------------------------
+
+Los registros y los resultados de los trabajos por sí solos pueden no revelar situaciones en las que se van perdiendo documentos del índice, como cuando un sitio devuelve errores en todas las solicitudes o cuando caducan los documentos.
+Esto se debe a que el trabajo de rastreo puede terminar con ``ok`` y a que la :doc:`Health API <../api/api-health>` indica el estado del clúster del motor de búsqueda (por ejemplo, ``GREEN``), no el contenido del índice.
+El ``Status`` del correo de notificación de fin de rastreo tampoco refleja los fallos de obtención de URL concretas (consulte «Correo de notificación» en :doc:`../admin/general-guide`).
+
+Verifique periódicamente con una supervisión externa los dos puntos siguientes.
+
+- Número de documentos del índice: compruébelo con ``record_count`` de la API de búsqueda (:doc:`../api/api-search`) y vigile si ha disminuido bruscamente respecto al valor reciente. Si necesita un recuento exacto, especifique ``track_total_hits=true`` y compruebe que ``record_count_relation`` sea ``EQUAL_TO``.
+- Hora en que terminó el último rastreo: compruébela en el registro de trabajos (``end_time`` de ``GET /api/admin/joblog/logs``; consulte :doc:`../api/admin/api-admin-joblog`) y emita una alerta si no se ha actualizado dentro del intervalo previsto.
+
 Supervisión en Tiempo Real
 ---------------------------
 

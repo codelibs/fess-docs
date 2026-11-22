@@ -733,6 +733,40 @@ Codificación de nombres de archivo del sistema de archivos:
 
     crawler.document.file.name.encoding=
 
+Detección de la Codificación de los Documentos
+-----------------------------------------------
+
+**HTML (rastreo web):**
+
+Si el ``<meta>`` de la página especifica una codificación (``charset``), se usa esa. El ``<meta>`` se busca en los primeros 2048 bytes de la página (valor predeterminado).
+Si no hay ``<meta>``, la codificación se determina a partir de la secuencia de bytes inicial, usando como pista el ``charset`` del ``Content-Type`` HTTP.
+El ``charset`` del ``Content-Type`` no se adopta si contradice la secuencia de bytes.
+
+El ``<meta>`` tiene prioridad sobre la BOM. Si ambos se contradicen, por ejemplo una página con una BOM UTF-8 cuyo ``<meta>`` indica Shift_JIS,
+se lee con la codificación del ``<meta>`` y el texto aparece corrupto. Haga que el ``<meta>`` coincida con la codificación real.
+
+**Markdown:**
+
+Los archivos Markdown (``.md``) no se someten a detección de codificación. Si hay una BOM (UTF-8, UTF-16 o UTF-32), se sigue; si no, se lee con el
+``encoding`` de ``markdownExtractor`` (``UTF-8`` de forma predeterminada). Por ello, un Markdown que no sea UTF-8, como Shift_JIS o EUC-JP, aparece corrupto si no se configura ``encoding``
+(un archivo ``.txt`` con el mismo contenido sí se detecta y se lee correctamente). Para configurar ``encoding``, cree ``app/WEB-INF/classes/crawler/extractor+markdownExtractor.xml``
+con el siguiente contenido.
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+            "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+            <include path="crawler/container.xml" />
+            <component name="markdownExtractor"
+                    class="org.codelibs.fess.crawler.extractor.impl.MarkdownExtractor">
+                    <property name="encoding">Shift_JIS</property>
+            </component>
+    </components>
+
+El mismo valor de ``encoding`` se usa para todos los archivos Markdown. Si hay Markdown con distintas codificaciones, unifíquelos a UTF-8.
+
 Solución de Problemas de Rastreo
 =================================
 

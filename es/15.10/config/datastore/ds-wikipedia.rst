@@ -161,6 +161,11 @@ Configuración de Script
     last_modified=timestamp
     timestamp=timestamp
 
+De forma predeterminada se indexan todas las páginas del volcado. También se incluyen los espacios de nombres (discusión, usuario, plantilla, etc.) y las páginas de redirección,
+y no se pueden filtrar mediante parámetros. El número del espacio de nombres de cada página (``ns``) y si es una redirección (``redirect``) se pasan como valores
+que el script puede referenciar (consulte «Campos Disponibles» a continuación). Tenga en cuenta que una página para la que el script no establece ``url`` no se omite,
+sino que se registra en las URL de fallo como una página que no se puede añadir al índice.
+
 Campos Disponibles
 ~~~~~~~~~~~~~~~~~~
 

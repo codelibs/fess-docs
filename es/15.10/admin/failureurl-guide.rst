@@ -8,6 +8,9 @@ Descripción general
 Aquí se explica sobre las URL de fallo.
 Las URL que no se pudieron obtener durante el rastreo se registran y se pueden verificar como URL de fallo.
 
+Las URL de fallo son un historial. Si corrige la causa y el rastreo de esa URL se realiza correctamente, el registro no se elimina automáticamente.
+Elimine los registros que ya no necesite desde la pantalla de administración (el botón Eliminar de la página de detalles o el botón Eliminar todo de la lista) o con la Admin API.
+
 Método de gestión
 ==================
 
