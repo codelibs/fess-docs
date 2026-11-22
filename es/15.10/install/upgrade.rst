@@ -620,7 +620,7 @@ El procedimiento ZIP del paso 3 copia ``fess_config.properties`` de la instalaci
      - ``esreq``
      - El icono de ayuda de la pantalla "Solicitud a OpenSearch" (``/admin/sereq/``) abre ``sereq-guide.html``, que no existe. Use ``esreq``, el nombre de la guía de esa pantalla.
 
-La versión 15.10 también añade a ``fess_config.properties`` las siguientes claves: ``api.search.similar.rate.limit.per.minute``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``passkey.enabled``, ``passkey.origins``, ``passkey.rp.id``, ``passkey.rp.name``, ``password.changed.check.interval``, ``query.boost.fuzzy.cjk.enabled``, ``query.boost.fuzzy.digit.enabled`` y ``search.result.link.schemes``. Faltan en un archivo heredado de 15.9, por lo que 15.10 usa el valor que incluye para cada una y escribe una advertencia en ``fess.log`` una vez por clave. No se rompe nada; añada las claves del archivo de 15.10 para que dejen de aparecer las advertencias.
+La versión 15.10 también añade a ``fess_config.properties`` las siguientes claves: ``api.search.similar.rate.limit.per.minute``, ``authentication.local.username.policy``, ``crawler.progress.interval``, ``crawler.metadata.content.image.includes``, ``passkey.enabled``, ``passkey.origins``, ``passkey.rp.id``, ``passkey.rp.name``, ``password.changed.check.interval``, ``query.boost.fuzzy.cjk.enabled``, ``query.boost.fuzzy.digit.enabled`` y ``search.result.link.schemes``. Faltan en un archivo heredado de 15.9, por lo que 15.10 usa el valor que incluye para cada una y escribe una advertencia en ``fess.log`` una vez por clave. No se rompe nada; añada las claves del archivo de 15.10 para que dejen de aparecer las advertencias.
 
 .. _upgrade-1510-failure-url:
 

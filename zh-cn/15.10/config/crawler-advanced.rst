@@ -380,7 +380,7 @@ robots.txt 配置
 ::
 
     # 排除的元数据
-    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
+    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length
 
     # 添加到图像（image/*）内容中的元数据
     crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
@@ -475,7 +475,7 @@ HTML 标签处理
      - 默认值
    * - ``crawler.document.html.pruned.tags``
      - 删除的 HTML 标签
-     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+     - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
    * - ``crawler.document.html.max.digest.length``
      - 摘要最大长度
      - ``120``

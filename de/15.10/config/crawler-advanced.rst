@@ -378,7 +378,7 @@ Konfigurationsbeispiel
 ::
 
     # Auszuschließende Metadaten
-    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
+    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length
 
     # Metadaten, die dem Inhalt eines Bildes (image/*) hinzugefügt werden
     crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
@@ -475,7 +475,7 @@ HTML-Tag-Verarbeitung
      - Standard
    * - ``crawler.document.html.pruned.tags``
      - Zu entfernende HTML-Tags
-     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+     - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
    * - ``crawler.document.html.max.digest.length``
      - Maximale Digest-Länge
      - ``120``

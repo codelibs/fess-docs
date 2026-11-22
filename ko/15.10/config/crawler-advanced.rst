@@ -380,7 +380,7 @@ robots.txt 설정
 ::
 
     # 제외할 메타데이터
-    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*
+    crawler.metadata.content.excludes=resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length
 
     # 이미지(image/*)의 콘텐츠에 추가할 메타데이터
     crawler.metadata.content.image.includes=dc:title,dc:description,dc:creator,dc:subject,dc:rights,w:Comments,Exif IFD0:Image Description,Exif IFD0:Artist,Exif IFD0:Copyright,Exif IFD0:Windows XP .*,Exif SubIFD:User Comment,Object Name,Headline,Caption/Abstract,By-line,By-line Title,Credit,Source,Copyright Notice,Sub-location,City,Province/State,Country/Primary Location Name,Special Instructions,tEXt tEXtEntry,iTXt iTXtEntry,zTXt zTXtEntry
@@ -475,7 +475,7 @@ HTML 태그 처리
      - 기본값
    * - ``crawler.document.html.pruned.tags``
      - 제거할 HTML 태그
-     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+     - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
    * - ``crawler.document.html.max.digest.length``
      - 다이제스트 최대 길이
      - ``120``
