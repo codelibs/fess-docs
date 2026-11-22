@@ -143,6 +143,10 @@ Le tableau suivant indique ce que prend en charge chaque image.
 
 Quelle que soit l'image, la vignette d'une page HTML est créée à partir d'une image de la page. Pour afficher les vignettes, activez aussi l'affichage des vignettes dans les paramètres généraux de l'interface d'administration. Voir :doc:`../config/crawler-thumbnail` pour plus de détails.
 
+.. warning::
+
+   Pour l'image, spécifiez une balise contenant la version, comme ``15.10.0``. N'utilisez pas la balise ``latest``. Si vous exécutez ``docker pull ghcr.io/codelibs/fess`` sans balise, ou si vous spécifiez ``latest`` dans ``image``, c'est ``latest`` qui est utilisé.
+
 Étape 3 : Démarrage des conteneurs Docker
 ==========================================
 

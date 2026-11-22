@@ -8,6 +8,9 @@ Présentation
 Cette section explique les URL en échec.
 Les URL qui n'ont pas pu être obtenues lors du crawl sont enregistrées et peuvent être vérifiées comme URL en échec.
 
+Les URL en échec constituent un historique. Même si vous corrigez la cause et que le crawl de cette URL réussit, l'enregistrement n'est pas supprimé automatiquement.
+Supprimez les enregistrements devenus inutiles depuis l'interface d'administration (bouton Supprimer de la page de détails, ou bouton Tout supprimer de la liste) ou avec l'API Admin.
+
 Gestion
 =======
 
