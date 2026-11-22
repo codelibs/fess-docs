@@ -67,6 +67,9 @@ Von der Suche ausgeschlossene URL
 
 URLs, die mit dem regulären Ausdruck (Java-Format) übereinstimmen, der in diesem Element angegeben ist, werden von der Suche ausgeschlossen.
 
+.. note::
+   Diese Angabe wirkt sich nur auf Dokumente aus, die bei späteren Crawls indexiert werden (übereinstimmende Dokumente werden nicht indexiert). Bereits indexierte Dokumente werden durch das Hinzufügen dieser Angabe nicht gelöscht und bleiben in den Suchergebnissen. Ist „Letzte Änderung prüfen" in den allgemeinen Einstellungen aktiviert (Standard), wird die Ablaufzeit nicht geänderter Dokumente bei jedem Crawl verlängert (siehe „Letzte Änderung prüfen" in :doc:`general-guide`); daher verschwinden sie nicht zwangsläufig, wenn die unter „Alte Dokumente löschen" festgelegte Frist erreicht ist. Dokumente, die sicher aus den Suchergebnissen verschwinden sollen, löschen Sie in der Suchliste (Verwaltungsoberfläche). Ein gelöschtes Dokument wird beim nächsten Crawl nicht erneut indexiert, solange es mit dieser Angabe übereinstimmt.
+
 Registerkarte „Crawl-Einstellungen"
 -----------------------------------
 

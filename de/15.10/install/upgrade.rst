@@ -1289,6 +1289,13 @@ einem neuen Server wiederhergestellt haben, lassen sie sich nicht entschlüsseln
 protokolliert eine ``CipherFailureException``, und ein Crawl, der eine solche Konfiguration
 einschließt, kann nichts indexieren.
 
+Enthält auch nur eine Konfiguration einen Wert, der sich nicht entschlüsseln lässt, bricht der Crawl an dieser Stelle ab. Es wird nicht nur die
+nicht entschlüsselbare Konfiguration übersprungen: Auch die anderen Konfigurationen, die zum selben Crawl gehören, werden nicht indexiert. Die Meldung der
+``CipherFailureException`` nennt Typ, Name und ID der Konfiguration sowie den Schlüssel des Parameters, der sich nicht entschlüsseln ließ,
+und weist darauf hin, dass ``app.cipher.key`` möglicherweise vom Schlüssel abweicht, mit dem gespeichert wurde (der verschlüsselte Wert und der Schlüssel selbst
+werden nicht ausgegeben). Sobald die Ursache feststeht, setzen Sie ``app.cipher.key`` auf den ursprünglichen Wert zurück
+oder geben das Passwort dieser Konfiguration erneut ein.
+
 .. note::
 
    |Fess| 15.9 speichert auch das ``password`` der Web- und Datei-Authentifizierung mit ``app.cipher.key``

@@ -258,6 +258,21 @@ Beispiel für Konfigurationsdatei (``log4j2.xml``):
         </DefaultRolloverStrategy>
     </RollingFile>
 
+Protokollüberwachung
+====================
+
+Dokumentanzahl im Index und Aktualität des Crawls
+-------------------------------------------------
+
+Allein anhand der Protokolle und der Job-Ergebnisse bemerken Sie nicht immer, dass Dokumente aus dem Index verschwinden, etwa wenn alle Anfragen an eine Site mit Fehlern beantwortet werden oder wenn die Ablaufzeit von Dokumenten erreicht ist.
+Ein Crawl-Job kann mit ``ok`` enden, und die :doc:`Health API <../api/api-health>` gibt den Zustand des Suchmaschinen-Clusters an (zum Beispiel ``GREEN``), nicht den Inhalt des Index.
+Auch der ``Status`` in der Benachrichtigungs-E-Mail zum Crawl-Abschluss spiegelt fehlgeschlagene Abrufe einzelner URLs nicht wider (siehe „Benachrichtigungs-E-Mail" in :doc:`../admin/general-guide`).
+
+Prüfen Sie daher mit einer externen Überwachung regelmäßig die folgenden zwei Punkte:
+
+- Dokumentanzahl im Index: Prüfen Sie ``record_count`` der Such-API (:doc:`../api/api-search`) und achten Sie darauf, dass der Wert gegenüber dem letzten Wert nicht plötzlich stark sinkt. Wenn Sie die genaue Anzahl benötigen, geben Sie ``track_total_hits=true`` an und prüfen Sie, dass ``record_count_relation`` ``EQUAL_TO`` ist.
+- Zeitpunkt des letzten abgeschlossenen Crawls: Prüfen Sie ``end_time`` im Job-Protokoll (``GET /api/admin/joblog/logs``, siehe :doc:`../api/admin/api-admin-joblog`) und lösen Sie eine Warnung aus, wenn der Wert länger als das erwartete Intervall nicht aktualisiert wurde.
+
 Referenzinformationen
 ========
 

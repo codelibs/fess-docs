@@ -161,6 +161,11 @@ Skript-Einstellungen
     last_modified=timestamp
     timestamp=timestamp
 
+Standardmäßig werden alle im Dump enthaltenen Seiten indexiert. Das gilt auch für Seiten in Namensräumen (Diskussion, Benutzer, Vorlagen usw.) und für Weiterleitungen;
+eine Einschränkung über Parameter ist nicht möglich. Die Namensraumnummer (``ns``) und die Angabe, ob die Seite eine Weiterleitung ist (``redirect``), werden jeder Seite
+als im Skript referenzierbare Werte übergeben (siehe „Verfügbare Felder" unten). Seiten, für die das Skript kein ``url`` setzt, werden nicht übersprungen,
+sondern als nicht in den Index aufnehmbare Seiten in den Fehler-URLs aufgezeichnet.
+
 Verfügbare Felder
 ~~~~~~~~~~~~~~~~~
 

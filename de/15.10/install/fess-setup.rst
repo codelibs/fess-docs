@@ -14,6 +14,10 @@ Führen Sie es im |Fess|-Verzeichnis aus. Ohne Argumente gibt es die Liste der B
     $ cd /path/to/fess-15.10.0
     $ bin/fess-setup <command> [options]
 
+.. note::
+
+   Bei den RPM-/DEB-Paketen gehören ``fess``, ``fess-setup``, ``fess.in.sh`` und ``generate-thumbnail`` in ``/usr/share/fess/bin`` dem Benutzer ``fess`` und können vom Benutzer ``fess`` verändert werden. Führt ein Administrator ``fess-setup`` mit ``sudo`` aus, wird ein Skript, das der Benutzer ``fess`` verändern kann, als ``root`` ausgeführt. Prüfen Sie vor der Ausführung, dass das Skript nicht verändert wurde.
+
 Exit-Codes
 ==========
 

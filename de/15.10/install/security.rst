@@ -31,6 +31,10 @@ Das Standard-Administratorpasswort (``admin`` / ``admin``) muss unbedingt geänd
 
    Sobald Sie das Passwort von ``admin`` geändert haben, können Sie es nicht mehr auf einen einfachen Wert wie ``admin`` zurücksetzen (eine Sperrliste für Administratorpasswörter wird über ``password.invalid.admin.passwords`` konfiguriert). Außerdem können Sie das Initialpasswort des Benutzers ``admin`` bereits vor dem ersten Start ändern, indem Sie ``index.user.initial_password`` in ``fess_config.properties`` setzen. ``bin/fess-setup init`` setzt es für Sie; siehe :doc:`fess-setup`.
 
+.. note::
+
+   Wenn Sie sich mit dem Initialpasswort als ``admin`` anmelden, wird unmittelbar nach der Anmeldung die Seite zum Ändern des Passworts angezeigt. Das ist ein Hinweis, der zur Änderung auffordert, keine serverseitige Erzwingung (die Anmeldung ist bereits erfolgt, und die Verwaltungsoberfläche lässt sich auch ohne Änderung öffnen). Damit das Passwort sicher geändert wird, setzen Sie das Initialpasswort vor dem ersten Start mit ``bin/fess-setup init`` oder ``index.user.initial_password``.
+
 **Empfohlene Passwort-Richtlinie:**
 
 |Fess| bietet eine integrierte Funktion, die die Mindest- und Höchstlänge des Passworts sowie Anforderungen an die Zeichenarten erzwingt. Konfigurieren Sie die folgenden Eigenschaften in ``fess_config.properties`` (Standardwerte in Klammern):

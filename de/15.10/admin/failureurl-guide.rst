@@ -8,6 +8,9 @@ Fehler-URLs
 Hier werden Fehler-URLs erläutert.
 URLs, die beim Crawlen nicht abgerufen werden konnten, werden aufgezeichnet und können als Fehler-URLs überprüft werden.
 
+Fehler-URLs sind ein Verlauf. Wird die Ursache behoben und die URL anschließend erfolgreich gecrawlt, wird der Eintrag nicht automatisch gelöscht.
+Nicht mehr benötigte Einträge löschen Sie in der Verwaltungsoberfläche (mit der Schaltfläche „Löschen" auf der Detailseite oder der Schaltfläche „Alle löschen" unter der Liste) oder über die Admin-API.
+
 Verwaltung
 ==========
 
