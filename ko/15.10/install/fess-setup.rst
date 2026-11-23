@@ -50,7 +50,7 @@ install opensearch
 
 ``opensearch.yml`` 에 이미 있는 설정은 다시 추가하지 않으며, ``plugins.security.*`` 설정이 하나라도 있으면 ``plugins.security.disabled: true`` 를 추가하지 않습니다. OpenSearch 디렉터리가 이미 있으면 다운로드를 건너뛰므로, 기존 설치에 대해 다시 실행하면 부족한 설정만 추가됩니다.
 
-명령은 추가한 설정을 표시한 다음, ``bin/fess.in.sh`` 가 이 OpenSearch 를 자동으로 찾을 수 있는지 표시합니다. |Fess| 디렉터리의 ``opensearch/`` 아래에서 ``config/dictionary`` 디렉터리를 가진 OpenSearch 가 이것 하나뿐이면 찾을 수 있습니다. 이때 ``bin/fess.in.sh`` (Windows 에서는 ``bin\fess.in.bat`` )가 ``FESS_DICTIONARY_PATH`` 를 그 디렉터리로 설정하므로, 같은 호스트에서 실행하는 OpenSearch 라면 그 밖의 설정은 필요하지 않습니다. 찾을 수 없으면 설정해야 할 ``SEARCH_ENGINE_HTTP_URL`` 과 ``FESS_DICTIONARY_PATH`` 값을 표시합니다. 설정 방법은 :doc:`install-linux` 또는 :doc:`install-windows` 를 참조하십시오.
+명령은 추가한 설정을 표시한 다음, ``bin/fess.in.sh`` 가 이 OpenSearch 를 자동으로 찾을 수 있는지 표시합니다. |Fess| 디렉터리의 ``opensearch/`` 아래에서 ``config/dictionary`` 디렉터리를 가진 OpenSearch 가 이것 하나뿐이면 찾을 수 있습니다. 이때 ``bin/fess.in.sh`` (Windows 에서는 ``bin\fess.in.bat`` )가 ``FESS_DICTIONARY_PATH`` 를 ``dictionary/`` 로 설정합니다. OpenSearch 는 이 상대 경로를 자신의 설정 디렉터리를 기준으로 해석하므로, 이는 해당 OpenSearch 의 ``config/dictionary`` 디렉터리를 가리킵니다. 같은 호스트에서 실행하는 OpenSearch 라면 그 밖의 설정은 필요하지 않습니다. 찾을 수 없으면 설정해야 할 ``SEARCH_ENGINE_HTTP_URL`` 과 ``FESS_DICTIONARY_PATH`` 값을 표시합니다. 설정 방법은 :doc:`install-linux` 또는 :doc:`install-windows` 를 참조하십시오. 상대 경로로 두면 OpenSearch 디렉터리가 이동하더라도(예: 인접한 디렉터리로 업그레이드) |Fess| 가 만든 인덱스를 계속 사용할 수 있습니다. 절대 경로 ``FESS_DICTIONARY_PATH`` 를 설정할 수도 있습니다.
 
 .. list-table::
    :header-rows: 1

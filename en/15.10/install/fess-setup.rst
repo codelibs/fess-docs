@@ -65,10 +65,13 @@ command again on an existing installation only adds the settings that are missin
 The command prints each setting it added, and then whether ``bin/fess.in.sh`` finds this OpenSearch
 on its own. It does when this is the only OpenSearch with a ``config/dictionary`` directory under
 ``opensearch/`` in the |Fess| directory: ``bin/fess.in.sh`` (``bin\fess.in.bat`` on Windows) then
-sets ``FESS_DICTIONARY_PATH`` to that directory, and nothing else needs to be configured for an
-OpenSearch on the same host. Otherwise the command prints the ``SEARCH_ENGINE_HTTP_URL`` and
-``FESS_DICTIONARY_PATH`` values to set, as described in :doc:`install-linux` or
-:doc:`install-windows`.
+sets ``FESS_DICTIONARY_PATH`` to ``dictionary/``, which OpenSearch resolves against its own
+configuration directory, so it names the ``config/dictionary`` directory of that OpenSearch. Nothing
+else needs to be configured for an OpenSearch on the same host. Otherwise the command prints the
+``SEARCH_ENGINE_HTTP_URL`` and ``FESS_DICTIONARY_PATH`` values to set, as described in
+:doc:`install-linux` or :doc:`install-windows`. A relative path keeps the indices |Fess| creates
+working when the OpenSearch directory moves, for example on an upgrade into a sibling directory. An
+absolute ``FESS_DICTIONARY_PATH`` can still be set.
 
 .. list-table::
    :header-rows: 1

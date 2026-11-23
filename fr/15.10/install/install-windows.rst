@@ -73,12 +73,12 @@ Configuration des variables d'environnement
        > cd C:\fess-15.10.0
        > bin\fess-setup install opensearch
 
-   ``bin\fess.in.bat`` trouve un OpenSearch installé de cette façon et transmet son répertoire
-   ``config\dictionary`` à |Fess| : « Configuration de Fess » à l'Étape 2 ne nécessite donc aucune
-   modification tant qu'OpenSearch s'exécute sur le même hôte. La commande affiche les paramètres
-   ajoutés et indique si ``bin\fess.in.bat`` trouve l'installation. Lisez l'avertissement de
-   « Configuration d'OpenSearch » avant qu'OpenSearch n'écoute sur une autre adresse que
-   ``localhost``.
+   ``bin\fess.in.bat`` trouve un OpenSearch installé de cette façon et transmet ``dictionary/``, qui
+   désigne son répertoire ``config\dictionary``, à |Fess| : « Configuration de Fess » à l'Étape 2 ne
+   nécessite donc aucune modification tant qu'OpenSearch s'exécute sur le même hôte. La commande
+   affiche les paramètres ajoutés et indique si ``bin\fess.in.bat`` trouve l'installation. Lisez
+   l'avertissement de « Configuration d'OpenSearch » avant qu'OpenSearch n'écoute sur une autre
+   adresse que ``localhost``.
 
    Suivez les étapes ci-dessous pour les dérouler une à une, ou lorsque vous utilisez un
    OpenSearch existant. Pour n'installer que les plugins dans un OpenSearch existant, utilisez
@@ -215,6 +215,7 @@ Après modification ::
 .. note::
 
    - Pour ``fess.dictionary.path``, spécifiez le même chemin que ``configsync.config_path`` défini dans le fichier ``opensearch.yml`` d'OpenSearch.
+   - Si ``configsync.config_path`` est le répertoire ``config\dictionary`` de cet OpenSearch, comme l'écrit ``bin\fess-setup``, ``fess.dictionary.path`` peut être à la place le chemin relatif ``dictionary/``, qu'OpenSearch résout par rapport à son répertoire de configuration.
    - Si vous exécutez OpenSearch sur un autre hôte, modifiez le nom d'hôte ou l'adresse IP de ``fess.search_engine.http_address`` avec la valeur appropriée.
    - Utilisez ``/`` comme séparateur de chemin. |Fess| insère le chemin dans les paramètres de l'index, où un ``\`` est perdu : un chemin écrit avec ``\`` n'est donc pas trouvé.
    - Ne pas ajouter de nouvelles lignes ``set FESS_JAVA_OPTS=...`` ; décommentez et éditez les lignes existantes. La spécification dupliquée d'une même option peut provoquer un comportement inattendu.

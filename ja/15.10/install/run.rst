@@ -353,7 +353,7 @@ ZIP 版は ``bin/fess.in.sh``、RPM 版は ``/etc/sysconfig/fess``、DEB 版は
 
    - ``FESS_MIN_MEM``、``FESS_MAX_MEM``: 最小・最大ヒープサイズを個別に指定します（``FESS_HEAP_SIZE`` を設定した場合は無視されます）。
    - ``FESS_DIRECT_SIZE``: ダイレクトメモリの上限（``-XX:MaxDirectMemorySize``）です。
-   - ``FESS_DICTIONARY_PATH``: OpenSearch の ``config\dictionary`` ディレクトリです。
+   - ``FESS_DICTIONARY_PATH``: OpenSearch の辞書ディレクトリで、その ``configsync.config_path`` に対応します。 ``dictionary/`` はその OpenSearch の ``config\dictionary`` ディレクトリを指し、この変数が未設定で ``opensearch\`` に ``bin\fess-setup`` で導入した OpenSearch がちょうど 1 つある場合に ``bin\fess.in.bat`` が設定する値です。
    - ``FESS_PROXY_HOST``、``FESS_PROXY_PORT``、``FESS_NON_PROXY_HOSTS``: プロキシの設定です。
    - ``FESS_JAVA_OPTS``: 設定済みの値の後ろに、``fess.in.bat`` が JVM オプションを追加します。
    - ``PLAYWRIGHT_NODEJS_PATH``: Playwright プラグインが使用する Node.js の実行ファイルです。

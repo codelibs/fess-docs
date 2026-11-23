@@ -226,7 +226,18 @@ Schritt 2: Installation von Fess
    ``bin/fess-setup install opensearch`` nach ``opensearch/`` im |Fess|-Verzeichnis installiert hat
    und das auf demselben Host läuft, muss diese Datei nicht geändert werden:
    ``SEARCH_ENGINE_HTTP_URL`` ist standardmäßig ``http://localhost:9200``, und
-   ``FESS_DICTIONARY_PATH`` wird auf das Verzeichnis ``config/dictionary`` dieses OpenSearch gesetzt.
+   ``FESS_DICTIONARY_PATH`` wird auf ``dictionary/`` gesetzt.
+   OpenSearch löst diesen relativen Pfad relativ zu seinem eigenen Konfigurationsverzeichnis auf, sodass
+   er das Verzeichnis ``config/dictionary`` dieses OpenSearch bezeichnet. |Fess| schreibt den Wert in
+   die Analyzer-Einstellungen jedes Index, den es anlegt; ein relativer Pfad hält den Index daher
+   funktionsfähig, wenn das OpenSearch-Verzeichnis verschoben wird, etwa bei einem Upgrade in ein
+   benachbartes Verzeichnis. Ein absoluter Pfad kann weiterhin gesetzt werden, wie unten beschrieben.
+
+   .. note::
+
+      Ein Index, der mit einem absoluten ``FESS_DICTIONARY_PATH`` angelegt wurde, zum Beispiel von
+      |Fess| 15.9.0, behält diesen absoluten Pfad. Nur danach angelegte Indizes erhalten den
+      relativen Pfad.
 
    Bearbeiten Sie ``bin/fess.in.sh`` in den folgenden Fällen:
 
@@ -258,6 +269,7 @@ Schritt 2: Installation von Fess
    .. note::
 
       - Setzen Sie für ``FESS_DICTIONARY_PATH`` denselben Pfad wie den in ``opensearch.yml`` von OpenSearch angegebenen ``configsync.config_path``. Ohne diese Einstellung kann |Fess| seine Indizes nicht anlegen und startet nicht.
+      - Ist ``configsync.config_path`` das Verzeichnis ``config/dictionary`` dieses OpenSearch (so schreibt es ``bin/fess-setup``), kann statt des absoluten Pfads ``FESS_DICTIONARY_PATH=dictionary/`` gesetzt werden.
       - Wenn OpenSearch auf einem anderen Host ausgeführt wird, ändern Sie die URL in der Zeile ``SEARCH_ENGINE_HTTP_URL`` auf diesen Host. Beispiel: ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}``. ``FESS_DICTIONARY_PATH`` ist dann der ``configsync.config_path`` dieses Servers.
       - Statt die Datei zu bearbeiten, können beide Variablen auch in der Umgebung exportiert werden, aus der |Fess| gestartet wird. Eine exportierte ``SEARCH_ENGINE_HTTP_URL`` hat Vorrang vor der URL in der Datei, und ein exportierter ``FESS_DICTIONARY_PATH`` wird verwendet, solange die entsprechende Zeile in der Datei auskommentiert bleibt.
       - Fügen Sie keine neue Zeile ``SEARCH_ENGINE_HTTP_URL=...`` hinzu, sondern bearbeiten Sie die vorhandene.

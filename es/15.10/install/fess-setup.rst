@@ -64,12 +64,16 @@ Una opción que ``opensearch.yml`` ya contiene no se vuelve a añadir, y
 volver a ejecutar el comando sobre una instalación existente solo añade las opciones que faltan.
 
 El comando muestra cada opción que ha añadido y, a continuación, indica si ``bin/fess.in.sh``
-encuentra este OpenSearch por sí mismo. Lo encuentra cuando es el único OpenSearch con un
-directorio ``config/dictionary`` dentro de ``opensearch/`` en el directorio de |Fess|: en ese caso
-``bin/fess.in.sh`` (``bin\fess.in.bat`` en Windows) establece ``FESS_DICTIONARY_PATH`` en ese
-directorio, y no hace falta configurar nada más para un OpenSearch en el mismo host. En caso
-contrario, el comando muestra los valores de ``SEARCH_ENGINE_HTTP_URL`` y ``FESS_DICTIONARY_PATH``
-que debe establecer, tal como se describe en :doc:`install-linux` o :doc:`install-windows`.
+encuentra este OpenSearch por sí mismo. Lo encuentra cuando es el único OpenSearch con un directorio
+``config/dictionary`` dentro de ``opensearch/`` en el directorio de |Fess|: en ese caso
+``bin/fess.in.sh`` (``bin\fess.in.bat`` en Windows) establece ``FESS_DICTIONARY_PATH`` en
+``dictionary/``, que OpenSearch resuelve respecto a su propio directorio de configuración, por lo
+que designa el directorio ``config/dictionary`` de ese OpenSearch. No hace falta configurar nada más
+para un OpenSearch en el mismo host. En caso contrario, el comando muestra los valores de
+``SEARCH_ENGINE_HTTP_URL`` y ``FESS_DICTIONARY_PATH`` que debe establecer, tal como se describe en
+:doc:`install-linux` o :doc:`install-windows`. Una ruta relativa hace que los índices que crea
+|Fess| sigan funcionando si se mueve el directorio de OpenSearch, por ejemplo al actualizar a un
+directorio contiguo. También se puede establecer un ``FESS_DICTIONARY_PATH`` absoluto.
 
 .. list-table::
    :header-rows: 1

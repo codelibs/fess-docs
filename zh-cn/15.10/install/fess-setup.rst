@@ -50,7 +50,7 @@ install opensearch
 
 ``opensearch.yml`` 中已有的配置不会重复追加；如果该文件中存在任何 ``plugins.security.*`` 配置，则不会追加 ``plugins.security.disabled: true``\ 。OpenSearch 目录已存在时会跳过下载，因此对已有的安装再次运行该命令时，只会追加缺少的配置。
 
-命令会显示追加的每项配置，然后显示 ``bin/fess.in.sh`` 能否自动找到此 OpenSearch。当它是 |Fess| 目录下 ``opensearch/`` 中唯一带有 ``config/dictionary`` 目录的 OpenSearch 时即可找到：此时 ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会将 ``FESS_DICTIONARY_PATH`` 设置为该目录，对于在同一主机上运行的 OpenSearch，无需其他配置。否则，命令会显示需要设置的 ``SEARCH_ENGINE_HTTP_URL`` 和 ``FESS_DICTIONARY_PATH`` 的值，设置方法请参阅 :doc:`install-linux` 或 :doc:`install-windows`\ 。
+命令会显示追加的每项配置，然后显示 ``bin/fess.in.sh`` 能否自动找到此 OpenSearch。当它是 |Fess| 目录下 ``opensearch/`` 中唯一带有 ``config/dictionary`` 目录的 OpenSearch 时即可找到：此时 ``bin/fess.in.sh``\ （Windows 上为 ``bin\fess.in.bat``\ ）会将 ``FESS_DICTIONARY_PATH`` 设置为 ``dictionary/``\ 。OpenSearch 会以自己的配置目录为基准解析这个相对路径，因此它指向该 OpenSearch 的 ``config/dictionary`` 目录。对于在同一主机上运行的 OpenSearch，无需其他配置。否则，命令会显示需要设置的 ``SEARCH_ENGINE_HTTP_URL`` 和 ``FESS_DICTIONARY_PATH`` 的值，设置方法请参阅 :doc:`install-linux` 或 :doc:`install-windows`\ 。使用相对路径后，即使 OpenSearch 目录发生移动（例如升级到相邻的目录），|Fess| 创建的索引仍可继续使用。也仍然可以设置绝对路径的 ``FESS_DICTIONARY_PATH``\ 。
 
 .. list-table::
    :header-rows: 1

@@ -69,7 +69,7 @@ Java 21 以降が表示されることを確認してください。
        > cd C:\fess-15.10.0
        > bin\fess-setup install opensearch
 
-   この方法で導入した OpenSearch は ``bin\fess.in.bat`` が見つけ、その ``config\dictionary`` ディレクトリを |Fess| に渡すため、OpenSearch を同じホストで動かす限り、ステップ 2 の「Fess の設定」で変更は必要ありません。コマンドは、追加した設定と、 ``bin\fess.in.bat`` がこのインストールを見つけられるかどうかを表示します。OpenSearch を ``localhost`` 以外のアドレスで待ち受けさせる前に、「OpenSearch の設定」の警告を確認してください。
+   この方法で導入した OpenSearch は ``bin\fess.in.bat`` が見つけ、その ``config\dictionary`` ディレクトリを指す ``dictionary/`` を |Fess| に渡すため、OpenSearch を同じホストで動かす限り、ステップ 2 の「Fess の設定」で変更は必要ありません。コマンドは、追加した設定と、 ``bin\fess.in.bat`` がこのインストールを見つけられるかどうかを表示します。OpenSearch を ``localhost`` 以外のアドレスで待ち受けさせる前に、「OpenSearch の設定」の警告を確認してください。
 
    手順を個別に確認したい場合や、既存の OpenSearch を使う場合は、以下に従ってください。
    既存の OpenSearch にプラグインだけを入れる場合は
@@ -200,6 +200,7 @@ Fess の設定
 .. note::
 
    - ``fess.dictionary.path`` には、OpenSearch の ``opensearch.yml`` で指定した ``configsync.config_path`` と同じパスを設定してください。
+   - ``configsync.config_path`` がその OpenSearch の ``config\dictionary`` ディレクトリ（ ``bin\fess-setup`` が設定する値）であれば、 ``fess.dictionary.path`` には代わりに相対パスの ``dictionary/`` を指定できます。OpenSearch はこれを自身の設定ディレクトリを基準に解決します。
    - OpenSearch を別のホストで実行している場合は、``fess.search_engine.http_address`` のホスト名または IP アドレスを適切な値に変更してください。
    - パスの区切り文字は ``/`` を使用してください。 |Fess| はこのパスをインデックスの設定に埋め込み、その際に ``\`` が失われるため、 ``\`` で書いたパスは見つかりません。
    - 新たに ``set FESS_JAVA_OPTS=...`` の行を追加するのではなく、既存のコメント行を解除して編集してください。同じオプションを重複して指定すると、意図しない動作の原因となる場合があります。

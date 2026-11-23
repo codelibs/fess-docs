@@ -69,10 +69,15 @@ fehlenden Einstellungen hinzu.
 Der Befehl gibt jede hinzugefügte Einstellung aus und anschließend, ob ``bin/fess.in.sh`` dieses
 OpenSearch selbst findet. Das ist der Fall, wenn es das einzige OpenSearch mit einem Verzeichnis
 ``config/dictionary`` unter ``opensearch/`` im |Fess|-Verzeichnis ist: ``bin/fess.in.sh`` (unter
-Windows ``bin\fess.in.bat``) setzt dann ``FESS_DICTIONARY_PATH`` auf dieses Verzeichnis, und für ein
-OpenSearch auf demselben Host ist nichts weiter zu konfigurieren. Andernfalls gibt der Befehl die
-Werte für ``SEARCH_ENGINE_HTTP_URL`` und ``FESS_DICTIONARY_PATH`` aus, die zu setzen sind, wie in
-:doc:`install-linux` oder :doc:`install-windows` beschrieben.
+Windows ``bin\fess.in.bat``) setzt dann ``FESS_DICTIONARY_PATH`` auf ``dictionary/``, was OpenSearch
+relativ zu seinem eigenen Konfigurationsverzeichnis auflöst; der Wert bezeichnet also das
+Verzeichnis ``config/dictionary`` dieses OpenSearch. Für ein OpenSearch auf demselben Host ist
+nichts weiter zu konfigurieren. Andernfalls gibt der Befehl die Werte für ``SEARCH_ENGINE_HTTP_URL``
+und ``FESS_DICTIONARY_PATH`` aus, die zu setzen sind, wie in :doc:`install-linux` oder
+:doc:`install-windows` beschrieben. Ein relativer Pfad sorgt dafür, dass die von |Fess| angelegten
+Indizes weiter funktionieren, wenn das OpenSearch-Verzeichnis verschoben wird, etwa bei einem
+Upgrade in ein benachbartes Verzeichnis. Ein absoluter ``FESS_DICTIONARY_PATH`` kann weiterhin
+gesetzt werden.
 
 .. list-table::
    :header-rows: 1

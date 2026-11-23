@@ -205,7 +205,11 @@
 
 2. 配置 Fess
 
-   到 OpenSearch 的连接信息位于 ``bin/fess.in.sh`` 中。对于通过 ``bin/fess-setup install opensearch`` 安装到 |Fess| 目录下的 ``opensearch/`` 中、并在同一主机上运行的 OpenSearch，无需修改此文件：\ ``SEARCH_ENGINE_HTTP_URL`` 默认为 ``http://localhost:9200``\ ，\ ``FESS_DICTIONARY_PATH`` 会被设置为该 OpenSearch 的 ``config/dictionary`` 目录。
+   到 OpenSearch 的连接信息位于 ``bin/fess.in.sh`` 中。对于通过 ``bin/fess-setup install opensearch`` 安装到 |Fess| 目录下的 ``opensearch/`` 中、并在同一主机上运行的 OpenSearch，无需修改此文件：\ ``SEARCH_ENGINE_HTTP_URL`` 默认为 ``http://localhost:9200``\ ，\ ``FESS_DICTIONARY_PATH`` 会被设置为 ``dictionary/``\ 。OpenSearch 会以自己的配置目录为基准解析这个相对路径，因此它指向该 OpenSearch 的 ``config/dictionary`` 目录。|Fess| 会把该值写入它创建的每个索引的 Analyzer 设置中，所以使用相对路径时，即使 OpenSearch 目录发生移动（例如升级到相邻的目录），索引仍可继续使用。也仍然可以设置绝对路径，见下文。
+
+   .. note::
+
+      使用绝对路径的 ``FESS_DICTIONARY_PATH`` 创建的索引（例如由 |Fess| 15.9.0 创建的索引）会保留该绝对路径；只有之后创建的索引才会使用相对路径。
 
    在以下任一情况下，请编辑 ``bin/fess.in.sh``\ ：
 
@@ -232,6 +236,7 @@
    .. note::
 
       - ``FESS_DICTIONARY_PATH`` 请设置与 OpenSearch 的 ``opensearch.yml`` 中指定的 ``configsync.config_path`` 相同的路径。未设置时，|Fess| 无法创建索引，也无法启动。
+      - 如果 ``configsync.config_path`` 就是该 OpenSearch 的 ``config/dictionary`` 目录（\ ``bin/fess-setup`` 写入的就是这个值），可以用 ``FESS_DICTIONARY_PATH=dictionary/`` 代替绝对路径。
       - 如果 OpenSearch 在其他主机上运行，请将 ``SEARCH_ENGINE_HTTP_URL`` 行中的 URL 更改为该主机。例: ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}``\ 。此时 ``FESS_DICTIONARY_PATH`` 为该服务器的 ``configsync.config_path``\ 。
       - 也可以不编辑文件，而在启动 |Fess| 的环境中 export 这两个变量。export 的 ``SEARCH_ENGINE_HTTP_URL`` 优先于文件中的 URL；只要文件中的对应行保持注释状态，就会使用 export 的 ``FESS_DICTIONARY_PATH``\ 。
       - 请勿新增 ``SEARCH_ENGINE_HTTP_URL=...`` 行，而应编辑已有的行。

@@ -73,12 +73,12 @@ Paso 1: Instalación de OpenSearch
        > cd C:\fess-15.10.0
        > bin\fess-setup install opensearch
 
-   ``bin\fess.in.bat`` encuentra un OpenSearch instalado de esta forma y pasa su directorio
-   ``config\dictionary`` a |Fess|, por lo que "Configuración de Fess" en el Paso 2 no requiere
-   cambios mientras OpenSearch se ejecute en el mismo host. El comando muestra la configuración que
-   ha añadido y si ``bin\fess.in.bat`` encuentra la instalación. Lea la advertencia de
-   "Configuración de OpenSearch" antes de que OpenSearch escuche en cualquier dirección distinta de
-   ``localhost``.
+   ``bin\fess.in.bat`` encuentra un OpenSearch instalado de esta forma y pasa ``dictionary/``, que
+   designa su directorio ``config\dictionary``, a |Fess|, por lo que "Configuración de Fess" en el
+   Paso 2 no requiere cambios mientras OpenSearch se ejecute en el mismo host. El comando muestra la
+   configuración que ha añadido y si ``bin\fess.in.bat`` encuentra la instalación. Lea la
+   advertencia de "Configuración de OpenSearch" antes de que OpenSearch escuche en cualquier
+   dirección distinta de ``localhost``.
 
    Siga los pasos siguientes para revisarlos uno a uno, o cuando utilice un OpenSearch que ya
    tenga. Para instalar únicamente los plugins en un OpenSearch existente, utilice
@@ -215,6 +215,7 @@ Estado después del cambio::
 .. note::
 
    - En ``fess.dictionary.path``, establezca la misma ruta que la indicada en ``configsync.config_path`` dentro de ``opensearch.yml`` de OpenSearch.
+   - Si ``configsync.config_path`` es el directorio ``config\dictionary`` de ese OpenSearch, como lo escribe ``bin\fess-setup``, ``fess.dictionary.path`` puede ser en su lugar la ruta relativa ``dictionary/``, que OpenSearch resuelve respecto a su directorio de configuración.
    - Si está ejecutando OpenSearch en otro host, cambie el nombre de host o la dirección IP en ``fess.search_engine.http_address`` al valor apropiado.
    - Use ``/`` como separador de ruta. |Fess| inserta la ruta en la configuración de los índices, donde se pierde cualquier ``\``, por lo que una ruta escrita con ``\`` no se encuentra.
    - En lugar de agregar nuevas líneas ``set FESS_JAVA_OPTS=...``, descomente y edite las líneas de comentario existentes. Especificar la misma opción de forma duplicada puede causar comportamientos no deseados.

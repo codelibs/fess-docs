@@ -69,7 +69,7 @@ Java 21 이상이 표시되는지 확인하십시오.
        > cd C:\fess-15.10.0
        > bin\fess-setup install opensearch
 
-   이 방법으로 설치한 OpenSearch 는 ``bin\fess.in.bat`` 이 찾아서 그 ``config\dictionary`` 디렉터리를 |Fess| 에 전달하므로, OpenSearch 를 같은 호스트에서 실행하는 한 단계 2 의 「Fess 설정」은 변경할 필요가 없습니다. 명령은 추가한 설정과, ``bin\fess.in.bat`` 이 이 설치를 찾을 수 있는지를 표시합니다. OpenSearch 가 ``localhost`` 이외의 주소에서 수신 대기하기 전에 「OpenSearch 설정」의 경고를 확인하십시오.
+   이 방법으로 설치한 OpenSearch 는 ``bin\fess.in.bat`` 이 찾아서 그 ``config\dictionary`` 디렉터리를 가리키는 ``dictionary/`` 를 |Fess| 에 전달하므로, OpenSearch 를 같은 호스트에서 실행하는 한 단계 2 의 「Fess 설정」은 변경할 필요가 없습니다. 명령은 추가한 설정과, ``bin\fess.in.bat`` 이 이 설치를 찾을 수 있는지를 표시합니다. OpenSearch 가 ``localhost`` 이외의 주소에서 수신 대기하기 전에 「OpenSearch 설정」의 경고를 확인하십시오.
 
    절차를 하나씩 확인하려는 경우나 기존 OpenSearch 를 사용하는 경우에는 아래를 따르십시오.
    기존 OpenSearch 에 플러그인만 설치하려면
@@ -200,6 +200,7 @@ Fess 설정
 .. note::
 
    - ``fess.dictionary.path`` 에는 OpenSearch의 ``opensearch.yml`` 에서 지정한 ``configsync.config_path`` 와 동일한 경로를 설정하십시오.
+   - ``configsync.config_path`` 가 해당 OpenSearch 의 ``config\dictionary`` 디렉터리( ``bin\fess-setup`` 이 설정하는 값)라면, ``fess.dictionary.path`` 에 상대 경로 ``dictionary/`` 를 대신 지정할 수 있습니다. OpenSearch 는 이를 자신의 설정 디렉터리를 기준으로 해석합니다.
    - OpenSearch를 다른 호스트에서 실행하는 경우 ``fess.search_engine.http_address`` 의 호스트 이름 또는 IP 주소를 적절한 값으로 변경하십시오.
    - 경로 구분 문자는 ``/`` 를 사용하십시오. |Fess| 는 이 경로를 인덱스 설정에 삽입하며, 그때 ``\`` 가 사라지므로 ``\`` 로 쓴 경로는 찾을 수 없습니다.
    - 새로 ``set FESS_JAVA_OPTS=...`` 행을 추가하는 것이 아니라 기존 주석 행을 해제하여 편집하십시오. 동일한 옵션을 중복하여 지정하면 의도하지 않은 동작의 원인이 될 수 있습니다.

@@ -351,7 +351,7 @@ Les paramètres tels que le numéro de port, la taille du tas JVM et l'URL de co
 
    - ``FESS_MIN_MEM``, ``FESS_MAX_MEM`` : définissent séparément la taille minimale et maximale du tas (ignorées si ``FESS_HEAP_SIZE`` est défini).
    - ``FESS_DIRECT_SIZE`` : limite de la mémoire directe (``-XX:MaxDirectMemorySize``).
-   - ``FESS_DICTIONARY_PATH`` : répertoire ``config\dictionary`` d'OpenSearch.
+   - ``FESS_DICTIONARY_PATH`` : répertoire des dictionnaires d'OpenSearch, qui doit correspondre à son ``configsync.config_path``. ``dictionary/`` désigne le répertoire ``config\dictionary`` de cet OpenSearch ; c'est la valeur que ``bin\fess.in.bat`` définit lorsque la variable n'est pas définie et que ``opensearch\`` contient exactement un OpenSearch installé par ``bin\fess-setup``.
    - ``FESS_PROXY_HOST``, ``FESS_PROXY_PORT``, ``FESS_NON_PROXY_HOSTS`` : paramètres du proxy.
    - ``FESS_JAVA_OPTS`` : ``fess.in.bat`` ajoute ces options JVM après les valeurs déjà configurées.
    - ``PLAYWRIGHT_NODEJS_PATH`` : exécutable Node.js utilisé par le plugin Playwright.
