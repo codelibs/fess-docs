@@ -633,6 +633,13 @@ Un ``fess_config.properties`` heredado de 15.9 conserva la lista antigua, y ento
 
 Un documento que el extractor Tika rechaza por sospecha de zip bomb se registra ahora como URL de fallo y no se indexa, incluso con ``crawler.ignore.content.exception`` en ``true`` (el valor por defecto). Hasta la versión 15.9 se indexaba sin contenido. Los demás errores de contenido que ignora este ajuste no cambian. El extractor considera que un documento es una zip bomb cuando su texto extraído supera ``maxUncompressionSize`` (10 000 000 de caracteres) y además es más de ``maxCompressionRatio`` veces más largo que los bytes de los que se leyó; ambos valores se definen en ``crawler/extractor+tikaExtractor.xml``. La relación es 100 (el valor por defecto de Tika), de modo que un archivo comprimido o un documento de Office con texto, que se expande entre unas pocas y unas decenas de veces, se indexa sea cual sea su tamaño. Aumente ``maxCompressionRatio`` si necesita indexar un documento más compresible, o redúzcalo para una comprobación más estricta.
 
+.. _upgrade-1510-robots-txt:
+
+Request-rate y Visit-time en robots.txt
+---------------------------------------
+
+Hasta la versión 15.9 se ignoraban las líneas ``Request-rate`` y ``Visit-time`` de robots.txt. La versión 15.10 las respeta mientras el manejo de robots.txt está activado (``crawler.ignore.robots.txt`` es ``false``, el valor predeterminado). Un sitio que declara ``Request-rate`` ahora se rastrea con ritmo: |Fess| espera el intervalo que implica la tasa (como máximo 60 segundos) antes de la siguiente URL de ese origen, por lo que el rastreo de ese sitio puede tardar más. Un sitio que declara ``Visit-time`` solo se rastrea en esa franja horaria (UTC): una URL de ese origen que se saca de la cola fuera de la franja se omite, no se reintenta en el mismo rastreo y no se registra como URL fallida. Un trabajo de rastreo que nunca se ejecuta dentro de la franja no actualiza los documentos de ese sitio, y con el ajuste predeterminado «Eliminar documentos anteriores» (``day.for.cleanup``, 3 días) caducan unos 3 días después del último rastreo que los alcanzó. Programe el trabajo de rastreo dentro de la franja. No existe un ajuste que desactive solo ``Request-rate`` o solo ``Visit-time``; ``crawler.ignore.robots.txt=true`` desactiva todo el manejo de robots.txt. Para más detalles, consulte :doc:`../config/rate-limiting`.
+
 .. _upgrade-1510-user-agent:
 
 Agente de usuario guardado por la pantalla General

@@ -612,6 +612,13 @@ Docker 버전::
 
 Tika 추출기가 zip 폭탄으로 의심하여 거부한 문서는 ``crawler.ignore.content.exception`` 이 ``true`` (기본값)여도 이제 장애 URL로 기록되며 색인되지 않습니다. 15.9까지는 콘텐츠 없이 색인되었습니다. 이 설정이 무시하는 그 밖의 콘텐츠 오류는 바뀌지 않습니다. 추출한 텍스트가 ``maxUncompressionSize`` (10,000,000자)보다 길고 읽어 들인 바이트 수의 ``maxCompressionRatio`` 배보다도 긴 문서를 zip 폭탄으로 의심합니다. 두 값은 모두 ``crawler/extractor+tikaExtractor.xml`` 에서 설정합니다. 비율은 100(Tika의 기본값)이므로 몇 배에서 수십 배로 전개되는 일반적인 텍스트 아카이브나 Office 문서는 크기와 관계없이 색인됩니다. 압축률이 더 높은 문서를 색인해야 한다면 ``maxCompressionRatio`` 를 높이고, 더 엄격하게 하려면 낮추십시오.
 
+.. _upgrade-1510-robots-txt:
+
+robots.txt 의 Request-rate 와 Visit-time
+----------------------------------------
+
+15.9까지는 robots.txt 의 ``Request-rate`` 행과 ``Visit-time`` 행이 무시되었습니다. 15.10은 robots.txt 처리가 활성화되어 있을 때(``crawler.ignore.robots.txt`` 가 기본값인 ``false`` 일 때) 이를 준수합니다. ``Request-rate`` 를 선언한 사이트에는 이제 속도 조절이 적용됩니다. |Fess|\ 는 그 속도가 나타내는 간격(최대 60초)만큼 그 오리진의 다음 URL 까지 대기하므로, 그 사이트의 크롤링에 시간이 더 걸릴 수 있습니다. ``Visit-time`` 을 선언한 사이트는 그 시간대(UTC) 안에서만 크롤링됩니다. 시간대 밖에서 큐에서 꺼낸 그 오리진의 URL 은 건너뛰며, 같은 크롤링 중에 재시도하지 않고 장애 URL 로도 기록하지 않습니다. 시간대 안에서 한 번도 실행되지 않는 크롤링 작업은 그 사이트의 문서를 갱신하지 않으며, 기본 "이전 문서 삭제" 설정(``day.for.cleanup``, 3일)에서는 그 문서에 마지막으로 도달한 크롤링으로부터 약 3일 뒤에 만료됩니다. 크롤링 작업은 시간대 안에서 실행되도록 스케줄하십시오. ``Request-rate`` 또는 ``Visit-time`` 만 비활성화하는 설정은 없으며, ``crawler.ignore.robots.txt=true`` 는 robots.txt 처리 전체를 비활성화합니다. 자세한 내용은 :doc:`../config/rate-limiting` 을 참조하십시오.
+
 .. _upgrade-1510-user-agent:
 
 일반 화면이 저장한 사용자 에이전트

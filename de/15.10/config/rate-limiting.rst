@@ -110,6 +110,43 @@ robots.txt wird gemäß RFC 9309 ausgewertet. Zwischen ``Allow:`` und ``Disallow
 passende Regel, und auch die Start-URLs werden gegen robots.txt geprüft. Eine von robots.txt
 verbotene URL wird in ``fess-crawler.log`` auf INFO protokolliert und nicht als Fehler-URL erfasst.
 
+Request-rate
+------------
+
+Ab 15.10 beachtet |Fess| auch die Zeilen ``Request-rate`` und ``Visit-time`` in robots.txt (bis 15.9 wurden sie ignoriert). Beide sind nicht Teil von RFC 9309, sondern stammen aus dem `erweiterten Robots-Exclusion-Vorschlag <https://www.conman.org/people/spc/robots2.html>`__. SeznamBot verwendet ebenfalls Request-rate (`Dokumentation von Seznam <https://www.napoveda.seznam.cz/en/crawling-control>`__). Wie Crawl-delay gelten sie nur, solange die robots.txt-Verarbeitung aktiv ist: ``crawler.ignore.robots.txt=true`` schaltet alle drei ab, eine Einstellung für nur eine davon gibt es nicht. Sie sind keine ``Allow:``- oder ``Disallow:``-Regeln: Sie beenden nie eine ``User-agent``-Gruppe und ändern nie, welche URLs verboten sind.
+
+``Request-rate: <Dokumente>/<Zeit>[ Einheit]`` bittet einen Crawler, in dieser Zeit höchstens so viele Dokumente abzurufen. Die Einheit der Zeit ist ``s`` (Sekunden, Standard), ``m``, ``h`` oder ``d``. Beispiele:
+
+- ``1/10``: eine Seite pro 10 Sekunden
+- ``10/10m``: zehn Seiten pro 10 Minuten
+- ``20/1h``: zwanzig Seiten pro Stunde
+- ``100/15 m``: hundert Seiten pro 15 Minuten
+
+|Fess| rechnet die Rate in den Abstand zwischen zwei URLs um (``1/10`` sind 10 Sekunden, ``5/1m`` sind 12 Sekunden) und wartet je Origin vor der nächsten URL so lange wie der größere der beiden Abstände aus Crawl-delay und Request-rate. Die Obergrenze von 60 Sekunden gilt auch für diese Wartezeit; eine langsamere Rate wie ``1/1h`` wird auf 60 Sekunden begrenzt. Request-rate taktet URLs und ist kein Kontingent für einen Schwall von Anfragen. Wie bei Crawl-delay wird die erste URL eines Origin nicht getaktet, weil robots.txt beim Abruf dieser URL gelesen wird, und bei einem inkrementellen Crawl werden HEAD und GET einer URL direkt nacheinander gesendet.
+
+Hinter der Rate kann eine Tageszeit stehen. Die Rate gilt dann nur in dieser Tageszeit; außerhalb davon setzt Request-rate keine Grenze (Crawl-delay gilt weiterhin):
+
+::
+
+    User-agent: *
+    Request-rate: 1/10 s 1800-1900
+
+Zeiten sind UT/GMT (UTC) von 00:00 bis 23:59, geschrieben als ``HHMM-HHMM`` oder ``HH:MM-HH:MM``; beide Enden sind eingeschlossen. Ein Bereich darf über Mitternacht gehen (``2300-0100``). Stehen mehrere Request-rate-Zeilen in der Datei, werden alle beachtet, und es gilt die langsamste, die gerade aktiv ist. Eine fehlerhafte Rate oder Tageszeit (zum Beispiel eine Stunde über 23 oder eine Minute über 59) wird ignoriert.
+
+Visit-time
+----------
+
+``Visit-time: HH:MM-HH:MM`` (auch ``HHMM-HHMM``) bittet einen Crawler, die Website nur in dieser Tageszeit zu besuchen, in UTC und einschließlich beider Enden. Mehrere Zeilen sind erlaubt; zulässig ist dann die Vereinigung aller Zeiten.
+
+::
+
+    User-agent: *
+    Visit-time: 02:00-06:00
+
+|Fess| wartet nicht, bis das Zeitfenster beginnt, denn das würde einen Crawl-Thread stundenlang blockieren. Eine URL dieses Origin, die außerhalb des Fensters aus der Warteschlange genommen wird, wird übersprungen wie eine mit ``Disallow:`` verbotene URL: Sie wird je Origin einmal auf INFO protokolliert, nicht wieder in die Warteschlange gestellt (im selben Crawl also nicht später erneut versucht) und nicht als Fehler gezählt. Der Crawl muss daher innerhalb des Fensters beginnen. Eine Start-URL, die vor Beginn des Fensters aus der Warteschlange genommen wird, geht für diesen Crawl verloren, auch wenn der Crawl noch läuft, wenn das Fenster beginnt. Eine fehlerhafte Visit-time-Zeile wird ignoriert, es gibt dann keine Einschränkung.
+
+Läuft der Crawl-Job einer Website, die Visit-time angibt, nie innerhalb des Fensters, wird die Website nicht gecrawlt und ihre indexierten Dokumente werden nicht aktualisiert. Mit der Standardeinstellung „Alte Dokumente löschen“ (``day.for.cleanup``, 3 Tage) laufen sie etwa 3 Tage nach dem letzten Crawl ab, der sie erreicht hat, genau wie bei einer nicht erreichbaren Website. Planen Sie den Crawl-Job innerhalb des Fensters.
+
 Backoff nach 429/503-Antworten
 ------------------------------
 

@@ -663,6 +663,7 @@ Présentation
 
 robots.txt est un fichier qui indique aux robots d'indexation s'ils peuvent ou non indexer.
 |Fess| respecte robots.txt par défaut.
+Outre les règles ``Allow:`` et ``Disallow:``, il respecte la ligne ``Crawl-delay`` et, depuis la version 15.10, les lignes ``Request-rate`` et ``Visit-time`` ; voir :doc:`rate-limiting`.
 
 Méthode de configuration
 --------

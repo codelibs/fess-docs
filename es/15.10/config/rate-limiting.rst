@@ -110,6 +110,43 @@ robots.txt se interpreta según RFC 9309. Entre ``Allow:`` y ``Disallow:`` preva
 coincidente más larga, y las URL iniciales también se comprueban con robots.txt. Una URL que
 robots.txt no permite se registra en INFO en ``fess-crawler.log`` y no se registra como URL fallida.
 
+Request-rate
+------------
+
+A partir de la versión 15.10, |Fess| también respeta las líneas ``Request-rate`` y ``Visit-time`` de robots.txt (hasta la 15.9 se ignoraban). Ninguna forma parte de RFC 9309: ambas proceden de la `propuesta ampliada de exclusión de robots <https://www.conman.org/people/spc/robots2.html>`__. SeznamBot también usa Request-rate (`documentación de Seznam <https://www.napoveda.seznam.cz/en/crawling-control>`__). Igual que Crawl-delay, solo actúan mientras el manejo de robots.txt está activado: ``crawler.ignore.robots.txt=true`` desactiva las tres, y no existe un ajuste para desactivar solo una de ellas. No son reglas ``Allow:`` ni ``Disallow:``: nunca terminan un grupo ``User-agent`` ni cambian qué URL están prohibidas.
+
+``Request-rate: <documentos>/<tiempo>[ unidad]`` pide a un rastreador que obtenga como máximo ese número de documentos en ese tiempo. La unidad del tiempo es ``s`` (segundos, el valor predeterminado), ``m``, ``h`` o ``d``. Ejemplos:
+
+- ``1/10``: una página cada 10 segundos
+- ``10/10m``: diez páginas cada 10 minutos
+- ``20/1h``: veinte páginas por hora
+- ``100/15 m``: cien páginas cada 15 minutos
+
+|Fess| convierte la tasa en el intervalo entre dos URL (``1/10`` son 10 segundos y ``5/1m`` son 12 segundos) y, por cada origen, espera antes de la siguiente URL el mayor de los intervalos de Crawl-delay y Request-rate. El máximo de 60 segundos también se aplica a esta espera, así que una tasa más lenta, como ``1/1h``, se limita a 60 segundos. Request-rate espacia las URL; no es un presupuesto de ráfaga. Como con Crawl-delay, la primera URL de un origen no se espacia, porque robots.txt se lee mientras se obtiene, y en un rastreo incremental el HEAD y el GET de una URL se envían uno tras otro.
+
+Tras la tasa puede ir una franja horaria. La tasa solo se aplica entonces en esa franja; fuera de ella Request-rate no impone ningún límite (Crawl-delay sigue aplicándose):
+
+::
+
+    User-agent: *
+    Request-rate: 1/10 s 1800-1900
+
+Las horas son UT/GMT (UTC), de 00:00 a 23:59, con el formato ``HHMM-HHMM`` o ``HH:MM-HH:MM``, y ambos extremos están incluidos. Un intervalo puede cruzar la medianoche (``2300-0100``). Si hay varias líneas Request-rate, se respetan todas y se aplica la más lenta de las que están activas en ese momento. Una tasa o una franja horaria mal formada (por ejemplo, una hora superior a 23 o un minuto superior a 59) se ignora.
+
+Visit-time
+----------
+
+``Visit-time: HH:MM-HH:MM`` (también se acepta ``HHMM-HHMM``) pide a un rastreador que visite el sitio solo en esa franja horaria, en UTC y con ambos extremos incluidos. Se permiten varias líneas, y la franja permitida es la unión de todas.
+
+::
+
+    User-agent: *
+    Visit-time: 02:00-06:00
+
+|Fess| no espera a que se abra la franja, porque eso retendría un hilo de rastreo durante horas. Una URL de ese origen que se saca de la cola fuera de la franja se omite, como una URL prohibida por ``Disallow:``: se registra en INFO una vez por origen, no se vuelve a poner en la cola (no se reintenta más tarde en el mismo rastreo) y no se cuenta como fallo. Por tanto, el rastreo debe empezar dentro de la franja. Una URL inicial que se saca de la cola antes de que se abra la franja se pierde para ese rastreo, aunque este siga en ejecución cuando la franja se abra. Una línea Visit-time mal formada se ignora, es decir, no supone ninguna restricción.
+
+Si el trabajo de rastreo de un sitio que declara Visit-time nunca se ejecuta dentro de la franja, el sitio no se rastrea y sus documentos ya indexados no se actualizan. Con el ajuste predeterminado «Eliminar documentos anteriores» (``day.for.cleanup``, 3 días), caducan unos 3 días después del último rastreo que los alcanzó, igual que cuando un sitio no está disponible. Programe el trabajo de rastreo dentro de la franja.
+
 Espera tras respuestas 429/503
 ------------------------------
 

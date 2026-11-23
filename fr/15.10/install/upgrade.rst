@@ -639,6 +639,13 @@ Un ``fess_config.properties`` repris de 15.9 contient encore l'ancienne liste, e
 
 Un document que l'extracteur Tika rejette comme une bombe zip suspectée est désormais enregistré comme URL en échec et n'est pas indexé, même lorsque ``crawler.ignore.content.exception`` vaut ``true`` (valeur par défaut). Jusqu'à 15.9, il était indexé sans contenu. Les autres erreurs de contenu que ce paramètre ignore sont inchangées. L'extracteur prend un document pour une bombe zip lorsque son texte extrait dépasse ``maxUncompressionSize`` (10 000 000 de caractères) et est en outre plus de ``maxCompressionRatio`` fois plus long que les octets lus ; les deux valeurs se définissent dans ``crawler/extractor+tikaExtractor.xml``. Le rapport est de 100 (la valeur par défaut de Tika), de sorte qu'une archive ou un document Office de texte, qui s'étend de quelques fois à quelques dizaines de fois, est indexé quelle que soit sa taille. Augmentez ``maxCompressionRatio`` si vous devez indexer un document plus compressible, ou diminuez-le pour un contrôle plus strict.
 
+.. _upgrade-1510-robots-txt:
+
+Request-rate et Visit-time dans robots.txt
+------------------------------------------
+
+Jusqu'à la version 15.9, les lignes ``Request-rate`` et ``Visit-time`` d'un robots.txt étaient ignorées. La version 15.10 les respecte tant que le traitement de robots.txt est activé (``crawler.ignore.robots.txt`` vaut ``false``, la valeur par défaut). Un site qui déclare ``Request-rate`` est désormais cadencé : |Fess| attend l'intervalle que le débit implique (60 secondes au plus) avant l'URL suivante de cette origine, si bien que le crawl de ce site peut durer plus longtemps. Un site qui déclare ``Visit-time`` n'est crawlé que pendant cette plage horaire (UTC) : une URL de cette origine retirée de la file en dehors de la plage est ignorée, n'est pas réessayée dans le même crawl et n'est pas enregistrée comme URL en échec. Une tâche de crawl qui ne s'exécute jamais dans la plage n'actualise pas les documents de ce site, et avec le réglage par défaut « Supprimer les anciens documents » (``day.for.cleanup``, 3 jours) ils expirent environ 3 jours après le dernier crawl qui les a atteints. Planifiez la tâche de crawl dans la plage. Aucun réglage ne désactive ``Request-rate`` ou ``Visit-time`` seul ; ``crawler.ignore.robots.txt=true`` désactive tout le traitement de robots.txt. Pour les détails, voir :doc:`../config/rate-limiting`.
+
 .. _upgrade-1510-user-agent:
 
 Agent utilisateur enregistré par l'écran Général

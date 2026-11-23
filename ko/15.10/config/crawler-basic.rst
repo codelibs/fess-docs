@@ -656,6 +656,7 @@ robots.txt 설정
 
 robots.txt 는 크롤러에 대해 크롤링 가부를 지시하는 파일입니다.
 |Fess| 는 기본적으로 robots.txt 를 준수합니다.
+``Allow:`` 와 ``Disallow:`` 규칙 외에 ``Crawl-delay`` 행도 준수하며, 15.10 부터는 ``Request-rate`` 행과 ``Visit-time`` 행도 준수합니다(:doc:`rate-limiting` 참조).
 
 설정 방법
 --------

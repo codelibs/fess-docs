@@ -112,6 +112,43 @@ correspondante la plus longue l'emporte, et les URL de départ sont elles aussi 
 interdite par robots.txt est journalisée au niveau INFO dans ``fess-crawler.log`` et n'est pas
 enregistrée comme URL en échec.
 
+Request-rate
+------------
+
+Depuis la version 15.10, |Fess| respecte aussi les lignes ``Request-rate`` et ``Visit-time`` de robots.txt (elles étaient ignorées jusqu'à la 15.9). Ni l'une ni l'autre ne fait partie de la RFC 9309 : toutes deux viennent de la `proposition étendue d'exclusion des robots <https://www.conman.org/people/spc/robots2.html>`__. SeznamBot utilise aussi Request-rate (`documentation de Seznam <https://www.napoveda.seznam.cz/en/crawling-control>`__). Comme Crawl-delay, elles ne s'appliquent que lorsque le traitement de robots.txt est activé : ``crawler.ignore.robots.txt=true`` désactive les trois, et il n'existe pas de réglage pour n'en désactiver qu'une seule. Ce ne sont pas des règles ``Allow:`` ou ``Disallow:`` : elles ne terminent jamais un groupe ``User-agent`` et ne changent jamais les URL interdites.
+
+``Request-rate: <documents>/<durée>[ unité]`` demande à un robot de ne pas récupérer plus de documents que ce nombre pendant cette durée. L'unité de la durée est ``s`` (secondes, par défaut), ``m``, ``h`` ou ``d``. Exemples :
+
+- ``1/10`` : une page toutes les 10 secondes
+- ``10/10m`` : dix pages toutes les 10 minutes
+- ``20/1h`` : vingt pages par heure
+- ``100/15 m`` : cent pages toutes les 15 minutes
+
+|Fess| convertit le débit en intervalle entre deux URL (``1/10`` vaut 10 secondes, ``5/1m`` vaut 12 secondes) et, pour chaque origine, attend avant l'URL suivante le plus long des intervalles de Crawl-delay et de Request-rate. La limite de 60 secondes s'applique aussi à cette attente : un débit plus lent, comme ``1/1h``, est ramené à 60 secondes. Request-rate espace les URL ; ce n'est pas un budget de rafale. Comme pour Crawl-delay, la première URL d'une origine n'est pas espacée, car robots.txt est lu pendant qu'elle est récupérée, et lors d'un crawl incrémental le HEAD et le GET d'une même URL partent l'un après l'autre.
+
+Une plage horaire peut suivre le débit. Le débit ne s'applique alors que pendant cette plage ; en dehors, Request-rate n'impose aucune limite (Crawl-delay continue de s'appliquer) :
+
+::
+
+    User-agent: *
+    Request-rate: 1/10 s 1800-1900
+
+Les heures sont en UT/GMT (UTC), de 00:00 à 23:59, écrites ``HHMM-HHMM`` ou ``HH:MM-HH:MM``, bornes comprises. Une plage peut franchir minuit (``2300-0100``). Quand il y a plusieurs lignes Request-rate, toutes sont prises en compte et c'est la plus lente parmi celles qui sont actives à cet instant qui s'applique. Un débit ou une plage horaire mal formé (par exemple une heure supérieure à 23 ou une minute supérieure à 59) est ignoré.
+
+Visit-time
+----------
+
+``Visit-time: HH:MM-HH:MM`` (``HHMM-HHMM`` est accepté aussi) demande à un robot de ne visiter le site que pendant cette plage horaire, en UTC, bornes comprises. Plusieurs lignes sont possibles ; la plage autorisée est alors leur union.
+
+::
+
+    User-agent: *
+    Visit-time: 02:00-06:00
+
+|Fess| n'attend pas l'ouverture de la plage, car cela immobiliserait un thread de crawl pendant des heures. Une URL de cette origine retirée de la file en dehors de la plage est ignorée, comme une URL interdite par ``Disallow:`` : elle est journalisée au niveau INFO une fois par origine, elle n'est pas remise dans la file (elle n'est pas réessayée plus tard dans le même crawl) et elle n'est pas comptée comme un échec. Le crawl doit donc démarrer dans la plage. Une URL de départ retirée de la file avant l'ouverture de la plage est perdue pour ce crawl, même si le crawl tourne encore quand la plage s'ouvre. Une ligne Visit-time mal formée est ignorée, ce qui équivaut à aucune restriction.
+
+Si la tâche de crawl d'un site qui déclare Visit-time ne s'exécute jamais dans la plage, le site n'est pas crawlé et ses documents déjà indexés ne sont pas actualisés. Avec le réglage par défaut « Supprimer les anciens documents » (``day.for.cleanup``, 3 jours), ils expirent environ 3 jours après le dernier crawl qui les a atteints, comme lorsqu'un site est indisponible. Planifiez la tâche de crawl dans la plage.
+
 Attente après les réponses 429/503
 ----------------------------------
 

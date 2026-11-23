@@ -649,6 +649,7 @@ Overview
 
 robots.txt is a file that instructs crawlers whether crawling is allowed.
 |Fess| respects robots.txt by default.
+Besides the ``Allow:`` and ``Disallow:`` rules, it honors the ``Crawl-delay`` line, and from 15.10 the ``Request-rate`` and ``Visit-time`` lines; see :doc:`rate-limiting`.
 
 Configuration Method
 --------------------

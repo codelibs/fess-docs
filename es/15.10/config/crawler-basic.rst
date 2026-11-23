@@ -660,6 +660,7 @@ Descripción General
 
 robots.txt es un archivo que instruye a los rastreadores sobre si permitir o no el rastreo.
 |Fess| respeta robots.txt por defecto.
+Además de las reglas ``Allow:`` y ``Disallow:``, respeta la línea ``Crawl-delay`` y, desde la versión 15.10, las líneas ``Request-rate`` y ``Visit-time``; consulte :doc:`rate-limiting`.
 
 Método de Configuración
 ------------------------
