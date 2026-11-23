@@ -614,6 +614,13 @@ Docker 版::
 
 Tika の抽出処理が zip 爆弾の疑いで拒否した文書は、 ``crawler.ignore.content.exception`` が ``true`` （既定）でも、障害 URL として記録され、インデックスされなくなりました。15.9 まではコンテンツなしでインデックスされていました。この設定が無視するその他のコンテンツエラーは変わりません。抽出したテキストが ``maxUncompressionSize`` （10,000,000 文字）を超え、かつ読み込んだバイト数の ``maxCompressionRatio`` 倍を超える文書が zip 爆弾の疑いと判定されます。どちらも ``crawler/extractor+tikaExtractor.xml`` で設定します。比は 100（Tika の既定値）なので、数倍から数十倍に展開される通常のテキストのアーカイブや Office 文書は、サイズにかかわらずインデックスされます。さらに圧縮率の高い文書をインデックスする必要がある場合は ``maxCompressionRatio`` を上げ、より厳しくするには下げてください。
 
+.. _upgrade-1510-robots-txt:
+
+robots.txt の Request-rate と Visit-time
+----------------------------------------
+
+15.9 までは、robots.txt の ``Request-rate`` 行と ``Visit-time`` 行は無視されていました。15.10 は、robots.txt の処理が有効なとき（ ``crawler.ignore.robots.txt`` が既定の ``false`` のとき）に、これらを尊重します。 ``Request-rate`` を宣言しているサイトにはペース配分が働くようになり、 |Fess| はそのレートが示す間隔（最大 60 秒）だけ、そのオリジンの次の URL まで待つため、そのサイトのクロールに時間がかかることがあります。 ``Visit-time`` を宣言しているサイトは、その時刻帯（UTC）の中でだけクロールされます。時刻帯の外でキューから取り出したそのオリジンの URL はスキップされ、同じクロール中に再試行されず、障害 URL としても記録されません。時刻帯の中で一度も実行されないクロールジョブは、そのサイトの文書を更新しません。既定の「以前のドキュメントを削除」設定（ ``day.for.cleanup`` 、3 日）では、その文書に最後に到達したクロールから約 3 日で期限切れになります。クロールジョブは時刻帯の中で実行されるようにスケジュールしてください。 ``Request-rate`` または ``Visit-time`` だけを無効にする設定はなく、 ``crawler.ignore.robots.txt=true`` は robots.txt の処理全体を無効にします。詳細は :doc:`../config/rate-limiting` を参照してください。
+
 .. _upgrade-1510-user-agent:
 
 全般画面が保存したユーザーエージェント

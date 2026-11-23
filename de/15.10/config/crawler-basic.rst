@@ -663,6 +663,7 @@ Konfiguration von robots.txt
 
 robots.txt ist eine Datei, die Crawlern anweist, ob das Crawlen erlaubt ist.
 |Fess| befolgt standardmäßig robots.txt.
+Neben den Regeln ``Allow:`` und ``Disallow:`` beachtet es die Zeile ``Crawl-delay`` und ab 15.10 auch die Zeilen ``Request-rate`` und ``Visit-time``; siehe :doc:`rate-limiting`.
 
 Konfigurationsmethode
 --------

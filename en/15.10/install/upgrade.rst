@@ -622,6 +622,13 @@ A ``fess_config.properties`` carried over from 15.9 still holds the old list, an
 
 A document that the Tika extractor rejects as a suspected zip bomb is now recorded as a failure URL and is not indexed, even when ``crawler.ignore.content.exception`` is ``true`` (the default). Up to 15.9, it was indexed with no content. Other content errors that this setting ignores are unchanged. The extractor takes a document for a zip bomb when its extracted text is longer than ``maxUncompressionSize`` (10,000,000 characters) and also more than ``maxCompressionRatio`` times as long as the bytes it was read from; both are set in ``crawler/extractor+tikaExtractor.xml``. The ratio is 100 (the default of Tika), so an ordinary archive or office document of text, which expands by a factor of a few to a few tens, is indexed whatever its size. Raise ``maxCompressionRatio`` if you have to index a more compressible document, or lower it to be stricter.
 
+.. _upgrade-1510-robots-txt:
+
+Request-rate and Visit-time in robots.txt
+-----------------------------------------
+
+Up to 15.9, the ``Request-rate`` and ``Visit-time`` lines of a robots.txt were ignored. 15.10 honors them while robots.txt handling is on (``crawler.ignore.robots.txt`` is ``false``, the default). A site that declares ``Request-rate`` is now paced: |Fess| waits for the interval the rate implies (at most 60 seconds) before the next URL of that origin, so a crawl of that site can take longer. A site that declares ``Visit-time`` is crawled only in that time of day (UTC): a URL of that origin that is dequeued outside it is skipped, is not retried in the same crawl and is not recorded as a failure URL. A crawl job that never runs inside the window does not refresh the documents of that site, and with the default "Delete old documents" setting (``day.for.cleanup``, 3 days) they expire about 3 days after the last crawl that reached them. Schedule the crawl job inside the window. There is no setting that turns off ``Request-rate`` or ``Visit-time`` alone; ``crawler.ignore.robots.txt=true`` turns off all of the robots.txt handling. For the details, see :doc:`../config/rate-limiting`.
+
 .. _upgrade-1510-user-agent:
 
 User Agent Saved by the General Screen

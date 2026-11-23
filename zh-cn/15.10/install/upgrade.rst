@@ -602,6 +602,13 @@ Docker 版::
 
 被 Tika 提取器判定为疑似 zip 炸弹而拒绝的文档，即使 ``crawler.ignore.content.exception`` 为 ``true`` （默认），现在也会被记录为失败 URL，并且不会被索引。直到 15.9，这类文档会以没有内容的状态被索引。该设置所忽略的其他内容错误保持不变。提取出的文本长度超过 ``maxUncompressionSize`` （10,000,000 个字符），并且超过所读取字节数的 ``maxCompressionRatio`` 倍时，该文档会被判定为疑似 zip 炸弹；这两个值都在 ``crawler/extractor+tikaExtractor.xml`` 中设置。比值为 100（Tika 的默认值），因此展开几倍到几十倍的普通文本压缩包或 Office 文档，无论大小都会被索引。如需索引压缩率更高的文档，请调大 ``maxCompressionRatio``；如需更严格的检查，请调小它。
 
+.. _upgrade-1510-robots-txt:
+
+robots.txt 中的 Request-rate 和 Visit-time
+------------------------------------------
+
+直到 15.9，robots.txt 中的 ``Request-rate`` 行和 ``Visit-time`` 行都会被忽略。15.10 在 robots.txt 处理启用时（ ``crawler.ignore.robots.txt`` 为默认的 ``false`` ）会遵守它们。声明了 ``Request-rate`` 的站点现在会被限速： |Fess| 会在该源的下一个 URL 之前等待该速率所对应的间隔（最长 60 秒），因此该站点的爬取可能耗时更长。声明了 ``Visit-time`` 的站点只会在该时间段（UTC）内被爬取：在时间段之外从队列取出的该源的 URL 会被跳过，在同一次爬取中不会重试，也不会记录为失败 URL。从不在该时间段内运行的爬取作业不会刷新该站点的文档，在默认的“删除以前的文档”设置（ ``day.for.cleanup`` ，3 天）下，这些文档会在最后一次到达它们的爬取之后约 3 天过期。请将爬取作业安排在该时间段内运行。没有只关闭 ``Request-rate`` 或 ``Visit-time`` 的设置， ``crawler.ignore.robots.txt=true`` 会关闭全部 robots.txt 处理。详情请参阅 :doc:`../config/rate-limiting` 。
+
 .. _upgrade-1510-user-agent:
 
 常规页面保存的用户代理

@@ -636,6 +636,13 @@ Eine aus 15.9 übernommene ``fess_config.properties`` enthält noch die alte Lis
 
 Ein Dokument, das der Tika-Extraktor als vermutete Zip-Bombe ablehnt, wird jetzt als Fehler-URL aufgezeichnet und nicht indiziert, auch wenn ``crawler.ignore.content.exception`` ``true`` ist (Standard). Bis 15.9 wurde es ohne Inhalt indiziert. Andere Inhaltsfehler, die diese Einstellung ignoriert, bleiben unverändert. Der Extraktor hält ein Dokument für eine Zip-Bombe, wenn sein extrahierter Text länger als ``maxUncompressionSize`` (10.000.000 Zeichen) und zugleich mehr als ``maxCompressionRatio``-mal so lang ist wie die gelesenen Bytes; beide Werte stehen in ``crawler/extractor+tikaExtractor.xml``. Das Verhältnis beträgt 100 (der Standardwert von Tika), sodass ein gewöhnliches Archiv oder Office-Dokument mit Text, das auf das Mehrfache bis einige Dutzendfache anwächst, unabhängig von seiner Größe indiziert wird. Erhöhen Sie ``maxCompressionRatio``, wenn Sie ein stärker komprimierbares Dokument indizieren müssen, oder senken Sie den Wert für eine strengere Prüfung.
 
+.. _upgrade-1510-robots-txt:
+
+Request-rate und Visit-time in robots.txt
+-----------------------------------------
+
+Bis 15.9 wurden die Zeilen ``Request-rate`` und ``Visit-time`` einer robots.txt ignoriert. 15.10 beachtet sie, solange die robots.txt-Verarbeitung aktiv ist (``crawler.ignore.robots.txt`` ist ``false``, der Standard). Eine Website, die ``Request-rate`` angibt, wird nun getaktet: |Fess| wartet den Abstand, den die Rate ergibt (höchstens 60 Sekunden), bevor es die nächste URL dieses Origin abruft; der Crawl dieser Website kann dadurch länger dauern. Eine Website, die ``Visit-time`` angibt, wird nur in dieser Tageszeit (UTC) gecrawlt: Eine URL dieses Origin, die außerhalb des Fensters aus der Warteschlange genommen wird, wird übersprungen, im selben Crawl nicht erneut versucht und nicht als Fehler-URL erfasst. Ein Crawl-Job, der nie innerhalb des Fensters läuft, aktualisiert die Dokumente dieser Website nicht; mit der Standardeinstellung „Alte Dokumente löschen“ (``day.for.cleanup``, 3 Tage) laufen sie etwa 3 Tage nach dem letzten Crawl ab, der sie erreicht hat. Planen Sie den Crawl-Job innerhalb des Fensters. Es gibt keine Einstellung, die nur ``Request-rate`` oder nur ``Visit-time`` abschaltet; ``crawler.ignore.robots.txt=true`` schaltet die gesamte robots.txt-Verarbeitung ab. Einzelheiten finden Sie unter :doc:`../config/rate-limiting`.
+
 .. _upgrade-1510-user-agent:
 
 Vom Bildschirm „Allgemein" gespeicherter User-Agent

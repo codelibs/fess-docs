@@ -110,6 +110,43 @@ robots.txt is interpreted according to RFC 9309. Between ``Allow:`` and ``Disall
 matching rule wins, and the start URLs are checked against robots.txt too. A URL that robots.txt
 disallows is logged at INFO in ``fess-crawler.log`` and is not recorded as a failure URL.
 
+Request-rate
+------------
+
+From 15.10, |Fess| also honors the ``Request-rate`` and ``Visit-time`` lines of robots.txt (up to 15.9 they were ignored). Neither is part of RFC 9309: both come from the `extended robots exclusion proposal <https://www.conman.org/people/spc/robots2.html>`__, and SeznamBot also uses Request-rate (`Seznam documentation <https://www.napoveda.seznam.cz/en/crawling-control>`__). Like Crawl-delay, they apply only while robots.txt handling is on: ``crawler.ignore.robots.txt=true`` turns off all three, and there is no setting for one of them alone. They are not ``Allow:`` or ``Disallow:`` rules: they never end a ``User-agent`` group and never change which URLs are disallowed.
+
+``Request-rate: <documents>/<time>[ unit]`` asks a crawler to fetch no more than that many documents in that time. The unit of the time is ``s`` (seconds, the default), ``m``, ``h`` or ``d``. For example:
+
+- ``1/10``: one page per 10 seconds
+- ``10/10m``: ten pages per 10 minutes
+- ``20/1h``: twenty pages per hour
+- ``100/15 m``: one hundred pages per 15 minutes
+
+|Fess| converts the rate into the interval between two URLs (``1/10`` is 10 seconds, ``5/1m`` is 12 seconds) and, for each origin, waits for the longer of the Crawl-delay and the Request-rate interval before the next URL. The upper limit of 60 seconds applies to this wait as well, so a slower rate such as ``1/1h`` is clamped to 60 seconds. Request-rate paces URLs; it is not a burst budget. As with Crawl-delay, the first URL of an origin is not paced, because robots.txt is read while it is fetched, and in an incremental crawl the HEAD and the GET of one URL are sent back to back.
+
+A time of day can follow the rate. The rate then applies only in that time of day; outside it, Request-rate sets no limit (Crawl-delay still applies):
+
+::
+
+    User-agent: *
+    Request-rate: 1/10 s 1800-1900
+
+Times are UT/GMT (UTC) from 00:00 to 23:59, written ``HHMM-HHMM`` or ``HH:MM-HH:MM``, and both ends are included. A range may cross midnight (``2300-0100``). When there are several Request-rate lines, all of them are honored, and the slowest one that is active at that moment applies. A malformed rate or time of day (for example an hour over 23 or a minute over 59) is ignored.
+
+Visit-time
+----------
+
+``Visit-time: HH:MM-HH:MM`` (``HHMM-HHMM`` is accepted too) asks a crawler to visit the site only in that time of day, in UTC and with both ends included. Several lines are allowed, and the permitted time of day is the union of them.
+
+::
+
+    User-agent: *
+    Visit-time: 02:00-06:00
+
+|Fess| does not wait for the window to open, because that would hold a crawl thread for hours. A URL of the origin that is dequeued outside the window is skipped, like a URL that ``Disallow:`` forbids: it is logged at INFO once per origin, it is not put back into the queue (it is not retried later in the same crawl), and it is not counted as a failure. The crawl therefore has to start inside the window. A start URL that is dequeued before the window opens is lost for that crawl, even if the crawl is still running when the window opens. A malformed Visit-time line is ignored, which means no restriction.
+
+If the crawl job of a site that declares Visit-time never runs inside the window, the site is not crawled and its indexed documents are not refreshed. With the default "Delete old documents" setting (``day.for.cleanup``, 3 days), they expire about 3 days after the last crawl that reached them, as they do when a site is down. Schedule the crawl job inside the window.
+
 Backoff after 429/503 responses
 -------------------------------
 

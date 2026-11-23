@@ -638,7 +638,7 @@ robots.txt 配置
 ----
 
 robots.txt 是向爬虫指示是否允许爬取的文件。
-|Fess| 默认遵守 robots.txt。
+|Fess| 默认遵守 robots.txt。除 ``Allow:`` 和 ``Disallow:`` 规则外，它还会遵守 ``Crawl-delay`` 行，从 15.10 起还会遵守 ``Request-rate`` 行和 ``Visit-time`` 行（请参阅 :doc:`rate-limiting` ）。
 
 配置方法
 --------
