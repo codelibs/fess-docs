@@ -78,7 +78,8 @@ Backup der Konfigurationsdaten
    - ``fess_config.bulk`` - zusätzlich zu den oben genannten 19 Indizes Laufzeitdaten wie
      Crawl-Informationen, fehlgeschlagene URLs, Job-Protokolle und Thumbnail-Warteschlange,
      insgesamt 25 Indizes bis 15.8; 15.9 ergänzt den Index ``tag_type``, der die Benutzer-Tags
-     enthält, sodass es 26 sind
+     enthält, sodass es 26 sind; 15.10 ergänzt den Index ``session``, sodass der Alias ``fess_config``
+     27 Indizes umfasst, die Datei enthält jedoch keinen Sitzungsdatensatz, siehe :ref:`Der Index fess_config.session für Sitzungen <upgrade-1510-session-index>`
    - ``fess_user.bulk`` - Benutzer, Rollen und Gruppen
    - ``system.properties`` - Systemeinstellungen einschließlich der allgemeinen Einstellungen
    - ``fess.json`` - Indexeinstellungen (Anzahl der Shards, ``index.knn`` usw.)
@@ -404,7 +405,13 @@ Sie es anhand der folgenden Schritte.
 
    Diese Anleitung gilt für die manuelle Verwaltung von OpenSearch bei der ZIP-Version und der RPM/DEB-Version.
    Bei der Docker-Version werden OpenSearch und die Plugins durch das Herunterladen der neuen Images in Schritt 3
-   gemeinsam aktualisiert, sodass dieser Schritt nicht erforderlich ist.
+   gemeinsam aktualisiert, sodass dieser Schritt nicht erforderlich ist, sofern die Compose-Dateien aus dem
+   Tag 15.10 (``v15.10.0``, wie in Schritt 3) stammen. Bei Compose-Dateien, die noch auf einem Tag 15.9 stehen,
+   bleiben die Images bei |Fess| 15.9.0 und OpenSearch 3.9.0; ändern Sie beide Image-Tags gemeinsam (oder
+   verwenden Sie die Dateien von 15.10), denn |Fess| und OpenSearch verschiedener Versionen sind kein
+   unterstütztes Paar. Die Volume-Namen ändern sich nicht, daher starten die Volumes von OpenSearch 3.9.0 ohne
+   Migrationsschritt unter 3.10.0. Der Wechsel ist nur in eine Richtung möglich: Zur Rückkehr siehe
+   „Rollback-Verfahren".
 
 .. important::
 
@@ -430,12 +437,33 @@ Sie es anhand der folgenden Schritte.
    immer zu.
 
    Ein mit OpenSearch 3.10.0 erstellter Snapshot lässt sich nicht in OpenSearch 3.9.x oder älter
-   wiederherstellen. Bewahren Sie den vor dem Upgrade erstellten Snapshot für ein mögliches Rollback
-   auf.
+   wiederherstellen, und OpenSearch 3.9.x startet nicht auf einem Datenverzeichnis, das ein Knoten
+   3.10.0 geöffnet hat. Bewahren Sie den vor dem Upgrade erstellten Snapshot für ein mögliches Rollback
+   auf (siehe „Rollback-Verfahren").
+
+   |Fess| 15.10 prüft nicht, auf welcher OpenSearch-3.x-Version es läuft: Es startete und suchte
+   nachweislich auch auf einem unveränderten OpenSearch 3.9.0, und ``bin/fess-setup check`` warnt nur,
+   wenn die Knoten eines Clusters verschiedene Versionen ausführen. Diese Kombination wird nicht
+   unterstützt. Die |Fess|-Plugins von OpenSearch müssen für die Version von OpenSearch gebaut sein, in
+   der sie laufen (3.10.0 für |Fess| 15.10).
 
 1. Installieren Sie die neue Version von OpenSearch
 
-2. Plugins neu installieren::
+   Bei der ZIP-Version muss das OpenSearch-Home am Ende unter demselben absoluten Pfad liegen wie das
+   alte; lesen Sie unten :ref:`ZIP-Version: OpenSearch-Home am alten Pfad belassen <upgrade-opensearch-zip-path>`, bevor Sie Daten verschieben. Die
+   RPM/DEB-Pakete behalten das Wörterbuchverzeichnis unter ``/etc/opensearch/dictionary`` bei, das vor
+   und nach dem Upgrade derselbe Pfad ist, sodass dort nichts Besonderes nötig ist.
+
+2. Plugins neu installieren. Entfernen Sie zuerst die vier Plugins der alten Version, falls das
+   OpenSearch-Verzeichnis sie bereits enthält (auch ``bin/fess-setup install opensearch`` installiert die
+   vier Plugins)::
+
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove analysis-fess
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove analysis-extension
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove minhash
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove configsync
+
+   Installieren Sie danach die Plugins der neuen Version::
 
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
@@ -451,6 +479,20 @@ Sie es anhand der folgenden Schritte.
       Die vier Plugins für |Fess| werden auf maven.codelibs.org veröffentlicht und daher per URL
       installiert. Die Form ``groupId:artifactId:version`` von ``opensearch-plugin install`` sucht
       nur in Maven Central.
+
+   .. warning::
+
+      Existiert ein Plugin-Verzeichnis bereits, schlägt ``opensearch-plugin install`` mit ``plugin
+      directory [...] already exists`` fehl und lässt das alte Plugin bestehen. ``bin/fess-setup install
+      opensearch-plugins`` behandelt ein solches Verzeichnis als installiert, ersetzt nichts und endet
+      mit Exit-Code ``0``. OpenSearch 3.10.0 verweigert dann den Start mit ``Plugin [...] was built for
+      OpenSearch version 3.9.0 but version 3.10.0 is running``. Entfernen Sie die alten Plugins wie oben
+      gezeigt, bevor Sie die neuen installieren.
+
+      ``opensearch-plugin install`` fragt bei einem Plugin, das zusätzliche Berechtigungen anfordert,
+      nach einer Bestätigung (``Continue with installation?``). Kann niemand antworten (kein Terminal,
+      Eingabe von ``/dev/null``), wird ein solches Plugin nicht installiert: Antworten Sie mit ``y``
+      oder übergeben Sie ``-b``, um die Frage zu überspringen.
 
 3. Wörterbuchverzeichnis unter das OpenSearch-Konfigurationsverzeichnis verschieben
 
@@ -469,6 +511,54 @@ Sie es anhand der folgenden Schritte.
 4. OpenSearch starten::
 
        $ sudo systemctl start opensearch.service
+
+.. _upgrade-opensearch-zip-path:
+
+**ZIP-Version: OpenSearch-Home am alten Pfad belassen**
+
+.. warning::
+
+   Die Analyzer-Einstellungen eines vorhandenen Index (die ``*_path``-Einstellungen) enthalten den
+   absoluten Pfad der Wörterbuchdateien, zum Beispiel ``/path/to/fess-15.9.0/opensearch/opensearch-3.9.0/config/dictionary/ja/mapping.txt``.
+   OpenSearch öffnet einen solchen Index nur, wenn dieser Pfad innerhalb seines eigenen
+   Konfigurationsverzeichnisses liegt. Installieren Sie OpenSearch 3.10.0 in einem anderen
+   Verzeichnis, wie es ``bin/fess-setup install opensearch`` tut (es legt ``opensearch-3.10.0`` neben
+   ``opensearch-3.9.0`` an), und verschieben Sie ``data/`` und die Wörterbuchdateien dann von Hand
+   dorthin, bleibt der Dokumentindex unzugewiesen (``Resource path must
+   be inside config directory`` in der Erklärung der Zuweisung), und der Cluster ist rot. Dasselbe
+   geschieht, wenn Sie ``data/`` in ein Home kopieren, das bereits einmal gestartet wurde. Das folgende
+   Verfahren legt die neue Engine unter den Pfad, mit dem die Indizes erstellt wurden:
+
+   1. Installieren Sie bei gestopptem OpenSearch (Schritt 2) OpenSearch 3.10.0 und seine Plugins in einem
+      anderen Verzeichnis (zum Beispiel mit ``bin/fess-setup install opensearch`` in ``fess-15.10.0``)
+      und starten Sie es nicht. Kopieren Sie ``data/`` und ``config/dictionary/`` des alten Home hinein::
+
+          $ OLD=/path/to/fess-15.9.0/opensearch/opensearch-3.9.0
+          $ NEW=/path/to/fess-15.10.0/opensearch/opensearch-3.10.0
+          $ mkdir -p $NEW/data $NEW/config/dictionary
+          $ cp -a $OLD/data/. $NEW/data/
+          $ cp -a $OLD/config/dictionary/. $NEW/config/dictionary/
+
+   2. Verschieben Sie das alte Home aus dem Verzeichnis ``opensearch/`` heraus (behalten Sie es, bis das
+      Upgrade abgeschlossen ist; zwei OpenSearch-Verzeichnisse unter ``opensearch/`` lassen
+      ``FESS_DICTIONARY_PATH`` in ``bin/fess.in.sh`` ungesetzt), und legen Sie das neue Home unter den
+      alten Pfad. Der Verzeichnisname behält die alte Versionsnummer::
+
+          $ mv $OLD /path/to/opensearch-3.9.0-orig
+          $ mv $NEW $OLD
+
+   3. Setzen Sie in ``config/opensearch.yml`` des verschobenen Home ``configsync.config_path`` auf den alten
+      absoluten Pfad zurück (der vollständige Pfad von ``$OLD/config/dictionary``, nicht die Variable).
+      Behalten Sie auch ``FESS_DICTIONARY_PATH`` auf dem alten Wert. Setzen Sie ihn ausdrücklich
+      (Umgebungsvariable oder ``bin/fess.in.sh``), denn ``bin/fess.in.sh`` setzt ihn nur für ein
+      OpenSearch unter ``opensearch/`` im |Fess|-Verzeichnis selbst.
+
+   4. Starten Sie OpenSearch aus ``$OLD``, veranlassen Sie einen erneuten Zuweisungsversuch für
+      fehlgeschlagene Shards (nötig, wenn der Cluster rot ist, weil OpenSearch zuvor unter einem anderen
+      Pfad gestartet wurde) und prüfen Sie den Zustand::
+
+          $ curl -X POST "http://localhost:9200/_cluster/reroute?retry_failed=true"
+          $ curl "http://localhost:9200/_cluster/health"
 
 Schritt 5: Start der neuen Version
 ====================================
@@ -552,7 +642,8 @@ Bei Major-Version-Upgrades wird die Neuerstellung des Index empfohlen.
 
 .. warning::
 
-   OpenSearch 3.10.0 lehnt Wörterbucheinträge ab, die 15.8 noch akzeptiert hat, etwa denselben
+   OpenSearch 3.9.0 und neuer, einschließlich des von 15.10 verwendeten 3.10.0, lehnt
+   Wörterbucheinträge ab, die 15.8 noch akzeptiert hat, etwa denselben
    ``mapping``-Eintrag, der zweimal gespeichert wurde, oder ein ``kuromoji``-Token, das ein
    Leerzeichen enthält. Bei einem solchen Eintrag legt die „Neuindizierung" den neuen Dokumentindex
    nicht an: ``fess.log`` meldet nur ``Failed to create index``, und der alte Index beantwortet
@@ -618,6 +709,10 @@ Das ZIP-Verfahren in Schritt 3 kopiert die ``fess_config.properties`` aus der al
      - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
      - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
      - Keine. 15.10 entfernt die Namen, die mit ``tk:``, ``X-TIKA:`` oder ``zip:`` beginnen, und fügt ``Content-Length`` dem Inhalt nicht hinzu, unabhängig davon, ob die Liste sie nennt (siehe „Metadatennamen" und „``Content-Length`` wird dem Inhalt nicht mehr hinzugefügt" weiter unten).
+   * - ``crawler.document.html.pruned.tags``
+     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+     - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
+     - Mit dem Wert von 15.10 gehört der Inhalt eines ``<template>``-Elements nicht mehr zum indexierten Text einer HTML-Seite. Wird der Wert von 15.9 beibehalten, wird er wie bisher indexiert. Ergänzen Sie ``template``, um das neue Verhalten zu übernehmen; bereits indexierte Dokumente ändern sich erst, wenn sie erneut gecrawlt werden.
    * - ``online.help.name.sereq``
      - ``sereq``
      - ``esreq``
@@ -665,6 +760,15 @@ Schemata von Suchergebnis-Links
 
 Ein Suchergebnis, dessen URL ein Schema hat, das nicht in der Liste steht, wird nicht zum Link. ``/go/`` antwortet für ein Dokument, dessen URL nach den Pfadzuordnungen für „Anzeige" ein Schema hat, das nicht in der Liste steht, mit ``404`` (eine Warnung wird in ``fess.log`` geschrieben). Bis 15.9 leitete ``/go/`` auf ein eigenes Schema (etwa ``hammerspoon://``) weiter, das eine Pfadzuordnung für „Anzeige" erzeugt hatte. Wenn Sie ein solches Schema verwenden, ergänzen Sie es ohne Doppelpunkt in ``search.result.link.schemes``. Führen Sie ``javascript``, ``data`` und ``vbscript`` nicht auf. Ein leerer Wert lässt kein Schema zu. Zum Format und zum Verhalten siehe :ref:`search-result-link-schemes`.
 
+.. _upgrade-1510-session-index:
+
+Der Index ``fess_config.session`` für Sitzungen
+-----------------------------------------------
+
+15.10 fügt einen optionalen Speicher hinzu, der die HTTP-Sitzungen in der Suchmaschine ablegt, sodass mehrere |Fess|-Knoten sie gemeinsam nutzen können. Er ist nur aktiv, wenn die Umgebungsvariable ``FESS_SESSION_STORE`` auf dem Knoten ``opensearch`` ist; ohne sie behält jeder Knoten seine Sitzungen wie bisher im Arbeitsspeicher (siehe :doc:`../config/session-store`).
+
+Auch bei ausgeschaltetem Speicher legt |Fess| bei jedem Start den Index ``fess_config.session`` an. Der Index gehört zum Alias ``fess_config``, weshalb der Alias in 15.10 27 Indizes hat (26 in 15.9). Der Index ist vom Backup-Export ausgenommen, sodass ``fess_config.bulk`` keinen Sitzungsdatensatz enthält, auch wenn Sitzungen gespeichert werden.
+
 .. _upgrade-1510-passkey:
 
 Der Index ``fess_user.passkey`` für Passkeys
@@ -701,7 +805,7 @@ Weitere Verhaltensänderungen
 - Der Aufruf von ``POST /login/changePassword`` ohne das alte Passwort lieferte bis 15.9 HTTP 500. 15.10 liefert einen Validierungsfehler, und das Passwort bleibt unverändert.
 - Ein POST an ein Formular der Administrationsoberfläche ohne ``crudMode`` (zum Beispiel aus einem Skript) lieferte in 15.9 HTTP 500 (15.8 und früher liefern kein 500). 15.10 liefert einen Validierungsfehler.
 - Das Löschen eines Plugins betrifft nur Dateien direkt im Plugin-Verzeichnis. Ein Name oder eine Version mit ``../`` löscht keine Datei außerhalb des Verzeichnisses mehr; stattdessen wird eine Warnung in ``fess.log`` geschrieben. Bis 15.9 konnte ein solcher Name Dateien außerhalb des Verzeichnisses löschen. Das Löschen läuft im Hintergrund, daher liefert ``DELETE /api/admin/plugin`` ``status`` ``0``, unabhängig davon, ob das Löschen gelingt. Prüfen Sie das Ergebnis in ``fess.log``.
-- Wird das Passwort eines lokalen Benutzers geändert, enden die übrigen Anmeldesitzungen dieses Benutzers bei ihrer nächsten Prüfung (siehe unten). Bis 15.9 blieben sie geöffnet; nur die Sitzung, die die Änderung vorgenommen hatte, wurde beendet (und nur bei einer Passwortänderung über ``/api/v2``). Das gilt für eine Änderung durch den Benutzer und für eine Änderung durch einen Administrator (Benutzerverwaltungsseite und Admin-REST-API). Jede Sitzung liest die Änderung höchstens einmal je ``password.changed.check.interval`` Sekunden aus dem Benutzerindex (Standard ``60``; siehe :doc:`security`), sodass die übrigen Sitzungen innerhalb dieser Zeit enden. Benutzer von LDAP und SSO werden nicht geprüft. Eine vor dem Upgrade begonnene Sitzung (nur bei persistierten oder replizierten Sitzungen; die Standardkonfiguration behält Sitzungen über einen Neustart nicht) endet, wenn das Passwort nach der Erstellung ihrer HTTP-Sitzung geändert wird; für ein vor dem Upgrade geändertes Passwort ist keine Änderungszeit gespeichert, daher bleibt eine solche Sitzung geöffnet. Das Feld ``password_changed_at`` wird beim Start zum Benutzerindex hinzugefügt, eine Neuindizierung ist daher nicht nötig.
+- Wird das Passwort eines lokalen Benutzers geändert, werden die Rollen oder die Gruppen des Benutzers geändert oder wird der Benutzer gelöscht, enden die übrigen Anmeldesitzungen dieses Benutzers bei ihrer nächsten Prüfung (siehe unten). Bis 15.9 blieben die übrigen Sitzungen geöffnet; nur die Sitzung, die die Änderung vorgenommen hatte, wurde beendet (und nur bei einer Passwortänderung über ``/api/v2``); eine Änderung von Rollen oder Gruppen und ein Löschen beendeten keine Sitzung. Das gilt für eine Änderung durch den Benutzer und für eine Änderung durch einen Administrator (Benutzerverwaltungsseite und Admin-REST-API). Jede Sitzung liest die Änderung höchstens einmal je ``password.changed.check.interval`` Sekunden aus dem Benutzerindex (Standard ``60``; siehe :doc:`security`), sodass die übrigen Sitzungen innerhalb dieser Zeit enden. Benutzer von LDAP und SSO werden nicht geprüft. Eine vor dem Upgrade begonnene Sitzung (nur bei persistierten oder replizierten Sitzungen; die Standardkonfiguration behält Sitzungen über einen Neustart nicht) endet, wenn das Passwort nach der Erstellung ihrer HTTP-Sitzung geändert wird; für ein vor dem Upgrade geändertes Passwort ist keine Änderungszeit gespeichert, daher bleibt eine solche Sitzung geöffnet. Das Feld ``password_changed_at`` wird beim Start zum Benutzerindex hinzugefügt, eine Neuindizierung ist daher nicht nötig.
 - Bei der LDAP-Anmeldung werden Leerzeichen vor und nach dem eingegebenen Benutzernamen entfernt, bevor der Name verwendet wird. Bis 15.9 wurde der Name unverändert (zum Beispiel mit einem Leerzeichen davor) für die Benutzer-ID der Sitzung, das Audit-Log und die Begrenzung der Anmeldeversuche verwendet und zählte dadurch als zweite Schreibweise desselben Kontos. Ebenso wurde das Kürzen durch ``ldap.max.username.length`` bis 15.9 nur auf den Bind angewendet, während der Benutzername, die Rollensuche, die Berechtigungsnamen und die Sitzung den ungekürzten Namen behielten. 15.10 verwendet für alle diese den gekürzten Namen (siehe :doc:`../config/ldap-integration`).
 - Ein Passwort, das in UTF-8 länger als 72 Byte ist, wird beim Festlegen oder Ändern abgelehnt (Benutzerverwaltung, erzwungene Passwortänderung im Anmeldeformular, ``/api/v2/auth/password`` und Admin-API), unabhängig davon, was ``password.max.length`` (Standard ``100``) erlaubt. BCrypt liest nur die ersten 72 Byte; bis 15.9 wurde ein längeres Passwort daher akzeptiert und nur anhand seiner ersten 72 Byte geprüft: Jedes beliebige Ende führte zur Anmeldung. Zeichen außerhalb von ASCII belegen mehr als ein Byte (3 Byte bei den meisten japanischen, chinesischen und koreanischen Zeichen). Die Ablehnung lautet „Das Passwort darf höchstens 72 Bytes lang sein." (``errors.password_too_long``), und ``/api/v2/auth/password`` gibt diesen Schlüssel zusammen mit ``max_bytes`` als ``reason`` zurück. Bestehende Konten sind nicht betroffen: Die Anmeldung prüft die Länge nicht, daher funktioniert ein vor dem Upgrade festgelegtes Passwort mit mehr als 72 Byte weiterhin. Es wird aber nur anhand seiner ersten 72 Byte geprüft; ändern Sie es daher.
 - Die Einträge in ``audit.log`` unterscheiden sich in 15.10 auf drei Arten von 15.9 (siehe :doc:`security`). ``ACCESS``-Einträge haben die neuen Felder ``method`` (HTTP-Methode) und ``id`` (der Anfrageparameter ``id``, falls vorhanden). Eine neue Aktion ``UPDATE_PASSWORD`` zeichnet eine Passwortänderung mit dem handelnden Benutzer (``user``) und dem Benutzer, dessen Passwort geändert wurde (``target``), auf. Anfragen an die Admin-REST-API, die die Prüfung des Zugriffstokens ablehnt, werden jetzt als ``ACCESS_DENIED`` aufgezeichnet. Prüfen Sie ein Programm, das ``audit.log`` auswertet, auf diese Änderungen.
@@ -710,6 +814,18 @@ Weitere Verhaltensänderungen
 - Zwei ``POST /api/v2/auth/password``-Anfragen desselben lokalen Benutzers mit demselben ``current_password``, die gleichzeitig eintreffen, sind nicht mehr beide erfolgreich. Das Passwort wird nur geschrieben, solange das gespeicherte noch das geprüfte ``current_password`` ist; die spätere Anfrage antwortet daher mit ``409`` (``conflict``) und ändert nichts. Der Client muss das aktuelle Passwort bestätigen und es erneut versuchen. Bis 15.9 antworteten beide mit ``200``, und der letzte Schreibvorgang gewann (:doc:`../api/api-auth`). Das gilt nur für lokale Benutzer: Das Passwort eines Benutzers, der sich über das Verzeichnis (LDAP) anmeldet, wird im Verzeichnis geändert, das aktuelle Passwort wird nicht mit einem lokalen Hash verglichen, und gleichzeitige Anfragen können weiterhin beide erfolgreich sein.
 - Der Passwort-Hash-Algorithmus ist jetzt eine Komponente. Die ID in einem gespeicherten Wert ``{id}hash`` und in ``app.password.algorithm`` wird als DI-Komponente ``<id>PasswordEncoder`` aufgelöst (|Fess| registriert ``bcryptPasswordEncoder``), sodass ein Plugin einen anderen Algorithmus mit eigener Längenbegrenzung bereitstellen kann (siehe :ref:`webapp-plugin-password-encoder`). Solange ``app.password.algorithm`` den Wert ``bcrypt`` hat, ändert sich nichts. Nennt die Einstellung eine ID ohne Komponente (zum Beispiel nach dem Entfernen der Plugin-JAR), startet |Fess| trotzdem, und Benutzer, deren Hash eine andere ID hat, können sich weiterhin anmelden; Benutzer, deren Hash diese ID hat, können sich nicht anmelden, und das Festlegen eines Passworts schlägt mit einem Fehler fehl, der ``app.password.algorithm`` nennt. Eine Neuinstallation, deren ``index.user.initial_password`` länger ist, als der Algorithmus akzeptiert (72 Bytes bei BCrypt), startet nicht: Sie bricht vor dem Anlegen des Benutzerindex mit einer Meldung ab, die die Eigenschaft nennt. Eine Installation, in der der Benutzer ``admin`` bereits existiert, protokolliert nur eine Warnung.
 - Neue Einstellung ``authentication.local.username.policy`` (Standard ``preserved``). |Fess| vergleicht die Namen lokaler Benutzer weiterhin genau wie eingegeben, wie in 15.9; ``Alice`` und ``alice`` sind also zwei Benutzer. Mit ``mapped`` wird das Anlegen oder Umbenennen eines lokalen Benutzers in der Benutzerverwaltung oder mit der Admin-API abgelehnt, wenn der Name bei Nichtbeachtung von Zeichenbreite, Groß-/Kleinschreibung und Unicode-Zusammensetzung mit dem Namen eines anderen Benutzers übereinstimmt oder eine andere Schreibweise eines Eintrags von ``authentication.admin.users`` ist. Anmeldung, Benutzer-IDs, gespeicherte Namen, Berechtigungen und indexierte Dokumente ändern sich nicht. Einzelheiten und Grenzen finden Sie unter :ref:`local-username-policy`.
+- Skripte, Stylesheets und SVG-Dateien ab 1 KB werden standardmäßig mit gzip komprimiert gesendet; 15.9 komprimierte nichts. Seiten und JSON werden nicht komprimiert. ``tomcat.compression`` (``on`` oder ``off``) und ``tomcat.compression.mime`` (der Liste hinzugefügte Typen, durch Komma getrennt) in ``tomcat_config.properties`` steuern dies. Eine aus 15.9 übernommene ``tomcat_config.properties`` hat keinen der beiden Schlüssel, daher ist die Komprimierung aktiv. Setzen Sie ``tomcat.compression=off``, wenn ein Reverse-Proxy vor |Fess| die Antworten selbst komprimiert.
+- Die Dateien des mitgelieferten Themes ``bootstrap`` werden mit ``Cache-Control: no-cache`` und einem ``ETag`` gesendet, und ein Browser fragt mit ``If-None-Match`` erneut an und erhält ``304``, solange die Datei unverändert ist. Bis 15.9 trugen sie ``max-age=86400``, sodass ein Browser eine aktualisierte Datei bis zu 24 Stunden lang behielt.
+- Eine Einstellung kann statt als ``-D``-Option als Umgebungsvariable angegeben werden: ``FESS_CONFIG_<KEY>`` für einen Schlüssel der ``fess_config.properties`` und ``FESS_SYSTEM_<KEY>`` für einen Schlüssel der ``system.properties`` (der Schlüssel in Großbuchstaben, jedes Zeichen außer Buchstaben und Ziffern durch ``_`` ersetzt; ``search_engine.password`` ist ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). Eine ``-D``-Option mit einem Wert hat Vorrang vor der Variablen, und die Variable hat Vorrang vor der ``fess_config.properties``; ein Schlüssel, den die ``system.properties`` bereits enthält, wird nicht überschrieben. Eine Variable wird im Gegensatz zu einer ``-D``-Option nicht von ``ps`` oder ``docker top`` angezeigt, und die Systeminformationen maskieren ihren Wert.
+- Wird ein Geheimnis (ein Passwort, ein API-Schlüssel oder ein geheimer Schlüssel) als Option ``-Dfess.config.<key>`` oder ``-Dfess.system.<key>`` angegeben, schreibt 15.10 beim Start eine Warnung in ``fess.log``, die den Schlüssel und die stattdessen zu verwendende Variable nennt, niemals den Wert.
+- Die Umgebungsvariable ``FESS_SESSION_STORE=opensearch`` legt die HTTP-Sitzungen in der Suchmaschine ab, sodass mehrere Knoten sie gemeinsam nutzen. Sie ist standardmäßig aus (siehe :ref:`Der Index fess_config.session für Sitzungen <upgrade-1510-session-index>` und :doc:`../config/session-store`).
+- ``PUT /api/admin/<name>/setting`` von 19 weiteren Admin-APIs (zum Beispiel ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` und ``scheduler``; nicht ``tagtype``, ``general``, ``theme`` oder ``dict``) lehnt ein veraltetes ``version_no`` wie die oben genannte Benutzer-API mit HTTP 400 und ``status`` ``1`` ab. Bis 15.9 wurde der Wert nie verglichen, und die Listen lieferten ``-1``, sodass ein Skript, das ein konstantes ``version_no`` sendet, jetzt fehlschlägt: Senden Sie den Wert aus ``GET /api/admin/<name>/setting/{id}`` und lesen Sie die Einstellung nach einer Ablehnung erneut.
+- ``POST /api/admin/webconfig/setting``, ``/api/admin/fileconfig/setting`` und ``/api/admin/dataconfig/setting`` ohne ``permissions`` speichern ``{role}guest``. Bis 15.9 speicherten sie keine Berechtigung. ``PUT`` ohne ``permissions`` behält den gespeicherten Wert; in 15.9 ließ es das Feld leer.
+- Das Anmeldeformular, das Formular zur Passwortänderung und die Passwortfelder der Benutzerverwaltung entfernen keine Leerzeichen mehr am Anfang und am Ende eines Passworts. Bis 15.9 taten sie es, während ``/api/v2/auth/login`` und die Admin-API es nicht taten, sodass ein über die API festgelegtes Passwort mit umgebenden Leerzeichen sich nicht über das Formular anmelden konnte. Jetzt übernehmen alle Zugänge das Passwort wie eingegeben. Ein Benutzer, bei dem die Leerzeichen beim Speichern des Passworts in 15.9 entfernt wurden, muss es ohne sie eingeben.
+- Ein regulärer Ausdruck, der sich nicht kompilieren lässt, wird beim Speichern abgelehnt: die Include- und Exclude-Muster von Web- und Datei-Crawl-Konfigurationen, die Pfade eines Label-Typs und der reguläre Ausdruck einer Pfadzuordnung. Ein früher gespeicherter Wert bleibt bestehen und lässt sich unverändert nicht erneut speichern, bis er korrigiert ist. Eine vor 15.10 gespeicherte Pfadzuordnung mit ungültigem regulärem Ausdruck führt dazu, dass jede Suche keine Treffer liefert, in 15.9 und in 15.10 (``fess.log`` zeigt ``PatternSyntaxException`` von ``PathMapping``); entfernen oder korrigieren Sie sie.
+- Solange die Suchmaschine nicht erreichbar ist, antwortet die Administrationsoberfläche mit ``503`` (bis 15.9 mit 500), und das Anmeldeformular zeigt statt einer Fehlerseite einen Hinweis, dass die Suchmaschine nicht verfügbar ist.
+- ``engine.status`` von ``GET /api/v2/health`` ist ``YELLOW``, solange ein |Fess|-Index Schreibzugriffe ablehnt (er hat eine Schreibsperre); bis 15.9 war er ``GREEN``. Eine Schreibsperre auf einem Index, der nicht zu |Fess| gehört, wird ignoriert.
+- Das SAML-Plugin (``fess-sso-saml``) von 15.10 verwendet saml4j statt java-saml. Eine ``saml.*``-Eigenschaft, die die alte Bibliothek hatte und die neue nicht verwendet, wie ``saml.security.digest_algorithm`` oder ``saml.sp.contact``, wird ignoriert; eine Warnung, die sie nennt, wird in ``fess.log`` geschrieben. Das OpenID-Connect-Plugin (``fess-sso-oidc``) von 15.10 verwendet standardmäßig PKCE (S256). Setzen Sie ``oic.pkce=false`` in ``system.properties`` für einen OpenID-Provider, der es ablehnt (siehe :doc:`../config/sso-oidc`).
 
 .. _upgrade-1510-new-api:
 
@@ -1926,8 +2042,37 @@ oder::
    Datei, die Sie aus der Sicherung vor dem Upgrade wiederherstellen, enthält den Wert von 15.9 und muss
    nicht geändert werden.
 
+.. _upgrade-1510-rollback-opensearch:
+
 Schritt 3: Datenwiederherstellung
 ----------------------------------
+
+.. warning::
+
+   **Kehren Sie auch zu OpenSearch 3.9.x zurück; die Daten von OpenSearch 3.10.0 lassen sich nicht
+   zurückführen.** OpenSearch 3.9.0 startet nicht auf einem Datenverzeichnis, das ein Knoten 3.10.0
+   geöffnet hat (es endet mit ``IndexFormatTooNewException``), und ein mit 3.10.0 erstellter Snapshot
+   lässt sich nicht in 3.9.x wiederherstellen (``the snapshot was created with OpenSearch version [3.10.0] which is higher than the version of
+   this node``). Gehen Sie so auf den Zustand vor dem Upgrade zurück:
+
+   1. Stoppen Sie OpenSearch 3.10.0.
+   2. Installieren Sie OpenSearch 3.9.x, die Version, die Ihr altes |Fess| verwendet hat (3.9.0 für
+      15.9.0), und seine vier für dieselbe Version gebauten Plugins (die URLs in :ref:`Schritt 4: Upgrade von OpenSearch <upgrade-opensearch>` mit ``3.9.0``
+      anstelle von ``3.10.0``; entfernen Sie Plugins einer anderen Version zuvor) mit einem **leeren
+      Datenverzeichnis**. Kopieren Sie die Daten von 3.10.0 nicht. Belassen Sie das Wörterbuchverzeichnis und
+      ``configsync.config_path`` wie sie waren, unter demselben absoluten Pfad.
+   3. Starten Sie OpenSearch 3.9.x und stellen Sie den vor dem Upgrade erstellten Snapshot wieder her
+      (siehe „Schritt 1: Daten-Backup") wie unten beschrieben, einschließlich des Löschens der Indizes, die
+      das Plugin beim Start angelegt hat (``configsync``).
+
+   |Fess| 15.9.0 gegen ein zurückgelassenes OpenSearch 3.10.0 zu betreiben, startete und suchte
+   nachweislich, nachdem der Snapshot darauf wiederhergestellt worden war, ist aber keine unterstützte
+   Kombination.
+
+   Bei der Docker-Version gilt dasselbe: Die Volumes, die OpenSearch 3.10.0 beschrieben hat, lassen sich
+   mit 3.9.0 nicht weiterverwenden. Starten Sie einen neuen Knoten 3.9.0 auf leeren Volumes und stellen
+   Sie den Snapshot wieder her, oder stellen Sie das vor dem Upgrade erstellte Archiv der Volumes wieder
+   her, wie unten gezeigt.
 
 Wiederherstellung aus Snapshot. OpenSearch muss laufen und |Fess| gestoppt sein:
 
@@ -2038,7 +2183,8 @@ F: Muss auch OpenSearch aktualisiert werden?
 ---------------------------------------------
 
 A: Für jede |Fess|-Version ist eine bestimmte OpenSearch-Version vorgesehen.
-|Fess| 15.10 unterstützt OpenSearch 3.10.0.
+|Fess| 15.10 unterstützt OpenSearch 3.10.0. Es prüft beim Start nicht, auf welcher
+OpenSearch-3.x-Version es läuft, aber jede andere Version, zum Beispiel 3.9.0, wird nicht unterstützt.
 Da die |Fess|-spezifischen OpenSearch-Plugins wie ``opensearch-analysis-fess`` exakt mit der
 OpenSearch-Version übereinstimmen müssen, aktualisieren Sie beim Upgrade von OpenSearch die Plugins
 auf die entsprechende Version (3.10.0).
