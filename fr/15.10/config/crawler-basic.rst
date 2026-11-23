@@ -739,6 +739,40 @@ Encodage des noms de fichiers du système de fichiers :
 
     crawler.document.file.name.encoding=UTF-8
 
+Détection du jeu de caractères des documents
+--------------------------------------------
+
+**HTML (crawl web) :**
+
+Si le ``<meta>`` de la page indique un jeu de caractères (``charset``), il est utilisé. Le ``<meta>`` est recherché dans les 2048 premiers octets de la page (valeur par défaut).
+En l'absence de ``<meta>``, le jeu de caractères est déterminé à partir de la séquence d'octets initiale, en s'aidant du ``charset`` de l'en-tête HTTP ``Content-Type``.
+Le ``charset`` de ``Content-Type`` n'est pas retenu lorsqu'il est en contradiction avec la séquence d'octets.
+
+L'indication du ``<meta>`` l'emporte sur le BOM. Si les deux sont en contradiction, par exemple une page avec un BOM UTF-8 dont le ``<meta>`` indique Shift_JIS,
+la page est lue avec le jeu de caractères du ``<meta>`` et le texte est corrompu. Faites correspondre le ``<meta>`` au jeu de caractères réel.
+
+**Markdown :**
+
+Pour Markdown (``.md``), le jeu de caractères n'est pas détecté. Si un BOM (UTF-8, UTF-16, UTF-32) est présent, il est suivi ; sinon, le fichier est lu avec
+le paramètre ``encoding`` de ``markdownExtractor`` (``UTF-8`` par défaut). Les fichiers Markdown dans un jeu de caractères autre que UTF-8, comme Shift_JIS ou EUC-JP,
+sont donc corrompus tant que ``encoding`` n'est pas défini (un fichier ``.txt`` de même contenu est détecté et lu correctement). Pour définir ``encoding``, créez
+``app/WEB-INF/classes/crawler/extractor+markdownExtractor.xml`` avec le contenu suivant.
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+            "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+            <include path="crawler/container.xml" />
+            <component name="markdownExtractor"
+                    class="org.codelibs.fess.crawler.extractor.impl.MarkdownExtractor">
+                    <property name="encoding">Shift_JIS</property>
+            </component>
+    </components>
+
+La même valeur d'``encoding`` est utilisée pour tous les fichiers Markdown. Si vous avez des fichiers Markdown dans des jeux de caractères différents, convertissez-les tous en UTF-8.
+
 Dépannage de l'indexation
 ================================
 

@@ -714,6 +714,38 @@ Web爬虫有专用的"用户代理"字段。
 
     crawler.document.file.name.encoding=UTF-8
 
+文档字符编码的判定
+----------------------------
+
+**HTML（网页爬取）:**
+
+如果页面的 ``<meta>`` 中指定了字符编码（ ``charset`` ），则使用该编码。 ``<meta>`` 从页面开头的 2048 字节（默认值）中查找。
+没有 ``<meta>`` 指定时，以 HTTP ``Content-Type`` 的 ``charset`` 为线索，根据开头的字节序列判定字符编码。
+``Content-Type`` 的 ``charset`` 与字节序列不一致时不会被采用。
+
+``<meta>`` 的指定优先于 BOM。如果两者不一致，例如带有 UTF-8 BOM 的页面中写有 Shift_JIS 的 ``<meta>`` ，则会按 ``<meta>`` 的字符编码读取，从而出现乱码。请使 ``<meta>`` 与实际的字符编码一致。
+
+**Markdown:**
+
+Markdown（ ``.md`` ）不会判定字符编码。如果有 BOM（UTF-8、UTF-16、UTF-32）则按其读取，没有则按 ``markdownExtractor`` 的
+``encoding`` （默认为 ``UTF-8`` ）读取。因此，Shift_JIS 或 EUC-JP 等非 UTF-8 的 Markdown，如果不设置 ``encoding`` 就会出现乱码
+（内容相同的 ``.txt`` 文件会被判定并正常读取）。 ``encoding`` 通过以下内容创建 ``app/WEB-INF/classes/crawler/extractor+markdownExtractor.xml`` 来设置。
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+            "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+            <include path="crawler/container.xml" />
+            <component name="markdownExtractor"
+                    class="org.codelibs.fess.crawler.extractor.impl.MarkdownExtractor">
+                    <property name="encoding">Shift_JIS</property>
+            </component>
+    </components>
+
+``encoding`` 对所有 Markdown 使用同一个值。如果混有不同字符编码的 Markdown，请统一为 UTF-8。
+
 爬取故障排除
 ================================
 

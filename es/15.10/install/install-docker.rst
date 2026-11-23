@@ -143,6 +143,10 @@ La siguiente tabla muestra qué admite cada imagen.
 
 Con cualquier imagen, la miniatura de una página HTML se crea a partir de una imagen de la propia página. Para que se muestren las miniaturas, active también la visualización de miniaturas en la configuración general de la pantalla de administración. Consulte :doc:`../config/crawler-thumbnail` para más detalles.
 
+.. warning::
+
+   Especifique para la imagen una etiqueta que incluya la versión, como ``15.10.0``. No use la etiqueta ``latest``. Si ejecuta ``docker pull ghcr.io/codelibs/fess`` sin etiqueta, o especifica ``latest`` en ``image``, se usa ``latest``.
+
 Paso 3: Inicio del Contenedor Docker
 =====================================
 

@@ -398,6 +398,18 @@ Modèles d'alerte
 - ``Slow query``
 - ``Queue full``
 
+Nombre de documents de l'index et fraîcheur du crawl
+----------------------------------------------------
+
+Les journaux et les résultats des tâches ne permettent pas toujours de remarquer que des documents de l'index disparaissent, par exemple lorsqu'un site renvoie systématiquement des erreurs ou lorsque les documents arrivent à expiration.
+En effet, la tâche de crawl peut se terminer avec ``ok``, et l':doc:`API Health <../api/api-health>` indique l'état du cluster du moteur de recherche (par exemple ``GREEN``), pas le contenu de l'index.
+Le ``Status`` de l'e-mail de notification de fin de crawl ne reflète pas non plus l'échec d'obtention d'une URL donnée (voir « E-mail de notification » dans :doc:`../admin/general-guide`).
+
+Vérifiez périodiquement les deux points suivants avec une surveillance externe.
+
+- Nombre de documents de l'index : vérifiez-le avec ``record_count`` de l'API de recherche (:doc:`../api/api-search`) et contrôlez qu'il n'a pas brusquement diminué par rapport à la dernière valeur. Si vous avez besoin du nombre exact, spécifiez ``track_total_hits=true`` et vérifiez que ``record_count_relation`` vaut ``EQUAL_TO``.
+- Heure de la dernière fin de crawl : vérifiez-la avec le journal des tâches (``end_time`` de ``GET /api/admin/joblog/logs`` ; voir :doc:`../api/admin/api-admin-joblog`) et déclenchez une alerte si elle n'a pas été mise à jour dans l'intervalle prévu.
+
 Surveillance en temps réel
 ----------------
 

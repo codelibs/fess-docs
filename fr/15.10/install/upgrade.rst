@@ -1293,6 +1293,8 @@ fonctionne avec une clé différente de celle qui les a enregistrés, parce que 
 pas être déchiffrés : ``fess-crawler.log`` consigne une ``CipherFailureException`` et une
 exploration qui inclut une telle configuration peut n'indexer rien.
 
+Dès qu'une seule configuration contient une valeur qui ne peut pas être déchiffrée, l'exploration s'arrête à ce point. La configuration non déchiffrable n'est pas simplement ignorée : les autres configurations visées par la même exploration ne sont pas indexées non plus. Le message de la ``CipherFailureException`` indique le type, le nom et l'ID de cette configuration ainsi que la clé du paramètre qui n'a pas pu être déchiffré, et précise que ``app.cipher.key`` peut différer de la clé utilisée lors de l'enregistrement (ni la valeur chiffrée ni la clé elle-même ne sont affichées). Une fois la cause identifiée, rétablissez la valeur d'origine de ``app.cipher.key`` ou saisissez à nouveau le mot de passe de cette configuration.
+
 .. note::
 
    |Fess| 15.9 enregistre aussi le ``password`` de l'authentification Web et fichier chiffré avec ``app.cipher.key`` ;

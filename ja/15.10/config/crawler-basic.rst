@@ -723,6 +723,40 @@ Webクローラーには専用の「ユーザーエージェント」フィー�
 
     crawler.document.file.name.encoding=
 
+文書の文字コードの判定
+----------------------
+
+**HTML（ウェブクロール）:**
+
+ページの ``<meta>`` に文字コード（ ``charset`` ）の指定があれば、それを使います。 ``<meta>`` は、ページの先頭 2048 バイト（既定値）から探します。
+``<meta>`` の指定がないときは、HTTP の ``Content-Type`` の ``charset`` を手がかりにして、先頭のバイト列から文字コードを判定します。
+``Content-Type`` の ``charset`` は、バイト列と食い違うときには採用されません。
+
+``<meta>`` の指定は BOM より優先されます。UTF-8 の BOM があるページに Shift_JIS の ``<meta>`` が書かれているように、
+両者が食い違っていると、 ``<meta>`` の文字コードで読むため、文字化けします。 ``<meta>`` を実際の文字コードに合わせてください。
+
+**Markdown:**
+
+Markdown（ ``.md`` ）は、文字コードを判定しません。BOM（UTF-8、UTF-16、UTF-32）があればそれに従い、なければ ``markdownExtractor`` の
+``encoding`` （既定は ``UTF-8`` ）で読みます。そのため、Shift_JIS や EUC-JP などの UTF-8 以外の Markdown は、 ``encoding`` を設定しないと文字化けします
+（同じ内容の ``.txt`` ファイルは判定されて読めます）。 ``encoding`` は ``app/WEB-INF/classes/crawler/extractor+markdownExtractor.xml`` を
+次の内容で作成して設定します。
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+            "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+            <include path="crawler/container.xml" />
+            <component name="markdownExtractor"
+                    class="org.codelibs.fess.crawler.extractor.impl.MarkdownExtractor">
+                    <property name="encoding">Shift_JIS</property>
+            </component>
+    </components>
+
+``encoding`` は、すべての Markdown に同じ値が使われます。文字コードの異なる Markdown が混在する場合は、UTF-8 に揃えてください。
+
 クロールのトラブルシューティング
 ================================
 

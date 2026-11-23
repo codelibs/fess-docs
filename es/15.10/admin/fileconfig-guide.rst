@@ -79,6 +79,9 @@ Rutas excluidas de la búsqueda
 
 Las rutas que coincidan con la expresión regular (formato Java) especificada en este elemento no serán objeto de búsqueda.
 
+.. note::
+   Esta configuración solo afecta a los documentos que se indexen en rastreos posteriores (los documentos que coinciden no se indexan). Los documentos que ya están indexados no se eliminan al añadir esta configuración y siguen apareciendo en los resultados de búsqueda. Si «Comprobar fecha de última modificación» de la configuración general está habilitado (valor predeterminado), la fecha de caducidad de un documento sin cambios se prolonga en cada rastreo (consulte «Comprobar fecha de última modificación» en :doc:`general-guide`), por lo que el documento no siempre desaparece cuando vence el plazo de «Eliminar documentos anteriores». Para quitar con seguridad un documento de los resultados de búsqueda, elimínelo en la lista de búsqueda (pantalla de administración). Mientras coincida con esta configuración, un documento eliminado no se vuelve a indexar en el siguiente rastreo.
+
 Pestaña Configuración de rastreo
 --------------------------------
 

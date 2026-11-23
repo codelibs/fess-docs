@@ -67,6 +67,10 @@ Para iniciar en segundo plano::
    contiene los mensajes de |Fess| y ``server_0.log`` los del Tomcat integrado (incluido el mensaje de
    finalización del inicio).
 
+.. important::
+
+   La versión ZIP escribe dentro del directorio en el que se extrae (``logs/`` y ``temp/``, además de ``app/WEB-INF/conf/system.properties``, entre otros). Extráigala en una ubicación que pertenezca al usuario que ejecuta |Fess|. No se admite extraerla en una ubicación de solo lectura ni en una que pertenezca a otro usuario. Aunque mueva los registros y los archivos temporales con ``FESS_LOG_PATH`` y ``FESS_TEMP_PATH``, ``system.properties`` se escribe en el directorio de extracción, por lo que |Fess| no se inicia. La ruta en la que no se puede escribir se indica en el mensaje de error de inicio.
+
 En Caso de Versión ZIP (Windows)
 ---------------------------------
 

@@ -136,6 +136,8 @@ indexé) et/ou ``If-Modified-Since``. Une page qui répond ``304 Not Modified`` 
 page inchangée et n'est pas récupérée à nouveau. Pour tout récupérer à nouveau, par exemple après
 avoir modifié les paramètres de crawl, désactivez ce réglage le temps d'un crawl.
 
+Une page dont le ``Last-Modified`` de la réponse HEAD est inférieur ou égal à la date de dernière modification enregistrée dans l'index est considérée comme non modifiée et n'est pas récupérée à nouveau. Si le serveur a déjà renvoyé un ``Last-Modified`` plus récent que la date de modification réelle (par exemple l'heure de la réponse), cette valeur est enregistrée dans l'index ; par la suite, les modifications dont le ``Last-Modified`` reste inférieur ou égal à cette valeur ne sont plus détectées. La date d'expiration d'un document considéré comme non modifié est prolongée à chaque crawl. Tant que le crawl se poursuit, le document n'est donc pas récupéré à nouveau, même lorsque l'échéance définie par « Supprimer les anciens documents » est atteinte. Pour que la modification soit prise en compte, supprimez le document concerné de l'index avant de relancer le crawl, ou désactivez ce réglage le temps d'un crawl.
+
 Configuration du robot d'exploration simultané
 :::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -587,6 +589,8 @@ E-mail de notification
 
 Spécifie l'adresse e-mail pour la notification à la fin du crawl.
 Plusieurs adresses peuvent être spécifiées séparées par des virgules. Un serveur de messagerie est requis pour l'utilisation.
+
+Le ``Status`` de l'e-mail de notification indique si le traitement du crawl ou l'enregistrement dans l'index a échoué à cause d'une exception. L'impossibilité d'obtenir une URL donnée n'est pas reflétée dans ``Status`` (même si l'obtention de toutes les URL échoue, il vaut ``ok``) ; elle est enregistrée dans les URL en échec. Vérifiez les échecs d'obtention dans [Informations système > URL en échec] de l'interface d'administration.
 
 Slack Webhook URLs
 :::::::::::::::::

@@ -122,7 +122,7 @@ El código de estado HTTP predeterminado se determina según ``error.code``.
      - El método HTTP no está permitido. Los métodos admitidos se enumeran en la cabecera ``Allow``.
    * - ``not_acceptable``
      - 406
-     - La solicitud no es aceptable.
+     - La solicitud no es aceptable. Es un código reservado y actualmente ningún endpoint lo devuelve (no se rechaza una solicitud por el valor de la cabecera ``Accept``).
    * - ``conflict``
      - 409
      - Se produjo un conflicto de recursos.

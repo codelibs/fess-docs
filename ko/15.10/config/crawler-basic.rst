@@ -731,6 +731,40 @@ User-Agent 설정
 
     crawler.document.file.name.encoding=UTF-8
 
+문서 문자 코드 판정
+----------------------
+
+**HTML(웹 크롤링):**
+
+페이지의 ``<meta>`` 에 문자 코드( ``charset`` ) 지정이 있으면 그것을 사용합니다. ``<meta>`` 는 페이지 앞부분 2048바이트(기본값)에서 찾습니다.
+``<meta>`` 지정이 없을 때는 HTTP ``Content-Type`` 의 ``charset`` 을 단서로 삼아 앞부분 바이트열로 문자 코드를 판정합니다.
+``Content-Type`` 의 ``charset`` 은 바이트열과 어긋날 때는 채택되지 않습니다.
+
+``<meta>`` 지정은 BOM보다 우선합니다. UTF-8 BOM이 있는 페이지에 Shift_JIS ``<meta>`` 가 쓰여 있는 경우처럼
+둘이 어긋나 있으면 ``<meta>`` 의 문자 코드로 읽기 때문에 문자가 깨집니다. ``<meta>`` 를 실제 문자 코드에 맞추십시오.
+
+**Markdown:**
+
+Markdown( ``.md`` )은 문자 코드를 판정하지 않습니다. BOM(UTF-8, UTF-16, UTF-32)이 있으면 그에 따르고, 없으면 ``markdownExtractor`` 의
+``encoding`` (기본값은 ``UTF-8`` )으로 읽습니다. 그래서 Shift_JIS나 EUC-JP 등 UTF-8 이외의 Markdown은 ``encoding`` 을 설정하지 않으면 문자가 깨집니다
+(같은 내용의 ``.txt`` 파일은 판정되어 읽을 수 있습니다). ``encoding`` 은 ``app/WEB-INF/classes/crawler/extractor+markdownExtractor.xml`` 을
+다음 내용으로 생성하여 설정합니다.
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+            "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+            <include path="crawler/container.xml" />
+            <component name="markdownExtractor"
+                    class="org.codelibs.fess.crawler.extractor.impl.MarkdownExtractor">
+                    <property name="encoding">Shift_JIS</property>
+            </component>
+    </components>
+
+``encoding`` 은 모든 Markdown에 같은 값이 사용됩니다. 문자 코드가 다른 Markdown이 섞여 있는 경우에는 UTF-8로 통일하십시오.
+
 크롤링 문제 해결
 ================================
 

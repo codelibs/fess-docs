@@ -67,6 +67,10 @@ Für Hintergrundstart::
    enthält die Meldungen von |Fess| selbst, ``server_0.log`` die des eingebetteten Tomcat (einschließlich
    der Startabschlussmeldung).
 
+.. important::
+
+   Die ZIP-Version schreibt in das entpackte Verzeichnis (neben ``logs/`` und ``temp/`` auch zum Beispiel ``app/WEB-INF/conf/system.properties``). Entpacken Sie sie an einen Ort, der dem Benutzer gehört, unter dem |Fess| läuft. Ein Entpacken an einen schreibgeschützten Ort oder an einen Ort, der einem anderen Benutzer gehört, wird nicht unterstützt. Auch wenn Sie den Speicherort von Protokollen und temporären Dateien mit ``FESS_LOG_PATH`` und ``FESS_TEMP_PATH`` verlegen, wird ``system.properties`` in das entpackte Verzeichnis geschrieben, sodass |Fess| nicht startet. Nicht beschreibbare Pfade nennt die Fehlermeldung beim Start.
+
 ZIP-Version (Windows)
 ---------------------
 

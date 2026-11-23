@@ -61,6 +61,10 @@ Fess 시작
    ``logs/`` 디렉터리의 로그 파일에서 시작 상태를 확인할 수 있습니다. ``fess.log`` 에는 |Fess| 자체의 메시지가,
    ``server_0.log`` 에는 내장 Tomcat의 메시지(시작 완료 메시지 포함)가 출력됩니다.
 
+.. important::
+
+   ZIP 버전은 압축을 푼 디렉터리 안에 기록합니다(``logs/``, ``temp/`` 외에 ``app/WEB-INF/conf/system.properties`` 등). |Fess| 를 실행하는 사용자가 소유한 위치에 압축을 푸십시오. 읽기 전용 위치나 다른 사용자가 소유한 위치에 압축을 푸는 것은 지원 대상이 아닙니다. ``FESS_LOG_PATH`` 와 ``FESS_TEMP_PATH`` 로 로그와 임시 파일의 위치를 옮겨도 ``system.properties`` 는 압축을 푼 위치에 기록되므로 |Fess| 는 시작에 실패합니다. 기록할 수 없는 경로는 시작 시의 오류 메시지에 표시됩니다.
+
 ZIP 버전의 경우(Windows)
 ------------------------
 

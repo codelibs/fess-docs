@@ -136,6 +136,8 @@ indexado) y/o ``If-Modified-Since``. Una página que responde ``304 Not Modified
 página sin cambios y no se vuelve a obtener. Para obtener todo de nuevo, por ejemplo tras cambiar la
 configuración de rastreo, desactive esta opción durante un rastreo.
 
+Una página cuyo ``Last-Modified`` de la respuesta HEAD es igual o anterior a la fecha de última modificación registrada en el índice se considera sin cambios y no se vuelve a obtener. Si el servidor ha devuelto alguna vez un ``Last-Modified`` más reciente que la fecha real de modificación (por ejemplo, la hora de la respuesta), ese valor queda registrado en el índice y, a partir de entonces, no se detectan las modificaciones cuyo ``Last-Modified`` siga siendo igual o anterior a ese valor. La fecha de caducidad de un documento considerado sin cambios se prolonga en cada rastreo. Por ello, mientras se siga rastreando, el documento no se vuelve a obtener aunque venza el plazo determinado por «Eliminar documentos anteriores». Para que se refleje el cambio, elimine el documento del índice y vuelva a rastrear, o desactive esta opción durante un rastreo.
+
 Configuración de rastreadores simultáneos
 ::::::::::::::::::::::::::::::::::::::::::
 
@@ -587,6 +589,8 @@ Correo de notificación
 
 Especifique las direcciones de correo electrónico que recibirán notificaciones al completarse el rastreo.
 Se pueden especificar varias direcciones separadas por comas. Se requiere un servidor de correo para su uso.
+
+El ``Status`` del correo de notificación indica si el procesamiento del rastreo o el registro en el índice falló con una excepción. El hecho de que no se pudiera obtener una URL concreta no se refleja en ``Status`` (aunque fallen todas las URL, es ``ok``) y se registra en las URL de fallo. Verifique los fallos de obtención en [Información del sistema > URL de fallo] de la pantalla de administración.
 
 Slack Webhook URLs
 :::::::::::::::::

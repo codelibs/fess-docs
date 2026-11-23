@@ -31,6 +31,10 @@
 
    한 번 ``admin`` 에서 변경한 비밀번호는 ``admin`` 과 같은 단순한 문자열로는 다시 설정할 수 없습니다(``password.invalid.admin.passwords`` 에 의해 관리자 비밀번호의 블랙리스트가 설정되어 있습니다). 또한 최초 시작 전이라면 ``fess_config.properties`` 의 ``index.user.initial_password`` 로 ``admin`` 사용자의 초기 비밀번호를 변경할 수 있습니다. ``bin/fess-setup init`` 로 설정할 수도 있습니다( :doc:`fess-setup` 참조).
 
+.. note::
+
+   초기 비밀번호 그대로 ``admin`` 으로 로그인하면 로그인 직후에 비밀번호 변경 화면이 표시됩니다. 이것은 변경을 권장하는 안내이며 서버 측의 강제는 아닙니다(로그인은 이미 성립되었으며, 변경하지 않고 관리 화면을 열 수도 있습니다). 비밀번호 변경을 확실히 하려면 최초 시작 전에 ``bin/fess-setup init`` 또는 ``index.user.initial_password`` 로 초기 비밀번호를 설정하십시오.
+
 **권장 비밀번호 정책:**
 
 |Fess| 는 비밀번호의 최소·최대 문자 수와 문자 종류 요건을 강제하는 기능을 제공합니다. ``fess_config.properties`` 에서 다음 속성을 설정하십시오(괄호 안은 기본값입니다).

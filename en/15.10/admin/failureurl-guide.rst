@@ -7,6 +7,9 @@ Overview
 
 Failure URL page display URLs/paths which are not correctly crawled.
 
+A failure URL is a history record. Even if you fix the cause and the URL is crawled successfully afterwards, the record is not deleted automatically.
+Delete records you no longer need in the admin console (the Delete button on the details page, or the Delete All button of the list) or with the Admin API.
+
 
 Management Operations
 =====================

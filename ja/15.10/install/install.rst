@@ -164,13 +164,19 @@ OpenSearch
   - opensearch-analysis-extension
   - opensearch-minhash
   - opensearch-configsync
+  - analysis-nori
+  - analysis-smartcn
+
+.. note::
+
+   ``analysis-nori`` と ``analysis-smartcn`` は OpenSearch の公式プラグインで、 ``opensearch-analysis-fess`` が韓国語・中国語の言語別解析に使います。これらがないと、 ``opensearch-analysis-fess`` の韓国語と中国語のトークナイザーは語を出力せず（空のトークナイザーを返します）、韓国語・中国語の言語別解析で語が得られません。日本語は影響を受けません。 |Fess| の Docker 版が使う OpenSearch のイメージ（ ``ghcr.io/codelibs/fess-opensearch`` ）は、公開済みの 3.10.0 にはこの 2 つが含まれておらず、次のリリースのイメージから含まれます。公開済みのイメージと Docker 以外の環境（ZIP 版、RPM / DEB 版）では、OpenSearch のディレクトリで ``bin/opensearch-plugin install analysis-nori`` と ``bin/opensearch-plugin install analysis-smartcn`` を実行して導入してください。 ``bin/fess-setup install opensearch`` が導入するプラグインは、 |Fess| 用の 4 つだけです。
 
 .. important::
 
    OpenSearch のバージョンとプラグインのバージョンは一致させる必要があります。
    バージョンの不一致は、起動エラーや予期しない動作の原因となります。
 
-``bin/fess-setup install opensearch`` は、Linux と Windows で、これらのプラグインを含めて OpenSearch を用意します。詳細は、OpenSearch を別の方法で導入する必要がある macOS の場合も含めて :doc:`install-linux` を、すべてのコマンドについては :doc:`fess-setup` を参照してください。
+``bin/fess-setup install opensearch`` は、Linux と Windows で、 |Fess| 用の 4 つのプラグイン（ ``analysis-nori`` と ``analysis-smartcn`` を除く）を含めて OpenSearch を用意します。詳細は、OpenSearch を別の方法で導入する必要がある macOS の場合も含めて :doc:`install-linux` を、すべてのコマンドについては :doc:`fess-setup` を参照してください。
 
 .. note::
 

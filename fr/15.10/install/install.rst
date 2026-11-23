@@ -164,13 +164,19 @@ OpenSearch est utilisé comme moteur de recherche.
   - opensearch-analysis-extension
   - opensearch-minhash
   - opensearch-configsync
+  - analysis-nori
+  - analysis-smartcn
+
+.. note::
+
+   ``analysis-nori`` et ``analysis-smartcn`` sont des plugins officiels d'OpenSearch, utilisés par ``opensearch-analysis-fess`` pour l'analyse par langue du coréen et du chinois. Sans eux, les tokenizers coréen et chinois de ``opensearch-analysis-fess`` ne produisent aucun terme (ils renvoient un tokenizer vide) et l'analyse par langue du coréen et du chinois n'extrait aucun terme. Le japonais n'est pas concerné. L'image OpenSearch utilisée par la version Docker de |Fess| (``ghcr.io/codelibs/fess-opensearch``) ne contient pas ces deux plugins dans la version 3.10.0 déjà publiée ; ils sont inclus à partir de l'image de la prochaine version. Pour l'image déjà publiée et pour les environnements hors Docker (version ZIP, version RPM / DEB), installez-les en exécutant ``bin/opensearch-plugin install analysis-nori`` et ``bin/opensearch-plugin install analysis-smartcn`` dans le répertoire d'OpenSearch. Les plugins que ``bin/fess-setup install opensearch`` installe sont uniquement les 4 plugins propres à |Fess|.
 
 .. important::
 
    Les versions d'OpenSearch et des plugins doivent correspondre.
    Une incompatibilité de version peut causer des erreurs de démarrage ou des comportements inattendus.
 
-``bin/fess-setup install opensearch`` met en place OpenSearch avec ces plugins sous Linux et Windows. Voir :doc:`install-linux` pour les détails, y compris pour macOS, où OpenSearch doit être installé d'une autre manière, et :doc:`fess-setup` pour toutes les commandes.
+``bin/fess-setup install opensearch`` met en place OpenSearch avec les 4 plugins propres à |Fess| (à l'exception de ``analysis-nori`` et ``analysis-smartcn``) sous Linux et Windows. Voir :doc:`install-linux` pour les détails, y compris pour macOS, où OpenSearch doit être installé d'une autre manière, et :doc:`fess-setup` pour toutes les commandes.
 
 .. note::
 

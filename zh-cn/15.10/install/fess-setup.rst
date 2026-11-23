@@ -11,6 +11,10 @@ fess-setup 命令
     $ cd /path/to/fess-15.10.0
     $ bin/fess-setup <command> [options]
 
+.. note::
+
+   在 RPM / DEB 软件包中， ``/usr/share/fess/bin`` 下的 ``fess`` 、 ``fess-setup`` 、 ``fess.in.sh`` 和 ``generate-thumbnail`` 归 ``fess`` 用户所有，``fess`` 用户可以修改它们。如果管理员用 ``sudo`` 运行 ``fess-setup``，就相当于以 ``root`` 身份执行 ``fess`` 用户可以修改的脚本。执行之前，请确认脚本没有被改动。
+
 退出码
 ======
 

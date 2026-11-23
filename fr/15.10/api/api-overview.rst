@@ -122,7 +122,7 @@ Le code de statut HTTP par défaut est déterminé en fonction de ``error.code``
      - Méthode HTTP non autorisée. Les méthodes acceptées sont listées dans l'en-tête ``Allow``.
    * - ``not_acceptable``
      - 406
-     - Requête non acceptable.
+     - Requête non acceptable. Code réservé, qu'aucun point de terminaison ne renvoie actuellement (une requête n'est pas rejetée en fonction de la valeur de l'en-tête ``Accept``).
    * - ``conflict``
      - 409
      - Conflit de ressource détecté.

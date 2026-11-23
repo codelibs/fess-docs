@@ -123,7 +123,7 @@ Abhängig von ``error.code`` wird ein standardmäßiger HTTP-Statuscode zurückg
      - HTTP-Methode nicht erlaubt. Der ``Allow``-Header listet die unterstützten Methoden auf.
    * - ``not_acceptable``
      - 406
-     - Anfrage nicht akzeptierbar.
+     - Anfrage nicht akzeptierbar. Reservierter Code, der derzeit von keinem Endpunkt zurückgegeben wird (eine Anfrage wird nicht wegen des Werts des ``Accept``-Headers abgelehnt).
    * - ``conflict``
      - 409
      - Ressourcenkonflikt aufgetreten.

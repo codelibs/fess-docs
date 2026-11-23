@@ -11,6 +11,10 @@ fess-setup コマンド
     $ cd /path/to/fess-15.10.0
     $ bin/fess-setup <command> [options]
 
+.. note::
+
+   RPM / DEB パッケージでは、 ``/usr/share/fess/bin`` の ``fess`` ・ ``fess-setup`` ・ ``fess.in.sh`` ・ ``generate-thumbnail`` は ``fess`` ユーザーの所有で、 ``fess`` ユーザーが書き換えられます。管理者が ``sudo`` で ``fess-setup`` を実行すると、 ``fess`` ユーザーが書き換えられるスクリプトを ``root`` で実行することになります。実行する前に、スクリプトが書き換えられていないことを確認してください。
+
 終了コード
 ==========
 

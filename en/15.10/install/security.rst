@@ -31,6 +31,10 @@ The default administrator password (``admin`` / ``admin``) must be changed.
 
    Once you have changed the password from ``admin``, you cannot set it back to a simple value such as ``admin`` (a blacklist of administrator passwords is configured via ``password.invalid.admin.passwords``). You can also change the initial password of the ``admin`` user before the first startup by setting ``index.user.initial_password`` in ``fess_config.properties``. ``bin/fess-setup init`` sets it for you; see :doc:`fess-setup`.
 
+.. note::
+
+   If you log in as ``admin`` with the initial password, the password change screen is displayed right after login. This is a prompt to change the password, not server-side enforcement (the login has already succeeded, and you can open the admin console without changing it). To make sure the password is changed, set the initial password with ``bin/fess-setup init`` or ``index.user.initial_password`` before the first startup.
+
 **Recommended Password Policy:**
 
 |Fess| provides a built-in feature that enforces the minimum/maximum password length and character-type requirements. Configure the following properties in ``fess_config.properties`` (defaults in parentheses):

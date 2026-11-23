@@ -164,13 +164,19 @@ OpenSearch
   - opensearch-analysis-extension
   - opensearch-minhash
   - opensearch-configsync
+  - analysis-nori
+  - analysis-smartcn
+
+.. note::
+
+   ``analysis-nori`` 和 ``analysis-smartcn`` 是 OpenSearch 的官方插件， ``opensearch-analysis-fess`` 用它们进行韩语和中文的按语言分析。没有它们时， ``opensearch-analysis-fess`` 的韩语和中文分词器不会输出词（返回空的分词器），韩语、中文的按语言分析将无法得到词。日语不受影响。 |Fess| 的 Docker 版所使用的 OpenSearch 镜像（ ``ghcr.io/codelibs/fess-opensearch`` ）在已发布的 3.10.0 中不包含这两个插件，从下一个版本的镜像开始包含。对于已发布的镜像以及非 Docker 环境（ZIP 版、RPM / DEB 版），请在 OpenSearch 目录中执行 ``bin/opensearch-plugin install analysis-nori`` 和 ``bin/opensearch-plugin install analysis-smartcn`` 进行安装。 ``bin/fess-setup install opensearch`` 安装的插件只有 |Fess| 专用的 4 个。
 
 .. important::
 
    OpenSearch 的版本与插件的版本必须一致。
    版本不一致可能导致启动错误或意外行为。
 
-``bin/fess-setup install opensearch`` 会在 Linux 和 Windows 上连同这些插件一起准备 OpenSearch。详情请参阅 :doc:`install-linux`\ （其中也包括必须用其他方式安装 OpenSearch 的 macOS），所有命令请参阅 :doc:`fess-setup`\ 。
+``bin/fess-setup install opensearch`` 会在 Linux 和 Windows 上连同 |Fess| 专用的 4 个插件（不含 ``analysis-nori`` 和 ``analysis-smartcn``\ ）一起准备 OpenSearch。详情请参阅 :doc:`install-linux`\ （其中也包括必须用其他方式安装 OpenSearch 的 macOS），所有命令请参阅 :doc:`fess-setup`\ 。
 
 .. note::
 

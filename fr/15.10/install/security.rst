@@ -31,6 +31,10 @@ Veuillez obligatoirement modifier le mot de passe administrateur par défaut (``
 
    Une fois le mot de passe modifié à partir de ``admin``, il n'est plus possible de le redéfinir avec une valeur aussi simple que ``admin`` (une liste noire de mots de passe administrateur est configurée via ``password.invalid.admin.passwords``). Vous pouvez également modifier le mot de passe initial de l'utilisateur ``admin`` avant le premier démarrage en définissant ``index.user.initial_password`` dans ``fess_config.properties``. ``bin/fess-setup init`` la définit pour vous ; voir :doc:`fess-setup`.
 
+.. note::
+
+   Si vous vous connectez avec ``admin`` et le mot de passe initial, l'écran de changement de mot de passe s'affiche juste après la connexion. Il s'agit d'une invitation à changer le mot de passe, et non d'une obligation imposée côté serveur (la connexion est déjà établie et vous pouvez ouvrir l'interface d'administration sans changer le mot de passe). Pour garantir le changement du mot de passe, définissez le mot de passe initial avec ``bin/fess-setup init`` ou ``index.user.initial_password`` avant le premier démarrage.
+
 **Politique de mot de passe recommandée :**
 
 |Fess| dispose d'une fonctionnalité intégrée qui impose des exigences de longueur minimale/maximale et de types de caractères pour le mot de passe. Configurez les propriétés suivantes dans ``fess_config.properties`` (les valeurs par défaut sont indiquées entre parenthèses) :

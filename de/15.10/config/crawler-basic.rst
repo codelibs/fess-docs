@@ -737,6 +737,40 @@ Codierung von Dateinamen im Dateisystem:
 
     crawler.document.file.name.encoding=
 
+Erkennung der Zeichencodierung von Dokumenten
+---------------------------------------------
+
+**HTML (Web-Crawling):**
+
+Enthält ein ``<meta>``-Element der Seite eine Angabe der Zeichencodierung (``charset``), wird diese verwendet. Das ``<meta>``-Element wird in den ersten 2048 Bytes der Seite gesucht (Standardwert).
+Fehlt eine ``<meta>``-Angabe, wird die Zeichencodierung anhand der Anfangsbytes ermittelt, wobei das ``charset`` im HTTP-``Content-Type`` als Anhaltspunkt dient.
+Das ``charset`` im ``Content-Type`` wird nicht übernommen, wenn es den Bytes widerspricht.
+
+Die ``<meta>``-Angabe hat Vorrang vor der BOM. Widersprechen sich beide, etwa bei einer Seite mit UTF-8-BOM, in der ein ``<meta>`` mit Shift_JIS steht,
+wird mit der Zeichencodierung des ``<meta>`` gelesen, und der Text wird fehlerhaft dargestellt. Passen Sie das ``<meta>`` an die tatsächliche Zeichencodierung an.
+
+**Markdown:**
+
+Bei Markdown (``.md``) wird die Zeichencodierung nicht erkannt. Ist eine BOM (UTF-8, UTF-16, UTF-32) vorhanden, wird ihr gefolgt; andernfalls wird mit
+``encoding`` von ``markdownExtractor`` gelesen (Standard ist ``UTF-8``). Markdown in einer anderen Codierung als UTF-8, etwa Shift_JIS oder EUC-JP,
+wird daher fehlerhaft dargestellt, wenn ``encoding`` nicht gesetzt ist (eine ``.txt``-Datei mit demselben Inhalt wird erkannt und lesbar). ``encoding`` legen Sie fest, indem Sie
+``app/WEB-INF/classes/crawler/extractor+markdownExtractor.xml`` mit dem folgenden Inhalt anlegen.
+
+::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE components PUBLIC "-//DBFLUTE//DTD LastaDi 1.0//EN"
+            "http://dbflute.org/meta/lastadi10.dtd">
+    <components namespace="fessCrawler">
+            <include path="crawler/container.xml" />
+            <component name="markdownExtractor"
+                    class="org.codelibs.fess.crawler.extractor.impl.MarkdownExtractor">
+                    <property name="encoding">Shift_JIS</property>
+            </component>
+    </components>
+
+``encoding`` gilt mit demselben Wert für alle Markdown-Dateien. Liegen Markdown-Dateien in unterschiedlichen Zeichencodierungen vor, vereinheitlichen Sie sie auf UTF-8.
+
 Fehlersuche beim Crawling
 ================================
 

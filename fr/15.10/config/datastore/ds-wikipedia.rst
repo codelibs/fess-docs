@@ -161,6 +161,11 @@ Configuration du script
     last_modified=timestamp
     timestamp=timestamp
 
+Par défaut, toutes les pages du dump sont indexées. Les pages des espaces de noms (discussions, utilisateurs, modèles, etc.) et les pages de redirection sont également concernées,
+et il n'est pas possible de les filtrer avec les paramètres. Le numéro d'espace de noms de chaque page (``ns``) et l'indication de redirection (``redirect``)
+sont transmis comme valeurs référençables depuis le script (voir « Champs disponibles » ci-dessous). Notez qu'une page pour laquelle le script n'a pas défini ``url``
+n'est pas ignorée : elle est enregistrée dans les URL en échec comme page ne pouvant pas être ajoutée à l'index.
+
 Champs disponibles
 ~~~~~~~~~~~~~~~~~~
 

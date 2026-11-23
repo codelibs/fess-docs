@@ -143,6 +143,10 @@ Die folgende Tabelle zeigt, was die einzelnen Images unterstützen.
 
 Das Thumbnail einer HTML-Seite wird bei jedem Image aus einem Bild auf der Seite erzeugt. Damit Thumbnails angezeigt werden, aktivieren Sie außerdem die Thumbnail-Anzeige in den allgemeinen Einstellungen der Verwaltungsoberfläche. Details finden Sie unter :doc:`../config/crawler-thumbnail`.
 
+.. warning::
+
+   Geben Sie für das Image ein Tag mit Version an, etwa ``15.10.0``. Verwenden Sie nicht das Tag ``latest``. Wenn Sie ``docker pull ghcr.io/codelibs/fess`` ohne Tag ausführen oder bei ``image`` ``latest`` angeben, wird ``latest`` verwendet.
+
 Schritt 3: Starten der Docker-Container
 ========================================
 

@@ -143,6 +143,10 @@ Compose 文件及启动步骤由 `docker-fess <https://github.com/codelibs/docke
 
 无论使用哪种镜像，HTML 页面的缩略图都是根据页面中的图片生成的。要显示缩略图，还需要在管理页面的常规设置中启用缩略图显示。详情请参阅 :doc:`../config/crawler-thumbnail` 。
 
+.. warning::
+
+   请为镜像指定包含版本的标签，例如 ``15.10.0`` 。请不要使用 ``latest`` 标签。如果不带标签执行 ``docker pull ghcr.io/codelibs/fess`` ，或在 ``image`` 中指定 ``latest`` ，则会使用 ``latest`` 。
+
 步骤 3: 启动 Docker 容器
 ========================
 

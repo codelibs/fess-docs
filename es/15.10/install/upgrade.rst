@@ -1282,6 +1282,12 @@ instalación funciona con una clave distinta de la que los guardó, porque tomó
 pueden descifrar: ``fess-crawler.log`` registra una ``CipherFailureException`` y un rastreo que
 incluya una configuración así puede no indexar nada.
 
+Si una sola configuración tiene un valor que no se puede descifrar, el rastreo se detiene en ese punto. No se omite solo esa configuración:
+tampoco se indexan las demás configuraciones que forman parte del mismo rastreo. El mensaje de ``CipherFailureException`` indica
+el tipo, el nombre y el ID de la configuración y la clave del parámetro que no se pudo descifrar, y señala que ``app.cipher.key`` puede ser
+distinta de la clave con la que se guardó (no se muestran ni el valor cifrado ni la propia clave). Una vez identificada la causa,
+restablezca ``app.cipher.key`` a su valor original o vuelva a introducir la contraseña de esa configuración.
+
 .. note::
 
    |Fess| 15.9 también guarda el ``password`` de la autenticación web y de archivos cifrado con ``app.cipher.key``, por

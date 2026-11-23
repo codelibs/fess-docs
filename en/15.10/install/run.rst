@@ -67,6 +67,10 @@ To start in the background::
    messages of |Fess| itself, and ``server_0.log`` those of the embedded Tomcat, including the
    startup-completion message.
 
+.. important::
+
+   The ZIP version writes inside the extracted directory (``logs/`` and ``temp/``, as well as ``app/WEB-INF/conf/system.properties``). Extract it to a location owned by the user who runs |Fess|. Extracting to a read-only location or to a location owned by another user is not supported. Even if you move the log and temporary file locations with ``FESS_LOG_PATH`` and ``FESS_TEMP_PATH``, ``system.properties`` is written to the extracted directory, so |Fess| fails to start. The path that cannot be written is shown in the error message at startup.
+
 ZIP Version (Windows)
 ---------------------
 

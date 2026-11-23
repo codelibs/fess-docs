@@ -136,6 +136,16 @@ und/oder ``If-Modified-Since`` gesendet. Eine mit ``304 Not Modified`` beantwort
 eine unveränderte Seite behandelt und nicht erneut abgerufen. Um alles erneut abzurufen, etwa nach
 einer Änderung der Crawl-Einstellungen, deaktivieren Sie diese Einstellung für einen Crawl.
 
+Seiten, deren ``Last-Modified``-Wert der HEAD-Antwort nicht neuer ist als das im Index gespeicherte
+Änderungsdatum, gelten als unverändert und werden nicht erneut abgerufen. Hat der Server einmal ein
+``Last-Modified`` geliefert, das neuer ist als die tatsächliche Änderungszeit (zum Beispiel den
+Zeitpunkt der Antwort), wird dieser Wert im Index gespeichert; spätere Änderungen, bei denen
+``Last-Modified`` nicht über diesen Wert hinausgeht, werden dann nicht erkannt. Die Ablaufzeit von
+Dokumenten, die als unverändert gelten, wird bei jedem Crawl verlängert. Solange der Crawl weiterläuft,
+werden sie daher auch dann nicht erneut abgerufen, wenn die unter „Alte Dokumente löschen" festgelegte
+Frist erreicht ist. Um die Änderungen zu übernehmen, löschen Sie die betroffenen Dokumente aus dem Index
+und crawlen anschließend erneut, oder deaktivieren Sie diese Einstellung für einen Crawl.
+
 Gleichzeitige Crawler-Konfiguration
 :::::::::::::::::::::::::::::::::::::
 
@@ -587,6 +597,8 @@ Benachrichtigungs-E-Mail
 
 Geben Sie die E-Mail-Adresse an, die bei Abschluss des Crawls benachrichtigt werden soll.
 Mehrere Adressen können durch Kommas getrennt angegeben werden. Ein E-Mail-Server ist erforderlich.
+
+Der ``Status`` in der Benachrichtigungs-E-Mail gibt an, ob die Verarbeitung des Crawls oder die Registrierung im Index durch eine Ausnahme fehlgeschlagen ist. Dass einzelne URLs nicht abgerufen werden konnten, spiegelt sich nicht im ``Status`` wider (auch wenn der Abruf aller URLs fehlschlägt, lautet er ``ok``); diese Fehler werden als Fehler-URLs aufgezeichnet. Prüfen Sie fehlgeschlagene Abrufe in der Verwaltungsoberfläche unter [Systeminformationen > Fehler-URL].
 
 Slack Webhook URLs
 :::::::::::::::::

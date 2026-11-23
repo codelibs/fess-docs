@@ -31,6 +31,10 @@ Asegúrese de cambiar la contraseña de administrador predeterminada (``admin`` 
 
    Una vez que haya cambiado la contraseña desde ``admin``, no podrá volver a establecerla en un valor simple como ``admin`` (una lista negra de contraseñas de administrador está configurada mediante ``password.invalid.admin.passwords``). También puede cambiar la contraseña inicial del usuario ``admin`` antes del primer inicio estableciendo ``index.user.initial_password`` en ``fess_config.properties``. ``bin/fess-setup init`` también la establece; consulte :doc:`fess-setup`.
 
+.. note::
+
+   Si inicia sesión como ``admin`` con la contraseña inicial, justo después del inicio de sesión aparece la pantalla de cambio de contraseña. Es una indicación para que la cambie, no una obligación impuesta por el servidor (el inicio de sesión ya se ha completado y también puede abrir la pantalla de administración sin cambiarla). Para asegurarse de que se cambie la contraseña, establezca la contraseña inicial con ``bin/fess-setup init`` o ``index.user.initial_password`` antes del primer inicio.
+
 |Fess| ofrece una función integrada que aplica los requisitos de longitud mínima/máxima y de tipos de caracteres de la contraseña. Configure las siguientes propiedades en ``fess_config.properties`` (los valores predeterminados se indican entre paréntesis):
 
 - ``password.min.length`` (valor predeterminado: ``8``): Longitud mínima. Se recomienda 12 o más.

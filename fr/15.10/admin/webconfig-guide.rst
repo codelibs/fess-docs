@@ -67,6 +67,9 @@ URL exclues de l'indexation
 
 Les URL correspondant à l'expression régulière (format Java) spécifiée dans cet élément ne seront pas ciblées pour la recherche.
 
+.. note::
+   Cette spécification ne s'applique qu'aux documents indexés lors des crawls suivants (les documents correspondants ne sont pas indexés). Les documents déjà indexés ne sont pas supprimés lorsque vous ajoutez cette spécification et restent dans les résultats de recherche. Lorsque « Vérifier la dernière modification » est activé dans les paramètres généraux (valeur par défaut), la date d'expiration d'un document non modifié est prolongée à chaque crawl (voir « Vérifier la dernière modification » dans :doc:`general-guide`) ; un tel document ne disparaît donc pas forcément à l'échéance définie par « Supprimer les anciens documents ». Pour retirer à coup sûr un document des résultats de recherche, supprimez-le dans la liste de recherche (interface d'administration). Un document supprimé n'est plus indexé lors des crawls suivants tant qu'il correspond à cette spécification.
+
 Onglet Paramètres d’exploration
 -------------------------------
 

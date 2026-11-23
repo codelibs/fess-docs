@@ -14,6 +14,10 @@ Ejecútelo desde el directorio de |Fess|. Sin argumentos, muestra la lista de co
     $ cd /path/to/fess-15.10.0
     $ bin/fess-setup <command> [options]
 
+.. note::
+
+   En los paquetes RPM / DEB, ``fess``, ``fess-setup``, ``fess.in.sh`` y ``generate-thumbnail`` de ``/usr/share/fess/bin`` pertenecen al usuario ``fess``, que puede modificarlos. Si un administrador ejecuta ``fess-setup`` con ``sudo``, ejecuta como ``root`` un script que el usuario ``fess`` puede modificar. Antes de ejecutarlo, compruebe que el script no ha sido modificado.
+
 Códigos de Salida
 =================
 

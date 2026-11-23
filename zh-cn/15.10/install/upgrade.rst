@@ -1187,6 +1187,12 @@ RPM 版请以同样方式比较 ``/etc/fess/fess_config.properties`` 与
 （因为使用了随附的 ``fess_config.properties`` ，或将备份恢复到了新服务器），就无法解密：
 ``fess-crawler.log`` 中会记录 ``CipherFailureException`` ，包含此类配置的爬取将无法索引任何内容。
 
+只要有一个配置含有无法解密的值，爬取就会在此时停止。不会只跳过无法解密的配置，
+属于同一次爬取对象的其他配置也不会被索引。 ``CipherFailureException`` 的消息中会显示
+该配置的类型、名称和 ID，以及无法解密的参数的键，并写明 ``app.cipher.key`` 可能与保存时的密钥不同
+（加密后的值和密钥本身不会被输出）。查明原因后，请将 ``app.cipher.key`` 恢复为原来的值，
+或重新输入该配置的密码。
+
 .. note::
 
    |Fess| 15.9 同样使用 ``app.cipher.key`` 加密保存 Web 认证和文件认证的 ``password`` ，因此备份中的

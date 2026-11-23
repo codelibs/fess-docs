@@ -67,6 +67,10 @@ Pour un démarrage en arrière-plan ::
    contient les messages de |Fess| lui-même et ``server_0.log`` ceux du Tomcat intégré (y compris le
    message de fin de démarrage).
 
+.. important::
+
+   La version ZIP écrit dans le répertoire d'extraction (``logs/`` et ``temp/``, mais aussi ``app/WEB-INF/conf/system.properties``, etc.). Extrayez-la dans un emplacement appartenant à l'utilisateur qui exécute |Fess|. L'extraction dans un emplacement en lecture seule ou appartenant à un autre utilisateur n'est pas prise en charge. Même si vous déplacez les journaux et les fichiers temporaires avec ``FESS_LOG_PATH`` et ``FESS_TEMP_PATH``, ``system.properties`` est écrit dans le répertoire d'extraction ; |Fess| échoue donc au démarrage. Le chemin non accessible en écriture est indiqué dans le message d'erreur au démarrage.
+
 Version ZIP (Windows)
 ---------------------
 
