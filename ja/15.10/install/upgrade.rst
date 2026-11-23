@@ -601,7 +601,7 @@ Docker 版::
      - ``esreq``
      - 「OpenSearchへのリクエスト」画面（ ``/admin/sereq/`` ）のヘルプアイコンが、存在しない ``sereq-guide.html`` を開きます。この画面のガイドの名前である ``esreq`` にしてください。
 
-15.10 は ``fess_config.properties`` に次のキーも追加します: ``api.search.similar.rate.limit.per.minute`` 、 ``crawler.progress.interval`` 、 ``crawler.metadata.content.image.includes`` 、 ``passkey.enabled`` 、 ``passkey.origins`` 、 ``passkey.rp.id`` 、 ``passkey.rp.name`` 、 ``password.changed.check.interval`` 、 ``query.boost.fuzzy.cjk.enabled`` 、 ``query.boost.fuzzy.digit.enabled`` 、 ``search.result.link.schemes`` 。15.9 から引き継いだファイルにはこれらがないため、15.10 は各キーについて同梱の値を使い、キーごとに 1 回、 ``fess.log`` へ警告を出力します。動作に問題はありません。警告を止めるには、15.10 のファイルからキーを追加してください。
+15.10 は ``fess_config.properties`` に次のキーも追加します: ``api.search.similar.rate.limit.per.minute`` 、 ``authentication.local.username.policy`` 、 ``crawler.progress.interval`` 、 ``crawler.metadata.content.image.includes`` 、 ``passkey.enabled`` 、 ``passkey.origins`` 、 ``passkey.rp.id`` 、 ``passkey.rp.name`` 、 ``password.changed.check.interval`` 、 ``query.boost.fuzzy.cjk.enabled`` 、 ``query.boost.fuzzy.digit.enabled`` 、 ``search.result.link.schemes`` 。15.9 から引き継いだファイルにはこれらがないため、15.10 は各キーについて同梱の値を使い、そのキーを最初に読み込むときに、キーごとに 1 回、 ``fess.log`` へ警告を出力します。設定で使われないキー（たとえばパスキーが無効のときの ``passkey.rp.id`` 、 ``passkey.origins`` 、 ``passkey.rp.name`` ）は警告を出力しません。動作に問題はありません。警告を止めるには、15.10 のファイルからキーを追加してください。
 
 .. _upgrade-1510-failure-url:
 

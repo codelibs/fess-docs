@@ -599,7 +599,7 @@ Docker 버전::
      - ``esreq``
      - "OpenSearch에 요청" 화면(``/admin/sereq/``)의 도움말 아이콘이 존재하지 않는 ``sereq-guide.html`` 을 엽니다. 이 화면의 가이드 이름인 ``esreq`` 를 사용하십시오.
 
-15.10은 ``fess_config.properties`` 에 다음 키도 추가합니다: ``api.search.similar.rate.limit.per.minute`` , ``crawler.progress.interval`` , ``crawler.metadata.content.image.includes`` , ``passkey.enabled`` , ``passkey.origins`` , ``passkey.rp.id`` , ``passkey.rp.name`` , ``password.changed.check.interval`` , ``query.boost.fuzzy.cjk.enabled`` , ``query.boost.fuzzy.digit.enabled`` , ``search.result.link.schemes`` . 15.9에서 이어받은 파일에는 이 키들이 없으므로 15.10은 각 키에 대해 기본 제공 값을 사용하고 키마다 한 번씩 ``fess.log`` 에 경고를 출력합니다. 동작에는 문제가 없습니다. 경고를 없애려면 15.10 파일의 키를 추가하십시오.
+15.10은 ``fess_config.properties`` 에 다음 키도 추가합니다: ``api.search.similar.rate.limit.per.minute`` , ``authentication.local.username.policy`` , ``crawler.progress.interval`` , ``crawler.metadata.content.image.includes`` , ``passkey.enabled`` , ``passkey.origins`` , ``passkey.rp.id`` , ``passkey.rp.name`` , ``password.changed.check.interval`` , ``query.boost.fuzzy.cjk.enabled`` , ``query.boost.fuzzy.digit.enabled`` , ``search.result.link.schemes`` . 15.9에서 이어받은 파일에는 이 키들이 없으므로 15.10은 각 키에 대해 기본 제공 값을 사용하고 키마다 한 번씩 ``fess.log`` 에 경고를 출력합니다. 동작에는 문제가 없습니다. 경고를 없애려면 15.10 파일의 키를 추가하십시오.
 
 .. _upgrade-1510-failure-url:
 

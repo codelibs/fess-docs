@@ -589,7 +589,7 @@ Docker 版::
      - ``esreq``
      - “对OpenSearch的请求”页面（ ``/admin/sereq/`` ）的帮助图标会打开不存在的 ``sereq-guide.html`` 。请使用该页面指南的名称 ``esreq`` 。
 
-15.10 还会向 ``fess_config.properties`` 添加下列键： ``api.search.similar.rate.limit.per.minute`` 、 ``crawler.progress.interval`` 、 ``crawler.metadata.content.image.includes`` 、 ``passkey.enabled`` 、 ``passkey.origins`` 、 ``passkey.rp.id`` 、 ``passkey.rp.name`` 、 ``password.changed.check.interval`` 、 ``query.boost.fuzzy.cjk.enabled`` 、 ``query.boost.fuzzy.digit.enabled`` 和 ``search.result.link.schemes`` 。沿用自 15.9 的文件中没有这些键，因此 15.10 对每个键使用其内置值，并为每个键向 ``fess.log`` 输出一次警告。不会出现故障；如需消除警告，请从 15.10 的文件中添加这些键。
+15.10 还会向 ``fess_config.properties`` 添加下列键： ``api.search.similar.rate.limit.per.minute`` 、 ``authentication.local.username.policy`` 、 ``crawler.progress.interval`` 、 ``crawler.metadata.content.image.includes`` 、 ``passkey.enabled`` 、 ``passkey.origins`` 、 ``passkey.rp.id`` 、 ``passkey.rp.name`` 、 ``password.changed.check.interval`` 、 ``query.boost.fuzzy.cjk.enabled`` 、 ``query.boost.fuzzy.digit.enabled`` 和 ``search.result.link.schemes`` 。沿用自 15.9 的文件中没有这些键，因此 15.10 对每个键使用其内置值，并为每个键向 ``fess.log`` 输出一次警告。不会出现故障；如需消除警告，请从 15.10 的文件中添加这些键。
 
 .. _upgrade-1510-failure-url:
 

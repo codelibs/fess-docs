@@ -237,7 +237,7 @@ IdPの設定画面またはメタデータから以下の情報を取得し、|F
 - **X.509証明書**: SAMLアサーションの署名検証に使用する公開鍵証明書
 
 .. note::
-   |Fess| はすべてのアサーションについて以下を検証します。URLは受信したリクエストではなく、``saml.sp.base.url``（または個別のURLプロパティ）から導出されます。
+   |Fess| はすべてのアサーションについて以下を検証します。URLは受信したリクエストではなく、``saml.sp.base.url``\ （または個別のURLプロパティ）から導出されます。
 
    - アサーションに、SPのEntity IDを指す ``AudienceRestriction`` が含まれていること
    - 署名されたResponseの ``Destination`` と、SubjectConfirmationの ``Recipient`` が、Assertion Consumer ServiceのURLであること
