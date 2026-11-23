@@ -137,6 +137,8 @@ ZIP 버전 설치
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
+   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 이 확인(``Continue with installation?``) 입력을 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
+
    .. important::
 
       플러그인 버전은 OpenSearch 버전과 일치시켜야 합니다.
@@ -269,9 +271,17 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
    ::
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.10.0-linux-x64.rpm
+       $ sudo env OPENSEARCH_INITIAL_ADMIN_PASSWORD=<password> rpm -ivh opensearch-3.10.0-linux-x64.rpm
 
    arm64(aarch64) 머신에서는 위 파일명의 ``linux-x64`` 를 ``linux-arm64`` 로 바꾸십시오(예: ``opensearch-3.10.0-linux-arm64.rpm``).
+
+   .. note::
+
+      OpenSearch 2.12 이후 버전에서는 패키지를 설치할 때 데모용 보안 설정도 함께 생성되므로 OpenSearch 관리자 비밀번호(|Fess| 의 ``admin`` 계정과는 별개입니다)가 필요합니다. 위와 같이 환경 변수 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 로 지정하십시오. 지정하지 않으면 설치가 실패합니다(rpm 이 ``%post scriptlet failed`` 를 출력합니다).
+
+      ``<password>`` 는 강력한 비밀번호로 바꾸십시오. 8~100자이며 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 포함해야 하고, OpenSearch 의 강도 검사(``zxcvbn``)에서 ``strong`` 이상으로 평가되어야 합니다. 셸이 해석하는 문자가 포함된 경우에는 작은따옴표로 감싸십시오. 저장소에서 설치하는 경우에도 마찬가지입니다.
+
+      이 지정은 패키지 설치에만 필요합니다. 아래 항목 3 의 ``plugins.security.disabled: true`` 는 개발 환경용으로 보안 플러그인을 비활성화하는 설정 그대로입니다. 운영 환경의 보안 설정은 :doc:`security` 를 참조하십시오.
 
    또는 리포지토리를 추가하여 설치할 수도 있습니다.
    자세한 내용은 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__ 를 참조하십시오.
@@ -284,6 +294,8 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
+
+   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 이 확인(``Continue with installation?``) 입력을 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
 
 3. OpenSearch 설정
 
@@ -381,9 +393,17 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
    ::
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.10.0-linux-x64.deb
+       $ sudo env OPENSEARCH_INITIAL_ADMIN_PASSWORD=<password> dpkg -i opensearch-3.10.0-linux-x64.deb
 
    arm64(aarch64) 머신에서는 위 파일명의 ``linux-x64`` 를 ``linux-arm64`` 로 바꾸십시오(예: ``opensearch-3.10.0-linux-arm64.deb``).
+
+   .. note::
+
+      OpenSearch 2.12 이후 버전에서는 패키지를 설치할 때 데모용 보안 설정도 함께 생성되므로 OpenSearch 관리자 비밀번호(|Fess| 의 ``admin`` 계정과는 별개입니다)가 필요합니다. 위와 같이 환경 변수 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 로 지정하십시오. 지정하지 않으면 설치가 실패합니다(dpkg 가 ``error processing package opensearch`` 를 출력합니다).
+
+      ``<password>`` 는 강력한 비밀번호로 바꾸십시오. 8~100자이며 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 포함해야 하고, OpenSearch 의 강도 검사(``zxcvbn``)에서 ``strong`` 이상으로 평가되어야 합니다. 셸이 해석하는 문자가 포함된 경우에는 작은따옴표로 감싸십시오. 저장소에서 설치하는 경우에도 마찬가지입니다.
+
+      이 지정은 패키지 설치에만 필요합니다. 아래 항목 3 의 ``plugins.security.disabled: true`` 는 개발 환경용으로 보안 플러그인을 비활성화하는 설정 그대로입니다. 운영 환경의 보안 설정은 :doc:`security` 를 참조하십시오.
 
    또는 리포지토리를 추가하여 설치할 수도 있습니다.
    자세한 내용은 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__ 를 참조하십시오.
@@ -396,6 +416,8 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
+
+   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 이 확인(``Continue with installation?``) 입력을 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
 
 3. OpenSearch 설정
 
