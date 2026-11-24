@@ -72,11 +72,11 @@ Step 1: Install OpenSearch
        > cd C:\fess-15.10.0
        > bin\fess-setup install opensearch
 
-   ``bin\fess.in.bat`` finds an OpenSearch installed this way and passes its ``config\dictionary``
-   directory to |Fess|, so "Configure Fess" in Step 2 needs no change as long as OpenSearch runs on
-   the same host. The command prints the settings it added and whether ``bin\fess.in.bat`` finds
-   the installation. Read the warning in "Configure OpenSearch" before OpenSearch listens on any
-   address other than ``localhost``.
+   ``bin\fess.in.bat`` finds an OpenSearch installed this way and passes ``dictionary/``, which
+   names its ``config\dictionary`` directory, to |Fess|, so "Configure Fess" in Step 2 needs no
+   change as long as OpenSearch runs on the same host. The command prints the settings it added and
+   whether ``bin\fess.in.bat`` finds the installation. Read the warning in "Configure OpenSearch"
+   before OpenSearch listens on any address other than ``localhost``.
 
    Follow the steps below to work through them individually, or when using an OpenSearch you
    already have. To install only the plugins into an existing OpenSearch, use
@@ -211,6 +211,7 @@ After::
 .. note::
 
    - Set ``fess.dictionary.path`` to the same path specified for ``configsync.config_path`` in OpenSearch's ``opensearch.yml``.
+   - If ``configsync.config_path`` is the ``config\dictionary`` directory of that OpenSearch, as ``bin\fess-setup`` writes it, ``fess.dictionary.path`` can instead be the relative ``dictionary/``, which OpenSearch resolves against its configuration directory.
    - If OpenSearch is running on a different host, change the hostname or IP address in ``fess.search_engine.http_address`` to the appropriate value.
    - Use ``/`` for path separators. |Fess| inserts the path into the index settings, where a ``\`` is dropped, so a path written with ``\`` is not found.
    - Do not add new ``set FESS_JAVA_OPTS=...`` lines; instead, uncomment and edit the existing commented lines. Specifying the same option more than once may cause unexpected behavior.

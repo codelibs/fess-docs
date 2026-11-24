@@ -363,7 +363,7 @@ making changes.
 
    - ``FESS_MIN_MEM``, ``FESS_MAX_MEM``: Specify the minimum and maximum heap sizes individually (ignored when ``FESS_HEAP_SIZE`` is set).
    - ``FESS_DIRECT_SIZE``: Upper limit of direct memory (``-XX:MaxDirectMemorySize``).
-   - ``FESS_DICTIONARY_PATH``: The ``config\dictionary`` directory of OpenSearch.
+   - ``FESS_DICTIONARY_PATH``: The dictionary directory of OpenSearch, matching its ``configsync.config_path``. ``dictionary/`` names the ``config\dictionary`` directory of that OpenSearch, and is what ``bin\fess.in.bat`` sets when this variable is unset and ``opensearch\`` holds exactly one OpenSearch installed by ``bin\fess-setup``.
    - ``FESS_PROXY_HOST``, ``FESS_PROXY_PORT``, ``FESS_NON_PROXY_HOSTS``: Proxy settings.
    - ``FESS_JAVA_OPTS``: ``fess.in.bat`` appends these JVM options after the values already set.
    - ``PLAYWRIGHT_NODEJS_PATH``: The Node.js executable used by the Playwright plugin.

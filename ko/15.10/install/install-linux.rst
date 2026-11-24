@@ -207,7 +207,11 @@ ZIP 버전 설치
 
 2. Fess 설정
 
-   OpenSearch 연결 정보는 ``bin/fess.in.sh`` 에 있습니다. ``bin/fess-setup install opensearch`` 로 |Fess| 디렉터리의 ``opensearch/`` 에 설치하고 같은 호스트에서 실행하는 OpenSearch 라면 이 파일을 변경할 필요가 없습니다. ``SEARCH_ENGINE_HTTP_URL`` 의 기본값은 ``http://localhost:9200`` 이며, ``FESS_DICTIONARY_PATH`` 에는 해당 OpenSearch 의 ``config/dictionary`` 디렉터리가 설정됩니다.
+   OpenSearch 연결 정보는 ``bin/fess.in.sh`` 에 있습니다. ``bin/fess-setup install opensearch`` 로 |Fess| 디렉터리의 ``opensearch/`` 에 설치하고 같은 호스트에서 실행하는 OpenSearch 라면 이 파일을 변경할 필요가 없습니다. ``SEARCH_ENGINE_HTTP_URL`` 의 기본값은 ``http://localhost:9200`` 이며, ``FESS_DICTIONARY_PATH`` 에는 ``dictionary/`` 가 설정됩니다. OpenSearch 는 이 상대 경로를 자신의 설정 디렉터리를 기준으로 해석하므로, 이는 해당 OpenSearch 의 ``config/dictionary`` 디렉터리를 가리킵니다. |Fess| 는 생성하는 각 인덱스의 Analyzer 설정에 이 값을 기록하므로, 상대 경로이면 OpenSearch 디렉터리가 이동하더라도(예: 인접한 디렉터리로 업그레이드) 인덱스를 계속 사용할 수 있습니다. 아래에 설명하는 대로 절대 경로를 설정할 수도 있습니다.
+
+   .. note::
+
+      절대 경로의 ``FESS_DICTIONARY_PATH`` 로 생성된 인덱스(예: |Fess| 15.9.0 에서 생성한 인덱스)는 그 절대 경로를 그대로 유지합니다. 상대 경로가 되는 것은 그 이후에 생성한 인덱스뿐입니다.
 
    다음 중 하나에 해당하는 경우에는 ``bin/fess.in.sh`` 를 편집합니다.
 
@@ -234,6 +238,7 @@ ZIP 버전 설치
    .. note::
 
       - ``FESS_DICTIONARY_PATH`` 에는 OpenSearch의 ``opensearch.yml`` 에서 지정한 ``configsync.config_path`` 와 동일한 경로를 설정하십시오. 설정하지 않으면 |Fess| 는 인덱스를 생성할 수 없어 시작되지 않습니다.
+      - ``configsync.config_path`` 가 해당 OpenSearch 의 ``config/dictionary`` 디렉터리( ``bin/fess-setup`` 이 설정하는 값)라면, 절대 경로 대신 ``FESS_DICTIONARY_PATH=dictionary/`` 를 지정할 수 있습니다.
       - OpenSearch를 다른 호스트에서 실행하는 경우 ``SEARCH_ENGINE_HTTP_URL`` 줄의 URL 을 그 호스트로 변경하십시오. 예: ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}`` . 이때 ``FESS_DICTIONARY_PATH`` 에는 그 서버의 ``configsync.config_path`` 를 설정합니다.
       - 파일을 편집하는 대신 |Fess| 를 시작하는 환경에서 두 변수를 export 할 수도 있습니다. export 한 ``SEARCH_ENGINE_HTTP_URL`` 은 파일의 URL 보다 우선하며, export 한 ``FESS_DICTIONARY_PATH`` 는 파일의 해당 줄이 주석 상태로 남아 있으면 사용됩니다.
       - 새로 ``SEARCH_ENGINE_HTTP_URL=...`` 줄을 추가하지 말고 기존 줄을 편집하십시오.

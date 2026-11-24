@@ -350,7 +350,7 @@ ZIP 版请编辑 ``bin/fess.in.sh``，RPM 版请编辑 ``/etc/sysconfig/fess``�
 
    - ``FESS_MIN_MEM``、``FESS_MAX_MEM``：分别指定最小和最大堆大小（设置了 ``FESS_HEAP_SIZE`` 时将被忽略）。
    - ``FESS_DIRECT_SIZE``：直接内存的上限（``-XX:MaxDirectMemorySize``）。
-   - ``FESS_DICTIONARY_PATH``：OpenSearch 的 ``config\dictionary`` 目录。
+   - ``FESS_DICTIONARY_PATH``：OpenSearch 的词典目录，须与其 ``configsync.config_path`` 一致。``dictionary/`` 指向该 OpenSearch 的 ``config\dictionary`` 目录，在此变量未设置且 ``opensearch\`` 中恰好有一个通过 ``bin\fess-setup`` 安装的 OpenSearch 时，``bin\fess.in.bat`` 会设置该值。
    - ``FESS_PROXY_HOST``、``FESS_PROXY_PORT``、``FESS_NON_PROXY_HOSTS``：代理设置。
    - ``FESS_JAVA_OPTS``：``fess.in.bat`` 会将 JVM 选项追加到已设置的值之后。
    - ``PLAYWRIGHT_NODEJS_PATH``：Playwright 插件使用的 Node.js 可执行文件。

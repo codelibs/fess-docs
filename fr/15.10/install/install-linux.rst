@@ -224,7 +224,11 @@ Installation avec la version ZIP
 
 2. Configuration de Fess
 
-   Les informations de connexion à OpenSearch se trouvent dans ``bin/fess.in.sh``. Avec un OpenSearch que ``bin/fess-setup install opensearch`` a installé dans ``opensearch/`` du répertoire de |Fess| et qui s'exécute sur le même hôte, ce fichier ne nécessite aucune modification : ``SEARCH_ENGINE_HTTP_URL`` vaut ``http://localhost:9200`` par défaut, et ``FESS_DICTIONARY_PATH`` est défini sur le répertoire ``config/dictionary`` de cet OpenSearch.
+   Les informations de connexion à OpenSearch se trouvent dans ``bin/fess.in.sh``. Avec un OpenSearch que ``bin/fess-setup install opensearch`` a installé dans ``opensearch/`` du répertoire de |Fess| et qui s'exécute sur le même hôte, ce fichier ne nécessite aucune modification : ``SEARCH_ENGINE_HTTP_URL`` vaut ``http://localhost:9200`` par défaut, et ``FESS_DICTIONARY_PATH`` est défini sur ``dictionary/``. OpenSearch résout ce chemin relatif par rapport à son propre répertoire de configuration : il désigne donc le répertoire ``config/dictionary`` de cet OpenSearch. |Fess| écrit cette valeur dans les paramètres d'Analyzer de chaque index qu'il crée ; un chemin relatif permet donc à l'index de continuer à fonctionner lorsque le répertoire d'OpenSearch est déplacé, par exemple lors d'une mise à niveau vers un répertoire voisin. Un chemin absolu peut toujours être défini, comme décrit ci-dessous.
+
+   .. note::
+
+      Un index créé avec un ``FESS_DICTIONARY_PATH`` absolu, par exemple par |Fess| 15.9.0, conserve ce chemin absolu. Seuls les index créés ensuite reçoivent le chemin relatif.
 
    Modifiez ``bin/fess.in.sh`` dans l'un des cas suivants :
 
@@ -251,6 +255,7 @@ Installation avec la version ZIP
    .. note::
 
       - Définissez pour ``FESS_DICTIONARY_PATH`` le même chemin que celui indiqué dans ``configsync.config_path`` du fichier ``opensearch.yml`` d'OpenSearch. Sans ce paramètre, |Fess| ne peut pas créer ses index et ne démarre pas.
+      - Si ``configsync.config_path`` est le répertoire ``config/dictionary`` de cet OpenSearch, comme l'écrit ``bin/fess-setup``, vous pouvez définir ``FESS_DICTIONARY_PATH=dictionary/`` à la place du chemin absolu.
       - Si OpenSearch s'exécute sur un autre hôte, remplacez l'URL de la ligne ``SEARCH_ENGINE_HTTP_URL`` par celle de cet hôte. Exemple : ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}``. ``FESS_DICTIONARY_PATH`` est alors le ``configsync.config_path`` de ce serveur.
       - Au lieu de modifier le fichier, les deux variables peuvent être exportées dans l'environnement à partir duquel |Fess| est démarré. Un ``SEARCH_ENGINE_HTTP_URL`` exporté est prioritaire sur l'URL du fichier, et un ``FESS_DICTIONARY_PATH`` exporté est utilisé tant que sa ligne dans le fichier reste commentée.
       - N'ajoutez pas une nouvelle ligne ``SEARCH_ENGINE_HTTP_URL=...`` ; modifiez plutôt la ligne existante.

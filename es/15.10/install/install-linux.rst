@@ -229,7 +229,17 @@ Paso 2: Instalación de Fess
    ``bin/fess-setup install opensearch`` instaló en ``opensearch/`` dentro del directorio de |Fess|
    y que se ejecuta en el mismo host, este archivo no requiere cambios: ``SEARCH_ENGINE_HTTP_URL``
    tiene como valor predeterminado ``http://localhost:9200``, y ``FESS_DICTIONARY_PATH`` se
-   establece en el directorio ``config/dictionary`` de ese OpenSearch.
+   establece en ``dictionary/``. OpenSearch resuelve esta ruta relativa respecto a su propio
+   directorio de configuración, por lo que designa el directorio ``config/dictionary`` de ese
+   OpenSearch. |Fess| escribe el valor en la configuración de los analizadores de cada índice que
+   crea, de modo que una ruta relativa mantiene el índice en funcionamiento si se mueve el
+   directorio de OpenSearch, por ejemplo al actualizar a un directorio contiguo. Aún se puede
+   establecer una ruta absoluta, como se describe a continuación.
+
+   .. note::
+
+      Un índice creado con un ``FESS_DICTIONARY_PATH`` absoluto, por ejemplo por |Fess| 15.9.0,
+      conserva esa ruta absoluta. Solo los índices creados después obtienen la ruta relativa.
 
    Edite ``bin/fess.in.sh`` en cualquiera de los siguientes casos:
 
@@ -260,6 +270,7 @@ Paso 2: Instalación de Fess
    .. note::
 
       - Configure ``FESS_DICTIONARY_PATH`` con la misma ruta que especificó en ``configsync.config_path`` dentro de ``opensearch.yml`` de OpenSearch. Sin ella, |Fess| no puede crear sus índices y no se inicia.
+      - Si ``configsync.config_path`` es el directorio ``config/dictionary`` de ese OpenSearch, como lo escribe ``bin/fess-setup``, puede establecer ``FESS_DICTIONARY_PATH=dictionary/`` en lugar de la ruta absoluta.
       - Si ejecuta OpenSearch en otro host, cambie la URL de la línea ``SEARCH_ENGINE_HTTP_URL`` por la de ese host. Ejemplo: ``SEARCH_ENGINE_HTTP_URL=${SEARCH_ENGINE_HTTP_URL:-http://192.168.1.100:9200}``. En ese caso, ``FESS_DICTIONARY_PATH`` es el ``configsync.config_path`` de ese servidor.
       - En lugar de editar el archivo, puede exportar ambas variables en el entorno desde el que se inicia |Fess|. Un ``SEARCH_ENGINE_HTTP_URL`` exportado tiene prioridad sobre la URL del archivo, y un ``FESS_DICTIONARY_PATH`` exportado se utiliza mientras su línea en el archivo siga comentada.
       - No agregue una nueva línea ``SEARCH_ENGINE_HTTP_URL=...``; en su lugar, edite la línea existente.

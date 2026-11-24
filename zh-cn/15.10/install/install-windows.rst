@@ -69,7 +69,7 @@ PowerShell 的情况::
        > cd C:\fess-15.10.0
        > bin\fess-setup install opensearch
 
-   ``bin\fess.in.bat`` 会找到以这种方式安装的 OpenSearch，并将其 ``config\dictionary`` 目录传递给 |Fess|\ ，因此只要 OpenSearch 在同一主机上运行，步骤 2 的「配置 Fess」就无需修改。命令会显示它添加的配置，以及 ``bin\fess.in.bat`` 能否找到该安装。在让 OpenSearch 监听 ``localhost`` 以外的地址之前，请阅读「配置 OpenSearch」中的警告。
+   ``bin\fess.in.bat`` 会找到以这种方式安装的 OpenSearch，并将指向其 ``config\dictionary`` 目录的 ``dictionary/`` 传递给 |Fess|\ ，因此只要 OpenSearch 在同一主机上运行，步骤 2 的「配置 Fess」就无需修改。命令会显示它添加的配置，以及 ``bin\fess.in.bat`` 能否找到该安装。在让 OpenSearch 监听 ``localhost`` 以外的地址之前，请阅读「配置 OpenSearch」中的警告。
 
    如果想逐步确认，或者要使用已有的 OpenSearch，请按照下面的步骤操作。
    若只需向已有的 OpenSearch 安装插件，请使用
@@ -200,6 +200,7 @@ PowerShell 的情况::
 .. note::
 
    - ``fess.dictionary.path`` 请设置与 OpenSearch 的 ``opensearch.yml`` 中指定的 ``configsync.config_path`` 相同的路径。
+   - 如果 ``configsync.config_path`` 就是该 OpenSearch 的 ``config\dictionary`` 目录（\ ``bin\fess-setup`` 写入的就是这个值），那么 ``fess.dictionary.path`` 也可以改用相对路径 ``dictionary/``\ ，OpenSearch 会以自己的配置目录为基准解析它。
    - 如果 OpenSearch 在其他主机上运行，请将 ``fess.search_engine.http_address`` 中的主机名或 IP 地址更改为适当的值。
    - 路径分隔符请使用 ``/``\ 。\ |Fess| 会将该路径插入索引设置中，其中的 ``\`` 会丢失，因此用 ``\`` 书写的路径将无法找到。
    - 请勿新增 ``set FESS_JAVA_OPTS=...`` 行，而应取消注释已有的注释行并进行编辑。重复指定相同选项可能导致意外行为。

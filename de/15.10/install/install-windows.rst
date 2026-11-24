@@ -73,12 +73,12 @@ Schritt 1: Installation von OpenSearch
        > cd C:\fess-15.10.0
        > bin\fess-setup install opensearch
 
-   ``bin\fess.in.bat`` findet ein so installiertes OpenSearch und übergibt dessen Verzeichnis
-   ``config\dictionary`` an |Fess|, sodass „Konfiguration von Fess" in Schritt 2 keine Änderung
-   erfordert, solange OpenSearch auf demselben Host läuft. Der Befehl gibt die hinzugefügten
-   Einstellungen aus und ob ``bin\fess.in.bat`` die Installation findet. Lesen Sie die Warnung unter
-   „Konfiguration von OpenSearch", bevor OpenSearch auf einer anderen Adresse als ``localhost``
-   lauscht.
+   ``bin\fess.in.bat`` findet ein so installiertes OpenSearch und übergibt ``dictionary/``, das
+   dessen Verzeichnis ``config\dictionary`` bezeichnet, an |Fess|, sodass „Konfiguration von Fess"
+   in Schritt 2 keine Änderung erfordert, solange OpenSearch auf demselben Host läuft. Der Befehl
+   gibt die hinzugefügten Einstellungen aus und ob ``bin\fess.in.bat`` die Installation findet.
+   Lesen Sie die Warnung unter „Konfiguration von OpenSearch", bevor OpenSearch auf einer anderen
+   Adresse als ``localhost`` lauscht.
 
    Folgen Sie den Schritten unten, um sie einzeln durchzugehen oder ein vorhandenes OpenSearch
    zu verwenden. Um nur die Plugins in ein vorhandenes OpenSearch zu installieren, verwenden Sie
@@ -215,6 +215,7 @@ Zustand nach der Änderung::
 .. note::
 
    - Setzen Sie ``fess.dictionary.path`` auf denselben Pfad, der in ``opensearch.yml`` als ``configsync.config_path`` angegeben ist.
+   - Ist ``configsync.config_path`` das Verzeichnis ``config\dictionary`` dieses OpenSearch (so schreibt es ``bin\fess-setup``), kann ``fess.dictionary.path`` stattdessen der relative Pfad ``dictionary/`` sein, den OpenSearch relativ zu seinem Konfigurationsverzeichnis auflöst.
    - Wenn OpenSearch auf einem anderen Host ausgeführt wird, ändern Sie den Hostnamen oder die IP-Adresse in ``fess.search_engine.http_address`` entsprechend.
    - Verwenden Sie ``/`` als Pfadtrennzeichen. |Fess| fügt den Pfad in die Indexeinstellungen ein, wobei ein ``\`` verloren geht; ein mit ``\`` geschriebener Pfad wird daher nicht gefunden.
    - Fügen Sie keine neuen ``set FESS_JAVA_OPTS=...``-Zeilen hinzu, sondern heben Sie die vorhandenen Kommentarzeilen auf und bearbeiten Sie diese. Die doppelte Angabe derselben Option kann zu unerwünschtem Verhalten führen.

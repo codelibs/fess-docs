@@ -68,10 +68,15 @@ donc que les paramètres manquants.
 La commande affiche chaque paramètre ajouté, puis indique si ``bin/fess.in.sh`` trouve cet
 OpenSearch par lui-même. C'est le cas lorsqu'il s'agit du seul OpenSearch possédant un répertoire
 ``config/dictionary`` sous ``opensearch/`` dans le répertoire de |Fess| : ``bin/fess.in.sh``
-(``bin\fess.in.bat`` sous Windows) définit alors ``FESS_DICTIONARY_PATH`` sur ce répertoire, et rien
-d'autre n'est à configurer pour un OpenSearch situé sur le même hôte. Dans le cas contraire, la
-commande affiche les valeurs de ``SEARCH_ENGINE_HTTP_URL`` et de ``FESS_DICTIONARY_PATH`` à définir,
-comme décrit dans :doc:`install-linux` ou :doc:`install-windows`.
+(``bin\fess.in.bat`` sous Windows) définit alors ``FESS_DICTIONARY_PATH`` sur ``dictionary/``,
+qu'OpenSearch résout par rapport à son propre répertoire de configuration : cette valeur désigne
+donc le répertoire ``config/dictionary`` de cet OpenSearch. Rien d'autre n'est à configurer pour un
+OpenSearch situé sur le même hôte. Dans le cas contraire, la commande affiche les valeurs de
+``SEARCH_ENGINE_HTTP_URL`` et de ``FESS_DICTIONARY_PATH`` à définir, comme décrit dans
+:doc:`install-linux` ou :doc:`install-windows`. Un chemin relatif permet aux index créés par |Fess|
+de continuer à fonctionner lorsque le répertoire d'OpenSearch est déplacé, par exemple lors d'une
+mise à niveau vers un répertoire voisin. Un ``FESS_DICTIONARY_PATH`` absolu peut toujours être
+défini.
 
 .. list-table::
    :header-rows: 1
