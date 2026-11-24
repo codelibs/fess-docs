@@ -76,7 +76,8 @@
      关键词匹配、角色、Web/文件认证等 19 个索引）
    - ``fess_config.bulk`` - 除上述 19 个索引外，还包含爬取信息、失败 URL、作业日志、
      缩略图队列等运行时数据，共 25 个索引（15.8 及之前；15.9 增加了保存用户标签的
-     ``tag_type`` 索引，共 26 个）
+     ``tag_type`` 索引，共 26 个；15.10 增加了 ``session`` 索引，``fess_config`` 别名下共 27 个，
+     但文件中不含任何会话记录，请参阅 :ref:`用于会话的 fess_config.session 索引 <upgrade-1510-session-index>`\ ）
    - ``fess_user.bulk`` - 用户、角色、群组
    - ``system.properties`` - 包含常规设置的系统设置
    - ``fess.json`` - 索引设置（分片数、\ ``index.knn`` 等）
@@ -385,7 +386,11 @@ Docker 版
 
    本步骤适用于 ZIP 版及 RPM/DEB 版中手动运维 OpenSearch 的情况。
    对于 Docker 版，在步骤 3 中获取新镜像时，OpenSearch 和插件也会一并更新，
-   因此无需执行本步骤。
+   因此无需执行本步骤，前提是 Compose 文件来自 15.10 标签（与步骤 3 相同，为 ``v15.10.0``\ ）。
+   如果 Compose 文件仍停留在 15.9 标签，镜像会保持为 |Fess| 15.9.0 和 OpenSearch 3.9.0；
+   请同时更改两者的镜像标签（或使用 15.10 的文件），因为不同版本的 |Fess| 和 OpenSearch
+   不是受支持的组合。卷名不会改变，因此 OpenSearch 3.9.0 的卷无需任何迁移步骤即可在 3.10.0 下启动。
+   此变更是单向的：回退请参阅「回滚步骤」。
 
 .. important::
 
@@ -406,11 +411,31 @@ Docker 版
    可能会出现索引兼容性问题。
    |Fess| 14.x 对应 OpenSearch 2.x 系列，因此从 14.x 升级时必然属于这种情况。
 
-   在 OpenSearch 3.10.0 上创建的快照无法恢复到 OpenSearch 3.9.x 及更早版本。请保留升级前创建的快照，以备回滚。
+   在 OpenSearch 3.10.0 上创建的快照无法恢复到 OpenSearch 3.9.x 及更早版本，
+   并且 OpenSearch 3.9.x 无法在已被 3.10.0 节点打开过的数据目录上启动。请保留升级前创建的快照，
+   以备回滚（请参阅「回滚步骤」）。
+
+   |Fess| 15.10 不会检查所运行的 OpenSearch 3.x 版本：据观察，它可以在未升级的 OpenSearch 3.9.0
+   上启动并搜索，而 ``bin/fess-setup check`` 只在集群中的节点运行不同版本时才发出警告。
+   该组合不受支持。OpenSearch 的 |Fess| 插件必须针对其所运行的 OpenSearch 版本构建
+   （|Fess| 15.10 对应 3.10.0）。
 
 1. 安装新版本的 OpenSearch
 
-2. 重新安装插件::
+   对于 ZIP 版，OpenSearch 主目录最终必须位于与旧版本相同的绝对路径；在移动任何数据之前，
+   请先阅读下文的 :ref:`ZIP 版: 将 OpenSearch 主目录保持在旧路径 <upgrade-opensearch-zip-path>`\ 。
+   RPM/DEB 软件包的词典目录保持在 ``/etc/opensearch/dictionary``\ ，升级前后路径相同，
+   因此无需特别处理。
+
+2. 重新安装插件。如果 OpenSearch 目录中已有旧版本的 4 个插件，请先将其删除
+   （``bin/fess-setup install opensearch`` 也会安装这 4 个插件）::
+
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove analysis-fess
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove analysis-extension
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove minhash
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove configsync
+
+   然后安装新版本的插件::
 
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
@@ -424,6 +449,19 @@ Docker 版
       插件安装将会失败。
 
       |Fess| 的 4 个插件发布在 maven.codelibs.org 上，因此通过 URL 指定。 ``opensearch-plugin install`` 的 ``groupId:artifactId:version`` 形式只查找 Maven Central。
+
+   .. warning::
+
+      如果插件目录已存在，``opensearch-plugin install`` 会失败并提示 ``plugin
+      directory [...] already exists``，旧插件保持原样。``bin/fess-setup install
+      opensearch-plugins`` 会把这样的目录视为已安装，不替换任何内容，并以代码 ``0`` 退出。
+      之后 OpenSearch 3.10.0 会拒绝启动，并提示 ``Plugin [...] was built for
+      OpenSearch version 3.9.0 but version 3.10.0 is running``。请先按上文所示删除旧插件，
+      再安装新插件。
+
+      对于请求额外权限的插件，``opensearch-plugin install`` 会请求确认（``Continue with installation?``）。
+      在无人可以应答的环境（没有终端、输入来自 ``/dev/null``）中，这样的插件不会被安装：
+      请回答 ``y``，或传入 ``-b`` 跳过该提问。
 
 3. 将词典目录移至 OpenSearch 配置目录下
 
@@ -442,6 +480,49 @@ Docker 版
 4. 启动 OpenSearch::
 
        $ sudo systemctl start opensearch.service
+
+.. _upgrade-opensearch-zip-path:
+
+**ZIP 版: 将 OpenSearch 主目录保持在旧路径**
+
+.. warning::
+
+   现有索引的分析器设置（``*_path`` 设置）中保存的是词典文件的绝对路径，例如
+   ``/path/to/fess-15.9.0/opensearch/opensearch-3.9.0/config/dictionary/ja/mapping.txt``。
+   只有当该路径位于 OpenSearch 自己的配置目录之内时，OpenSearch 才会打开这样的索引。
+   如果像 ``bin/fess-setup install opensearch`` 那样将 OpenSearch 3.10.0 安装到另一个目录
+   （它会在 ``opensearch-3.9.0`` 旁边创建 ``opensearch-3.10.0``），然后手动将 ``data/`` 和
+   词典文件移到那里，文档索引会保持未分配状态（分配说明中为 ``Resource path must
+   be inside config directory``），集群变为红色。把 ``data/`` 复制到已启动过一次的主目录中，
+   也会出现同样的情况。下面的步骤会把新引擎放在创建索引时使用的路径上：
+
+   1. 在 OpenSearch 已停止的状态下（步骤 2），将 OpenSearch 3.10.0 及其插件安装到另一个目录
+      （例如在 ``fess-15.10.0`` 中执行 ``bin/fess-setup install opensearch``），并且不要启动它。
+      将旧主目录的 ``data/`` 和 ``config/dictionary/`` 复制到其中::
+
+          $ OLD=/path/to/fess-15.9.0/opensearch/opensearch-3.9.0
+          $ NEW=/path/to/fess-15.10.0/opensearch/opensearch-3.10.0
+          $ mkdir -p $NEW/data $NEW/config/dictionary
+          $ cp -a $OLD/data/. $NEW/data/
+          $ cp -a $OLD/config/dictionary/. $NEW/config/dictionary/
+
+   2. 将旧主目录移到 ``opensearch/`` 目录之外（升级完成之前请保留；``opensearch/`` 下有两个
+      OpenSearch 目录时，``bin/fess.in.sh`` 中的 ``FESS_DICTIONARY_PATH`` 将保持未设置），
+      并把新主目录放在旧路径上。目录名沿用旧版本号::
+
+          $ mv $OLD /path/to/opensearch-3.9.0-orig
+          $ mv $NEW $OLD
+
+   3. 在移动后的主目录的 ``config/opensearch.yml`` 中，将 ``configsync.config_path`` 改回旧的
+      绝对路径（``$OLD/config/dictionary`` 的完整路径，而不是变量）。``FESS_DICTIONARY_PATH`` 也请保持
+      旧值。请显式设置它（环境变量或 ``bin/fess.in.sh``），因为 ``bin/fess.in.sh``
+      只会对位于 |Fess| 目录下 ``opensearch/`` 中的 OpenSearch 自行设置它。
+
+   4. 从 ``$OLD`` 启动 OpenSearch，让它重试分配失败的分片（当集群因 OpenSearch 之前在其他路径下
+      启动而为红色时需要这样做），然后确认健康状态::
+
+          $ curl -X POST "http://localhost:9200/_cluster/reroute?retry_failed=true"
+          $ curl "http://localhost:9200/_cluster/health"
 
 步骤 5: 启动新版本
 ================================
@@ -521,8 +602,9 @@ Docker 版::
 
 .. warning::
 
-   OpenSearch 3.10.0 会拒绝 15.8 曾接受的字典条目，例如重复保存的同一条 ``mapping`` 条目，或
-   含有空格的 ``kuromoji`` 词元。存在此类条目时，「重新索引」不会创建新的文档索引：``fess.log``
+   OpenSearch 3.9.0 及更高版本（包括 15.10 使用的 3.10.0）会拒绝 15.8 曾接受的字典条目，
+   例如重复保存的同一条 ``mapping`` 条目，或含有空格的 ``kuromoji`` 词元。存在此类条目时，
+   「重新索引」不会创建新的文档索引：``fess.log``
    中只会输出 ``Failed to create index`` ，旧索引继续提供搜索。请在「系统」→「字典」下载字典，
    删除重复或无效的行后重新上传，然后再次运行「重新索引」。15.10 不再保存的条目请参阅
    :ref:`upgrade-159-api-requests` 。
@@ -584,6 +666,10 @@ Docker 版::
      - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
      - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
      - 无。无论列表中是否包含，15.10 都会删除以 ``tk:`` 、 ``X-TIKA:`` 或 ``zip:`` 开头的名称，并且不会把 ``Content-Length`` 添加到内容中（请参阅下文的“元数据名称”和“``Content-Length`` 不再被添加到内容中”）。
+   * - ``crawler.document.html.pruned.tags``
+     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+     - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
+     - 使用 15.10 的值时， ``<template>`` 元素的内容不再属于 HTML 页面的索引文本。保留 15.9 的值时，仍像以前一样被索引。添加 ``template`` 即可采用新行为；已建立索引的文档只有在重新爬取后才会改变。
    * - ``online.help.name.sereq``
      - ``sereq``
      - ``esreq``
@@ -631,6 +717,15 @@ robots.txt 中的 Request-rate 和 Visit-time
 
 URL 的协议不在列表中的搜索结果不会成为链接。对于经过「显示」路径映射之后 URL 的协议不在列表中的文档， ``/go/`` 返回 ``404`` （并向 ``fess.log`` 输出警告）。直到 15.9， ``/go/`` 会重定向到「显示」路径映射生成的您自己的协议（例如 ``hammerspoon://`` ）。如果您使用这样的协议，请将其不带冒号添加到 ``search.result.link.schemes`` 中。请不要添加 ``javascript`` 、 ``data`` 或 ``vbscript`` 。值为空表示不允许任何协议。格式和行为请参见 :ref:`search-result-link-schemes` 。
 
+.. _upgrade-1510-session-index:
+
+用于会话的 ``fess_config.session`` 索引
+---------------------------------------
+
+15.10 新增了一个可选的存储，将 HTTP 会话保存在搜索引擎中，以便多个 |Fess| 节点共享会话。只有当节点上的环境变量 ``FESS_SESSION_STORE`` 为 ``opensearch`` 时才会启用；否则，每个节点仍像以前一样将会话保存在内存中（请参阅 :doc:`../config/session-store` ）。
+
+即使该存储处于关闭状态， |Fess| 也会在每次启动时创建索引 ``fess_config.session`` 。该索引是 ``fess_config`` 别名的成员，因此该别名在 15.10 中有 27 个索引（15.9 中为 26 个）。该索引不包含在备份导出中，因此即使会话被保存， ``fess_config.bulk`` 中也不含任何会话记录。
+
 .. _upgrade-1510-passkey:
 
 用于通行密钥的 ``fess_user.passkey`` 索引
@@ -667,7 +762,7 @@ URL 的协议不在列表中的搜索结果不会成为链接。对于经过「�
 - 不发送旧密码调用 ``POST /login/changePassword`` 时，15.9 之前返回 HTTP 500。15.10 返回验证错误，密码不会改变。
 - 对管理界面表单的 POST 不包含 ``crudMode`` 时（例如来自脚本的调用），15.9 返回 HTTP 500（15.8 及更早版本不会返回 500）。15.10 返回验证错误。
 - 删除插件只针对插件目录正下方的文件。名称或版本中包含 ``../`` 时，不会删除目录之外的文件，而是在 ``fess.log`` 中输出警告。15.9 之前，这样的名称可以删除目录之外的文件。删除在后台执行，因此无论删除是否成功，``DELETE /api/admin/plugin`` 都返回 ``status`` 为 ``0`` 的响应。请在 ``fess.log`` 中确认结果。
-- 本地用户的密码被更改后，该用户的其他登录会话会在下一次检查时结束（见下）。15.9 及更早版本中，其他会话会一直保持打开，只有执行更改的会话会结束（且仅限通过 ``/api/v2`` 更改密码的情况）。用户本人的更改和管理员的更改（用户管理界面和 Admin API）都适用。每个会话最多每隔 ``password.changed.check.interval`` 秒（默认值 ``60``，参见 :doc:`security`）从用户索引读取一次更改，因此其他会话会在该时间内结束。LDAP 和 SSO 用户不在检查范围内。升级前已开始的会话（仅在会话被持久化或复制的配置下；默认配置重启后不会保留会话）会在其 HTTP 会话创建之后密码被更改时结束；升级前更改的密码没有记录更改时间，因此这类会话会保持打开。启动时会向用户索引添加 ``password_changed_at`` 字段，因此无需重新索引。
+- 本地用户的密码被更改、用户的角色或群组被更改，或用户被删除后，该用户的其他登录会话会在下一次检查时结束（见下）。15.9 及更早版本中，其他会话会一直保持打开，只有执行更改的会话会结束（且仅限通过 ``/api/v2`` 更改密码的情况）；更改角色或群组以及删除用户都不会结束任何会话。用户本人的更改和管理员的更改（用户管理界面和 Admin API）都适用。每个会话最多每隔 ``password.changed.check.interval`` 秒（默认值 ``60``，参见 :doc:`security`）从用户索引读取一次更改，因此其他会话会在该时间内结束。LDAP 和 SSO 用户不在检查范围内。升级前已开始的会话（仅在会话被持久化或复制的配置下；默认配置重启后不会保留会话）会在其 HTTP 会话创建之后密码被更改时结束；升级前更改的密码没有记录更改时间，因此这类会话会保持打开。启动时会向用户索引添加 ``password_changed_at`` 字段，因此无需重新索引。
 - LDAP 登录会先去除输入的用户名前后的空白再进行处理。15.9 及更早版本中，会话的用户 ID、审计日志和登录次数限制使用的是输入原样的名称（例如前面带有空白的名称），因此被视为同一账户的另一种写法。另外，``ldap.max.username.length`` 的截断在 15.9 及更早版本中只应用于绑定，用户名、角色搜索、权限名称和会话仍使用截断前的名称。15.10 在所有这些地方都使用截断后的名称（参见 :doc:`../config/ldap-integration`）。
 - 以 UTF-8 计超过 72 字节的密码在设置或修改时会被拒绝（用户管理页面、登录表单中的强制修改密码、 ``/api/v2/auth/password`` 和 Admin API），与 ``password.max.length`` （默认 ``100`` ）允许的长度无关。BCrypt 只读取前 72 字节，因此直到 15.9，更长的密码也会被接受，并且只用前 72 字节进行验证：无论后面是什么都可以登录。非 ASCII 字符占用多个字节（大多数日文、中文和韩文字符占 3 字节）。拒绝时的消息是“密码长度不能超过 72 个字节。”（ ``errors.password_too_long`` ）， ``/api/v2/auth/password`` 会把该键作为 ``reason`` 与 ``max_bytes`` 一起返回。现有账户不受影响：登录时不检查长度，因此升级前设置的超过 72 字节的密码仍可登录。但它仍只用前 72 字节验证，请修改它。
 - 15.10 的 ``audit.log`` 记录与 15.9 有三点不同（请参阅 :doc:`security` ）。 ``ACCESS`` 记录新增了字段 ``method`` （HTTP 方法）和 ``id`` （请求参数 ``id`` ，仅在存在时）。新的操作 ``UPDATE_PASSWORD`` 会记录密码修改，以及执行操作的用户（ ``user`` ）和被修改密码的用户（ ``target`` ）。被访问令牌检查拒绝的 Admin REST API 请求现在会记录为 ``ACCESS_DENIED`` 。如果有解析 ``audit.log`` 的程序，请确认它能处理这些变化。
@@ -676,6 +771,18 @@ URL 的协议不在列表中的搜索结果不会成为链接。对于经过「�
 - 同一本地用户携带相同 ``current_password`` 的两个 ``POST /api/v2/auth/password`` 请求同时到达时，不再两个都成功。只有在保存的密码仍是已验证的 ``current_password`` 时才会写入密码，因此后处理的请求返回 ``409`` （ ``conflict`` ）且不做任何更改；客户端需要确认当前密码后重试。15.9 及更早版本中，两者都返回 ``200`` ，以最后一次写入为准（ :doc:`../api/api-auth` ）。这仅适用于本地用户：通过目录（LDAP）登录的用户的密码在目录中修改，当前密码不会与本地哈希比较，因此同时到达的请求仍可能都成功。
 - 密码哈希算法现在是一个组件。保存的 ``{id}hash`` 值中的 ID 和 ``app.password.algorithm`` 中的 ID 会被解析为 DI 组件 ``<id>PasswordEncoder`` （ |Fess| 注册了 ``bcryptPasswordEncoder`` ），因此插件可以提供带有自身长度限制的其他算法（参见 :ref:`webapp-plugin-password-encoder` ）。只要 ``app.password.algorithm`` 为 ``bcrypt`` ，就没有任何变化。如果它指定了没有组件的 ID（例如删除插件 jar 之后）， |Fess| 仍会启动，哈希带有其他 ID 的用户仍可登录，但哈希带有该 ID 的用户无法登录，设置密码也会失败，并给出指明 ``app.password.algorithm`` 的错误。 ``index.user.initial_password`` 超过算法接受的长度（BCrypt 为 72 字节）的全新安装无法启动：它会在创建用户索引之前停止，并给出指明该属性的消息。已存在 ``admin`` 用户的安装只会记录一条警告。
 - 新增设置 ``authentication.local.username.policy`` （默认 ``preserved`` ）。与 15.9 相同， |Fess| 仍按输入原样比较本地用户的名称，因此 ``Alice`` 和 ``alice`` 是两个用户。设为 ``mapped`` 后，在用户管理页面或通过 Admin API 创建或重命名本地用户时，如果忽略字符宽度、大小写和 Unicode 组合方式后名称与其他用户的名称相同，或是 ``authentication.admin.users`` 中某个条目的另一种写法，就会被拒绝。登录、用户 ID、保存的名称、权限和已建立索引的文档都不会改变。详细信息和限制请参见 :ref:`local-username-policy` 。
+- 1 KB 及以上的脚本、样式和 SVG 文件现在默认以 gzip 压缩后发送；15.9 不压缩任何内容。页面和 JSON 不会被压缩。可通过 ``tomcat_config.properties`` 中的 ``tomcat.compression`` （ ``on`` 或 ``off`` ）和 ``tomcat.compression.mime`` （添加到列表中的类型，以逗号分隔）进行控制。沿用自 15.9 的 ``tomcat_config.properties`` 中没有这两个键，因此压缩处于开启状态。如果 |Fess| 前面的反向代理自行压缩响应，请设置 ``tomcat.compression=off`` 。
+- 内置 ``bootstrap`` 主题的文件以 ``Cache-Control: no-cache`` 和 ``ETag`` 发送，文件未变化时，浏览器会携带 ``If-None-Match`` 再次请求并得到 ``304`` 。直到 15.9，它们带有 ``max-age=86400`` ，因此浏览器会将已更新的文件保留最长 24 小时。
+- 设置可以通过环境变量而不是 ``-D`` 选项来指定： ``fess_config.properties`` 的键使用 ``FESS_CONFIG_<KEY>`` ， ``system.properties`` 的键使用 ``FESS_SYSTEM_<KEY>`` （键使用大写，字母和数字以外的每个字符都替换为 ``_`` ； ``search_engine.password`` 对应 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。有值的 ``-D`` 选项优先于环境变量，环境变量优先于 ``fess_config.properties`` ； ``system.properties`` 中已有的键不会被覆盖。与 ``-D`` 选项不同，环境变量不会被 ``ps`` 或 ``docker top`` 显示，系统信息也会屏蔽其值。
+- 当密钥（密码、API 密钥或密钥串）以 ``-Dfess.config.<key>`` 或 ``-Dfess.system.<key>`` 选项给出时，15.10 会在启动时向 ``fess.log`` 输出一条警告，其中包含键名和应改用的变量，但不包含值。
+- 环境变量 ``FESS_SESSION_STORE=opensearch`` 会把 HTTP 会话保存在搜索引擎中，以便多个节点共享。默认关闭（请参阅 :ref:`用于会话的 fess_config.session 索引 <upgrade-1510-session-index>` 和 :doc:`../config/session-store` ）。
+- 另外 19 个管理 API（例如 ``webconfig`` 、 ``fileconfig`` 、 ``dataconfig`` 、 ``role`` 、 ``group`` 、 ``labeltype`` 、 ``pathmap`` 和 ``scheduler`` ；不包括 ``tagtype`` 、 ``general`` 、 ``theme`` 和 ``dict`` ）的 ``PUT /api/admin/<name>/setting`` 会像上面的用户 API 一样拒绝过期的 ``version_no`` ，返回 HTTP 400， ``status`` 为 ``1`` 。直到 15.9，该值从不比较，列表返回 ``-1`` ，因此发送固定 ``version_no`` 的脚本现在会失败：请发送从 ``GET /api/admin/<name>/setting/{id}`` 读取的值，被拒绝后请重新读取该设置。
+- 不带 ``permissions`` 的 ``POST /api/admin/webconfig/setting`` 、 ``/api/admin/fileconfig/setting`` 和 ``/api/admin/dataconfig/setting`` 会保存 ``{role}guest`` 。直到 15.9，它们不保存任何权限。不带 ``permissions`` 的 ``PUT`` 会保留已保存的值；在 15.9 中它会把该字段留空。
+- 登录表单、修改密码表单以及用户管理页面的密码字段不再去除密码开头和结尾的空白。直到 15.9，它们会去除，而 ``/api/v2/auth/login`` 和 Admin API 不会，因此通过 API 设置的、前后带有空白的密码无法通过表单登录。现在所有入口都按输入原样接受密码。如果某用户的密码在 15.9 中保存时空白被去除了，则该用户需要输入不带空白的密码。
+- 无法编译的正则表达式在保存时会被拒绝：Web 和文件爬取设置的包含与排除模式、标签类型的路径，以及路径映射的正则表达式。此前保存的值保持原样，在更正之前无法原样再次保存。15.10 之前保存的带有无效正则表达式的路径映射会导致每次搜索都没有命中结果，15.9 和 15.10 都是如此（ ``fess.log`` 中会显示来自 ``PathMapping`` 的 ``PatternSyntaxException`` ）；请删除或更正它。
+- 搜索引擎无法连接时，管理控制台返回 ``503`` （15.9 及更早版本为 500），登录表单会显示搜索引擎不可用的提示，而不是错误页面。
+- 当某个 |Fess| 索引拒绝写入（带有写入阻止）时， ``GET /api/v2/health`` 的 ``engine.status`` 为 ``YELLOW`` ，直到 15.9 为 ``GREEN`` 。不属于 |Fess| 的索引上的写入阻止会被忽略。
+- 15.10 的 SAML 插件（ ``fess-sso-saml`` ）使用 saml4j 代替 java-saml。旧库中有而新库不使用的 ``saml.*`` 属性，例如 ``saml.security.digest_algorithm`` 或 ``saml.sp.contact`` ，会被忽略；会向 ``fess.log`` 输出一条列出它们的警告。15.10 的 OpenID Connect 插件（ ``fess-sso-oidc`` ）默认使用 PKCE（S256）。对于拒绝 PKCE 的 OpenID 提供方，请在 ``system.properties`` 中设置 ``oic.pkce=false`` （请参阅 :doc:`../config/sso-oidc` ）。
 
 .. _upgrade-1510-new-api:
 
@@ -1712,8 +1819,32 @@ RPM/DEB 版的情况::
    （15.9 的值）；如果设置了 ``-Dfess.config.crawler.failure.url.status.codes`` JVM 参数，也请从中删除。
    请在启动 |Fess| 之前完成此操作；修改在重启后才会生效。从升级前所做的备份中恢复的文件保留的是 15.9 的值，无需修改。
 
+.. _upgrade-1510-rollback-opensearch:
+
 步骤 3: 恢复数据
 ----------------------
+
+.. warning::
+
+   **请同时回退到 OpenSearch 3.9.x；OpenSearch 3.10.0 的数据无法带回旧版本。**
+   OpenSearch 3.9.0 无法在已被 3.10.0 节点打开过的数据目录上启动（它会以
+   ``IndexFormatTooNewException`` 退出），并且在 3.10.0 上创建的快照无法恢复到 3.9.x
+   （``the snapshot was created with OpenSearch version [3.10.0] which is higher than the version of
+   this node``）。请按以下方式回退到升级前的状态：
+
+   1. 停止 OpenSearch 3.10.0。
+   2. 安装 OpenSearch 3.9.x（即旧 |Fess| 所使用的版本，15.9.0 对应 3.9.0）及针对同一版本构建的
+      4 个插件（使用 :ref:`步骤 4: 升级 OpenSearch <upgrade-opensearch>` 中的 URL，将
+      ``3.10.0`` 替换为 ``3.9.0``；请先删除其他版本的插件），并使用 **空的数据目录** 。
+      请勿复制 3.10.0 的数据。词典目录和 ``configsync.config_path`` 请保持原样，位于相同的绝对路径。
+   3. 启动 OpenSearch 3.9.x，并按下文所述恢复升级前创建的快照（请参阅
+      「步骤 1: 数据备份」），包括删除插件在启动时创建的索引（ ``configsync`` ）。
+
+   据观察，让 |Fess| 15.9.0 连接保留不动的 OpenSearch 3.10.0，在其上恢复快照之后可以启动并搜索，
+   但这不是受支持的组合。
+
+   对于 Docker 版，同样适用：OpenSearch 3.10.0 写入过的卷无法被 3.9.0 重用。请在空卷上启动新的
+   3.9.0 节点并恢复快照，或按下文所示恢复升级前创建的卷归档。
 
 从快照恢复。请保持 OpenSearch 运行，|Fess| 停止：
 
@@ -1813,8 +1944,9 @@ A: Fess 的升级需要停止服务。要最小化停机时间，请考虑以下
 Q: 需要升级 OpenSearch 吗？
 -------------------------------------------------
 
-A: 每个 |Fess| 版本对应特定的 OpenSearch 版本。
-|Fess| 15.10 对应 OpenSearch 3.10.0。
+A: 每个 |Fess| 版本都是针对特定的 OpenSearch 版本发布的。
+|Fess| 15.10 支持 OpenSearch 3.10.0。启动时它不会检查所运行的 OpenSearch 3.x 版本，
+但其他任何版本（例如 3.9.0）都不受支持。
 由于 ``opensearch-analysis-fess`` 等 |Fess| 专用 OpenSearch 插件必须与 OpenSearch 版本完全一致，
 因此在升级 OpenSearch 时，请同时将插件更新为对应版本（3.10.0）。
 

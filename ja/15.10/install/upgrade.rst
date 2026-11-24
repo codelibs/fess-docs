@@ -76,7 +76,9 @@
      キーマッチ、ロール、Web/ファイル認証など 19 インデックス）
    - ``fess_config.bulk`` - 上記 19 インデックスに加えて、クロール情報、障害 URL、ジョブログ、
      サムネイルキューなどの実行時データを含む 25 インデックス（15.8 まで。15.9 ではユーザータグを
-     保持する ``tag_type`` インデックスが加わり 26 インデックス）
+     保持する ``tag_type`` インデックスが加わり 26 インデックス。15.10 では ``session`` インデックスが
+     加わり、 ``fess_config`` エイリアスは 27 インデックスですが、ファイルにセッションのレコードは
+     含まれません。 :ref:`セッション用のインデックス fess_config.session <upgrade-1510-session-index>` を参照）
    - ``fess_user.bulk`` - ユーザー、ロール、グループ
    - ``system.properties`` - 全般設定を含むシステム設定
    - ``fess.json`` - インデックスの設定（シャード数、\ ``index.knn`` など）
@@ -392,7 +394,12 @@ Docker 版
 
    この手順は ZIP 版および RPM/DEB 版で OpenSearch を手動運用している場合の手順です。
    Docker 版では、ステップ 3 で新しいイメージを取得すると OpenSearch とプラグインも
-   まとめて更新されるため、本ステップは不要です。
+   まとめて更新されるため、本ステップは不要です。ただし、Compose ファイルが 15.10 のタグ
+   （ステップ 3 の ``v15.10.0`` ）のものである場合に限ります。Compose ファイルがまだ 15.9 のタグのままだと、
+   イメージは |Fess| 15.9.0 と OpenSearch 3.9.0 のままです。リリースの異なる |Fess| と OpenSearch は
+   サポート対象の組み合わせではないため、イメージのタグは両方をそろえて変更するか、15.10 のファイルを
+   使ってください。ボリューム名は変わらないため、OpenSearch 3.9.0 のボリュームは移行の手順なしに 3.10.0 で
+   起動します。この移行は一方向です。元に戻す場合は「ロールバック手順」を参照してください。
 
 .. important::
 
@@ -413,11 +420,23 @@ Docker 版
    インデックスの互換性に問題が発生する可能性があります。
    |Fess| 14.x は OpenSearch 2.x 系のため、14.x からのアップグレードでは必ずこのケースに該当します。
 
-   OpenSearch 3.10.0 で取得したスナップショットは、3.9.x 以前の OpenSearch には復元できません。切り戻しに備えて、アップグレード前に取得したスナップショットを残しておいてください。
+   OpenSearch 3.10.0 で取得したスナップショットは、3.9.x 以前の OpenSearch には復元できません。また、3.10.0 のノードが一度開いたデータディレクトリでは、OpenSearch 3.9.x は起動しません。切り戻しに備えて、アップグレード前に取得したスナップショットを残しておいてください（「ロールバック手順」を参照）。
+
+   |Fess| 15.10 は、動作している OpenSearch の 3.x のバージョンを確認しません。変更していない OpenSearch 3.9.0 でも起動して検索できることが確認されていますが、この組み合わせはサポート対象外です。また、 ``bin/fess-setup check`` が警告するのは、クラスターのノード間で OpenSearch のバージョンが異なる場合だけです。OpenSearch 用の |Fess| のプラグインは、動作させる OpenSearch のバージョン（|Fess| 15.10 では 3.10.0）用にビルドされたものである必要があります。
 
 1. 新しいバージョンの OpenSearch をインストール
 
-2. プラグインを再インストール::
+   ZIP 版では、OpenSearch のホームを旧バージョンと同じ絶対パスに置く必要があります。データを移動する前に、下の :ref:`ZIP 版: OpenSearch のホームを旧バージョンと同じパスに置く <upgrade-opensearch-zip-path>` を参照してください。RPM/DEB 版は、辞書ディレクトリが ``/etc/opensearch/dictionary`` のまま変わらず（アップグレードの前後で同じパス）、特別な作業は不要です。
+
+2. プラグインを再インストール。OpenSearch のディレクトリに旧バージョンの 4 つのプラグインが
+   すでにある場合は、先に削除します（ ``bin/fess-setup install opensearch`` も 4 つのプラグインをインストールします）::
+
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove analysis-fess
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove analysis-extension
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove minhash
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove configsync
+
+   そのうえで、新しいバージョンのプラグインをインストールします::
 
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
@@ -431,6 +450,12 @@ Docker 版
       プラグインのインストールに失敗します。
 
       |Fess| 用の 4 つのプラグインは maven.codelibs.org で公開しているため、URL で指定します。 ``opensearch-plugin install`` の ``groupId:artifactId:version`` 形式は Maven Central だけを参照します。
+
+   .. warning::
+
+      プラグインのディレクトリがすでにある場合、 ``opensearch-plugin install`` は ``plugin directory [...] already exists`` で失敗し、古いプラグインがそのまま残ります。 ``bin/fess-setup install opensearch-plugins`` は、そのようなディレクトリをインストール済みとみなし、何も置き換えずに終了コード ``0`` で終了します。その後、OpenSearch 3.10.0 は ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running`` を出力して起動を拒否します。新しいプラグインをインストールする前に、上記のとおり古いプラグインを削除してください。
+
+      ``opensearch-plugin install`` は、追加の権限を要求するプラグインについて確認（ ``Continue with installation?`` ）を求めます。答えられない環境（端末がない、入力が ``/dev/null`` など）では、そのプラグインはインストールされません。 ``y`` と答えるか、 ``-b`` を付けて確認を省略してください。
 
 3. 辞書ディレクトリを OpenSearch の設定ディレクトリの下へ移動
 
@@ -449,6 +474,45 @@ Docker 版
 4. OpenSearch を起動::
 
        $ sudo systemctl start opensearch.service
+
+.. _upgrade-opensearch-zip-path:
+
+**ZIP 版: OpenSearch のホームを旧バージョンと同じパスに置く**
+
+.. warning::
+
+   既存のインデックスの分析設定（ ``*_path`` の設定）には、辞書ファイルの絶対パスが記録されています（例: ``/path/to/fess-15.9.0/opensearch/opensearch-3.9.0/config/dictionary/ja/mapping.txt`` ）。
+   OpenSearch は、そのパスが自身の設定ディレクトリの中にある場合にだけ、そのインデックスを開きます。
+   ``bin/fess-setup install opensearch`` のように OpenSearch 3.10.0 を別のディレクトリにインストールし（ ``opensearch-3.9.0`` の隣に ``opensearch-3.10.0`` が作られます）、
+   ``data/`` と辞書ファイルを手作業でそこへ移すと、文書インデックスは未割り当てのままになり（割り当ての説明に ``Resource path must be inside config directory`` と出ます）、クラスターは red になります。
+   一度起動したホームに ``data/`` をコピーした場合も同じです。次の手順で、新しいエンジンを、インデックスが作成されたときのパスに置きます。
+
+   1. OpenSearch を停止した状態（ステップ 2）で、OpenSearch 3.10.0 とそのプラグインを別のディレクトリにインストールし
+      （たとえば ``fess-15.10.0`` で ``bin/fess-setup install opensearch`` ）、起動はしません。旧ホームの ``data/`` と ``config/dictionary/`` をコピーします::
+
+          $ OLD=/path/to/fess-15.9.0/opensearch/opensearch-3.9.0
+          $ NEW=/path/to/fess-15.10.0/opensearch/opensearch-3.10.0
+          $ mkdir -p $NEW/data $NEW/config/dictionary
+          $ cp -a $OLD/data/. $NEW/data/
+          $ cp -a $OLD/config/dictionary/. $NEW/config/dictionary/
+
+   2. 旧ホームを ``opensearch/`` ディレクトリの外へ退避し（アップグレードが終わるまで残しておきます。 ``opensearch/`` の下に OpenSearch のディレクトリが 2 つあると、
+      ``bin/fess.in.sh`` は ``FESS_DICTIONARY_PATH`` を設定しません）、新しいホームを旧ホームのパスに置きます。
+      ディレクトリ名には旧バージョンの番号が残ります::
+
+          $ mv $OLD /path/to/opensearch-3.9.0-orig
+          $ mv $NEW $OLD
+
+   3. 移動したホームの ``config/opensearch.yml`` で、 ``configsync.config_path`` を旧バージョンの絶対パス
+      （変数ではなく、 ``$OLD/config/dictionary`` の完全なパス）に戻します。 ``FESS_DICTIONARY_PATH`` も旧バージョンの値のままにします。
+      ``bin/fess.in.sh`` が自動で設定するのは |Fess| のディレクトリ内の ``opensearch/`` にある OpenSearch だけなので、
+      環境変数または ``bin/fess.in.sh`` で明示的に設定してください。
+
+   4. ``$OLD`` から OpenSearch を起動し、失敗したシャードの割り当てを再試行させ（以前に別のパスで起動したためにクラスターが red の場合に必要です）、
+      ヘルスを確認します::
+
+          $ curl -X POST "http://localhost:9200/_cluster/reroute?retry_failed=true"
+          $ curl "http://localhost:9200/_cluster/health"
 
 ステップ 5: 新しいバージョンの起動
 ==================================
@@ -531,9 +595,9 @@ Docker 版::
 
 .. warning::
 
-   15.8 が受け付けた辞書のエントリーのうち、OpenSearch 3.10.0 が拒否するものがあります。たとえば
-   同じ ``mapping`` のエントリーを 2 回保存している場合や、 ``kuromoji`` のトークンに空白が含まれる
-   場合です。そのようなエントリーがあると「再インデクシング」は新しい文書インデックスを作成しません。
+   15.8 が受け付けた辞書のエントリーのうち、OpenSearch 3.9.0 以降（15.10 が使う 3.10.0 を含む）が
+   拒否するものがあります。たとえば同じ ``mapping`` のエントリーを 2 回保存している場合や、
+   ``kuromoji`` のトークンに空白が含まれる場合です。そのようなエントリーがあると「再インデクシング」は新しい文書インデックスを作成しません。
    ``fess.log`` には ``Failed to create index`` としか出力されず、古いインデックスが検索を提供し続けます。
    「システム」→「辞書」で辞書をダウンロードし、重複または不正な行を削除してから再度アップロードし、
    「再インデクシング」をもう一度実行してください。15.10 が保存しなくなったエントリーは
@@ -596,6 +660,10 @@ Docker 版::
      - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
      - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
      - なし。15.10 は、一覧に含まれているかどうかにかかわらず、 ``tk:`` ・ ``X-TIKA:`` ・ ``zip:`` で始まる名前を取り除き、 ``Content-Length`` をコンテンツに追加しません（下記の「メタデータ名」と「 ``Content-Length`` がコンテンツに追加されなくなった」を参照）。
+   * - ``crawler.document.html.pruned.tags``
+     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+     - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
+     - 15.10 の値では、HTML ページの ``<template>`` 要素の内容がインデックスされる本文に含まれなくなります。15.9 の値が残った場合は、これまでどおりインデックスされます。新しい動作にするには ``template`` を追加してください。すでにインデックスされた文書は、再クロールしたときにだけ変わります。
    * - ``online.help.name.sereq``
      - ``sereq``
      - ``esreq``
@@ -643,6 +711,15 @@ robots.txt の Request-rate と Visit-time
 
 一覧にないスキームの URL を持つ検索結果は、リンクになりません。 ``/go/`` は、「表示」のパスマッピングを適用した後の URL のスキームが一覧にない文書に、 ``404`` を返します（ ``fess.log`` には警告が出力されます）。15.9 までは、「表示」のパスマッピングで URL を独自のスキーム（ ``hammerspoon://`` など）に書き換えても、 ``/go/`` はそのスキームにリダイレクトしていました。独自のスキームを使っている場合は、コロンを付けずにそのスキームを ``search.result.link.schemes`` に追加してください。 ``javascript`` 、 ``data`` 、 ``vbscript`` は追加しないでください。値を空にすると、どのスキームも許可されません。書式と動作の詳細は :ref:`search-result-link-schemes` を参照してください。
 
+.. _upgrade-1510-session-index:
+
+セッション用のインデックス ``fess_config.session``
+--------------------------------------------------
+
+15.10 は、HTTP セッションを検索エンジンに保存し、複数の |Fess| ノードで共有できるようにする機能を追加しました。既定では無効で、ノードの環境変数 ``FESS_SESSION_STORE`` が ``opensearch`` のときだけ有効になります。設定しない場合は、これまでどおり各ノードがメモリ上にセッションを保持します（ :doc:`../config/session-store` を参照）。
+
+この機能が無効でも、 |Fess| は起動のたびにインデックス ``fess_config.session`` を作成します。このインデックスは ``fess_config`` エイリアスのメンバーであり、そのため 15.10 のエイリアスは 27 インデックスです（15.9 は 26 インデックス）。このインデックスはバックアップのエクスポートから除外されるため、セッションを保存していても ``fess_config.bulk`` にセッションのレコードは含まれません。
+
 .. _upgrade-1510-passkey:
 
 パスキーのインデックス ``fess_user.passkey``
@@ -679,7 +756,7 @@ robots.txt の Request-rate と Visit-time
 - 旧パスワードを送らずに ``POST /login/changePassword`` を呼ぶと、15.9 までは HTTP 500 を返していました。15.10 は検証エラーを返し、パスワードは変わりません。
 - 管理画面のフォームへの POST に ``crudMode`` が含まれていないと（スクリプトからの呼び出しなど）、15.9 は HTTP 500 を返していました（15.8 以前では 500 になりません）。15.10 は検証エラーを返します。
 - プラグインの削除は、プラグインのディレクトリの直下のファイルだけを対象にします。名前やバージョンに ``../`` を含めても、ディレクトリの外のファイルは削除されず、``fess.log`` に警告が出力されます。15.9 までは、このような名前でディレクトリの外のファイルを削除できました。削除はバックグラウンドで行われるため、``DELETE /api/admin/plugin`` は削除の成否にかかわらず ``status`` が ``0`` の応答を返します。結果は ``fess.log`` で確認してください。
-- ローカルユーザーのパスワードが変更されると、そのユーザーの他のログインセッションは次の確認時に終了します（下記）。15.9 までは、他のセッションは開いたままで、終了するのは変更を行ったセッションだけでした（ ``/api/v2`` のパスワード変更の場合のみ）。ユーザー自身による変更と、管理者による変更（ユーザー管理画面と Admin API）のどちらも対象です。各セッションは変更をユーザーインデックスから ``password.changed.check.interval`` 秒（既定値は ``60`` 。 :doc:`security` を参照）に 1 回までの間隔で確認するため、他のセッションはその時間内に終了します。LDAP や SSO のユーザーは対象外です。アップグレード前に開始したセッション（セッションを永続化または複製している構成のみ。既定の構成では、再起動でセッションは残りません）は、その HTTP セッションの作成後にパスワードが変更された場合に終了します。アップグレード前に変更されたパスワードには変更時刻が記録されていないため、そのセッションは開いたままです。ユーザーのインデックスにはフィールド ``password_changed_at`` が起動時に追加されるため、再インデックスは不要です。
+- ローカルユーザーのパスワードが変更されたとき、ロールまたはグループが変更されたとき、ユーザーが削除されたときに、そのユーザーの他のログインセッションは次の確認時に終了します（下記）。15.9 までは、他のセッションは開いたままで、終了するのは変更を行ったセッションだけでした（ ``/api/v2`` のパスワード変更の場合のみ）。ロールやグループの変更とユーザーの削除では、どのセッションも終了しませんでした。ユーザー自身による変更と、管理者による変更（ユーザー管理画面と Admin API）のどちらも対象です。各セッションは変更をユーザーインデックスから ``password.changed.check.interval`` 秒（既定値は ``60`` 。 :doc:`security` を参照）に 1 回までの間隔で確認するため、他のセッションはその時間内に終了します。LDAP や SSO のユーザーは対象外です。アップグレード前に開始したセッション（セッションを永続化または複製している構成のみ。既定の構成では、再起動でセッションは残りません）は、その HTTP セッションの作成後にパスワードが変更された場合に終了します。アップグレード前に変更されたパスワードには変更時刻が記録されていないため、そのセッションは開いたままです。ユーザーのインデックスにはフィールド ``password_changed_at`` が起動時に追加されるため、再インデックスは不要です。
 - LDAP のログインでは、入力したユーザー名の前後の空白を取り除いてから処理します。15.9 までは、入力のままの名前（前後に空白が付いた名前など）がセッションのユーザー ID、監査ログ、ログインの回数制限に使われ、同じアカウントの別の綴りとして扱われていました。また、 ``ldap.max.username.length`` による切り詰めは、15.9 まではバインドにだけ適用され、ユーザー名、ロール検索、権限名、セッションには切り詰め前の名前が使われていました。15.10 は、これらすべてに切り詰め後の名前を使います（ :doc:`../config/ldap-integration` を参照）。
 - パスワードが UTF-8 で 72 バイトを超える場合、設定または変更の際に拒否されます（ユーザー管理画面、ログインフォームの強制パスワード変更、 ``/api/v2/auth/password`` 、Admin API）。 ``password.max.length`` （既定 ``100`` ）が許可する長さにかかわらず適用されます。BCrypt は先頭の 72 バイトしか読まないため、15.9 までは、それより長いパスワードも受け付けられ、先頭の 72 バイトだけで検証されていました。つまり、後ろをどう変えてもログインできました。ASCII 以外の文字は 1 文字が複数バイトになります（日本語・中国語・韓国語の文字の多くは 3 バイト）。拒否のメッセージは「パスワードは72バイト以内である必要があります。」（ ``errors.password_too_long`` ）で、 ``/api/v2/auth/password`` は ``reason`` としてこのキーを、 ``max_bytes`` とともに返します。既存のアカウントは影響を受けません。ログイン時には長さを確認しないため、アップグレード前に設定した 72 バイトを超えるパスワードでも引き続きログインできます。ただし先頭の 72 バイトだけで検証されるため、変更してください。
 - 15.10 の ``audit.log`` は、15.9 と次の 3 点が異なります（ :doc:`security` を参照）。 ``ACCESS`` レコードに、 ``method`` （HTTP メソッド）と ``id`` （ ``id`` リクエストパラメーター。ある場合のみ）が追加されました。新しいアクション ``UPDATE_PASSWORD`` が、パスワードの変更を、操作したユーザー（ ``user`` ）とパスワードが変更されたユーザー（ ``target`` ）とともに記録します。アクセストークンの確認で拒否された Admin API のリクエストは、 ``ACCESS_DENIED`` として記録されるようになりました。 ``audit.log`` を解析するプログラムがある場合は、これらに対応しているか確認してください。
@@ -688,6 +765,18 @@ robots.txt の Request-rate と Visit-time
 - 同じローカルユーザーの、同じ ``current_password`` を持つ 2 つの ``POST /api/v2/auth/password`` が同時に届いても、両方は成功しなくなりました。パスワードは、保存されているものが検証済みの ``current_password`` のままである間だけ書き込まれるため、後から処理されたリクエストは ``409`` （ ``conflict`` ）を返し、何も変更しません。クライアントは現在のパスワードを確認してやり直してください。15.9 までは、どちらも ``200`` を返し、最後の書き込みが残りました（ :doc:`../api/api-auth` ）。これはローカルユーザーだけの動作です。ディレクトリ（LDAP）でログインするユーザーのパスワードはディレクトリで変更され、現在のパスワードはローカルのハッシュと照合されないため、同時に届いたリクエストが両方成功することがあります。
 - パスワードのハッシュアルゴリズムがコンポーネントになりました。保存された ``{id}hash`` の値と ``app.password.algorithm`` の ID は、DI コンポーネント ``<id>PasswordEncoder`` として解決されます（ |Fess| は ``bcryptPasswordEncoder`` を登録します）。プラグインは、独自の長さの制限を持つ別のアルゴリズムを提供できます（ :ref:`webapp-plugin-password-encoder` を参照）。 ``app.password.algorithm`` が ``bcrypt`` の間は何も変わりません。コンポーネントのない ID を指定した場合（たとえばプラグインの jar を削除したあとなど）、 |Fess| は起動し、別の ID のハッシュを持つユーザーはログインできますが、その ID のハッシュを持つユーザーはログインできず、パスワードの設定は ``app.password.algorithm`` を示すエラーで失敗します。 ``index.user.initial_password`` がアルゴリズムの受け付ける長さ（BCrypt では 72 バイト）を超えている新規インストールは起動しません。ユーザーインデックスを作る前に、プロパティ名を示すメッセージで停止します。 ``admin`` ユーザーがすでにあるインストールでは、警告を記録するだけです。
 - 新しい設定 ``authentication.local.username.policy`` （既定は ``preserved`` ）があります。 |Fess| は、15.9 までと同じく、ローカルユーザーの名前を入力されたとおりに比較するため、 ``Alice`` と ``alice`` は 2 人のユーザーです。 ``mapped`` にすると、ユーザー管理画面または Admin API でのローカルユーザーの作成と名前の変更は、文字幅、大文字小文字、Unicode の合成の違いを無視したときに、名前がほかのユーザーの名前と同じになる場合や、 ``authentication.admin.users`` のエントリの別の表記になる場合に拒否されます。ログイン、ユーザー ID、保存される名前、パーミッション、インデックス済みの文書は変わりません。詳細と制限は :ref:`local-username-policy` を参照してください。
+- スクリプト、スタイルシート、SVG ファイルのうち 1 KB 以上のものは、既定で gzip 圧縮して送信されます。15.9 は何も圧縮しませんでした。ページと JSON は圧縮されません。 ``tomcat_config.properties`` の ``tomcat.compression`` （ ``on`` または ``off`` ）と ``tomcat.compression.mime`` （一覧に追加する種別。カンマ区切り）で制御します。15.9 から引き継いだ ``tomcat_config.properties`` にはどちらのキーもないため、圧縮は有効です。|Fess| の前段にあるリバースプロキシが自分で応答を圧縮する場合は、 ``tomcat.compression=off`` を設定してください。
+- 同梱の ``bootstrap`` テーマのファイルは、 ``Cache-Control: no-cache`` と ``ETag`` を付けて送信されます。ブラウザは ``If-None-Match`` で再確認し、ファイルが変わっていなければ ``304`` を受け取ります。15.9 までは ``max-age=86400`` が付いていたため、更新したファイルがブラウザに最長 24 時間残ることがありました。
+- 設定は、 ``-D`` オプションの代わりに環境変数でも指定できます。 ``fess_config.properties`` のキーは ``FESS_CONFIG_<KEY>`` 、 ``system.properties`` のキーは ``FESS_SYSTEM_<KEY>`` です（キーは大文字にし、英数字以外の文字は ``_`` に置き換えます。 ``search_engine.password`` は ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。値を持つ ``-D`` オプションが環境変数より優先され、環境変数は ``fess_config.properties`` より優先されます。 ``system.properties`` にすでにあるキーは上書きされません。環境変数は ``-D`` オプションと違って ``ps`` や ``docker top`` に表示されず、システム情報では値がマスクされます。
+- シークレット（パスワード、API キー、秘密鍵）を ``-Dfess.config.<key>`` または ``-Dfess.system.<key>`` のオプションで渡すと、15.10 は起動時に、そのキーと代わりに使う環境変数の名前を示す警告を ``fess.log`` に出力します。値は出力しません。
+- 環境変数 ``FESS_SESSION_STORE=opensearch`` を指定すると、HTTP セッションを検索エンジンに保存し、複数のノードで共有します。既定では無効です（ :ref:`セッション用のインデックス fess_config.session <upgrade-1510-session-index>` と :doc:`../config/session-store` を参照）。
+- ほかの 19 の管理 API（たとえば ``webconfig`` 、 ``fileconfig`` 、 ``dataconfig`` 、 ``role`` 、 ``group`` 、 ``labeltype`` 、 ``pathmap`` 、 ``scheduler`` 。 ``tagtype`` 、 ``general`` 、 ``theme`` 、 ``dict`` は対象外）の ``PUT /api/admin/<name>/setting`` も、上のユーザー API と同じように古い ``version_no`` を HTTP 400 と ``status`` ``1`` で拒否します。15.9 までは値が比較されず、一覧は ``-1`` を返していたため、 ``version_no`` に固定値を送るスクリプトは失敗するようになります。 ``GET /api/admin/<name>/setting/{id}`` で読み取った値を送り、拒否されたら設定を読み直してください。
+- ``permissions`` を指定しない ``POST /api/admin/webconfig/setting`` 、 ``/api/admin/fileconfig/setting`` 、 ``/api/admin/dataconfig/setting`` は ``{role}guest`` を保存します。15.9 までは権限を保存しませんでした。 ``permissions`` を指定しない ``PUT`` は保存済みの値を保持します（15.9 ではこの項目が空になっていました）。
+- ログインフォーム、パスワード変更フォーム、ユーザー管理画面のパスワード欄は、パスワードの前後の空白を取り除かなくなりました。15.9 までは取り除いていましたが、 ``/api/v2/auth/login`` と Admin API は取り除かなかったため、API で設定した前後に空白のあるパスワードで、フォームからはログインできませんでした。15.10 では、どの入口でも入力されたとおりに扱います。15.9 で保存時に空白が取り除かれたユーザーは、空白を付けずに入力してください。
+- コンパイルできない正規表現は、保存時に拒否されます。対象は、Web クロール設定とファイルクロール設定の対象・除外パターン、ラベルタイプのパス、パスマッピングの正規表現です。以前に保存された値はそのまま残り、修正するまで変更なしでは再保存できません。15.10 より前に保存した、正規表現が不正なパスマッピングがあると、15.9 でも 15.10 でも、すべての検索のヒットが 0 件になります（ ``fess.log`` に ``PathMapping`` からの ``PatternSyntaxException`` が出力されます）。そのパスマッピングを削除するか修正してください。
+- 検索エンジンに接続できない間、管理画面は ``503`` を返し（15.9 までは 500）、ログインフォームはエラーページではなく、検索エンジンが利用できないことを知らせるメッセージを表示します。
+- ``GET /api/v2/health`` の ``engine.status`` は、 |Fess| のインデックスが書き込みを拒否している間（書き込みブロックがある場合）は ``YELLOW`` になります。15.9 までは ``GREEN`` でした。 |Fess| のものではないインデックスの書き込みブロックは無視されます。
+- 15.10 の SAML プラグイン（ ``fess-sso-saml`` ）は、java-saml の代わりに saml4j を使います。以前のライブラリにあり新しいライブラリが使わない ``saml.*`` プロパティ（ ``saml.security.digest_algorithm`` や ``saml.sp.contact`` など）は無視され、それらを示す警告が ``fess.log`` に 1 回出力されます。15.10 の OpenID Connect プラグイン（ ``fess-sso-oidc`` ）は、既定で PKCE（S256）を使います。PKCE を拒否する OpenID プロバイダーでは、 ``system.properties`` に ``oic.pkce=false`` を設定してください（ :doc:`../config/sso-oidc` を参照）。
 
 .. _upgrade-1510-new-api:
 
@@ -1831,8 +1920,30 @@ RPM/DEB 版の場合::
    この作業は |Fess| を起動する前に行ってください。変更は再起動してはじめて反映されます。アップグレード前に取ったバックアップから
    戻したファイルには 15.9 の値が入っているため、変更は不要です。
 
+.. _upgrade-1510-rollback-opensearch:
+
 ステップ 3: データの復元
 ------------------------
+
+.. warning::
+
+   **OpenSearch も 3.9.x に戻してください。OpenSearch 3.10.0 のデータは持ち帰れません。**
+   OpenSearch 3.9.0 は、3.10.0 のノードが一度開いたデータディレクトリでは起動せず（ ``IndexFormatTooNewException`` で終了します）、
+   3.10.0 で取得したスナップショットは 3.9.x に復元できません（ ``the snapshot was created with OpenSearch version [3.10.0] which is higher than the version of
+   this node`` ）。アップグレード前の状態へ戻すには、次のようにします。
+
+   1. OpenSearch 3.10.0 を停止します。
+   2. 旧 |Fess| が使っていたバージョンの OpenSearch 3.9.x（15.9.0 なら 3.9.0）と、同じバージョン用にビルドされた 4 つのプラグイン
+      （ :ref:`ステップ 4: OpenSearch のアップグレード <upgrade-opensearch>` の URL の ``3.10.0`` を ``3.9.0`` に置き換えたもの。別のバージョンのプラグインは先に削除します）を、
+      **空のデータディレクトリ** でインストールします。3.10.0 のデータはコピーしないでください。辞書ディレクトリと
+      ``configsync.config_path`` は、同じ絶対パスのまま変えません。
+   3. OpenSearch 3.9.x を起動し、アップグレード前（「ステップ 1: データのバックアップ」）に取得したスナップショットを、
+      起動時にプラグインが作成するインデックス（ ``configsync`` ）の削除を含め、以下のとおり復元します。
+
+   OpenSearch 3.10.0 のまま残した環境で |Fess| 15.9.0 を動かすと、スナップショットを復元した後に起動して検索できることが確認されていますが、サポート対象の組み合わせではありません。
+
+   Docker 版でも同じです。OpenSearch 3.10.0 が書き込んだボリュームは 3.9.0 では再利用できません。空のボリュームで新しい 3.9.0 のノードを起動してスナップショットを復元するか、
+   アップグレード前に取得したボリュームのアーカイブを、以下のとおり復元してください。
 
 スナップショットから復元します。OpenSearch を起動し、 |Fess| は停止したままにしてください。
 
@@ -1936,7 +2047,8 @@ Q: OpenSearch もアップグレードする必要がありますか？
 ----------------------------------------------------
 
 A: |Fess| のバージョンごとに対応する OpenSearch のバージョンが決まっています。
-|Fess| 15.10 は OpenSearch 3.10.0 に対応しています。
+|Fess| 15.10 は OpenSearch 3.10.0 に対応しています。起動時に OpenSearch の 3.x のどのバージョンで動いているかは
+確認しませんが、それ以外のバージョン（たとえば 3.9.0）はサポート対象外です。
 ``opensearch-analysis-fess`` などの |Fess| 用 OpenSearch プラグインは OpenSearch のバージョンと
 完全に一致している必要があるため、OpenSearch をアップグレードする場合は、
 対応するバージョン（3.10.0）のプラグインに更新してください。

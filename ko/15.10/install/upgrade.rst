@@ -76,7 +76,8 @@
      키 매치, 역할, 웹/파일 인증 등 19개 인덱스)
    - ``fess_config.bulk`` - 위 19개 인덱스에 더해 크롤 정보, 장애 URL, 작업 로그,
      썸네일 큐 등 실행 시 데이터를 포함하는 25개 인덱스(15.8 까지. 15.9 에서는 사용자 태그를
-     보관하는 ``tag_type`` 인덱스가 추가되어 26개)
+     보관하는 ``tag_type`` 인덱스가 추가되어 26개. 15.10 에서는 ``session`` 인덱스가 추가되어 ``fess_config`` 별칭에는 27개가 되지만,
+     파일에는 세션 레코드가 포함되지 않습니다. :ref:`세션용 fess_config.session 인덱스 <upgrade-1510-session-index>` 참조)
    - ``fess_user.bulk`` - 사용자, 역할, 그룹
    - ``system.properties`` - 전반 설정을 포함하는 시스템 설정
    - ``fess.json`` - 인덱스 설정(샤드 수, ``index.knn`` 등)
@@ -391,7 +392,12 @@ Docker 버전
 
    이 절차는 ZIP 버전 및 RPM/DEB 버전에서 OpenSearch를 수동으로 운용하는 경우의 절차입니다.
    Docker 버전에서는 단계 3에서 새 이미지를 가져오면 OpenSearch와 플러그인도
-   함께 업데이트되므로 이 단계는 불필요합니다.
+   함께 업데이트되므로, Compose 파일이 15.10 태그(단계 3과 같은 ``v15.10.0``)의 것이라면 이 단계는
+   불필요합니다. Compose 파일이 아직 15.9 태그인 경우 이미지는 |Fess| 15.9.0과 OpenSearch 3.9.0
+   그대로이므로, 두 이미지 태그를 함께 변경하거나(또는 15.10의 파일을 사용하십시오) 하십시오.
+   서로 다른 릴리스의 |Fess| 와 OpenSearch 조합은 지원 대상이 아닙니다.
+   볼륨 이름은 바뀌지 않으므로 OpenSearch 3.9.0의 볼륨은 이전 절차 없이 3.10.0에서 시작됩니다.
+   이 이동은 되돌릴 수 없습니다. 되돌리려면 「롤백 절차」를 참조하십시오.
 
 .. important::
 
@@ -413,11 +419,31 @@ Docker 버전
    인덱스 호환성에 문제가 발생할 수 있습니다.
    |Fess| 14.x는 OpenSearch 2.x 계열이므로, 14.x에서의 업그레이드는 반드시 이 경우에 해당합니다.
 
-   OpenSearch 3.10.0에서 생성한 스냅샷은 OpenSearch 3.9.x 이하로 복원할 수 없습니다. 롤백에 대비하여 업그레이드 전에 생성한 스냅샷을 보관해 두십시오.
+   OpenSearch 3.10.0에서 생성한 스냅샷은 OpenSearch 3.9.x 이하로 복원할 수 없으며,
+   3.10.0 노드가 연 적이 있는 데이터 디렉터리에서는 OpenSearch 3.9.x가 시작되지 않습니다.
+   롤백에 대비하여 업그레이드 전에 생성한 스냅샷을 보관해 두십시오(「롤백 절차」 참조).
+
+   |Fess| 15.10은 실행 중인 OpenSearch 3.x의 버전을 확인하지 않습니다. 변경하지 않은 OpenSearch 3.9.0에서도
+   시작되어 검색할 수 있는 것이 관찰되었으며, ``bin/fess-setup check`` 는 클러스터의 노드끼리 버전이 다른
+   경우에만 경고합니다. 이 조합은 지원 대상이 아닙니다. OpenSearch용 |Fess| 플러그인은 실행되는
+   OpenSearch의 버전용으로 빌드된 것이어야 합니다(|Fess| 15.10에서는 3.10.0).
 
 1. 새 버전의 OpenSearch 설치
 
-2. 플러그인 재설치::
+   ZIP 버전에서는 OpenSearch 홈이 이전 홈과 같은 절대 경로가 되도록 해야 합니다. 데이터를 옮기기 전에
+   아래의 :ref:`ZIP 버전: OpenSearch 홈을 이전 경로로 유지 <upgrade-opensearch-zip-path>` 를 참조하십시오. RPM/DEB
+   패키지는 사전 디렉터리를 ``/etc/opensearch/dictionary`` 에 두며 업그레이드 전후로 같은 경로이므로
+   특별한 조치가 필요하지 않습니다.
+
+2. 플러그인 재설치. OpenSearch 디렉터리에 이전 버전의 플러그인 4개가 이미 있는 경우에는 먼저 삭제하십시오
+   (``bin/fess-setup install opensearch`` 도 플러그인 4개를 설치합니다)::
+
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove analysis-fess
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove analysis-extension
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove minhash
+       $ sudo /usr/share/opensearch/bin/opensearch-plugin remove configsync
+
+   그런 다음 새 버전의 플러그인을 설치합니다::
 
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-fess/3.10.0/opensearch-analysis-fess-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
@@ -431,6 +457,19 @@ Docker 버전
       플러그인 설치에 실패합니다.
 
       |Fess| 용 플러그인 4개는 maven.codelibs.org 에 공개되어 있으므로 URL로 지정합니다. ``opensearch-plugin install`` 의 ``groupId:artifactId:version`` 형식은 Maven Central만 참조합니다.
+
+   .. warning::
+
+      플러그인 디렉터리가 이미 있으면 ``opensearch-plugin install`` 은 ``plugin
+      directory [...] already exists`` 로 실패하고 이전 플러그인을 그대로 남깁니다. ``bin/fess-setup install
+      opensearch-plugins`` 는 이러한 디렉터리를 설치된 것으로 간주하여 아무것도 교체하지 않고 종료
+      코드 ``0`` 으로 끝납니다. 그러면 OpenSearch 3.10.0은 ``Plugin [...] was built for
+      OpenSearch version 3.9.0 but version 3.10.0 is running`` 이라는 메시지와 함께 시작되지 않습니다.
+      새 플러그인을 설치하기 전에 위와 같이 이전 플러그인을 삭제하십시오.
+
+      ``opensearch-plugin install`` 은 추가 권한을 요청하는 플러그인에 대해 확인(``Continue with installation?``)을
+      요구합니다. 응답할 수 없는 환경(터미널이 없거나 입력이 ``/dev/null`` 인 경우)에서는 그러한
+      플러그인이 설치되지 않습니다. ``y`` 로 응답하거나 ``-b`` 를 지정하여 확인을 건너뛰십시오.
 
 3. 사전 디렉터리를 OpenSearch 설정 디렉터리 아래로 이동
 
@@ -449,6 +488,51 @@ Docker 버전
 4. OpenSearch 시작::
 
        $ sudo systemctl start opensearch.service
+
+.. _upgrade-opensearch-zip-path:
+
+**ZIP 버전: OpenSearch 홈을 이전 경로로 유지**
+
+.. warning::
+
+   기존 인덱스의 분석기 설정(``*_path`` 설정)에는 사전 파일의 절대 경로가 들어 있습니다. 예를 들어
+   ``/path/to/fess-15.9.0/opensearch/opensearch-3.9.0/config/dictionary/ja/mapping.txt`` 입니다.
+   OpenSearch는 그 경로가 자신의 설정 디렉터리 안에 있을 때만 이러한 인덱스를 엽니다.
+   ``bin/fess-setup install opensearch`` 처럼 OpenSearch 3.10.0을 다른 디렉터리에 설치하고
+   (``opensearch-3.9.0`` 옆에 ``opensearch-3.10.0`` 이 만들어집니다) ``data/`` 와 사전 파일을
+   직접 옮기면, 문서 인덱스는 할당되지 않은 상태로 남고(할당 설명에 ``Resource path must
+   be inside config directory`` 가 표시됩니다) 클러스터는 red가 됩니다. 한 번 시작한 홈에 ``data/`` 를
+   복사한 경우에도 마찬가지입니다. 다음 절차는 새 엔진을 인덱스가 만들어졌을 때의 경로에 둡니다.
+
+   1. OpenSearch를 중지한 상태(단계 2)에서 OpenSearch 3.10.0과 플러그인을 다른 디렉터리에 설치하고
+      (예: ``fess-15.10.0`` 에서 ``bin/fess-setup install opensearch``), 시작하지 마십시오. 이전 홈의
+      ``data/`` 와 ``config/dictionary/`` 를 그곳으로 복사합니다::
+
+          $ OLD=/path/to/fess-15.9.0/opensearch/opensearch-3.9.0
+          $ NEW=/path/to/fess-15.10.0/opensearch/opensearch-3.10.0
+          $ mkdir -p $NEW/data $NEW/config/dictionary
+          $ cp -a $OLD/data/. $NEW/data/
+          $ cp -a $OLD/config/dictionary/. $NEW/config/dictionary/
+
+   2. 이전 홈을 ``opensearch/`` 디렉터리 밖으로 옮기고(업그레이드가 끝날 때까지 보관하십시오.
+      ``opensearch/`` 아래에 OpenSearch 디렉터리가 두 개 있으면 ``bin/fess.in.sh`` 에서
+      ``FESS_DICTIONARY_PATH`` 가 설정되지 않습니다), 새 홈을 이전 경로에 둡니다. 디렉터리 이름은
+      이전 버전 번호 그대로입니다::
+
+          $ mv $OLD /path/to/opensearch-3.9.0-orig
+          $ mv $NEW $OLD
+
+   3. 옮긴 홈의 ``config/opensearch.yml`` 에서 ``configsync.config_path`` 를 이전 절대 경로
+      (변수가 아니라 ``$OLD/config/dictionary`` 의 전체 경로)로 되돌립니다. ``FESS_DICTIONARY_PATH`` 도
+      이전 값 그대로 유지하십시오. 환경 변수 또는 ``bin/fess.in.sh`` 로 명시적으로 설정하십시오.
+      ``bin/fess.in.sh`` 는 |Fess| 디렉터리의 ``opensearch/`` 아래에 있는 OpenSearch에 대해서만
+      스스로 설정하기 때문입니다.
+
+   4. ``$OLD`` 에서 OpenSearch를 시작하고, 실패한 샤드의 할당을 다시 시도하도록 요청한 뒤(이전에
+      다른 경로에서 OpenSearch를 시작하여 클러스터가 red인 경우에 필요합니다) 상태를 확인합니다::
+
+          $ curl -X POST "http://localhost:9200/_cluster/reroute?retry_failed=true"
+          $ curl "http://localhost:9200/_cluster/health"
 
 단계 5: 새 버전 시작
 ================================
@@ -530,7 +614,7 @@ Docker 버전::
 
 .. warning::
 
-   OpenSearch 3.10.0 은 15.8 이 받아들였던 사전 항목을 거부합니다. 같은 ``mapping`` 항목을 두 번
+   OpenSearch 3.9.0 이상(15.10이 사용하는 3.10.0 포함)은 15.8 이 받아들였던 사전 항목을 거부합니다. 같은 ``mapping`` 항목을 두 번
    저장한 경우나 공백이 포함된 ``kuromoji`` 토큰이 그 예입니다. 이러한 항목이 있으면
    「재인덱싱」은 새 문서 인덱스를 생성하지 않으며, ``fess.log`` 에는 ``Failed to create index`` 라고만
    출력되고 이전 인덱스가 계속 검색을 제공합니다. 「시스템」→「사전」에서 사전을 다운로드하여
@@ -594,6 +678,10 @@ Docker 버전::
      - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,X-FESS.*``
      - ``resourceName,X-Parsed-By,Content-Encoding.*,Content-Type.*,X-TIKA.*,tk:.*,X-FESS.*,Content-Length``
      - 없음. 15.10은 목록에 있는지 여부와 관계없이 ``tk:`` , ``X-TIKA:`` , ``zip:`` 으로 시작하는 이름을 제거하고 ``Content-Length`` 를 콘텐츠에 추가하지 않습니다(아래의 "메타데이터 이름" 및 "``Content-Length`` 가 콘텐츠에 추가되지 않는다" 참조).
+   * - ``crawler.document.html.pruned.tags``
+     - ``noscript,script,style,header,footer,aside,nav,a[rel=nofollow]``
+     - ``noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow]``
+     - 15.10의 값에서는 ``<template>`` 요소의 내용이 HTML 페이지의 색인 대상 텍스트에 포함되지 않습니다. 15.9의 값을 유지하면 이전처럼 색인됩니다. 새 동작을 적용하려면 ``template`` 을 추가하십시오. 이미 색인된 문서는 다시 크롤할 때만 바뀝니다.
    * - ``online.help.name.sereq``
      - ``sereq``
      - ``esreq``
@@ -641,6 +729,15 @@ robots.txt 의 Request-rate 와 Visit-time
 
 URL의 스킴이 목록에 없는 검색 결과는 링크가 되지 않습니다. "표시" 경로 매핑을 적용한 후의 URL 스킴이 목록에 없는 문서에 대해 ``/go/`` 는 ``404`` 를 반환합니다(``fess.log`` 에 경고가 출력됩니다). 15.9까지 ``/go/`` 는 "표시" 경로 매핑이 만든 독자적인 스킴(``hammerspoon://`` 등)으로도 리다이렉트했습니다. 그러한 스킴을 사용한다면 콜론 없이 ``search.result.link.schemes`` 에 추가하십시오. ``javascript``, ``data``, ``vbscript`` 는 추가하지 마십시오. 값이 비어 있으면 어떤 스킴도 허용하지 않습니다. 형식과 동작은 :ref:`search-result-link-schemes` 를 참조하십시오.
 
+.. _upgrade-1510-session-index:
+
+세션용 ``fess_config.session`` 인덱스
+-------------------------------------
+
+15.10은 HTTP 세션을 검색 엔진에 보관하여 여러 |Fess| 노드가 공유할 수 있게 하는 옵트인 저장소를 추가합니다. 노드의 환경 변수 ``FESS_SESSION_STORE`` 가 ``opensearch`` 일 때만 켜지며, 설정하지 않으면 모든 노드가 이전처럼 세션을 메모리에 보관합니다(:doc:`../config/session-store` 참조).
+
+저장소가 꺼져 있어도 |Fess| 는 시작할 때마다 ``fess_config.session`` 인덱스를 만듭니다. 이 인덱스는 ``fess_config`` 별칭에 포함되므로 별칭의 인덱스 수는 15.10에서 27개입니다(15.9에서는 26개). 이 인덱스는 백업 내보내기에서 제외되므로, 세션이 저장되어 있어도 ``fess_config.bulk`` 에는 세션 레코드가 포함되지 않습니다.
+
 .. _upgrade-1510-passkey:
 
 패스키용 ``fess_user.passkey`` 인덱스
@@ -677,7 +774,7 @@ URL의 스킴이 목록에 없는 검색 결과는 링크가 되지 않습니다
 - 이전 비밀번호 없이 ``POST /login/changePassword`` 를 호출하면 15.9까지는 HTTP 500을 반환했습니다. 15.10은 검증 오류를 반환하며 비밀번호는 바뀌지 않습니다.
 - 관리 화면 폼에 대한 POST에 ``crudMode`` 가 없으면(스크립트에서의 호출 등) 15.9는 HTTP 500을 반환했습니다(15.8 이전에서는 500이 되지 않습니다). 15.10은 검증 오류를 반환합니다.
 - 플러그인 삭제는 플러그인 디렉터리 바로 아래의 파일만 대상으로 합니다. 이름이나 버전에 ``../`` 가 들어 있어도 디렉터리 밖의 파일은 삭제되지 않으며 ``fess.log`` 에 경고가 출력됩니다. 15.9까지는 이런 이름으로 디렉터리 밖의 파일을 삭제할 수 있었습니다. 삭제는 백그라운드에서 수행되므로 ``DELETE /api/admin/plugin`` 은 삭제 성공 여부와 관계없이 ``status`` 가 ``0`` 인 응답을 반환합니다. 결과는 ``fess.log`` 에서 확인하세요.
-- 로컬 사용자의 비밀번호가 변경되면 해당 사용자의 다른 로그인 세션은 다음 확인 시 종료됩니다(아래 참조). 15.9까지는 다른 세션이 열린 채로 남았고, 종료되는 것은 변경을 수행한 세션뿐이었습니다(``/api/v2`` 로 비밀번호를 변경한 경우에 한함). 사용자 본인이 변경한 경우와 관리자가 변경한 경우(사용자 관리 화면과 Admin API) 모두 대상입니다. 각 세션이 변경 여부를 ``password.changed.check.interval`` 초(기본값 ``60``, :doc:`security` 참조)에 한 번 이하로 사용자 인덱스에서 확인하므로, 다른 세션은 그 시간 이내에 종료됩니다. LDAP와 SSO 사용자는 대상이 아닙니다. 업그레이드 전에 시작된 세션(세션을 영속화하거나 복제하는 구성에서만 해당하며, 기본 구성에서는 재시작하면 세션이 남지 않습니다)은 해당 HTTP 세션이 만들어진 뒤에 비밀번호가 변경되면 종료됩니다. 업그레이드 전에 변경된 비밀번호에는 변경 시각이 기록되어 있지 않으므로 그 세션은 열린 채로 남습니다. 사용자 인덱스에는 시작 시 ``password_changed_at`` 필드가 추가되므로 재인덱싱은 필요하지 않습니다.
+- 로컬 사용자의 비밀번호가 변경되거나, 사용자의 롤 또는 그룹이 변경되거나, 사용자가 삭제되면 해당 사용자의 다른 로그인 세션은 다음 확인 시 종료됩니다(아래 참조). 15.9까지는 다른 세션이 열린 채로 남았고, 종료되는 것은 변경을 수행한 세션뿐이었습니다(``/api/v2`` 로 비밀번호를 변경한 경우에 한함). 롤이나 그룹의 변경과 삭제로는 어떤 세션도 종료되지 않았습니다. 사용자 본인이 변경한 경우와 관리자가 변경한 경우(사용자 관리 화면과 Admin API) 모두 대상입니다. 각 세션이 변경 여부를 ``password.changed.check.interval`` 초(기본값 ``60``, :doc:`security` 참조)에 한 번 이하로 사용자 인덱스에서 확인하므로, 다른 세션은 그 시간 이내에 종료됩니다. LDAP와 SSO 사용자는 대상이 아닙니다. 업그레이드 전에 시작된 세션(세션을 영속화하거나 복제하는 구성에서만 해당하며, 기본 구성에서는 재시작하면 세션이 남지 않습니다)은 해당 HTTP 세션이 만들어진 뒤에 비밀번호가 변경되면 종료됩니다. 업그레이드 전에 변경된 비밀번호에는 변경 시각이 기록되어 있지 않으므로 그 세션은 열린 채로 남습니다. 사용자 인덱스에는 시작 시 ``password_changed_at`` 필드가 추가되므로 재인덱싱은 필요하지 않습니다.
 - LDAP 로그인은 입력한 사용자 이름의 앞뒤 공백을 제거한 후에 처리합니다. 15.9까지는 입력한 그대로의 이름(예: 앞에 공백이 있는 이름)이 세션의 사용자 ID, 감사 로그, 로그인 횟수 제한에 사용되어 같은 계정의 다른 표기로 취급되었습니다. 또한 ``ldap.max.username.length`` 에 의한 잘라내기는 15.9까지 바인드에만 적용되었고, 사용자 이름, 역할 검색, 권한 이름, 세션에는 잘라내기 전의 이름이 사용되었습니다. 15.10은 이 모두에 잘라낸 이름을 사용합니다(:doc:`../config/ldap-integration` 참조).
 - UTF-8로 72바이트를 넘는 비밀번호는 설정하거나 변경할 때 거부됩니다(사용자 관리 화면, 로그인 폼의 강제 비밀번호 변경, ``/api/v2/auth/password`` , Admin API). ``password.max.length`` (기본값 ``100`` )가 허용하는 길이와 관계없이 적용됩니다. BCrypt는 앞의 72바이트만 읽으므로, 15.9까지는 그보다 긴 비밀번호도 받아들여진 뒤 앞의 72바이트만으로 검증되었습니다. 즉 뒷부분이 무엇이든 로그인할 수 있었습니다. ASCII가 아닌 문자는 한 글자가 여러 바이트를 차지합니다(일본어, 중국어, 한국어 문자 대부분은 3바이트). 거부 메시지는 "비밀번호는 72바이트 이하여야 합니다."(``errors.password_too_long`` )이며, ``/api/v2/auth/password`` 는 ``reason`` 으로 이 키를 ``max_bytes`` 와 함께 반환합니다. 기존 계정은 영향을 받지 않습니다. 로그인할 때는 길이를 확인하지 않으므로 업그레이드 전에 설정한 72바이트를 넘는 비밀번호도 계속 로그인할 수 있습니다. 다만 앞의 72바이트만으로 검증되므로 변경하십시오.
 - 15.10의 ``audit.log`` 레코드는 15.9와 세 가지가 다릅니다(:doc:`security` 참조). ``ACCESS`` 레코드에 ``method`` (HTTP 메서드)와 ``id`` (``id`` 요청 파라미터. 있는 경우만)가 추가되었습니다. 새 액션 ``UPDATE_PASSWORD`` 는 비밀번호 변경을 조작한 사용자(``user``)와 비밀번호가 변경된 사용자(``target``)와 함께 기록합니다. 액세스 토큰 확인에서 거부된 Admin REST API 요청은 이제 ``ACCESS_DENIED`` 로 기록됩니다. ``audit.log`` 를 분석하는 프로그램이 있다면 이 변경에 대응하는지 확인하십시오.
@@ -686,6 +783,18 @@ URL의 스킴이 목록에 없는 검색 결과는 링크가 되지 않습니다
 - 같은 로컬 사용자의 같은 ``current_password`` 를 가진 ``POST /api/v2/auth/password`` 요청 두 개가 동시에 도착해도 더 이상 둘 다 성공하지 않습니다. 비밀번호는 저장된 것이 검증된 ``current_password`` 그대로인 동안에만 쓰이므로, 나중에 처리된 요청은 ``409`` ( ``conflict`` )를 반환하고 아무것도 변경하지 않습니다. 클라이언트는 현재 비밀번호를 확인하고 다시 시도해야 합니다. 15.9까지는 둘 다 ``200`` 을 반환했고 마지막 쓰기가 남았습니다( :doc:`../api/api-auth` ). 이것은 로컬 사용자에게만 해당합니다. 디렉터리(LDAP)로 로그인하는 사용자의 비밀번호는 디렉터리에서 변경되고, 현재 비밀번호는 로컬 해시와 비교되지 않으므로, 동시에 도착한 요청이 둘 다 성공할 수 있습니다.
 - 비밀번호 해시 알고리즘이 컴포넌트가 되었습니다. 저장된 ``{id}hash`` 값의 ID와 ``app.password.algorithm`` 의 ID는 DI 컴포넌트 ``<id>PasswordEncoder`` 로 해석됩니다( |Fess| 가 ``bcryptPasswordEncoder`` 를 등록합니다). 따라서 플러그인이 자체 길이 제한을 가진 다른 알고리즘을 제공할 수 있습니다( :ref:`webapp-plugin-password-encoder` 참조). ``app.password.algorithm`` 이 ``bcrypt`` 인 동안에는 아무것도 바뀌지 않습니다. 컴포넌트가 없는 ID를 지정한 경우(예: 플러그인 jar를 삭제한 뒤), |Fess| 는 시작되고 다른 ID의 해시를 가진 사용자는 계속 로그인하지만, 그 ID의 해시를 가진 사용자는 로그인할 수 없고 비밀번호 설정은 ``app.password.algorithm`` 을 지목하는 오류로 실패합니다. ``index.user.initial_password`` 가 알고리즘이 받아들이는 길이(BCrypt는 72바이트)를 넘는 새 설치는 시작되지 않습니다. 사용자 인덱스를 만들기 전에 속성 이름을 지목하는 메시지와 함께 중단됩니다. ``admin`` 사용자가 이미 있는 설치에서는 경고만 기록합니다.
 - 새 설정 ``authentication.local.username.policy`` (기본값 ``preserved`` )가 있습니다. |Fess| 는 15.9까지와 같이 로컬 사용자의 이름을 입력된 그대로 비교하므로 ``Alice`` 와 ``alice`` 는 두 명의 사용자입니다. ``mapped`` 로 하면, 사용자 관리 화면 또는 Admin API에서 로컬 사용자를 만들거나 이름을 바꿀 때, 문자 폭, 대소문자, 유니코드 합성의 차이를 무시했을 때 이름이 다른 사용자의 이름과 같아지거나 ``authentication.admin.users`` 항목의 다른 표기가 되면 거부됩니다. 로그인, 사용자 ID, 저장되는 이름, 권한, 색인된 문서는 바뀌지 않습니다. 자세한 내용과 제한은 :ref:`local-username-policy` 를 참조하십시오.
+- 1 KB 이상의 스크립트, 스타일, SVG 파일은 기본적으로 gzip으로 압축되어 전송됩니다. 15.9는 아무것도 압축하지 않았습니다. 페이지와 JSON은 압축되지 않습니다. ``tomcat_config.properties`` 의 ``tomcat.compression`` (``on`` 또는 ``off``)과 ``tomcat.compression.mime`` (목록에 추가할 타입, 쉼표로 구분)으로 제어합니다. 15.9에서 이어받은 ``tomcat_config.properties`` 에는 두 키가 모두 없으므로 압축이 켜집니다. |Fess| 앞단의 리버스 프록시가 응답을 직접 압축하는 경우에는 ``tomcat.compression=off`` 로 설정하십시오.
+- 번들된 ``bootstrap`` 테마의 파일은 ``Cache-Control: no-cache`` 와 ``ETag`` 로 전송되며, 브라우저는 ``If-None-Match`` 로 다시 요청하고 파일이 바뀌지 않았으면 ``304`` 를 받습니다. 15.9까지는 ``max-age=86400`` 이 붙어 있어 갱신된 파일을 브라우저가 최대 24시간 동안 유지했습니다.
+- 설정은 ``-D`` 옵션 대신 환경 변수로도 지정할 수 있습니다. ``fess_config.properties`` 의 키에는 ``FESS_CONFIG_<KEY>`` , ``system.properties`` 의 키에는 ``FESS_SYSTEM_<KEY>`` 를 사용합니다(키를 대문자로 하고 영문자와 숫자 이외의 문자는 모두 ``_`` 로 바꿉니다. ``search_engine.password`` 는 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` 입니다). 값이 있는 ``-D`` 옵션이 환경 변수보다 우선하고, 환경 변수가 ``fess_config.properties`` 보다 우선합니다. ``system.properties`` 에 이미 있는 키는 덮어쓰지 않습니다. 환경 변수는 ``-D`` 옵션과 달리 ``ps`` 나 ``docker top`` 에 표시되지 않으며, 시스템 정보에서는 값이 마스킹됩니다.
+- 비밀(비밀번호, API 키, 시크릿 키)을 ``-Dfess.config.<key>`` 또는 ``-Dfess.system.<key>`` 옵션으로 지정하면, 15.10은 시작할 때 해당 키와 대신 사용할 환경 변수를 알리는 경고를 ``fess.log`` 에 출력합니다. 값은 출력하지 않습니다.
+- 환경 변수 ``FESS_SESSION_STORE=opensearch`` 는 HTTP 세션을 검색 엔진에 보관하여 여러 노드가 공유하게 합니다. 기본값은 꺼짐입니다(:ref:`세션용 fess_config.session 인덱스 <upgrade-1510-session-index>` 와 :doc:`../config/session-store` 참조).
+- 관리 API 19개(예: ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap``, ``scheduler``. ``tagtype``, ``general``, ``theme``, ``dict`` 는 제외)의 ``PUT /api/admin/<name>/setting`` 도 위의 사용자 API와 마찬가지로 오래된 ``version_no`` 를 HTTP 400과 ``status`` ``1`` 로 거부합니다. 15.9까지는 값을 비교하지 않았고 목록은 ``-1`` 을 반환했으므로, 상수 ``version_no`` 를 보내는 스크립트는 이제 실패합니다. ``GET /api/admin/<name>/setting/{id}`` 에서 읽은 값을 보내고, 거부된 후에는 설정을 다시 읽으십시오.
+- ``permissions`` 없이 ``POST /api/admin/webconfig/setting``, ``/api/admin/fileconfig/setting``, ``/api/admin/dataconfig/setting`` 을 호출하면 ``{role}guest`` 가 저장됩니다. 15.9까지는 권한이 저장되지 않았습니다. ``permissions`` 없는 ``PUT`` 은 저장된 값을 유지하며, 15.9에서는 필드가 비어 있게 되었습니다.
+- 로그인 폼, 비밀번호 변경 폼, 사용자 관리 화면의 비밀번호 필드는 비밀번호 앞뒤의 공백을 더 이상 제거하지 않습니다. 15.9까지는 제거했으나 ``/api/v2/auth/login`` 과 Admin API는 제거하지 않았으므로, API로 설정한 앞뒤 공백이 있는 비밀번호로는 폼에서 로그인할 수 없었습니다. 이제 모든 입구에서 비밀번호를 입력된 그대로 받습니다. 15.9에서 비밀번호를 저장할 때 공백이 제거된 사용자는 공백 없이 입력해야 합니다.
+- 컴파일되지 않는 정규 표현식은 저장할 때 거부됩니다. 대상은 웹 및 파일 크롤 설정의 포함/제외 패턴, 레이블 유형의 경로, 경로 매핑의 정규 표현식입니다. 이전에 저장된 값은 그대로 남지만, 수정하기 전에는 변경 없이 다시 저장할 수 없습니다. 15.10 이전에 저장된 잘못된 정규 표현식의 경로 매핑은 15.9와 15.10 모두에서 모든 검색의 결과가 0건이 되게 합니다(``fess.log`` 에 ``PathMapping`` 의 ``PatternSyntaxException`` 이 표시됩니다). 삭제하거나 수정하십시오.
+- 검색 엔진에 접속할 수 없는 동안 관리 콘솔은 ``503`` 을 반환하며(15.9까지는 500), 로그인 폼에는 오류 페이지 대신 검색 엔진을 사용할 수 없다는 안내가 표시됩니다.
+- |Fess| 인덱스가 쓰기를 거부하는 동안(쓰기 차단이 걸려 있는 동안) ``GET /api/v2/health`` 의 ``engine.status`` 는 ``YELLOW`` 이며, 15.9까지는 ``GREEN`` 이었습니다. |Fess| 에 속하지 않는 인덱스의 쓰기 차단은 무시됩니다.
+- 15.10의 SAML 플러그인(``fess-sso-saml``)은 java-saml 대신 saml4j를 사용합니다. 이전 라이브러리에는 있었지만 새 라이브러리가 사용하지 않는 ``saml.*`` 속성(``saml.security.digest_algorithm``, ``saml.sp.contact`` 등)은 무시되며, 이를 알리는 경고가 ``fess.log`` 에 한 번 출력됩니다. 15.10의 OpenID Connect 플러그인(``fess-sso-oidc``)은 기본적으로 PKCE(S256)를 사용합니다. 이를 거부하는 OpenID 공급자에는 ``system.properties`` 에 ``oic.pkce=false`` 를 설정하십시오(:doc:`../config/sso-oidc` 참조).
 
 .. _upgrade-1510-new-api:
 
@@ -1819,8 +1928,34 @@ RPM/DEB 버전의 경우::
    이 작업은 |Fess|\ 를 시작하기 전에 하십시오. 변경은 다시 시작해야 반영됩니다. 업그레이드 전에 만든 백업에서
    복원한 파일에는 15.9의 값이 들어 있으므로 변경할 필요가 없습니다.
 
+.. _upgrade-1510-rollback-opensearch:
+
 단계 3: 데이터 복원
 ----------------------
+
+.. warning::
+
+   **OpenSearch도 3.9.x로 되돌리십시오. OpenSearch 3.10.0의 데이터는 되돌릴 수 없습니다.**
+   OpenSearch 3.9.0은 3.10.0 노드가 연 적이 있는 데이터 디렉터리에서 시작되지 않으며
+   (``IndexFormatTooNewException`` 으로 종료됩니다), 3.10.0에서 생성한 스냅샷은 3.9.x로 복원할 수 없습니다
+   (``the snapshot was created with OpenSearch version [3.10.0] which is higher than the version of
+   this node``). 업그레이드 전의 상태로 되돌리려면 다음과 같이 하십시오.
+
+   1. OpenSearch 3.10.0을 중지합니다.
+   2. 이전 |Fess| 가 사용하던 버전의 OpenSearch 3.9.x(15.9.0에서는 3.9.0)와 같은 버전용으로 빌드된
+      플러그인 4개를 **빈 데이터 디렉터리** 로 설치합니다(:ref:`단계 4: OpenSearch 업그레이드 <upgrade-opensearch>` 의 URL에서
+      ``3.10.0`` 을 ``3.9.0`` 으로 바꿉니다. 다른 버전의 플러그인은 먼저 삭제하십시오).
+      3.10.0의 데이터는 복사하지 마십시오. 사전 디렉터리와 ``configsync.config_path`` 는 이전과 같은
+      절대 경로로 유지하십시오.
+   3. OpenSearch 3.9.x를 시작하고, 플러그인이 시작할 때 만든 인덱스(``configsync``)의 삭제를 포함하여
+      아래 설명대로 업그레이드 전에 생성한 스냅샷을 복원합니다(「단계 1: 데이터 백업」 참조).
+
+   OpenSearch 3.10.0을 그대로 둔 채 |Fess| 15.9.0을 실행하면, 그 위에 스냅샷을 복원한 뒤에는 시작되어
+   검색할 수 있는 것이 관찰되었지만 지원 대상 조합은 아닙니다.
+
+   Docker 버전에서도 마찬가지입니다. OpenSearch 3.10.0이 기록한 볼륨은 3.9.0에서 재사용할 수 없습니다.
+   빈 볼륨에서 새 3.9.0 노드를 시작하여 스냅샷을 복원하거나, 아래와 같이 업그레이드 전에 만든
+   볼륨 아카이브를 복원하십시오.
 
 스냅샷에서 복원합니다. OpenSearch 는 실행 중이어야 하고 |Fess| 는 중지되어 있어야 합니다.
 
@@ -1922,8 +2057,9 @@ A: Fess의 업그레이드에는 서비스 중지가 필요합니다. 다운타�
 Q: OpenSearch도 업그레이드해야 합니까?
 -------------------------------------------------
 
-A: |Fess| 버전마다 대응하는 OpenSearch 버전이 정해져 있습니다.
-|Fess| 15.10은 OpenSearch 3.10.0에 대응합니다.
+A: |Fess| 버전마다 릴리스 대상 OpenSearch 버전이 정해져 있습니다.
+|Fess| 15.10은 OpenSearch 3.10.0을 지원합니다. 시작할 때 실행 중인 OpenSearch 3.x의 버전을
+확인하지는 않지만, 3.9.0 등 그 밖의 버전은 지원 대상이 아닙니다.
 ``opensearch-analysis-fess`` 등의 |Fess| 용 OpenSearch 플러그인은 OpenSearch 버전과
 완전히 일치해야 하므로, OpenSearch를 업그레이드하는 경우
 대응하는 버전(3.10.0)의 플러그인으로 업데이트하십시오.
