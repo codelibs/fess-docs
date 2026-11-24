@@ -21,6 +21,8 @@ Endpoint            ``/api/v2/health``
 Devuelve una instantánea del estado del clúster del motor de búsqueda (etiqueta ``monitor``).
 El estado HTTP es 200 cuando el estado del clúster es ``GREEN`` o ``YELLOW``, y 503 cuando es ``RED`` o cuando no se puede acceder al motor de búsqueda.
 
+Se devuelve ``YELLOW`` cuando el estado del clúster es ``YELLOW``, y también cuando el estado del clúster es ``GREEN`` pero uno de los índices de |Fess|, o todo el clúster, tiene un bloqueo que rechaza las escrituras. Por ejemplo, OpenSearch pone los índices en modo de solo lectura cuando el uso de disco supera el umbral de marca de agua flood-stage. Las búsquedas siguen funcionando en este estado, pero el rastreo, el cambio de la configuración y la actualización del índice fallan. No se cuentan los índices de otras aplicaciones que comparten el clúster. Cuando no se pueden leer los bloqueos, el estado permanece en ``GREEN``. Como este endpoint puede llamarse sin autenticación, la respuesta no indica por qué el estado es ``YELLOW``; un administrador debe comprobar el motivo en el lado de OpenSearch.
+
 Este endpoint respeta la invariante del sobre: "``status >= 1`` ⇔ estado HTTP ``>= 400``".
 
 - En caso de ``GREEN`` o ``YELLOW``: devuelve el sobre de éxito (``status: 0``) con ``engine``.
@@ -37,7 +39,7 @@ Los campos de ``engine`` son los siguientes:
 .. list-table:: Campos de engine
 
    * - ``status``
-     - Estado del clúster. Uno de ``GREEN`` / ``YELLOW`` / ``RED`` (en mayúsculas). ``UNAVAILABLE`` cuando no se puede acceder al motor de búsqueda.
+     - Estado del clúster. Uno de ``GREEN`` / ``YELLOW`` / ``RED`` (en mayúsculas). Incluso cuando el clúster está en ``GREEN``, es ``YELLOW`` mientras un índice de |Fess| tiene un bloqueo de escritura (véase arriba). ``UNAVAILABLE`` cuando no se puede acceder al motor de búsqueda.
    * - ``ping_status``
      - Estado del ping (int). Es ``1`` cuando el clúster está en ``RED`` o no se puede acceder al motor de búsqueda, y ``0`` en caso contrario (``GREEN`` / ``YELLOW``).
 
@@ -113,6 +115,6 @@ Consulte :doc:`api-overview` para detalles del modelo de errores. Los estados HT
    * - 405 Method Not Allowed
      - Cuando el método HTTP no está permitido.
    * - 503 Service Unavailable
-     - Cuando el clúster está en estado ``RED`` o no se puede acceder al motor de búsqueda. El sobre de error (``error.code: service_unavailable``) incluye la instantánea del motor en ``error.details.engine``.
+     - Cuando el clúster está en estado ``RED`` o no se puede acceder al motor de búsqueda. El sobre de error (``error.code: service_unavailable``) incluye la instantánea del motor en ``error.details.engine``. Un encabezado ``Retry-After: 5`` indica al cliente cuántos segundos esperar antes de reintentar.
 
 Tabla: Lista de respuestas

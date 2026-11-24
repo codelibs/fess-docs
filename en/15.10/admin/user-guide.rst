@@ -58,6 +58,10 @@ Groups
 
 Specify the groups to which the user belongs.
 
+.. note::
+
+   When the password, the roles or the groups of a user are changed, the login sessions of that user end within about 60 seconds at most (the default of ``password.changed.check.interval``), and the user has to log in again. When a password is changed, the session that made the change stays. When roles or groups are changed, the session that made the change ends as well. See :doc:`../install/security`.
+
 Delete Configuration
 --------------------
 

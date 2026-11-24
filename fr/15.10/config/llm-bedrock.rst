@@ -183,7 +183,7 @@ Clé API
 Lorsque ``rag.llm.bedrock.api.key`` est définie, elle est envoyée sous la forme ``Authorization: Bearer <key>``.
 Les clés API Bedrock à court terme expirent et ne sont valides que dans la région où elles ont été créées ; les clés à long terme sont rattachées à un utilisateur IAM.
 La valeur est masquée dans Administration > Système > Informations système lorsqu'elle est définie dans ``fess_config.properties`` (ou, pour ``content_chunker.embedding.bedrock.api.key``, dans ``system.properties``).
-Les variables d'environnement et les propriétés système JVM, y compris les options ``-Dfess.config.*`` et ``-Dfess.system.*``, y sont affichées sans masquage ; ne transmettez donc pas la clé de cette manière.
+Si elle est transmise par l'option JVM ``-Dfess.config.rag.llm.bedrock.api.key``, la valeur apparaît dans la liste des processus (``ps`` et ``docker top``) et un avertissement est écrit au démarrage. Transmettez-la plutôt par la variable d'environnement ``FESS_CONFIG_RAG_LLM_BEDROCK_API_KEY`` (voir :ref:`config-env-override`).
 
 Identifiants AWS (SigV4)
 ------------------------

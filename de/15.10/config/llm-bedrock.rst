@@ -183,7 +183,7 @@ API-Schlüssel
 Wenn ``rag.llm.bedrock.api.key`` gesetzt ist, wird er als ``Authorization: Bearer <key>`` gesendet.
 Kurzlebige Bedrock-API-Schlüssel laufen ab und sind nur in der Region gültig, in der sie erstellt wurden; langlebige Schlüssel sind an einen IAM-Benutzer gebunden.
 Der Wert wird unter Administration > Systeminformationen maskiert angezeigt, wenn er in ``fess_config.properties`` gesetzt ist (bzw. bei ``content_chunker.embedding.bedrock.api.key`` in ``system.properties``).
-Umgebungsvariablen und JVM-Systemeigenschaften, einschließlich der Optionen ``-Dfess.config.*`` und ``-Dfess.system.*``, werden dort unmaskiert aufgelistet; übergeben Sie den Schlüssel daher nicht auf diesem Weg.
+Wird er als JVM-Option ``-Dfess.config.rag.llm.bedrock.api.key`` übergeben, ist der Wert in der Prozessliste (``ps`` und ``docker top``) sichtbar, und beim Start wird eine Warnung geschrieben. Übergeben Sie ihn stattdessen über die Umgebungsvariable ``FESS_CONFIG_RAG_LLM_BEDROCK_API_KEY`` (siehe :ref:`config-env-override`).
 
 AWS-Zugangsdaten (SigV4)
 ------------------------

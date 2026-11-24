@@ -133,6 +133,10 @@ persistida en OpenSearch). Las rutas de configuración difieren; no las mezcle.
 
 .. note::
 
+   Pase una clave de API (``rag.llm.*.api.key``) mediante una variable de entorno como ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY``, no como una opción ``-D`` (consulte :ref:`config-env-override`). Con una opción como ``-Dfess.config.rag.llm.gemini.api.key=...`` de la tabla anterior, el valor aparece en la lista de procesos y se escribe una advertencia al iniciar.
+
+.. note::
+
    ``rag.llm.type`` es el nombre de propiedad heredado de |Fess| 15.5 y anteriores.
    En 15.6 y posteriores se renombró a ``rag.llm.name``; los valores escritos bajo
    ``rag.llm.type`` no se leen.

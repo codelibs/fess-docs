@@ -111,6 +111,7 @@ SystemInfo APIは、|Fess| のシステム情報を取得するためのAPIで�
    ``content_chunker.embedding.*.api.key``、``rag.llm.*.api.key`` に一致する項目です。
    ``fess.system.<キー>`` または ``fess.config.<キー>`` という名前のシステムプロパティ（設定値を ``-D`` オプションで渡す形式）は、
    ``<キー>`` と同じ規則でマスクされます。
+   名前が ``FESS_CONFIG_`` または ``FESS_SYSTEM_`` で始まる環境変数（設定値を渡す形式。 :ref:`config-env-override` を参照）の値は、キーにかかわらずマスクされます。
    ``env_props`` と ``system_props`` では、``FESS_JAVA_OPTS`` や ``JAVA_TOOL_OPTIONS`` のような長い文字列の中にある
    ``-Dキー=値`` オプションのうち機密性の高いキーの値もマスクされ、文字列の残りはそのまま返されます。
 

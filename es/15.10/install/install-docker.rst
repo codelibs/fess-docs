@@ -444,6 +444,19 @@ Agregue ``FESS_JAVA_OPTS`` a las variables de entorno del servicio ``fess01`` en
    ``fess_config.properties``.
    Si solo desea sobrescribir algunos elementos, este método es más sencillo.
 
+.. warning::
+
+   Pase un secreto, como una contraseña o una clave de API, mediante una variable de entorno y no como una opción JVM ``-Dfess.config.``. El valor de una opción ``-D`` lo muestran ``ps`` y ``docker top`` y se repite en la línea de comandos del rastreador y de otros procesos que |Fess| inicia. Un elemento de ``fess_config.properties`` también puede indicarse mediante la variable de entorno formada por ``FESS_CONFIG_`` seguido de la clave en mayúsculas, con cada carácter que no sea una letra o un dígito sustituido por ``_`` (por ejemplo, ``http.proxy.password`` es ``FESS_CONFIG_HTTP_PROXY_PASSWORD``).
+
+   ::
+
+       services:
+         fess01:
+           environment:
+             - "FESS_CONFIG_HTTP_PROXY_PASSWORD=${PROXY_PASSWORD}"
+
+   Consulte :ref:`config-env-override` para más detalles.
+
 Conexión a OpenSearch Externo
 ------------------------------
 

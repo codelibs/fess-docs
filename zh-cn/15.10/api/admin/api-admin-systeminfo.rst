@@ -111,6 +111,7 @@ SystemInfo API是用于获取 |Fess| 系统信息的API。
    或匹配 ``content_chunker.embedding.*.api.key``、``rag.llm.*.api.key`` 的所有项。
    名为 ``fess.system.<键>`` 或 ``fess.config.<键>`` 的系统属性（以 ``-D`` 选项传递设置值的形式）
    按与 ``<键>`` 相同的规则屏蔽。
+   名称以 ``FESS_CONFIG_`` 或 ``FESS_SYSTEM_`` 开头的环境变量（传递设置值的形式，参见 :ref:`config-env-override`）的值，无论键是什么，都会被屏蔽。
    在 ``env_props`` 和 ``system_props`` 中，``FESS_JAVA_OPTS`` 或 ``JAVA_TOOL_OPTIONS`` 等较长字符串内的
    敏感 ``-D键=值`` 选项的值也会被屏蔽，字符串的其余部分保持可读。
 

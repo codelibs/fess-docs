@@ -428,6 +428,19 @@ Docker 환경에서 설정을 반영시키려면 다음 방법이 있습니다.
    ``-Dfess.config.`` 뒤에 이어지는 부분이 ``fess_config.properties`` 의 설정 항목명에 대응합니다.
    일부 항목만 오버라이드하는 경우에는 이 방법이 간단합니다.
 
+.. warning::
+
+   비밀번호나 API 키와 같은 비밀 정보는 ``-Dfess.config.`` JVM 옵션이 아니라 환경 변수로 전달하십시오. ``-D`` 옵션의 값은 ``ps`` 와 ``docker top`` 에 표시되며, |Fess| 가 시작하는 크롤러 등의 프로세스의 명령줄에도 반복되어 나타납니다. ``fess_config.properties`` 의 항목은 ``FESS_CONFIG_`` 뒤에 키를 대문자로 바꾸고 영문자와 숫자 이외의 문자를 모두 ``_`` 로 바꾼 것을 붙인 환경 변수로도 지정할 수 있습니다(예: ``http.proxy.password`` 는 ``FESS_CONFIG_HTTP_PROXY_PASSWORD``).
+
+   ::
+
+       services:
+         fess01:
+           environment:
+             - "FESS_CONFIG_HTTP_PROXY_PASSWORD=${PROXY_PASSWORD}"
+
+   자세한 내용은 :ref:`config-env-override` 를 참조하십시오.
+
 외부 OpenSearch 연결
 ------------------------
 

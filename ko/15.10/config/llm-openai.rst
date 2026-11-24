@@ -452,8 +452,7 @@ o1/o3/o4계열 또는 gpt-5계열 추론 모델을 사용하는 경우, |Fess|\ 
 JVM 옵션 설정
 =============
 
-보안상의 이유로 API 키는 체크인된 파일이 아니라 런타임 환경(JVM 옵션)을 통해
-설정하는 것을 권장합니다.
+보안상의 이유로 API 키는 체크인된 파일이 아니라 환경 변수 ``FESS_CONFIG_RAG_LLM_OPENAI_API_KEY`` 로 설정하는 것을 권장합니다. ``-Dfess.config.rag.llm.openai.api.key`` JVM 옵션으로 전달하면 값이 프로세스 목록(``ps`` 와 ``docker top``)에 표시되고 시작할 때 경고가 출력됩니다. 변수의 이름 규칙은 :ref:`config-env-override` 를 참조하세요.
 
 Docker 환경
 -----------
@@ -466,7 +465,7 @@ OpenAI용 오버레이 ``compose-openai.yaml`` 이 포함되어 있습니다. �
     export OPENAI_API_KEY="sk-..."
     docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
 
-``compose-openai.yaml`` 의 내용 (동등 구성을 직접 작성할 때의 참고):
+API 키를 환경 변수로 전달하도록 고쳐 쓴 ``compose-openai.yaml`` (동등 구성을 직접 작성할 때의 참고):
 
 .. code-block:: yaml
 
@@ -474,13 +473,14 @@ OpenAI용 오버레이 ``compose-openai.yaml`` 이 포함되어 있습니다. �
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-openai:15.10.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
+          - "FESS_CONFIG_RAG_LLM_OPENAI_API_KEY=${OPENAI_API_KEY:-}"
 
 요점:
 
 - ``FESS_PLUGINS=fess-llm-openai:15.10.0`` 으로 컨테이너의 ``run.sh`` 가 플러그인 JAR을 자동 다운로드하여 ``app/WEB-INF/plugin/`` 에 배치합니다
 - ``-Dfess.config.rag.chat.enabled=true`` 로 AI 검색 모드를 활성화
-- ``-Dfess.config.rag.llm.openai.api.key=...`` 로 API 키, ``-Dfess.config.rag.llm.openai.model=...`` 로 모델 지정
+- 환경 변수 ``FESS_CONFIG_RAG_LLM_OPENAI_API_KEY`` 로 API 키, ``-Dfess.config.rag.llm.openai.model=...`` 로 모델 지정
 - ``-Dfess.system.rag.llm.name=openai`` 는 OpenSearch에 값이 아직 기록되지 않은 첫 시작 시에만 기본값으로 적용됩니다. 시작 후에는 관리 화면 "시스템 > 전체 설정" 의 RAG 섹션에서도 변경할 수 있습니다
 
 프록시 경유로 인터넷에 접속하는 경우, |Fess| 의 ``http.proxy.*`` 설정을 ``FESS_JAVA_OPTS`` 를 통해 지정하세요(후술하는 "HTTP 프록시 경유 사용" 참조).
@@ -488,11 +488,12 @@ OpenAI용 오버레이 ``compose-openai.yaml`` 이 포함되어 있습니다. �
 systemd 환경
 ------------
 
-``/etc/sysconfig/fess`` (또는 ``/etc/default/fess`` )의 ``FESS_JAVA_OPTS`` 에 추가합니다:
+``/etc/sysconfig/fess`` (또는 ``/etc/default/fess`` )에 추가합니다. API 키 행은 ``export`` 없이 작성합니다(SysV init 스크립트와 기타 주의 사항은 :ref:`config-env-override` 참조):
 
 ::
 
-    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=sk-... -Dfess.system.rag.llm.name=openai"
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.system.rag.llm.name=openai"
+    FESS_CONFIG_RAG_LLM_OPENAI_API_KEY=sk-...
 
 HTTP 프록시 경유 사용
 =====================

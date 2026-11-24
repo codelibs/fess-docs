@@ -2363,7 +2363,7 @@ Web
     - Exiger des caractères spéciaux dans le mot de passe.
     - ``false``
   * - password.changed.check.interval
-    - Nombre de secondes entre deux consultations, par une session de connexion d'un utilisateur local, de l'heure du dernier changement de mot de passe stockée dans l'index des utilisateurs. Les autres sessions de l'utilisateur prennent fin dans ce délai après le changement, sur n'importe quel nœud ; la session qui a fait le changement reste ouverte. 0 ou moins lit l'index des utilisateurs à chaque requête.
+    - Nombre de secondes entre deux consultations, par une session de connexion d'un utilisateur local, de son document utilisateur dans l'index des utilisateurs, pour détecter un changement de mot de passe, un changement des rôles ou des groupes, ou une suppression (le nom de la clé ne mentionne que le mot de passe). Les autres sessions de connexion de l'utilisateur se terminent dans ce délai après la modification, sur n'importe quel nœud ; la session qui a changé le mot de passe est conservée. Avec 0 ou moins, l'index des utilisateurs est lu à chaque requête.
     - ``60``
   * - rag.chat.enabled
     - Indique si la fonctionnalité de chat RAG est activée.

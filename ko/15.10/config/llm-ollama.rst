@@ -539,7 +539,7 @@ Docker 구성
 - ``deploy.resources.reservations.devices`` 블록은 GPU를 사용하기 위한 설정입니다. GPU를 사용하지 않는 경우(CPU만으로 실행하는 경우)는 이 블록을 삭제하세요
 
 .. note::
-   ``RAG_CHAT_ENABLED`` 나 ``RAG_LLM_NAME`` 등의 대문자 스네이크 케이스 환경 변수는 |Fess| 에서 직접 인식되지 않습니다. 설정 값은 반드시 ``FESS_JAVA_OPTS`` 내에서 ``-Dfess.config.<key>`` ( ``fess_config.properties`` 계열) 또는 ``-Dfess.system.<key>`` ( ``system.properties`` 계열)로 전달하세요.
+   ``RAG_CHAT_ENABLED`` 나 ``RAG_LLM_NAME`` 등의 대문자 스네이크 케이스 환경 변수는 |Fess| 에서 직접 인식되지 않습니다. 설정 값은 ``FESS_JAVA_OPTS`` 내에서 ``-Dfess.config.<key>`` ( ``fess_config.properties`` 계열) 또는 ``-Dfess.system.<key>`` ( ``system.properties`` 계열)로 전달하거나, ``FESS_CONFIG_<KEY>`` ( ``fess_config.properties`` 계열) 또는 ``FESS_SYSTEM_<KEY>`` ( ``system.properties`` 계열)라는 이름의 환경 변수로 전달하세요. 예를 들어 ``rag.chat.enabled`` 는 ``FESS_CONFIG_RAG_CHAT_ENABLED`` 입니다. 비밀번호나 API 키와 같은 비밀 정보는 환경 변수로 전달하세요(:ref:`config-env-override` 참조).
 
 원격 Ollama 서버
 ----------------------

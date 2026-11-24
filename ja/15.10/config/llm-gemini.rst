@@ -406,7 +406,7 @@ Gemini 3.x のバケットマッピングは以下のとおりです:
 JVMオプションでの設定
 =====================
 
-セキュリティ上の理由から、APIキーをファイルではなく環境（JVMオプション）経由で設定することを推奨します。
+セキュリティ上の理由から、APIキーはファイルではなく環境変数 ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` で設定することを推奨します。 ``-Dfess.config.rag.llm.gemini.api.key`` の JVM オプションで渡すと、値がプロセス一覧（ ``ps`` や ``docker top`` ）に表示され、起動時に警告が出力されます。環境変数の名前の付け方は :ref:`config-env-override` を参照してください。
 
 Docker環境
 ----------
@@ -418,7 +418,7 @@ Docker環境
     export GEMINI_API_KEY="AIzaSy..."
     docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
 
-``compose-gemini.yaml`` の内容（同等の構成を自前で書く場合の参考）:
+``compose-gemini.yaml`` をもとに、API キーを環境変数で渡す形にした例（同等の構成を自前で書く場合の参考）:
 
 .. code-block:: yaml
 
@@ -426,13 +426,14 @@ Docker環境
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-gemini:15.10.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
+          - "FESS_CONFIG_RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY:-}"
 
 ポイント:
 
 - ``FESS_PLUGINS=fess-llm-gemini:15.10.0`` で ``run.sh`` がプラグイン JAR を自動取得して ``app/WEB-INF/plugin/`` に配置します
 - ``-Dfess.config.rag.chat.enabled=true`` で AI検索モードを有効化
-- ``-Dfess.config.rag.llm.gemini.api.key=...`` で API キー、 ``-Dfess.config.rag.llm.gemini.model=...`` でモデルを指定
+- ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` 環境変数で API キー、 ``-Dfess.config.rag.llm.gemini.model=...`` でモデルを指定
 - ``-Dfess.system.rag.llm.name=gemini`` は OpenSearch にまだ値が書き込まれていない初回起動時にデフォルトとして効きます。起動後は管理画面「システム > 全般」の RAG セクションでも変更できます
 
 Proxy 経由でインターネットに接続する場合は、 |Fess| の ``http.proxy.*`` 設定を ``FESS_JAVA_OPTS`` 経由で指定してください（後述の「HTTPプロキシ経由の利用」を参照）。
@@ -440,11 +441,12 @@ Proxy 経由でインターネットに接続する場合は、 |Fess| の ``htt
 systemd環境
 -----------
 
-``/etc/sysconfig/fess`` （または ``/etc/default/fess`` ）の ``FESS_JAVA_OPTS`` に追記します。
+``/etc/sysconfig/fess`` （または ``/etc/default/fess`` ）に追記します。API キーの行は、 ``export`` を付けずに書きます（SysV init スクリプトで起動する場合などの注意は :ref:`config-env-override` を参照してください）。
 
 ::
 
-    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.system.rag.llm.name=gemini"
+    FESS_CONFIG_RAG_LLM_GEMINI_API_KEY=AIzaSy...
 
 HTTPプロキシ経由の利用
 ======================

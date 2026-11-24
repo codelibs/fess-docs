@@ -207,7 +207,7 @@ Field Description
      - Display order
    * - ``permissions``
      - No
-     - Access permission roles (newline-separated for multiple values)
+     - Access permission roles (newline-separated for multiple values). When omitted or empty on create (POST), the value of ``role.search.default.display.permissions`` (default: ``{role}guest``) is set. On update (PUT), omitting it keeps the stored value, and an empty string is stored as empty. An entry with a malformed format, such as a space after ``(deny)`` or full-width or invisible characters, is a validation error (see :doc:`../../config/security-role`)
    * - ``virtual_hosts``
      - No
      - Virtual hosts (newline-separated for multiple values)

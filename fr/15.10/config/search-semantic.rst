@@ -345,9 +345,10 @@ Ceux-ci sont définis dans le même fichier ``system.properties`` que ci-dessus.
    **Informations système > Informations de configuration**, dans le panneau **Propriétés de
    l'application**. ``content_chunker.embedding.opensearch.password`` y est masqué sous la forme
    ``XXXXXXXX``, mais ``username`` s'affiche tel quel. De plus, les valeurs fournies via
-   ``-Dfess.system.<key>`` apparaissent **sans masquage** dans le panneau **Propriétés du
-   système** du même écran : renseignez donc les identifiants dans ``system.properties`` plutôt
-   que dans les options de démarrage.
+   ``-Dfess.system.<key>`` apparaissent dans la liste des processus (``ps``, etc.) :
+   renseignez donc les identifiants dans ``system.properties``, ou transmettez-les par la
+   variable d'environnement ``FESS_SYSTEM_<KEY>`` (voir :ref:`config-env-override`), plutôt que
+   dans les options de démarrage.
 
 Autres fournisseurs (ollama / openai / gemini / bedrock)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -109,6 +109,7 @@ Campos de Respuesta
    o coincida con ``content_chunker.embedding.*.api.key`` o ``rag.llm.*.api.key``.
    Una propiedad del sistema llamada ``fess.system.<clave>`` o ``fess.config.<clave>`` (la forma en que se pasa un ajuste como opción ``-D``)
    se enmascara con la misma regla que ``<clave>``.
+   El valor de una variable de entorno cuyo nombre empieza por ``FESS_CONFIG_`` o ``FESS_SYSTEM_`` (la forma en que se pasa un ajuste; consulte :ref:`config-env-override`) se enmascara siempre, sea cual sea la clave.
    En ``env_props`` y ``system_props``, el valor de una opción ``-Dclave=valor`` sensible dentro de una cadena más larga
    (por ejemplo ``FESS_JAVA_OPTS`` o ``JAVA_TOOL_OPTIONS``) también se enmascara, y el resto de la cadena sigue siendo legible.
 

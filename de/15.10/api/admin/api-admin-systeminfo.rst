@@ -111,6 +111,7 @@ Response-Felder
    oder zu ``content_chunker.embedding.*.api.key`` bzw. ``rag.llm.*.api.key`` passt.
    Eine Systemeigenschaft mit dem Namen ``fess.system.<Schlüssel>`` oder ``fess.config.<Schlüssel>`` (die Form, in der eine Einstellung als ``-D``-Option übergeben wird)
    wird nach derselben Regel maskiert wie ``<Schlüssel>``.
+   Der Wert einer Umgebungsvariablen, deren Name mit ``FESS_CONFIG_`` oder ``FESS_SYSTEM_`` beginnt (die Form, in der eine Einstellung übergeben wird; siehe :ref:`config-env-override`), wird unabhängig vom Schlüssel immer maskiert.
    In ``env_props`` und ``system_props`` wird außerdem der Wert einer solchen vertraulichen ``-DSchlüssel=Wert``-Option innerhalb einer längeren Zeichenfolge
    (z. B. ``FESS_JAVA_OPTS`` oder ``JAVA_TOOL_OPTIONS``) maskiert; der Rest der Zeichenfolge bleibt lesbar.
 

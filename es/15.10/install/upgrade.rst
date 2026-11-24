@@ -587,10 +587,11 @@ Si una solicitud procedente de una dirección que no figura en ``rate.limit.trus
 
 .. _upgrade-1510-cipher-key:
 
-Advertencia sobre ``app.cipher.key``
-------------------------------------
+Comprobación de ``app.cipher.key``
+----------------------------------
 
-Si ``app.cipher.key`` está vacío o conserva el valor incluido en ``fess_config.properties`` (``___change__me___``), 15.10 escribe una advertencia en ``fess.log`` al iniciarse. Los procesos de trabajos, como el rastreador, no la escriben.
+Si ``app.cipher.key`` está vacío, 15.10 aborta el inicio y escribe en ``fess.log`` un error que nombra la clave ``app.cipher.key``. Defina una clave de 16, 24 o 32 caracteres, o ejecute ``bin/fess-setup init`` antes del primer inicio.
+Si conserva el valor incluido en ``fess_config.properties`` (``___change__me___``), el inicio continúa y 15.10 escribe una advertencia en ``fess.log``. Los procesos de trabajos, como el rastreador, no la escriben.
 Esta clave cifra valores como las contraseñas guardadas en las configuraciones de rastreo y de almacén de datos, y el valor incluido es público. |Fess| no cambia la clave por sí mismo. Si la cambia, los valores cifrados con la clave anterior ya no se podrán descifrar, por lo que debe definirla antes de poner el sistema en producción.
 
 .. _upgrade-1510-carried-over-config:

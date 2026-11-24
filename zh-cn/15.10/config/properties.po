@@ -45,7 +45,7 @@ msgstr "加密用的密钥（生产环境请更改此值）。"
 msgid "Algorithm for digest calculation."
 msgstr "用于计算摘要的算法。"
 
-msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
+msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (built in), or the id of a PasswordEncoder component named {id}PasswordEncoder that a plugin supplies"
 msgstr "密码哈希（新机制，兼容 Spring Security v5.8）。支持：bcrypt（内置）；其他算法由插件以 <id>PasswordEncoder 组件提供"
 
 msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
@@ -2007,8 +2007,8 @@ msgstr "密码中要求包含数字。"
 msgid "Require special characters in password."
 msgstr "密码中要求包含特殊字符。"
 
-msgid "Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request."
-msgstr "本地用户的登录会话查询用户索引中最近一次密码更改时间的间隔（秒）。该用户的其他登录会话会在更改后的该时间内于任何节点结束；执行更改的会话保持有效。0 或更小的值表示每次请求都读取用户索引。"
+msgid "Seconds between two looks of a login session of a local user at its user document in the user index, for a password change, a change of the roles or the groups, or a deletion (the name of the key mentions only the password). The other login sessions of the user end within this time of the change, on any node; the session that made a password change stays. 0 or less reads the user index on every request."
+msgstr "本地用户的登录会话查看用户索引中自己的用户文档的间隔（秒），用于发现密码更改、角色或组的更改以及文档的删除（该键的名称中只有密码）。该用户的其他登录会话会在更改后的这段时间内在任意节点上结束；更改密码的会话会保留。0 或更小时，每次请求都会读取用户索引。"
 
 msgid "Whether RAG chat feature is enabled."
 msgstr "是否启用 RAG 聊天功能。"

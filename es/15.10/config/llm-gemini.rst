@@ -406,8 +406,7 @@ El mapeo de buckets para Gemini 3.x es el siguiente:
 Configuración vía opciones JVM
 ==============================
 
-Por razones de seguridad, se recomienda configurar las claves de API a través del
-entorno de ejecución (opciones JVM) en lugar de archivos versionados.
+Por razones de seguridad, se recomienda configurar la clave de API mediante la variable de entorno ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` en lugar de archivos versionados. Si se pasa como la opción JVM ``-Dfess.config.rag.llm.gemini.api.key``, el valor aparece en la lista de procesos (``ps`` y ``docker top``) y se escribe una advertencia al iniciar. Consulte :ref:`config-env-override` para saber cómo se nombra la variable.
 
 Entorno Docker
 --------------
@@ -420,7 +419,7 @@ incluye un overlay Gemini (``compose-gemini.yaml``). Pasos mínimos:
     export GEMINI_API_KEY="AIzaSy..."
     docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-gemini.yaml up -d
 
-Contenido de ``compose-gemini.yaml`` (referencia para una configuración equivalente):
+``compose-gemini.yaml`` reescrito para pasar la clave de API mediante una variable de entorno (referencia para una configuración equivalente):
 
 .. code-block:: yaml
 
@@ -428,13 +427,14 @@ Contenido de ``compose-gemini.yaml`` (referencia para una configuración equival
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-gemini:15.10.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=${GEMINI_API_KEY:-} -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.model=${GEMINI_MODEL:-gemini-3.1-flash-lite-preview} -Dfess.system.rag.llm.name=gemini"
+          - "FESS_CONFIG_RAG_LLM_GEMINI_API_KEY=${GEMINI_API_KEY:-}"
 
 Notas:
 
 - ``FESS_PLUGINS=fess-llm-gemini:15.10.0`` hace que el ``run.sh`` del contenedor descargue e instale automáticamente el plugin en ``app/WEB-INF/plugin/``
 - ``-Dfess.config.rag.chat.enabled=true`` habilita el modo IA
-- ``-Dfess.config.rag.llm.gemini.api.key=...`` define la clave API, ``-Dfess.config.rag.llm.gemini.model=...`` selecciona el modelo
+- La variable de entorno ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` define la clave API, ``-Dfess.config.rag.llm.gemini.model=...`` selecciona el modelo
 - ``-Dfess.system.rag.llm.name=gemini`` solo actúa como valor inicial por defecto antes de que se persista un valor en OpenSearch. Después del inicio el ajuste también puede modificarse desde Administración > Sistema > General (sección RAG)
 
 Si el acceso a Internet pasa por un proxy, especifique la configuración ``http.proxy.*`` de |Fess| a través de ``FESS_JAVA_OPTS`` (consulte la sección "Uso a través de proxy HTTP" más adelante).
@@ -442,11 +442,12 @@ Si el acceso a Internet pasa por un proxy, especifique la configuración ``http.
 Entorno systemd
 ---------------
 
-Agregue a ``FESS_JAVA_OPTS`` en ``/etc/sysconfig/fess`` (o ``/etc/default/fess``):
+Agregue a ``/etc/sysconfig/fess`` (o ``/etc/default/fess``). Escriba la línea de la clave de API sin ``export`` (consulte :ref:`config-env-override` para el script de init SysV y otras notas):
 
 ::
 
-    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.gemini.api.key=AIzaSy... -Dfess.system.rag.llm.name=gemini"
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.system.rag.llm.name=gemini"
+    FESS_CONFIG_RAG_LLM_GEMINI_API_KEY=AIzaSy...
 
 Uso a través de proxy HTTP
 ==========================

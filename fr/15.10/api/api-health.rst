@@ -21,6 +21,8 @@ Point de terminaison  ``/api/v2/health``
 Retourne un instantané de l'état du cluster du moteur de recherche (tag ``monitor``).
 Le statut HTTP est 200 si l'état du cluster est ``GREEN`` ou ``YELLOW``, et 503 si l'état est ``RED`` ou si le moteur de recherche est injoignable.
 
+``YELLOW`` est retourné lorsque l'état du cluster est ``YELLOW``, et aussi lorsque l'état du cluster est ``GREEN`` mais que l'un des index de |Fess|, ou le cluster entier, porte un blocage qui refuse les écritures. Par exemple, OpenSearch place les index en lecture seule lorsque l'utilisation du disque dépasse le seuil flood-stage. Les recherches fonctionnent encore dans cet état, mais l'indexation par le robot, la modification des paramètres et la mise à jour de l'index échouent. Les index des autres applications qui partagent le cluster ne sont pas pris en compte. Lorsque les blocages ne peuvent pas être lus, l'état reste ``GREEN``. Ce point de terminaison pouvant être appelé sans authentification, la réponse n'indique pas la raison de l'état ``YELLOW`` ; un administrateur doit vérifier la cause du côté d'OpenSearch.
+
 Ce point de terminaison respecte l'invariant de l'enveloppe : « ``status >= 1`` ⟺ statut HTTP ``>= 400`` ».
 
 - En cas d'état ``GREEN`` ou ``YELLOW`` : retourne l'enveloppe de succès (``status: 0``) avec ``engine``.
@@ -37,7 +39,7 @@ Les champs de ``engine`` sont les suivants.
 .. list-table:: Champs de engine
 
    * - ``status``
-     - État du cluster. L'une des valeurs ``GREEN`` / ``YELLOW`` / ``RED`` (en majuscules). ``UNAVAILABLE`` si le moteur de recherche est injoignable.
+     - État du cluster. L'une des valeurs ``GREEN`` / ``YELLOW`` / ``RED`` (en majuscules). Même lorsque le cluster est ``GREEN``, l'état est ``YELLOW`` tant qu'un index de |Fess| porte un blocage d'écriture (voir ci-dessus). ``UNAVAILABLE`` si le moteur de recherche est injoignable.
    * - ``ping_status``
      - Statut du ping (int). La valeur est ``1`` lorsque le cluster est ``RED`` ou que le moteur de recherche est injoignable, et ``0`` dans les autres cas (``GREEN`` / ``YELLOW``).
 
@@ -113,6 +115,6 @@ Pour le détail du modèle d'erreur, voir :doc:`api-overview`. Les statuts HTTP 
    * - 405 Method Not Allowed
      - La méthode HTTP n'est pas autorisée.
    * - 503 Service Unavailable
-     - Le cluster est ``RED`` ou le moteur de recherche est injoignable. L'enveloppe d'erreur (``error.code: service_unavailable``) contient l'instantané du moteur sous ``error.details.engine``.
+     - Le cluster est ``RED`` ou le moteur de recherche est injoignable. L'enveloppe d'erreur (``error.code: service_unavailable``) contient l'instantané du moteur sous ``error.details.engine``. Un en-tête ``Retry-After: 5`` indique au client le nombre de secondes à attendre avant de réessayer.
 
 Tableau : Liste des réponses

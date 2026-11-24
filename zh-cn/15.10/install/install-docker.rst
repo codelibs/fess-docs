@@ -428,6 +428,19 @@ Fess 本体（``fess01``）的容器本身不保存状态，也没有专用的�
    ``-Dfess.config.`` 之后的部分对应 ``fess_config.properties`` 中的配置项名称。
    如果只想覆盖部分配置项，使用这种方法更简单。
 
+.. warning::
+
+   密码、API 密钥等机密信息请通过环境变量传递，而不要作为 ``-Dfess.config.`` JVM 选项传递。``-D`` 选项的值会被 ``ps`` 和 ``docker top`` 显示，并且会在 |Fess| 启动的爬虫等进程的命令行中重复出现。``fess_config.properties`` 的配置项也可以通过环境变量指定：该变量由 ``FESS_CONFIG_`` 加上大写的键构成，其中字母和数字以外的每个字符都替换为 ``_``（例如，``http.proxy.password`` 对应 ``FESS_CONFIG_HTTP_PROXY_PASSWORD``）。
+
+   ::
+
+       services:
+         fess01:
+           environment:
+             - "FESS_CONFIG_HTTP_PROXY_PASSWORD=${PROXY_PASSWORD}"
+
+   详情请参见 :ref:`config-env-override`。
+
 连接到外部 OpenSearch
 ---------------------
 

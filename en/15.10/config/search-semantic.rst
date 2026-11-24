@@ -323,9 +323,9 @@ set in the same ``system.properties`` file as above.
    The contents of ``system.properties`` can be viewed on the admin **System Info > Config Info**
    screen, in the **App Properties** panel. ``content_chunker.embedding.opensearch.password`` is
    masked there as ``XXXXXXXX``, but ``username`` is shown as-is. Values supplied with
-   ``-Dfess.system.<key>``, on the other hand, are shown **unmasked** in the **System Properties**
-   panel of that same screen — so put credentials in ``system.properties`` rather than in startup
-   options.
+   ``-Dfess.system.<key>``, on the other hand, are shown in the process list (``ps`` and so on) —
+   so put credentials in ``system.properties``, or pass them by the environment variable
+   ``FESS_SYSTEM_<KEY>`` (see :ref:`config-env-override`), rather than in startup options.
 
 Other Providers (ollama / openai / gemini / bedrock)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

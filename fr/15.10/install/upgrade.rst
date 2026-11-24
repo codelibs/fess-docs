@@ -593,10 +593,11 @@ Si une requête provenant d'une adresse absente de ``rate.limit.trusted.proxies`
 
 .. _upgrade-1510-cipher-key:
 
-Avertissement sur ``app.cipher.key``
-------------------------------------
+Vérification de ``app.cipher.key``
+----------------------------------
 
-Si ``app.cipher.key`` est vide ou conserve la valeur fournie dans ``fess_config.properties`` (``___change__me___``), la 15.10 écrit un avertissement dans ``fess.log`` au démarrage. Les processus de tâches tels que le crawler n'en écrivent pas.
+Si ``app.cipher.key`` est vide, la 15.10 interrompt le démarrage et écrit dans ``fess.log`` une erreur qui nomme la clé ``app.cipher.key``. Définissez une clé de 16, 24 ou 32 caractères, ou exécutez ``bin/fess-setup init`` avant le premier démarrage.
+Si elle conserve la valeur fournie dans ``fess_config.properties`` (``___change__me___``), le démarrage se poursuit et la 15.10 écrit un avertissement dans ``fess.log``. Les processus de tâches tels que le crawler n'en écrivent pas.
 Cette clé chiffre des valeurs telles que les mots de passe enregistrés dans les configurations de crawl et de magasin de données, et la valeur fournie est publique. |Fess| ne modifie pas la clé automatiquement. Après modification, les valeurs chiffrées avec l'ancienne clé ne peuvent plus être déchiffrées ; définissez-la donc avant la mise en exploitation.
 
 .. _upgrade-1510-carried-over-config:

@@ -207,7 +207,7 @@ Descripción de Campos
      - Orden de visualización
    * - ``permissions``
      - No
-     - Roles con permiso de acceso (separados por saltos de línea si son varios)
+     - Roles con permiso de acceso (separados por saltos de línea si son varios). Cuando se omite o está vacío al crear (POST), se establece el valor de ``role.search.default.display.permissions`` (predeterminado: ``{role}guest``). Al actualizar (PUT), omitirlo conserva el valor almacenado, y una cadena vacía se almacena como vacía. Una entrada con un formato incorrecto, como un espacio después de ``(deny)`` o caracteres de ancho completo o invisibles, es un error de validación (consulte :doc:`../../config/security-role`)
    * - ``virtual_hosts``
      - No
      - Hosts virtuales (separados por saltos de línea si son varios)

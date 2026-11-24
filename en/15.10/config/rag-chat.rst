@@ -134,6 +134,10 @@ not mix them up.
 
 .. note::
 
+   Pass an API key (``rag.llm.*.api.key``) by an environment variable such as ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY``, not as a ``-D`` option (see :ref:`config-env-override`). With an option such as ``-Dfess.config.rag.llm.gemini.api.key=...`` in the table above, the value is shown in the process list and a warning is written at startup.
+
+.. note::
+
    ``rag.llm.type`` is the legacy property name from |Fess| 15.5 and earlier.
    In 15.6 and later it has been renamed to ``rag.llm.name``; values written
    under ``rag.llm.type`` are not read.

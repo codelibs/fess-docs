@@ -2363,7 +2363,7 @@ Web
     - Exigir caracteres especiales en la contraseña.
     - ``false``
   * - password.changed.check.interval
-    - Segundos entre dos consultas de una sesión de inicio de sesión de un usuario local a la hora del último cambio de contraseña, tal como está almacenada en el índice de usuarios. Las demás sesiones del usuario terminan dentro de este tiempo tras el cambio, en cualquier nodo; la sesión que hizo el cambio permanece. 0 o menos lee el índice de usuarios en cada solicitud.
+    - Segundos entre dos consultas que una sesión de inicio de sesión de un usuario local hace de su documento de usuario en el índice de usuarios, para detectar un cambio de contraseña, un cambio de los roles o los grupos, o una eliminación (el nombre de la clave solo menciona la contraseña). Las demás sesiones del usuario terminan dentro de este tiempo tras el cambio, en cualquier nodo; la sesión que cambió la contraseña se mantiene. Con 0 o menos, el índice de usuarios se lee en cada solicitud.
     - ``60``
   * - rag.chat.enabled
     - Indica si la funcionalidad de chat RAG está habilitada.

@@ -58,6 +58,10 @@ Grupo
 
 Especifique los grupos a los que pertenece el usuario.
 
+.. note::
+
+   Cuando se cambian la contraseña, los roles o los grupos de un usuario, las sesiones de inicio de sesión de ese usuario terminan en un máximo de unos 60 segundos (el valor predeterminado de ``password.changed.check.interval``), y el usuario debe iniciar sesión de nuevo. Cuando se cambia una contraseña, la sesión que realizó el cambio se mantiene. Cuando se cambian roles o grupos, la sesión que realizó el cambio también termina. Consulte :doc:`../install/security`.
+
 Eliminar configuración
 ----------------------
 

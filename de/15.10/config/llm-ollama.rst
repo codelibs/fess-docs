@@ -539,7 +539,7 @@ Hinweise:
 - Der Block ``deploy.resources.reservations.devices`` dient der GPU-Nutzung. Wenn Sie keine GPU verwenden (nur CPU), entfernen Sie diesen Block
 
 .. note::
-   Großgeschriebene Snake-Case-Umgebungsvariablen wie ``RAG_CHAT_ENABLED`` oder ``RAG_LLM_NAME`` werden von |Fess| nicht direkt erkannt. Konfigurationswerte müssen stets innerhalb von ``FESS_JAVA_OPTS`` als ``-Dfess.config.<key>`` (für ``fess_config.properties``) oder ``-Dfess.system.<key>`` (für ``system.properties``) übergeben werden.
+   Großgeschriebene Snake-Case-Umgebungsvariablen wie ``RAG_CHAT_ENABLED`` oder ``RAG_LLM_NAME`` werden von |Fess| nicht direkt erkannt. Übergeben Sie die Werte innerhalb von ``FESS_JAVA_OPTS`` als ``-Dfess.config.<key>`` (für ``fess_config.properties``) oder ``-Dfess.system.<key>`` (für ``system.properties``) oder über Umgebungsvariablen mit den Namen ``FESS_CONFIG_<KEY>`` (für Schlüssel aus ``fess_config.properties``) bzw. ``FESS_SYSTEM_<KEY>`` (für Schlüssel aus ``system.properties``); beispielsweise wird ``rag.chat.enabled`` zu ``FESS_CONFIG_RAG_CHAT_ENABLED``. Übergeben Sie ein Geheimnis wie ein Passwort oder einen API-Schlüssel per Umgebungsvariable (siehe :ref:`config-env-override`).
 
 Remote-Ollama-Server
 --------------------

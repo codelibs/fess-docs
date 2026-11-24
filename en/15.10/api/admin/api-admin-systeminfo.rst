@@ -111,6 +111,7 @@ Response Fields
    or matches ``content_chunker.embedding.*.api.key`` or ``rag.llm.*.api.key``.
    A system property named ``fess.system.<key>`` or ``fess.config.<key>`` (the form used to pass a setting as a ``-D`` option)
    is masked under the same rule as ``<key>``.
+   The value of an environment variable whose name starts with ``FESS_CONFIG_`` or ``FESS_SYSTEM_`` (the form used to pass a setting; see :ref:`config-env-override`) is always masked, whatever the key.
    In ``env_props`` and ``system_props``, the value of such a sensitive ``-Dkey=value`` option inside a longer string
    (for example ``FESS_JAVA_OPTS`` or ``JAVA_TOOL_OPTIONS``) is masked as well, and the rest of the string stays readable.
 

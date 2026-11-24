@@ -60,10 +60,14 @@ La limite en octets appartient à l'algorithme. BCrypt ne lit que les 72 premier
 
 Lorsque le mot de passe d'un utilisateur local est modifié, que ce soit par l'utilisateur lui-même ou par un administrateur sur l'écran de gestion des utilisateurs ou via l'API REST d'administration, les autres sessions de connexion de cet utilisateur prennent fin à leur prochaine vérification (voir ci-dessous). Chaque session de connexion lit l'heure du dernier changement de mot de passe dans l'index des utilisateurs au plus une fois par ``password.changed.check.interval`` de ``fess_config.properties`` (par défaut : ``60`` secondes ; avec ``0`` ou moins, la vérification a lieu à chaque requête), de sorte que les autres sessions prennent fin dans ce délai, sur n'importe quel nœud. Les utilisateurs authentifiés par LDAP ou SSO ne sont pas concernés, car leurs mots de passe sont gérés en dehors de |Fess|.
 
+**Sessions après une modification des rôles ou des groupes :**
+
+Lorsque les rôles ou les groupes d'un utilisateur local sont modifiés après l'ouverture d'une session, la session de connexion de cet utilisateur prend fin. Cela couvre la modification de l'utilisateur (sur l'écran de gestion des utilisateurs ou via l'API REST d'administration) ainsi que la suppression d'un rôle ou d'un groupe que l'utilisateur possédait. L'intervalle de vérification est le même ``password.changed.check.interval`` (par défaut : ``60`` secondes) que pour un changement de mot de passe. Contrairement à un changement de mot de passe, la session qui a effectué la modification n'est pas une exception : par exemple, lorsqu'un administrateur modifie ses propres rôles, la session de l'administrateur prend fin elle aussi et il doit se reconnecter. Une session terminée est enregistrée dans le journal d'audit sous ``SESSION_END`` avec ``reason`` ``permissions_changed``. Les utilisateurs authentifiés par LDAP ou SSO ne sont pas concernés, car leurs rôles et groupes sont obtenus auprès du fournisseur d'identité à chaque connexion.
+
 Modifier la clé de chiffrement
 ------------------------------
 
-``app.cipher.key`` dans ``fess_config.properties`` est la clé qui chiffre les mots de passe enregistrés dans les configurations de crawl et de magasin de données. La valeur fournie (``___change__me___``) est publique. Si la clé est vide ou conserve la valeur fournie, |Fess| écrit un avertissement dans ``fess.log`` au démarrage (voir :ref:`upgrade-1510-cipher-key`). |Fess| ne modifie pas la clé automatiquement.
+``app.cipher.key`` dans ``fess_config.properties`` est la clé qui chiffre les mots de passe enregistrés dans les configurations de crawl et de magasin de données. La valeur fournie (``___change__me___``) est publique. Si la clé conserve la valeur fournie, |Fess| écrit un avertissement dans ``fess.log`` au démarrage. Si la clé est vide, |Fess| interrompt le démarrage (voir :ref:`upgrade-1510-cipher-key`). |Fess| ne modifie pas la clé automatiquement.
 
 Définissez-la avant le premier démarrage, avec le mot de passe initial de l'utilisateur ``admin`` ::
 
@@ -262,15 +266,22 @@ Chaque enregistrement d'audit est une ligne de champs ``key:value`` séparés pa
    * - ``UPDATE_PERMISSION``
      - ``user``, ``permissions``
      - les permissions d'un utilisateur LDAP sont mises à jour.
+   * - ``REGISTER_PASSKEY``
+     - ``user``, ``target``, ``credentialId``
+     - une clé d'accès est enregistrée.
+   * - ``DELETE_PASSKEY``
+     - ``user``, ``target``, ``credentialId``
+     - une clé d'accès est supprimée : par l'utilisateur, ou par un administrateur sur l'écran de gestion des utilisateurs. Lorsqu'un administrateur définit un nouveau mot de passe pour un utilisateur, toutes les clés d'accès de cet utilisateur sont supprimées, et un enregistrement est écrit pour chaque clé d'accès.
    * - ``SCRIPT_EXECUTION``
      - ``scriptType``, ``source``, ``user``, ``result``, ``script``
      - un script est exécuté. Voir :doc:`../config/scripting-overview`.
 
 - ``LOGIN_FAILURE`` : ``user`` est le nom d'utilisateur saisi et ``class`` le type des identifiants. Lorsqu'un authentificateur SSO refuse une connexion par une exception, aucun identifiant n'a été établi : l'enregistrement ne contient alors ni ``user`` ni ``class``, et rien de l'exception n'est écrit.
-- ``ACCESS`` : ``method`` est la méthode HTTP. ``id`` est la valeur du paramètre de requête ``id``, écrit uniquement si la requête en comporte un (il n'est pas lu dans une requête de téléversement). Aucun autre paramètre de requête n'est écrit, car les formulaires d'administration contiennent des mots de passe et des clés.
+- ``ACCESS`` : ``user`` est l'utilisateur connecté lorsque la requête porte une session. Lorsque l'API REST d'administration est appelée avec un simple jeton d'accès et sans session, c'est le nom du jeton d'accès (le jeton lui-même n'est jamais écrit ; ``-`` lorsque le nom ne peut pas être obtenu). ``user`` de ``ACCESS_DENIED`` suit la même règle. ``method`` est la méthode HTTP. ``id`` est la valeur du paramètre de requête ``id``, écrit uniquement si la requête en comporte un (il n'est pas lu dans une requête de téléversement). Aucun autre paramètre de requête n'est écrit, car les formulaires d'administration contiennent des mots de passe et des clés.
 - ``ACCESS_DENIED`` : pour une requête refusée vers l'API REST d'administration, seul le chemin de la requête est écrit. Ni le jeton d'accès ni le paramètre qui le transportait ne sont enregistrés.
+- ``REGISTER_PASSKEY`` et ``DELETE_PASSKEY`` : ``user`` est l'utilisateur qui a effectué l'opération et ``target`` le nom de l'utilisateur propriétaire de la clé d'accès. ``credentialId`` correspond aux 8 premiers caractères de l'identifiant d'identification, suivis de ``...`` s'il est plus long. La clé de la clé d'accès n'est jamais écrite.
 - ``UPDATE_PASSWORD`` : ``user`` est l'utilisateur qui a modifié le mot de passe et ``target`` le nom de l'utilisateur dont le mot de passe a été modifié. Le mot de passe et son empreinte ne sont jamais écrits, et une modification refusée n'écrit rien.
-- ``SESSION_END`` : ``user`` est l'utilisateur dont la session a pris fin et ``reason`` en est la raison. ``password_changed`` : le mot de passe de l'utilisateur a été modifié après l'ouverture de la session. ``user_not_found`` : le document de l'utilisateur local n'existe plus, par exemple parce que l'utilisateur a été supprimé ou renommé. ``idp_session_ended`` : le fournisseur d'identité (IdP) a mis fin à sa session (le ``SessionNotOnOrAfter`` de SAML, voir :doc:`../config/sso-saml`).
+- ``SESSION_END`` : ``user`` est l'utilisateur dont la session a pris fin et ``reason`` en est la raison. ``password_changed`` : le mot de passe de l'utilisateur a été modifié après l'ouverture de la session. ``permissions_changed`` : les rôles ou les groupes de l'utilisateur local ont été modifiés après l'ouverture de la session (par la modification de l'utilisateur, ou par la suppression d'un rôle ou d'un groupe que l'utilisateur possédait). ``user_not_found`` : le document de l'utilisateur local n'existe plus, par exemple parce que l'utilisateur a été supprimé ou renommé. ``idp_session_ended`` : le fournisseur d'identité (IdP) a mis fin à sa session (le ``SessionNotOnOrAfter`` de SAML, voir :doc:`../config/sso-saml`).
 
 Mises à jour de sécurité régulières
 ------------------------------------

@@ -428,6 +428,19 @@ Add ``FESS_JAVA_OPTS`` to the environment variables of the ``fess01`` service in
    The part following ``-Dfess.config.`` corresponds to the configuration item name in ``fess_config.properties``.
    This method is simpler when you only want to override a few items.
 
+.. warning::
+
+   Pass a secret such as a password or an API key by an environment variable, not as a ``-Dfess.config.`` JVM option. The value of a ``-D`` option is shown by ``ps`` and ``docker top`` and is repeated on the command line of the crawler and other processes that |Fess| starts. An item of ``fess_config.properties`` can also be given by the environment variable made of ``FESS_CONFIG_`` followed by the key in upper case with every character other than a letter or a digit replaced by ``_`` (for example, ``http.proxy.password`` is ``FESS_CONFIG_HTTP_PROXY_PASSWORD``).
+
+   ::
+
+       services:
+         fess01:
+           environment:
+             - "FESS_CONFIG_HTTP_PROXY_PASSWORD=${PROXY_PASSWORD}"
+
+   See :ref:`config-env-override` for details.
+
 Connect to External OpenSearch
 ------------------------------
 

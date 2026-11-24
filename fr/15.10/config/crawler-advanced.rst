@@ -24,6 +24,42 @@ La configuration détaillée du robot d'indexation s'effectue dans les fichiers 
 - **Configuration de la longueur du contenu** : ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Configuration des composants** : ``app/WEB-INF/classes/crawler/container.xml``
 
+.. _config-env-override:
+
+Remplacement des paramètres (options JVM et variables d'environnement)
+----------------------------------------------------------------------
+
+Un paramètre de ``fess_config.properties`` peut être remplacé au démarrage par une option JVM ou une variable d'environnement, sans modifier le fichier. Un paramètre de ``system.properties`` peut être fourni de la même manière.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - Cible
+     - Option JVM
+     - Variable d'environnement
+   * - Une clé de ``fess_config.properties``
+     - ``-Dfess.config.<key>=value``
+     - ``FESS_CONFIG_<KEY>``
+   * - Une clé de ``system.properties``
+     - ``-Dfess.system.<key>=value``
+     - ``FESS_SYSTEM_<KEY>``
+
+Le nom de la variable est le préfixe (``FESS_CONFIG_`` ou ``FESS_SYSTEM_``) suivi de la clé en majuscules, où chaque caractère autre qu'une lettre ou un chiffre est remplacé par ``_``. Par exemple, ``http.proxy.password`` devient ``FESS_CONFIG_HTTP_PROXY_PASSWORD``, ``rag.llm.gemini.api.key`` devient ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` et ``rag.llm.name`` devient ``FESS_SYSTEM_RAG_LLM_NAME``.
+
+- Une clé de ``fess_config.properties`` est lue dans l'option ``-D``, puis dans la variable d'environnement, puis dans ``fess_config.properties``, puis dans la valeur par défaut fournie avec |Fess|.
+- Pour une clé de ``system.properties``, une valeur présente dans ``system.properties`` (y compris celle définie sous Administration > Système > Général) est utilisée lorsqu'il y en a une. L'option ``-D`` et la variable d'environnement ne s'appliquent que lorsque ``system.properties`` n'a pas de valeur, et l'option ``-D`` est prioritaire.
+- Une variable d'environnement vide est considérée comme non définie. Une option ``-D`` à valeur vide ne masque pas une variable d'environnement définie.
+- Les variables sont héritées par les processus que |Fess| démarre, tels que le crawler.
+- Un paramètre pour lequel l'option ``-D`` n'est pas prise en compte (par exemple ``oic.client.secret``, que les plugins SSO lisent directement dans ``system.properties``) ne prend pas non plus en compte la variable d'environnement.
+
+Transmettez un secret tel qu'un mot de passe ou une clé API par une variable d'environnement. Une option ``-D`` fait partie de la ligne de commande que montrent ``ps`` et ``docker top``, et elle est répétée sur la ligne de commande des processus crawler, suggest, thumbnail et chunk que |Fess| démarre. Lorsqu'un secret est transmis par une option ``-Dfess.config.*`` ou ``-Dfess.system.*``, |Fess| écrit un avertissement dans ``fess.log`` au démarrage. L'avertissement nomme la clé et la variable, jamais la valeur. Il concerne les clés dont les valeurs sont masquées comme secrets sous Administration > Système > Informations système (par exemple ``search_engine.password``, ``app.cipher.key`` et ``rag.llm.*.api.key``), et non une option à valeur vide. Un identifiant client SSO (``*.client.id``) est envoyé dans l'URL de la redirection de connexion et n'est pas un secret ; il ne donne donc pas lieu à un avertissement. Les valeurs des variables ``FESS_CONFIG_*`` et ``FESS_SYSTEM_*`` sont masquées sous Administration > Système > Informations système.
+
+L'endroit où définir la variable dépend de la manière dont |Fess| est démarré :
+
+- Docker : transmettez-la avec ``environment:`` dans ``compose.yaml`` ou avec ``docker run -e``. ``docker inspect`` montre la valeur à toute personne pouvant utiliser le socket Docker.
+- Packages RPM / DEB (systemd) : ``/etc/sysconfig/fess`` (``/etc/default/fess`` pour DEB) est lu comme un ``EnvironmentFile`` de systemd ; ajoutez donc une ligne ``FESS_CONFIG_<KEY>=value`` sans ``export``. Le script d'init SysV ne transmet à |Fess| qu'une liste fixe de variables ; écrivez donc ``export FESS_CONFIG_<KEY>=value`` à cet endroit. Rendez le fichier lisible uniquement par ``root``.
+
 Script par défaut
 --------------------
 

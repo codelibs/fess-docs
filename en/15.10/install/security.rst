@@ -60,10 +60,14 @@ The byte limit belongs to the algorithm. BCrypt reads only the first 72 bytes of
 
 When the password of a local user is changed, whether by the user or by an administrator on the user management screen or through the Admin API, the other login sessions of that user end at their next check (see below). Each login session looks up the time of the last password change in the user index at most once per ``password.changed.check.interval`` in ``fess_config.properties`` (default: ``60`` seconds; ``0`` or less checks on every request), so the other sessions end within this many seconds, on any node. Users authenticated by LDAP or SSO are not affected, because their passwords are managed outside |Fess|.
 
+**Sessions after a change of roles or groups:**
+
+When the roles or the groups of a local user are changed after a session was opened, the login session of that user ends. This covers editing the user (on the user management screen or through the Admin API) and also deleting a role or a group that the user had. The check interval is the same ``password.changed.check.interval`` (default: ``60`` seconds) as for a password change. Unlike a password change, the session that made the change is not an exception: for example, when an administrator changes their own roles, the administrator's session ends as well and they have to log in again. An ended session is recorded in the audit log as ``SESSION_END`` with ``reason`` ``permissions_changed``. Users authenticated by LDAP or SSO are not affected, because their roles and groups are obtained from the identity provider at each login.
+
 Change the Cipher Key
 ---------------------
 
-``app.cipher.key`` in ``fess_config.properties`` is the key that encrypts the passwords stored in crawl configurations and data store configurations. The shipped value (``___change__me___``) is public. If the key is blank or still the shipped value, |Fess| writes a warning to ``fess.log`` at startup (see :ref:`upgrade-1510-cipher-key`). |Fess| does not change the key by itself.
+``app.cipher.key`` in ``fess_config.properties`` is the key that encrypts the passwords stored in crawl configurations and data store configurations. The shipped value (``___change__me___``) is public. If the key is still the shipped value, |Fess| writes a warning to ``fess.log`` at startup. If the key is blank, |Fess| aborts the startup (see :ref:`upgrade-1510-cipher-key`). |Fess| does not change the key by itself.
 
 Set it before the first start, together with the initial password of the ``admin`` user::
 
@@ -262,15 +266,22 @@ Each audit record is one line of tab-separated ``key:value`` fields (LTSV). A re
    * - ``UPDATE_PERMISSION``
      - ``user``, ``permissions``
      - The permissions of an LDAP user are updated.
+   * - ``REGISTER_PASSKEY``
+     - ``user``, ``target``, ``credentialId``
+     - A passkey is registered.
+   * - ``DELETE_PASSKEY``
+     - ``user``, ``target``, ``credentialId``
+     - A passkey is deleted: by the user, or by an administrator on the user admin screen. When an administrator sets a new password for a user, all passkeys of that user are deleted, and one record is written for each passkey.
    * - ``SCRIPT_EXECUTION``
      - ``scriptType``, ``source``, ``user``, ``result``, ``script``
      - A script runs. See :doc:`../config/scripting-overview`.
 
 - ``LOGIN_FAILURE``: ``user`` is the user name that was typed and ``class`` is the type of the credential. When an SSO authenticator rejects a login with an exception, no credential has been resolved, so the record has neither ``user`` nor ``class``, and nothing from the exception is written.
-- ``ACCESS``: ``method`` is the HTTP method. ``id`` is the value of the ``id`` request parameter and is written only when the request has one (it is not read from an upload request). No other request parameter is written, because the admin forms carry passwords and keys.
+- ``ACCESS``: ``user`` is the logged-in user when the request carries a session. When the admin REST API is called with only an access token and no session, it is the name of the access token (the token itself is never written; ``-`` when the name cannot be obtained). ``user`` of ``ACCESS_DENIED`` follows the same rule. ``method`` is the HTTP method. ``id`` is the value of the ``id`` request parameter and is written only when the request has one (it is not read from an upload request). No other request parameter is written, because the admin forms carry passwords and keys.
 - ``ACCESS_DENIED``: for a rejected admin REST API request, only the request path is written. Neither the access token nor the parameter that carried it is recorded.
+- ``REGISTER_PASSKEY`` and ``DELETE_PASSKEY``: ``user`` is the user who performed the operation and ``target`` is the name of the user who owns the passkey. ``credentialId`` is the first 8 characters of the credential ID, followed by ``...`` when it is longer. The key of the passkey is never written.
 - ``UPDATE_PASSWORD``: ``user`` is the user who changed the password and ``target`` is the name of the user whose password was changed. The password and its hash are never written, and a rejected change writes nothing.
-- ``SESSION_END``: ``user`` is the user whose session ended and ``reason`` is why it ended. ``password_changed``: the password of the user was changed after the session was opened. ``user_not_found``: the document of the local user no longer exists, for example because the user was deleted or renamed. ``idp_session_ended``: the identity provider ended its session (the ``SessionNotOnOrAfter`` of SAML, see :doc:`../config/sso-saml`).
+- ``SESSION_END``: ``user`` is the user whose session ended and ``reason`` is why it ended. ``password_changed``: the password of the user was changed after the session was opened. ``permissions_changed``: the roles or the groups of the local user were changed after the session was opened (by editing the user, or by deleting a role or a group that the user had). ``user_not_found``: the document of the local user no longer exists, for example because the user was deleted or renamed. ``idp_session_ended``: the identity provider ended its session (the ``SessionNotOnOrAfter`` of SAML, see :doc:`../config/sso-saml`).
 
 Regular Security Updates
 ------------------------

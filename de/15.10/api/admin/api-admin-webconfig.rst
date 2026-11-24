@@ -272,7 +272,7 @@ Feldbeschreibungen
      - Anzeigereihenfolge (0 oder größer)
    * - ``permissions``
      - Nein
-     - Zugriffsberechtigte Rollen (bei mehreren durch Zeilenumbruch getrennt)
+     - Zugriffsberechtigte Rollen (bei mehreren durch Zeilenumbruch getrennt). Wenn der Wert beim Erstellen (POST) fehlt oder leer ist, wird der Wert von ``role.search.default.display.permissions`` (Standard: ``{role}guest``) gesetzt. Beim Aktualisieren (PUT) bleibt der gespeicherte Wert erhalten, wenn das Feld fehlt, und eine leere Zeichenfolge wird als leer gespeichert. Ein Eintrag mit fehlerhaftem Format, etwa ein Leerzeichen nach ``(deny)`` oder Zeichen in Vollbreite bzw. unsichtbare Zeichen, führt zu einem Validierungsfehler (siehe :doc:`../../config/security-role`)
    * - ``virtual_hosts``
      - Nein
      - Virtuelle Hosts (bei mehreren durch Zeilenumbruch getrennt)

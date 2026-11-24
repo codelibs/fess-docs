@@ -58,6 +58,10 @@ Groupe
 
 Spécifie les groupes auxquels l'utilisateur appartient.
 
+.. note::
+
+   Lorsque le mot de passe, les rôles ou les groupes d'un utilisateur sont modifiés, les sessions de connexion de cet utilisateur prennent fin au bout de 60 secondes au plus (valeur par défaut de ``password.changed.check.interval``), et l'utilisateur doit se reconnecter. Lorsqu'un mot de passe est modifié, la session qui a effectué la modification est conservée. Lorsque des rôles ou des groupes sont modifiés, la session qui a effectué la modification prend fin elle aussi. Voir :doc:`../install/security`.
+
 Suppression de configuration
 ----------------------------
 

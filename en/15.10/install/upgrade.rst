@@ -576,10 +576,11 @@ If a request from an address that is not in ``rate.limit.trusted.proxies`` carri
 
 .. _upgrade-1510-cipher-key:
 
-Warning for ``app.cipher.key``
-------------------------------
+Check of ``app.cipher.key``
+---------------------------
 
-If ``app.cipher.key`` is blank or still the value shipped in ``fess_config.properties`` (``___change__me___``), 15.10 writes a warning to ``fess.log`` at startup. Job processes such as the crawler do not write it.
+If ``app.cipher.key`` is blank, 15.10 aborts the startup and writes an error that names the key ``app.cipher.key`` to ``fess.log``. Set a key of 16, 24 or 32 characters, or run ``bin/fess-setup init`` before the first start.
+If it is still the value shipped in ``fess_config.properties`` (``___change__me___``), the startup continues and 15.10 writes a warning to ``fess.log``. Job processes such as the crawler do not write it.
 The key encrypts values such as the passwords stored in crawl configurations and data store configurations, and the shipped value is public. |Fess| does not change the key by itself. Changing it makes values encrypted with the previous key impossible to decrypt, so set it before you start operating.
 
 .. _upgrade-1510-carried-over-config:
