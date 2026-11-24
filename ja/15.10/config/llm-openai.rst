@@ -452,7 +452,7 @@ o1/o3/o4系やgpt-5系の推論モデルを使用する場合、|Fess| は自動
 JVMオプションでの設定
 =====================
 
-セキュリティ上の理由から、APIキーをファイルではなく環境（JVMオプション）経由で設定することを推奨します。
+セキュリティ上の理由から、APIキーはファイルではなく環境変数 ``FESS_CONFIG_RAG_LLM_OPENAI_API_KEY`` で設定することを推奨します。 ``-Dfess.config.rag.llm.openai.api.key`` の JVM オプションで渡すと、値がプロセス一覧（ ``ps`` や ``docker top`` ）に表示され、起動時に警告が出力されます。環境変数の名前の付け方は :ref:`config-env-override` を参照してください。
 
 Docker環境
 ----------
@@ -464,7 +464,7 @@ Docker環境
     export OPENAI_API_KEY="sk-..."
     docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
 
-``compose-openai.yaml`` の内容（同等の構成を自前で書く場合の参考）:
+``compose-openai.yaml`` をもとに、API キーを環境変数で渡す形にした例（同等の構成を自前で書く場合の参考）:
 
 .. code-block:: yaml
 
@@ -472,13 +472,14 @@ Docker環境
       fess01:
         environment:
           - "FESS_PLUGINS=fess-llm-openai:15.10.0"
-          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
+          - "FESS_CONFIG_RAG_LLM_OPENAI_API_KEY=${OPENAI_API_KEY:-}"
 
 ポイント:
 
 - ``FESS_PLUGINS=fess-llm-openai:15.10.0`` で ``run.sh`` がプラグイン JAR を自動取得して ``app/WEB-INF/plugin/`` に配置します
 - ``-Dfess.config.rag.chat.enabled=true`` で AI検索モードを有効化
-- ``-Dfess.config.rag.llm.openai.api.key=...`` で API キー、 ``-Dfess.config.rag.llm.openai.model=...`` でモデルを指定
+- ``FESS_CONFIG_RAG_LLM_OPENAI_API_KEY`` 環境変数で API キー、 ``-Dfess.config.rag.llm.openai.model=...`` でモデルを指定
 - ``-Dfess.system.rag.llm.name=openai`` は OpenSearch にまだ値が書き込まれていない初回起動時にデフォルトとして効きます。起動後は管理画面「システム > 全般」の RAG セクションでも変更できます
 
 Proxy 経由でインターネットに接続する場合は、 |Fess| の ``http.proxy.*`` 設定を ``FESS_JAVA_OPTS`` 経由で指定してください（後述の「HTTPプロキシ経由の利用」を参照）。
@@ -486,11 +487,12 @@ Proxy 経由でインターネットに接続する場合は、 |Fess| の ``htt
 systemd環境
 -----------
 
-``/etc/sysconfig/fess`` （または ``/etc/default/fess`` ）の ``FESS_JAVA_OPTS`` に追記します。
+``/etc/sysconfig/fess`` （または ``/etc/default/fess`` ）に追記します。API キーの行は、 ``export`` を付けずに書きます（SysV init スクリプトで起動する場合などの注意は :ref:`config-env-override` を参照してください）。
 
 ::
 
-    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=sk-... -Dfess.system.rag.llm.name=openai"
+    FESS_JAVA_OPTS="-Dfess.config.rag.chat.enabled=true -Dfess.system.rag.llm.name=openai"
+    FESS_CONFIG_RAG_LLM_OPENAI_API_KEY=sk-...
 
 HTTPプロキシ経由の利用
 ======================

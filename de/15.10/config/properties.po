@@ -45,7 +45,7 @@ msgstr "Geheimer Schlüssel für die Verschlüsselung (ändern Sie diesen Wert f
 msgid "Algorithm for digest calculation."
 msgstr "Algorithmus für die Digest-Berechnung."
 
-msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
+msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (built in), or the id of a PasswordEncoder component named {id}PasswordEncoder that a plugin supplies"
 msgstr "Passwort-Hashing (neuer Mechanismus, kompatibel mit Spring Security v5.8) Unterstützt: bcrypt (eingebaut); weitere Algorithmen liefert ein Plugin als Komponente <id>PasswordEncoder"
 
 msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
@@ -2007,8 +2007,8 @@ msgstr "Ziffern im Passwort verlangen."
 msgid "Require special characters in password."
 msgstr "Sonderzeichen im Passwort verlangen."
 
-msgid "Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request."
-msgstr "Sekunden zwischen zwei Abfragen einer Anmeldesitzung eines lokalen Benutzers nach dem Zeitpunkt der letzten Passwortänderung, wie er im Benutzerindex gespeichert ist. Die übrigen Anmeldesitzungen des Benutzers enden innerhalb dieser Zeit nach der Änderung, auf jedem Knoten; die Sitzung, die die Änderung vorgenommen hat, bleibt bestehen. 0 oder weniger liest den Benutzerindex bei jeder Anfrage."
+msgid "Seconds between two looks of a login session of a local user at its user document in the user index, for a password change, a change of the roles or the groups, or a deletion (the name of the key mentions only the password). The other login sessions of the user end within this time of the change, on any node; the session that made a password change stays. 0 or less reads the user index on every request."
+msgstr "Sekunden zwischen zwei Abfragen einer Anmeldesitzung eines lokalen Benutzers nach seinem Benutzerdokument im Benutzerindex, um eine Passwortänderung, eine Änderung der Rollen oder Gruppen oder eine Löschung zu erkennen (der Name des Schlüssels erwähnt nur das Passwort). Die übrigen Anmeldesitzungen des Benutzers enden innerhalb dieser Zeit nach der Änderung, auf jedem Knoten; die Sitzung, die eine Passwortänderung vorgenommen hat, bleibt bestehen. 0 oder weniger liest den Benutzerindex bei jeder Anfrage."
 
 msgid "Whether RAG chat feature is enabled."
 msgstr "Gibt an, ob die RAG-Chat-Funktion aktiviert ist."

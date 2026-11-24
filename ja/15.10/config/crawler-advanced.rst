@@ -24,6 +24,42 @@
 - **コンテンツ長設定**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **コンポーネント設定**: ``app/WEB-INF/classes/crawler/container.xml``
 
+.. _config-env-override:
+
+設定の上書き（JVM オプションと環境変数）
+----------------------------------------
+
+``fess_config.properties`` の設定は、ファイルを編集せずに、起動時の JVM オプションまたは環境変数で上書きできます。 ``system.properties`` の設定も、同じ方法で値を渡せます。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - 対象
+     - JVM オプション
+     - 環境変数
+   * - ``fess_config.properties`` の項目
+     - ``-Dfess.config.<キー>=値``
+     - ``FESS_CONFIG_<キー>``
+   * - ``system.properties`` の項目
+     - ``-Dfess.system.<キー>=値``
+     - ``FESS_SYSTEM_<キー>``
+
+環境変数の名前は、プレフィックス（ ``FESS_CONFIG_`` または ``FESS_SYSTEM_`` ）の後に、キーを大文字にし、英数字以外の文字をすべて ``_`` に置き換えたものを続けて作ります。たとえば、 ``http.proxy.password`` は ``FESS_CONFIG_HTTP_PROXY_PASSWORD`` 、 ``rag.llm.gemini.api.key`` は ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` 、 ``rag.llm.name`` は ``FESS_SYSTEM_RAG_LLM_NAME`` です。
+
+- ``fess_config.properties`` の項目は、 ``-D`` オプション、環境変数、 ``fess_config.properties`` 、 |Fess| に同梱の既定値の順に参照されます。
+- ``system.properties`` の項目は、 ``system.properties`` （管理画面の「システム > 全般」で設定した値を含みます）に値があれば、その値が使われます。 ``-D`` オプションと環境変数は、 ``system.properties`` に値がない場合の値として使われ、 ``-D`` オプションが優先されます。
+- 空の環境変数は、設定されていないものとして扱われます。値が空の ``-D`` オプションは、設定されている環境変数を隠しません。
+- 環境変数は、クローラーなど |Fess| が起動する子プロセスにも引き継がれます。
+- ``-D`` オプションが効かない設定（たとえば、SSO プラグインが ``system.properties`` を直接読む ``oic.client.secret`` ）には、環境変数も効きません。
+
+パスワードや API キーなどの秘密は、環境変数で渡してください。 ``-D`` オプションは、 ``ps`` や ``docker top`` が表示するコマンドラインの一部になり、 |Fess| が起動するクローラー、サジェスト、サムネイル、チャンクの各プロセスのコマンドラインにも繰り返されます。秘密を ``-Dfess.config.*`` または ``-Dfess.system.*`` オプションで渡すと、 |Fess| は起動時に ``fess.log`` へ警告を出力します。警告にはキーと環境変数の名前が含まれ、値は含まれません。警告の対象は、管理画面の「システム情報」で値がマスクされる秘密のキー（ ``search_engine.password`` 、 ``app.cipher.key`` 、 ``rag.llm.*.api.key`` など）で、値が空のオプションは対象外です。SSO のクライアント ID（ ``*.client.id`` ）は、ログインのリダイレクト先の URL に含まれて送られる値で秘密ではないため、警告の対象ではありません。 ``FESS_CONFIG_*`` と ``FESS_SYSTEM_*`` の環境変数の値は、管理画面の「システム情報」ではマスクされます。
+
+環境変数の設定場所は、起動方法によって異なります。
+
+- Docker: ``compose.yaml`` の ``environment:`` または ``docker run -e`` で渡します。 ``docker inspect`` は、Docker ソケットを使えるユーザーに値を表示します。
+- RPM / DEB パッケージ（systemd）: ``/etc/sysconfig/fess`` （DEB は ``/etc/default/fess`` ）は systemd の ``EnvironmentFile`` として読み込まれるため、 ``FESS_CONFIG_<キー>=値`` の行を ``export`` を付けずに追加します。SysV init スクリプトは、決まった変数しか |Fess| に渡さないため、 ``export FESS_CONFIG_<キー>=値`` と書いてください。ファイルは ``root`` だけが読めるようにします。
+
 デフォルトスクリプト
 --------------------
 

@@ -539,7 +539,7 @@ Notes:
 - The ``deploy.resources.reservations.devices`` block enables GPU usage. Remove this block if you do not use a GPU (CPU-only execution)
 
 .. note::
-   Uppercase snake-case environment variables such as ``RAG_CHAT_ENABLED`` and ``RAG_LLM_NAME`` are not recognized directly by |Fess|. All values must be passed inside ``FESS_JAVA_OPTS`` as ``-Dfess.config.<key>`` (for ``fess_config.properties`` keys) or ``-Dfess.system.<key>`` (for ``system.properties`` keys).
+   Uppercase snake-case environment variables such as ``RAG_CHAT_ENABLED`` and ``RAG_LLM_NAME`` are not recognized directly by |Fess|. Pass the values inside ``FESS_JAVA_OPTS`` as ``-Dfess.config.<key>`` (for ``fess_config.properties`` keys) or ``-Dfess.system.<key>`` (for ``system.properties`` keys), or by environment variables named ``FESS_CONFIG_<KEY>`` (for ``fess_config.properties`` keys) or ``FESS_SYSTEM_<KEY>`` (for ``system.properties`` keys); for example, ``rag.chat.enabled`` is ``FESS_CONFIG_RAG_CHAT_ENABLED``. Pass a secret such as a password or an API key by an environment variable (see :ref:`config-env-override`).
 
 Remote Ollama Server
 --------------------

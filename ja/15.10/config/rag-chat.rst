@@ -135,6 +135,10 @@ LLMプロバイダーの詳細設定については、以下を参照してく�
 
 .. note::
 
+   API キー（ ``rag.llm.*.api.key`` ）は、 ``-D`` オプションではなく、環境変数（ ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` など）で渡してください（ :ref:`config-env-override` を参照）。上の表の ``-Dfess.config.rag.llm.gemini.api.key=...`` のようなオプションで渡すと、値がプロセス一覧に表示され、起動時に警告が出力されます。
+
+.. note::
+
    ``rag.llm.type`` というプロパティ名は |Fess| 15.5 までの旧名です。15.6 以降は ``rag.llm.name`` に変更されており、
    ``rag.llm.type`` の設定は読み取られません。
 

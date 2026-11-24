@@ -304,8 +304,9 @@ opensearch 프로바이더 연결 설정
    ``system.properties`` 의 내용은 관리 화면의 「시스템 정보」→「설정 정보」 화면, 「앱 속성」
    패널에서 확인할 수 있습니다. ``content_chunker.embedding.opensearch.password`` 는 이 화면에서
    ``XXXXXXXX`` 로 마스킹되지만 ``username`` 은 그대로 표시됩니다. 또한 ``-Dfess.system.<키>`` 로
-   지정한 값은 같은 화면의 「시스템 속성」 패널에 **마스킹되지 않은 채** 표시되므로, 인증 정보는
-   시작 옵션이 아니라 ``system.properties`` 에 기술하세요.
+   지정한 값은 프로세스 목록(``ps`` 등)에 표시되므로, 인증 정보는 시작 옵션이 아니라
+   ``system.properties`` 에 기술하거나 환경 변수 ``FESS_SYSTEM_<KEY>`` 로 전달하세요
+   (:ref:`config-env-override` 참조).
 
 기타 프로바이더(ollama / openai / gemini / bedrock)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

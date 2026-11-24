@@ -339,9 +339,10 @@ Diese werden in derselben Datei ``system.properties`` wie oben gesetzt.
    Konfigurationsinformationen**, im Bereich **App-Eigenschaften**, einsehbar.
    ``content_chunker.embedding.opensearch.password`` wird auf diesem Bildschirm zu ``XXXXXXXX``
    maskiert, ``username`` dagegen unverändert angezeigt. Werte, die Sie über
-   ``-Dfess.system.<key>`` angeben, erscheinen auf demselben Bildschirm im Bereich
-   **Systemeigenschaften** **unmaskiert** — tragen Sie Zugangsdaten daher in
-   ``system.properties`` ein und nicht in die Startoptionen.
+   ``-Dfess.system.<key>`` angeben, sind dagegen in der Prozessliste (``ps`` usw.) sichtbar —
+   tragen Sie Zugangsdaten daher in ``system.properties`` ein oder übergeben Sie sie über die
+   Umgebungsvariable ``FESS_SYSTEM_<KEY>`` (siehe :ref:`config-env-override`) und nicht in
+   den Startoptionen.
 
 Andere Anbieter (ollama / openai / gemini / bedrock)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

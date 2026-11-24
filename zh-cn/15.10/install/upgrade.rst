@@ -638,10 +638,11 @@ Docker 版::
 
 .. _upgrade-1510-cipher-key:
 
-``app.cipher.key`` 警告
+``app.cipher.key`` 检查
 -----------------------
 
-如果 ``app.cipher.key`` 为空，或仍是 ``fess_config.properties`` 中随附的值（``___change__me___``），15.10 会在启动时向 ``fess.log`` 输出警告。爬虫等作业进程不会输出。
+如果 ``app.cipher.key`` 为空，15.10 会中止启动，并向 ``fess.log`` 输出指明键 ``app.cipher.key`` 的错误。请设置 16、24 或 32 个字符的密钥，或在首次启动之前运行 ``bin/fess-setup init``。
+如果它仍是 ``fess_config.properties`` 中随附的值（``___change__me___``），启动会继续，15.10 会向 ``fess.log`` 输出警告。爬虫等作业进程不会输出。
 该密钥用于加密爬取设置和数据存储设置中保存的密码等，而随附的值是公开的。|Fess| 不会自动更改密钥。更改后，用旧密钥加密的值将无法解密，因此请在开始运维之前设置。
 
 .. _upgrade-1510-carried-over-config:

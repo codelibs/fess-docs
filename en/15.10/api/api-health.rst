@@ -21,6 +21,8 @@ Endpoint            ``/api/v2/health``
 Returns a snapshot of the search engine cluster status (``monitor`` tag).
 The HTTP status is 200 when the cluster status is ``GREEN`` or ``YELLOW``, and 503 when it is ``RED`` or when the search engine cannot be reached.
 
+``YELLOW`` is returned when the cluster status is ``YELLOW``, and also when the cluster status is ``GREEN`` but one of the indices of |Fess|, or the whole cluster, carries a block that refuses writes. For example, OpenSearch makes indices read-only when the disk usage passes the flood-stage watermark. Searches still work in this state, but crawling, changing settings and updating the index fail. Indices of other applications that share the cluster are not counted. When the blocks cannot be read, the status stays ``GREEN``. Because this endpoint can be called without authentication, the response does not say why the status is ``YELLOW``; an administrator should check the reason on the OpenSearch side.
+
 This endpoint respects the envelope invariant "``status >= 1`` ⇔ HTTP status ``>= 400``".
 
 - When ``GREEN`` or ``YELLOW``: returns a success envelope (``status: 0``) with ``engine``.
@@ -37,7 +39,7 @@ The fields of ``engine`` are as follows:
 .. list-table:: engine Fields
 
    * - ``status``
-     - Cluster status. One of ``GREEN``, ``YELLOW``, or ``RED`` (upper case). ``UNAVAILABLE`` when the search engine cannot be reached.
+     - Cluster status. One of ``GREEN``, ``YELLOW``, or ``RED`` (upper case). Even when the cluster is ``GREEN``, it is ``YELLOW`` while an index of |Fess| carries a write block (see above). ``UNAVAILABLE`` when the search engine cannot be reached.
    * - ``ping_status``
      - Ping status (int). It is ``1`` when the cluster status is ``RED`` or the search engine cannot be reached, and ``0`` otherwise (``GREEN`` or ``YELLOW``).
 
@@ -113,6 +115,6 @@ For details on the error model, see :doc:`api-overview`. The HTTP statuses retur
    * - 405 Method Not Allowed
      - The HTTP method is not allowed.
    * - 503 Service Unavailable
-     - Cluster is ``RED`` or the search engine cannot be reached. An error envelope (``error.code: service_unavailable``) with the engine snapshot under ``error.details.engine``.
+     - Cluster is ``RED`` or the search engine cannot be reached. An error envelope (``error.code: service_unavailable``) with the engine snapshot under ``error.details.engine``. A ``Retry-After: 5`` header tells the client how many seconds to wait before retrying.
 
 Table: Response List

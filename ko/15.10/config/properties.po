@@ -45,7 +45,7 @@ msgstr "암호화용 비밀 키(운영 환경에서는 이 값을 변경하십�
 msgid "Algorithm for digest calculation."
 msgstr "다이제스트 계산용 알고리즘."
 
-msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)"
+msgid "Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (built in), or the id of a PasswordEncoder component named {id}PasswordEncoder that a plugin supplies"
 msgstr "비밀번호 해싱(새로운 방식, Spring Security v5.8 호환) 지원: bcrypt(내장). 다른 알고리즘은 플러그인이 <id>PasswordEncoder 컴포넌트로 제공"
 
 msgid "BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31."
@@ -2007,8 +2007,8 @@ msgstr "비밀번호에 숫자를 요구합니다."
 msgid "Require special characters in password."
 msgstr "비밀번호에 특수 문자를 요구합니다."
 
-msgid "Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request."
-msgstr "로컬 사용자의 로그인 세션이 마지막 비밀번호 변경 시각을 사용자 인덱스에서 확인하는 간격(초)입니다. 해당 사용자의 다른 로그인 세션은 변경 후 이 시간 이내에 어느 노드에서든 종료되며, 변경을 수행한 세션은 유지됩니다. 0 이하이면 요청마다 사용자 인덱스를 읽습니다."
+msgid "Seconds between two looks of a login session of a local user at its user document in the user index, for a password change, a change of the roles or the groups, or a deletion (the name of the key mentions only the password). The other login sessions of the user end within this time of the change, on any node; the session that made a password change stays. 0 or less reads the user index on every request."
+msgstr "로컬 사용자의 로그인 세션이 사용자 인덱스에 있는 자신의 사용자 문서를 확인하는 간격(초)입니다. 확인 대상은 비밀번호 변경, 역할 또는 그룹 변경, 문서 삭제입니다(키 이름에는 비밀번호만 들어 있습니다). 해당 사용자의 다른 로그인 세션은 변경 후 이 시간 안에 모든 노드에서 종료됩니다. 비밀번호를 변경한 세션은 유지됩니다. 0 이하이면 요청마다 사용자 인덱스를 읽습니다."
 
 msgid "Whether RAG chat feature is enabled."
 msgstr "RAG 채팅 기능 활성화 여부."

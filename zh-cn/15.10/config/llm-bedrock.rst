@@ -183,7 +183,7 @@ API密钥
 设置 ``rag.llm.bedrock.api.key`` 后，它会以 ``Authorization: Bearer <key>`` 的形式发送。
 短期 Bedrock API 密钥会过期，且仅在其创建所在的区域有效；长期密钥则与 IAM 用户绑定。
 当该值设置在 ``fess_config.properties`` 中（对于 ``content_chunker.embedding.bedrock.api.key`` 则是设置在 ``system.properties`` 中）时，会在管理界面 > 系统 > 系统信息中被掩码显示。
-环境变量和JVM系统属性（包括 ``-Dfess.config.*`` 和 ``-Dfess.system.*`` 选项）会在该页面中不加掩码地列出，因此请勿以这种方式传递密钥。
+如果将其作为 JVM 选项 ``-Dfess.config.rag.llm.bedrock.api.key`` 传递，该值会显示在进程列表（``ps`` 和 ``docker top``）中，并且启动时会写入警告。请改用环境变量 ``FESS_CONFIG_RAG_LLM_BEDROCK_API_KEY`` 传递（参见 :ref:`config-env-override`）。
 
 AWS凭据（SigV4）
 ----------------

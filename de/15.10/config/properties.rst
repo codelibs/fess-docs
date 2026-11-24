@@ -2363,7 +2363,7 @@ Web
     - Sonderzeichen im Passwort verlangen.
     - ``false``
   * - password.changed.check.interval
-    - Sekunden zwischen zwei Abfragen einer Anmeldesitzung eines lokalen Benutzers nach dem Zeitpunkt der letzten Passwortänderung, wie er im Benutzerindex gespeichert ist. Die übrigen Anmeldesitzungen des Benutzers enden innerhalb dieser Zeit nach der Änderung, auf jedem Knoten; die Sitzung, die die Änderung vorgenommen hat, bleibt bestehen. 0 oder weniger liest den Benutzerindex bei jeder Anfrage.
+    - Sekunden zwischen zwei Abfragen einer Anmeldesitzung eines lokalen Benutzers nach seinem Benutzerdokument im Benutzerindex, um eine Passwortänderung, eine Änderung der Rollen oder Gruppen oder eine Löschung zu erkennen (der Name des Schlüssels erwähnt nur das Passwort). Die übrigen Anmeldesitzungen des Benutzers enden innerhalb dieser Zeit nach der Änderung, auf jedem Knoten; die Sitzung, die eine Passwortänderung vorgenommen hat, bleibt bestehen. 0 oder weniger liest den Benutzerindex bei jeder Anfrage.
     - ``60``
   * - rag.chat.enabled
     - Gibt an, ob die RAG-Chat-Funktion aktiviert ist.

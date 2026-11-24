@@ -681,10 +681,11 @@ Trägt eine Anfrage von einer Adresse, die nicht in ``rate.limit.trusted.proxies
 
 .. _upgrade-1510-cipher-key:
 
-Warnung zu ``app.cipher.key``
------------------------------
+Prüfung von ``app.cipher.key``
+------------------------------
 
-Ist ``app.cipher.key`` leer oder noch der in ``fess_config.properties`` mitgelieferte Wert (``___change__me___``), schreibt 15.10 beim Start eine Warnung in ``fess.log``. Job-Prozesse wie der Crawler schreiben sie nicht.
+Ist ``app.cipher.key`` leer, bricht 15.10 den Start ab und schreibt einen Fehler, der den Schlüssel ``app.cipher.key`` nennt, in ``fess.log``. Legen Sie einen Schlüssel mit 16, 24 oder 32 Zeichen fest oder führen Sie vor dem ersten Start ``bin/fess-setup init`` aus.
+Ist er noch der in ``fess_config.properties`` mitgelieferte Wert (``___change__me___``), wird der Start fortgesetzt, und 15.10 schreibt eine Warnung in ``fess.log``. Job-Prozesse wie der Crawler schreiben sie nicht.
 Der Schlüssel verschlüsselt Werte wie die in Crawl-Konfigurationen und Datenspeicher-Konfigurationen gespeicherten Passwörter, und der mitgelieferte Wert ist öffentlich bekannt. |Fess| ändert den Schlüssel nicht selbstständig. Nach einer Änderung lassen sich mit dem früheren Schlüssel verschlüsselte Werte nicht mehr entschlüsseln. Legen Sie ihn daher fest, bevor Sie den Betrieb aufnehmen.
 
 .. _upgrade-1510-carried-over-config:

@@ -305,8 +305,9 @@ opensearch プロバイダの接続設定
    ``system.properties`` の内容は 管理画面 > システム情報 > 設定情報 の「アプリのプロパティ」で
    閲覧できます。``content_chunker.embedding.opensearch.password`` はこの画面では ``XXXXXXXX``
    にマスクされますが、``username`` はそのまま表示されます。また、``-Dfess.system.<キー名>`` で
-   指定した値は同じ画面の「システムのプロパティ」に **マスクされずに** 表示されるため、認証情報は
-   起動オプションではなく ``system.properties`` に記述してください。
+   指定した値は ``ps`` などのプロセス一覧に表示されるため、認証情報は起動オプションではなく
+   ``system.properties`` に記述するか、環境変数 ``FESS_SYSTEM_<キー名>`` で渡してください
+   （ :ref:`config-env-override` を参照）。
 
 その他のプロバイダ（ollama / openai / gemini / bedrock）
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

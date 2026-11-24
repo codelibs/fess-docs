@@ -92,6 +92,7 @@ Permission
 Spécifie la permission pour cette configuration.
 Pour la méthode de spécification de permission, par exemple, pour afficher les résultats de recherche aux utilisateurs appartenant au groupe developer, spécifiez {group}developer.
 La spécification par utilisateur est {user}nom_utilisateur, par rôle {role}nom_rôle, par groupe {group}nom_groupe.
+Faites précéder une entrée de ``(deny)``, par exemple ``(deny){role}nom_rôle``, pour refuser l'accès. En 15.10, les entrées suivantes sont rejetées avec une erreur lors de l'enregistrement : un espace (y compris une espace pleine chasse) juste après ``(allow)`` / ``(deny)``, ou en début de ligne avant ``{user}``, ``{group}`` ou ``{role}`` ; ``(deny)``, ``{role}`` et similaires saisis en caractères pleine chasse ; et un caractère invisible (par exemple une espace de largeur nulle ou une marque d'ordre des octets) au début d'une entrée ou juste après ``(allow)`` / ``(deny)``. Si une valeur enregistrée par une version antérieure a l'une de ces formes, saisissez-la de nouveau. Voir :doc:`../config/security-role` pour plus de détails.
 
 Hôtes virtuels
 ::::::::::::::

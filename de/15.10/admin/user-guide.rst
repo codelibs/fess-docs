@@ -58,6 +58,10 @@ Gruppe
 
 Geben Sie die Gruppe an, zu der der Benutzer gehört.
 
+.. note::
+
+   Wenn das Passwort, die Rollen oder die Gruppen eines Benutzers geändert werden, enden die Anmeldesitzungen dieses Benutzers spätestens nach etwa 60 Sekunden (Standardwert von ``password.changed.check.interval``), und der Benutzer muss sich erneut anmelden. Wenn ein Passwort geändert wird, bleibt die Sitzung bestehen, die die Änderung vorgenommen hat. Wenn Rollen oder Gruppen geändert werden, endet auch die Sitzung, die die Änderung vorgenommen hat. Siehe :doc:`../install/security`.
+
 Konfiguration löschen
 ---------------------
 

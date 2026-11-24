@@ -62,7 +62,7 @@ Core
     - Algorithm for digest calculation.
     - ``sha256``
   * - app.password.algorithm
-    - Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (only, as of now)
+    - Password hashing (new mechanism, Spring Security v5.8 compatible) Supported: bcrypt (built in), or the id of a PasswordEncoder component named {id}PasswordEncoder that a plugin supplies
     - ``bcrypt``
   * - app.password.bcrypt.cost
     - BCrypt cost (log rounds). 10 matches Spring Security v5.8 default. Range: 4-31.
@@ -2363,7 +2363,7 @@ Web
     - Require special characters in password.
     - ``false``
   * - password.changed.check.interval
-    - Seconds between two looks of a login session of a local user at the time the password was last changed, as stored in the user index. The other login sessions of the user end within this time of the change, on any node; the session that made the change stays. 0 or less reads the user index on every request.
+    - Seconds between two looks of a login session of a local user at its user document in the user index, for a password change, a change of the roles or the groups, or a deletion (the name of the key mentions only the password). The other login sessions of the user end within this time of the change, on any node; the session that made a password change stays. 0 or less reads the user index on every request.
     - ``60``
   * - rag.chat.enabled
     - Whether RAG chat feature is enabled.

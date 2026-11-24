@@ -58,10 +58,14 @@ El límite en bytes pertenece al algoritmo. BCrypt solo lee los primeros 72 byte
 
 Cuando se cambia la contraseña de un usuario local, ya sea por el propio usuario o por un administrador en la pantalla de administración de usuarios o mediante la API REST de administración, las demás sesiones de inicio de sesión de ese usuario terminan en su siguiente comprobación (véase más abajo). Cada sesión de inicio de sesión consulta en el índice de usuarios la hora del último cambio de contraseña como máximo una vez por ``password.changed.check.interval`` de ``fess_config.properties`` (valor predeterminado: ``60`` segundos; con ``0`` o menos se comprueba en cada solicitud), de modo que las demás sesiones terminan dentro de ese número de segundos, en cualquier nodo. Los usuarios autenticados mediante LDAP o SSO no se ven afectados, porque sus contraseñas se gestionan fuera de |Fess|.
 
+**Sesiones tras un cambio de roles o grupos:**
+
+Cuando se cambian los roles o los grupos de un usuario local después de abrirse una sesión, la sesión de inicio de sesión de ese usuario termina. Esto abarca la edición del usuario (en la pantalla de administración de usuarios o mediante la API REST de administración) y también la eliminación de un rol o de un grupo que el usuario tenía. El intervalo de comprobación es el mismo ``password.changed.check.interval`` (valor predeterminado: ``60`` segundos) que en un cambio de contraseña. A diferencia de un cambio de contraseña, la sesión que realizó el cambio no es una excepción: por ejemplo, cuando un administrador cambia sus propios roles, la sesión del administrador también termina y debe iniciar sesión de nuevo. Una sesión finalizada se registra en el registro de auditoría como ``SESSION_END`` con ``reason`` ``permissions_changed``. Los usuarios autenticados mediante LDAP o SSO no se ven afectados, porque sus roles y grupos se obtienen del proveedor de identidad en cada inicio de sesión.
+
 Cambiar la clave de cifrado
 ---------------------------
 
-``app.cipher.key`` en ``fess_config.properties`` es la clave que cifra las contraseñas guardadas en las configuraciones de rastreo y de almacén de datos. El valor incluido (``___change__me___``) es público. Si la clave está vacía o conserva el valor incluido, |Fess| escribe una advertencia en ``fess.log`` al iniciarse (consulte :ref:`upgrade-1510-cipher-key`). |Fess| no cambia la clave por sí mismo.
+``app.cipher.key`` en ``fess_config.properties`` es la clave que cifra las contraseñas guardadas en las configuraciones de rastreo y de almacén de datos. El valor incluido (``___change__me___``) es público. Si la clave conserva el valor incluido, |Fess| escribe una advertencia en ``fess.log`` al iniciarse. Si la clave está vacía, |Fess| aborta el inicio (consulte :ref:`upgrade-1510-cipher-key`). |Fess| no cambia la clave por sí mismo.
 
 Defínala antes del primer inicio, junto con la contraseña inicial del usuario ``admin``::
 
@@ -260,15 +264,22 @@ Cada registro de auditoría es una línea de campos ``key:value`` separados por 
    * - ``UPDATE_PERMISSION``
      - ``user``, ``permissions``
      - se actualizan los permisos de un usuario LDAP.
+   * - ``REGISTER_PASSKEY``
+     - ``user``, ``target``, ``credentialId``
+     - se registra una llave de acceso.
+   * - ``DELETE_PASSKEY``
+     - ``user``, ``target``, ``credentialId``
+     - se elimina una llave de acceso: por el usuario, o por un administrador en la pantalla de administración de usuarios. Cuando un administrador establece una nueva contraseña para un usuario, se eliminan todas las llaves de acceso de ese usuario y se escribe un registro por cada llave.
    * - ``SCRIPT_EXECUTION``
      - ``scriptType``, ``source``, ``user``, ``result``, ``script``
      - se ejecuta un script. Consulte :doc:`../config/scripting-overview`.
 
 - ``LOGIN_FAILURE``: ``user`` es el nombre de usuario escrito y ``class`` es el tipo de credencial. Cuando un autenticador SSO rechaza un inicio de sesión con una excepción, no se ha resuelto ninguna credencial, por lo que el registro no contiene ``user`` ni ``class`` y no se escribe nada de la excepción.
-- ``ACCESS``: ``method`` es el método HTTP. ``id`` es el valor del parámetro de solicitud ``id`` y solo se escribe cuando la solicitud lo incluye (no se lee en una solicitud de carga de archivos). No se escribe ningún otro parámetro de la solicitud, porque los formularios de administración contienen contraseñas y claves.
+- ``ACCESS``: ``user`` es el usuario que ha iniciado sesión cuando la solicitud lleva una sesión. Cuando se llama a la API REST de administración solo con un token de acceso y sin sesión, es el nombre del token de acceso (el token en sí nunca se escribe; ``-`` cuando no se puede obtener el nombre). ``user`` de ``ACCESS_DENIED`` sigue la misma regla. ``method`` es el método HTTP. ``id`` es el valor del parámetro de solicitud ``id`` y solo se escribe cuando la solicitud lo incluye (no se lee en una solicitud de carga de archivos). No se escribe ningún otro parámetro de la solicitud, porque los formularios de administración contienen contraseñas y claves.
 - ``ACCESS_DENIED``: en una solicitud rechazada a la API REST de administración, solo se escribe la ruta de la solicitud. No se registra ni el token de acceso ni el parámetro que lo transportaba.
+- ``REGISTER_PASSKEY`` y ``DELETE_PASSKEY``: ``user`` es el usuario que realizó la operación y ``target`` es el nombre del usuario propietario de la llave de acceso. ``credentialId`` son los primeros 8 caracteres del ID de la credencial, seguidos de ``...`` cuando es más largo. La clave de la llave de acceso nunca se escribe.
 - ``UPDATE_PASSWORD``: ``user`` es el usuario que cambió la contraseña y ``target`` es el nombre del usuario cuya contraseña se cambió. La contraseña y su hash nunca se escriben, y un cambio rechazado no escribe nada.
-- ``SESSION_END``: ``user`` es el usuario cuya sesión terminó y ``reason`` es el motivo. ``password_changed``: la contraseña del usuario se cambió después de abrirse la sesión. ``user_not_found``: el documento del usuario local ya no existe, por ejemplo porque el usuario se eliminó o se renombró. ``idp_session_ended``: el proveedor de identidad (IdP) finalizó su sesión (el ``SessionNotOnOrAfter`` de SAML, consulte :doc:`../config/sso-saml`).
+- ``SESSION_END``: ``user`` es el usuario cuya sesión terminó y ``reason`` es el motivo. ``password_changed``: la contraseña del usuario se cambió después de abrirse la sesión. ``permissions_changed``: los roles o los grupos del usuario local se cambiaron después de abrirse la sesión (al editar el usuario, o al eliminar un rol o un grupo que el usuario tenía). ``user_not_found``: el documento del usuario local ya no existe, por ejemplo porque el usuario se eliminó o se renombró. ``idp_session_ended``: el proveedor de identidad (IdP) finalizó su sesión (el ``SessionNotOnOrAfter`` de SAML, consulte :doc:`../config/sso-saml`).
 
 Actualizaciones de Seguridad Periódicas
 ----------------------------------------

@@ -539,7 +539,7 @@ Puntos clave:
 - El bloque ``deploy.resources.reservations.devices`` es la configuración para usar GPU. Si no se usa GPU (ejecutando solo con CPU), elimine este bloque
 
 .. note::
-   Las variables de entorno en formato snake_case en mayúsculas como ``RAG_CHAT_ENABLED`` o ``RAG_LLM_NAME`` no son reconocidas directamente por |Fess|. Los valores de configuración deben pasarse siempre dentro de ``FESS_JAVA_OPTS`` como ``-Dfess.config.<key>`` (familia ``fess_config.properties``) o ``-Dfess.system.<key>`` (familia ``system.properties``).
+   Las variables de entorno en formato snake_case en mayúsculas como ``RAG_CHAT_ENABLED`` o ``RAG_LLM_NAME`` no son reconocidas directamente por |Fess|. Pase los valores dentro de ``FESS_JAVA_OPTS`` como ``-Dfess.config.<key>`` (familia ``fess_config.properties``) o ``-Dfess.system.<key>`` (familia ``system.properties``), o mediante variables de entorno llamadas ``FESS_CONFIG_<KEY>`` (familia ``fess_config.properties``) o ``FESS_SYSTEM_<KEY>`` (familia ``system.properties``); por ejemplo, ``rag.chat.enabled`` es ``FESS_CONFIG_RAG_CHAT_ENABLED``. Pase un secreto, como una contraseña o una clave de API, mediante una variable de entorno (consulte :ref:`config-env-override`).
 
 Servidor Ollama remoto
 ----------------------

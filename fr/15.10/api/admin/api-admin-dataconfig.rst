@@ -207,7 +207,7 @@ Description des champs
      - Ordre d'affichage
    * - ``permissions``
      - Non
-     - Rôles autorisés (séparés par des sauts de ligne si plusieurs)
+     - Rôles autorisés (séparés par des sauts de ligne si plusieurs). Si ce champ est omis ou vide à la création (POST), la valeur de ``role.search.default.display.permissions`` (par défaut : ``{role}guest``) est utilisée. À la mise à jour (PUT), l'omettre conserve la valeur enregistrée, et une chaîne vide est enregistrée comme vide. Une entrée au format incorrect, par exemple avec un espace après ``(deny)`` ou des caractères pleine chasse ou invisibles, provoque une erreur de validation (voir :doc:`../../config/security-role`)
    * - ``virtual_hosts``
      - Non
      - Hôtes virtuels (séparés par des sauts de ligne si plusieurs)

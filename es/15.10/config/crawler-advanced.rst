@@ -24,6 +24,42 @@ La configuración avanzada del rastreador se realiza en los siguientes archivos:
 - **Configuración de longitud de contenido**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Configuración de componentes**: ``app/WEB-INF/classes/crawler/container.xml``
 
+.. _config-env-override:
+
+Sobrescritura de la configuración (opciones JVM y variables de entorno)
+-----------------------------------------------------------------------
+
+Un ajuste de ``fess_config.properties`` puede sobrescribirse al iniciar con una opción JVM o una variable de entorno, sin editar el archivo. Un ajuste de ``system.properties`` puede indicarse de la misma forma.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - Destino
+     - Opción JVM
+     - Variable de entorno
+   * - Una clave de ``fess_config.properties``
+     - ``-Dfess.config.<key>=valor``
+     - ``FESS_CONFIG_<KEY>``
+   * - Una clave de ``system.properties``
+     - ``-Dfess.system.<key>=valor``
+     - ``FESS_SYSTEM_<KEY>``
+
+El nombre de la variable es el prefijo (``FESS_CONFIG_`` o ``FESS_SYSTEM_``) seguido de la clave en mayúsculas, con cada carácter que no sea una letra o un dígito sustituido por ``_``. Por ejemplo, ``http.proxy.password`` es ``FESS_CONFIG_HTTP_PROXY_PASSWORD``, ``rag.llm.gemini.api.key`` es ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` y ``rag.llm.name`` es ``FESS_SYSTEM_RAG_LLM_NAME``.
+
+- Una clave de ``fess_config.properties`` se lee de la opción ``-D``, después de la variable de entorno, después de ``fess_config.properties`` y por último del valor predeterminado incluido con |Fess|.
+- Para una clave de ``system.properties``, se usa el valor de ``system.properties`` (incluido uno establecido en Administración > Sistema > General) cuando existe. La opción ``-D`` y la variable de entorno se aplican solo cuando ``system.properties`` no tiene valor, y la opción ``-D`` tiene prioridad.
+- Una variable de entorno vacía cuenta como no definida. Una opción ``-D`` con valor vacío no oculta una variable de entorno que esté definida.
+- Las variables son heredadas por los procesos que |Fess| inicia, como el rastreador.
+- Un ajuste para el que no se respeta la opción ``-D`` (por ejemplo ``oic.client.secret``, que los plugins SSO leen directamente de ``system.properties``) tampoco respeta la variable de entorno.
+
+Pase un secreto, como una contraseña o una clave de API, mediante una variable de entorno. Una opción ``-D`` forma parte de la línea de comandos que muestran ``ps`` y ``docker top``, y se repite en la línea de comandos de los procesos del rastreador, de sugerencias, de miniaturas y de fragmentos que |Fess| inicia. Cuando se pasa un secreto como opción ``-Dfess.config.*`` o ``-Dfess.system.*``, |Fess| escribe una advertencia en ``fess.log`` al iniciar. La advertencia nombra la clave y la variable, nunca el valor. Abarca las claves cuyos valores se enmascaran como secretos en Administración > Sistema > Información del sistema (por ejemplo ``search_engine.password``, ``app.cipher.key`` y ``rag.llm.*.api.key``), y no una opción con valor vacío. Un ID de cliente SSO (``*.client.id``) se envía en la URL de la redirección de inicio de sesión y no es un secreto, por lo que no genera advertencia. Los valores de las variables ``FESS_CONFIG_*`` y ``FESS_SYSTEM_*`` se enmascaran en Administración > Sistema > Información del sistema.
+
+El lugar donde definir la variable depende de cómo se inicie |Fess|:
+
+- Docker: páselo con ``environment:`` en ``compose.yaml`` o con ``docker run -e``. ``docker inspect`` muestra el valor a cualquiera que pueda usar el socket de Docker.
+- Paquetes RPM / DEB (systemd): ``/etc/sysconfig/fess`` (``/etc/default/fess`` para DEB) se lee como un ``EnvironmentFile`` de systemd, por lo que debe añadir una línea ``FESS_CONFIG_<KEY>=valor`` sin ``export``. El script de init SysV pasa a |Fess| solo una lista fija de variables, así que escriba allí ``export FESS_CONFIG_<KEY>=valor``. Haga que el archivo sea legible solo por ``root``.
+
 Script Predeterminado
 ---------------------
 

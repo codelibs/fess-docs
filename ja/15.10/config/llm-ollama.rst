@@ -539,7 +539,7 @@ Dockerでの構成
 - ``deploy.resources.reservations.devices`` のブロックは GPU を利用するための設定です。GPU を使用しない（CPU のみで実行する）場合は、このブロックを削除してください
 
 .. note::
-   ``RAG_CHAT_ENABLED`` や ``RAG_LLM_NAME`` などの大文字スネークケース環境変数は |Fess| に直接認識されません。設定値は必ず ``FESS_JAVA_OPTS`` 内で ``-Dfess.config.<key>`` （ ``fess_config.properties`` 系）または ``-Dfess.system.<key>`` （ ``system.properties`` 系）として渡してください。
+   ``RAG_CHAT_ENABLED`` や ``RAG_LLM_NAME`` などの大文字スネークケース環境変数は |Fess| に直接認識されません。設定値は ``FESS_JAVA_OPTS`` 内で ``-Dfess.config.<key>`` （ ``fess_config.properties`` 系）または ``-Dfess.system.<key>`` （ ``system.properties`` 系）として渡すか、 ``FESS_CONFIG_<KEY>`` （ ``fess_config.properties`` 系）または ``FESS_SYSTEM_<KEY>`` （ ``system.properties`` 系）という名前の環境変数で渡してください（たとえば ``rag.chat.enabled`` は ``FESS_CONFIG_RAG_CHAT_ENABLED`` です）。パスワードや API キーなどの秘密は、環境変数で渡します（ :ref:`config-env-override` を参照）。
 
 リモートOllamaサーバー
 ----------------------

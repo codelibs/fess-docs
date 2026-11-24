@@ -121,6 +121,7 @@ Berechtigungen
 Geben Sie die Berechtigung für diese Konfiguration an.
 Um beispielsweise Suchergebnisse für Benutzer anzuzeigen, die zur Gruppe „developer" gehören, geben Sie {group}developer an.
 Für Benutzerebene geben Sie {user}Benutzername an, für Rollenebene {role}Rollenname und für Gruppenebene {group}Gruppenname.
+Stellen Sie einem Eintrag ``(deny)`` voran, z. B. ``(deny){role}Rollenname``, um den Zugriff zu verweigern. In 15.10 werden beim Speichern folgende Einträge mit einem Fehler abgelehnt: Leerzeichen (auch ein Leerzeichen in Vollbreite) direkt nach ``(allow)`` / ``(deny)`` oder am Zeilenanfang vor ``{user}``, ``{group}`` oder ``{role}``; ``(deny)``, ``{role}`` und Ähnliches, das mit Zeichen in Vollbreite eingegeben wurde; sowie ein unsichtbares Zeichen (z. B. ein Zero-Width-Space oder eine Byte-Order-Mark) am Anfang eines Eintrags oder direkt nach ``(allow)`` / ``(deny)``. Wenn ein mit einer früheren Version gespeicherter Wert eine dieser Formen enthält, geben Sie ihn erneut ein. Einzelheiten finden Sie unter :doc:`../config/security-role`.
 
 Virtuelle Hosts
 :::::::::::::::

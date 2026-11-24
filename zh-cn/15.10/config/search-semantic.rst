@@ -286,8 +286,8 @@ opensearch 提供商的连接配置
    ``system.properties`` 的内容可以在管理界面的「系统信息」→「配置信息」页面的「应用程序属性」
    面板中查看。其中 ``content_chunker.embedding.opensearch.password`` 会在该页面上被掩码为
    ``XXXXXXXX``\ ，但 ``username`` 会原样显示。此外，通过 ``-Dfess.system.<键名>`` 指定的值会
-   在同一页面的「系统属性」面板中\ **不加掩码地**\ 显示，因此凭据请写入 ``system.properties``\ ，
-   而不要放在启动选项中。
+   显示在进程列表（``ps`` 等）中，因此凭据请写入 ``system.properties``\ ，或通过环境变量
+   ``FESS_SYSTEM_<KEY>`` 传递（参见 :ref:`config-env-override`），而不要放在启动选项中。
 
 其他提供商（ollama / openai / gemini / bedrock）
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

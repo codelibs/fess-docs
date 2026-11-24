@@ -428,6 +428,19 @@ Fügen Sie den Umgebungsvariablen des ``fess01``-Dienstes in ``compose.yaml`` ``
    Der Teil nach ``-Dfess.config.`` entspricht dem Namen des Konfigurationseintrags in ``fess_config.properties``.
    Wenn Sie nur einzelne Einträge überschreiben möchten, ist diese Methode einfacher.
 
+.. warning::
+
+   Übergeben Sie ein Geheimnis wie ein Passwort oder einen API-Schlüssel per Umgebungsvariable und nicht als JVM-Option ``-Dfess.config.``. Der Wert einer ``-D``-Option wird von ``ps`` und ``docker top`` angezeigt und in der Befehlszeile des Crawlers und anderer Prozesse wiederholt, die |Fess| startet. Ein Eintrag aus ``fess_config.properties`` kann auch über die Umgebungsvariable übergeben werden, die aus ``FESS_CONFIG_``, gefolgt vom Schlüssel in Großbuchstaben, besteht, wobei jedes Zeichen, das weder Buchstabe noch Ziffer ist, durch ``_`` ersetzt wird (zum Beispiel wird ``http.proxy.password`` zu ``FESS_CONFIG_HTTP_PROXY_PASSWORD``).
+
+   ::
+
+       services:
+         fess01:
+           environment:
+             - "FESS_CONFIG_HTTP_PROXY_PASSWORD=${PROXY_PASSWORD}"
+
+   Einzelheiten finden Sie unter :ref:`config-env-override`.
+
 Verbindung zu externem OpenSearch
 ------------------------------------
 

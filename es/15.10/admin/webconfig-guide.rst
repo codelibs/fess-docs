@@ -121,6 +121,7 @@ Permisos
 Especifique el permiso para esta configuración.
 La forma de especificar permisos es, por ejemplo, para mostrar resultados de búsqueda a usuarios que pertenecen al grupo developer, especifique {group}developer.
 La especificación por usuario es {user}nombre_usuario, la especificación por rol es {role}nombre_rol, y la especificación por grupo es {group}nombre_grupo.
+Prefije una entrada con ``(deny)``, por ejemplo ``(deny){role}nombre_rol``, para denegar el acceso. En 15.10, las siguientes entradas se rechazan con un error al guardar: un espacio en blanco (incluido un espacio de ancho completo) justo después de ``(allow)`` / ``(deny)``, o al inicio de una línea antes de ``{user}``, ``{group}`` o ``{role}``; ``(deny)``, ``{role}`` y similares escritos con caracteres de ancho completo; y un carácter invisible (como un espacio de ancho cero o una marca de orden de bytes) al inicio de una entrada o justo después de ``(allow)`` / ``(deny)``. Si un valor guardado por una versión anterior tiene alguna de estas formas, vuelva a introducirlo. Consulte :doc:`../config/security-role` para más detalles.
 
 Hosts virtuales
 :::::::::::::::

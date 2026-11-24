@@ -135,6 +135,10 @@ SystemProperty 系列（ ``system.properties`` ，持久化在 OpenSearch 中）
 
 .. note::
 
+   API 密钥（``rag.llm.*.api.key``）请通过 ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` 之类的环境变量传递，而不要作为 ``-D`` 选项传递（参见 :ref:`config-env-override`）。如果像上表中的 ``-Dfess.config.rag.llm.gemini.api.key=...`` 这样指定，该值会显示在进程列表中，并且启动时会写入警告。
+
+.. note::
+
    ``rag.llm.type`` 是 |Fess| 15.5 及以前的旧属性名。15.6 及以后已改为 ``rag.llm.name``，
    写入 ``rag.llm.type`` 的值不会被读取。
 

@@ -60,10 +60,14 @@
 
 本地用户的密码被更改后（无论是用户本人更改，还是管理员在用户管理界面或通过 Admin API 更改），该用户的其他登录会话会在下一次检查时结束（见下）。每个登录会话最多每隔 ``fess_config.properties`` 中的 ``password.changed.check.interval``（默认值：``60`` 秒；``0`` 或更小时每次请求都确认）从用户索引读取一次最近的密码更改时间，因此其他会话在任何节点上都会在该秒数内结束。通过 LDAP 或 SSO 认证的用户不受影响，因为其密码在 |Fess| 之外管理。
 
+**角色或组更改后的会话：**
+
+在会话建立之后，如果本地用户的角色或组被更改，该用户的登录会话会结束。这包括编辑用户（在用户管理界面或通过 Admin API），也包括删除该用户所属的角色或组。检查间隔与更改密码时相同，均为 ``password.changed.check.interval``（默认值：``60`` 秒）。与更改密码不同，执行更改操作的会话也不例外：例如，管理员更改自己的角色时，该管理员的会话同样会结束，需要重新登录。结束的会话会在审计日志中记录为 ``SESSION_END``，``reason`` 为 ``permissions_changed``。通过 LDAP 或 SSO 认证的用户不受影响，因为其角色和组在每次登录时从身份提供方获取。
+
 更改加密密钥
 ------------
 
-``fess_config.properties`` 中的 ``app.cipher.key`` 是用于加密爬取设置和数据存储设置中所保存密码的密钥。随附的值（``___change__me___``）是公开的。如果密钥为空或仍是随附的值，|Fess| 会在启动时向 ``fess.log`` 输出警告（参见 :ref:`upgrade-1510-cipher-key`）。|Fess| 不会自动更改密钥。
+``fess_config.properties`` 中的 ``app.cipher.key`` 是用于加密爬取设置和数据存储设置中所保存密码的密钥。随附的值（``___change__me___``）是公开的。如果密钥仍是随附的值，|Fess| 会在启动时向 ``fess.log`` 输出警告。如果密钥为空，|Fess| 会中止启动（参见 :ref:`upgrade-1510-cipher-key`）。|Fess| 不会自动更改密钥。
 
 请在首次启动之前，与 ``admin`` 用户的初始密码一起设置::
 
@@ -262,15 +266,22 @@ Nginx 访问限制示例::
    * - ``UPDATE_PERMISSION``
      - ``user`` 、 ``permissions``
      - LDAP 用户的权限被更新时。
+   * - ``REGISTER_PASSKEY``
+     - ``user`` 、 ``target`` 、 ``credentialId``
+     - 注册通行密钥（passkey）时。
+   * - ``DELETE_PASSKEY``
+     - ``user`` 、 ``target`` 、 ``credentialId``
+     - 删除通行密钥时：由用户本人删除，或由管理员在用户管理画面删除。管理员为用户设置新密码时，该用户的所有通行密钥都会被删除，并为每个通行密钥各写入一条记录。
    * - ``SCRIPT_EXECUTION``
      - ``scriptType`` 、 ``source`` 、 ``user`` 、 ``result`` 、 ``script``
      - 脚本被执行时。请参阅 :doc:`../config/scripting-overview` 。
 
 - ``LOGIN_FAILURE``： ``user`` 是输入的用户名， ``class`` 是凭据的类型。SSO 认证器以异常拒绝登录时，尚未确定凭据，因此记录中既没有 ``user`` 也没有 ``class``，也不会写入异常的任何内容。
-- ``ACCESS``： ``method`` 是 HTTP 方法。 ``id`` 是请求参数 ``id`` 的值，仅在请求中带有该参数时记录（不会从上传请求中读取）。由于管理画面的表单包含密码和密钥，因此不会记录其他请求参数。
+- ``ACCESS``： ``user`` 是登录用户（请求带有会话时）。仅使用访问令牌而没有会话调用 Admin API 时，是访问令牌的名称（绝不会记录令牌本身；无法获取名称时为 ``-``）。 ``ACCESS_DENIED`` 的 ``user`` 遵循相同的规则。 ``method`` 是 HTTP 方法。 ``id`` 是请求参数 ``id`` 的值，仅在请求中带有该参数时记录（不会从上传请求中读取）。由于管理画面的表单包含密码和密钥，因此不会记录其他请求参数。
 - ``ACCESS_DENIED``：对于被拒绝的 Admin API 请求，仅记录请求路径。访问令牌及传递它的参数都不会被记录。
+- ``REGISTER_PASSKEY`` 和 ``DELETE_PASSKEY``： ``user`` 是执行操作的用户， ``target`` 是拥有该通行密钥的用户的名称。 ``credentialId`` 是凭据 ID 的前 8 个字符，超过 8 个字符时后面带有 ``...``。通行密钥的密钥本身不会被记录。
 - ``UPDATE_PASSWORD``： ``user`` 是更改密码的用户， ``target`` 是被更改密码的用户的名称。密码及其哈希值不会被记录，被拒绝的更改也不会被记录。
-- ``SESSION_END``： ``user`` 是会话被结束的用户， ``reason`` 是结束的原因。 ``password_changed`` 表示会话建立之后用户的密码被更改， ``user_not_found`` 表示本地用户的文档已不存在（例如用户被删除或被重命名）， ``idp_session_ended`` 表示 IdP（身份提供方）结束了自己的会话（SAML 的 ``SessionNotOnOrAfter`` ，参见 :doc:`../config/sso-saml` ）。
+- ``SESSION_END``： ``user`` 是会话被结束的用户， ``reason`` 是结束的原因。 ``password_changed`` 表示会话建立之后用户的密码被更改， ``permissions_changed`` 表示会话建立之后本地用户的角色或组被更改（编辑用户，或删除该用户所属的角色或组）， ``user_not_found`` 表示本地用户的文档已不存在（例如用户被删除或被重命名）， ``idp_session_ended`` 表示 IdP（身份提供方）结束了自己的会话（SAML 的 ``SessionNotOnOrAfter`` ，参见 :doc:`../config/sso-saml` ）。
 
 定期安全更新
 ------------------------------

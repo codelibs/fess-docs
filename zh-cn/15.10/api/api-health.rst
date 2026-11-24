@@ -21,6 +21,8 @@ HTTP 方法            GET
 返回搜索引擎集群的状态快照（\ ``monitor`` 标签）。
 当集群状态为 ``GREEN`` / ``YELLOW`` 时，HTTP 状态码为 200；为 ``RED`` 或无法连接搜索引擎时，HTTP 状态码为 503。
 
+当集群状态为 ``YELLOW`` 时返回 ``YELLOW``；此外，即使集群状态为 ``GREEN``，只要 |Fess| 的某个索引或整个集群带有拒绝写入的阻止（block），也会返回 ``YELLOW``。例如，当磁盘使用率超过 flood-stage 水位线时，OpenSearch 会将索引设为只读。此状态下搜索仍可使用，但爬取、更改设置和更新索引会失败。与 |Fess| 共用同一集群的其他应用程序的索引不计入。无法读取阻止信息时，状态保持 ``GREEN``。由于该端点无需认证即可调用，响应中不会说明状态为 ``YELLOW`` 的原因，请管理员在 OpenSearch 端确认原因。
+
 本端点遵守信封不变量"``status >= 1`` ⇔ HTTP 状态码 ``>= 400``"。
 
 - ``GREEN`` / ``YELLOW`` 时：以成功信封（\ ``status: 0``\ ）返回 ``engine``\ 。
@@ -37,7 +39,7 @@ HTTP 方法            GET
 .. list-table:: engine 字段
 
    * - ``status``
-     - 集群状态。为大写的 ``GREEN`` / ``YELLOW`` / ``RED`` 之一。无法连接搜索引擎时为 ``UNAVAILABLE``\ 。
+     - 集群状态。为大写的 ``GREEN`` / ``YELLOW`` / ``RED`` 之一。即使集群为 ``GREEN``，只要 |Fess| 的某个索引带有写入阻止，也为 ``YELLOW``（见上文）。无法连接搜索引擎时为 ``UNAVAILABLE``\ 。
    * - ``ping_status``
      - ping 的状态码（int）。集群为 ``RED`` 或无法连接搜索引擎时值为 ``1``\ ，其他情况（\ ``GREEN`` / ``YELLOW``\ ）值为 ``0``\ 。
 
@@ -113,6 +115,6 @@ HTTP 方法            GET
    * - 405 Method Not Allowed
      - 不允许使用该 HTTP 方法时。
    * - 503 Service Unavailable
-     - 集群为 ``RED`` 或无法连接搜索引擎时。错误信封（\ ``error.code: service_unavailable``\ ）中，\ ``error.details.engine`` 包含引擎快照。
+     - 集群为 ``RED`` 或无法连接搜索引擎时。错误信封（\ ``error.code: service_unavailable``\ ）中，\ ``error.details.engine`` 包含引擎快照。响应头 ``Retry-After: 5`` 告知客户端重试前需等待的秒数。
 
 表: 响应一览

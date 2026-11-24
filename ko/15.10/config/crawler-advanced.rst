@@ -24,6 +24,42 @@
 - **콘텐츠 길이 설정**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **컴포넌트 설정**: ``app/WEB-INF/classes/crawler/container.xml``
 
+.. _config-env-override:
+
+설정 덮어쓰기(JVM 옵션과 환경 변수)
+-----------------------------------
+
+``fess_config.properties`` 의 설정은 파일을 편집하지 않고도 시작할 때 JVM 옵션이나 환경 변수로 덮어쓸 수 있습니다. ``system.properties`` 의 설정도 같은 방법으로 지정할 수 있습니다.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - 대상
+     - JVM 옵션
+     - 환경 변수
+   * - ``fess_config.properties`` 의 키
+     - ``-Dfess.config.<key>=value``
+     - ``FESS_CONFIG_<KEY>``
+   * - ``system.properties`` 의 키
+     - ``-Dfess.system.<key>=value``
+     - ``FESS_SYSTEM_<KEY>``
+
+환경 변수의 이름은 접두사(``FESS_CONFIG_`` 또는 ``FESS_SYSTEM_``)에 키를 대문자로 바꾼 것을 붙이고, 영문자와 숫자 이외의 문자는 모두 ``_`` 로 바꾼 것입니다. 예를 들어 ``http.proxy.password`` 는 ``FESS_CONFIG_HTTP_PROXY_PASSWORD``, ``rag.llm.gemini.api.key`` 는 ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY``, ``rag.llm.name`` 은 ``FESS_SYSTEM_RAG_LLM_NAME`` 이 됩니다.
+
+- ``fess_config.properties`` 의 키는 ``-D`` 옵션, 환경 변수, ``fess_config.properties``, |Fess| 에 포함된 기본값 순으로 읽습니다.
+- ``system.properties`` 의 키는 ``system.properties`` 에 값이 있으면(관리 화면 > 시스템 > 전반 에서 설정한 값 포함) 그 값을 사용합니다. ``-D`` 옵션과 환경 변수는 ``system.properties`` 에 값이 없을 때만 적용되며, ``-D`` 옵션이 우선합니다.
+- 비어 있는 환경 변수는 설정되지 않은 것으로 취급합니다. 값이 빈 ``-D`` 옵션은 설정된 환경 변수를 가리지 않습니다.
+- 이 환경 변수는 |Fess| 가 시작하는 크롤러 등의 프로세스에도 상속됩니다.
+- ``-D`` 옵션이 적용되지 않는 설정(예: SSO 플러그인이 ``system.properties`` 에서 직접 읽는 ``oic.client.secret``)은 환경 변수도 적용되지 않습니다.
+
+비밀번호나 API 키와 같은 비밀 정보는 환경 변수로 전달하십시오. ``-D`` 옵션은 ``ps`` 나 ``docker top`` 에 표시되는 명령줄의 일부이며, |Fess| 가 시작하는 크롤러, suggest, 썸네일, 청크 프로세스의 명령줄에도 반복되어 나타납니다. 비밀 정보를 ``-Dfess.config.*`` 또는 ``-Dfess.system.*`` 옵션으로 전달하면 |Fess| 는 시작할 때 ``fess.log`` 에 경고를 출력합니다. 경고에는 키와 변수의 이름만 있고 값은 포함되지 않습니다. 경고 대상은 관리 화면 > 시스템 정보에서 비밀 정보로 마스킹되는 키(예: ``search_engine.password``, ``app.cipher.key``, ``rag.llm.*.api.key``)이며, 값이 빈 옵션은 대상이 아닙니다. SSO 클라이언트 ID(``*.client.id``)는 로그인 리다이렉트의 URL로 전송되며 비밀 정보가 아니므로 경고하지 않습니다. ``FESS_CONFIG_*`` 와 ``FESS_SYSTEM_*`` 변수의 값은 관리 화면 > 시스템 정보에서 마스킹됩니다.
+
+변수를 설정하는 위치는 |Fess| 를 시작하는 방법에 따라 다릅니다.
+
+- Docker: ``compose.yaml`` 의 ``environment:`` 또는 ``docker run -e`` 로 전달합니다. ``docker inspect`` 는 Docker 소켓을 사용할 수 있는 모든 사용자에게 값을 보여 줍니다.
+- RPM / DEB 패키지(systemd): ``/etc/sysconfig/fess`` (DEB는 ``/etc/default/fess``)는 systemd의 ``EnvironmentFile`` 로 읽히므로 ``export`` 없이 ``FESS_CONFIG_<KEY>=value`` 행을 추가합니다. SysV init 스크립트는 정해진 변수 목록만 |Fess| 에 전달하므로, 이 경우에는 ``export FESS_CONFIG_<KEY>=value`` 라고 작성합니다. 파일은 ``root`` 만 읽을 수 있도록 하십시오.
+
 기본 스크립트
 --------------------
 

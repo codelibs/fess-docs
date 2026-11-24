@@ -650,10 +650,11 @@ Docker 버전::
 
 .. _upgrade-1510-cipher-key:
 
-``app.cipher.key`` 경고
+``app.cipher.key`` 확인
 -----------------------
 
-``app.cipher.key`` 가 비어 있거나 ``fess_config.properties`` 에 기본 제공되는 값(``___change__me___``) 그대로이면, 15.10은 시작할 때 ``fess.log`` 에 경고를 출력합니다. 크롤러 등 잡 프로세스는 출력하지 않습니다.
+``app.cipher.key`` 가 비어 있으면 15.10은 시작을 중단하고, 키 ``app.cipher.key`` 를 명시한 오류를 ``fess.log`` 에 출력합니다. 16, 24 또는 32자의 키를 설정하거나, 처음 시작하기 전에 ``bin/fess-setup init`` 을 실행하십시오.
+``fess_config.properties`` 에 기본 제공되는 값(``___change__me___``) 그대로이면 시작은 계속되며 15.10은 ``fess.log`` 에 경고를 출력합니다. 크롤러 등 잡 프로세스는 출력하지 않습니다.
 이 키는 크롤링 설정과 데이터 스토어 설정에 저장되는 비밀번호 등을 암호화하는 데 사용되며, 기본 제공 값은 공개되어 있습니다. |Fess| 는 키를 자동으로 변경하지 않습니다. 변경하면 이전 키로 암호화된 값은 복호화할 수 없게 되므로, 운용을 시작하기 전에 설정하십시오.
 
 .. _upgrade-1510-carried-over-config:

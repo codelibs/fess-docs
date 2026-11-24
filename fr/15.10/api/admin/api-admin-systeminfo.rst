@@ -109,6 +109,7 @@ Champs de la réponse
    ou correspond à ``content_chunker.embedding.*.api.key`` ou ``rag.llm.*.api.key``.
    Une propriété système nommée ``fess.system.<clé>`` ou ``fess.config.<clé>`` (la forme servant à passer un paramètre en option ``-D``)
    est masquée selon la même règle que ``<clé>``.
+   La valeur d'une variable d'environnement dont le nom commence par ``FESS_CONFIG_`` ou ``FESS_SYSTEM_`` (la forme servant à passer un paramètre ; voir :ref:`config-env-override`) est toujours masquée, quelle que soit la clé.
    Dans ``env_props`` et ``system_props``, la valeur d'une telle option ``-Dclé=valeur`` sensible située dans une chaîne plus longue
    (par exemple ``FESS_JAVA_OPTS`` ou ``JAVA_TOOL_OPTIONS``) est également masquée, et le reste de la chaîne reste lisible.
 

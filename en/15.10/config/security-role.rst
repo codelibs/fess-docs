@@ -50,6 +50,8 @@ Logged-in users are automatically granted permissions representing themselves (`
 .. note::
     To explicitly deny access from a specific role, user, or group, prefix the entry with ``(deny)``, for example ``(deny){role}Role1``. Prefixing with ``(allow)`` grants access, which is treated the same as having no prefix.
 
+    In 15.10, the following entries are rejected with an error when saved in the permission field (on the admin screen and through the Admin API) of crawl configurations (Web, File and Data Store), labels, tags, access tokens and elevate words: whitespace (including a full-width space) right after ``(allow)`` / ``(deny)``, or at the start of a line before ``{user}``, ``{group}`` or ``{role}`` (for example ``(deny) {user}bob``); ``(deny)``, ``{role}`` and the like typed with full-width characters; and an invisible character (such as a zero-width space or a byte order mark) at the start of an entry or right after ``(allow)`` / ``(deny)``. This prevents a deny entry from being silently ignored while the document stays visible to the person it was meant to hide it from. If a value saved by an earlier version has one of these forms, enter it again.
+
 .. note::
     When integrating with LDAP or single sign-on, the user's role and group information is retrieved from the authentication source and treated as permissions in the same way.
     The behavior during LDAP integration can be controlled by ``ldap.role.search.user.enabled``, ``ldap.role.search.group.enabled``, and ``ldap.role.search.role.enabled`` in ``fess_config.properties`` (all default to ``true``).

@@ -24,6 +24,42 @@
 - **内容长度配置**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **组件配置**: ``app/WEB-INF/classes/crawler/container.xml``
 
+.. _config-env-override:
+
+覆盖设置（JVM 选项和环境变量）
+------------------------------
+
+``fess_config.properties`` 中的设置，可以在启动时通过 JVM 选项或环境变量覆盖，无需编辑文件。``system.properties`` 中的设置也可以用同样的方式指定。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - 对象
+     - JVM 选项
+     - 环境变量
+   * - ``fess_config.properties`` 的键
+     - ``-Dfess.config.<key>=value``
+     - ``FESS_CONFIG_<KEY>``
+   * - ``system.properties`` 的键
+     - ``-Dfess.system.<key>=value``
+     - ``FESS_SYSTEM_<KEY>``
+
+变量名由前缀（``FESS_CONFIG_`` 或 ``FESS_SYSTEM_``）加上大写的键构成，其中字母和数字以外的每个字符都替换为 ``_``。例如，``http.proxy.password`` 对应 ``FESS_CONFIG_HTTP_PROXY_PASSWORD``，``rag.llm.gemini.api.key`` 对应 ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY``，``rag.llm.name`` 对应 ``FESS_SYSTEM_RAG_LLM_NAME``。
+
+- ``fess_config.properties`` 的键按以下顺序读取：``-D`` 选项、环境变量、``fess_config.properties``、|Fess| 自带的默认值。
+- 对于 ``system.properties`` 的键，如果 ``system.properties`` 中有值（包括在管理界面 > 系统 > 常规中设置的值），则使用该值。仅当 ``system.properties`` 中没有值时，``-D`` 选项和环境变量才生效，且 ``-D`` 选项优先。
+- 空的环境变量视为未设置。值为空的 ``-D`` 选项不会遮盖已设置的环境变量。
+- 这些变量会被 |Fess| 启动的进程（例如爬虫）继承。
+- 对于不支持 ``-D`` 选项的设置（例如由 SSO 插件直接从 ``system.properties`` 读取的 ``oic.client.secret``），环境变量同样不生效。
+
+密码、API 密钥等机密信息请通过环境变量传递。``-D`` 选项会成为 ``ps`` 和 ``docker top`` 所显示命令行的一部分，并且会在 |Fess| 启动的爬虫、suggest、缩略图和 chunk 进程的命令行中重复出现。当机密信息以 ``-Dfess.config.*`` 或 ``-Dfess.system.*`` 选项传递时，|Fess| 会在启动时向 ``fess.log`` 写入警告。警告中会写明键和变量名，但绝不会写入值。警告的对象是在管理界面 > 系统 > 系统信息中作为机密被掩码显示值的键（例如 ``search_engine.password``、``app.cipher.key`` 和 ``rag.llm.*.api.key``），值为空的选项不在其列。SSO 的客户端 ID（``*.client.id``）会出现在登录重定向的 URL 中，不属于机密，因此不会发出警告。``FESS_CONFIG_*`` 和 ``FESS_SYSTEM_*`` 变量的值会在管理界面 > 系统 > 系统信息中被掩码显示。
+
+变量的设置位置取决于 |Fess| 的启动方式：
+
+- Docker：通过 ``compose.yaml`` 中的 ``environment:`` 或 ``docker run -e`` 传递。能够使用 Docker 套接字的人可以通过 ``docker inspect`` 看到该值。
+- RPM / DEB 软件包（systemd）：``/etc/sysconfig/fess``（DEB 为 ``/etc/default/fess``）会作为 systemd 的 ``EnvironmentFile`` 读取，因此请添加不带 ``export`` 的 ``FESS_CONFIG_<KEY>=value`` 行。SysV init 脚本只会向 |Fess| 传递固定列表中的变量，因此请在其中写成 ``export FESS_CONFIG_<KEY>=value``。请将该文件设置为仅 ``root`` 可读。
+
 默认脚本
 --------------------
 

@@ -24,6 +24,42 @@ Detailed crawler settings are configured in the following files:
 - **Content length configuration**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Component configuration**: ``app/WEB-INF/classes/crawler/container.xml``
 
+.. _config-env-override:
+
+Overriding Settings (JVM Options and Environment Variables)
+-----------------------------------------------------------
+
+A setting of ``fess_config.properties`` can be overridden at startup with a JVM option or an environment variable, without editing the file. A setting of ``system.properties`` can be given the same way.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - Target
+     - JVM option
+     - Environment variable
+   * - A key of ``fess_config.properties``
+     - ``-Dfess.config.<key>=value``
+     - ``FESS_CONFIG_<KEY>``
+   * - A key of ``system.properties``
+     - ``-Dfess.system.<key>=value``
+     - ``FESS_SYSTEM_<KEY>``
+
+The name of the variable is the prefix (``FESS_CONFIG_`` or ``FESS_SYSTEM_``) followed by the key in upper case, with every character other than a letter or a digit replaced by ``_``. For example, ``http.proxy.password`` is ``FESS_CONFIG_HTTP_PROXY_PASSWORD``, ``rag.llm.gemini.api.key`` is ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` and ``rag.llm.name`` is ``FESS_SYSTEM_RAG_LLM_NAME``.
+
+- A key of ``fess_config.properties`` is read from the ``-D`` option, then the environment variable, then ``fess_config.properties``, then the default shipped with |Fess|.
+- For a key of ``system.properties``, a value in ``system.properties`` (including one set on Administration > System > General) is used when there is one. The ``-D`` option and the environment variable apply only when ``system.properties`` has no value, and the ``-D`` option takes precedence.
+- An empty environment variable counts as not set. A ``-D`` option with an empty value does not hide an environment variable that is set.
+- The variables are inherited by the processes that |Fess| starts, such as the crawler.
+- A setting for which the ``-D`` option is not honoured (for example ``oic.client.secret``, which the SSO plugins read directly from ``system.properties``) does not honour the environment variable either.
+
+Pass a secret such as a password or an API key by an environment variable. A ``-D`` option is part of the command line that ``ps`` and ``docker top`` show, and it is repeated on the command line of the crawler, suggest, thumbnail and chunk processes that |Fess| starts. When a secret is passed as a ``-Dfess.config.*`` or ``-Dfess.system.*`` option, |Fess| writes a warning to ``fess.log`` at startup. The warning names the key and the variable, never the value. It covers the keys whose values are masked on Administration > System Info as secrets (for example ``search_engine.password``, ``app.cipher.key`` and ``rag.llm.*.api.key``), and not an option with an empty value. An SSO client ID (``*.client.id``) is sent in the URL of the login redirect and is not a secret, so it is not warned about. The values of the ``FESS_CONFIG_*`` and ``FESS_SYSTEM_*`` variables are masked on Administration > System Info.
+
+Where to set the variable depends on how |Fess| is started:
+
+- Docker: pass it with ``environment:`` in ``compose.yaml`` or ``docker run -e``. ``docker inspect`` shows the value to anyone who can use the Docker socket.
+- RPM / DEB packages (systemd): ``/etc/sysconfig/fess`` (``/etc/default/fess`` for DEB) is read as a systemd ``EnvironmentFile``, so add a line ``FESS_CONFIG_<KEY>=value`` without ``export``. The SysV init script passes only a fixed list of variables to |Fess|, so write ``export FESS_CONFIG_<KEY>=value`` there. Make the file readable by ``root`` only.
+
 Default Script
 --------------
 

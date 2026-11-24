@@ -24,6 +24,42 @@ Erweiterte Crawler-Konfigurationen werden in folgenden Dateien vorgenommen:
 - **Inhaltslängen-Konfiguration**: ``app/WEB-INF/classes/crawler/contentlength.xml``
 - **Komponenten-Konfiguration**: ``app/WEB-INF/classes/crawler/container.xml``
 
+.. _config-env-override:
+
+Einstellungen überschreiben (JVM-Optionen und Umgebungsvariablen)
+-----------------------------------------------------------------
+
+Eine Einstellung aus ``fess_config.properties`` kann beim Start mit einer JVM-Option oder einer Umgebungsvariablen überschrieben werden, ohne die Datei zu bearbeiten. Eine Einstellung aus ``system.properties`` kann auf dieselbe Weise übergeben werden.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
+
+   * - Ziel
+     - JVM-Option
+     - Umgebungsvariable
+   * - Ein Schlüssel aus ``fess_config.properties``
+     - ``-Dfess.config.<key>=value``
+     - ``FESS_CONFIG_<KEY>``
+   * - Ein Schlüssel aus ``system.properties``
+     - ``-Dfess.system.<key>=value``
+     - ``FESS_SYSTEM_<KEY>``
+
+Der Name der Variablen besteht aus dem Präfix (``FESS_CONFIG_`` oder ``FESS_SYSTEM_``), gefolgt vom Schlüssel in Großbuchstaben, wobei jedes Zeichen, das weder Buchstabe noch Ziffer ist, durch ``_`` ersetzt wird. Beispielsweise wird ``http.proxy.password`` zu ``FESS_CONFIG_HTTP_PROXY_PASSWORD``, ``rag.llm.gemini.api.key`` zu ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` und ``rag.llm.name`` zu ``FESS_SYSTEM_RAG_LLM_NAME``.
+
+- Ein Schlüssel aus ``fess_config.properties`` wird in dieser Reihenfolge gelesen: ``-D``-Option, Umgebungsvariable, ``fess_config.properties``, danach der mit |Fess| ausgelieferte Standardwert.
+- Bei einem Schlüssel aus ``system.properties`` wird ein Wert in ``system.properties`` (auch einer, der unter Administration > System > Allgemein gesetzt wurde) verwendet, sofern vorhanden. Die ``-D``-Option und die Umgebungsvariable gelten nur, wenn ``system.properties`` keinen Wert enthält, wobei die ``-D``-Option Vorrang hat.
+- Eine leere Umgebungsvariable gilt als nicht gesetzt. Eine ``-D``-Option mit leerem Wert verdeckt keine gesetzte Umgebungsvariable.
+- Die Variablen werden an die Prozesse vererbt, die |Fess| startet, etwa den Crawler.
+- Eine Einstellung, für die die ``-D``-Option nicht berücksichtigt wird (zum Beispiel ``oic.client.secret``, das die SSO-Plugins direkt aus ``system.properties`` lesen), berücksichtigt auch die Umgebungsvariable nicht.
+
+Übergeben Sie ein Geheimnis wie ein Passwort oder einen API-Schlüssel per Umgebungsvariable. Eine ``-D``-Option ist Teil der Befehlszeile, die ``ps`` und ``docker top`` anzeigen, und sie wird in der Befehlszeile der Crawler-, Suggest-, Thumbnail- und Chunk-Prozesse wiederholt, die |Fess| startet. Wird ein Geheimnis als ``-Dfess.config.*``- oder ``-Dfess.system.*``-Option übergeben, schreibt |Fess| beim Start eine Warnung in ``fess.log``. Die Warnung nennt den Schlüssel und die Variable, nie den Wert. Sie gilt für die Schlüssel, deren Werte unter Administration > Systeminformationen als Geheimnisse maskiert werden (zum Beispiel ``search_engine.password``, ``app.cipher.key`` und ``rag.llm.*.api.key``), und nicht für eine Option mit leerem Wert. Eine SSO-Client-ID (``*.client.id``) wird in der URL der Login-Weiterleitung gesendet und ist kein Geheimnis, daher wird dafür nicht gewarnt. Die Werte der Variablen ``FESS_CONFIG_*`` und ``FESS_SYSTEM_*`` werden unter Administration > Systeminformationen maskiert.
+
+Wo die Variable gesetzt wird, hängt davon ab, wie |Fess| gestartet wird:
+
+- Docker: Übergeben Sie sie mit ``environment:`` in ``compose.yaml`` oder mit ``docker run -e``. ``docker inspect`` zeigt den Wert jedem, der den Docker-Socket verwenden kann.
+- RPM-/DEB-Pakete (systemd): ``/etc/sysconfig/fess`` (bei DEB ``/etc/default/fess``) wird als systemd-``EnvironmentFile`` gelesen. Fügen Sie daher eine Zeile ``FESS_CONFIG_<KEY>=value`` ohne ``export`` hinzu. Das SysV-Init-Skript gibt nur eine feste Liste von Variablen an |Fess| weiter, schreiben Sie dort also ``export FESS_CONFIG_<KEY>=value``. Die Datei sollte nur für ``root`` lesbar sein.
+
 Standard-Skriptsprache
 ----------------------
 

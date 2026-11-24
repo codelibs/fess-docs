@@ -207,7 +207,7 @@ DataConfig API是用于管理 |Fess| 数据存储设置的API。
      - 显示顺序
    * - ``permissions``
      - 否
-     - 访问权限角色（多个时以换行分隔）
+     - 访问权限角色（多个时以换行分隔）。创建（POST）时省略或为空，则设置为 ``role.search.default.display.permissions`` 的值（默认：``{role}guest``）。更新（PUT）时省略则保留已保存的值，空字符串则保存为空。格式不正确的项（例如 ``(deny)`` 之后带有空格，或含有全角字符、不可见字符）会导致验证错误（参见 :doc:`../../config/security-role`）
    * - ``virtual_hosts``
      - 否
      - 虚拟主机（多个时以换行分隔）

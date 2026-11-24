@@ -136,6 +136,10 @@ OpenSearch에 영속화). 두 계열의 설정 경로가 다르므로 혼동하�
 
 .. note::
 
+   API 키(``rag.llm.*.api.key``)는 ``-D`` 옵션이 아니라 ``FESS_CONFIG_RAG_LLM_GEMINI_API_KEY`` 와 같은 환경 변수로 전달하세요(:ref:`config-env-override` 참조). 위 표의 ``-Dfess.config.rag.llm.gemini.api.key=...`` 와 같은 옵션으로 전달하면 값이 프로세스 목록에 표시되고 시작할 때 경고가 출력됩니다.
+
+.. note::
+
    ``rag.llm.type`` 은 |Fess| 15.5 이전의 옛 프로퍼티 이름입니다.
    15.6 이후에는 ``rag.llm.name`` 으로 변경되었으며, ``rag.llm.type`` 에 작성된 값은
    읽혀지지 않습니다.

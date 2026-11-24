@@ -539,7 +539,7 @@ Docker配置
 - ``deploy.resources.reservations.devices`` 块是使用GPU的配置。不使用GPU（仅CPU运行）时，请删除此块
 
 .. note::
-   ``RAG_CHAT_ENABLED`` 或 ``RAG_LLM_NAME`` 等大写蛇形命名的环境变量不会被 |Fess| 直接识别。配置值必须在 ``FESS_JAVA_OPTS`` 中以 ``-Dfess.config.<key>`` （ ``fess_config.properties`` 系列）或 ``-Dfess.system.<key>`` （ ``system.properties`` 系列）的形式传递。
+   ``RAG_CHAT_ENABLED`` 或 ``RAG_LLM_NAME`` 等大写蛇形命名的环境变量不会被 |Fess| 直接识别。请在 ``FESS_JAVA_OPTS`` 中以 ``-Dfess.config.<key>`` （ ``fess_config.properties`` 系列）或 ``-Dfess.system.<key>`` （ ``system.properties`` 系列）的形式传递配置值，或者通过名为 ``FESS_CONFIG_<KEY>`` （ ``fess_config.properties`` 系列）或 ``FESS_SYSTEM_<KEY>`` （ ``system.properties`` 系列）的环境变量传递；例如，``rag.chat.enabled`` 对应 ``FESS_CONFIG_RAG_CHAT_ENABLED``。密码、API 密钥等机密信息请通过环境变量传递（参见 :ref:`config-env-override`）。
 
 远程Ollama服务器
 ----------------

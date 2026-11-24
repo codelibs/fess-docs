@@ -21,6 +21,8 @@ Endpunkt             ``/api/v2/health``
 Gibt einen Statusschnappschuss des Suchmaschinenclusters zurück (Tag ``monitor``).
 Der HTTP-Statuscode ist 200, wenn der Clusterstatus ``GREEN`` oder ``YELLOW`` ist, und 503 bei ``RED`` oder wenn die Suchmaschine nicht erreichbar ist.
 
+``YELLOW`` wird zurückgegeben, wenn der Clusterstatus ``YELLOW`` ist, und auch dann, wenn der Clusterstatus ``GREEN`` ist, aber einer der Indizes von |Fess| oder der gesamte Cluster eine Sperre trägt, die Schreibzugriffe verweigert. OpenSearch setzt Indizes beispielsweise auf schreibgeschützt, wenn die Festplattenbelegung den Flood-Stage-Watermark überschreitet. Suchen funktionieren in diesem Zustand weiterhin, aber Crawling, Änderungen an den Einstellungen und Aktualisierungen des Index schlagen fehl. Indizes anderer Anwendungen, die sich den Cluster teilen, werden nicht berücksichtigt. Wenn die Sperren nicht gelesen werden können, bleibt der Status ``GREEN``. Da dieser Endpunkt ohne Authentifizierung aufgerufen werden kann, nennt die Antwort nicht den Grund für ``YELLOW``; ein Administrator sollte die Ursache auf der OpenSearch-Seite prüfen.
+
 Dieser Endpunkt hält die Envelope-Invariante ein: „``status >= 1`` ⇔ HTTP-Status ``>= 400``".
 
 - Bei ``GREEN`` / ``YELLOW``: Gibt einen Erfolgs-Envelope (``status: 0``) mit ``engine`` zurück.
@@ -37,7 +39,7 @@ Die einzelnen Felder von ``engine`` sind wie folgt:
 .. list-table:: engine-Felder
 
    * - ``status``
-     - Clusterstatus. Einer der Werte ``GREEN`` / ``YELLOW`` / ``RED`` (Großbuchstaben). ``UNAVAILABLE``, wenn die Suchmaschine nicht erreichbar ist.
+     - Clusterstatus. Einer der Werte ``GREEN`` / ``YELLOW`` / ``RED`` (Großbuchstaben). Auch bei einem ``GREEN``-Cluster ist der Wert ``YELLOW``, solange ein Index von |Fess| eine Schreibsperre trägt (siehe oben). ``UNAVAILABLE``, wenn die Suchmaschine nicht erreichbar ist.
    * - ``ping_status``
      - Ping-Statuscode (int). Der Wert ist ``1``, wenn der Cluster ``RED`` ist oder die Suchmaschine nicht erreichbar ist, und ``0`` andernfalls (``GREEN`` / ``YELLOW``).
 
@@ -113,6 +115,6 @@ Details zum Fehlermodell finden Sie unter :doc:`api-overview`. Folgende HTTP-Sta
    * - 405 Method Not Allowed
      - Wenn die HTTP-Methode nicht erlaubt ist.
    * - 503 Service Unavailable
-     - Cluster ist ``RED`` oder die Suchmaschine ist nicht erreichbar. Fehler-Envelope (``error.code: service_unavailable``) mit Engine-Schnappschuss unter ``error.details.engine``.
+     - Cluster ist ``RED`` oder die Suchmaschine ist nicht erreichbar. Fehler-Envelope (``error.code: service_unavailable``) mit Engine-Schnappschuss unter ``error.details.engine``. Ein ``Retry-After: 5``-Header teilt dem Client mit, wie viele Sekunden er vor einem erneuten Versuch warten soll.
 
 Tabelle: Antwortübersicht
