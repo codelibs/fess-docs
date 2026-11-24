@@ -152,6 +152,8 @@ Schritt 1: Installation von OpenSearch
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
+   Ist kein Terminal angeschlossen (zum Beispiel in einem Skript, einem Container-Build oder einem Automatisierungswerkzeug), wartet ``opensearch-plugin install`` auf die Bestätigung ``Continue with installation?`` und wird nicht beendet. Fügen Sie dem Befehl ``--batch`` (``-b``) hinzu, um die Bestätigung zu überspringen.
+
    .. important::
 
       Die Plugin-Version muss mit der OpenSearch-Version übereinstimmen.
@@ -298,9 +300,17 @@ Schritt 1: Installation von OpenSearch
    ::
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.10.0-linux-x64.rpm
+       $ sudo env OPENSEARCH_INITIAL_ADMIN_PASSWORD=<password> rpm -ivh opensearch-3.10.0-linux-x64.rpm
 
    Auf einem arm64-Rechner (aarch64) ersetzen Sie in den obigen Dateinamen ``linux-x64`` durch ``linux-arm64`` (zum Beispiel ``opensearch-3.10.0-linux-arm64.rpm``).
+
+   .. note::
+
+      Ab OpenSearch 2.12 richtet die Installation des Pakets auch die Demo-Sicherheitskonfiguration ein. Dafür ist ein Administratorkennwort für OpenSearch erforderlich (nicht das Konto ``admin`` von |Fess|). Übergeben Sie es wie oben gezeigt in der Umgebungsvariablen ``OPENSEARCH_INITIAL_ADMIN_PASSWORD``. Ohne diese Variable schlägt die Installation fehl (rpm meldet ``%post scriptlet failed``).
+
+      Ersetzen Sie ``<password>`` durch ein starkes Kennwort: 8 bis 100 Zeichen mit mindestens einem Großbuchstaben, einem Kleinbuchstaben, einer Ziffer und einem Sonderzeichen, das von der Stärkeprüfung ``zxcvbn`` von OpenSearch mindestens als ``strong`` bewertet wird. Enthält das Kennwort Zeichen, die die Shell interpretiert, setzen Sie es in einfache Anführungszeichen. Dasselbe gilt, wenn Sie das Paket aus einem Repository installieren.
+
+      Diese Angabe ist nur für die Installation des Pakets nötig. ``plugins.security.disabled: true`` in Punkt 3 weiter unten deaktiviert das Sicherheits-Plugin für die Entwicklung weiterhin. Die Sicherheitskonfiguration für Produktionsumgebungen finden Sie unter :doc:`security`.
 
    Alternativ können Sie auch ein Repository hinzufügen und die Installation durchführen.
    Details finden Sie unter `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__.
@@ -313,6 +323,8 @@ Schritt 1: Installation von OpenSearch
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
+
+   Ist kein Terminal angeschlossen (zum Beispiel in einem Skript, einem Container-Build oder einem Automatisierungswerkzeug), wartet ``opensearch-plugin install`` auf die Bestätigung ``Continue with installation?`` und wird nicht beendet. Fügen Sie dem Befehl ``--batch`` (``-b``) hinzu, um die Bestätigung zu überspringen.
 
 3. Konfiguration von OpenSearch
 
@@ -410,9 +422,17 @@ Schritt 1: Installation von OpenSearch
    ::
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.10.0-linux-x64.deb
+       $ sudo env OPENSEARCH_INITIAL_ADMIN_PASSWORD=<password> dpkg -i opensearch-3.10.0-linux-x64.deb
 
    Auf einem arm64-Rechner (aarch64) ersetzen Sie in den obigen Dateinamen ``linux-x64`` durch ``linux-arm64`` (zum Beispiel ``opensearch-3.10.0-linux-arm64.deb``).
+
+   .. note::
+
+      Ab OpenSearch 2.12 richtet die Installation des Pakets auch die Demo-Sicherheitskonfiguration ein. Dafür ist ein Administratorkennwort für OpenSearch erforderlich (nicht das Konto ``admin`` von |Fess|). Übergeben Sie es wie oben gezeigt in der Umgebungsvariablen ``OPENSEARCH_INITIAL_ADMIN_PASSWORD``. Ohne diese Variable schlägt die Installation fehl (dpkg meldet ``error processing package opensearch``).
+
+      Ersetzen Sie ``<password>`` durch ein starkes Kennwort: 8 bis 100 Zeichen mit mindestens einem Großbuchstaben, einem Kleinbuchstaben, einer Ziffer und einem Sonderzeichen, das von der Stärkeprüfung ``zxcvbn`` von OpenSearch mindestens als ``strong`` bewertet wird. Enthält das Kennwort Zeichen, die die Shell interpretiert, setzen Sie es in einfache Anführungszeichen. Dasselbe gilt, wenn Sie das Paket aus einem Repository installieren.
+
+      Diese Angabe ist nur für die Installation des Pakets nötig. ``plugins.security.disabled: true`` in Punkt 3 weiter unten deaktiviert das Sicherheits-Plugin für die Entwicklung weiterhin. Die Sicherheitskonfiguration für Produktionsumgebungen finden Sie unter :doc:`security`.
 
    Alternativ können Sie auch ein Repository hinzufügen und die Installation durchführen.
    Details finden Sie unter `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__.
@@ -425,6 +445,8 @@ Schritt 1: Installation von OpenSearch
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
+
+   Ist kein Terminal angeschlossen (zum Beispiel in einem Skript, einem Container-Build oder einem Automatisierungswerkzeug), wartet ``opensearch-plugin install`` auf die Bestätigung ``Continue with installation?`` und wird nicht beendet. Fügen Sie dem Befehl ``--batch`` (``-b``) hinzu, um die Bestätigung zu überspringen.
 
 3. Konfiguration von OpenSearch
 

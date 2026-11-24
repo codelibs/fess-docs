@@ -137,6 +137,8 @@
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
+   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，``opensearch-plugin install`` 会等待确认（``Continue with installation?``）而不会结束。在命令中加上 ``--batch``（``-b``）即可跳过确认。
+
    .. important::
 
       插件版本必须与 OpenSearch 版本一致。
@@ -269,9 +271,17 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
    ::
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.rpm
-       $ sudo rpm -ivh opensearch-3.10.0-linux-x64.rpm
+       $ sudo env OPENSEARCH_INITIAL_ADMIN_PASSWORD=<password> rpm -ivh opensearch-3.10.0-linux-x64.rpm
 
    在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.10.0-linux-arm64.rpm``）。
+
+   .. note::
+
+      从 OpenSearch 2.12 起，安装软件包时还会创建演示用的安全配置，因此需要 OpenSearch 的管理员密码（与 |Fess| 的 ``admin`` 账户无关）。请如上所示通过环境变量 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 指定。未指定时安装会失败（rpm 会输出 ``%post scriptlet failed``）。
+
+      请将 ``<password>`` 替换为强密码：长度为 8 到 100 个字符，至少包含一个大写字母、一个小写字母、一个数字和一个特殊字符，并且在 OpenSearch 的强度检查（``zxcvbn``）中被评为 ``strong`` 或更高。如果密码包含会被 shell 解释的字符，请用单引号括起来。从软件仓库安装时同样如此。
+
+      这只是安装软件包时所需。下面第 3 项中的 ``plugins.security.disabled: true`` 仍然会为开发环境关闭安全插件。生产环境的安全配置请参阅 :doc:`security`\ 。
 
    或者，也可以添加仓库后进行安装。
    详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/rpm/>`__\ 。
@@ -284,6 +294,8 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
+
+   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，``opensearch-plugin install`` 会等待确认（``Continue with installation?``）而不会结束。在命令中加上 ``--batch``（``-b``）即可跳过确认。
 
 3. 配置 OpenSearch
 
@@ -381,9 +393,17 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
    ::
 
        $ wget https://artifacts.opensearch.org/releases/bundle/opensearch/3.10.0/opensearch-3.10.0-linux-x64.deb
-       $ sudo dpkg -i opensearch-3.10.0-linux-x64.deb
+       $ sudo env OPENSEARCH_INITIAL_ADMIN_PASSWORD=<password> dpkg -i opensearch-3.10.0-linux-x64.deb
 
    在 arm64（aarch64）机器上，请将上述文件名中的 ``linux-x64`` 替换为 ``linux-arm64``\ （例如 ``opensearch-3.10.0-linux-arm64.deb``）。
+
+   .. note::
+
+      从 OpenSearch 2.12 起，安装软件包时还会创建演示用的安全配置，因此需要 OpenSearch 的管理员密码（与 |Fess| 的 ``admin`` 账户无关）。请如上所示通过环境变量 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 指定。未指定时安装会失败（dpkg 会输出 ``error processing package opensearch``）。
+
+      请将 ``<password>`` 替换为强密码：长度为 8 到 100 个字符，至少包含一个大写字母、一个小写字母、一个数字和一个特殊字符，并且在 OpenSearch 的强度检查（``zxcvbn``）中被评为 ``strong`` 或更高。如果密码包含会被 shell 解释的字符，请用单引号括起来。从软件仓库安装时同样如此。
+
+      这只是安装软件包时所需。下面第 3 项中的 ``plugins.security.disabled: true`` 仍然会为开发环境关闭安全插件。生产环境的安全配置请参阅 :doc:`security`\ 。
 
    或者，也可以添加仓库后进行安装。
    详情请参阅 `Installing OpenSearch <https://opensearch.org/docs/latest/install-and-configure/install-opensearch/debian/>`__\ 。
@@ -396,6 +416,8 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-analysis-extension/3.10.0/opensearch-analysis-extension-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
+
+   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，``opensearch-plugin install`` 会等待确认（``Continue with installation?``）而不会结束。在命令中加上 ``--batch``（``-b``）即可跳过确认。
 
 3. 配置 OpenSearch
 
