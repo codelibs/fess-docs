@@ -1,5 +1,5 @@
 ===============================================
-Parte 1 Por que las empresas necesitan búsqueda
+Parte 1 Por qué las empresas necesitan búsqueda
 ===============================================
 
 Introducción
@@ -97,7 +97,7 @@ El sistema de búsqueda puede administrarse desde el panel de administración si
 
 Proporciona una API de búsqueda basada en JSON, lo que permite integrar la funcionalidad de búsqueda en sistemas existentes.
 
-Por que elegir Fess
+Por qué elegir Fess
 -------------------
 
 Existen varias alternativas de búsqueda empresarial.

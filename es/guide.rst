@@ -10,7 +10,7 @@ Esta serie de 23 partes cubre desde la implementación de Fess hasta la integrac
 
 **Fundamentos (Para principiantes)**
 
-- :doc:`articles/guide-01` - Por que la búsqueda empresarial es importante y los desafíos de la información dispersa
+- :doc:`articles/guide-01` - Por qué la búsqueda empresarial es importante y los desafíos de la información dispersa
 - :doc:`articles/guide-02` - Inicio rápido: lanzar Fess con Docker Compose y experimentar la búsqueda en minutos
 - :doc:`articles/guide-03` - Tres patrones para integrar widgets de búsqueda en sitios web existentes
 - :doc:`articles/guide-04` - Construir búsqueda transversal entre servidores de archivos y almacenamiento en la nube
