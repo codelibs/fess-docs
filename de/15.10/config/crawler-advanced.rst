@@ -1275,6 +1275,9 @@ Die folgenden Parameter werden mit dem Präfix ``client.`` in
      - Hosts, die den Proxy umgehen (kommagetrennt)
      - (leer)
 
+.. note::
+   Eine Seite, die sich mit ``location.replace(...)`` oder ``<meta http-equiv="refresh" content="0;url=...">`` selbst auf eine andere Seite weiterleitet, wird wie eine Weiterleitung behandelt: Das Ziel wird anhand der URL-Filter der Crawl-Konfiguration geprüft und unter seiner eigenen URL indiziert; ein Ziel außerhalb des Crawls wird ohne Fehler-URL übersprungen. Löst eine Weiterleitung erst aus, nachdem ``client.renderedState`` erreicht wurde (zum Beispiel ein Timer von einigen Sekunden bei ``NETWORKIDLE``), wird die Seite so indiziert, wie sie vor der Weiterleitung war; ``client.contentWaitDuration`` kann das abdecken.
+
 Konfigurationsbeispiel
 ~~~~~~~~~~~~~~~~~~~~~~
 

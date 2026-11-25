@@ -1274,6 +1274,9 @@ crawling configuration with the ``client.`` prefix.
      - Hosts that bypass the proxy (comma-separated)
      - (empty)
 
+.. note::
+   A page that moves itself to another page with ``location.replace(...)`` or ``<meta http-equiv="refresh" content="0;url=...">`` is handled like a redirect: the destination is checked against the URL filters of the crawling configuration and indexed under its own URL, and a destination outside the crawl is skipped without a failure URL. A redirect that fires after ``client.renderedState`` has been reached (for example a timer of a few seconds with ``NETWORKIDLE``) indexes the page as it was before the redirect; ``client.contentWaitDuration`` can cover that.
+
 Configuration Example
 ~~~~~~~~~~~~~~~~~~~~~
 

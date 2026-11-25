@@ -1271,6 +1271,9 @@ Playwright 크롤러를 사용하면 헤드리스 브라우저에서 페이지�
      - 프록시를 경유하지 않을 호스트(쉼표로 구분)
      - (빈 값)
 
+.. note::
+   ``location.replace(...)`` 또는 ``<meta http-equiv="refresh" content="0;url=...">`` 로 스스로 다른 페이지로 이동하는 페이지는 리디렉션과 동일하게 처리됩니다. 이동 대상은 크롤 설정의 URL 필터로 판정되어 대상 자신의 URL로 색인되며, 크롤 범위 밖의 대상은 실패 URL로 만들지 않고 건너뜁니다. ``client.renderedState`` 에 도달한 뒤에 동작하는 리디렉션(예: ``NETWORKIDLE`` 에서 몇 초 뒤에 동작하는 타이머)은 리디렉션 이전의 내용이 색인됩니다. 이 경우 ``client.contentWaitDuration`` 으로 대기 시간을 늘릴 수 있습니다.
+
 설정 예
 ~~~~~~~
 

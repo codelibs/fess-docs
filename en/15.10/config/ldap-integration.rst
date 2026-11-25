@@ -238,6 +238,15 @@ Controls the behavior of role and group resolution after login.
 .. note::
    For a login with an LDAP username and password, blanks around the typed username are removed (blanks inside the name are kept). The cut is made after that, and a blank left at the end of the cut name is removed as well.
 
+LDAP Role Organizational Units and Nested Groups
+------------------------------------------------
+
+Whether a group entry gives a role (permission prefix ``role.search.role.prefix``, default ``R``) or a group (``role.search.group.prefix``, default ``2``) is decided by its DN. For what changed from 15.9, see :doc:`../install/upgrade`.
+
+15.10 parses the DN and treats an entry as a role only when one of its ``ou`` components is exactly ``Role`` or ``Roles`` (case-insensitive). Every other entry is a group, and so is an entry whose DN cannot be parsed.
+
+When ``ldap.group.filter`` is set (it is blank by default), |Fess| uses it to look up the groups that contain the groups of the user (nested groups). Up to 15.9, the DNs of the user's groups were put into that filter without escaping. A DN with an escaped character, such as the comma of ``CN=Sales\, EMEA,...``, did not match, so the nested groups of such a group were silently missing, and a DN that contained characters special to LDAP filters changed the filter. 15.10 escapes the DNs (RFC 4515). The nested groups of such groups are now found, so the users concerned get the permissions of those groups, too.
+
 Reserved Admin User Names
 -------------------------
 

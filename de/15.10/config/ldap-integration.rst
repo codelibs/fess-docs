@@ -239,6 +239,15 @@ Steuert das Verhalten bei der Rollen- und Gruppenauflösung nach der Anmeldung.
 .. note::
    Bei einer Anmeldung mit LDAP-Benutzername und -Passwort werden Leerzeichen vor und nach dem eingegebenen Benutzernamen entfernt (Leerzeichen innerhalb des Namens bleiben erhalten). Danach wird gekürzt; ein Leerzeichen am Ende des gekürzten Namens wird ebenfalls entfernt.
 
+LDAP: Organisationseinheiten für Rollen und verschachtelte Gruppen
+------------------------------------------------------------------
+
+Ob ein Gruppeneintrag eine Rolle (Berechtigungspräfix ``role.search.role.prefix``, Standard ``R``) oder eine Gruppe (``role.search.group.prefix``, Standard ``2``) ergibt, richtet sich nach seinem DN. Änderungen gegenüber 15.9 finden Sie unter :doc:`../install/upgrade`.
+
+15.10 zerlegt den DN und behandelt einen Eintrag nur dann als Rolle, wenn eine seiner ``ou``-Komponenten genau ``Role`` oder ``Roles`` lautet (ohne Beachtung der Groß- und Kleinschreibung). Jeder andere Eintrag ist eine Gruppe, ebenso ein Eintrag, dessen DN sich nicht zerlegen lässt.
+
+Ist ``ldap.group.filter`` gesetzt (standardmäßig ist er leer), sucht |Fess| mit diesem Filter die Gruppen, die die Gruppen des Benutzers enthalten (verschachtelte Gruppen). Bis 15.9 wurden die DNs der Gruppen des Benutzers ohne Maskierung in diesen Filter eingesetzt. Ein DN mit einem maskierten Zeichen, etwa dem Komma in ``CN=Sales\, EMEA,...``, passte nicht, sodass die verschachtelten Gruppen einer solchen Gruppe ohne Fehlermeldung fehlten, und ein DN mit für LDAP-Filter besonderen Zeichen veränderte den Filter. 15.10 maskiert die DNs (RFC 4515). Die verschachtelten Gruppen solcher Gruppen werden nun gefunden, sodass die betroffenen Benutzer auch die Berechtigungen dieser Gruppen erhalten.
+
 Reservierte Administrator-Benutzernamen
 ---------------------------------------
 

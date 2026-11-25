@@ -239,6 +239,15 @@ Contrôle le comportement de la résolution des rôles/groupes après la connexi
 .. note::
    Lors d'une connexion avec un nom d'utilisateur et un mot de passe LDAP, les espaces avant et après le nom d'utilisateur saisi sont supprimés (les espaces à l'intérieur du nom sont conservés). La troncature est effectuée ensuite, et un espace restant à la fin du nom tronqué est également supprimé.
 
+LDAP : unités d'organisation des rôles et groupes imbriqués
+-----------------------------------------------------------
+
+Le DN d'une entrée de groupe détermine si elle donne un rôle (préfixe de permission ``role.search.role.prefix``, ``R`` par défaut) ou un groupe (``role.search.group.prefix``, ``2`` par défaut). Pour les changements depuis la 15.9, voir :doc:`../install/upgrade`.
+
+La 15.10 analyse le DN et ne traite une entrée comme un rôle que si l'un de ses composants ``ou`` est exactement ``Role`` ou ``Roles`` (sans distinction de casse). Toute autre entrée est un groupe, de même qu'une entrée dont le DN ne peut pas être analysé.
+
+Lorsque ``ldap.group.filter`` est défini (il est vide par défaut), |Fess| l'utilise pour rechercher les groupes qui contiennent les groupes de l'utilisateur (groupes imbriqués). Jusqu'à la 15.9, les DN des groupes de l'utilisateur étaient insérés dans ce filtre sans être échappés. Un DN contenant un caractère échappé, comme la virgule de ``CN=Sales\, EMEA,...``, ne correspondait pas : les groupes imbriqués d'un tel groupe manquaient donc sans aucune erreur, et un DN contenant des caractères spéciaux des filtres LDAP modifiait le filtre. La 15.10 échappe les DN (RFC 4515). Les groupes imbriqués de ces groupes sont désormais trouvés, et les utilisateurs concernés obtiennent aussi les permissions de ces groupes.
+
 Noms d'utilisateur administrateur réservés
 ------------------------------------------
 
