@@ -246,7 +246,7 @@ Veamos una panorámica del contenido tratado en las 23 partes de la serie.
      - Tema clave
    * - 1
      - Fundamentos
-     - Por que las empresas necesitan búsqueda
+     - Por qué las empresas necesitan búsqueda
      - Valor de la búsqueda
    * - 2
      - Fundamentos
