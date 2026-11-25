@@ -235,6 +235,15 @@ Controla el comportamiento de la resolución de roles y grupos tras el inicio de
 .. note::
    En un inicio de sesión con nombre de usuario y contraseña de LDAP, se eliminan los espacios al principio y al final del nombre de usuario introducido (los espacios dentro del nombre se conservan). El recorte se hace después, y un espacio que quede al final del nombre recortado también se elimina.
 
+LDAP: unidades organizativas de roles y grupos anidados
+-------------------------------------------------------
+
+Si una entrada de grupo da un rol (prefijo de permiso ``role.search.role.prefix``, por defecto ``R``) o un grupo (``role.search.group.prefix``, por defecto ``2``) se decide por su DN. Para los cambios respecto a 15.9, consulte :doc:`../install/upgrade`.
+
+15.10 analiza el DN y trata una entrada como rol solo cuando uno de sus componentes ``ou`` es exactamente ``Role`` o ``Roles`` (sin distinguir mayúsculas de minúsculas). Cualquier otra entrada es un grupo, igual que una entrada cuyo DN no se puede analizar.
+
+Cuando ``ldap.group.filter`` está definido (por defecto está vacío), |Fess| lo usa para buscar los grupos que contienen los grupos del usuario (grupos anidados). Hasta 15.9, los DN de los grupos del usuario se insertaban en ese filtro sin escapar. Un DN con un carácter escapado, como la coma de ``CN=Sales\, EMEA,...``, no coincidía, de modo que los grupos anidados de ese grupo faltaban sin ningún error, y un DN con caracteres especiales de los filtros LDAP modificaba el filtro. 15.10 escapa los DN (RFC 4515). Los grupos anidados de esos grupos ahora se encuentran, por lo que los usuarios afectados obtienen también los permisos de esos grupos.
+
 Nombres de usuario administrador reservados
 -------------------------------------------
 

@@ -1277,6 +1277,9 @@ d'une configuration de crawl, avec le préfixe ``client.``.
      - Hôtes qui contournent le proxy (séparés par des virgules)
      - (vide)
 
+.. note::
+   Une page qui se redirige elle-même vers une autre page avec ``location.replace(...)`` ou ``<meta http-equiv="refresh" content="0;url=...">`` est traitée comme une redirection : la destination est vérifiée avec les filtres d'URL de la configuration d'exploration et indexée sous sa propre URL, et une destination hors de l'exploration est ignorée sans créer d'URL en échec. Une redirection qui se déclenche après l'atteinte de ``client.renderedState`` (par exemple un minuteur de quelques secondes avec ``NETWORKIDLE``) indexe la page telle qu'elle était avant la redirection ; ``client.contentWaitDuration`` permet de couvrir ce cas.
+
 Exemple de configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

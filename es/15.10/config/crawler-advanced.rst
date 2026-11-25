@@ -1276,6 +1276,9 @@ configuración de rastreo con el prefijo ``client.``.
      - Hosts que omiten el proxy (separados por comas)
      - (vacío)
 
+.. note::
+   Una página que se redirige a sí misma a otra con ``location.replace(...)`` o ``<meta http-equiv="refresh" content="0;url=...">`` se trata como una redirección: el destino se comprueba con los filtros de URL de la configuración de rastreo y se indexa con su propia URL, y un destino fuera del rastreo se omite sin crear una URL con error. Una redirección que se activa después de alcanzar ``client.renderedState`` (por ejemplo, un temporizador de unos segundos con ``NETWORKIDLE``) indexa la página tal como era antes de la redirección; ``client.contentWaitDuration`` puede cubrir ese caso.
+
 Ejemplo de Configuración
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

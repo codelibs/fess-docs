@@ -1267,6 +1267,9 @@ HTML，因此正文不会被索引。使用 Playwright 爬虫可以先用无头�
      - 不经过代理的主机（逗号分隔）
      - (空)
 
+.. note::
+   通过 ``location.replace(...)`` 或 ``<meta http-equiv="refresh" content="0;url=...">`` 自行跳转到其他页面的页面，按重定向处理：跳转目标按爬取配置的 URL 过滤器判断，并以目标自身的 URL 建立索引；爬取范围之外的目标会被跳过，且不会成为失败 URL。在到达 ``client.renderedState`` 之后才触发的重定向（例如 ``NETWORKIDLE`` 下数秒后的计时器）会以重定向之前的内容建立索引，此时可以用 ``client.contentWaitDuration`` 补足等待时间。
+
 配置示例
 ~~~~~~~~
 
