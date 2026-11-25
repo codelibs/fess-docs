@@ -57,6 +57,13 @@ Excluded URLs for Crawling
 
 URLs matching this regular expression (Java format) will not be crawled by the |Fess| crawler.
 
+.. note::
+   On the create form of the admin console, this field is pre-filled with ``(?i).*(css|js|jpeg|jpg|gif|png|bmp|wmv|xml|ico|exe)``.
+   The pattern is matched against the whole URL and also applies to the start URLs of a crawl.
+   The default value matches any URL that ends with a term such as ``css``, ``js`` or ``xml`` (case-insensitive), so a start URL such as ``sitemap.xml`` is not fetched and nothing is crawled from it.
+   To crawl such a URL, remove the matching term from the default value.
+   When a start URL matches a pattern of this field, the name of the crawl configuration, the start URL and the matching pattern are logged as a WARN in ``fess-crawler.log``.
+
 Included URLs for Indexing
 ::::::::::::::::::::::::::
 

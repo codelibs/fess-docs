@@ -177,16 +177,14 @@ Restoring only ``fess*`` does not work either: without the dictionary files, ``f
       "include_global_state": false
     }'
 
-2. Restart OpenSearch (every node in a multi-node cluster). Once the ``configsync`` index is available, write the restored dictionaries out to OpenSearch's ``config/dictionary``.
+2. Write the restored dictionaries out to OpenSearch's ``config/dictionary``.
 
 ::
-
-    curl -X GET "localhost:9200/_cluster/health/configsync?wait_for_status=yellow&timeout=60s&pretty"
 
     curl -X POST "localhost:9200/_configsync/flush"
 
 .. note::
-   With configsync plugin 3.8.0 and earlier, ``_configsync/flush`` writes only the files registered after the node last started a write run (a scheduled run or ``_configsync/flush``). The restored ``configsync`` files carry the times they were registered on the cluster the snapshot was taken from, so once the first scheduled write has run, about one minute after OpenSearch starts, running ``_configsync/flush`` without a restart writes no dictionary files and the cluster turns red after step 3. A restart resets that point, so ``_configsync/flush`` after the restart writes every dictionary file. For each file it writes, OpenSearch logs ``Updated {file path}`` from ``ConfigSyncService``.
+   With configsync plugin 3.9.0 and later (including the plugin for OpenSearch 3.10.0 that |Fess| 15.10 uses), ``_configsync/flush`` writes every stored file, so no restart is needed. With plugin 3.8.0 and earlier, ``_configsync/flush`` writes only the files registered after the node last started a write run, so restoring after the first scheduled write, about one minute after OpenSearch starts, leaves the dictionary files unwritten. In that case, restart OpenSearch (every node, if there are several), and run ``_configsync/flush`` once the ``configsync`` index is available. For each file it writes, OpenSearch logs ``Updated {file path}`` from ``ConfigSyncService``.
 
 3. Restore the |Fess| indexes.
 
@@ -403,7 +401,7 @@ If the cluster status is ``red`` after restoring ``fess*`` and you see the follo
 
 Neither ``_cluster/reroute?retry_failed=true`` nor putting the dictionary files in place recovers it: a shard that failed to restore is not allocated again until its index is closed or deleted and restored once more. Recover as follows.
 
-1. Follow steps 1 and 2 of "Restoring All Indexes" to restore ``configsync``, restart OpenSearch, and write out the dictionary files.
+1. Follow steps 1 and 2 of "Restoring All Indexes" to restore ``configsync`` and write out the dictionary files.
 2. List the ``red`` indexes.
 
    ::

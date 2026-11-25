@@ -57,6 +57,9 @@ URL
 
 与此项中指定的正则表达式(Java格式)匹配的URL将从 |Fess| 爬虫的爬取对象中排除。
 
+.. note::
+   在管理页面的新建表单中，此项默认填入 ``(?i).*(css|js|jpeg|jpg|gif|png|bmp|wmv|xml|ico|exe)`` 。该模式按整个URL进行匹配，同样适用于爬取的起始URL。默认值会匹配以 ``css`` 、 ``js`` 、 ``xml`` 等词结尾的URL(不区分大小写)，因此若将 ``sitemap.xml`` 这样的URL指定为起始URL，则不会获取该URL，也不会爬取任何内容。若要爬取这类URL，请从默认值中删除对应的词。当起始URL与此项的模式匹配时，爬取配置名称、起始URL和匹配的模式会以 WARN 级别输出到 ``fess-crawler.log`` 。
+
 搜索对象URL
 ::::::::::::::
 

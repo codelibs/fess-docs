@@ -57,6 +57,13 @@ Vom Crawlen ausgeschlossene URL
 
 URLs, die mit dem regulären Ausdruck (Java-Format) übereinstimmen, der in diesem Element angegeben ist, werden vom |Fess| Crawler nicht gecrawlt.
 
+.. note::
+   Im Formular zum Anlegen in der Administrationsoberfläche ist dieses Feld mit ``(?i).*(css|js|jpeg|jpg|gif|png|bmp|wmv|xml|ico|exe)`` vorbelegt.
+   Das Muster wird gegen die gesamte URL geprüft und gilt auch für die Start-URLs eines Crawls.
+   Der Standardwert passt auf jede URL, die auf einen Begriff wie ``css``, ``js`` oder ``xml`` endet (ohne Beachtung der Groß- und Kleinschreibung). Eine Start-URL wie ``sitemap.xml`` wird daher nicht abgerufen, und es wird nichts gecrawlt.
+   Um eine solche URL zu crawlen, entfernen Sie den passenden Begriff aus dem Standardwert.
+   Passt eine Start-URL auf ein Muster dieses Feldes, werden der Name der Crawl-Konfiguration, die Start-URL und das passende Muster als WARN in ``fess-crawler.log`` protokolliert.
+
 Zu durchsuchende URL
 :::::::::::::::::::::
 
