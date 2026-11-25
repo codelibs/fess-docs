@@ -556,8 +556,10 @@ Edit ``fess_config.properties``.
     crawler.document.max.symbol.term.size=20
 
 .. note::
-   If you need to search by long alphanumeric strings (e.g., serial numbers, tokens),
-   increase this value. However, index size will increase.
+   Of a run of ASCII alphanumeric characters longer than the limit, only the first characters up to the limit are indexed.
+   With the default ``20``, a search for the whole of a 34-character word, for example, may therefore find nothing.
+   If you need to search by long alphanumeric strings as a whole (e.g., serial numbers, tokens, long compound words, long class names),
+   increase this value and crawl again. However, index size will increase.
 
 Proxy Configuration
 ===================

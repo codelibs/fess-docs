@@ -57,6 +57,13 @@ URL exclues du crawl
 
 Les URL correspondant à l'expression régulière (format Java) spécifiée dans cet élément ne seront pas ciblées par le crawler |Fess|.
 
+.. note::
+   Dans le formulaire de création de la console d'administration, ce champ est prérempli avec ``(?i).*(css|js|jpeg|jpg|gif|png|bmp|wmv|xml|ico|exe)``.
+   Le motif est comparé à l'URL entière et s'applique aussi aux URL de départ d'un crawl.
+   La valeur par défaut correspond à toute URL qui se termine par un terme tel que ``css``, ``js`` ou ``xml`` (sans distinction de casse) ; une URL de départ comme ``sitemap.xml`` n'est donc pas récupérée et rien n'est crawlé à partir d'elle.
+   Pour crawler une telle URL, retirez le terme correspondant de la valeur par défaut.
+   Lorsqu'une URL de départ correspond à un motif de ce champ, le nom de la configuration de crawl, l'URL de départ et le motif correspondant sont journalisés en WARN dans ``fess-crawler.log``.
+
 URL à indexer
 :::::::::::::
 

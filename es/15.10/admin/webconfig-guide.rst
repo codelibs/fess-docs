@@ -57,6 +57,13 @@ URL excluidas del rastreo
 
 Las URL que coincidan con la expresión regular (formato Java) especificada en este elemento no serán objeto del rastreador de |Fess|.
 
+.. note::
+   En el formulario de creación de la consola de administración, este campo viene rellenado con ``(?i).*(css|js|jpeg|jpg|gif|png|bmp|wmv|xml|ico|exe)``.
+   El patrón se compara con la URL completa y también se aplica a las URL de inicio del rastreo.
+   El valor predeterminado coincide con cualquier URL que termine en un término como ``css``, ``js`` o ``xml`` (sin distinguir mayúsculas de minúsculas), por lo que una URL de inicio como ``sitemap.xml`` no se obtiene y no se rastrea nada a partir de ella.
+   Para rastrear una URL así, elimine del valor predeterminado el término que coincide.
+   Cuando una URL de inicio coincide con un patrón de este campo, el nombre de la configuración de rastreo, la URL de inicio y el patrón coincidente se registran como WARN en ``fess-crawler.log``.
+
 URL a buscar
 ::::::::::::
 
