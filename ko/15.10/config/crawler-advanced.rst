@@ -525,7 +525,7 @@ HTML 태그 처리
 ::
 
     # 제거할 태그 추가
-    crawler.document.html.pruned.tags=noscript,script,style,header,footer,aside,nav,a[rel=nofollow],form
+    crawler.document.html.pruned.tags=noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow],form
 
     # 다이제스트 길이를 200자로
     crawler.document.html.max.digest.length=200

@@ -525,7 +525,7 @@ HTML 标签处理
 ::
 
     # 添加要删除的标签
-    crawler.document.html.pruned.tags=noscript,script,style,header,footer,aside,nav,a[rel=nofollow],form
+    crawler.document.html.pruned.tags=noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow],form
 
     # 摘要长度设为200个字符
     crawler.document.html.max.digest.length=200

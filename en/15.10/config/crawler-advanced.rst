@@ -527,7 +527,7 @@ Configuration Example
 ::
 
     # Add tags to remove
-    crawler.document.html.pruned.tags=noscript,script,style,header,footer,aside,nav,a[rel=nofollow],form
+    crawler.document.html.pruned.tags=noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow],form
 
     # Set digest length to 200 characters
     crawler.document.html.max.digest.length=200
