@@ -37,7 +37,7 @@ En la autenticación OpenID Connect, |Fess| opera como Relying Party (RP) y cola
 Para la integración con búsqueda basada en roles, consulte :doc:`security-role`.
 
 .. note::
-   La sesión de inicio de sesión de |Fess| no termina cuando caducan los tokens emitidos por el OP. |Fess| comprueba ``exp`` del token de ID solo cuando el usuario inicia sesión, y la vigencia del token no se usa para la sesión. El inicio de sesión dura hasta que el usuario cierra sesión o se alcanza el tiempo de espera de la sesión. SAML es distinto: su sesión termina con la sesión del IdP (consulte :doc:`sso-saml`).
+   La sesión de inicio de sesión de |Fess| no termina cuando caducan los tokens emitidos por el OP. |Fess| comprueba ``exp`` del token de ID solo cuando el usuario inicia sesión, y la vigencia del token no se usa para la sesión. Si ``oic.jwks.uri`` no está definido, el inicio de sesión dura hasta que el usuario cierra sesión o se alcanza el tiempo de espera de la sesión. Para que la sesión de |Fess| termine cuando el usuario cierra sesión en el OP, configure el `Cierre de sesión por canal secundario (back-channel logout)`_. SAML es distinto: su sesión termina con la sesión del IdP (consulte :doc:`sso-saml`).
 
 .. note::
    Si ejecuta varios nodos, defina la variable de entorno ``FESS_SESSION_STORE=opensearch`` para compartir la sesión HTTP entre ellos; un inicio de sesión iniciado en un nodo podrá entonces completarse en otro. Actualice el plugin en cada nodo a 15.10 antes de activarlo: un plugin 15.9.0 no comparte el estado del inicio de sesión, y un usuario que vuelve a otro nodo permanece como anónimo. Sin una sesión compartida, haga que el balanceador de carga fije cada sesión a un nodo.
@@ -76,9 +76,9 @@ Para habilitar la autenticación OpenID Connect, agregue la siguiente configurac
     sso.type=oic
 
 .. note::
-   Los ajustes de ``sso.type`` y los de ``oic.*`` descritos a continuación, excepto ``oic.issuer``, también pueden configurarse y modificarse desde la página "Sistema > General" de la pantalla de administración.
+   Los ajustes de ``sso.type`` y los de ``oic.*`` descritos a continuación, excepto ``oic.issuer`` y ``oic.jwks.uri``, también pueden configurarse y modificarse desde la página "Sistema > General" de la pantalla de administración.
    Los cambios realizados en la pantalla de administración se guardan en ``system.properties`` y se conservan tras el reinicio.
-   ``oic.issuer`` solo puede definirse en ``system.properties``.
+   ``oic.issuer`` y ``oic.jwks.uri`` solo pueden definirse en ``system.properties``.
 
 Configuración del proveedor
 ---------------------------
@@ -101,6 +101,9 @@ Configure la información obtenida de su OP.
    * - ``oic.issuer``
      - Identificador del emisor (opcional). Si se define, el claim ``iss`` del ID Token debe ser exactamente igual a este valor (una barra final cuenta)
      - (vacío: no se comprueba ``iss``)
+   * - ``oic.jwks.uri``
+     - El ``jwks_uri`` del OP (opcional). Al definirlo se activa el back-channel logout (consulte `Cierre de sesión por canal secundario (back-channel logout)`_)
+     - (vacío: no se usa el back-channel logout)
 
 .. note::
    Estas URLs y el emisor se pueden obtener del endpoint Discovery del OP (``/.well-known/openid-configuration``); el emisor es su valor ``issuer``.
@@ -233,6 +236,44 @@ Obtenga la siguiente información de la pantalla de configuración o endpoint Di
 .. note::
    La mayoría de los OP le permiten verificar las URLs de los endpoints de autorización y token desde el
    endpoint Discovery (``https://<OP>/.well-known/openid-configuration``).
+
+Cierre de sesión por canal secundario (back-channel logout)
+===========================================================
+
+Con `OpenID Connect Back-Channel Logout 1.0 <https://openid.net/specs/openid-connect-backchannel-1_0.html>`__, el OP notifica a |Fess|, de servidor a servidor, que un inicio de sesión ha terminado en el OP, y |Fess| finaliza la sesión de ese inicio de sesión.
+Sin esta función, una sesión de |Fess| continúa después del cierre de sesión en el OP.
+
+Habilitación
+------------
+
+Defina el ``jwks_uri`` del OP en ``app/WEB-INF/conf/system.properties``. Al definirlo se activa el back-channel logout; no es necesario cambiar ningún otro ajuste.
+
+::
+
+    oic.jwks.uri=https://op.example.com/jwks
+
+- ``oic.jwks.uri`` solo puede definirse en ``system.properties`` (la pantalla de administración no tiene ningún campo para ello).
+- ``oic.issuer`` y ``oic.client.id`` también deben estar definidos, porque el token de cierre de sesión se comprueba con ellos. Si alguno está vacío, se rechazan todas las solicitudes de cierre de sesión.
+- ``oic.jwks.uri`` debe ser HTTPS. Al igual que con el endpoint de token, ``http`` solo se acepta cuando el host es ``localhost``, ``127.x.x.x`` o ``::1``. La comprobación se realiza cuando se obtienen las claves para una solicitud de cierre de sesión, y una URL que no la supera hace que se rechace la solicitud.
+- ``jwks_uri`` e ``issuer`` se pueden obtener del endpoint Discovery del OP (``/.well-known/openid-configuration``), donde ``backchannel_logout_supported`` indica si el OP admite esta función.
+
+Registro en el OP
+-----------------
+
+- En la configuración del cliente en el OP, registre ``https://<host de Fess>/sso/logout`` como URL de back-channel logout.
+- Si el OP ofrece la opción (``backchannel_logout_session_required``), haga que incluya el ID de sesión (``sid``) en el token de cierre de sesión. Con ``sid`` solo termina la sesión correspondiente, no todas las sesiones del usuario. El ID Token emitido al iniciar sesión debe contener el mismo ``sid``.
+
+Comportamiento
+--------------
+
+- El OP envía por POST un parámetro ``logout_token`` a ``/sso/logout``. |Fess| responde ``200`` cuando se registró el cierre de sesión y ``400`` en caso contrario, con ``Cache-Control: no-store`` en ambos casos.
+- Del token de cierre de sesión se comprueban la firma (RS256, RS384, RS512, ES256, ES384 o ES512, con una clave del documento ``jwks_uri``), ``iss`` (``oic.issuer``), ``aud`` (``oic.client.id``), ``iat`` y ``exp`` (con el mismo desfase horario de 300 segundos que para el ID Token; se rechaza un token emitido hace más de una hora), ``jti``, ``events``, la ausencia de ``nonce`` y la presencia de ``sid`` o ``sub``. Un token que no supera una comprobación y un token ya aceptado (el mismo ``jti``) se rechazan con ``400`` y no termina ninguna sesión. Si ``oic.jwks.uri`` no está definido, todas las solicitudes de cierre de sesión también se rechazan con ``400``.
+- Con ``sid`` en el token, solo termina la sesión del inicio de sesión que tiene ese ``sid``. Con solo ``sub``, terminan todas las sesiones de ese usuario abiertas antes de que |Fess| recibiera la solicitud. Un inicio de sesión cuyo ID Token no tenía ``sid`` no termina con un token que contiene ``sid``.
+- Una sesión termina la próxima vez que se usa, y esa solicitud se trata como anónima. No se envía ningún cierre de sesión al OP; solo termina la sesión de |Fess|. El registro de auditoría registra ``SESSION_END`` con el ``reason`` ``idp_session_ended`` (consulte :doc:`../install/security`).
+- El cierre de sesión se registra en el índice coordinador del motor de búsqueda (``fess_config.coordinator``), que leen todos los nodos, por lo que funciona con varios nodos tanto si las sesiones HTTP se comparten con ``FESS_SESSION_STORE=opensearch`` como si no. En el nodo que recibió la solicitud, la sesión termina sin demora en su siguiente solicitud. Otro nodo comprueba el registro como máximo cada 30 segundos, por lo que allí una sesión puede continuar hasta 30 segundos después de la solicitud.
+- Si no se puede leer el índice coordinador, no termina ninguna sesión (se registra una advertencia). Con solo ``sub``, la hora de un inicio de sesión puede compararse con la hora en que otro nodo recibió la solicitud, así que mantenga sincronizados los relojes de los nodos.
+- La primera solicitud rechazada de cada tipo se registra como advertencia, y las siguientes en el nivel DEBUG. No se registran el token, ``sid`` ni ``sub``.
+- No se admiten los tokens de cierre de sesión cifrados (JWE) ni el front-channel logout.
 
 Ejemplos de configuración
 =========================

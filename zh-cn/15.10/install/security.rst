@@ -281,7 +281,7 @@ Nginx 访问限制示例::
 - ``ACCESS_DENIED``：对于被拒绝的 Admin API 请求，仅记录请求路径。访问令牌及传递它的参数都不会被记录。
 - ``REGISTER_PASSKEY`` 和 ``DELETE_PASSKEY``： ``user`` 是执行操作的用户， ``target`` 是拥有该通行密钥的用户的名称。 ``credentialId`` 是凭据 ID 的前 8 个字符，超过 8 个字符时后面带有 ``...``。通行密钥的密钥本身不会被记录。
 - ``UPDATE_PASSWORD``： ``user`` 是更改密码的用户， ``target`` 是被更改密码的用户的名称。密码及其哈希值不会被记录，被拒绝的更改也不会被记录。
-- ``SESSION_END``： ``user`` 是会话被结束的用户， ``reason`` 是结束的原因。 ``password_changed`` 表示会话建立之后用户的密码被更改， ``permissions_changed`` 表示会话建立之后本地用户的角色或组被更改（编辑用户，或删除该用户所属的角色或组）， ``user_not_found`` 表示本地用户的文档已不存在（例如用户被删除或被重命名）， ``idp_session_ended`` 表示 IdP（身份提供方）结束了自己的会话（SAML 的 ``SessionNotOnOrAfter`` ，参见 :doc:`../config/sso-saml` ）。
+- ``SESSION_END``： ``user`` 是会话被结束的用户， ``reason`` 是结束的原因。 ``password_changed`` 表示会话建立之后用户的密码被更改， ``permissions_changed`` 表示会话建立之后本地用户的角色或组被更改（编辑用户，或删除该用户所属的角色或组）， ``user_not_found`` 表示本地用户的文档已不存在（例如用户被删除或被重命名）， ``idp_session_ended`` 表示 IdP（身份提供方）结束了自己的会话（SAML 的 ``SessionNotOnOrAfter`` ，参见 :doc:`../config/sso-saml` ；或 OpenID Connect 的后端通道登出，参见 :doc:`../config/sso-oidc` ）。
 
 定期安全更新
 ------------------------------

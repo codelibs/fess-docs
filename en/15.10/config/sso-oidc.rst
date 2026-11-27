@@ -37,7 +37,7 @@ In OpenID Connect authentication, |Fess| operates as a Relying Party (RP) and co
 For integration with role-based search, see :doc:`security-role`.
 
 .. note::
-   The |Fess| login session does not end when the tokens issued by the OP expire. |Fess| checks ``exp`` of the ID Token only when the user logs in, and the lifetime of the token is not used for the session. The login lasts until the user logs out or the session timeout is reached. SAML differs: its session ends with the IdP session (see :doc:`sso-saml`).
+   The |Fess| login session does not end when the tokens issued by the OP expire. |Fess| checks ``exp`` of the ID Token only when the user logs in, and the lifetime of the token is not used for the session. When ``oic.jwks.uri`` is not set, the login lasts until the user logs out or the session timeout is reached. To end the |Fess| session when the user logs out at the OP, set up `Back-Channel Logout`_. SAML differs: its session ends with the IdP session (see :doc:`sso-saml`).
 
 .. note::
    When you run several nodes, set the environment variable ``FESS_SESSION_STORE=opensearch`` to share the HTTP session between them; a login started on one node can then be completed on another. Update the plugin on every node to 15.10 before you enable it: a 15.9.0 plugin does not share the login state, and a user who returns to another node stays anonymous. Without a shared session, pin each session to one node on the load balancer.
@@ -76,9 +76,9 @@ To enable OpenID Connect authentication, add the following setting to ``app/WEB-
     sso.type=oic
 
 .. note::
-   The ``sso.type`` setting and the ``oic.*`` settings described below, except ``oic.issuer``, can also be configured and changed from the admin "System > General" page.
+   The ``sso.type`` setting and the ``oic.*`` settings described below, except ``oic.issuer`` and ``oic.jwks.uri``, can also be configured and changed from the admin "System > General" page.
    Settings changed through the admin page are saved to ``system.properties`` and persist after restart.
-   ``oic.issuer`` can only be set in ``system.properties``.
+   ``oic.issuer`` and ``oic.jwks.uri`` can only be set in ``system.properties``.
 
 Provider Configuration
 ----------------------
@@ -101,6 +101,9 @@ Configure the information obtained from your OP.
    * - ``oic.issuer``
      - Issuer identifier (optional). When set, the ``iss`` claim of the ID Token must equal it exactly (a trailing slash counts)
      - (empty: ``iss`` is not checked)
+   * - ``oic.jwks.uri``
+     - The OP's ``jwks_uri`` (optional). Setting it turns on back-channel logout (see `Back-Channel Logout`_)
+     - (empty: back-channel logout is not used)
 
 .. note::
    These URLs and the issuer can be obtained from the OP's Discovery endpoint (``/.well-known/openid-configuration``); the issuer is its ``issuer`` value.
@@ -232,6 +235,44 @@ Obtain the following information from the OP's configuration screen or Discovery
 .. note::
    Most OPs allow you to check the authorization and token endpoint URLs from the
    Discovery endpoint (``https://<OP>/.well-known/openid-configuration``).
+
+Back-Channel Logout
+===================
+
+With `OpenID Connect Back-Channel Logout 1.0 <https://openid.net/specs/openid-connect-backchannel-1_0.html>`__, the OP tells |Fess|, server to server, that a login has ended at the OP, and |Fess| ends the session of that login.
+Without it, a |Fess| session outlives the logout at the OP.
+
+Enabling
+--------
+
+Set the OP's ``jwks_uri`` in ``app/WEB-INF/conf/system.properties``. Setting it turns back-channel logout on; nothing else needs to be switched.
+
+::
+
+    oic.jwks.uri=https://op.example.com/jwks
+
+- ``oic.jwks.uri`` can only be set in ``system.properties`` (the admin page has no field for it).
+- ``oic.issuer`` and ``oic.client.id`` have to be set too, because the logout token is checked against them. If either is empty, every logout request is refused.
+- ``oic.jwks.uri`` must be HTTPS. As for the token endpoint, ``http`` is accepted only when the host is ``localhost``, ``127.x.x.x`` or ``::1``. The check runs when the keys are fetched for a logout request, and a URL that fails it makes the request be refused.
+- ``jwks_uri`` and ``issuer`` can be obtained from the OP's Discovery endpoint (``/.well-known/openid-configuration``), where ``backchannel_logout_supported`` tells whether the OP supports it.
+
+Registering at the OP
+---------------------
+
+- In the client settings of the OP, register ``https://<Fess host>/sso/logout`` as the back-channel logout URL.
+- Where the OP has the option (``backchannel_logout_session_required``), have it include the session ID (``sid``) in the logout token. With ``sid``, only the one matching session ends, not every session of the user. The ID Token issued at login has to carry the same ``sid``.
+
+Behavior
+--------
+
+- The OP posts a ``logout_token`` parameter to ``/sso/logout``. |Fess| answers ``200`` when the logout was recorded and ``400`` otherwise, with ``Cache-Control: no-store`` in both cases.
+- The logout token is checked for its signature (RS256, RS384, RS512, ES256, ES384 or ES512, with a key of the ``jwks_uri`` document), ``iss`` (``oic.issuer``), ``aud`` (``oic.client.id``), ``iat`` and ``exp`` (the same 300 seconds of clock skew as for the ID Token; a token issued more than an hour ago is refused), ``jti``, ``events``, the absence of ``nonce``, and the presence of ``sid`` or ``sub``. A token that fails a check, and a token that was already accepted (the same ``jti``), are refused with ``400`` and no session ends. When ``oic.jwks.uri`` is not set, every logout request is refused with ``400`` as well.
+- With ``sid`` in the token, only the session of the login that has that ``sid`` ends. With ``sub`` only, every session of that user that was opened before |Fess| received the request ends. A login whose ID Token had no ``sid`` is not ended by a token that carries ``sid``.
+- A session ends when it is next used, and that request is handled as anonymous. No logout is sent back to the OP; only the |Fess| session ends. The audit log records ``SESSION_END`` with ``reason`` ``idp_session_ended`` (see :doc:`../install/security`).
+- The logout is recorded in the coordinator index of the search engine (``fess_config.coordinator``), which every node reads, so it works with several nodes whether or not the HTTP sessions are shared with ``FESS_SESSION_STORE=opensearch``. On the node that received the request, the session ends at its next request without delay. Another node checks the record at most every 30 seconds, so a session can continue there for up to 30 seconds after the request.
+- If the coordinator index cannot be read, no session is ended (one warning is logged). With ``sub`` only, the time of a login can be compared with the time another node received the request, so keep the clocks of the nodes in sync.
+- The first refused request of each kind is logged as a warning, and the later ones at DEBUG level. No token, ``sid`` or ``sub`` is logged.
+- Encrypted logout tokens (JWE) and front-channel logout are not supported.
 
 Configuration Examples
 ======================

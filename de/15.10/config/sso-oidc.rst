@@ -38,7 +38,7 @@ Bei der OpenID Connect Authentifizierung fungiert |Fess| als Relying Party (RP) 
 Für die Integration mit rollenbasierter Suche siehe :doc:`security-role`.
 
 .. note::
-   Die |Fess|-Anmeldesitzung endet nicht, wenn die vom OP ausgestellten Token ablaufen. |Fess| prüft ``exp`` des ID-Tokens nur, wenn sich der Benutzer anmeldet, und die Lebensdauer des Tokens wird für die Sitzung nicht verwendet. Die Anmeldung besteht, bis sich der Benutzer abmeldet oder das Sitzungs-Timeout erreicht ist. Bei SAML ist das anders: Die Sitzung endet mit der Sitzung des IdP (siehe :doc:`sso-saml`).
+   Die |Fess|-Anmeldesitzung endet nicht, wenn die vom OP ausgestellten Token ablaufen. |Fess| prüft ``exp`` des ID-Tokens nur, wenn sich der Benutzer anmeldet, und die Lebensdauer des Tokens wird für die Sitzung nicht verwendet. Ohne ``oic.jwks.uri`` besteht die Anmeldung, bis sich der Benutzer abmeldet oder das Sitzungs-Timeout erreicht ist. Damit die |Fess|-Sitzung endet, wenn sich der Benutzer beim OP abmeldet, richten Sie das `Back-Channel-Logout`_ ein. Bei SAML ist das anders: Die Sitzung endet mit der Sitzung des IdP (siehe :doc:`sso-saml`).
 
 .. note::
    Wenn Sie mehrere Knoten betreiben, setzen Sie die Umgebungsvariable ``FESS_SESSION_STORE=opensearch``, um die HTTP-Sitzung zwischen ihnen zu teilen; eine auf einem Knoten begonnene Anmeldung kann dann auf einem anderen abgeschlossen werden. Aktualisieren Sie das Plugin auf jedem Knoten auf 15.10, bevor Sie dies aktivieren: Ein Plugin 15.9.0 teilt den Anmeldestatus nicht, und ein Benutzer, der zu einem anderen Knoten zurückkehrt, bleibt anonym. Ohne gemeinsame Sitzung binden Sie jede Sitzung am Load Balancer an einen Knoten.
@@ -77,9 +77,9 @@ Um die OpenID Connect Authentifizierung zu aktivieren, fügen Sie die folgende E
     sso.type=oic
 
 .. note::
-   ``sso.type`` sowie die im Folgenden beschriebenen ``oic.*``-Einstellungen mit Ausnahme von ``oic.issuer`` können auch über die Administrationsseite „System > Allgemein" konfiguriert und geändert werden.
+   ``sso.type`` sowie die im Folgenden beschriebenen ``oic.*``-Einstellungen mit Ausnahme von ``oic.issuer`` und ``oic.jwks.uri`` können auch über die Administrationsseite „System > Allgemein" konfiguriert und geändert werden.
    Über die Administrationsseite vorgenommene Änderungen werden in ``system.properties`` gespeichert und bleiben auch nach einem Neustart erhalten.
-   ``oic.issuer`` lässt sich nur in ``system.properties`` festlegen.
+   ``oic.issuer`` und ``oic.jwks.uri`` lassen sich nur in ``system.properties`` festlegen.
 
 Provider-Konfiguration
 ----------------------
@@ -102,6 +102,9 @@ Konfigurieren Sie die vom OP erhaltenen Informationen.
    * - ``oic.issuer``
      - Aussteller-Kennung (Issuer, optional). Wenn gesetzt, muss der ``iss``-Claim des ID-Tokens exakt damit übereinstimmen (ein abschließender Schrägstrich zählt mit)
      - (leer: ``iss`` wird nicht geprüft)
+   * - ``oic.jwks.uri``
+     - Die ``jwks_uri`` des OP (optional). Wenn gesetzt, ist das Back-Channel-Logout aktiviert (siehe `Back-Channel-Logout`_)
+     - (leer: kein Back-Channel-Logout)
 
 .. note::
    Diese URLs und der Aussteller können vom Discovery-Endpunkt des OP (``/.well-known/openid-configuration``) abgerufen werden; der Aussteller ist dessen ``issuer``-Wert.
@@ -235,6 +238,44 @@ Rufen Sie die folgenden Informationen vom Konfigurationsbildschirm oder Discover
 .. note::
    Die meisten OPs ermöglichen es Ihnen, die Autorisierungs- und Token-Endpunkt-URLs vom
    Discovery-Endpunkt (``https://<OP>/.well-known/openid-configuration``) zu überprüfen.
+
+Back-Channel-Logout
+===================
+
+Mit `OpenID Connect Back-Channel Logout 1.0 <https://openid.net/specs/openid-connect-backchannel-1_0.html>`__ teilt der OP |Fess| von Server zu Server mit, dass eine Anmeldung beim OP beendet wurde, und |Fess| beendet die Sitzung dieser Anmeldung.
+Ohne diese Funktion besteht eine |Fess|-Sitzung auch nach der Abmeldung beim OP weiter.
+
+Aktivierung
+-----------
+
+Setzen Sie die ``jwks_uri`` des OP in ``app/WEB-INF/conf/system.properties``. Damit wird das Back-Channel-Logout aktiviert; weitere Einstellungen müssen nicht umgeschaltet werden.
+
+::
+
+    oic.jwks.uri=https://op.example.com/jwks
+
+- ``oic.jwks.uri`` lässt sich nur in ``system.properties`` festlegen (die Administrationsseite hat dafür kein Feld).
+- ``oic.issuer`` und ``oic.client.id`` müssen ebenfalls gesetzt sein, weil das Logout-Token gegen sie geprüft wird. Ist einer der beiden Werte leer, wird jede Logout-Anfrage abgelehnt.
+- ``oic.jwks.uri`` muss HTTPS sein. Wie beim Token-Endpunkt ist ``http`` nur erlaubt, wenn der Host ``localhost``, ``127.x.x.x`` oder ``::1`` ist. Die Prüfung erfolgt, wenn die Schlüssel für eine Logout-Anfrage abgerufen werden; eine URL, die sie nicht besteht, führt zur Ablehnung der Anfrage.
+- ``jwks_uri`` und ``issuer`` können vom Discovery-Endpunkt des OP (``/.well-known/openid-configuration``) abgerufen werden; dort gibt ``backchannel_logout_supported`` an, ob der OP diese Funktion unterstützt.
+
+Registrierung beim OP
+---------------------
+
+- Registrieren Sie in den Client-Einstellungen des OP ``https://<Fess-Host>/sso/logout`` als Back-Channel-Logout-URL.
+- Sofern der OP die Option anbietet (``backchannel_logout_session_required``), lassen Sie ihn die Sitzungs-ID (``sid``) in das Logout-Token aufnehmen. Mit ``sid`` endet nur die eine passende Sitzung, nicht jede Sitzung des Benutzers. Das bei der Anmeldung ausgestellte ID-Token muss dieselbe ``sid`` enthalten.
+
+Verhalten
+---------
+
+- Der OP sendet einen ``logout_token``-Parameter per POST an ``/sso/logout``. |Fess| antwortet mit ``200``, wenn das Logout erfasst wurde, und sonst mit ``400``, in beiden Fällen mit ``Cache-Control: no-store``.
+- Geprüft werden die Signatur des Logout-Tokens (RS256, RS384, RS512, ES256, ES384 oder ES512 mit einem Schlüssel des ``jwks_uri``-Dokuments), ``iss`` (``oic.issuer``), ``aud`` (``oic.client.id``), ``iat`` und ``exp`` (mit derselben Zeitabweichung von 300 Sekunden wie beim ID-Token; ein Token, das vor mehr als einer Stunde ausgestellt wurde, wird abgelehnt), ``jti``, ``events``, das Fehlen von ``nonce`` und das Vorhandensein von ``sid`` oder ``sub``. Ein Token, das eine Prüfung nicht besteht, und ein bereits angenommenes Token (dieselbe ``jti``) werden mit ``400`` abgelehnt, und keine Sitzung endet. Ist ``oic.jwks.uri`` nicht gesetzt, wird ebenfalls jede Logout-Anfrage mit ``400`` abgelehnt.
+- Enthält das Token ``sid``, endet nur die Sitzung der Anmeldung mit dieser ``sid``. Enthält es nur ``sub``, endet jede Sitzung dieses Benutzers, die geöffnet wurde, bevor |Fess| die Anfrage erhielt. Eine Anmeldung, deren ID-Token keine ``sid`` enthielt, wird durch ein Token mit ``sid`` nicht beendet.
+- Eine Sitzung endet, wenn sie das nächste Mal verwendet wird, und diese Anfrage wird als anonym behandelt. An den OP wird kein Logout zurückgesendet; nur die |Fess|-Sitzung endet. Das Audit-Log erfasst ``SESSION_END`` mit dem ``reason`` ``idp_session_ended`` (siehe :doc:`../install/security`).
+- Das Logout wird im Koordinator-Index der Suchmaschine (``fess_config.coordinator``) erfasst, den jeder Knoten liest. Es funktioniert daher mit mehreren Knoten, unabhängig davon, ob die HTTP-Sitzungen mit ``FESS_SESSION_STORE=opensearch`` geteilt werden. Auf dem Knoten, der die Anfrage erhalten hat, endet die Sitzung ohne Verzögerung bei ihrer nächsten Anfrage. Ein anderer Knoten prüft den Eintrag höchstens alle 30 Sekunden, sodass eine Sitzung dort bis zu 30 Sekunden nach der Anfrage weiterbestehen kann.
+- Kann der Koordinator-Index nicht gelesen werden, endet keine Sitzung (es wird eine Warnung protokolliert). Bei einem Token mit nur ``sub`` kann der Zeitpunkt einer Anmeldung mit dem Zeitpunkt verglichen werden, zu dem ein anderer Knoten die Anfrage erhielt; halten Sie daher die Uhren der Knoten synchron.
+- Die erste abgelehnte Anfrage jeder Art wird als Warnung protokolliert, die späteren auf DEBUG-Ebene. Weder Token noch ``sid`` oder ``sub`` werden protokolliert.
+- Verschlüsselte Logout-Tokens (JWE) und Front-Channel-Logout werden nicht unterstützt.
 
 Konfigurationsbeispiele
 =======================
