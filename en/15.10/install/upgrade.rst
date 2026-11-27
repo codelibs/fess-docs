@@ -839,7 +839,7 @@ Other Behavior Changes
 - A regular expression that does not compile is refused on save: the include and exclude patterns of web and file crawl configurations, the paths of a label type and the regular expression of a path mapping. A value saved earlier stays as it is, and cannot be saved again unchanged until it is corrected. In 15.9, a stored path mapping with an invalid regular expression makes every search return no hits (``fess.log`` shows ``PatternSyntaxException`` from ``PathMapping``). 15.10 skips such a mapping: searches return hits, the other path mappings still apply, and ``fess.log`` gets one warning such as ``The regex of the path mapping "(" is not valid, so the mapping is skipped``. Correct or delete the mapping.
 - The label menu of the search screen, the label choices of the admin forms and the labelling of crawled documents use every label type. Up to 15.9 only the first ``page.labeltype.max.fetch.size`` (1,000) label types were read, so a label type beyond them was missing from the menu and the forms, and the documents it should label were not labelled. The setting now only sizes the pages of the label type list in the admin console. With more than 1,000 label types, ``/api/v2/ui/config`` is larger (about 45 bytes per label type).
 - A permission entry written with full-width characters, such as ``（deny）{user}name`` or ``(deny)｛user｝name`` (as a Japanese keyboard types them), is refused on the permission fields of the admin screens and by the Admin API, with a message that asks for the half-width spelling such as ``(deny){user}name``. Up to 15.9 it was stored as a value that matches nobody, or dropped, so a deny that was meant to hide a document had no effect. The name after the marker is not changed, so a role named in Japanese or with full-width letters is still accepted.
-- A permission entry that has an invisible character (a zero-width space, a byte order mark or a control character) where the ``(allow)`` / ``(deny)`` prefix or the name starts, such as ``(deny)<U+200B>{user}name``, is refused with a message that asks to delete the character. Such a character is usually pasted in with the text. Up to 15.9 the entry was saved as a value that matches nobody, or dropped. A character of this kind inside a name, or at its end, is not refused. A no-break space before the prefix is different: a value that 15.9.0 stored as ``<U+00A0>(deny){user}name`` matched nobody in 15.9.0, but 15.10 accepts it when the setting is saved again and stores it as an effective deny entry. Check the permission values carried over from 15.9 for leading invisible spaces before saving them again.
+- A permission entry that has an invisible character (a zero-width space, a byte order mark or a control character) where the ``(allow)`` / ``(deny)`` prefix or the name starts, such as ``(deny)<U+200B>{user}name``, is refused with a message that asks to delete the character. Such a character is usually pasted in with the text. Up to 15.9 the entry was saved as a value that matches nobody, or dropped. A character of this kind inside a name, or at its end, is not refused.
 - A user who is already signed in and opens ``/login/`` is redirected to the page a login would lead to: the dashboard for an administrator, the first admin screen the roles allow for a user with an admin role, and the search screen for anyone else. An anonymous visitor still gets the login form. To sign in as another account, sign out first. A link on another site to ``/logout/`` (see above) keeps the session and therefore also ends on that page.
 - A stored ``{bcrypt}`` hash with the ``$2b$`` prefix (Python's bcrypt and many other systems) or the ``$2y$`` prefix (PHP, ``htpasswd -B``) now verifies like a ``$2a$`` one. Up to 15.9 the login of such a user always failed. New hashes are still written as ``$2a$``.
 - While the search engine cannot be reached, the admin console answers ``503`` (500 up to 15.9), and the login form shows a notice that the search engine is not available instead of an error page. ``/go/`` (the link of a search result) also answers ``503`` while the search engine is not available (``404`` up to 15.9). These ``503`` answers carry ``Retry-After: 5``. A connection reset by the search engine is treated as unavailable as well, so the answer is ``503`` instead of ``500``.
@@ -1403,23 +1403,36 @@ is replaced by the 15.10 file on a DEB upgrade (see Step 3), so it starts from t
 
 ``app.cipher.key`` is the one value you must carry over even though 15.10 did not change it. It is
 the key that encrypts the passwords and secrets stored in the parameters of web authentication,
-crawling configurations and data store configurations. If the new installation runs with a
-different key than the one that saved them, because you took the shipped ``fess_config.properties``
-or restored a backup onto a new server, they cannot be decrypted: ``fess-crawler.log`` records a
-``CipherFailureException``, and a crawl that includes such a configuration can index nothing.
+crawling configurations and data store configurations. The installation you upgrade or restore into
+must use the same ``app.cipher.key`` as the installation that saved the data: carry the key over
+together with the backup.
+
+If the installation runs with a different key, for example because you took the shipped
+``fess_config.properties`` or restored a backup onto a server that uses another key, the stored values
+cannot be decrypted: ``fess-crawler.log`` records a ``CipherFailureException``, and a crawl that
+includes such a configuration can index nothing.
 
 If even one configuration has a value that cannot be decrypted, the crawl stops at that point. The configuration that cannot be decrypted is not simply skipped;
 the other configurations targeted by the same crawl are not indexed either. The message of the ``CipherFailureException`` shows the type, name and ID of that
 configuration and the key of the parameter that could not be decrypted, and it also says that ``app.cipher.key`` may differ from the key used when the value was saved
-(neither the encrypted value nor the key itself is output). Once you know the cause, either restore ``app.cipher.key`` to the original value, or re-enter the password of that configuration and replace every parameter value that starts with ``{cipher}`` with the plain value. A web authentication whose parameters hold ``{cipher}`` values saved under another key cannot be saved even with a new password (the save fails with ``Failed to decrypt a parameter: key=...``); it can be saved once those values are replaced with plain text or removed.
+(neither the encrypted value nor the key itself is output). Set ``app.cipher.key`` back to the original value.
+
+To change ``app.cipher.key`` on purpose, re-enter the stored secrets after the change. Open every web
+authentication, file authentication, crawling configuration and data store configuration that holds a
+password or an encrypted parameter, and enter those values again in plain text in the same setting:
+the password field, and each parameter value that starts with ``{cipher}``, replaced by its plain
+value. |Fess| encrypts them again with the new key when the setting is saved. Re-enter them in place
+instead of deleting the setting and creating it again: a re-created setting gets a new ID, while other
+settings (such as the web or file configuration of an authentication) and the crawl schedule refer to
+the old one.
 
 .. note::
 
    |Fess| 15.9 also stores the ``password`` of web and file authentication encrypted with ``app.cipher.key``, so
-   ``fess_basic_config.bulk`` and ``fess_config.bulk`` in a backup contain the encrypted values. When you restore onto
-   another installation, carry the same ``app.cipher.key`` over; with a different key, crawls that use these
-   credentials fail with an error. A backup made before 15.9 holds them in plain text and keeps working (see
-   :doc:`../admin/backup-guide`).
+   ``fess_basic_config.bulk`` and ``fess_config.bulk`` in a backup contain the encrypted values. Restore such a
+   backup into an installation that uses the same ``app.cipher.key``; with a different key, crawls that use these
+   credentials fail with an error until the original key is set. A backup made before 15.9 holds them in plain text
+   and keeps working (see :doc:`../admin/backup-guide`).
 
 .. _upgrade-159-jcifs:
 

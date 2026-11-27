@@ -853,7 +853,7 @@ Otros cambios de comportamiento
 - Una expresión regular que no compila se rechaza al guardar: los patrones de inclusión y exclusión de las configuraciones de rastreo web y de archivos, las rutas de un tipo de etiqueta y la expresión regular de un mapeo de rutas. Un valor guardado antes se conserva tal cual y no se puede volver a guardar sin cambios hasta que se corrija. En 15.9, un mapeo de rutas guardado con una expresión regular no válida hace que toda búsqueda devuelva cero resultados (``fess.log`` muestra ``PatternSyntaxException`` de ``PathMapping``). 15.10 omite ese mapeo: las búsquedas devuelven resultados, los demás mapeos de rutas se siguen aplicando y ``fess.log`` recibe una advertencia como ``The regex of the path mapping "(" is not valid, so the mapping is skipped``. Corrija o elimine el mapeo.
 - El menú de etiquetas de la pantalla de búsqueda, las opciones de etiqueta de los formularios de administración y el etiquetado de los documentos rastreados usan todos los tipos de etiqueta. Hasta 15.9 solo se leían los primeros ``page.labeltype.max.fetch.size`` (1000) tipos de etiqueta, por lo que un tipo de etiqueta más allá de ellos faltaba en el menú y en los formularios, y los documentos que debía etiquetar no se etiquetaban. El ajuste ahora solo determina el tamaño de las páginas de la lista de tipos de etiqueta en la consola de administración. Con más de 1000 tipos de etiqueta, ``/api/v2/ui/config`` es más grande (unos 45 bytes por tipo de etiqueta).
 - Una entrada de permiso escrita con caracteres de ancho completo, como ``（deny）{user}name`` o ``(deny)｛user｝name`` (tal como los escribe un teclado japonés), se rechaza en los campos de permisos de las pantallas de administración y en la API de administración, con un mensaje que pide la grafía de ancho medio, como ``(deny){user}name``. Hasta 15.9 se guardaba como un valor que no coincide con nadie, o se descartaba, de modo que un deny pensado para ocultar un documento no tenía efecto. El nombre que sigue al marcador no se modifica, por lo que un rol con nombre en japonés o con letras de ancho completo se sigue aceptando.
-- Una entrada de permiso que tiene un carácter invisible (un espacio de ancho cero, una marca de orden de bytes o un carácter de control) donde empieza el prefijo ``(allow)`` / ``(deny)`` o el nombre, como ``(deny)<U+200B>{user}name``, se rechaza con un mensaje que pide eliminar el carácter. Un carácter así suele entrar junto con un texto pegado. Hasta 15.9 la entrada se guardaba como un valor que no coincide con nadie, o se descartaba. Un carácter de este tipo dentro de un nombre o al final de él no se rechaza. Un espacio de no separación antes del prefijo es distinto: un valor que 15.9.0 guardó como ``<U+00A0>(deny){user}name`` no coincidía con nadie en 15.9.0, pero 15.10 lo acepta cuando se vuelve a guardar el ajuste y lo guarda como una entrada deny efectiva. Antes de volver a guardarlos, compruebe si los valores de permiso que vienen de 15.9 empiezan por espacios invisibles.
+- Una entrada de permiso que tiene un carácter invisible (un espacio de ancho cero, una marca de orden de bytes o un carácter de control) donde empieza el prefijo ``(allow)`` / ``(deny)`` o el nombre, como ``(deny)<U+200B>{user}name``, se rechaza con un mensaje que pide eliminar el carácter. Un carácter así suele entrar junto con un texto pegado. Hasta 15.9 la entrada se guardaba como un valor que no coincide con nadie, o se descartaba. Un carácter de este tipo dentro de un nombre o al final de él no se rechaza.
 - Un usuario que ya ha iniciado sesión y abre ``/login/`` se redirige a la página a la que llevaría un inicio de sesión: el panel de control para un administrador, la primera pantalla de administración que permiten sus roles para un usuario con un rol de administración y la pantalla de búsqueda para cualquier otro. Un visitante anónimo sigue obteniendo el formulario de inicio de sesión. Para iniciar sesión con otra cuenta, cierre antes la sesión. Un enlace a ``/logout/`` desde otro sitio (véase más arriba) conserva la sesión y, por tanto, también termina en esa página.
 - Un hash ``{bcrypt}`` almacenado con el prefijo ``$2b$`` (bcrypt de Python y muchos otros sistemas) o el prefijo ``$2y$`` (PHP, ``htpasswd -B``) ahora se verifica como uno ``$2a$``. Hasta 15.9 el inicio de sesión de un usuario así siempre fallaba. Los hashes nuevos se siguen escribiendo como ``$2a$``.
 - Mientras no se puede acceder al motor de búsqueda, la consola de administración responde ``503`` (500 hasta 15.9), y el formulario de inicio de sesión muestra un aviso de que el motor de búsqueda no está disponible en lugar de una página de error. ``/go/`` (el enlace de un resultado de búsqueda) también responde ``503`` mientras el motor de búsqueda no está disponible (``404`` hasta 15.9). Estas respuestas ``503`` llevan ``Retry-After: 5``. Si el motor de búsqueda restablece la conexión (connection reset), también se trata como no disponible, por lo que la respuesta es ``503`` en lugar de ``500``.
@@ -1442,26 +1442,36 @@ los valores de 15.10.
 
 ``app.cipher.key`` es el único valor que debe trasladar aunque 15.10 no lo haya cambiado. Es la
 clave que cifra las contraseñas y los secretos almacenados en los parámetros de la autenticación
-web, de las configuraciones de rastreo y de las configuraciones de almacenes de datos. Si la nueva
-instalación funciona con una clave distinta de la que los guardó, porque tomó el
-``fess_config.properties`` incluido o restauró una copia de seguridad en un servidor nuevo, no se
-pueden descifrar: ``fess-crawler.log`` registra una ``CipherFailureException`` y un rastreo que
-incluya una configuración así puede no indexar nada.
+web, de las configuraciones de rastreo y de las configuraciones de almacenes de datos. La instalación
+que actualiza o en la que restaura debe usar la misma ``app.cipher.key`` que la instalación que guardó
+los datos: traslade la clave junto con la copia de seguridad.
+
+Si la instalación funciona con una clave distinta, por ejemplo porque tomó el
+``fess_config.properties`` incluido o restauró una copia de seguridad en un servidor que usa otra
+clave, los valores guardados no se pueden descifrar: ``fess-crawler.log`` registra una
+``CipherFailureException`` y un rastreo que incluya una configuración así puede no indexar nada.
 
 Si una sola configuración tiene un valor que no se puede descifrar, el rastreo se detiene en ese punto. No se omite solo esa configuración:
 tampoco se indexan las demás configuraciones que forman parte del mismo rastreo. El mensaje de ``CipherFailureException`` indica
 el tipo, el nombre y el ID de la configuración y la clave del parámetro que no se pudo descifrar, y señala que ``app.cipher.key`` puede ser
-distinta de la clave con la que se guardó (no se muestran ni el valor cifrado ni la propia clave). Una vez identificada la causa,
-restablezca ``app.cipher.key`` a su valor original, o vuelva a introducir la contraseña de esa configuración y sustituya cada valor de parámetro que empiece por ``{cipher}`` por el valor sin cifrar.
-Una autenticación web cuyos parámetros contienen valores ``{cipher}`` guardados con otra clave no se puede guardar ni siquiera con una contraseña nueva (el guardado falla con ``Failed to decrypt a parameter: key=...``); se puede guardar una vez que esos valores se sustituyen por texto sin cifrar o se eliminan.
+distinta de la clave con la que se guardó (no se muestran ni el valor cifrado ni la propia clave). Restablezca ``app.cipher.key`` a su valor original.
+
+Para cambiar ``app.cipher.key`` a propósito, vuelva a introducir los secretos guardados después del
+cambio. Abra cada autenticación web, autenticación de archivos, configuración de rastreo y configuración
+de almacén de datos que contenga una contraseña o un parámetro cifrado, e introduzca de nuevo esos
+valores sin cifrar en el mismo ajuste: el campo de contraseña y cada valor de parámetro que empiece por
+``{cipher}``, sustituido por su valor sin cifrar. |Fess| los vuelve a cifrar con la nueva clave al
+guardar el ajuste. Vuelva a introducirlos en el mismo ajuste en lugar de eliminarlo y crearlo de nuevo:
+un ajuste creado de nuevo recibe un ID nuevo, mientras que otros ajustes (como la configuración web o de
+archivos de una autenticación) y la programación del rastreo hacen referencia al anterior.
 
 .. note::
 
    |Fess| 15.9 también guarda el ``password`` de la autenticación web y de archivos cifrado con ``app.cipher.key``, por
    lo que ``fess_basic_config.bulk`` y ``fess_config.bulk`` de una copia de seguridad contienen los valores cifrados.
-   Al restaurar en otra instalación, traslade la misma ``app.cipher.key``; con una clave distinta, los rastreos que usan
-   estas credenciales fallan con un error. Una copia de seguridad creada antes de 15.9 las contiene en texto sin cifrar
-   y sigue funcionando (consulte :doc:`../admin/backup-guide`).
+   Restaure una copia así en una instalación que use la misma ``app.cipher.key``; con una clave distinta, los rastreos
+   que usan estas credenciales fallan con un error hasta que se configura la clave original. Una copia de seguridad
+   creada antes de 15.9 las contiene en texto sin cifrar y sigue funcionando (consulte :doc:`../admin/backup-guide`).
 
 .. _upgrade-159-jcifs:
 

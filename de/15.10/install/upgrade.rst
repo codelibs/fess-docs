@@ -859,7 +859,7 @@ Weitere Verhaltensänderungen
 - Ein regulärer Ausdruck, der sich nicht kompilieren lässt, wird beim Speichern abgelehnt: die Include- und Exclude-Muster von Web- und Datei-Crawl-Konfigurationen, die Pfade eines Label-Typs und der reguläre Ausdruck einer Pfadzuordnung. Ein früher gespeicherter Wert bleibt bestehen und lässt sich unverändert nicht erneut speichern, bis er korrigiert ist. In 15.9 führt eine gespeicherte Pfadzuordnung mit ungültigem regulärem Ausdruck dazu, dass jede Suche keine Treffer liefert (``fess.log`` zeigt ``PatternSyntaxException`` von ``PathMapping``). 15.10 überspringt eine solche Zuordnung: Suchen liefern Treffer, die anderen Pfadzuordnungen gelten weiter, und ``fess.log`` erhält eine Warnung wie ``The regex of the path mapping "(" is not valid, so the mapping is skipped``. Korrigieren oder löschen Sie die Zuordnung.
 - Das Label-Menü der Suchseite, die Label-Auswahl in den Formularen der Administrationsoberfläche und die Kennzeichnung gecrawlter Dokumente verwenden alle Label-Typen. Bis 15.9 wurden nur die ersten ``page.labeltype.max.fetch.size`` (1.000) Label-Typen gelesen, sodass ein Label-Typ darüber hinaus im Menü und in den Formularen fehlte und die Dokumente, die er kennzeichnen sollte, kein Label erhielten. Die Einstellung bestimmt jetzt nur noch die Seitengröße der Label-Typ-Liste in der Administrationsoberfläche. Bei mehr als 1.000 Label-Typen ist ``/api/v2/ui/config`` größer (etwa 45 Byte pro Label-Typ).
 - Ein Berechtigungseintrag in Vollbreitenzeichen, etwa ``（deny）{user}name`` oder ``(deny)｛user｝name`` (wie eine japanische Tastatur sie eingibt), wird in den Berechtigungsfeldern der Administrationsoberfläche und von der Admin-API abgelehnt; die Meldung bittet um die Schreibweise in halber Breite wie ``(deny){user}name``. Bis 15.9 wurde er als Wert gespeichert, der auf niemanden zutrifft, oder verworfen, sodass ein Deny-Eintrag, der ein Dokument verbergen sollte, wirkungslos blieb. Der Name nach der Markierung wird nicht verändert, daher werden Rollennamen auf Japanisch oder mit Vollbreitenbuchstaben weiterhin akzeptiert.
-- Ein Berechtigungseintrag mit einem unsichtbaren Zeichen (einem Leerzeichen der Breite null, einer Bytereihenfolge-Markierung oder einem Steuerzeichen) dort, wo das Präfix ``(allow)`` / ``(deny)`` oder der Name beginnt, etwa ``(deny)<U+200B>{user}name``, wird mit einer Meldung abgelehnt, die bittet, das Zeichen zu löschen. Ein solches Zeichen gelangt meist beim Einfügen zusammen mit dem Text hinein. Bis 15.9 wurde der Eintrag als Wert gespeichert, der auf niemanden zutrifft, oder verworfen. Ein solches Zeichen innerhalb eines Namens oder an dessen Ende wird nicht abgelehnt. Anders verhält es sich mit einem geschützten Leerzeichen vor dem Präfix: Ein Wert, den 15.9.0 als ``<U+00A0>(deny){user}name`` gespeichert hat, traf in 15.9.0 auf niemanden zu, aber 15.10 akzeptiert ihn, wenn die Einstellung erneut gespeichert wird, und speichert ihn als wirksamen Deny-Eintrag. Prüfen Sie die aus 15.9 übernommenen Berechtigungswerte vor dem erneuten Speichern auf führende unsichtbare Leerzeichen.
+- Ein Berechtigungseintrag mit einem unsichtbaren Zeichen (einem Leerzeichen der Breite null, einer Bytereihenfolge-Markierung oder einem Steuerzeichen) dort, wo das Präfix ``(allow)`` / ``(deny)`` oder der Name beginnt, etwa ``(deny)<U+200B>{user}name``, wird mit einer Meldung abgelehnt, die bittet, das Zeichen zu löschen. Ein solches Zeichen gelangt meist beim Einfügen zusammen mit dem Text hinein. Bis 15.9 wurde der Eintrag als Wert gespeichert, der auf niemanden zutrifft, oder verworfen. Ein solches Zeichen innerhalb eines Namens oder an dessen Ende wird nicht abgelehnt.
 - Ein bereits angemeldeter Benutzer, der ``/login/`` öffnet, wird auf die Seite weitergeleitet, zu der eine Anmeldung führen würde: für einen Administrator das Dashboard, für einen Benutzer mit einer Administrationsrolle die erste Verwaltungsseite, die seine Rollen erlauben, und für alle anderen die Suchseite. Ein anonymer Besucher erhält weiterhin das Anmeldeformular. Um sich mit einem anderen Konto anzumelden, melden Sie sich zuerst ab. Ein Link auf einer anderen Website auf ``/logout/`` (siehe oben) behält die Sitzung und endet daher ebenfalls auf dieser Seite.
 - Ein gespeicherter ``{bcrypt}``-Hash mit dem Präfix ``$2b$`` (bcrypt für Python und viele andere Systeme) oder ``$2y$`` (PHP, ``htpasswd -B``) wird jetzt wie ein ``$2a$``-Hash verifiziert. Bis 15.9 schlug die Anmeldung eines solchen Benutzers immer fehl. Neue Hashes werden weiterhin als ``$2a$`` geschrieben.
 - Solange die Suchmaschine nicht erreichbar ist, antwortet die Administrationsoberfläche mit ``503`` (bis 15.9 mit 500), und das Anmeldeformular zeigt statt einer Fehlerseite einen Hinweis, dass die Suchmaschine nicht verfügbar ist. Auch ``/go/`` (der Link eines Suchergebnisses) antwortet mit ``503``, solange die Suchmaschine nicht verfügbar ist (bis 15.9 mit ``404``). Diese ``503``-Antworten enthalten ``Retry-After: 5``. Eine von der Suchmaschine zurückgesetzte Verbindung gilt ebenfalls als nicht verfügbar, sodass die Antwort ``503`` statt ``500`` lautet.
@@ -1452,9 +1452,13 @@ dort beginnen Sie also mit den Werten von 15.10.
 ``app.cipher.key`` ist der eine Wert, den Sie übernehmen müssen, obwohl 15.10 ihn nicht geändert hat.
 Es ist der Schlüssel, der die Passwörter und Geheimnisse verschlüsselt, die in den Parametern der
 Web-Authentifizierung, der Crawl-Konfigurationen und der Datenspeicher-Konfigurationen gespeichert
-sind. Läuft die neue Installation mit einem anderen Schlüssel als dem, mit dem sie gespeichert
-wurden, weil Sie die ausgelieferte ``fess_config.properties`` übernommen oder eine Sicherung auf
-einem neuen Server wiederhergestellt haben, lassen sie sich nicht entschlüsseln: ``fess-crawler.log``
+sind. Die Installation, auf die Sie aktualisieren oder in die Sie wiederherstellen, muss denselben
+``app.cipher.key`` verwenden wie die Installation, die die Daten gespeichert hat: Übernehmen Sie den
+Schlüssel zusammen mit der Sicherung.
+
+Läuft die Installation mit einem anderen Schlüssel, etwa weil Sie die ausgelieferte
+``fess_config.properties`` übernommen oder eine Sicherung auf einem Server mit einem anderen Schlüssel
+wiederhergestellt haben, lassen sich die gespeicherten Werte nicht entschlüsseln: ``fess-crawler.log``
 protokolliert eine ``CipherFailureException``, und ein Crawl, der eine solche Konfiguration
 einschließt, kann nichts indexieren.
 
@@ -1462,18 +1466,25 @@ Enthält auch nur eine Konfiguration einen Wert, der sich nicht entschlüsseln l
 nicht entschlüsselbare Konfiguration übersprungen: Auch die anderen Konfigurationen, die zum selben Crawl gehören, werden nicht indexiert. Die Meldung der
 ``CipherFailureException`` nennt Typ, Name und ID der Konfiguration sowie den Schlüssel des Parameters, der sich nicht entschlüsseln ließ,
 und weist darauf hin, dass ``app.cipher.key`` möglicherweise vom Schlüssel abweicht, mit dem gespeichert wurde (der verschlüsselte Wert und der Schlüssel selbst
-werden nicht ausgegeben). Sobald die Ursache feststeht, setzen Sie ``app.cipher.key`` auf den ursprünglichen Wert zurück
-oder geben das Passwort dieser Konfiguration erneut ein und ersetzen jeden Parameterwert, der mit ``{cipher}`` beginnt, durch den Klartextwert.
-Eine Web-Authentifizierung, deren Parameter ``{cipher}``-Werte enthalten, die mit einem anderen Schlüssel gespeichert wurden, lässt sich auch mit einem neuen Passwort nicht speichern (das Speichern schlägt mit ``Failed to decrypt a parameter: key=...`` fehl); sie lässt sich speichern, sobald diese Werte durch Klartext ersetzt oder entfernt sind.
+werden nicht ausgegeben). Setzen Sie ``app.cipher.key`` auf den ursprünglichen Wert zurück.
+
+Um ``app.cipher.key`` absichtlich zu ändern, geben Sie die gespeicherten Geheimnisse nach der Änderung
+erneut ein. Öffnen Sie jede Web-Authentifizierung, Datei-Authentifizierung, Crawl-Konfiguration und
+Datenspeicher-Konfiguration, die ein Passwort oder einen verschlüsselten Parameter enthält, und geben Sie
+diese Werte in derselben Einstellung erneut im Klartext ein: das Passwortfeld und jeden Parameterwert,
+der mit ``{cipher}`` beginnt, ersetzt durch seinen Klartextwert. |Fess| verschlüsselt sie beim Speichern
+mit dem neuen Schlüssel neu. Geben Sie sie an Ort und Stelle erneut ein, statt die Einstellung zu löschen
+und neu anzulegen: Eine neu angelegte Einstellung erhält eine neue ID, während andere Einstellungen (etwa
+die Web- oder Datei-Konfiguration einer Authentifizierung) und der Crawl-Zeitplan auf die alte verweisen.
 
 .. note::
 
    |Fess| 15.9 speichert auch das ``password`` der Web- und Datei-Authentifizierung mit ``app.cipher.key``
    verschlüsselt, sodass ``fess_basic_config.bulk`` und ``fess_config.bulk`` einer Sicherung die verschlüsselten Werte
-   enthalten. Übernehmen Sie beim Wiederherstellen auf einer anderen Installation denselben ``app.cipher.key``; mit
-   einem anderen Schlüssel schlagen Crawls, die diese Zugangsdaten verwenden, mit einem Fehler fehl. Eine Sicherung,
-   die vor 15.9 erstellt wurde, enthält sie im Klartext und funktioniert weiterhin (siehe
-   :doc:`../admin/backup-guide`).
+   enthalten. Stellen Sie eine solche Sicherung in einer Installation wieder her, die denselben ``app.cipher.key``
+   verwendet; mit einem anderen Schlüssel schlagen Crawls, die diese Zugangsdaten verwenden, mit einem Fehler fehl,
+   bis der ursprüngliche Schlüssel gesetzt ist. Eine Sicherung, die vor 15.9 erstellt wurde, enthält sie im Klartext
+   und funktioniert weiterhin (siehe :doc:`../admin/backup-guide`).
 
 .. _upgrade-159-jcifs:
 

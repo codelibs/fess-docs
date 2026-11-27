@@ -861,7 +861,7 @@ Autres changements de comportement
 - Une expression régulière qui ne compile pas est refusée à l'enregistrement : les motifs d'inclusion et d'exclusion des configurations de crawl Web et fichiers, les chemins d'un type d'étiquette et l'expression régulière d'un mappage de chemin. Une valeur enregistrée auparavant reste telle quelle et ne peut pas être enregistrée de nouveau inchangée tant qu'elle n'est pas corrigée. En 15.9, un mappage de chemin enregistré avec une expression régulière invalide fait que chaque recherche ne renvoie aucun résultat (``fess.log`` montre ``PatternSyntaxException`` de ``PathMapping``). 15.10 ignore un tel mappage : les recherches renvoient des résultats, les autres mappages de chemin s'appliquent toujours et ``fess.log`` reçoit un avertissement tel que ``The regex of the path mapping "(" is not valid, so the mapping is skipped``. Corrigez ou supprimez le mappage.
 - Le menu des étiquettes de l'écran de recherche, les choix d'étiquette des formulaires d'administration et l'étiquetage des documents crawlés utilisent tous les types d'étiquette. Jusqu'à la 15.9, seuls les ``page.labeltype.max.fetch.size`` (1 000) premiers types d'étiquette étaient lus ; un type d'étiquette au-delà manquait donc dans le menu et les formulaires, et les documents qu'il devait étiqueter ne l'étaient pas. Le paramètre ne fixe plus que la taille des pages de la liste des types d'étiquette dans l'écran d'administration. Au-delà de 1 000 types d'étiquette, ``/api/v2/ui/config`` est plus volumineux (environ 45 octets par type d'étiquette).
 - Une entrée de permission écrite en caractères pleine chasse, comme ``（deny）{user}name`` ou ``(deny)｛user｝name`` (telle qu'un clavier japonais la saisit), est refusée dans les champs de permission des écrans d'administration et par l'API d'administration, avec un message qui demande l'écriture en demi-chasse, comme ``(deny){user}name``. Jusqu'à la 15.9, elle était stockée comme une valeur qui ne correspond à personne, ou supprimée ; un deny destiné à masquer un document restait donc sans effet. Le nom qui suit le marqueur n'est pas modifié ; un rôle nommé en japonais ou avec des lettres pleine chasse reste donc accepté.
-- Une entrée de permission qui comporte un caractère invisible (une espace de largeur nulle, une marque d'ordre des octets ou un caractère de contrôle) à l'endroit où commence le préfixe ``(allow)`` / ``(deny)`` ou le nom, comme ``(deny)<U+200B>{user}name``, est refusée avec un message qui demande de supprimer ce caractère. Un tel caractère arrive le plus souvent avec un texte collé. Jusqu'à la 15.9, l'entrée était stockée comme une valeur qui ne correspond à personne, ou supprimée. Un caractère de ce type à l'intérieur d'un nom, ou à sa fin, n'est pas refusé. Une espace insécable avant le préfixe est un cas différent : une valeur que 15.9.0 a enregistrée sous la forme ``<U+00A0>(deny){user}name`` ne correspondait à personne en 15.9.0, mais 15.10 l'accepte lorsque le paramètre est de nouveau enregistré et la stocke comme une entrée deny effective. Avant de les enregistrer de nouveau, vérifiez que les valeurs de permission reprises de 15.9 ne commencent pas par des espaces invisibles.
+- Une entrée de permission qui comporte un caractère invisible (une espace de largeur nulle, une marque d'ordre des octets ou un caractère de contrôle) à l'endroit où commence le préfixe ``(allow)`` / ``(deny)`` ou le nom, comme ``(deny)<U+200B>{user}name``, est refusée avec un message qui demande de supprimer ce caractère. Un tel caractère arrive le plus souvent avec un texte collé. Jusqu'à la 15.9, l'entrée était stockée comme une valeur qui ne correspond à personne, ou supprimée. Un caractère de ce type à l'intérieur d'un nom, ou à sa fin, n'est pas refusé.
 - Un utilisateur déjà connecté qui ouvre ``/login/`` est redirigé vers la page à laquelle mènerait une connexion : le tableau de bord pour un administrateur, le premier écran d'administration que ses rôles autorisent pour un utilisateur doté d'un rôle d'administration, et l'écran de recherche pour tous les autres. Un visiteur anonyme obtient toujours le formulaire de connexion. Pour vous connecter avec un autre compte, déconnectez-vous d'abord. Un lien vers ``/logout/`` placé sur un autre site (voir ci-dessus) conserve la session et aboutit donc lui aussi sur cette page.
 - Un hachage ``{bcrypt}`` stocké avec le préfixe ``$2b$`` (bcrypt de Python et de nombreux autres systèmes) ou le préfixe ``$2y$`` (PHP, ``htpasswd -B``) est désormais vérifié comme un hachage ``$2a$``. Jusqu'à la 15.9, la connexion d'un tel utilisateur échouait toujours. Les nouveaux hachages sont toujours écrits en ``$2a$``.
 - Tant que le moteur de recherche est injoignable, la console d'administration répond ``503`` (500 jusqu'à la 15.9), et le formulaire de connexion affiche un avis indiquant que le moteur de recherche n'est pas disponible au lieu d'une page d'erreur. ``/go/`` (le lien d'un résultat de recherche) répond aussi ``503`` tant que le moteur de recherche n'est pas disponible (``404`` jusqu'à la 15.9). Ces réponses ``503`` portent ``Retry-After: 5``. Une connexion réinitialisée par le moteur de recherche est elle aussi traitée comme une indisponibilité ; la réponse est donc ``503`` au lieu de ``500``.
@@ -1455,21 +1455,34 @@ part donc des valeurs de la 15.10.
 
 ``app.cipher.key`` est la seule valeur à reprendre même si la 15.10 ne l'a pas modifiée. C'est la
 clé qui chiffre les mots de passe et secrets enregistrés dans les paramètres de l'authentification
-Web, des configurations d'exploration et des configurations DataStore. Si la nouvelle installation
-fonctionne avec une clé différente de celle qui les a enregistrés, parce que vous avez pris le
-``fess_config.properties`` fourni ou restauré une sauvegarde sur un nouveau serveur, ils ne peuvent
-pas être déchiffrés : ``fess-crawler.log`` consigne une ``CipherFailureException`` et une
-exploration qui inclut une telle configuration peut n'indexer rien.
+Web, des configurations d'exploration et des configurations DataStore. L'installation que vous mettez
+à niveau ou dans laquelle vous restaurez doit utiliser la même ``app.cipher.key`` que l'installation
+qui a enregistré les données : reprenez la clé avec la sauvegarde.
 
-Dès qu'une seule configuration contient une valeur qui ne peut pas être déchiffrée, l'exploration s'arrête à ce point. La configuration non déchiffrable n'est pas simplement ignorée : les autres configurations visées par la même exploration ne sont pas indexées non plus. Le message de la ``CipherFailureException`` indique le type, le nom et l'ID de cette configuration ainsi que la clé du paramètre qui n'a pas pu être déchiffré, et précise que ``app.cipher.key`` peut différer de la clé utilisée lors de l'enregistrement (ni la valeur chiffrée ni la clé elle-même ne sont affichées). Une fois la cause identifiée, rétablissez la valeur d'origine de ``app.cipher.key``, ou saisissez à nouveau le mot de passe de cette configuration et remplacez chaque valeur de paramètre qui commence par ``{cipher}`` par la valeur en clair. Une authentification Web dont les paramètres contiennent des valeurs ``{cipher}`` enregistrées avec une autre clé ne peut pas être enregistrée, même avec un nouveau mot de passe (l'enregistrement échoue avec ``Failed to decrypt a parameter: key=...``) ; elle peut l'être une fois ces valeurs remplacées par du texte en clair ou supprimées.
+Si l'installation fonctionne avec une clé différente, par exemple parce que vous avez pris le
+``fess_config.properties`` fourni ou restauré une sauvegarde sur un serveur qui utilise une autre clé,
+les valeurs enregistrées ne peuvent pas être déchiffrées : ``fess-crawler.log`` consigne une
+``CipherFailureException`` et une exploration qui inclut une telle configuration peut n'indexer rien.
+
+Dès qu'une seule configuration contient une valeur qui ne peut pas être déchiffrée, l'exploration s'arrête à ce point. La configuration non déchiffrable n'est pas simplement ignorée : les autres configurations visées par la même exploration ne sont pas indexées non plus. Le message de la ``CipherFailureException`` indique le type, le nom et l'ID de cette configuration ainsi que la clé du paramètre qui n'a pas pu être déchiffré, et précise que ``app.cipher.key`` peut différer de la clé utilisée lors de l'enregistrement (ni la valeur chiffrée ni la clé elle-même ne sont affichées). Rétablissez la valeur d'origine de ``app.cipher.key``.
+
+Pour changer ``app.cipher.key`` délibérément, saisissez de nouveau les secrets enregistrés après le
+changement. Ouvrez chaque authentification Web, authentification de fichiers, configuration
+d'exploration et configuration DataStore qui contient un mot de passe ou un paramètre chiffré, et
+saisissez de nouveau ces valeurs en clair dans le même paramétrage : le champ du mot de passe, et chaque
+valeur de paramètre qui commence par ``{cipher}``, remplacée par sa valeur en clair. |Fess| les chiffre
+de nouveau avec la nouvelle clé à l'enregistrement. Saisissez-les de nouveau sur place plutôt que de
+supprimer le paramétrage et de le recréer : un paramétrage recréé reçoit un nouvel ID, alors que
+d'autres paramétrages (comme la configuration Web ou de fichiers d'une authentification) et la
+planification de l'exploration font référence à l'ancien.
 
 .. note::
 
    |Fess| 15.9 enregistre aussi le ``password`` de l'authentification Web et fichier chiffré avec ``app.cipher.key`` ;
-   ``fess_basic_config.bulk`` et ``fess_config.bulk`` d'une sauvegarde contiennent donc les valeurs chiffrées. Lorsque
-   vous restaurez sur une autre installation, reprenez la même ``app.cipher.key`` ; avec une clé différente, les
-   explorations qui utilisent ces identifiants échouent avec une erreur. Une sauvegarde créée avant la 15.9 les contient
-   en clair et continue de fonctionner (voir :doc:`../admin/backup-guide`).
+   ``fess_basic_config.bulk`` et ``fess_config.bulk`` d'une sauvegarde contiennent donc les valeurs chiffrées. Restaurez
+   une telle sauvegarde dans une installation qui utilise la même ``app.cipher.key`` ; avec une clé différente, les
+   explorations qui utilisent ces identifiants échouent avec une erreur jusqu'à ce que la clé d'origine soit définie.
+   Une sauvegarde créée avant la 15.9 les contient en clair et continue de fonctionner (voir :doc:`../admin/backup-guide`).
 
 .. _upgrade-159-jcifs:
 
