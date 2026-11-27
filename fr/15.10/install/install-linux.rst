@@ -152,7 +152,7 @@ Installation avec la version ZIP
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   Lorsqu'aucun terminal n'est attaché (par exemple dans un script, une construction de conteneur ou un outil d'automatisation), ``opensearch-plugin install`` attend la confirmation ``Continue with installation?`` et ne se termine pas. Ajoutez ``--batch`` (``-b``) à la commande pour ignorer la confirmation.
+   Lorsqu'aucun terminal n'est attaché (par exemple dans un script, une construction de conteneur ou un outil d'automatisation), personne ne peut répondre à la confirmation ``Continue with installation?`` que ``opensearch-plugin install`` demande pour un plugin qui réclame des permissions supplémentaires, et un tel plugin n'est pas installé : avec une entrée depuis ``/dev/null`` (ou ``sudo`` sans terminal), la commande se termine avec le code ``1`` au bout de quelques secondes avec ``IllegalStateException: unable to read from standard input``, et avec une entrée qui reste ouverte mais ne répond jamais, elle attend et ne se termine pas. Ajoutez ``--batch`` (``-b``) à la commande pour ignorer la confirmation.
 
    .. important::
 
@@ -317,7 +317,7 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   Lorsqu'aucun terminal n'est attaché (par exemple dans un script, une construction de conteneur ou un outil d'automatisation), ``opensearch-plugin install`` attend la confirmation ``Continue with installation?`` et ne se termine pas. Ajoutez ``--batch`` (``-b``) à la commande pour ignorer la confirmation.
+   Lorsqu'aucun terminal n'est attaché (par exemple dans un script, une construction de conteneur ou un outil d'automatisation), personne ne peut répondre à la confirmation ``Continue with installation?`` que ``opensearch-plugin install`` demande pour un plugin qui réclame des permissions supplémentaires, et un tel plugin n'est pas installé : avec une entrée depuis ``/dev/null`` (ou ``sudo`` sans terminal), la commande se termine avec le code ``1`` au bout de quelques secondes avec ``IllegalStateException: unable to read from standard input``, et avec une entrée qui reste ouverte mais ne répond jamais, elle attend et ne se termine pas. Ajoutez ``--batch`` (``-b``) à la commande pour ignorer la confirmation.
 
 3. Configuration d'OpenSearch
 
@@ -439,7 +439,7 @@ La version DEB est utilisée sur les distributions Linux basées sur DEB telles 
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   Lorsqu'aucun terminal n'est attaché (par exemple dans un script, une construction de conteneur ou un outil d'automatisation), ``opensearch-plugin install`` attend la confirmation ``Continue with installation?`` et ne se termine pas. Ajoutez ``--batch`` (``-b``) à la commande pour ignorer la confirmation.
+   Lorsqu'aucun terminal n'est attaché (par exemple dans un script, une construction de conteneur ou un outil d'automatisation), personne ne peut répondre à la confirmation ``Continue with installation?`` que ``opensearch-plugin install`` demande pour un plugin qui réclame des permissions supplémentaires, et un tel plugin n'est pas installé : avec une entrée depuis ``/dev/null`` (ou ``sudo`` sans terminal), la commande se termine avec le code ``1`` au bout de quelques secondes avec ``IllegalStateException: unable to read from standard input``, et avec une entrée qui reste ouverte mais ne répond jamais, elle attend et ne se termine pas. Ajoutez ``--batch`` (``-b``) à la commande pour ignorer la confirmation.
 
 3. Configuration d'OpenSearch
 

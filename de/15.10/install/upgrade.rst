@@ -299,8 +299,9 @@ ZIP-Version
 
       Ohne die ``tomcat_config.properties`` der alten Installation fällt ``tomcat.sameSiteCookies``
       stillschweigend auf den Standardwert ``lax`` zurück, und die SAML-Anmeldung funktioniert nicht
-      mehr (siehe :ref:`upgrade-159-saml`). Die ausgelieferte Datei ist in 15.8.0 und 15.10
-      identisch, sodass sie unverändert kopiert werden kann.
+      mehr (siehe :ref:`upgrade-159-saml`). Die ausgelieferte Datei von 15.10 unterscheidet sich von
+      der aus 15.8.0 und 15.9.0 nur durch auskommentierte Zeilen ``tomcat.compression`` und
+      ``tomcat.compression.mime``, sodass die alte Datei weiterhin unverändert kopiert werden kann.
 
    .. warning::
 
@@ -452,7 +453,9 @@ Sie es anhand der folgenden Schritte.
    Bei der ZIP-Version muss das OpenSearch-Home am Ende unter demselben absoluten Pfad liegen wie das
    alte; lesen Sie unten :ref:`ZIP-Version: OpenSearch-Home am alten Pfad belassen <upgrade-opensearch-zip-path>`, bevor Sie Daten verschieben. Die
    RPM/DEB-Pakete behalten das Wörterbuchverzeichnis unter ``/etc/opensearch/dictionary`` bei, das vor
-   und nach dem Upgrade derselbe Pfad ist, sodass dort nichts Besonderes nötig ist.
+   und nach dem Upgrade derselbe Pfad ist, sodass dort nichts Besonderes nötig ist. Das Upgrade des
+   RPM/DEB-Pakets von OpenSearch braucht ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` nicht; die Variable ist
+   nur für eine Neuinstallation des Pakets nötig.
 
 2. Plugins neu installieren. Entfernen Sie zuerst die vier Plugins der alten Version, falls das
    OpenSearch-Verzeichnis sie bereits enthält (auch ``bin/fess-setup install opensearch`` installiert die
@@ -485,9 +488,12 @@ Sie es anhand der folgenden Schritte.
       Ist ein Plugin-Verzeichnis bereits vorhanden, schlägt ``opensearch-plugin install`` mit ``plugin directory [...] already exists`` fehl und lässt das alte Plugin bestehen. OpenSearch 3.10.0 verweigert dann den Start mit ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running``. ``bin/fess-setup install opensearch-plugins`` belässt ein Plugin, das bereits in der angeforderten Version installiert ist; für ein Plugin einer anderen Version gibt es den Plugin-Namen, die installierte und die angeforderte Version sowie den auszuführenden Befehl ``opensearch-plugin remove`` aus und endet mit Exit-Code ``1``. Entfernen Sie die alten Plugins wie oben gezeigt, bevor Sie die neuen installieren.
 
       ``opensearch-plugin install`` fragt bei einem Plugin, das zusätzliche Berechtigungen anfordert,
-      nach einer Bestätigung (``Continue with installation?``). Kann niemand antworten (kein Terminal,
-      Eingabe von ``/dev/null``), wird ein solches Plugin nicht installiert: Antworten Sie mit ``y``
-      oder übergeben Sie ``-b``, um die Frage zu überspringen.
+      nach einer Bestätigung (``Continue with installation?``). Kann niemand antworten, wird ein solches
+      Plugin nicht installiert: Bei Eingabe von ``/dev/null`` (oder ``sudo`` ohne Terminal) endet der
+      Befehl nach einigen Sekunden mit dem Code ``1`` und
+      ``IllegalStateException: unable to read from standard input``; bei einer Eingabe, die offen
+      bleibt, aber nie antwortet, wartet er und wird nicht beendet. Antworten Sie mit ``y`` oder
+      übergeben Sie ``--batch`` (``-b``), um die Frage zu überspringen.
 
 3. Wörterbuchverzeichnis unter das OpenSearch-Konfigurationsverzeichnis verschieben
 
@@ -519,9 +525,14 @@ Sie es anhand der folgenden Schritte.
    Konfigurationsverzeichnisses liegt. Installieren Sie OpenSearch 3.10.0 in einem anderen
    Verzeichnis, wie es ``bin/fess-setup install opensearch`` tut (es legt ``opensearch-3.10.0`` neben
    ``opensearch-3.9.0`` an), und verschieben Sie ``data/`` und die Wörterbuchdateien dann von Hand
-   dorthin, bleibt der Dokumentindex unzugewiesen (``Resource path must
+   dorthin, bleiben der Dokumentindex und ``fess_suggest_analyzer``, der ebenfalls die absoluten
+   ``*_path``-Einstellungen von 15.9.0 behält, unzugewiesen (``Resource path must
    be inside config directory`` in der Erklärung der Zuweisung), und der Cluster ist rot. Dasselbe
-   geschieht, wenn Sie ``data/`` in ein Home kopieren, das bereits einmal gestartet wurde. Das folgende
+   geschieht, wenn Sie ``data/`` in ein Home kopieren, das bereits einmal gestartet wurde, und wenn
+   ein unter 15.9.0 erstellter Snapshot in eine neue 15.10-Installation wiederhergestellt wird, deren
+   OpenSearch-Home unter einem anderen Pfad liegt: Der wiederhergestellte Dokumentindex ist rot mit
+   ``Resource path must be inside config directory``. Stellen Sie einen solchen Snapshot in einer Engine
+   unter dem alten Pfad wieder her. Das folgende
    Verfahren legt die neue Engine unter den Pfad, mit dem die Indizes erstellt wurden:
 
    1. Installieren Sie bei gestopptem OpenSearch (Schritt 2) OpenSearch 3.10.0 und seine Plugins in einem
@@ -544,9 +555,23 @@ Sie es anhand der folgenden Schritte.
 
    3. Setzen Sie in ``config/opensearch.yml`` des verschobenen Home ``configsync.config_path`` auf den alten
       absoluten Pfad zurück (der vollständige Pfad von ``$OLD/config/dictionary``, nicht die Variable).
-      Behalten Sie auch ``FESS_DICTIONARY_PATH`` auf dem alten Wert. Setzen Sie ihn ausdrücklich
+      Setzen Sie für |Fess| ``FESS_DICTIONARY_PATH=dictionary/`` (mit dem abschließenden Schrägstrich),
+      relativ zum Konfigurationsverzeichnis von OpenSearch, statt des alten absoluten Pfads. Mit dem
+      alten absoluten Wert speichert jeder Index, den die „Neuindizierung" in Schritt 7 anlegt, wieder
+      absolute ``*_path``-Einstellungen; mit ``dictionary/`` speichern die neuen Indizes relative Pfade
+      und sind neben den alten Indizes grün und durchsuchbar. Eine frische Installation mit
+      ``bin/fess-setup install opensearch`` von 15.10 setzt ebenfalls ``dictionary/``. Setzen Sie ihn ausdrücklich
       (Umgebungsvariable oder ``bin/fess.in.sh``), denn ``bin/fess.in.sh`` setzt ihn nur für ein
-      OpenSearch unter ``opensearch/`` im |Fess|-Verzeichnis selbst.
+      OpenSearch unter ``opensearch/`` im |Fess|-Verzeichnis selbst: Mit der in Schritt 3 (ZIP-Version,
+      Schritt 2) kopierten ``bin/fess.in.sh`` von 15.9.0 und ohne eigene Einstellung ist ``FESS_DICTIONARY_PATH``
+      in dieser Anordnung nicht gesetzt, und die „Neuindizierung" in Schritt 7 protokolliert
+      ``Failed to create index`` und legt nichts an.
+
+      Die „Neuindizierung" in Schritt 7 legt ``fess_suggest_analyzer`` nicht neu an, sodass er die
+      absoluten ``*_path``-Einstellungen von 15.9.0 behält. Um ihn mit relativen Pfaden neu anzulegen,
+      stoppen Sie |Fess|, löschen ``fess_suggest_analyzer`` und starten |Fess| mit
+      ``FESS_DICTIONARY_PATH=dictionary/``: |Fess| legt ihn beim Start mit relativen Pfaden neu an, und
+      Vorschläge funktionieren nach dem nächsten Lauf des Jobs „Suggest Indexer".
 
    4. Starten Sie OpenSearch aus ``$OLD``, veranlassen Sie einen erneuten Zuweisungsversuch für
       fehlgeschlagene Shards (nötig, wenn der Cluster rot ist, weil OpenSearch zuvor unter einem anderen
@@ -830,21 +855,28 @@ Weitere Verhaltensänderungen
 - Neue Einstellung ``authentication.local.username.policy`` (Standard ``preserved``). |Fess| vergleicht die Namen lokaler Benutzer weiterhin genau wie eingegeben, wie in 15.9; ``Alice`` und ``alice`` sind also zwei Benutzer. Mit ``mapped`` wird das Anlegen oder Umbenennen eines lokalen Benutzers in der Benutzerverwaltung oder mit der Admin-API abgelehnt, wenn der Name bei Nichtbeachtung von Zeichenbreite, Groß-/Kleinschreibung und Unicode-Zusammensetzung mit dem Namen eines anderen Benutzers übereinstimmt oder eine andere Schreibweise eines Eintrags von ``authentication.admin.users`` ist. Anmeldung, Benutzer-IDs, gespeicherte Namen, Berechtigungen und indexierte Dokumente ändern sich nicht. Einzelheiten und Grenzen finden Sie unter :ref:`local-username-policy`.
 - Skripte, Stylesheets und SVG-Dateien ab 1 KB werden standardmäßig mit gzip komprimiert gesendet; 15.9 komprimierte nichts. Seiten und JSON werden nicht komprimiert. ``tomcat.compression`` (``on`` oder ``off``) und ``tomcat.compression.mime`` (der Liste hinzugefügte Typen, durch Komma getrennt) in ``tomcat_config.properties`` steuern dies. Eine aus 15.9 übernommene ``tomcat_config.properties`` hat keinen der beiden Schlüssel, daher ist die Komprimierung aktiv. Setzen Sie ``tomcat.compression=off``, wenn ein Reverse-Proxy vor |Fess| die Antworten selbst komprimiert.
 - Die Dateien des mitgelieferten Themes ``bootstrap`` werden mit ``Cache-Control: no-cache`` und einem ``ETag`` gesendet, und ein Browser fragt mit ``If-None-Match`` erneut an und erhält ``304``, solange die Datei unverändert ist. Bis 15.9 trugen sie ``max-age=86400``, sodass ein Browser eine aktualisierte Datei bis zu 24 Stunden lang behielt.
-- Eine Einstellung kann statt als ``-D``-Option als Umgebungsvariable angegeben werden: ``FESS_CONFIG_<KEY>`` für einen Schlüssel der ``fess_config.properties`` und ``FESS_SYSTEM_<KEY>`` für einen Schlüssel der ``system.properties`` (der Schlüssel in Großbuchstaben, jedes Zeichen außer Buchstaben und Ziffern durch ``_`` ersetzt; ``search_engine.password`` ist ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). Eine ``-D``-Option mit einem Wert hat Vorrang vor der Variablen, und die Variable hat Vorrang vor der ``fess_config.properties``; ein Schlüssel, den die ``system.properties`` bereits enthält, wird nicht überschrieben. Eine Variable wird im Gegensatz zu einer ``-D``-Option nicht von ``ps`` oder ``docker top`` angezeigt, und die Systeminformationen maskieren ihren Wert.
+- Eine Einstellung kann statt als ``-D``-Option als Umgebungsvariable angegeben werden: ``FESS_CONFIG_<KEY>`` für einen Schlüssel der ``fess_config.properties`` und ``FESS_SYSTEM_<KEY>`` für einen Schlüssel der ``system.properties`` (der Schlüssel in Großbuchstaben, jedes Zeichen außer Buchstaben und Ziffern durch ``_`` ersetzt; ``search_engine.password`` ist ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). Eine ``-D``-Option mit einem Wert hat Vorrang vor der Variablen, und die Variable hat Vorrang vor der ``fess_config.properties``; ein Schlüssel, den die ``system.properties`` bereits enthält, wird nicht überschrieben. Eine Variable wird im Gegensatz zu einer ``-D``-Option nicht von ``ps`` oder ``docker top`` angezeigt, und die Systeminformationen maskieren ihren Wert. In 15.9.0 schrieb das Speichern des Bildschirms „Allgemein" die Einstellungen von „Allgemein" in ``system.properties``, auch Werte, die auf dem Standardwert standen, und ein dort gespeicherter Schlüssel hat Vorrang vor ``FESS_SYSTEM_<KEY>``. Nach dem Upgrade wirkt eine ``FESS_SYSTEM_*``-Variable deshalb für keinen Schlüssel, den ein Speichern des Bildschirms „Allgemein" in 15.9.0 gespeichert hat, bis diese Zeile aus ``system.properties`` entfernt wird. Beim Speichern des Bildschirms „Allgemein" schreibt 15.10 ein Feld nicht, das auf dem Wert aus ``-Dfess.system.<key>`` oder ``FESS_SYSTEM_<KEY>`` belassen wurde, sofern ``system.properties`` den Schlüssel noch nicht enthält; ein auf dem Bildschirm geänderter Wert wird gespeichert und hat von da an Vorrang.
 - Wird ein Geheimnis (ein Passwort, ein API-Schlüssel oder ein geheimer Schlüssel) als Option ``-Dfess.config.<key>`` oder ``-Dfess.system.<key>`` angegeben, schreibt 15.10 beim Start eine Warnung in ``fess.log``, die den Schlüssel und die stattdessen zu verwendende Variable nennt, niemals den Wert.
 - Die Umgebungsvariable ``FESS_SESSION_STORE=opensearch`` legt die HTTP-Sitzungen in der Suchmaschine ab, sodass mehrere Knoten sie gemeinsam nutzen. Sie ist standardmäßig aus (siehe :ref:`Der Index fess_config.session für Sitzungen <upgrade-1510-session-index>` und :doc:`../config/session-store`).
-- ``PUT /api/admin/<name>/setting`` von 19 weiteren Admin-APIs (zum Beispiel ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` und ``scheduler``; nicht ``tagtype``, ``general``, ``theme`` oder ``dict``) lehnt ein veraltetes ``version_no`` wie die oben genannte Benutzer-API mit HTTP 400 und ``status`` ``1`` ab. Bis 15.9 wurde der Wert nie verglichen, und die Listen lieferten ``-1``, sodass ein Skript, das ein konstantes ``version_no`` sendet, jetzt fehlschlägt: Senden Sie den Wert aus ``GET /api/admin/<name>/setting/{id}`` und lesen Sie die Einstellung nach einer Ablehnung erneut.
+- ``PUT /api/admin/<name>/setting`` von 19 weiteren Admin-APIs (zum Beispiel ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` und ``scheduler``; nicht ``tagtype``, ``general``, ``theme`` oder ``dict``) lehnt ein veraltetes ``version_no`` wie die oben genannte Benutzer-API mit HTTP 400 und ``status`` ``1`` ab. Bis 15.9 wurde der Wert nie verglichen, und die Listen lieferten ``-1``, sodass ein Skript, das ein konstantes ``version_no`` sendet, jetzt fehlschlägt: Senden Sie den Wert aus ``GET /api/admin/<name>/setting/{id}`` und lesen Sie die Einstellung nach einer Ablehnung erneut. Gleichzeitige Aktualisierungen derselben Einstellung werden ebenfalls abgelehnt: Von 5 gleichzeitig gesendeten ``PUT``-Anfragen mit demselben ``version_no`` wird 1 angewendet, und die anderen 4 erhalten HTTP 400 mit ``status`` ``1``. Senden Sie die Aktualisierung mit dem aktuellen ``version_no`` erneut.
 - ``POST /api/admin/webconfig/setting``, ``/api/admin/fileconfig/setting`` und ``/api/admin/dataconfig/setting`` ohne ``permissions`` speichern ``{role}guest``. Bis 15.9 speicherten sie keine Berechtigung. ``PUT`` ohne ``permissions`` behält den gespeicherten Wert; in 15.9 ließ es das Feld leer.
 - Das Anmeldeformular, das Formular zur Passwortänderung und die Passwortfelder der Benutzerverwaltung entfernen keine Leerzeichen mehr am Anfang und am Ende eines Passworts. Bis 15.9 taten sie es, während ``/api/v2/auth/login`` und die Admin-API es nicht taten, sodass ein über die API festgelegtes Passwort mit umgebenden Leerzeichen sich nicht über das Formular anmelden konnte. Jetzt übernehmen alle Zugänge das Passwort wie eingegeben. Ein Benutzer, bei dem die Leerzeichen beim Speichern des Passworts in 15.9 entfernt wurden, muss es ohne sie eingeben.
-- Ein regulärer Ausdruck, der sich nicht kompilieren lässt, wird beim Speichern abgelehnt: die Include- und Exclude-Muster von Web- und Datei-Crawl-Konfigurationen, die Pfade eines Label-Typs und der reguläre Ausdruck einer Pfadzuordnung. Ein früher gespeicherter Wert bleibt bestehen und lässt sich unverändert nicht erneut speichern, bis er korrigiert ist. Eine vor 15.10 gespeicherte Pfadzuordnung mit ungültigem regulärem Ausdruck führt dazu, dass jede Suche keine Treffer liefert, in 15.9 und in 15.10 (``fess.log`` zeigt ``PatternSyntaxException`` von ``PathMapping``); entfernen oder korrigieren Sie sie.
+- Ein regulärer Ausdruck, der sich nicht kompilieren lässt, wird beim Speichern abgelehnt: die Include- und Exclude-Muster von Web- und Datei-Crawl-Konfigurationen, die Pfade eines Label-Typs und der reguläre Ausdruck einer Pfadzuordnung. Ein früher gespeicherter Wert bleibt bestehen und lässt sich unverändert nicht erneut speichern, bis er korrigiert ist. In 15.9 führt eine gespeicherte Pfadzuordnung mit ungültigem regulärem Ausdruck dazu, dass jede Suche keine Treffer liefert (``fess.log`` zeigt ``PatternSyntaxException`` von ``PathMapping``). 15.10 überspringt eine solche Zuordnung: Suchen liefern Treffer, die anderen Pfadzuordnungen gelten weiter, und ``fess.log`` erhält eine Warnung wie ``The regex of the path mapping "(" is not valid, so the mapping is skipped``. Korrigieren oder löschen Sie die Zuordnung.
 - Das Label-Menü der Suchseite, die Label-Auswahl in den Formularen der Administrationsoberfläche und die Kennzeichnung gecrawlter Dokumente verwenden alle Label-Typen. Bis 15.9 wurden nur die ersten ``page.labeltype.max.fetch.size`` (1.000) Label-Typen gelesen, sodass ein Label-Typ darüber hinaus im Menü und in den Formularen fehlte und die Dokumente, die er kennzeichnen sollte, kein Label erhielten. Die Einstellung bestimmt jetzt nur noch die Seitengröße der Label-Typ-Liste in der Administrationsoberfläche. Bei mehr als 1.000 Label-Typen ist ``/api/v2/ui/config`` größer (etwa 45 Byte pro Label-Typ).
 - Ein Berechtigungseintrag in Vollbreitenzeichen, etwa ``（deny）{user}name`` oder ``(deny)｛user｝name`` (wie eine japanische Tastatur sie eingibt), wird in den Berechtigungsfeldern der Administrationsoberfläche und von der Admin-API abgelehnt; die Meldung bittet um die Schreibweise in halber Breite wie ``(deny){user}name``. Bis 15.9 wurde er als Wert gespeichert, der auf niemanden zutrifft, oder verworfen, sodass ein Deny-Eintrag, der ein Dokument verbergen sollte, wirkungslos blieb. Der Name nach der Markierung wird nicht verändert, daher werden Rollennamen auf Japanisch oder mit Vollbreitenbuchstaben weiterhin akzeptiert.
-- Ein Berechtigungseintrag mit einem unsichtbaren Zeichen (einem Leerzeichen der Breite null, einer Bytereihenfolge-Markierung oder einem Steuerzeichen) dort, wo das Präfix ``(allow)`` / ``(deny)`` oder der Name beginnt, etwa ``(deny)<U+200B>{user}name``, wird mit einer Meldung abgelehnt, die bittet, das Zeichen zu löschen. Ein solches Zeichen gelangt meist beim Einfügen zusammen mit dem Text hinein. Bis 15.9 wurde der Eintrag als Wert gespeichert, der auf niemanden zutrifft, oder verworfen. Ein solches Zeichen innerhalb eines Namens oder an dessen Ende wird nicht abgelehnt.
+- Ein Berechtigungseintrag mit einem unsichtbaren Zeichen (einem Leerzeichen der Breite null, einer Bytereihenfolge-Markierung oder einem Steuerzeichen) dort, wo das Präfix ``(allow)`` / ``(deny)`` oder der Name beginnt, etwa ``(deny)<U+200B>{user}name``, wird mit einer Meldung abgelehnt, die bittet, das Zeichen zu löschen. Ein solches Zeichen gelangt meist beim Einfügen zusammen mit dem Text hinein. Bis 15.9 wurde der Eintrag als Wert gespeichert, der auf niemanden zutrifft, oder verworfen. Ein solches Zeichen innerhalb eines Namens oder an dessen Ende wird nicht abgelehnt. Ein geschütztes Leerzeichen (U+00A0) oder ein schmales geschütztes Leerzeichen (U+202F) zählt als Leerzeichen: Ein Eintrag mit einem solchen Zeichen direkt nach dem Präfix ``(allow)`` / ``(deny)`` oder am Anfang des Namens, etwa ``(deny)<U+00A0>{user}name``, wird wie mit einem ASCII-Leerzeichen abgelehnt, und ein von 15.9 in dieser Form gespeicherter Wert bleibt bestehen, bis er korrigiert wird.
 - Ein bereits angemeldeter Benutzer, der ``/login/`` öffnet, wird auf die Seite weitergeleitet, zu der eine Anmeldung führen würde: für einen Administrator das Dashboard, für einen Benutzer mit einer Administrationsrolle die erste Verwaltungsseite, die seine Rollen erlauben, und für alle anderen die Suchseite. Ein anonymer Besucher erhält weiterhin das Anmeldeformular. Um sich mit einem anderen Konto anzumelden, melden Sie sich zuerst ab. Ein Link auf einer anderen Website auf ``/logout/`` (siehe oben) behält die Sitzung und endet daher ebenfalls auf dieser Seite.
 - Ein gespeicherter ``{bcrypt}``-Hash mit dem Präfix ``$2b$`` (bcrypt für Python und viele andere Systeme) oder ``$2y$`` (PHP, ``htpasswd -B``) wird jetzt wie ein ``$2a$``-Hash verifiziert. Bis 15.9 schlug die Anmeldung eines solchen Benutzers immer fehl. Neue Hashes werden weiterhin als ``$2a$`` geschrieben.
-- Solange die Suchmaschine nicht erreichbar ist, antwortet die Administrationsoberfläche mit ``503`` (bis 15.9 mit 500), und das Anmeldeformular zeigt statt einer Fehlerseite einen Hinweis, dass die Suchmaschine nicht verfügbar ist.
+- Solange die Suchmaschine nicht erreichbar ist, antwortet die Administrationsoberfläche mit ``503`` (bis 15.9 mit 500), und das Anmeldeformular zeigt statt einer Fehlerseite einen Hinweis, dass die Suchmaschine nicht verfügbar ist. Auch ``/go/`` (der Link eines Suchergebnisses) antwortet mit ``503``, solange die Suchmaschine nicht verfügbar ist (bis 15.9 mit ``404``). Diese ``503``-Antworten enthalten ``Retry-After: 5``. Eine von der Suchmaschine zurückgesetzte Verbindung gilt ebenfalls als nicht verfügbar, sodass die Antwort ``503`` statt ``500`` lautet.
 - ``engine.status`` von ``GET /api/v2/health`` ist ``YELLOW``, solange ein |Fess|-Index Schreibzugriffe ablehnt (er hat eine Schreibsperre); bis 15.9 war er ``GREEN``. Eine Schreibsperre auf einem Index, der nicht zu |Fess| gehört, wird ignoriert.
 - Das SAML-Plugin (``fess-sso-saml``) von 15.10 verwendet saml4j statt java-saml. Eine ``saml.*``-Eigenschaft, die die alte Bibliothek hatte und die neue nicht verwendet, wie ``saml.security.digest_algorithm`` oder ``saml.sp.contact``, wird ignoriert; eine Warnung, die sie nennt, wird in ``fess.log`` geschrieben. Das OpenID-Connect-Plugin (``fess-sso-oidc``) von 15.10 verwendet standardmäßig PKCE (S256). Setzen Sie ``oic.pkce=false`` in ``system.properties`` für einen OpenID-Provider, der es ablehnt (siehe :doc:`../config/sso-oidc`).
+- Ein Aufruf der Admin-API oder von ``/api/v2`` legt keine HTTP-Sitzung mehr an: Für einen Aufruf mit gültigem oder ungültigem Zugriffstoken und für eine anonyme Suche über ``/api/v2`` wird kein ``JSESSIONID``-Cookie gesetzt. Bis 15.9 legte jeder solche Aufruf eine Sitzung an. Eine Anmeldung über ``/api/v2/auth/login`` legt ihre Sitzung weiterhin an.
+- Hat eine Anfrage keinen ``Accept-Language``-Header, ist die Meldung einer Ablehnung durch die API auf Englisch, auch wenn das Standard-Locale des Servers eine andere Sprache ist; der Fehlercode ändert sich nicht. Bis 15.9 folgte die Meldung dem Standard-Locale des Servers. Senden Sie ``Accept-Language``, um die Meldung in einer anderen Sprache zu erhalten.
+- Eine Anfrage mit ``Accept-Language`` ``zh-Hans`` erhält vereinfachtes Chinesisch, und eine mit ``Accept-Language`` ``zh-Hant``, ``zh-HK`` oder ``zh-MO`` erhält traditionelles Chinesisch. Bis 15.9 fielen diese auf Englisch zurück.
+- Eine HTML-Seite, die ISO-8859-1 deklariert, wird als ``windows-1252`` dekodiert, sodass Zeichen im Bereich 0x80-0x9F wie typografische Anführungszeichen und das Euro-Zeichen indexiert statt verworfen werden. Ein vor dem Upgrade gecrawltes Dokument behält seinen alten Text, bis es erneut gecrawlt wird.
+- Die Bildschirme der Web- und Datei-Authentifizierung zeigen das gespeicherte Passwort nie an: Das Feld ist leer, und wird es leer gespeichert, bleibt das gespeicherte Passwort erhalten. Ein ``PUT`` der Admin-API ``webauth`` oder ``fileauth`` ohne Passwort wird mit HTTP 400 abgelehnt, wenn sich das gespeicherte Passwort nicht entschlüsseln lässt.
+- Die Rollenauswahl des Benutzerformulars auf dem Bildschirm der Benutzerverwaltung listet jede Rolle auf. Bis 15.9 wurden nur die ersten 1.000 Rollen angeboten.
+- Die Admin-Bildschirme eines Zugriffstokens zeigen das Token als Maske fester Länge statt seines Werts. Kopieren Sie den Wert von der Seite, statt ihn abzulesen.
 
 .. _upgrade-1510-new-api:
 
@@ -1425,9 +1457,13 @@ dort beginnen Sie also mit den Werten von 15.10.
 ``app.cipher.key`` ist der eine Wert, den Sie übernehmen müssen, obwohl 15.10 ihn nicht geändert hat.
 Es ist der Schlüssel, der die Passwörter und Geheimnisse verschlüsselt, die in den Parametern der
 Web-Authentifizierung, der Crawl-Konfigurationen und der Datenspeicher-Konfigurationen gespeichert
-sind. Läuft die neue Installation mit einem anderen Schlüssel als dem, mit dem sie gespeichert
-wurden, weil Sie die ausgelieferte ``fess_config.properties`` übernommen oder eine Sicherung auf
-einem neuen Server wiederhergestellt haben, lassen sie sich nicht entschlüsseln: ``fess-crawler.log``
+sind. Die Installation, auf die Sie aktualisieren oder in die Sie wiederherstellen, muss denselben
+``app.cipher.key`` verwenden wie die Installation, die die Daten gespeichert hat: Übernehmen Sie den
+Schlüssel zusammen mit der Sicherung.
+
+Läuft die Installation mit einem anderen Schlüssel, etwa weil Sie die ausgelieferte
+``fess_config.properties`` übernommen oder eine Sicherung auf einem Server mit einem anderen Schlüssel
+wiederhergestellt haben, lassen sich die gespeicherten Werte nicht entschlüsseln: ``fess-crawler.log``
 protokolliert eine ``CipherFailureException``, und ein Crawl, der eine solche Konfiguration
 einschließt, kann nichts indexieren.
 
@@ -1435,17 +1471,39 @@ Enthält auch nur eine Konfiguration einen Wert, der sich nicht entschlüsseln l
 nicht entschlüsselbare Konfiguration übersprungen: Auch die anderen Konfigurationen, die zum selben Crawl gehören, werden nicht indexiert. Die Meldung der
 ``CipherFailureException`` nennt Typ, Name und ID der Konfiguration sowie den Schlüssel des Parameters, der sich nicht entschlüsseln ließ,
 und weist darauf hin, dass ``app.cipher.key`` möglicherweise vom Schlüssel abweicht, mit dem gespeichert wurde (der verschlüsselte Wert und der Schlüssel selbst
-werden nicht ausgegeben). Sobald die Ursache feststeht, setzen Sie ``app.cipher.key`` auf den ursprünglichen Wert zurück
-oder geben das Passwort dieser Konfiguration erneut ein.
+werden nicht ausgegeben). Setzen Sie ``app.cipher.key`` auf den ursprünglichen Wert zurück.
+
+Um ``app.cipher.key`` absichtlich zu ändern, geben Sie die gespeicherten Geheimnisse nach der Änderung
+erneut ein. Öffnen Sie jede Web- oder Datei-Crawl-Konfiguration, Web- oder Datei-Authentifizierung und
+Datenspeicher-Konfiguration, die verschlüsselte Werte enthält, über ihren Bearbeitungsbildschirm, und
+ersetzen Sie jeden Parameterwert, der mit ``{cipher}`` beginnt, durch seinen Klartextwert. Solange einer
+übrig ist, schlägt das Speichern mit „Fehler beim Aktualisieren der Daten." und
+``Failed to decrypt a parameter: key=...`` fehl, das den Schlüssel nennt. Geben Sie bei einer Web- oder
+Datei-Authentifizierung auch das Passwort erneut ein: Der Bildschirm zeigt das Feld leer mit „Das
+gespeicherte Passwort konnte mit dem aktuellen app.cipher.key nicht entschlüsselt werden. Geben Sie das
+Passwort erneut ein." Geben Sie auch das Passwort des LDAP-Administrators (das Bind-DN-Passwort) auf dem
+Bildschirm „Allgemein" erneut ein: Es ist als ``{cipher}``-Wert verschlüsselt in ``system.properties``
+gespeichert. Öffnen Sie nach einem fehlgeschlagenen Speichern den Bearbeitungsbildschirm erneut,
+statt die Fehlerseite erneut abzusenden. |Fess| verschlüsselt die Werte beim Speichern mit dem neuen
+Schlüssel, und der nächste Crawl entschlüsselt sie. Der Benutzercode eines angemeldeten Benutzers ist die mit
+``app.cipher.key`` verschlüsselte Benutzer-ID, sodass angemeldete Benutzer nach der Änderung neue
+Benutzercodes erhalten; Daten, die unter den alten Benutzercodes erfasst wurden, etwa Favoriten und
+Suchprotokolle, sind nicht mit den neuen verknüpft.
+
+Bearbeiten Sie die Einstellungen an Ort und Stelle, statt sie zu löschen und neu anzulegen. Eine neu
+angelegte Crawl-Konfiguration erhält eine neue ID, während ihre Web- oder Datei-Authentifizierungen und
+Anfrage-Header, die geplanten Jobs, die die ID nennen, und die indexierten Dokumente (ihr ``config_id``)
+auf die alte ID verweisen. Das Löschen einer Web-Crawl-Konfiguration löscht auch ihre
+Authentifizierungen und Anfrage-Header.
 
 .. note::
 
    |Fess| 15.9 speichert auch das ``password`` der Web- und Datei-Authentifizierung mit ``app.cipher.key``
    verschlüsselt, sodass ``fess_basic_config.bulk`` und ``fess_config.bulk`` einer Sicherung die verschlüsselten Werte
-   enthalten. Übernehmen Sie beim Wiederherstellen auf einer anderen Installation denselben ``app.cipher.key``; mit
-   einem anderen Schlüssel schlagen Crawls, die diese Zugangsdaten verwenden, mit einem Fehler fehl. Eine Sicherung,
-   die vor 15.9 erstellt wurde, enthält sie im Klartext und funktioniert weiterhin (siehe
-   :doc:`../admin/backup-guide`).
+   enthalten. Stellen Sie eine solche Sicherung in einer Installation wieder her, die denselben ``app.cipher.key``
+   verwendet; mit einem anderen Schlüssel schlagen Crawls, die diese Zugangsdaten verwenden, mit einem Fehler fehl,
+   bis der ursprüngliche Schlüssel gesetzt ist. Eine Sicherung, die vor 15.9 erstellt wurde, enthält sie im Klartext
+   und funktioniert weiterhin (siehe :doc:`../admin/backup-guide`).
 
 .. _upgrade-159-jcifs:
 
@@ -2116,7 +2174,7 @@ Wiederherstellung aus Snapshot. OpenSearch muss laufen und |Fess| gestoppt sein:
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   Ein Snapshot, der wie in Schritt 1 erstellt wurde, enthält alle Indizes des Clusters, auch ``.plugins-ml-config``, den Systemindex des OpenSearch-ML-Plugins. Dieser Index ist im laufenden Cluster geöffnet, daher wird eine Wiederherstellung ohne die Einstellung ``indices`` mit ``cannot restore index [.plugins-ml-config] because an open index with same name already exists`` abgelehnt. Mit der Einstellung werden nur die Fess-Indizes und der Index ``configsync`` wiederhergestellt.
+   Ein Snapshot, der wie in Schritt 1 erstellt wurde, enthält alle Indizes des Clusters, auch Systemindizes von OpenSearch-Plugins wie ``.plugins-ml-config`` oder ``.opensearch-sap-log-types-config``. Ein solcher Index ist im laufenden Cluster geöffnet, daher wird eine Wiederherstellung ohne die Einstellung ``indices`` mit ``cannot restore index [<index>] because an open index with same name already exists`` abgelehnt. Mit der Einstellung werden nur die Fess-Indizes und der Index ``configsync`` wiederhergestellt.
 
 .. note::
 

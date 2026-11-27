@@ -295,7 +295,8 @@ ZIP 버전
 
       이전 설치의 ``tomcat_config.properties`` 를 복사하지 않으면 ``tomcat.sameSiteCookies`` 가
       아무런 알림 없이 기본값 ``lax`` 로 돌아가 SAML 로그인이 동작하지 않게 됩니다
-      ( :ref:`upgrade-159-saml` 참조). 이 파일의 기본 제공 내용은 15.8.0 과 15.10 에서 같으므로
+      ( :ref:`upgrade-159-saml` 참조). 15.10 에 기본 제공되는 파일이 15.8.0 및 15.9.0 의 파일과 다른 점은
+      주석 처리된 ``tomcat.compression`` 과 ``tomcat.compression.mime`` 행뿐이므로, 이전 파일을
       그대로 복사할 수 있습니다.
 
    .. warning::
@@ -433,7 +434,8 @@ Docker 버전
    ZIP 버전에서는 OpenSearch 홈이 이전 홈과 같은 절대 경로가 되도록 해야 합니다. 데이터를 옮기기 전에
    아래의 :ref:`ZIP 버전: OpenSearch 홈을 이전 경로로 유지 <upgrade-opensearch-zip-path>` 를 참조하십시오. RPM/DEB
    패키지는 사전 디렉터리를 ``/etc/opensearch/dictionary`` 에 두며 업그레이드 전후로 같은 경로이므로
-   특별한 조치가 필요하지 않습니다.
+   특별한 조치가 필요하지 않습니다. ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 는 패키지를 새로 설치할 때만
+   필요하며, OpenSearch RPM/DEB 패키지의 업그레이드에는 필요하지 않습니다.
 
 2. 플러그인 재설치. OpenSearch 디렉터리에 이전 버전의 플러그인 4개가 이미 있는 경우에는 먼저 삭제하십시오
    (``bin/fess-setup install opensearch`` 도 플러그인 4개를 설치합니다)::
@@ -463,8 +465,9 @@ Docker 버전
       플러그인 디렉터리가 이미 있으면 ``opensearch-plugin install`` 은 ``plugin directory [...] already exists`` 로 실패하고 이전 플러그인을 그대로 남깁니다. 그러면 OpenSearch 3.10.0은 ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running`` 이라는 메시지와 함께 시작되지 않습니다. ``bin/fess-setup install opensearch-plugins`` 는 요청한 버전으로 이미 설치된 플러그인은 그대로 두고, 다른 버전의 플러그인에 대해서는 플러그인 이름, 설치된 버전과 요청한 버전, 실행할 ``opensearch-plugin remove`` 명령을 표시하고 종료 코드 ``1`` 로 끝납니다. 새 플러그인을 설치하기 전에 위와 같이 이전 플러그인을 삭제하십시오.
 
       ``opensearch-plugin install`` 은 추가 권한을 요청하는 플러그인에 대해 확인(``Continue with installation?``)을
-      요구합니다. 응답할 수 없는 환경(터미널이 없거나 입력이 ``/dev/null`` 인 경우)에서는 그러한
-      플러그인이 설치되지 않습니다. ``y`` 로 응답하거나 ``-b`` 를 지정하여 확인을 건너뛰십시오.
+      요구합니다. 응답할 수 없는 환경에서는 그러한 플러그인이 설치되지 않습니다.
+      입력이 ``/dev/null`` 인 경우(터미널 없는 ``sudo`` 도 마찬가지)에는 몇 초 후 ``IllegalStateException: unable to read from standard input`` 을 출력하고 코드 ``1`` 로 종료하며, 입력이 열려 있지만 아무 응답도 오지 않는 경우에는 계속 기다리며 끝나지 않습니다.
+      ``y`` 로 응답하거나 ``--batch`` (``-b``) 를 지정하여 확인을 건너뛰십시오.
 
 3. 사전 디렉터리를 OpenSearch 설정 디렉터리 아래로 이동
 
@@ -495,9 +498,12 @@ Docker 버전
    OpenSearch는 그 경로가 자신의 설정 디렉터리 안에 있을 때만 이러한 인덱스를 엽니다.
    ``bin/fess-setup install opensearch`` 처럼 OpenSearch 3.10.0을 다른 디렉터리에 설치하고
    (``opensearch-3.9.0`` 옆에 ``opensearch-3.10.0`` 이 만들어집니다) ``data/`` 와 사전 파일을
-   직접 옮기면, 문서 인덱스는 할당되지 않은 상태로 남고(할당 설명에 ``Resource path must
+   직접 옮기면, 문서 인덱스와, 마찬가지로 15.9.0 의 절대 경로 ``*_path`` 설정을 가진 ``fess_suggest_analyzer`` 는
+   할당되지 않은 상태로 남고(할당 설명에 ``Resource path must
    be inside config directory`` 가 표시됩니다) 클러스터는 red가 됩니다. 한 번 시작한 홈에 ``data/`` 를
-   복사한 경우에도 마찬가지입니다. 다음 절차는 새 엔진을 인덱스가 만들어졌을 때의 경로에 둡니다.
+   복사한 경우에도 마찬가지입니다.
+   15.9.0 에서 만든 스냅샷을 OpenSearch 홈이 다른 경로에 있는 새 15.10 환경에 복원한 경우에도 마찬가지로, 복원된 문서 인덱스는 ``Resource path must be inside config directory`` 로 red가 됩니다.
+   그러한 스냅샷은 이전과 같은 경로에 있는 엔진에 복원하십시오. 다음 절차는 새 엔진을 인덱스가 만들어졌을 때의 경로에 둡니다.
 
    1. OpenSearch를 중지한 상태(단계 2)에서 OpenSearch 3.10.0과 플러그인을 다른 디렉터리에 설치하고
       (예: ``fess-15.10.0`` 에서 ``bin/fess-setup install opensearch``), 시작하지 마십시오. 이전 홈의
@@ -518,10 +524,21 @@ Docker 버전
           $ mv $NEW $OLD
 
    3. 옮긴 홈의 ``config/opensearch.yml`` 에서 ``configsync.config_path`` 를 이전 절대 경로
-      (변수가 아니라 ``$OLD/config/dictionary`` 의 전체 경로)로 되돌립니다. ``FESS_DICTIONARY_PATH`` 도
-      이전 값 그대로 유지하십시오. 환경 변수 또는 ``bin/fess.in.sh`` 로 명시적으로 설정하십시오.
+      (변수가 아니라 ``$OLD/config/dictionary`` 의 전체 경로)로 되돌립니다. |Fess| 의 ``FESS_DICTIONARY_PATH`` 에는
+      이전 절대 경로 대신 OpenSearch 설정 디렉터리를 기준으로 하는 상대 경로 ``FESS_DICTIONARY_PATH=dictionary/``
+      (끝의 슬래시 포함)를 설정하십시오. 이전 절대 경로 그대로이면 단계 7의 「재인덱싱」으로 다시 만드는 인덱스에도
+      절대 경로 ``*_path`` 설정이 기록됩니다. ``dictionary/`` 이면 새 인덱스에는 상대 경로가 기록되며, 이전 인덱스와 함께
+      green 이 되고 검색할 수 있습니다. 15.10 의 ``bin/fess-setup install opensearch`` 로 새로 설치한 경우에도
+      ``dictionary/`` 가 설정됩니다. 환경 변수 또는 ``bin/fess.in.sh`` 로 명시적으로 설정하십시오.
       ``bin/fess.in.sh`` 는 |Fess| 디렉터리의 ``opensearch/`` 아래에 있는 OpenSearch에 대해서만
-      스스로 설정하기 때문입니다.
+      스스로 설정하기 때문입니다. 단계 3(ZIP 버전의 절차 2)에서 15.9.0 의 ``bin/fess.in.sh`` 를 복사하고 아무것도 설정하지 않으면
+      이 배치에서는 ``FESS_DICTIONARY_PATH`` 가 설정되지 않으며, 단계 7의 「재인덱싱」은 ``Failed to create index`` 를
+      기록하고 아무것도 만들지 않습니다.
+
+      단계 7의 「재인덱싱」은 ``fess_suggest_analyzer`` 를 다시 만들지 않으므로 15.9.0 의 절대 경로 ``*_path`` 설정이 남습니다.
+      상대 경로로 다시 만들려면 |Fess| 를 중지하고 ``fess_suggest_analyzer`` 를 삭제한 뒤 ``FESS_DICTIONARY_PATH=dictionary/`` 로
+      |Fess| 를 시작하십시오. |Fess| 는 시작할 때 상대 경로로 이를 다시 만들며, 다음에 「Suggest Indexer」 작업이 실행된 후부터
+      추천어가 동작합니다.
 
    4. ``$OLD`` 에서 OpenSearch를 시작하고, 실패한 샤드의 할당을 다시 시도하도록 요청한 뒤(이전에
       다른 경로에서 OpenSearch를 시작하여 클러스터가 red인 경우에 필요합니다) 상태를 확인합니다::
@@ -799,21 +816,28 @@ URL의 스킴이 목록에 없는 검색 결과는 링크가 되지 않습니다
 - 새 설정 ``authentication.local.username.policy`` (기본값 ``preserved`` )가 있습니다. |Fess| 는 15.9까지와 같이 로컬 사용자의 이름을 입력된 그대로 비교하므로 ``Alice`` 와 ``alice`` 는 두 명의 사용자입니다. ``mapped`` 로 하면, 사용자 관리 화면 또는 Admin API에서 로컬 사용자를 만들거나 이름을 바꿀 때, 문자 폭, 대소문자, 유니코드 합성의 차이를 무시했을 때 이름이 다른 사용자의 이름과 같아지거나 ``authentication.admin.users`` 항목의 다른 표기가 되면 거부됩니다. 로그인, 사용자 ID, 저장되는 이름, 권한, 색인된 문서는 바뀌지 않습니다. 자세한 내용과 제한은 :ref:`local-username-policy` 를 참조하십시오.
 - 1 KB 이상의 스크립트, 스타일, SVG 파일은 기본적으로 gzip으로 압축되어 전송됩니다. 15.9는 아무것도 압축하지 않았습니다. 페이지와 JSON은 압축되지 않습니다. ``tomcat_config.properties`` 의 ``tomcat.compression`` (``on`` 또는 ``off``)과 ``tomcat.compression.mime`` (목록에 추가할 타입, 쉼표로 구분)으로 제어합니다. 15.9에서 이어받은 ``tomcat_config.properties`` 에는 두 키가 모두 없으므로 압축이 켜집니다. |Fess| 앞단의 리버스 프록시가 응답을 직접 압축하는 경우에는 ``tomcat.compression=off`` 로 설정하십시오.
 - 번들된 ``bootstrap`` 테마의 파일은 ``Cache-Control: no-cache`` 와 ``ETag`` 로 전송되며, 브라우저는 ``If-None-Match`` 로 다시 요청하고 파일이 바뀌지 않았으면 ``304`` 를 받습니다. 15.9까지는 ``max-age=86400`` 이 붙어 있어 갱신된 파일을 브라우저가 최대 24시간 동안 유지했습니다.
-- 설정은 ``-D`` 옵션 대신 환경 변수로도 지정할 수 있습니다. ``fess_config.properties`` 의 키에는 ``FESS_CONFIG_<KEY>`` , ``system.properties`` 의 키에는 ``FESS_SYSTEM_<KEY>`` 를 사용합니다(키를 대문자로 하고 영문자와 숫자 이외의 문자는 모두 ``_`` 로 바꿉니다. ``search_engine.password`` 는 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` 입니다). 값이 있는 ``-D`` 옵션이 환경 변수보다 우선하고, 환경 변수가 ``fess_config.properties`` 보다 우선합니다. ``system.properties`` 에 이미 있는 키는 덮어쓰지 않습니다. 환경 변수는 ``-D`` 옵션과 달리 ``ps`` 나 ``docker top`` 에 표시되지 않으며, 시스템 정보에서는 값이 마스킹됩니다.
+- 설정은 ``-D`` 옵션 대신 환경 변수로도 지정할 수 있습니다. ``fess_config.properties`` 의 키에는 ``FESS_CONFIG_<KEY>`` , ``system.properties`` 의 키에는 ``FESS_SYSTEM_<KEY>`` 를 사용합니다(키를 대문자로 하고 영문자와 숫자 이외의 문자는 모두 ``_`` 로 바꿉니다. ``search_engine.password`` 는 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` 입니다). 값이 있는 ``-D`` 옵션이 환경 변수보다 우선하고, 환경 변수가 ``fess_config.properties`` 보다 우선합니다. ``system.properties`` 에 이미 있는 키는 덮어쓰지 않습니다. 환경 변수는 ``-D`` 옵션과 달리 ``ps`` 나 ``docker top`` 에 표시되지 않으며, 시스템 정보에서는 값이 마스킹됩니다. 15.9.0 에서는 일반 화면을 저장하면 기본값 그대로인 값까지 포함하여 일반의 설정이 ``system.properties`` 에 기록되었고, 거기에 저장된 키는 ``FESS_SYSTEM_<KEY>`` 보다 우선합니다. 따라서 업그레이드 후에는 15.9.0 에서 일반 화면 저장으로 저장된 키에 대해 ``FESS_SYSTEM_*`` 환경 변수가 효과가 없으며, 그 줄을 ``system.properties`` 에서 삭제할 때까지 그대로입니다. 15.10 은 일반 화면을 저장할 때 ``system.properties`` 에 아직 없는 키에 대해 ``-Dfess.system.<key>`` 또는 ``FESS_SYSTEM_<KEY>`` 에서 온 값 그대로인 필드는 기록하지 않습니다. 화면에서 값을 바꾸면 그 값이 저장되고 이후로는 그 값이 우선합니다.
 - 비밀(비밀번호, API 키, 시크릿 키)을 ``-Dfess.config.<key>`` 또는 ``-Dfess.system.<key>`` 옵션으로 지정하면, 15.10은 시작할 때 해당 키와 대신 사용할 환경 변수를 알리는 경고를 ``fess.log`` 에 출력합니다. 값은 출력하지 않습니다.
 - 환경 변수 ``FESS_SESSION_STORE=opensearch`` 는 HTTP 세션을 검색 엔진에 보관하여 여러 노드가 공유하게 합니다. 기본값은 꺼짐입니다(:ref:`세션용 fess_config.session 인덱스 <upgrade-1510-session-index>` 와 :doc:`../config/session-store` 참조).
-- 관리 API 19개(예: ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap``, ``scheduler``. ``tagtype``, ``general``, ``theme``, ``dict`` 는 제외)의 ``PUT /api/admin/<name>/setting`` 도 위의 사용자 API와 마찬가지로 오래된 ``version_no`` 를 HTTP 400과 ``status`` ``1`` 로 거부합니다. 15.9까지는 값을 비교하지 않았고 목록은 ``-1`` 을 반환했으므로, 상수 ``version_no`` 를 보내는 스크립트는 이제 실패합니다. ``GET /api/admin/<name>/setting/{id}`` 에서 읽은 값을 보내고, 거부된 후에는 설정을 다시 읽으십시오.
+- 관리 API 19개(예: ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap``, ``scheduler``. ``tagtype``, ``general``, ``theme``, ``dict`` 는 제외)의 ``PUT /api/admin/<name>/setting`` 도 위의 사용자 API와 마찬가지로 오래된 ``version_no`` 를 HTTP 400과 ``status`` ``1`` 로 거부합니다. 15.9까지는 값을 비교하지 않았고 목록은 ``-1`` 을 반환했으므로, 상수 ``version_no`` 를 보내는 스크립트는 이제 실패합니다. ``GET /api/admin/<name>/setting/{id}`` 에서 읽은 값을 보내고, 거부된 후에는 설정을 다시 읽으십시오. 같은 설정에 대한 동시 업데이트도 거부됩니다. 같은 ``version_no`` 로 5개의 ``PUT`` 요청을 동시에 보내면 1개만 반영되고 나머지 4개는 HTTP 400과 ``status`` ``1`` 을 받습니다. 현재 ``version_no`` 로 업데이트를 다시 보내십시오.
 - ``permissions`` 없이 ``POST /api/admin/webconfig/setting``, ``/api/admin/fileconfig/setting``, ``/api/admin/dataconfig/setting`` 을 호출하면 ``{role}guest`` 가 저장됩니다. 15.9까지는 권한이 저장되지 않았습니다. ``permissions`` 없는 ``PUT`` 은 저장된 값을 유지하며, 15.9에서는 필드가 비어 있게 되었습니다.
 - 로그인 폼, 비밀번호 변경 폼, 사용자 관리 화면의 비밀번호 필드는 비밀번호 앞뒤의 공백을 더 이상 제거하지 않습니다. 15.9까지는 제거했으나 ``/api/v2/auth/login`` 과 Admin API는 제거하지 않았으므로, API로 설정한 앞뒤 공백이 있는 비밀번호로는 폼에서 로그인할 수 없었습니다. 이제 모든 입구에서 비밀번호를 입력된 그대로 받습니다. 15.9에서 비밀번호를 저장할 때 공백이 제거된 사용자는 공백 없이 입력해야 합니다.
-- 컴파일되지 않는 정규 표현식은 저장할 때 거부됩니다. 대상은 웹 및 파일 크롤 설정의 포함/제외 패턴, 레이블 유형의 경로, 경로 매핑의 정규 표현식입니다. 이전에 저장된 값은 그대로 남지만, 수정하기 전에는 변경 없이 다시 저장할 수 없습니다. 15.10 이전에 저장된 잘못된 정규 표현식의 경로 매핑은 15.9와 15.10 모두에서 모든 검색의 결과가 0건이 되게 합니다(``fess.log`` 에 ``PathMapping`` 의 ``PatternSyntaxException`` 이 표시됩니다). 삭제하거나 수정하십시오.
+- 컴파일되지 않는 정규 표현식은 저장할 때 거부됩니다. 대상은 웹 및 파일 크롤 설정의 포함/제외 패턴, 레이블 유형의 경로, 경로 매핑의 정규 표현식입니다. 이전에 저장된 값은 그대로 남지만, 수정하기 전에는 변경 없이 다시 저장할 수 없습니다. 15.9에서는 잘못된 정규 표현식의 경로 매핑이 저장되어 있으면 모든 검색의 결과가 0건이 됩니다(``fess.log`` 에 ``PathMapping`` 의 ``PatternSyntaxException`` 이 표시됩니다). 15.10 은 그러한 경로 매핑을 건너뜁니다. 검색은 결과를 반환하고 다른 경로 매핑은 그대로 적용되며, ``fess.log`` 에는 ``The regex of the path mapping "(" is not valid, so the mapping is skipped`` 와 같은 경고가 1회 기록됩니다. 그 경로 매핑을 수정하거나 삭제하십시오.
 - 검색 화면의 레이블 메뉴, 관리 화면 폼의 레이블 선택지, 크롤한 문서의 레이블 부여에 모든 레이블 유형이 사용됩니다. 15.9까지는 앞쪽 ``page.labeltype.max.fetch.size`` (1,000)개의 레이블 유형만 읽었으므로, 그 이후의 레이블 유형은 메뉴와 폼에 표시되지 않았고 그 레이블이 붙어야 할 문서에도 레이블이 붙지 않았습니다. 이제 이 설정은 관리 화면의 레이블 유형 목록의 페이지 크기에만 사용됩니다. 레이블 유형이 1,000개를 넘으면 ``/api/v2/ui/config`` 의 응답이 커집니다(레이블 유형 1개당 약 45바이트).
 - 전각 문자로 쓴 권한 항목( ``（deny）{user}name`` 이나 ``(deny)｛user｝name`` 등 일본어 키보드로 입력한 것)은 관리 화면의 권한 필드와 Admin API에서 거부되며, ``(deny){user}name`` 처럼 반각으로 쓰도록 요청하는 메시지가 표시됩니다. 15.9까지는 아무와도 일치하지 않는 값으로 저장되거나 제거되었으므로, 문서를 숨기기 위한 deny가 효과가 없었습니다. 표식 뒤의 이름은 변경되지 않으므로, 일본어나 전각 문자로 된 롤 이름은 계속 사용할 수 있습니다.
-- ``(allow)`` · ``(deny)`` 접두사나 이름이 시작되는 위치에 보이지 않는 문자(폭 없는 공백, 바이트 순서 표시, 제어 문자)가 있는 권한 항목( ``(deny)<U+200B>{user}name`` 등)은 그 문자를 삭제하도록 요청하는 메시지와 함께 거부됩니다. 이런 문자는 대개 텍스트를 붙여 넣을 때 함께 들어옵니다. 15.9까지는 아무와도 일치하지 않는 값으로 저장되거나 제거되었습니다. 이름의 중간이나 끝에 있는 이런 문자는 거부되지 않습니다.
+- ``(allow)`` · ``(deny)`` 접두사나 이름이 시작되는 위치에 보이지 않는 문자(폭 없는 공백, 바이트 순서 표시, 제어 문자)가 있는 권한 항목( ``(deny)<U+200B>{user}name`` 등)은 그 문자를 삭제하도록 요청하는 메시지와 함께 거부됩니다. 이런 문자는 대개 텍스트를 붙여 넣을 때 함께 들어옵니다. 15.9까지는 아무와도 일치하지 않는 값으로 저장되거나 제거되었습니다. 이름의 중간이나 끝에 있는 이런 문자는 거부되지 않습니다. 줄바꿈 없는 공백(no-break space, U+00A0)이나 좁은 줄바꿈 없는 공백(U+202F)은 공백으로 취급됩니다. ``(allow)`` · ``(deny)`` 접두사 바로 뒤나 이름의 시작에 이런 문자가 있는 항목( ``(deny)<U+00A0>{user}name`` 등)은 ASCII 공백과 마찬가지로 거부되며, 15.9가 이 형태로 저장한 값은 수정할 때까지 그대로 남습니다.
 - 이미 로그인한 사용자가 ``/login/`` 을 열면 로그인했을 때와 같은 페이지로 리다이렉트됩니다. 관리자는 대시보드, 관리 롤을 가진 사용자는 그 롤로 열 수 있는 첫 관리 화면, 그 밖의 사용자는 검색 화면입니다. 로그인하지 않은 방문자에게는 이전과 같이 로그인 폼이 표시됩니다. 다른 계정으로 로그인하려면 먼저 로그아웃하십시오. 다른 사이트에 있는 ``/logout/`` 링크(위 참조)는 세션을 유지하므로 역시 이 페이지로 이동합니다.
 - ``$2b$`` (Python의 bcrypt 등 많은 시스템)나 ``$2y$`` (PHP, ``htpasswd -B`` )로 시작하는 저장된 ``{bcrypt}`` 해시도 ``$2a$`` 와 같이 검증됩니다. 15.9까지는 이러한 사용자의 로그인이 항상 실패했습니다. 새 해시는 계속 ``$2a$`` 로 기록됩니다.
-- 검색 엔진에 접속할 수 없는 동안 관리 콘솔은 ``503`` 을 반환하며(15.9까지는 500), 로그인 폼에는 오류 페이지 대신 검색 엔진을 사용할 수 없다는 안내가 표시됩니다.
+- 검색 엔진에 접속할 수 없는 동안 관리 콘솔은 ``503`` 을 반환하며(15.9까지는 500), 로그인 폼에는 오류 페이지 대신 검색 엔진을 사용할 수 없다는 안내가 표시됩니다. 검색 엔진을 사용할 수 없는 동안에는 ``/go/`` (검색 결과의 링크)도 ``503`` 을 반환합니다(15.9까지는 ``404``). 이러한 ``503`` 응답에는 ``Retry-After: 5`` 가 붙습니다. 검색 엔진과의 연결이 재설정(reset)된 경우에도 사용할 수 없는 것으로 처리되어 ``500`` 이 아니라 ``503`` 을 반환합니다.
 - |Fess| 인덱스가 쓰기를 거부하는 동안(쓰기 차단이 걸려 있는 동안) ``GET /api/v2/health`` 의 ``engine.status`` 는 ``YELLOW`` 이며, 15.9까지는 ``GREEN`` 이었습니다. |Fess| 에 속하지 않는 인덱스의 쓰기 차단은 무시됩니다.
 - 15.10의 SAML 플러그인(``fess-sso-saml``)은 java-saml 대신 saml4j를 사용합니다. 이전 라이브러리에는 있었지만 새 라이브러리가 사용하지 않는 ``saml.*`` 속성(``saml.security.digest_algorithm``, ``saml.sp.contact`` 등)은 무시되며, 이를 알리는 경고가 ``fess.log`` 에 한 번 출력됩니다. 15.10의 OpenID Connect 플러그인(``fess-sso-oidc``)은 기본적으로 PKCE(S256)를 사용합니다. 이를 거부하는 OpenID 공급자에는 ``system.properties`` 에 ``oic.pkce=false`` 를 설정하십시오(:doc:`../config/sso-oidc` 참조).
+- 관리 API와 ``/api/v2`` 호출은 더 이상 HTTP 세션을 만들지 않습니다. 유효하거나 유효하지 않은 액세스 토큰을 붙인 호출이나 익명으로 ``/api/v2`` 를 통해 검색할 때 ``JSESSIONID`` 쿠키가 설정되지 않습니다. 15.9까지는 이러한 호출마다 세션이 만들어졌습니다. ``/api/v2/auth/login`` 을 통한 로그인은 이전과 같이 세션을 만듭니다.
+- 요청에 ``Accept-Language`` 헤더가 없으면, 서버의 기본 로케일이 다른 언어이더라도 API 거부 메시지는 영어입니다. 오류 코드는 바뀌지 않습니다. 15.9까지는 메시지가 서버의 기본 로케일을 따랐습니다. 다른 언어의 메시지를 받으려면 ``Accept-Language`` 를 보내십시오.
+- ``Accept-Language`` 가 ``zh-Hans`` 인 요청은 간체 중국어를, ``Accept-Language`` 가 ``zh-Hant`` , ``zh-HK`` , ``zh-MO`` 인 요청은 번체 중국어를 받습니다. 15.9까지는 영어로 대체되었습니다.
+- ISO-8859-1 을 선언한 HTML 페이지는 ``windows-1252`` 로 디코딩되므로, 0x80-0x9F 범위의 문자(둥근 따옴표, 유로 기호 등)가 제거되지 않고 색인됩니다. 업그레이드 전에 크롤링한 문서는 다시 크롤링할 때까지 이전 텍스트를 유지합니다.
+- 웹 인증과 파일 인증 화면은 저장된 비밀번호를 표시하지 않습니다. 비밀번호 필드는 비어 있으며, 비어 있는 채로 저장하면 저장된 비밀번호가 유지됩니다. ``webauth`` ·``fileauth`` 관리 API의 ``PUT`` 은 저장된 비밀번호를 복호화할 수 없는 경우 비밀번호가 없으면 HTTP 400으로 거부됩니다.
+- 사용자 관리 화면의 사용자 폼에 있는 역할 선택지에는 모든 역할이 표시됩니다. 15.9까지는 처음 1,000개의 역할만 표시되었습니다.
+- 액세스 토큰의 관리 화면은 토큰 값 대신 고정 길이의 마스크를 표시합니다. 값은 읽지 말고 페이지에서 복사하십시오.
 
 .. _upgrade-1510-new-api:
 
@@ -1368,23 +1392,40 @@ RPM 버전에서는 같은 방식으로 ``/etc/fess/fess_config.properties`` 와
 
 ``app.cipher.key`` 는 15.10 에서 바뀌지 않았더라도 반드시 이어받아야 하는 값입니다. 웹 인증,
 크롤링 설정, 데이터스토어 설정의 파라미터에 저장된 비밀번호와 시크릿을 암호화하는 키이기
-때문입니다. 기본 제공 ``fess_config.properties`` 를 사용했거나 백업을 새 서버에 복원했기 때문에
-새 설치가 그것들을 저장했을 때와 다른 키로 동작하면 복호화할 수 없으며, ``fess-crawler.log`` 에
+때문입니다. 업그레이드하거나 복원하는 대상 설치는 데이터를 저장한 설치와 같은 ``app.cipher.key`` 를
+사용해야 합니다. 백업과 함께 키도 이어받으십시오.
+
+기본 제공 ``fess_config.properties`` 를 사용했거나 다른 키를 사용하는 서버에 백업을 복원한 경우처럼
+설치가 다른 키로 동작하면 저장된 값을 복호화할 수 없으며, ``fess-crawler.log`` 에
 ``CipherFailureException`` 이 기록되고 그러한 설정을 포함하는 크롤은 아무것도 색인하지 못할 수
 있습니다.
 
 복호화할 수 없는 값을 가진 설정이 하나라도 있으면 크롤링은 그 시점에서 멈춥니다. 복호화할 수 없는 설정만 건너뛰는 것이 아니라,
 같은 크롤링의 대상이 되어 있는 다른 설정도 색인되지 않습니다. ``CipherFailureException`` 의 메시지에는
 그 설정의 종류·이름·ID와 복호화하지 못한 파라미터의 키가 표시되며, ``app.cipher.key`` 가 저장했을 때의 키와
-다를 가능성이 있다는 내용도 적혀 있습니다(암호화된 값과 키 자체는 출력되지 않습니다). 원인을 알게 되면
-``app.cipher.key`` 를 원래 값으로 되돌리거나, 그 설정의 비밀번호를 다시 입력하십시오.
+다를 가능성이 있다는 내용도 적혀 있습니다(암호화된 값과 키 자체는 출력되지 않습니다). ``app.cipher.key`` 를 원래 값으로 되돌리십시오.
+
+의도적으로 ``app.cipher.key`` 를 변경하는 경우에는 변경한 후에 저장된 비밀 값을 다시 입력하십시오. 암호화된 값을 가진
+웹·파일 크롤링 설정, 웹 인증·파일 인증, 데이터스토어 설정을 각각 편집 화면에서 열고, ``{cipher}`` 로 시작하는 파라미터 값을
+모두 평문 값으로 바꿉니다. 하나라도 남아 있으면 저장이 실패하고 "데이터를 업데이트하지 못했습니다."와
+``Failed to decrypt a parameter: key=...`` 로 그 키가 표시됩니다. 웹 인증과 파일 인증에서는 비밀번호도 다시 입력하십시오.
+화면에는 비밀번호 필드가 비어 있고 "저장된 비밀번호를 현재 app.cipher.key로 복호화할 수 없습니다. 비밀번호를 다시 입력하십시오."가
+표시됩니다. 일반 화면의 LDAP 관리자 비밀번호(Bind DN 비밀번호)도 다시 입력하십시오. 이 값은 ``system.properties`` 에
+``{cipher}`` 값으로 암호화되어 저장됩니다. 저장에 실패한 후에는 오류 화면에서 다시 제출하지 말고 편집 화면을 다시 여십시오. 저장하면 |Fess| 가 새 키로
+값을 암호화하며, 다음 크롤링에서 이를 복호화합니다. 로그인한 사용자의 사용자 코드는 사용자 ID를 ``app.cipher.key`` 로
+암호화한 것이므로, 변경 후에는 로그인한 사용자에게 새 사용자 코드가 붙습니다. 이전 사용자 코드로 기록된 데이터(즐겨찾기,
+검색 로그 등)는 새 사용자 코드와 연결되지 않습니다.
+
+설정은 삭제하고 다시 만들지 말고 그 자리에서 편집하십시오. 다시 만든 크롤링 설정에는 새 ID가 붙지만, 그 웹 인증·파일 인증과
+요청 헤더, 그 ID를 지정한 예약 작업, 색인된 문서(그 ``config_id``)는 이전 ID를 참조합니다. 웹 크롤링 설정을 삭제하면 그 인증과
+요청 헤더도 삭제됩니다.
 
 .. note::
 
    |Fess| 15.9 는 웹 인증과 파일 인증의 ``password`` 도 ``app.cipher.key`` 로 암호화하여 저장하므로, 백업의
-   ``fess_basic_config.bulk`` 와 ``fess_config.bulk`` 에는 암호화된 값이 포함됩니다. 다른 설치에 복원할 때는 동일한
-   ``app.cipher.key`` 를 이어받으십시오. 키가 다르면 이 인증 정보를 사용하는 크롤이 오류로 실패합니다. 15.9 이전에 만든
-   백업에는 평문으로 들어 있으며 그대로 사용할 수 있습니다(:doc:`../admin/backup-guide` 참조).
+   ``fess_basic_config.bulk`` 와 ``fess_config.bulk`` 에는 암호화된 값이 포함됩니다. 이러한 백업은 동일한
+   ``app.cipher.key`` 를 사용하는 설치에 복원하십시오. 키가 다르면 원래 키를 설정할 때까지 이 인증 정보를 사용하는
+   크롤이 오류로 실패합니다. 15.9 이전에 만든 백업에는 평문으로 들어 있으며 그대로 사용할 수 있습니다(:doc:`../admin/backup-guide` 참조).
 
 .. _upgrade-159-jcifs:
 
@@ -1998,7 +2039,7 @@ RPM/DEB 버전의 경우::
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   단계 1의 방법으로 만든 스냅샷에는 OpenSearch ML 플러그인의 시스템 인덱스인 ``.plugins-ml-config`` 를 포함하여 클러스터의 모든 인덱스가 들어 있습니다. 이 인덱스는 실행 중인 클러스터에서 열려 있으므로, ``indices`` 설정 없이 복원하면 ``cannot restore index [.plugins-ml-config] because an open index with same name already exists`` 로 거부됩니다. ``indices`` 를 지정하면 Fess의 인덱스와 ``configsync`` 인덱스만 복원됩니다.
+   단계 1의 방법으로 만든 스냅샷에는 ``.plugins-ml-config`` 나 ``.opensearch-sap-log-types-config`` 등 OpenSearch 플러그인의 시스템 인덱스를 포함하여 클러스터의 모든 인덱스가 들어 있습니다. 이러한 인덱스는 실행 중인 클러스터에서 열려 있으므로, ``indices`` 설정 없이 복원하면 ``cannot restore index [<index>] because an open index with same name already exists`` 로 거부됩니다. ``indices`` 를 지정하면 Fess의 인덱스와 ``configsync`` 인덱스만 복원됩니다.
 
 .. note::
 

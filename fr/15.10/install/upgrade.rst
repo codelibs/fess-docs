@@ -301,8 +301,9 @@ Version ZIP
 
       Sans le ``tomcat_config.properties`` de l'ancienne installation, ``tomcat.sameSiteCookies``
       revient silencieusement à la valeur par défaut ``lax`` et la connexion SAML cesse de
-      fonctionner (voir :ref:`upgrade-159-saml`). Le fichier fourni est identique en 15.8.0 et en
-      15.10 ; il peut donc être copié tel quel.
+      fonctionner (voir :ref:`upgrade-159-saml`). Le fichier fourni avec 15.10 ne diffère
+      de celui de 15.8.0 et 15.9.0 que par les lignes en commentaire ``tomcat.compression`` et
+      ``tomcat.compression.mime`` ; l'ancien fichier peut donc toujours être copié tel quel.
 
    .. warning::
 
@@ -456,7 +457,9 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
    absolu que l'ancien ; voir :ref:`Version ZIP : conserver le répertoire racine d'OpenSearch à son ancien chemin <upgrade-opensearch-zip-path>`
    ci-dessous avant de déplacer des données. Les paquets RPM/DEB conservent le répertoire des
    dictionnaires à ``/etc/opensearch/dictionary``, qui est le même chemin avant et après la mise à
-   niveau ; rien de particulier n'est donc nécessaire pour eux.
+   niveau ; rien de particulier n'est donc nécessaire pour eux. La mise à niveau du paquet RPM/DEB
+   d'OpenSearch ne nécessite pas ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` ; la variable n'est nécessaire
+   que pour une nouvelle installation du paquet.
 
 2. Réinstallez les plugins. Supprimez d'abord les quatre plugins de l'ancienne version si le
    répertoire d'OpenSearch les contient déjà (``bin/fess-setup install opensearch`` installe lui aussi
@@ -489,9 +492,12 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
       Si le répertoire d'un plugin existe déjà, ``opensearch-plugin install`` échoue avec ``plugin directory [...] already exists`` et laisse l'ancien plugin en place. OpenSearch 3.10.0 refuse alors de démarrer avec ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running``. ``bin/fess-setup install opensearch-plugins`` conserve un plugin déjà installé dans la version demandée ; pour un plugin d'une autre version, il affiche le nom du plugin, la version installée et la version demandée ainsi que la commande ``opensearch-plugin remove`` à exécuter, et se termine avec le code ``1``. Supprimez les anciens plugins comme indiqué ci-dessus avant d'installer les nouveaux.
 
       ``opensearch-plugin install`` demande une confirmation (``Continue with installation?``) pour un
-      plugin qui réclame des permissions supplémentaires. Là où personne ne peut répondre (pas de
-      terminal, entrée depuis ``/dev/null``), un tel plugin n'est pas installé : répondez ``y`` ou
-      passez ``-b`` pour ignorer la question.
+      plugin qui réclame des permissions supplémentaires. Là où personne ne peut répondre, un tel plugin
+      n'est pas installé : avec une entrée depuis ``/dev/null`` (ou ``sudo`` sans terminal), la commande
+      se termine avec le code ``1`` au bout de quelques secondes avec
+      ``IllegalStateException: unable to read from standard input``, et avec une entrée qui reste
+      ouverte mais ne répond jamais, elle attend et ne se termine pas. Répondez ``y`` ou passez
+      ``--batch`` (``-b``) pour ignorer la question.
 
 3. Déplacez le répertoire des dictionnaires sous le répertoire de configuration d'OpenSearch
 
@@ -522,9 +528,14 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
    OpenSearch n'ouvre un tel index que si ce chemin se trouve dans son propre répertoire de configuration.
    Si vous installez OpenSearch 3.10.0 dans un autre répertoire, comme le fait ``bin/fess-setup install opensearch``
    (il crée ``opensearch-3.10.0`` à côté de ``opensearch-3.9.0``), puis que vous y déplacez à la main ``data/`` et
-   les fichiers de dictionnaire, l'index de documents reste non assigné (``Resource path must
+   les fichiers de dictionnaire, l'index de documents et ``fess_suggest_analyzer``, qui conserve lui
+   aussi les paramètres ``*_path`` absolus de 15.9.0, restent non assignés (``Resource path must
    be inside config directory`` dans l'explication d'allocation) et le cluster est rouge. Il en va de même
-   lorsque vous copiez ``data/`` dans un répertoire racine déjà démarré une fois. La procédure
+   lorsque vous copiez ``data/`` dans un répertoire racine déjà démarré une fois, et lorsqu'un snapshot
+   pris en 15.9.0 est restauré dans une nouvelle installation 15.10 dont le répertoire racine d'OpenSearch
+   se trouve à un autre chemin : l'index de documents restauré est rouge avec
+   ``Resource path must be inside config directory``. Restaurez un tel snapshot dans un moteur situé à
+   l'ancien chemin. La procédure
    ci-dessous place le nouveau moteur au chemin avec lequel les index ont été créés :
 
    1. OpenSearch étant arrêté (étape 2), installez OpenSearch 3.10.0 et ses plugins dans un autre
@@ -546,10 +557,24 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
           $ mv $NEW $OLD
 
    3. Dans ``config/opensearch.yml`` du répertoire racine déplacé, remettez ``configsync.config_path`` à l'ancien
-      chemin absolu (le chemin complet de ``$OLD/config/dictionary``, et non la variable). Conservez aussi
-      ``FESS_DICTIONARY_PATH`` à l'ancienne valeur. Définissez-le explicitement (variable d'environnement ou
+      chemin absolu (le chemin complet de ``$OLD/config/dictionary``, et non la variable). Pour |Fess|,
+      définissez ``FESS_DICTIONARY_PATH=dictionary/`` (avec la barre oblique finale), relatif au répertoire
+      de configuration d'OpenSearch, plutôt que l'ancien chemin absolu. Avec l'ancienne valeur absolue,
+      chaque index que la « Réindexation » de l'étape 7 crée enregistre de nouveau des paramètres
+      ``*_path`` absolus ; avec ``dictionary/``, les nouveaux index enregistrent des chemins relatifs et
+      sont verts et interrogeables à côté des anciens index. Une installation neuve avec
+      ``bin/fess-setup install opensearch`` de 15.10 définit aussi ``dictionary/``. Définissez-le explicitement (variable d'environnement ou
       ``bin/fess.in.sh``), car ``bin/fess.in.sh`` ne le définit de lui-même que pour un OpenSearch situé sous
-      ``opensearch/`` dans le répertoire de |Fess|.
+      ``opensearch/`` dans le répertoire de |Fess| : avec le ``bin/fess.in.sh`` de 15.9.0 copié à
+      l'étape 3 (Version ZIP, étape 2) et rien de défini, ``FESS_DICTIONARY_PATH`` n'est pas défini dans
+      cette disposition, et la « Réindexation » de l'étape 7 journalise ``Failed to create index`` et ne
+      crée rien.
+
+      La « Réindexation » de l'étape 7 ne recrée pas ``fess_suggest_analyzer`` ; il garde donc les
+      paramètres ``*_path`` absolus de 15.9.0. Pour le recréer avec des chemins relatifs, arrêtez |Fess|,
+      supprimez ``fess_suggest_analyzer`` et démarrez |Fess| avec ``FESS_DICTIONARY_PATH=dictionary/`` :
+      |Fess| le recrée au démarrage avec des chemins relatifs, et les suggestions fonctionnent après la
+      prochaine exécution de la tâche « Suggest Indexer ».
 
    4. Démarrez OpenSearch depuis ``$OLD``, demandez-lui de réessayer l'allocation des shards en échec (nécessaire
       lorsque le cluster est rouge parce qu'OpenSearch a été démarré auparavant à un autre chemin), et vérifiez
@@ -833,21 +858,28 @@ Autres changements de comportement
 - Nouveau paramètre ``authentication.local.username.policy`` (``preserved`` par défaut). |Fess| compare toujours les noms des utilisateurs locaux exactement tels qu'ils sont saisis, comme en 15.9 ; ``Alice`` et ``alice`` sont donc deux utilisateurs. Avec ``mapped``, la création ou le renommage d'un utilisateur local sur l'écran de gestion des utilisateurs ou avec l'API d'administration est refusé lorsque le nom, sans tenir compte de la largeur des caractères, de la casse ni de la composition Unicode, est identique au nom d'un autre utilisateur ou est une autre graphie d'une entrée de ``authentication.admin.users``. La connexion, les ID d'utilisateur, les noms stockés, les permissions et les documents indexés ne changent pas. Pour les détails et les limites, voir :ref:`local-username-policy`.
 - Les scripts, les feuilles de style et les fichiers SVG de 1 Ko ou plus sont envoyés compressés avec gzip par défaut ; la 15.9 ne compressait rien. Les pages et le JSON ne sont pas compressés. ``tomcat.compression`` (``on`` ou ``off``) et ``tomcat.compression.mime`` (types ajoutés à la liste, séparés par des virgules) dans ``tomcat_config.properties`` le contrôlent. Un ``tomcat_config.properties`` repris de la 15.9 n'a aucune de ces clés ; la compression est donc active. Définissez ``tomcat.compression=off`` lorsqu'un proxy inverse placé devant |Fess| compresse lui-même les réponses.
 - Les fichiers du thème ``bootstrap`` fourni sont envoyés avec ``Cache-Control: no-cache`` et un ``ETag`` ; un navigateur les redemande avec ``If-None-Match`` et obtient ``304`` tant que le fichier est inchangé. Jusqu'à la 15.9, ils portaient ``max-age=86400`` : un navigateur conservait donc un fichier mis à jour jusqu'à 24 heures.
-- Un paramètre peut être fourni par une variable d'environnement au lieu d'une option ``-D`` : ``FESS_CONFIG_<KEY>`` pour une clé de ``fess_config.properties`` et ``FESS_SYSTEM_<KEY>`` pour une clé de ``system.properties`` (la clé en majuscules, chaque caractère autre qu'une lettre ou un chiffre remplacé par ``_`` ; ``search_engine.password`` devient ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). Une option ``-D`` avec une valeur l'emporte sur la variable, et la variable l'emporte sur ``fess_config.properties`` ; une clé que ``system.properties`` possède déjà n'est pas remplacée. Une variable, contrairement à une option ``-D``, n'est pas affichée par ``ps`` ni ``docker top``, et Informations système masque sa valeur.
+- Un paramètre peut être fourni par une variable d'environnement au lieu d'une option ``-D`` : ``FESS_CONFIG_<KEY>`` pour une clé de ``fess_config.properties`` et ``FESS_SYSTEM_<KEY>`` pour une clé de ``system.properties`` (la clé en majuscules, chaque caractère autre qu'une lettre ou un chiffre remplacé par ``_`` ; ``search_engine.password`` devient ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). Une option ``-D`` avec une valeur l'emporte sur la variable, et la variable l'emporte sur ``fess_config.properties`` ; une clé que ``system.properties`` possède déjà n'est pas remplacée. Une variable, contrairement à une option ``-D``, n'est pas affichée par ``ps`` ni ``docker top``, et Informations système masque sa valeur. En 15.9.0, l'enregistrement de l'écran Général écrivait dans ``system.properties`` les paramètres de Général, y compris les valeurs restées à leur valeur par défaut, et une clé enregistrée là l'emporte sur ``FESS_SYSTEM_<KEY>`` ; après la mise à niveau, une variable ``FESS_SYSTEM_*`` reste donc sans effet pour une clé qu'un enregistrement de l'écran Général en 15.9.0 a stockée, jusqu'à ce que cette ligne soit supprimée de ``system.properties``. Lors de l'enregistrement de l'écran Général, 15.10 n'écrit pas un champ laissé à la valeur qui provient de ``-Dfess.system.<key>`` ou de ``FESS_SYSTEM_<KEY>`` pour une clé que ``system.properties`` ne contient pas encore ; une valeur modifiée à l'écran est enregistrée et l'emporte dès lors.
 - Lorsqu'un secret (un mot de passe, une clé d'API ou une clé secrète) est fourni par une option ``-Dfess.config.<key>`` ou ``-Dfess.system.<key>``, la 15.10 écrit au démarrage un avertissement dans ``fess.log`` qui nomme la clé et la variable à utiliser à la place, jamais la valeur.
 - La variable d'environnement ``FESS_SESSION_STORE=opensearch`` conserve les sessions HTTP dans le moteur de recherche afin que plusieurs nœuds les partagent. Elle est désactivée par défaut (voir :ref:`L'index fess_config.session pour les sessions <upgrade-1510-session-index>` et :doc:`../config/session-store`).
-- ``PUT /api/admin/<name>/setting`` de 19 autres API d'administration (par exemple ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` et ``scheduler`` ; pas ``tagtype``, ``general``, ``theme`` ni ``dict``) refuse un ``version_no`` obsolète comme l'API des utilisateurs ci-dessus, avec HTTP 400 et ``status`` ``1``. Jusqu'à la 15.9, la valeur n'était jamais comparée et les listes renvoyaient ``-1`` ; un script qui envoie un ``version_no`` constant échoue donc maintenant : envoyez la valeur lue avec ``GET /api/admin/<name>/setting/{id}`` et relisez le paramètre après un refus.
+- ``PUT /api/admin/<name>/setting`` de 19 autres API d'administration (par exemple ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` et ``scheduler`` ; pas ``tagtype``, ``general``, ``theme`` ni ``dict``) refuse un ``version_no`` obsolète comme l'API des utilisateurs ci-dessus, avec HTTP 400 et ``status`` ``1``. Jusqu'à la 15.9, la valeur n'était jamais comparée et les listes renvoyaient ``-1`` ; un script qui envoie un ``version_no`` constant échoue donc maintenant : envoyez la valeur lue avec ``GET /api/admin/<name>/setting/{id}`` et relisez le paramètre après un refus. Les mises à jour simultanées d'un même paramètre sont également refusées : sur 5 requêtes ``PUT`` envoyées en même temps avec le même ``version_no``, 1 est appliquée et les 4 autres reçoivent HTTP 400 avec ``status`` ``1``. Renvoyez la mise à jour avec le ``version_no`` actuel.
 - ``POST /api/admin/webconfig/setting``, ``/api/admin/fileconfig/setting`` et ``/api/admin/dataconfig/setting`` sans ``permissions`` stockent ``{role}guest``. Jusqu'à la 15.9, ils ne stockaient aucune permission. ``PUT`` sans ``permissions`` conserve la valeur stockée ; en 15.9, il laissait le champ vide.
 - Le formulaire de connexion, le formulaire de changement de mot de passe et les champs de mot de passe de l'écran de gestion des utilisateurs ne suppriment plus les espaces au début et à la fin d'un mot de passe. Jusqu'à la 15.9, ils le faisaient, alors que ``/api/v2/auth/login`` et l'API d'administration ne le faisaient pas ; un mot de passe avec des espaces autour défini par l'API ne pouvait donc pas se connecter par le formulaire. Désormais chaque point d'entrée prend le mot de passe tel que saisi. Un utilisateur dont les espaces ont été supprimés lors de l'enregistrement du mot de passe en 15.9 doit le saisir sans eux.
-- Une expression régulière qui ne compile pas est refusée à l'enregistrement : les motifs d'inclusion et d'exclusion des configurations de crawl Web et fichiers, les chemins d'un type d'étiquette et l'expression régulière d'un mappage de chemin. Une valeur enregistrée auparavant reste telle quelle et ne peut pas être enregistrée de nouveau inchangée tant qu'elle n'est pas corrigée. Un mappage de chemin avec une expression régulière invalide enregistré avant la 15.10 fait que chaque recherche ne renvoie aucun résultat, en 15.9 comme en 15.10 (``fess.log`` montre ``PatternSyntaxException`` de ``PathMapping``) ; supprimez-le ou corrigez-le.
+- Une expression régulière qui ne compile pas est refusée à l'enregistrement : les motifs d'inclusion et d'exclusion des configurations de crawl Web et fichiers, les chemins d'un type d'étiquette et l'expression régulière d'un mappage de chemin. Une valeur enregistrée auparavant reste telle quelle et ne peut pas être enregistrée de nouveau inchangée tant qu'elle n'est pas corrigée. En 15.9, un mappage de chemin enregistré avec une expression régulière invalide fait que chaque recherche ne renvoie aucun résultat (``fess.log`` montre ``PatternSyntaxException`` de ``PathMapping``). 15.10 ignore un tel mappage : les recherches renvoient des résultats, les autres mappages de chemin s'appliquent toujours et ``fess.log`` reçoit un avertissement tel que ``The regex of the path mapping "(" is not valid, so the mapping is skipped``. Corrigez ou supprimez le mappage.
 - Le menu des étiquettes de l'écran de recherche, les choix d'étiquette des formulaires d'administration et l'étiquetage des documents crawlés utilisent tous les types d'étiquette. Jusqu'à la 15.9, seuls les ``page.labeltype.max.fetch.size`` (1 000) premiers types d'étiquette étaient lus ; un type d'étiquette au-delà manquait donc dans le menu et les formulaires, et les documents qu'il devait étiqueter ne l'étaient pas. Le paramètre ne fixe plus que la taille des pages de la liste des types d'étiquette dans l'écran d'administration. Au-delà de 1 000 types d'étiquette, ``/api/v2/ui/config`` est plus volumineux (environ 45 octets par type d'étiquette).
 - Une entrée de permission écrite en caractères pleine chasse, comme ``（deny）{user}name`` ou ``(deny)｛user｝name`` (telle qu'un clavier japonais la saisit), est refusée dans les champs de permission des écrans d'administration et par l'API d'administration, avec un message qui demande l'écriture en demi-chasse, comme ``(deny){user}name``. Jusqu'à la 15.9, elle était stockée comme une valeur qui ne correspond à personne, ou supprimée ; un deny destiné à masquer un document restait donc sans effet. Le nom qui suit le marqueur n'est pas modifié ; un rôle nommé en japonais ou avec des lettres pleine chasse reste donc accepté.
-- Une entrée de permission qui comporte un caractère invisible (une espace de largeur nulle, une marque d'ordre des octets ou un caractère de contrôle) à l'endroit où commence le préfixe ``(allow)`` / ``(deny)`` ou le nom, comme ``(deny)<U+200B>{user}name``, est refusée avec un message qui demande de supprimer ce caractère. Un tel caractère arrive le plus souvent avec un texte collé. Jusqu'à la 15.9, l'entrée était stockée comme une valeur qui ne correspond à personne, ou supprimée. Un caractère de ce type à l'intérieur d'un nom, ou à sa fin, n'est pas refusé.
+- Une entrée de permission qui comporte un caractère invisible (une espace de largeur nulle, une marque d'ordre des octets ou un caractère de contrôle) à l'endroit où commence le préfixe ``(allow)`` / ``(deny)`` ou le nom, comme ``(deny)<U+200B>{user}name``, est refusée avec un message qui demande de supprimer ce caractère. Un tel caractère arrive le plus souvent avec un texte collé. Jusqu'à la 15.9, l'entrée était stockée comme une valeur qui ne correspond à personne, ou supprimée. Un caractère de ce type à l'intérieur d'un nom, ou à sa fin, n'est pas refusé. Une espace insécable (U+00A0) ou une espace fine insécable (U+202F) compte comme une espace : une entrée qui en contient une juste après le préfixe ``(allow)`` / ``(deny)`` ou au début du nom, comme ``(deny)<U+00A0>{user}name``, est refusée comme avec une espace ASCII, et une valeur enregistrée sous cette forme par la 15.9 reste telle quelle jusqu'à ce qu'elle soit corrigée.
 - Un utilisateur déjà connecté qui ouvre ``/login/`` est redirigé vers la page à laquelle mènerait une connexion : le tableau de bord pour un administrateur, le premier écran d'administration que ses rôles autorisent pour un utilisateur doté d'un rôle d'administration, et l'écran de recherche pour tous les autres. Un visiteur anonyme obtient toujours le formulaire de connexion. Pour vous connecter avec un autre compte, déconnectez-vous d'abord. Un lien vers ``/logout/`` placé sur un autre site (voir ci-dessus) conserve la session et aboutit donc lui aussi sur cette page.
 - Un hachage ``{bcrypt}`` stocké avec le préfixe ``$2b$`` (bcrypt de Python et de nombreux autres systèmes) ou le préfixe ``$2y$`` (PHP, ``htpasswd -B``) est désormais vérifié comme un hachage ``$2a$``. Jusqu'à la 15.9, la connexion d'un tel utilisateur échouait toujours. Les nouveaux hachages sont toujours écrits en ``$2a$``.
-- Tant que le moteur de recherche est injoignable, la console d'administration répond ``503`` (500 jusqu'à la 15.9), et le formulaire de connexion affiche un avis indiquant que le moteur de recherche n'est pas disponible au lieu d'une page d'erreur.
+- Tant que le moteur de recherche est injoignable, la console d'administration répond ``503`` (500 jusqu'à la 15.9), et le formulaire de connexion affiche un avis indiquant que le moteur de recherche n'est pas disponible au lieu d'une page d'erreur. ``/go/`` (le lien d'un résultat de recherche) répond aussi ``503`` tant que le moteur de recherche n'est pas disponible (``404`` jusqu'à la 15.9). Ces réponses ``503`` portent ``Retry-After: 5``. Une connexion réinitialisée par le moteur de recherche est elle aussi traitée comme une indisponibilité ; la réponse est donc ``503`` au lieu de ``500``.
 - ``engine.status`` de ``GET /api/v2/health`` vaut ``YELLOW`` tant qu'un index |Fess| refuse les écritures (il a un blocage d'écriture) et valait ``GREEN`` jusqu'à la 15.9. Un blocage d'écriture sur un index qui n'appartient pas à |Fess| est ignoré.
 - Le plugin SAML (``fess-sso-saml``) de la 15.10 utilise saml4j au lieu de java-saml. Une propriété ``saml.*`` que l'ancienne bibliothèque avait et que la nouvelle n'utilise pas, comme ``saml.security.digest_algorithm`` ou ``saml.sp.contact``, est ignorée ; un avertissement qui les nomme est écrit dans ``fess.log``. Le plugin OpenID Connect (``fess-sso-oidc``) de la 15.10 utilise PKCE (S256) par défaut. Définissez ``oic.pkce=false`` dans ``system.properties`` pour un fournisseur OpenID qui le refuse (voir :doc:`../config/sso-oidc`).
+- Un appel de l'API d'administration ou de ``/api/v2`` ne crée plus de session HTTP : aucun cookie ``JSESSIONID`` n'est défini pour un appel avec un jeton d'accès valide ou invalide, ni pour une recherche anonyme via ``/api/v2``. Jusqu'à la 15.9, chacun de ces appels créait une session. Une connexion via ``/api/v2/auth/login`` crée toujours sa session.
+- Lorsqu'une requête n'a pas d'en-tête ``Accept-Language``, le message d'un refus de l'API est en anglais, même si la locale par défaut du serveur est une autre langue ; le code d'erreur ne change pas. Jusqu'à la 15.9, le message suivait la locale par défaut du serveur. Envoyez ``Accept-Language`` pour obtenir le message dans une autre langue.
+- Une requête dont l'``Accept-Language`` est ``zh-Hans`` obtient le chinois simplifié, et une requête dont l'``Accept-Language`` est ``zh-Hant``, ``zh-HK`` ou ``zh-MO`` obtient le chinois traditionnel. Jusqu'à la 15.9, elles retombaient sur l'anglais.
+- Une page HTML qui déclare ISO-8859-1 est décodée en ``windows-1252`` ; les caractères de la plage 0x80-0x9F, comme les guillemets typographiques et le symbole de l'euro, sont donc indexés au lieu d'être supprimés. Un document exploré avant la mise à niveau garde son ancien texte jusqu'à ce qu'il soit exploré de nouveau.
+- Les écrans d'authentification Web et d'authentification de fichiers n'affichent jamais le mot de passe enregistré : le champ est vide, et l'enregistrer vide conserve le mot de passe enregistré. Un ``PUT`` de l'API d'administration ``webauth`` ou ``fileauth`` sans mot de passe est refusé avec HTTP 400 lorsque le mot de passe enregistré ne peut pas être déchiffré.
+- Les choix de rôle du formulaire utilisateur de l'écran de gestion des utilisateurs listent tous les rôles. Jusqu'à la 15.9, seuls les 1 000 premiers rôles étaient proposés.
+- Les écrans d'administration d'un jeton d'accès affichent le jeton sous la forme d'un masque de longueur fixe au lieu de sa valeur. Copiez la valeur depuis la page au lieu de la lire.
 
 .. _upgrade-1510-new-api:
 
@@ -1429,21 +1461,47 @@ part donc des valeurs de la 15.10.
 
 ``app.cipher.key`` est la seule valeur à reprendre même si la 15.10 ne l'a pas modifiée. C'est la
 clé qui chiffre les mots de passe et secrets enregistrés dans les paramètres de l'authentification
-Web, des configurations d'exploration et des configurations DataStore. Si la nouvelle installation
-fonctionne avec une clé différente de celle qui les a enregistrés, parce que vous avez pris le
-``fess_config.properties`` fourni ou restauré une sauvegarde sur un nouveau serveur, ils ne peuvent
-pas être déchiffrés : ``fess-crawler.log`` consigne une ``CipherFailureException`` et une
-exploration qui inclut une telle configuration peut n'indexer rien.
+Web, des configurations d'exploration et des configurations DataStore. L'installation que vous mettez
+à niveau ou dans laquelle vous restaurez doit utiliser la même ``app.cipher.key`` que l'installation
+qui a enregistré les données : reprenez la clé avec la sauvegarde.
 
-Dès qu'une seule configuration contient une valeur qui ne peut pas être déchiffrée, l'exploration s'arrête à ce point. La configuration non déchiffrable n'est pas simplement ignorée : les autres configurations visées par la même exploration ne sont pas indexées non plus. Le message de la ``CipherFailureException`` indique le type, le nom et l'ID de cette configuration ainsi que la clé du paramètre qui n'a pas pu être déchiffré, et précise que ``app.cipher.key`` peut différer de la clé utilisée lors de l'enregistrement (ni la valeur chiffrée ni la clé elle-même ne sont affichées). Une fois la cause identifiée, rétablissez la valeur d'origine de ``app.cipher.key`` ou saisissez à nouveau le mot de passe de cette configuration.
+Si l'installation fonctionne avec une clé différente, par exemple parce que vous avez pris le
+``fess_config.properties`` fourni ou restauré une sauvegarde sur un serveur qui utilise une autre clé,
+les valeurs enregistrées ne peuvent pas être déchiffrées : ``fess-crawler.log`` consigne une
+``CipherFailureException`` et une exploration qui inclut une telle configuration peut n'indexer rien.
+
+Dès qu'une seule configuration contient une valeur qui ne peut pas être déchiffrée, l'exploration s'arrête à ce point. La configuration non déchiffrable n'est pas simplement ignorée : les autres configurations visées par la même exploration ne sont pas indexées non plus. Le message de la ``CipherFailureException`` indique le type, le nom et l'ID de cette configuration ainsi que la clé du paramètre qui n'a pas pu être déchiffré, et précise que ``app.cipher.key`` peut différer de la clé utilisée lors de l'enregistrement (ni la valeur chiffrée ni la clé elle-même ne sont affichées). Rétablissez la valeur d'origine de ``app.cipher.key``.
+
+Pour changer ``app.cipher.key`` délibérément, saisissez de nouveau les secrets enregistrés après le
+changement. Ouvrez depuis son écran de modification chaque configuration d'exploration Web ou de
+fichiers, authentification Web ou de fichiers et configuration DataStore qui contient des valeurs
+chiffrées, et remplacez chaque valeur de paramètre qui commence par ``{cipher}`` par sa valeur en clair.
+Tant qu'il en reste une, l'enregistrement échoue avec « Échec de la mise à jour des données. » et
+``Failed to decrypt a parameter: key=...``, qui nomme la clé. Pour une authentification Web ou de
+fichiers, saisissez aussi de nouveau le mot de passe : l'écran affiche le champ vide avec « Le mot de
+passe enregistré n'a pas pu être déchiffré avec le app.cipher.key actuel. Saisissez à nouveau le mot de
+passe. » Saisissez aussi de nouveau le mot de passe de l'administrateur LDAP (mot de passe du DN de
+liaison) de l'écran Général : il est enregistré chiffré, sous la forme d'une valeur ``{cipher}``, dans
+``system.properties``. Après un enregistrement qui a échoué, rouvrez l'écran de modification au lieu de soumettre de
+nouveau la page d'erreur. |Fess| chiffre les valeurs avec la nouvelle clé à l'enregistrement, et
+l'exploration suivante les déchiffre. Le code utilisateur d'un utilisateur connecté est son ID
+utilisateur chiffré avec ``app.cipher.key`` ; après le changement, les utilisateurs connectés reçoivent
+donc de nouveaux codes utilisateur, et les données enregistrées sous les anciens codes, comme les favoris
+et les journaux de recherche, ne sont pas liées aux nouveaux.
+
+Modifiez les paramétrages sur place plutôt que de les supprimer et de les recréer. Une configuration
+d'exploration recréée reçoit un nouvel ID, alors que ses authentifications Web ou de fichiers et ses
+en-têtes de requête, les tâches planifiées qui nomment l'ID et les documents indexés (leur
+``config_id``) font référence à l'ancien ID. Supprimer une configuration d'exploration Web supprime
+aussi ses authentifications et ses en-têtes de requête.
 
 .. note::
 
    |Fess| 15.9 enregistre aussi le ``password`` de l'authentification Web et fichier chiffré avec ``app.cipher.key`` ;
-   ``fess_basic_config.bulk`` et ``fess_config.bulk`` d'une sauvegarde contiennent donc les valeurs chiffrées. Lorsque
-   vous restaurez sur une autre installation, reprenez la même ``app.cipher.key`` ; avec une clé différente, les
-   explorations qui utilisent ces identifiants échouent avec une erreur. Une sauvegarde créée avant la 15.9 les contient
-   en clair et continue de fonctionner (voir :doc:`../admin/backup-guide`).
+   ``fess_basic_config.bulk`` et ``fess_config.bulk`` d'une sauvegarde contiennent donc les valeurs chiffrées. Restaurez
+   une telle sauvegarde dans une installation qui utilise la même ``app.cipher.key`` ; avec une clé différente, les
+   explorations qui utilisent ces identifiants échouent avec une erreur jusqu'à ce que la clé d'origine soit définie.
+   Une sauvegarde créée avant la 15.9 les contient en clair et continue de fonctionner (voir :doc:`../admin/backup-guide`).
 
 .. _upgrade-159-jcifs:
 
@@ -2115,7 +2173,7 @@ Restauration depuis le snapshot. OpenSearch doit être en cours d'exécution et 
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   Un snapshot pris comme à l'étape 1 contient tous les index du cluster, y compris ``.plugins-ml-config``, l'index système du plugin ML d'OpenSearch. Cet index est ouvert sur le cluster en cours d'exécution ; une restauration sans le paramètre ``indices`` est donc refusée avec ``cannot restore index [.plugins-ml-config] because an open index with same name already exists``. Avec ce paramètre, seuls les index de Fess et l'index ``configsync`` sont restaurés.
+   Un snapshot pris comme à l'étape 1 contient tous les index du cluster, y compris des index système de plugins d'OpenSearch comme ``.plugins-ml-config`` ou ``.opensearch-sap-log-types-config``. Un tel index est ouvert sur le cluster en cours d'exécution ; une restauration sans le paramètre ``indices`` est donc refusée avec ``cannot restore index [<index>] because an open index with same name already exists``. Avec ce paramètre, seuls les index de Fess et l'index ``configsync`` sont restaurés.
 
 .. note::
 

@@ -137,7 +137,7 @@ ZIP 版でのインストール
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   端末が接続されていない環境（スクリプト、コンテナのビルド、自動化ツールなど）では、 ``opensearch-plugin install`` は確認（ ``Continue with installation?`` ）の入力を待ち続けて終了しません。コマンドに ``--batch`` （ ``-b`` ）を付けると、確認を省略できます。
+   端末が接続されていない環境（スクリプト、コンテナのビルド、自動化ツールなど）では、 追加の権限を要求するプラグインについての ``opensearch-plugin install`` の確認（ ``Continue with installation?`` ）に答えられず、そのプラグインはインストールされません。入力が ``/dev/null`` の場合（端末のない ``sudo`` も同じです）は、数秒後に ``IllegalStateException: unable to read from standard input`` を出力してコード ``1`` で終了し、入力が開いたまま何も届かない場合は待ち続けて終了しません。コマンドに ``--batch`` （ ``-b`` ）を付けると、確認を省略できます。
 
    .. important::
 
@@ -300,7 +300,7 @@ RPM 版は、Red Hat Enterprise Linux、CentOS、Fedora などの RPM ベース�
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   端末が接続されていない環境（スクリプト、コンテナのビルド、自動化ツールなど）では、 ``opensearch-plugin install`` は確認（ ``Continue with installation?`` ）の入力を待ち続けて終了しません。コマンドに ``--batch`` （ ``-b`` ）を付けると、確認を省略できます。
+   端末が接続されていない環境（スクリプト、コンテナのビルド、自動化ツールなど）では、 追加の権限を要求するプラグインについての ``opensearch-plugin install`` の確認（ ``Continue with installation?`` ）に答えられず、そのプラグインはインストールされません。入力が ``/dev/null`` の場合（端末のない ``sudo`` も同じです）は、数秒後に ``IllegalStateException: unable to read from standard input`` を出力してコード ``1`` で終了し、入力が開いたまま何も届かない場合は待ち続けて終了しません。コマンドに ``--batch`` （ ``-b`` ）を付けると、確認を省略できます。
 
 3. OpenSearch の設定
 
@@ -422,7 +422,7 @@ DEB 版は、Debian、Ubuntu などの DEB ベースの Linux ディストリビ
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   端末が接続されていない環境（スクリプト、コンテナのビルド、自動化ツールなど）では、 ``opensearch-plugin install`` は確認（ ``Continue with installation?`` ）の入力を待ち続けて終了しません。コマンドに ``--batch`` （ ``-b`` ）を付けると、確認を省略できます。
+   端末が接続されていない環境（スクリプト、コンテナのビルド、自動化ツールなど）では、 追加の権限を要求するプラグインについての ``opensearch-plugin install`` の確認（ ``Continue with installation?`` ）に答えられず、そのプラグインはインストールされません。入力が ``/dev/null`` の場合（端末のない ``sudo`` も同じです）は、数秒後に ``IllegalStateException: unable to read from standard input`` を出力してコード ``1`` で終了し、入力が開いたまま何も届かない場合は待ち続けて終了しません。コマンドに ``--batch`` （ ``-b`` ）を付けると、確認を省略できます。
 
 3. OpenSearch の設定
 
