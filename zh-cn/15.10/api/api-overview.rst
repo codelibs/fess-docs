@@ -88,7 +88,7 @@ v2 的所有 JSON 响应均以公共信封结构返回。
    * - code
      - 稳定的错误码（\ ``snake_case``\ ）。建议客户端基于此值进行本地化处理。
    * - message
-     - 人类可读的错误消息（英语）。显示时请由客户端根据 ``code`` 进行本地化。
+     - 人类可读的错误消息。拒绝搜索参数或标签 API 输入等已有翻译的消息，会以 ``Accept-Language`` 请求头的语言返回（请求中没有 ``Accept-Language`` 头时以英文返回）；其他消息（例如 ``internal error`` 、 ``invalid access token`` ）在任何语言下都是相同的英文文本。 ``code`` 和 HTTP 状态码不随语言变化，因此请根据 ``code`` 而不是 ``message`` 的文本进行判断。如需以用户的语言显示所有消息，请由客户端根据 ``code`` 进行本地化。
    * - details
      - 包含附加结构化信息的可选对象（可能省略）。仅部分端点包含此字段。例如，:doc:`api-health` 会在 ``error.details.engine`` 下嵌入搜索引擎集群快照。
 
