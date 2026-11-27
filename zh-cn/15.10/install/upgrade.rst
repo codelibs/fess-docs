@@ -802,7 +802,7 @@ URL 的协议不在列表中的搜索结果不会成为链接。对于经过「�
 - 新增设置 ``authentication.local.username.policy`` （默认 ``preserved`` ）。与 15.9 相同， |Fess| 仍按输入原样比较本地用户的名称，因此 ``Alice`` 和 ``alice`` 是两个用户。设为 ``mapped`` 后，在用户管理页面或通过 Admin API 创建或重命名本地用户时，如果忽略字符宽度、大小写和 Unicode 组合方式后名称与其他用户的名称相同，或是 ``authentication.admin.users`` 中某个条目的另一种写法，就会被拒绝。登录、用户 ID、保存的名称、权限和已建立索引的文档都不会改变。详细信息和限制请参见 :ref:`local-username-policy` 。
 - 1 KB 及以上的脚本、样式和 SVG 文件现在默认以 gzip 压缩后发送；15.9 不压缩任何内容。页面和 JSON 不会被压缩。可通过 ``tomcat_config.properties`` 中的 ``tomcat.compression`` （ ``on`` 或 ``off`` ）和 ``tomcat.compression.mime`` （添加到列表中的类型，以逗号分隔）进行控制。沿用自 15.9 的 ``tomcat_config.properties`` 中没有这两个键，因此压缩处于开启状态。如果 |Fess| 前面的反向代理自行压缩响应，请设置 ``tomcat.compression=off`` 。
 - 内置 ``bootstrap`` 主题的文件以 ``Cache-Control: no-cache`` 和 ``ETag`` 发送，文件未变化时，浏览器会携带 ``If-None-Match`` 再次请求并得到 ``304`` 。直到 15.9，它们带有 ``max-age=86400`` ，因此浏览器会将已更新的文件保留最长 24 小时。
-- 设置可以通过环境变量而不是 ``-D`` 选项来指定： ``fess_config.properties`` 的键使用 ``FESS_CONFIG_<KEY>`` ， ``system.properties`` 的键使用 ``FESS_SYSTEM_<KEY>`` （键使用大写，字母和数字以外的每个字符都替换为 ``_`` ； ``search_engine.password`` 对应 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。有值的 ``-D`` 选项优先于环境变量，环境变量优先于 ``fess_config.properties`` ； ``system.properties`` 中已有的键不会被覆盖。与 ``-D`` 选项不同，环境变量不会被 ``ps`` 或 ``docker top`` 显示，系统信息也会屏蔽其值。在 15.9.0 中，保存常规页面时会把常规的所有设置（包括保持默认值的值）写入 ``system.properties`` ，而保存在那里的键优先于 ``FESS_SYSTEM_<KEY>`` 。因此升级后，对于 15.9.0 中保存常规页面时存入的键， ``FESS_SYSTEM_*`` 环境变量不起作用，直到从 ``system.properties`` 中删除这些行为止。15.10 在保存常规页面时，对于 ``system.properties`` 中尚未包含的键，不会写入来自 ``-Dfess.system.<key>`` 或 ``FESS_SYSTEM_<KEY>`` 的值。
+- 设置可以通过环境变量而不是 ``-D`` 选项来指定： ``fess_config.properties`` 的键使用 ``FESS_CONFIG_<KEY>`` ， ``system.properties`` 的键使用 ``FESS_SYSTEM_<KEY>`` （键使用大写，字母和数字以外的每个字符都替换为 ``_`` ； ``search_engine.password`` 对应 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。有值的 ``-D`` 选项优先于环境变量，环境变量优先于 ``fess_config.properties`` ； ``system.properties`` 中已有的键不会被覆盖。与 ``-D`` 选项不同，环境变量不会被 ``ps`` 或 ``docker top`` 显示，系统信息也会屏蔽其值。在 15.9.0 中，保存常规页面时会把常规的设置（包括保持默认值的值）写入 ``system.properties`` ，而保存在那里的键优先于 ``FESS_SYSTEM_<KEY>`` 。因此升级后，对于 15.9.0 中保存常规页面时存入的键， ``FESS_SYSTEM_*`` 环境变量不起作用，直到从 ``system.properties`` 中删除这些行为止。15.10 在保存常规页面时，对于 ``system.properties`` 中尚未包含的键，如果字段保持为来自 ``-Dfess.system.<key>`` 或 ``FESS_SYSTEM_<KEY>`` 的值，则不会写入；在页面上更改的值会被保存，并从此优先。
 - 当密钥（密码、API 密钥或密钥串）以 ``-Dfess.config.<key>`` 或 ``-Dfess.system.<key>`` 选项给出时，15.10 会在启动时向 ``fess.log`` 输出一条警告，其中包含键名和应改用的变量，但不包含值。
 - 环境变量 ``FESS_SESSION_STORE=opensearch`` 会把 HTTP 会话保存在搜索引擎中，以便多个节点共享。默认关闭（请参阅 :ref:`用于会话的 fess_config.session 索引 <upgrade-1510-session-index>` 和 :doc:`../config/session-store` ）。
 - 另外 19 个管理 API（例如 ``webconfig`` 、 ``fileconfig`` 、 ``dataconfig`` 、 ``role`` 、 ``group`` 、 ``labeltype`` 、 ``pathmap`` 和 ``scheduler`` ；不包括 ``tagtype`` 、 ``general`` 、 ``theme`` 和 ``dict`` ）的 ``PUT /api/admin/<name>/setting`` 会像上面的用户 API 一样拒绝过期的 ``version_no`` ，返回 HTTP 400， ``status`` 为 ``1`` 。直到 15.9，该值从不比较，列表返回 ``-1`` ，因此发送固定 ``version_no`` 的脚本现在会失败：请发送从 ``GET /api/admin/<name>/setting/{id}`` 读取的值，被拒绝后请重新读取该设置。对同一设置的并发更新也会被拒绝：使用相同的 ``version_no`` 同时发送 5 个 ``PUT`` 请求时，只有 1 个生效，其余 4 个返回 HTTP 400， ``status`` 为 ``1`` 。请使用当前的 ``version_no`` 重新发送更新。
@@ -811,7 +811,7 @@ URL 的协议不在列表中的搜索结果不会成为链接。对于经过「�
 - 无法编译的正则表达式在保存时会被拒绝：Web 和文件爬取设置的包含与排除模式、标签类型的路径，以及路径映射的正则表达式。此前保存的值保持原样，在更正之前无法原样再次保存。在 15.9 中，已保存的带有无效正则表达式的路径映射会导致每次搜索都没有命中结果（ ``fess.log`` 中会显示来自 ``PathMapping`` 的 ``PatternSyntaxException`` ）。15.10 会跳过这样的路径映射：搜索会返回命中结果，其他路径映射仍然适用， ``fess.log`` 中会输出一次类似 ``The regex of the path mapping "(" is not valid, so the mapping is skipped`` 的警告。请更正或删除该路径映射。
 - 搜索页面的标签菜单、管理界面表单中的标签选项以及为已爬取文档添加标签，都会使用所有标签类型。直到 15.9，只读取前 ``page.labeltype.max.fetch.size`` （1,000）个标签类型，因此超出的标签类型不会出现在菜单和表单中，本应由其添加标签的文档也没有被添加标签。现在该设置只用于管理界面中标签类型列表的每页大小。标签类型超过 1,000 个时， ``/api/v2/ui/config`` 的响应会变大（每个标签类型约 45 字节）。
 - 用全角字符书写的权限条目（例如用日语键盘输入的 ``（deny）{user}name`` 或 ``(deny)｛user｝name`` ），会在管理界面的权限字段和 Admin API 中被拒绝，并显示要求改用半角写法（如 ``(deny){user}name`` ）的消息。直到 15.9，这样的条目会被保存为不匹配任何人的值或被丢弃，因此本应隐藏文档的 deny 没有效果。标记后面的名称不会被改变，因此用日语或全角字母命名的角色仍然可以使用。
-- 在 ``(allow)`` / ``(deny)`` 前缀或名称开头处带有不可见字符（零宽空格、字节顺序标记或控制字符）的权限条目（例如 ``(deny)<U+200B>{user}name`` ）会被拒绝，并显示要求删除该字符的消息。这种字符通常是在粘贴文本时一起带入的。直到 15.9，这样的条目会被保存为不匹配任何人的值或被丢弃。位于名称中间或末尾的此类字符不会被拒绝。
+- 在 ``(allow)`` / ``(deny)`` 前缀或名称开头处带有不可见字符（零宽空格、字节顺序标记或控制字符）的权限条目（例如 ``(deny)<U+200B>{user}name`` ）会被拒绝，并显示要求删除该字符的消息。这种字符通常是在粘贴文本时一起带入的。直到 15.9，这样的条目会被保存为不匹配任何人的值或被丢弃。位于名称中间或末尾的此类字符不会被拒绝。不换行空格（U+00A0）或窄不换行空格（U+202F）会被视为空格：在 ``(allow)`` / ``(deny)`` 前缀之后紧接着或在名称开头带有这种字符的条目（例如 ``(deny)<U+00A0>{user}name`` ）会像 ASCII 空格一样被拒绝；15.9 以这种形式保存的值在更正之前会保持原样。
 - 已登录的用户打开 ``/login/`` 时，会被重定向到登录后会进入的页面：管理员为仪表板，拥有管理角色的用户为其角色允许访问的第一个管理页面，其他用户为搜索页面。匿名访问者仍会看到登录表单。要以其他账户登录，请先注销。其他网站上指向 ``/logout/`` 的链接（见上文）会保留会话，因此同样会到达该页面。
 - 以 ``$2b$`` （Python 的 bcrypt 及许多其他系统）或 ``$2y$`` （PHP、 ``htpasswd -B`` ）开头的已保存 ``{bcrypt}`` 哈希，现在会像 ``$2a$`` 哈希一样被验证。直到 15.9，此类用户的登录总是失败。新的哈希仍以 ``$2a$`` 写入。
 - 搜索引擎无法连接时，管理控制台返回 ``503`` （15.9 及更早版本为 500），登录表单会显示搜索引擎不可用的提示，而不是错误页面。搜索引擎不可用期间， ``/go/`` （搜索结果的链接）也会返回 ``503`` （15.9 及更早版本为 ``404`` ）。这些 ``503`` 响应带有 ``Retry-After: 5`` 。搜索引擎重置连接时也会被视为不可用，因此返回 ``503`` 而不是 ``500`` 。
@@ -1352,8 +1352,10 @@ RPM 版请以同样方式比较 ``/etc/fess/fess_config.properties`` 与
 如果要有意更改 ``app.cipher.key`` ，请在更改后重新输入已保存的机密值。从编辑页面打开每个含有加密值的 Web 或文件爬取配置、
 Web 认证或文件认证以及数据存储配置，把每个以 ``{cipher}`` 开头的参数值替换为其明文值。只要还剩一个，保存就会失败，并显示
 “无法更新数据。”和指明该键的 ``Failed to decrypt a parameter: key=...`` 。对于 Web 认证或文件认证，还要重新输入密码：
-页面上的密码字段为空，并显示“无法使用当前的 app.cipher.key 解密已保存的密码。请重新输入密码。”保存失败后，请重新打开编辑页面，
-而不要从错误页面再次提交。保存时 |Fess| 会用新密钥加密这些值，下一次爬取会对其解密。
+页面上的密码字段为空，并显示“无法使用当前的 app.cipher.key 解密已保存的密码。请重新输入密码。”还要重新输入常规页面中的 LDAP 管理员密码（Bind DN 的密码）：它以 ``{cipher}`` 值的形式
+加密保存在 ``system.properties`` 中。保存失败后，请重新打开编辑页面，
+而不要从错误页面再次提交。保存时 |Fess| 会用新密钥加密这些值，下一次爬取会对其解密。已登录用户的用户代码是用 ``app.cipher.key`` 加密的用户 ID，因此更改后已登录用户
+会获得新的用户代码；以旧用户代码记录的数据（例如收藏和搜索日志）不会与新的用户代码关联。
 
 请在原处编辑这些设置，而不要删除后重新创建。重新创建的爬取配置会获得新的 ID，而它的 Web 认证或文件认证和请求头、
 指定该 ID 的计划任务，以及已索引的文档（其 ``config_id`` ）引用的都是旧 ID。删除 Web 爬取配置时，其认证和请求头也会被删除。
