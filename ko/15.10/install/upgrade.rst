@@ -434,7 +434,8 @@ Docker 버전
    ZIP 버전에서는 OpenSearch 홈이 이전 홈과 같은 절대 경로가 되도록 해야 합니다. 데이터를 옮기기 전에
    아래의 :ref:`ZIP 버전: OpenSearch 홈을 이전 경로로 유지 <upgrade-opensearch-zip-path>` 를 참조하십시오. RPM/DEB
    패키지는 사전 디렉터리를 ``/etc/opensearch/dictionary`` 에 두며 업그레이드 전후로 같은 경로이므로
-   특별한 조치가 필요하지 않습니다.
+   특별한 조치가 필요하지 않습니다. ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 는 패키지를 새로 설치할 때만
+   필요하며, OpenSearch RPM/DEB 패키지의 업그레이드에는 필요하지 않습니다.
 
 2. 플러그인 재설치. OpenSearch 디렉터리에 이전 버전의 플러그인 4개가 이미 있는 경우에는 먼저 삭제하십시오
    (``bin/fess-setup install opensearch`` 도 플러그인 4개를 설치합니다)::
@@ -2008,7 +2009,7 @@ RPM/DEB 버전의 경우::
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   단계 1의 방법으로 만든 스냅샷에는 OpenSearch ML 플러그인의 시스템 인덱스인 ``.plugins-ml-config`` 를 포함하여 클러스터의 모든 인덱스가 들어 있습니다. 이 인덱스는 실행 중인 클러스터에서 열려 있으므로, ``indices`` 설정 없이 복원하면 ``cannot restore index [.plugins-ml-config] because an open index with same name already exists`` 로 거부됩니다. ``indices`` 를 지정하면 Fess의 인덱스와 ``configsync`` 인덱스만 복원됩니다.
+   단계 1의 방법으로 만든 스냅샷에는 ``.opensearch-sap-log-types-config`` 등 OpenSearch 플러그인의 시스템 인덱스를 포함하여 클러스터의 모든 인덱스가 들어 있습니다. 이러한 인덱스는 실행 중인 클러스터에서 열려 있으므로, ``indices`` 설정 없이 복원하면 ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists`` 로 거부됩니다. ``indices`` 를 지정하면 Fess의 인덱스와 ``configsync`` 인덱스만 복원됩니다.
 
 .. note::
 

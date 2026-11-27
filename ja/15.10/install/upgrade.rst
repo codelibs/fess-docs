@@ -427,7 +427,7 @@ Docker 版
 
 1. 新しいバージョンの OpenSearch をインストール
 
-   ZIP 版では、OpenSearch のホームを旧バージョンと同じ絶対パスに置く必要があります。データを移動する前に、下の :ref:`ZIP 版: OpenSearch のホームを旧バージョンと同じパスに置く <upgrade-opensearch-zip-path>` を参照してください。RPM/DEB 版は、辞書ディレクトリが ``/etc/opensearch/dictionary`` のまま変わらず（アップグレードの前後で同じパス）、特別な作業は不要です。
+   ZIP 版では、OpenSearch のホームを旧バージョンと同じ絶対パスに置く必要があります。データを移動する前に、下の :ref:`ZIP 版: OpenSearch のホームを旧バージョンと同じパスに置く <upgrade-opensearch-zip-path>` を参照してください。RPM/DEB 版は、辞書ディレクトリが ``/etc/opensearch/dictionary`` のまま変わらず（アップグレードの前後で同じパス）、特別な作業は不要です。 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` が必要なのはパッケージを新しくインストールする場合だけで、OpenSearch の RPM/DEB パッケージのアップグレードには必要ありません。
 
 2. プラグインを再インストール。OpenSearch のディレクトリに旧バージョンの 4 つのプラグインが
    すでにある場合は、先に削除します（ ``bin/fess-setup install opensearch`` も 4 つのプラグインをインストールします）::
@@ -1999,7 +1999,7 @@ RPM/DEB 版の場合::
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   ステップ 1 の方法で取得したスナップショットには、OpenSearch ML プラグインのシステムインデックス ``.plugins-ml-config`` を含む、クラスターのすべてのインデックスが含まれています。このインデックスは稼働中のクラスターでオープンされているため、 ``indices`` を指定しない復元は ``cannot restore index [.plugins-ml-config] because an open index with same name already exists`` で拒否されます。 ``indices`` を指定すると、Fess のインデックスと ``configsync`` インデックスだけが復元されます。
+   ステップ 1 の方法で取得したスナップショットには、 ``.opensearch-sap-log-types-config`` などの OpenSearch プラグインのシステムインデックスを含む、クラスターのすべてのインデックスが含まれています。このようなインデックスは稼働中のクラスターでオープンされているため、 ``indices`` を指定しない復元は ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists`` で拒否されます。 ``indices`` を指定すると、Fess のインデックスと ``configsync`` インデックスだけが復元されます。
 
 .. note::
 

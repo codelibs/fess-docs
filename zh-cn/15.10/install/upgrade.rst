@@ -426,7 +426,8 @@ Docker 版
    对于 ZIP 版，OpenSearch 主目录最终必须位于与旧版本相同的绝对路径；在移动任何数据之前，
    请先阅读下文的 :ref:`ZIP 版: 将 OpenSearch 主目录保持在旧路径 <upgrade-opensearch-zip-path>`\ 。
    RPM/DEB 软件包的词典目录保持在 ``/etc/opensearch/dictionary``\ ，升级前后路径相同，
-   因此无需特别处理。
+   因此无需特别处理。只有全新安装该软件包时才需要 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` ，
+   升级 OpenSearch 的 RPM/DEB 软件包时不需要。
 
 2. 重新安装插件。如果 OpenSearch 目录中已有旧版本的 4 个插件，请先将其删除
    （``bin/fess-setup install opensearch`` 也会安装这 4 个插件）::
@@ -1895,7 +1896,7 @@ RPM/DEB 版的情况::
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   按步骤 1 创建的快照包含集群中的所有索引，其中包括 OpenSearch ML 插件的系统索引 ``.plugins-ml-config`` 。该索引在运行中的集群上处于打开状态，因此不指定 ``indices`` 的恢复会被拒绝，并提示 ``cannot restore index [.plugins-ml-config] because an open index with same name already exists`` 。指定 ``indices`` 后，只会恢复 Fess 的索引和 ``configsync`` 索引。
+   按步骤 1 创建的快照包含集群中的所有索引，其中包括 ``.opensearch-sap-log-types-config`` 等 OpenSearch 插件的系统索引。这类索引在运行中的集群上处于打开状态，因此不指定 ``indices`` 的恢复会被拒绝，并提示 ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists`` 。指定 ``indices`` 后，只会恢复 Fess 的索引和 ``configsync`` 索引。
 
 .. note::
 

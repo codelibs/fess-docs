@@ -457,7 +457,9 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
    absolu que l'ancien ; voir :ref:`Version ZIP : conserver le répertoire racine d'OpenSearch à son ancien chemin <upgrade-opensearch-zip-path>`
    ci-dessous avant de déplacer des données. Les paquets RPM/DEB conservent le répertoire des
    dictionnaires à ``/etc/opensearch/dictionary``, qui est le même chemin avant et après la mise à
-   niveau ; rien de particulier n'est donc nécessaire pour eux.
+   niveau ; rien de particulier n'est donc nécessaire pour eux. La mise à niveau du paquet RPM/DEB
+   d'OpenSearch ne nécessite pas ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` ; la variable n'est nécessaire
+   que pour une nouvelle installation du paquet.
 
 2. Réinstallez les plugins. Supprimez d'abord les quatre plugins de l'ancienne version si le
    répertoire d'OpenSearch les contient déjà (``bin/fess-setup install opensearch`` installe lui aussi
@@ -2128,7 +2130,7 @@ Restauration depuis le snapshot. OpenSearch doit être en cours d'exécution et 
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   Un snapshot pris comme à l'étape 1 contient tous les index du cluster, y compris ``.plugins-ml-config``, l'index système du plugin ML d'OpenSearch. Cet index est ouvert sur le cluster en cours d'exécution ; une restauration sans le paramètre ``indices`` est donc refusée avec ``cannot restore index [.plugins-ml-config] because an open index with same name already exists``. Avec ce paramètre, seuls les index de Fess et l'index ``configsync`` sont restaurés.
+   Un snapshot pris comme à l'étape 1 contient tous les index du cluster, y compris des index système de plugins d'OpenSearch comme ``.opensearch-sap-log-types-config``. Un tel index est ouvert sur le cluster en cours d'exécution ; une restauration sans le paramètre ``indices`` est donc refusée avec ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists``. Avec ce paramètre, seuls les index de Fess et l'index ``configsync`` sont restaurés.
 
 .. note::
 

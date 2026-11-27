@@ -440,7 +440,9 @@ upgrade it using the following procedure.
    For the ZIP version, the OpenSearch home must end up at the same absolute path as the old
    one; see :ref:`ZIP version: keep the OpenSearch home at its old path <upgrade-opensearch-zip-path>` below before you move any data. The RPM/DEB
    packages keep the dictionary directory at ``/etc/opensearch/dictionary``, which is the same
-   path before and after the upgrade, so nothing special is needed there.
+   path before and after the upgrade, so nothing special is needed there. Upgrading the RPM/DEB
+   package of OpenSearch does not need ``OPENSEARCH_INITIAL_ADMIN_PASSWORD``; the variable is needed
+   only for a fresh installation of the package.
 
 2. Reinstall plugins. Remove the four plugins of the old version first if the OpenSearch directory
    already holds them (``bin/fess-setup install opensearch`` installs the four plugins, too)::
@@ -2035,7 +2037,7 @@ Restore from snapshot. OpenSearch must be running and |Fess| stopped:
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   A snapshot taken as in Step 1 holds every index of the cluster, including ``.plugins-ml-config``, the system index of the OpenSearch ML plugin. That index is open on the running cluster, so a restore without the ``indices`` setting is refused with ``cannot restore index [.plugins-ml-config] because an open index with same name already exists``. The setting restores only the Fess indices and the ``configsync`` index.
+   A snapshot taken as in Step 1 holds every index of the cluster, including system indices of OpenSearch plugins such as ``.opensearch-sap-log-types-config``. Such an index is open on the running cluster, so a restore without the ``indices`` setting is refused with ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists``. The setting restores only the Fess indices and the ``configsync`` index.
 
 .. note::
 

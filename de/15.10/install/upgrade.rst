@@ -453,7 +453,9 @@ Sie es anhand der folgenden Schritte.
    Bei der ZIP-Version muss das OpenSearch-Home am Ende unter demselben absoluten Pfad liegen wie das
    alte; lesen Sie unten :ref:`ZIP-Version: OpenSearch-Home am alten Pfad belassen <upgrade-opensearch-zip-path>`, bevor Sie Daten verschieben. Die
    RPM/DEB-Pakete behalten das Wörterbuchverzeichnis unter ``/etc/opensearch/dictionary`` bei, das vor
-   und nach dem Upgrade derselbe Pfad ist, sodass dort nichts Besonderes nötig ist.
+   und nach dem Upgrade derselbe Pfad ist, sodass dort nichts Besonderes nötig ist. Das Upgrade des
+   RPM/DEB-Pakets von OpenSearch braucht ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` nicht; die Variable ist
+   nur für eine Neuinstallation des Pakets nötig.
 
 2. Plugins neu installieren. Entfernen Sie zuerst die vier Plugins der alten Version, falls das
    OpenSearch-Verzeichnis sie bereits enthält (auch ``bin/fess-setup install opensearch`` installiert die
@@ -2131,7 +2133,7 @@ Wiederherstellung aus Snapshot. OpenSearch muss laufen und |Fess| gestoppt sein:
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   Ein Snapshot, der wie in Schritt 1 erstellt wurde, enthält alle Indizes des Clusters, auch ``.plugins-ml-config``, den Systemindex des OpenSearch-ML-Plugins. Dieser Index ist im laufenden Cluster geöffnet, daher wird eine Wiederherstellung ohne die Einstellung ``indices`` mit ``cannot restore index [.plugins-ml-config] because an open index with same name already exists`` abgelehnt. Mit der Einstellung werden nur die Fess-Indizes und der Index ``configsync`` wiederhergestellt.
+   Ein Snapshot, der wie in Schritt 1 erstellt wurde, enthält alle Indizes des Clusters, auch Systemindizes von OpenSearch-Plugins wie ``.opensearch-sap-log-types-config``. Ein solcher Index ist im laufenden Cluster geöffnet, daher wird eine Wiederherstellung ohne die Einstellung ``indices`` mit ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists`` abgelehnt. Mit der Einstellung werden nur die Fess-Indizes und der Index ``configsync`` wiederhergestellt.
 
 .. note::
 

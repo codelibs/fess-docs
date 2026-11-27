@@ -451,7 +451,9 @@ anterior, actualícelo siguiendo estos procedimientos.
    En la versión ZIP, el directorio principal de OpenSearch debe quedar en la misma ruta absoluta que el
    antiguo; consulte :ref:`Versión ZIP: mantenga el directorio principal de OpenSearch en su ruta anterior <upgrade-opensearch-zip-path>` más abajo antes de mover ningún dato. Los
    paquetes RPM/DEB mantienen el directorio de diccionarios en ``/etc/opensearch/dictionary``, que es la
-   misma ruta antes y después de la actualización, por lo que no se necesita nada especial.
+   misma ruta antes y después de la actualización, por lo que no se necesita nada especial. La
+   actualización del paquete RPM/DEB de OpenSearch no necesita ``OPENSEARCH_INITIAL_ADMIN_PASSWORD``; la
+   variable solo se necesita para una instalación nueva del paquete.
 
 2. Reinstale los plugins. Elimine primero los cuatro plugins de la versión antigua si el directorio de
    OpenSearch ya los contiene (``bin/fess-setup install opensearch`` también instala los cuatro
@@ -2116,7 +2118,7 @@ Restaure desde instantánea. OpenSearch debe estar en ejecución y |Fess| deteni
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   Una instantánea tomada como en el paso 1 contiene todos los índices del clúster, incluido ``.plugins-ml-config``, el índice de sistema del plugin ML de OpenSearch. Ese índice está abierto en el clúster en ejecución, por lo que una restauración sin el ajuste ``indices`` se rechaza con ``cannot restore index [.plugins-ml-config] because an open index with same name already exists``. Con el ajuste solo se restauran los índices de Fess y el índice ``configsync``.
+   Una instantánea tomada como en el paso 1 contiene todos los índices del clúster, incluidos índices de sistema de plugins de OpenSearch como ``.opensearch-sap-log-types-config``. Un índice así está abierto en el clúster en ejecución, por lo que una restauración sin el ajuste ``indices`` se rechaza con ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists``. Con el ajuste solo se restauran los índices de Fess y el índice ``configsync``.
 
 .. note::
 
