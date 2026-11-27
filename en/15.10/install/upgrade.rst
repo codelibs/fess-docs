@@ -296,8 +296,9 @@ ZIP Version
 
       Without ``tomcat_config.properties`` from the old installation, ``tomcat.sameSiteCookies``
       silently returns to the default ``lax``, and SAML login stops working (see
-      :ref:`upgrade-159-saml`). The shipped file is the same in 15.8.0 and 15.10, so it can be
-      copied as it is.
+      :ref:`upgrade-159-saml`). The shipped 15.10 file differs from the one of 15.8.0 and 15.9.0
+      only by commented-out ``tomcat.compression`` and ``tomcat.compression.mime`` lines, so the
+      old file can still be copied as it is.
 
    .. warning::
 
@@ -470,9 +471,12 @@ upgrade it using the following procedure.
       If a plugin directory already exists, ``opensearch-plugin install`` fails with ``plugin directory [...] already exists`` and leaves the old plugin in place. OpenSearch 3.10.0 then refuses to start with ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running``. ``bin/fess-setup install opensearch-plugins`` keeps a plugin that is already installed at the requested version; for a plugin of another version it prints the plugin name, the installed and the requested version and the ``opensearch-plugin remove`` command to run, and exits with code ``1``. Remove the old plugins as shown above before you install the new ones.
 
       ``opensearch-plugin install`` asks for confirmation (``Continue with installation?``) for a
-      plugin that requests additional permissions. Where nobody can answer (no terminal, input
-      from ``/dev/null``), such a plugin is not installed: answer ``y``, or pass ``-b`` to skip the
-      question.
+      plugin that requests additional permissions. Where nobody can answer, such a plugin is not
+      installed: with input from ``/dev/null`` (or ``sudo`` without a terminal), the command exits
+      with code ``1`` after a few seconds with
+      ``IllegalStateException: unable to read from standard input``, and with an input that stays
+      open but never answers, it waits and does not finish. Answer ``y``, or pass ``--batch``
+      (``-b``) to skip the question.
 
 3. Move the dictionary directory under the OpenSearch configuration directory
 
@@ -503,10 +507,12 @@ upgrade it using the following procedure.
    OpenSearch opens such an index only when that path is inside its own configuration directory.
    If you install OpenSearch 3.10.0 in another directory, as ``bin/fess-setup install opensearch``
    does (it creates ``opensearch-3.10.0`` beside ``opensearch-3.9.0``), and then move ``data/`` and
-   the dictionary files there by hand, the document index stays unassigned (``Resource path must
+   the dictionary files there by hand, the document index and ``fess_suggest_analyzer``, which
+   also keeps the absolute ``*_path`` settings of 15.9.0, stay unassigned (``Resource path must
    be inside config directory`` in the allocation explanation) and the cluster is red. The same
-   happens when you copy ``data/`` into a home that has already been started once. The procedure
-   below puts the new engine at the path the indices were created with:
+   happens when you copy ``data/`` into a home that has already been started once. "Re-indexing"
+   in Step 7 does not create ``fess_suggest_analyzer`` again. The procedure below puts the new
+   engine at the path the indices were created with:
 
    1. With OpenSearch stopped (Step 2), install OpenSearch 3.10.0 and its plugins in another
       directory (for example with ``bin/fess-setup install opensearch`` in ``fess-15.10.0``), and do
@@ -527,10 +533,17 @@ upgrade it using the following procedure.
           $ mv $NEW $OLD
 
    3. In ``config/opensearch.yml`` of the moved home, set ``configsync.config_path`` back to the old
-      absolute path (the full path of ``$OLD/config/dictionary``, not the variable). Keep ``FESS_DICTIONARY_PATH`` at the old
-      value as well. Set it explicitly (environment variable or ``bin/fess.in.sh``), because
-      ``bin/fess.in.sh`` sets it on its own only for an OpenSearch under ``opensearch/`` in the
-      |Fess| directory.
+      absolute path (the full path of ``$OLD/config/dictionary``, not the variable). For |Fess|,
+      set ``FESS_DICTIONARY_PATH=dictionary/`` (with the trailing slash), which is relative to the
+      configuration directory of OpenSearch, rather than the old absolute path. With the old
+      absolute value, every index that "Re-indexing" creates in Step 7 stores absolute ``*_path``
+      settings again; with ``dictionary/``, the new indices store relative ones and are green and
+      searchable next to the old indices. A fresh ``bin/fess-setup install opensearch`` of 15.10
+      also sets ``dictionary/``. Set it explicitly (environment variable or ``bin/fess.in.sh``),
+      because ``bin/fess.in.sh`` sets it on its own only for an OpenSearch under ``opensearch/`` in
+      the |Fess| directory: with the ``bin/fess.in.sh`` of 15.9.0 copied in Step 3 and nothing
+      set, ``FESS_DICTIONARY_PATH`` is unset in this layout, and "Re-indexing" in Step 7 logs
+      ``Failed to create index`` and creates nothing.
 
    4. Start OpenSearch from ``$OLD``, ask it to retry the allocation of shards that failed (needed
       when the cluster is red because OpenSearch was started at another path before), and check
@@ -812,19 +825,19 @@ Other Behavior Changes
 - New setting ``authentication.local.username.policy`` (default ``preserved``). |Fess| still compares the names of local users exactly as typed, as in 15.9, so ``Alice`` and ``alice`` are two users. With ``mapped``, creating or renaming a local user on the user management screen or with the Admin API is refused when the name is the same as the name of another user, or a different spelling of an entry of ``authentication.admin.users``, once width, case and Unicode composition are ignored. Login, user IDs, stored names, permissions and indexed documents do not change. For the details and the limits, see :ref:`local-username-policy`.
 - Scripts, styles and SVG files of 1 KB or more are sent compressed with gzip by default; 15.9 compressed nothing. Pages and JSON are not compressed. ``tomcat.compression`` (``on`` or ``off``) and ``tomcat.compression.mime`` (types added to the list, comma-separated) in ``tomcat_config.properties`` control it. A ``tomcat_config.properties`` carried over from 15.9 has neither key, so the compression is on. Set ``tomcat.compression=off`` when a reverse proxy in front of |Fess| compresses the responses itself.
 - The files of the bundled ``bootstrap`` theme are sent with ``Cache-Control: no-cache`` and an ``ETag``, and a browser asks again with ``If-None-Match`` and gets ``304`` while the file is unchanged. Up to 15.9 they carried ``max-age=86400``, so a browser kept an updated file for up to 24 hours.
-- A setting can be given as an environment variable instead of a ``-D`` option: ``FESS_CONFIG_<KEY>`` for a key of ``fess_config.properties`` and ``FESS_SYSTEM_<KEY>`` for a key of ``system.properties`` (the key in upper case, every character other than a letter or digit replaced by ``_``; ``search_engine.password`` is ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). A ``-D`` option with a value wins over the variable, and the variable wins over ``fess_config.properties``; a key that ``system.properties`` already has is not overridden. A variable, unlike a ``-D`` option, is not shown by ``ps`` or ``docker top``, and System Info masks its value.
+- A setting can be given as an environment variable instead of a ``-D`` option: ``FESS_CONFIG_<KEY>`` for a key of ``fess_config.properties`` and ``FESS_SYSTEM_<KEY>`` for a key of ``system.properties`` (the key in upper case, every character other than a letter or digit replaced by ``_``; ``search_engine.password`` is ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). A ``-D`` option with a value wins over the variable, and the variable wins over ``fess_config.properties``; a key that ``system.properties`` already has is not overridden. A variable, unlike a ``-D`` option, is not shown by ``ps`` or ``docker top``, and System Info masks its value. In 15.9.0, saving the General screen wrote the values that came from ``FESS_SYSTEM_*`` variables into ``system.properties``, and a key stored there wins over the variable, so after the upgrade a ``FESS_SYSTEM_*`` variable has no effect for any key that a save of the General screen stored in 15.9.0, until that line is removed from ``system.properties``. 15.10 no longer writes a value that comes from a variable when the General screen is saved.
 - When a secret (a password, an API key or a secret key) is given as a ``-Dfess.config.<key>`` or ``-Dfess.system.<key>`` option, 15.10 writes a warning to ``fess.log`` at startup that names the key and the variable to use instead, never the value.
 - The environment variable ``FESS_SESSION_STORE=opensearch`` keeps the HTTP sessions in the search engine so that several nodes share them. It is off by default (see :ref:`The fess_config.session Index for Sessions <upgrade-1510-session-index>` and :doc:`../config/session-store`).
-- ``PUT /api/admin/<name>/setting`` of 19 more admin APIs (for example ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` and ``scheduler``; not ``tagtype``, ``general``, ``theme`` or ``dict``) refuses a stale ``version_no`` like the user API above, with HTTP 400 and ``status`` ``1``. Up to 15.9 the value was never compared and the lists returned ``-1``, so a script that sends a constant ``version_no`` fails now: send the value read from ``GET /api/admin/<name>/setting/{id}`` and read the setting again after a refusal.
+- ``PUT /api/admin/<name>/setting`` of 19 more admin APIs (for example ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` and ``scheduler``; not ``tagtype``, ``general``, ``theme`` or ``dict``) refuses a stale ``version_no`` like the user API above, with HTTP 400 and ``status`` ``1``. Up to 15.9 the value was never compared and the lists returned ``-1``, so a script that sends a constant ``version_no`` fails now: send the value read from ``GET /api/admin/<name>/setting/{id}`` and read the setting again after a refusal. Concurrent updates of the same setting are refused as well: of 5 ``PUT`` requests sent at the same time with the same ``version_no``, 1 is applied and the other 4 get HTTP 400 with ``status`` ``1``. Send the update again with the current ``version_no``.
 - ``POST /api/admin/webconfig/setting``, ``/api/admin/fileconfig/setting`` and ``/api/admin/dataconfig/setting`` without ``permissions`` store ``{role}guest``. Up to 15.9 they stored no permission. ``PUT`` without ``permissions`` keeps the stored value; in 15.9 it left the field empty.
 - The login form, the change password form and the password fields of the user management screen no longer remove blanks at the start and the end of a password. Up to 15.9 they did, while ``/api/v2/auth/login`` and the Admin API did not, so a password with surrounding blanks that was set through the API could not log in through the form. Now every entrance takes the password as typed. A user whose blanks were dropped when the password was saved in 15.9 has to type it without them.
-- A regular expression that does not compile is refused on save: the include and exclude patterns of web and file crawl configurations, the paths of a label type and the regular expression of a path mapping. A value saved earlier stays as it is, and cannot be saved again unchanged until it is corrected. A path mapping with an invalid regular expression saved before 15.10 makes every search return no hits, in 15.9 and in 15.10 (``fess.log`` shows ``PatternSyntaxException`` from ``PathMapping``); remove or correct it.
+- A regular expression that does not compile is refused on save: the include and exclude patterns of web and file crawl configurations, the paths of a label type and the regular expression of a path mapping. A value saved earlier stays as it is, and cannot be saved again unchanged until it is corrected. In 15.9, a stored path mapping with an invalid regular expression makes every search return no hits (``fess.log`` shows ``PatternSyntaxException`` from ``PathMapping``). 15.10 skips such a mapping: searches return hits, the other path mappings still apply, and ``fess.log`` gets one warning such as ``The regex of the path mapping "(" is not valid, so the mapping is skipped``. Correct or delete the mapping.
 - The label menu of the search screen, the label choices of the admin forms and the labelling of crawled documents use every label type. Up to 15.9 only the first ``page.labeltype.max.fetch.size`` (1,000) label types were read, so a label type beyond them was missing from the menu and the forms, and the documents it should label were not labelled. The setting now only sizes the pages of the label type list in the admin console. With more than 1,000 label types, ``/api/v2/ui/config`` is larger (about 45 bytes per label type).
 - A permission entry written with full-width characters, such as ``（deny）{user}name`` or ``(deny)｛user｝name`` (as a Japanese keyboard types them), is refused on the permission fields of the admin screens and by the Admin API, with a message that asks for the half-width spelling such as ``(deny){user}name``. Up to 15.9 it was stored as a value that matches nobody, or dropped, so a deny that was meant to hide a document had no effect. The name after the marker is not changed, so a role named in Japanese or with full-width letters is still accepted.
-- A permission entry that has an invisible character (a zero-width space, a byte order mark or a control character) where the ``(allow)`` / ``(deny)`` prefix or the name starts, such as ``(deny)<U+200B>{user}name``, is refused with a message that asks to delete the character. Such a character is usually pasted in with the text. Up to 15.9 the entry was saved as a value that matches nobody, or dropped. A character of this kind inside a name, or at its end, is not refused.
+- A permission entry that has an invisible character (a zero-width space, a byte order mark or a control character) where the ``(allow)`` / ``(deny)`` prefix or the name starts, such as ``(deny)<U+200B>{user}name``, is refused with a message that asks to delete the character. Such a character is usually pasted in with the text. Up to 15.9 the entry was saved as a value that matches nobody, or dropped. A character of this kind inside a name, or at its end, is not refused. A no-break space before the prefix is different: a value that 15.9.0 stored as ``<U+00A0>(deny){user}name`` matched nobody in 15.9.0, but 15.10 accepts it when the setting is saved again and stores it as an effective deny entry. Check the permission values carried over from 15.9 for leading invisible spaces before saving them again.
 - A user who is already signed in and opens ``/login/`` is redirected to the page a login would lead to: the dashboard for an administrator, the first admin screen the roles allow for a user with an admin role, and the search screen for anyone else. An anonymous visitor still gets the login form. To sign in as another account, sign out first. A link on another site to ``/logout/`` (see above) keeps the session and therefore also ends on that page.
 - A stored ``{bcrypt}`` hash with the ``$2b$`` prefix (Python's bcrypt and many other systems) or the ``$2y$`` prefix (PHP, ``htpasswd -B``) now verifies like a ``$2a$`` one. Up to 15.9 the login of such a user always failed. New hashes are still written as ``$2a$``.
-- While the search engine cannot be reached, the admin console answers ``503`` (500 up to 15.9), and the login form shows a notice that the search engine is not available instead of an error page.
+- While the search engine cannot be reached, the admin console answers ``503`` (500 up to 15.9), and the login form shows a notice that the search engine is not available instead of an error page. ``/go/`` (the link of a search result) also answers ``503`` while the search engine is not available (``404`` up to 15.9). These ``503`` answers carry ``Retry-After: 5``. A connection reset by the search engine is treated as unavailable as well, so the answer is ``503`` instead of ``500``.
 - ``engine.status`` of ``GET /api/v2/health`` is ``YELLOW`` while a |Fess| index refuses writes (it has a write block) and was ``GREEN`` up to 15.9. A write block on an index that does not belong to |Fess| is ignored.
 - The SAML plugin (``fess-sso-saml``) of 15.10 uses saml4j instead of java-saml. A ``saml.*`` property that the old library had and the new one does not use, such as ``saml.security.digest_algorithm`` or ``saml.sp.contact``, is ignored; one warning that names them is written to ``fess.log``. The OpenID Connect plugin (``fess-sso-oidc``) of 15.10 uses PKCE (S256) by default. Set ``oic.pkce=false`` in ``system.properties`` for an OpenID provider that rejects it (see :doc:`../config/sso-oidc`).
 
@@ -1386,7 +1399,7 @@ or restored a backup onto a new server, they cannot be decrypted: ``fess-crawler
 If even one configuration has a value that cannot be decrypted, the crawl stops at that point. The configuration that cannot be decrypted is not simply skipped;
 the other configurations targeted by the same crawl are not indexed either. The message of the ``CipherFailureException`` shows the type, name and ID of that
 configuration and the key of the parameter that could not be decrypted, and it also says that ``app.cipher.key`` may differ from the key used when the value was saved
-(neither the encrypted value nor the key itself is output). Once you know the cause, either restore ``app.cipher.key`` to the original value or re-enter the password of that configuration.
+(neither the encrypted value nor the key itself is output). Once you know the cause, either restore ``app.cipher.key`` to the original value, or re-enter the password of that configuration and replace every parameter value that starts with ``{cipher}`` with the plain value. A web authentication whose parameters hold ``{cipher}`` values saved under another key cannot be saved even with a new password (the save fails with ``Failed to decrypt a parameter: key=...``); it can be saved once those values are replaced with plain text or removed.
 
 .. note::
 

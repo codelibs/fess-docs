@@ -137,7 +137,7 @@
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，``opensearch-plugin install`` 会等待确认（``Continue with installation?``）而不会结束。在命令中加上 ``--batch``（``-b``）即可跳过确认。
+   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，无人能应答 ``opensearch-plugin install`` 的确认（``Continue with installation?``），插件不会被安装：输入来自 ``/dev/null`` 时（没有终端的 ``sudo`` 也一样），命令会在几秒后输出 ``IllegalStateException: unable to read from standard input`` 并以代码 ``1`` 退出；输入保持打开却始终没有应答时，命令会一直等待而不会结束。在命令中加上 ``--batch`` （ ``-b`` ）即可跳过确认。
 
    .. important::
 
@@ -300,7 +300,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，``opensearch-plugin install`` 会等待确认（``Continue with installation?``）而不会结束。在命令中加上 ``--batch``（``-b``）即可跳过确认。
+   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，无人能应答 ``opensearch-plugin install`` 的确认（``Continue with installation?``），插件不会被安装：输入来自 ``/dev/null`` 时（没有终端的 ``sudo`` 也一样），命令会在几秒后输出 ``IllegalStateException: unable to read from standard input`` 并以代码 ``1`` 退出；输入保持打开却始终没有应答时，命令会一直等待而不会结束。在命令中加上 ``--batch`` （ ``-b`` ）即可跳过确认。
 
 3. 配置 OpenSearch
 
@@ -422,7 +422,7 @@ DEB 版用于 Debian、Ubuntu 等基于 DEB 的 Linux 发行版。
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，``opensearch-plugin install`` 会等待确认（``Continue with installation?``）而不会结束。在命令中加上 ``--batch``（``-b``）即可跳过确认。
+   在没有连接终端的环境（例如脚本、容器构建或自动化工具）中，无人能应答 ``opensearch-plugin install`` 的确认（``Continue with installation?``），插件不会被安装：输入来自 ``/dev/null`` 时（没有终端的 ``sudo`` 也一样），命令会在几秒后输出 ``IllegalStateException: unable to read from standard input`` 并以代码 ``1`` 退出；输入保持打开却始终没有应答时，命令会一直等待而不会结束。在命令中加上 ``--batch`` （ ``-b`` ）即可跳过确认。
 
 3. 配置 OpenSearch
 

@@ -137,7 +137,7 @@ ZIP 버전 설치
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 이 확인(``Continue with installation?``) 입력을 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
+   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 의 확인(``Continue with installation?``)에 응답할 수 없어 플러그인이 설치되지 않습니다. 입력이 ``/dev/null`` 인 경우(터미널 없는 ``sudo`` 도 마찬가지)에는 몇 초 후 ``IllegalStateException: unable to read from standard input`` 을 출력하고 코드 ``1`` 로 종료하며, 입력이 열려 있지만 아무 응답도 오지 않는 경우에는 계속 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
 
    .. important::
 
@@ -300,7 +300,7 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 이 확인(``Continue with installation?``) 입력을 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
+   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 의 확인(``Continue with installation?``)에 응답할 수 없어 플러그인이 설치되지 않습니다. 입력이 ``/dev/null`` 인 경우(터미널 없는 ``sudo`` 도 마찬가지)에는 몇 초 후 ``IllegalStateException: unable to read from standard input`` 을 출력하고 코드 ``1`` 로 종료하며, 입력이 열려 있지만 아무 응답도 오지 않는 경우에는 계속 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
 
 3. OpenSearch 설정
 
@@ -422,7 +422,7 @@ DEB 버전은 Debian, Ubuntu 등 DEB 기반 Linux 배포판에서 사용합니�
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 이 확인(``Continue with installation?``) 입력을 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
+   터미널이 연결되어 있지 않은 환경(스크립트, 컨테이너 빌드, 자동화 도구 등)에서는 ``opensearch-plugin install`` 의 확인(``Continue with installation?``)에 응답할 수 없어 플러그인이 설치되지 않습니다. 입력이 ``/dev/null`` 인 경우(터미널 없는 ``sudo`` 도 마찬가지)에는 몇 초 후 ``IllegalStateException: unable to read from standard input`` 을 출력하고 코드 ``1`` 로 종료하며, 입력이 열려 있지만 아무 응답도 오지 않는 경우에는 계속 기다리며 끝나지 않습니다. 명령에 ``--batch`` (``-b``) 를 붙이면 확인을 건너뜁니다.
 
 3. OpenSearch 설정
 

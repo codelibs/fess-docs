@@ -293,7 +293,8 @@ ZIP 版
 
       如果不复制旧版本的 ``tomcat_config.properties`` ，``tomcat.sameSiteCookies`` 会在没有任何提示的
       情况下恢复为默认值 ``lax`` ，SAML 登录将无法使用（参阅 :ref:`upgrade-159-saml` ）。
-      该文件的随附内容在 15.8.0 和 15.10 中相同，因此可以原样复制。
+      15.10 随附的该文件与 15.8.0 和 15.9.0 的文件相比，只多了被注释掉的 ``tomcat.compression`` 和
+      ``tomcat.compression.mime`` 行，因此旧文件仍可原样复制。
 
    .. warning::
 
@@ -455,8 +456,8 @@ Docker 版
       如果插件目录已经存在，\ ``opensearch-plugin install`` 会以 ``plugin directory [...] already exists`` 失败，旧插件保持原样。之后 OpenSearch 3.10.0 会拒绝启动，并提示 ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running``\ 。\ ``bin/fess-setup install opensearch-plugins`` 会保留已按请求版本安装的插件；对于其他版本的插件，会显示插件名称、已安装的版本和请求的版本，以及需要执行的 ``opensearch-plugin remove`` 命令，并以代码 ``1`` 退出。请先按上文所示删除旧插件，再安装新插件。
 
       对于请求额外权限的插件，``opensearch-plugin install`` 会请求确认（``Continue with installation?``）。
-      在无人可以应答的环境（没有终端、输入来自 ``/dev/null``）中，这样的插件不会被安装：
-      请回答 ``y``，或传入 ``-b`` 跳过该提问。
+      在无人可以应答的环境中，这样的插件不会被安装：输入来自 ``/dev/null`` 时（没有终端的 ``sudo`` 也一样），命令会在几秒后输出 ``IllegalStateException: unable to read from standard input`` 并以代码 ``1`` 退出；输入保持打开却始终没有应答时，命令会一直等待而不会结束。
+      请回答 ``y``，或传入 ``--batch`` （ ``-b`` ）跳过该提问。
 
 3. 将词典目录移至 OpenSearch 配置目录下
 
@@ -487,9 +488,10 @@ Docker 版
    只有当该路径位于 OpenSearch 自己的配置目录之内时，OpenSearch 才会打开这样的索引。
    如果像 ``bin/fess-setup install opensearch`` 那样将 OpenSearch 3.10.0 安装到另一个目录
    （它会在 ``opensearch-3.9.0`` 旁边创建 ``opensearch-3.10.0``），然后手动将 ``data/`` 和
-   词典文件移到那里，文档索引会保持未分配状态（分配说明中为 ``Resource path must
+   词典文件移到那里，文档索引以及同样保留 15.9.0 的绝对路径 ``*_path`` 设置的 ``fess_suggest_analyzer``
+   会保持未分配状态（分配说明中为 ``Resource path must
    be inside config directory``），集群变为红色。把 ``data/`` 复制到已启动过一次的主目录中，
-   也会出现同样的情况。下面的步骤会把新引擎放在创建索引时使用的路径上：
+   也会出现同样的情况。步骤 7 的「重新索引」不会重新创建 ``fess_suggest_analyzer`` 。下面的步骤会把新引擎放在创建索引时使用的路径上：
 
    1. 在 OpenSearch 已停止的状态下（步骤 2），将 OpenSearch 3.10.0 及其插件安装到另一个目录
       （例如在 ``fess-15.10.0`` 中执行 ``bin/fess-setup install opensearch``），并且不要启动它。
@@ -509,9 +511,15 @@ Docker 版
           $ mv $NEW $OLD
 
    3. 在移动后的主目录的 ``config/opensearch.yml`` 中，将 ``configsync.config_path`` 改回旧的
-      绝对路径（``$OLD/config/dictionary`` 的完整路径，而不是变量）。``FESS_DICTIONARY_PATH`` 也请保持
-      旧值。请显式设置它（环境变量或 ``bin/fess.in.sh``），因为 ``bin/fess.in.sh``
-      只会对位于 |Fess| 目录下 ``opensearch/`` 中的 OpenSearch 自行设置它。
+      绝对路径（``$OLD/config/dictionary`` 的完整路径，而不是变量）。 |Fess| 的 ``FESS_DICTIONARY_PATH``
+      请不要使用旧的绝对路径，而是设置为以 OpenSearch 配置目录为基准的相对路径 ``FESS_DICTIONARY_PATH=dictionary/``
+      （带末尾的斜杠）。如果保持旧的绝对路径，步骤 7 的「重新索引」重新创建的每个索引都会再次记录绝对路径的 ``*_path`` 设置；
+      使用 ``dictionary/`` 时，新索引记录的是相对路径，与旧索引并存时为绿色且可以搜索。
+      用 15.10 的 ``bin/fess-setup install opensearch`` 全新安装时也会设置 ``dictionary/`` 。
+      请显式设置它（环境变量或 ``bin/fess.in.sh``），因为 ``bin/fess.in.sh``
+      只会对位于 |Fess| 目录下 ``opensearch/`` 中的 OpenSearch 自行设置它：如果在步骤 3 中复制了 15.9.0 的
+      ``bin/fess.in.sh`` 且没有进行任何设置，在这种布局下 ``FESS_DICTIONARY_PATH`` 不会被设置，
+      步骤 7 的「重新索引」会记录 ``Failed to create index`` 且不创建任何索引。
 
    4. 从 ``$OLD`` 启动 OpenSearch，让它重试分配失败的分片（当集群因 OpenSearch 之前在其他路径下
       启动而为红色时需要这样做），然后确认健康状态::
@@ -787,19 +795,19 @@ URL 的协议不在列表中的搜索结果不会成为链接。对于经过「�
 - 新增设置 ``authentication.local.username.policy`` （默认 ``preserved`` ）。与 15.9 相同， |Fess| 仍按输入原样比较本地用户的名称，因此 ``Alice`` 和 ``alice`` 是两个用户。设为 ``mapped`` 后，在用户管理页面或通过 Admin API 创建或重命名本地用户时，如果忽略字符宽度、大小写和 Unicode 组合方式后名称与其他用户的名称相同，或是 ``authentication.admin.users`` 中某个条目的另一种写法，就会被拒绝。登录、用户 ID、保存的名称、权限和已建立索引的文档都不会改变。详细信息和限制请参见 :ref:`local-username-policy` 。
 - 1 KB 及以上的脚本、样式和 SVG 文件现在默认以 gzip 压缩后发送；15.9 不压缩任何内容。页面和 JSON 不会被压缩。可通过 ``tomcat_config.properties`` 中的 ``tomcat.compression`` （ ``on`` 或 ``off`` ）和 ``tomcat.compression.mime`` （添加到列表中的类型，以逗号分隔）进行控制。沿用自 15.9 的 ``tomcat_config.properties`` 中没有这两个键，因此压缩处于开启状态。如果 |Fess| 前面的反向代理自行压缩响应，请设置 ``tomcat.compression=off`` 。
 - 内置 ``bootstrap`` 主题的文件以 ``Cache-Control: no-cache`` 和 ``ETag`` 发送，文件未变化时，浏览器会携带 ``If-None-Match`` 再次请求并得到 ``304`` 。直到 15.9，它们带有 ``max-age=86400`` ，因此浏览器会将已更新的文件保留最长 24 小时。
-- 设置可以通过环境变量而不是 ``-D`` 选项来指定： ``fess_config.properties`` 的键使用 ``FESS_CONFIG_<KEY>`` ， ``system.properties`` 的键使用 ``FESS_SYSTEM_<KEY>`` （键使用大写，字母和数字以外的每个字符都替换为 ``_`` ； ``search_engine.password`` 对应 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。有值的 ``-D`` 选项优先于环境变量，环境变量优先于 ``fess_config.properties`` ； ``system.properties`` 中已有的键不会被覆盖。与 ``-D`` 选项不同，环境变量不会被 ``ps`` 或 ``docker top`` 显示，系统信息也会屏蔽其值。
+- 设置可以通过环境变量而不是 ``-D`` 选项来指定： ``fess_config.properties`` 的键使用 ``FESS_CONFIG_<KEY>`` ， ``system.properties`` 的键使用 ``FESS_SYSTEM_<KEY>`` （键使用大写，字母和数字以外的每个字符都替换为 ``_`` ； ``search_engine.password`` 对应 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。有值的 ``-D`` 选项优先于环境变量，环境变量优先于 ``fess_config.properties`` ； ``system.properties`` 中已有的键不会被覆盖。与 ``-D`` 选项不同，环境变量不会被 ``ps`` 或 ``docker top`` 显示，系统信息也会屏蔽其值。在 15.9.0 中，保存常规页面时会把来自 ``FESS_SYSTEM_*`` 环境变量的值写入 ``system.properties`` ，而保存在那里的键优先于环境变量。因此升级后，对于 15.9.0 中保存常规页面时存入的任何键， ``FESS_SYSTEM_*`` 环境变量都不起作用，直到从 ``system.properties`` 中删除这些行为止。15.10 在保存常规页面时不再写入来自环境变量的值。
 - 当密钥（密码、API 密钥或密钥串）以 ``-Dfess.config.<key>`` 或 ``-Dfess.system.<key>`` 选项给出时，15.10 会在启动时向 ``fess.log`` 输出一条警告，其中包含键名和应改用的变量，但不包含值。
 - 环境变量 ``FESS_SESSION_STORE=opensearch`` 会把 HTTP 会话保存在搜索引擎中，以便多个节点共享。默认关闭（请参阅 :ref:`用于会话的 fess_config.session 索引 <upgrade-1510-session-index>` 和 :doc:`../config/session-store` ）。
-- 另外 19 个管理 API（例如 ``webconfig`` 、 ``fileconfig`` 、 ``dataconfig`` 、 ``role`` 、 ``group`` 、 ``labeltype`` 、 ``pathmap`` 和 ``scheduler`` ；不包括 ``tagtype`` 、 ``general`` 、 ``theme`` 和 ``dict`` ）的 ``PUT /api/admin/<name>/setting`` 会像上面的用户 API 一样拒绝过期的 ``version_no`` ，返回 HTTP 400， ``status`` 为 ``1`` 。直到 15.9，该值从不比较，列表返回 ``-1`` ，因此发送固定 ``version_no`` 的脚本现在会失败：请发送从 ``GET /api/admin/<name>/setting/{id}`` 读取的值，被拒绝后请重新读取该设置。
+- 另外 19 个管理 API（例如 ``webconfig`` 、 ``fileconfig`` 、 ``dataconfig`` 、 ``role`` 、 ``group`` 、 ``labeltype`` 、 ``pathmap`` 和 ``scheduler`` ；不包括 ``tagtype`` 、 ``general`` 、 ``theme`` 和 ``dict`` ）的 ``PUT /api/admin/<name>/setting`` 会像上面的用户 API 一样拒绝过期的 ``version_no`` ，返回 HTTP 400， ``status`` 为 ``1`` 。直到 15.9，该值从不比较，列表返回 ``-1`` ，因此发送固定 ``version_no`` 的脚本现在会失败：请发送从 ``GET /api/admin/<name>/setting/{id}`` 读取的值，被拒绝后请重新读取该设置。对同一设置的并发更新也会被拒绝：使用相同的 ``version_no`` 同时发送 5 个 ``PUT`` 请求时，只有 1 个生效，其余 4 个返回 HTTP 400， ``status`` 为 ``1`` 。请使用当前的 ``version_no`` 重新发送更新。
 - 不带 ``permissions`` 的 ``POST /api/admin/webconfig/setting`` 、 ``/api/admin/fileconfig/setting`` 和 ``/api/admin/dataconfig/setting`` 会保存 ``{role}guest`` 。直到 15.9，它们不保存任何权限。不带 ``permissions`` 的 ``PUT`` 会保留已保存的值；在 15.9 中它会把该字段留空。
 - 登录表单、修改密码表单以及用户管理页面的密码字段不再去除密码开头和结尾的空白。直到 15.9，它们会去除，而 ``/api/v2/auth/login`` 和 Admin API 不会，因此通过 API 设置的、前后带有空白的密码无法通过表单登录。现在所有入口都按输入原样接受密码。如果某用户的密码在 15.9 中保存时空白被去除了，则该用户需要输入不带空白的密码。
-- 无法编译的正则表达式在保存时会被拒绝：Web 和文件爬取设置的包含与排除模式、标签类型的路径，以及路径映射的正则表达式。此前保存的值保持原样，在更正之前无法原样再次保存。15.10 之前保存的带有无效正则表达式的路径映射会导致每次搜索都没有命中结果，15.9 和 15.10 都是如此（ ``fess.log`` 中会显示来自 ``PathMapping`` 的 ``PatternSyntaxException`` ）；请删除或更正它。
+- 无法编译的正则表达式在保存时会被拒绝：Web 和文件爬取设置的包含与排除模式、标签类型的路径，以及路径映射的正则表达式。此前保存的值保持原样，在更正之前无法原样再次保存。在 15.9 中，已保存的带有无效正则表达式的路径映射会导致每次搜索都没有命中结果（ ``fess.log`` 中会显示来自 ``PathMapping`` 的 ``PatternSyntaxException`` ）。15.10 会跳过这样的路径映射：搜索会返回命中结果，其他路径映射仍然适用， ``fess.log`` 中会输出一次类似 ``The regex of the path mapping "(" is not valid, so the mapping is skipped`` 的警告。请更正或删除该路径映射。
 - 搜索页面的标签菜单、管理界面表单中的标签选项以及为已爬取文档添加标签，都会使用所有标签类型。直到 15.9，只读取前 ``page.labeltype.max.fetch.size`` （1,000）个标签类型，因此超出的标签类型不会出现在菜单和表单中，本应由其添加标签的文档也没有被添加标签。现在该设置只用于管理界面中标签类型列表的每页大小。标签类型超过 1,000 个时， ``/api/v2/ui/config`` 的响应会变大（每个标签类型约 45 字节）。
 - 用全角字符书写的权限条目（例如用日语键盘输入的 ``（deny）{user}name`` 或 ``(deny)｛user｝name`` ），会在管理界面的权限字段和 Admin API 中被拒绝，并显示要求改用半角写法（如 ``(deny){user}name`` ）的消息。直到 15.9，这样的条目会被保存为不匹配任何人的值或被丢弃，因此本应隐藏文档的 deny 没有效果。标记后面的名称不会被改变，因此用日语或全角字母命名的角色仍然可以使用。
-- 在 ``(allow)`` / ``(deny)`` 前缀或名称开头处带有不可见字符（零宽空格、字节顺序标记或控制字符）的权限条目（例如 ``(deny)<U+200B>{user}name`` ）会被拒绝，并显示要求删除该字符的消息。这种字符通常是在粘贴文本时一起带入的。直到 15.9，这样的条目会被保存为不匹配任何人的值或被丢弃。位于名称中间或末尾的此类字符不会被拒绝。
+- 在 ``(allow)`` / ``(deny)`` 前缀或名称开头处带有不可见字符（零宽空格、字节顺序标记或控制字符）的权限条目（例如 ``(deny)<U+200B>{user}name`` ）会被拒绝，并显示要求删除该字符的消息。这种字符通常是在粘贴文本时一起带入的。直到 15.9，这样的条目会被保存为不匹配任何人的值或被丢弃。位于名称中间或末尾的此类字符不会被拒绝。前缀之前的不换行空格则不同：15.9.0 以 ``<U+00A0>(deny){user}name`` 保存的值在 15.9.0 中不匹配任何人，但 15.10 在再次保存该设置时会接受它，并将其保存为有效的 deny 条目。再次保存之前，请检查从 15.9 沿用的权限值开头是否有不可见的空格。
 - 已登录的用户打开 ``/login/`` 时，会被重定向到登录后会进入的页面：管理员为仪表板，拥有管理角色的用户为其角色允许访问的第一个管理页面，其他用户为搜索页面。匿名访问者仍会看到登录表单。要以其他账户登录，请先注销。其他网站上指向 ``/logout/`` 的链接（见上文）会保留会话，因此同样会到达该页面。
 - 以 ``$2b$`` （Python 的 bcrypt 及许多其他系统）或 ``$2y$`` （PHP、 ``htpasswd -B`` ）开头的已保存 ``{bcrypt}`` 哈希，现在会像 ``$2a$`` 哈希一样被验证。直到 15.9，此类用户的登录总是失败。新的哈希仍以 ``$2a$`` 写入。
-- 搜索引擎无法连接时，管理控制台返回 ``503`` （15.9 及更早版本为 500），登录表单会显示搜索引擎不可用的提示，而不是错误页面。
+- 搜索引擎无法连接时，管理控制台返回 ``503`` （15.9 及更早版本为 500），登录表单会显示搜索引擎不可用的提示，而不是错误页面。搜索引擎不可用期间， ``/go/`` （搜索结果的链接）也会返回 ``503`` （15.9 及更早版本为 ``404`` ）。这些 ``503`` 响应带有 ``Retry-After: 5`` 。搜索引擎重置连接时也会被视为不可用，因此返回 ``503`` 而不是 ``500`` 。
 - 当某个 |Fess| 索引拒绝写入（带有写入阻止）时， ``GET /api/v2/health`` 的 ``engine.status`` 为 ``YELLOW`` ，直到 15.9 为 ``GREEN`` 。不属于 |Fess| 的索引上的写入阻止会被忽略。
 - 15.10 的 SAML 插件（ ``fess-sso-saml`` ）使用 saml4j 代替 java-saml。旧库中有而新库不使用的 ``saml.*`` 属性，例如 ``saml.security.digest_algorithm`` 或 ``saml.sp.contact`` ，会被忽略；会向 ``fess.log`` 输出一条列出它们的警告。15.10 的 OpenID Connect 插件（ ``fess-sso-oidc`` ）默认使用 PKCE（S256）。对于拒绝 PKCE 的 OpenID 提供方，请在 ``system.properties`` 中设置 ``oic.pkce=false`` （请参阅 :doc:`../config/sso-oidc` ）。
 
@@ -1324,7 +1332,8 @@ RPM 版请以同样方式比较 ``/etc/fess/fess_config.properties`` 与
 属于同一次爬取对象的其他配置也不会被索引。 ``CipherFailureException`` 的消息中会显示
 该配置的类型、名称和 ID，以及无法解密的参数的键，并写明 ``app.cipher.key`` 可能与保存时的密钥不同
 （加密后的值和密钥本身不会被输出）。查明原因后，请将 ``app.cipher.key`` 恢复为原来的值，
-或重新输入该配置的密码。
+或重新输入该配置的密码，并将所有以 ``{cipher}`` 开头的参数值替换为明文值。
+参数中带有以其他密钥保存的 ``{cipher}`` 值的 Web 认证，即使输入新密码也无法保存（保存时失败并显示 ``Failed to decrypt a parameter: key=...`` ）；将这些值替换为明文或删除后即可保存。
 
 .. note::
 

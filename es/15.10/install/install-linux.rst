@@ -153,7 +153,7 @@ Paso 1: Instalación de OpenSearch
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ ./bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   Si no hay un terminal conectado (por ejemplo, en un script, en la construcción de un contenedor o en una herramienta de automatización), ``opensearch-plugin install`` espera la confirmación ``Continue with installation?`` y no termina. Añada ``--batch`` (``-b``) al comando para omitir la confirmación.
+   Si no hay un terminal conectado (por ejemplo, en un script, en la construcción de un contenedor o en una herramienta de automatización), nadie puede responder a la confirmación ``Continue with installation?`` de ``opensearch-plugin install`` y el plugin no se instala: con la entrada desde ``/dev/null`` (o ``sudo`` sin terminal), el comando termina con el código ``1`` al cabo de unos segundos con ``IllegalStateException: unable to read from standard input``, y con una entrada que sigue abierta pero nunca responde, espera y no termina. Añada ``--batch`` (``-b``) al comando para omitir la confirmación.
 
    .. important::
 
@@ -335,7 +335,7 @@ Paso 1: Instalación de OpenSearch
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   Si no hay un terminal conectado (por ejemplo, en un script, en la construcción de un contenedor o en una herramienta de automatización), ``opensearch-plugin install`` espera la confirmación ``Continue with installation?`` y no termina. Añada ``--batch`` (``-b``) al comando para omitir la confirmación.
+   Si no hay un terminal conectado (por ejemplo, en un script, en la construcción de un contenedor o en una herramienta de automatización), nadie puede responder a la confirmación ``Continue with installation?`` de ``opensearch-plugin install`` y el plugin no se instala: con la entrada desde ``/dev/null`` (o ``sudo`` sin terminal), el comando termina con el código ``1`` al cabo de unos segundos con ``IllegalStateException: unable to read from standard input``, y con una entrada que sigue abierta pero nunca responde, espera y no termina. Añada ``--batch`` (``-b``) al comando para omitir la confirmación.
 
 3. Configuración de OpenSearch
 
@@ -457,7 +457,7 @@ Paso 1: Instalación de OpenSearch
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-minhash/3.10.0/opensearch-minhash-3.10.0.zip
        $ sudo /usr/share/opensearch/bin/opensearch-plugin install https://maven.codelibs.org/release/org/codelibs/opensearch/opensearch-configsync/3.10.0/opensearch-configsync-3.10.0.zip
 
-   Si no hay un terminal conectado (por ejemplo, en un script, en la construcción de un contenedor o en una herramienta de automatización), ``opensearch-plugin install`` espera la confirmación ``Continue with installation?`` y no termina. Añada ``--batch`` (``-b``) al comando para omitir la confirmación.
+   Si no hay un terminal conectado (por ejemplo, en un script, en la construcción de un contenedor o en una herramienta de automatización), nadie puede responder a la confirmación ``Continue with installation?`` de ``opensearch-plugin install`` y el plugin no se instala: con la entrada desde ``/dev/null`` (o ``sudo`` sin terminal), el comando termina con el código ``1`` al cabo de unos segundos con ``IllegalStateException: unable to read from standard input``, y con una entrada que sigue abierta pero nunca responde, espera y no termina. Añada ``--batch`` (``-b``) al comando para omitir la confirmación.
 
 3. Configuración de OpenSearch
 
