@@ -131,10 +131,12 @@ Active le crawl différentiel.
 
 Pour les URL HTTP/HTTPS, quand le ``Last-Modified`` de la réponse HEAD ne permet pas de décider
 (aucune date de modification dans l'index, pas de ``Last-Modified`` dans la réponse HEAD, ou un statut
-HEAD autre que 200/404), le GET est envoyé comme GET conditionnel avec ``If-None-Match`` (l'``ETag``
+HEAD autre que 200/404/410), le GET est envoyé comme GET conditionnel avec ``If-None-Match`` (l'``ETag``
 indexé) et/ou ``If-Modified-Since``. Une page qui répond ``304 Not Modified`` est traitée comme une
 page inchangée et n'est pas récupérée à nouveau. Pour tout récupérer à nouveau, par exemple après
 avoir modifié les paramètres de crawl, désactivez ce réglage le temps d'un crawl.
+
+Lorsqu'une page HTTP/HTTPS dont le document est dans l'index répond ``404`` ou ``410`` à la requête HEAD ou au GET, le document est supprimé de l'index et l'URL n'est pas enregistrée comme URL en échec. Un ``404`` ou ``410`` pour une URL qui n'a pas de document dans l'index est toujours enregistré comme URL en échec. Lorsque ce réglage est désactivé, un ``404`` ou ``410`` ne supprime pas le document.
 
 Une page dont le ``Last-Modified`` de la réponse HEAD est inférieur ou égal à la date de dernière modification enregistrée dans l'index est considérée comme non modifiée et n'est pas récupérée à nouveau. Si le serveur a déjà renvoyé un ``Last-Modified`` plus récent que la date de modification réelle (par exemple l'heure de la réponse), cette valeur est enregistrée dans l'index ; par la suite, les modifications dont le ``Last-Modified`` reste inférieur ou égal à cette valeur ne sont plus détectées. La date d'expiration d'un document considéré comme non modifié est prolongée à chaque crawl. Tant que le crawl se poursuit, le document n'est donc pas récupéré à nouveau, même lorsque l'échéance définie par « Supprimer les anciens documents » est atteinte. Pour que la modification soit prise en compte, supprimez le document concerné de l'index avant de relancer le crawl, ou désactivez ce réglage le temps d'un crawl.
 

@@ -131,6 +131,9 @@ SMB/CIFS (Partage de fichiers Windows)
     Nombre de threads : 5
     Profondeur : vide (illimitée)
 
+.. note::
+   Pour un serveur qui exige le chiffrement SMB3, voir :ref:`crawler-smb-encryption`.
+
 Configuration des informations d'authentification
 --------------
 
@@ -679,16 +682,36 @@ Pour ignorer robots.txt, modifiez ``fess_config.properties``.
 La valeur par défaut de cette propriété est ``false`` : |Fess| respecte robots.txt.
 Définissez-la à ``true`` pour l'ignorer.
 
-Pour ignorer également les balises meta robots HTML (``noindex``, ``nofollow``, etc.),
-utilisez la propriété suivante (valeur par défaut : ``false``) :
+.. warning::
+   Lors de l'indexation de sites externes, respectez robots.txt.
+   L'ignorer peut imposer une charge excessive sur le serveur ou violer les conditions d'utilisation.
+
+Balise meta robots et en-tête X-Robots-Tag
+------------------------------------------
+
+|Fess| respecte aussi les directives robots d'une page, données dans la balise meta robots d'une page HTML (``<meta name="robots" content="noindex">``) ou dans l'en-tête de réponse ``X-Robots-Tag`` :
+
+- ``noindex`` : le document n'est pas indexé.
+- ``nofollow`` : les liens de la page ne sont pas suivis.
+- ``none`` : équivaut à ``noindex`` et ``nofollow``.
+
+Pour une page HTML, la balise meta et l'en-tête sont lus tous les deux. Un document qui n'est pas du HTML, comme un PDF ou un fichier Office, n'a pas de balise meta ; à partir de 15.10, il n'est pas indexé lorsque son en-tête ``X-Robots-Tag`` indique ``noindex`` ou ``none``.
+
+La valeur est lue directive par directive :
+
+- Séparez les directives par des virgules, comme dans ``noindex, nofollow``. Chaque directive est comparée en entier, sans tenir compte de la casse ni des espaces qui l'entourent ; une directive avec une valeur comme ``max-image-preview:none`` ou ``unavailable_after: ...`` ne compte donc pas comme ``none`` ou ``noindex``.
+- Une valeur qui commence par un nom suivi de deux-points, comme ``googlebot: noindex``, est une règle pour un robot particulier, et toute la valeur est ignorée. Une règle adressée à |Fess| par son nom n'est pas lue non plus ; écrivez les directives sans nom.
+- Dans une page HTML, les directives séparées seulement par des espaces (``noindex nofollow``) sont lues aussi.
+
+Le crawl ne supprime pas un document indexé avant que la page ne demande à ne pas être indexée. Pour le retirer des résultats de recherche, supprimez-le dans la liste de recherche (interface d'administration).
+
+Pour ignorer la balise meta robots et l'en-tête ``X-Robots-Tag``, définissez la propriété suivante dans ``fess_config.properties`` (valeur par défaut : ``false``) :
 
 ::
 
     crawler.ignore.robots.tags=true
 
-.. warning::
-   Lors de l'indexation de sites externes, respectez robots.txt.
-   L'ignorer peut imposer une charge excessive sur le serveur ou violer les conditions d'utilisation.
+Pour les ignorer dans une seule configuration de crawl, ajoutez ``config.ignore.robots.tags=true`` à ses « Paramètres de configuration ». Cette valeur prime sur la propriété : avec ``config.ignore.robots.tags=false``, cette configuration respecte les directives même si la propriété vaut ``true``.
 
 Configuration du User-Agent
 =================

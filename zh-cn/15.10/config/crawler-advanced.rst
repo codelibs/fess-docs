@@ -858,6 +858,27 @@ JVM 选项
 
 详情请参阅 :doc:`setup-memory`。
 
+.. _crawler-smb-encryption:
+
+SMB 客户端设置
+--------------
+
+爬虫的 SMB 客户端（ ``smb://`` ）只从爬虫进程的 JVM 系统属性中读取 ``jcifs.*`` 设置。请像默认值设置 SMB 超时那样，在 ``jvm.crawler.options`` 中以 ``-D`` 选项进行设置。在文件爬取配置的“配置参数”中写入的 ``jcifs.*`` 行不会传递到 SMB 客户端。
+
+**对于要求 SMB3 加密的服务器：**
+
+默认设置下客户端不加密，因此无法爬取要求加密的服务器（例如设置了 ``server smb encrypt = required`` 的 Samba）上的共享：爬取会以 ``SmbAuthException: Access is denied.`` 失败，不会索引任何内容。请在 ``jvm.crawler.options`` 的值中添加下面一行，并保留其他行：
+
+::
+
+    -Djcifs.client.encryptionRequired=true\n\
+
+这样爬虫会从一开始就加密所有 SMB 连接。无法加密的连接会直接失败，而不会改用明文：不支持 SMB3 加密的服务器或协议版本，以及匿名会话。此选项适用于所有文件爬取配置。如果所爬取的服务器中有些无法加密，请改用 ``-Djcifs.client.encryptionEnabled=true``\ ：按照 jcifs 的说明，客户端会提供加密，对服务器要求加密的会话和共享进行加密，并以不加密的方式连接其他服务器。
+
+缩略图任务在以 ``jvm.thumbnail.options`` 启动的独立进程中读取文件。如果要为这类共享上的文件生成缩略图，请在该选项中也添加同一行。
+
+``smb1://`` 使用没有加密功能的 SMB1。
+
 性能调优
 ==========================
 

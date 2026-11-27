@@ -131,10 +131,12 @@ Aktivieren Sie dies für differenzielles Crawling.
 
 Bei HTTP/HTTPS-URLs wird, wenn der ``Last-Modified``-Wert der HEAD-Antwort keine Entscheidung
 erlaubt (kein Änderungsdatum im Index, kein ``Last-Modified`` in der HEAD-Antwort oder ein anderer
-Status als 200/404), der GET als bedingter GET mit ``If-None-Match`` (dem indexierten ``ETag``)
+Status als 200/404/410), der GET als bedingter GET mit ``If-None-Match`` (dem indexierten ``ETag``)
 und/oder ``If-Modified-Since`` gesendet. Eine mit ``304 Not Modified`` beantwortete Seite wird wie
 eine unveränderte Seite behandelt und nicht erneut abgerufen. Um alles erneut abzurufen, etwa nach
 einer Änderung der Crawl-Einstellungen, deaktivieren Sie diese Einstellung für einen Crawl.
+
+Antwortet eine HTTP/HTTPS-Seite, deren Dokument im Index steht, auf die HEAD-Anfrage oder den GET mit ``404`` oder ``410``, wird das Dokument aus dem Index gelöscht, und die URL wird nicht als Fehler-URL erfasst. Ein ``404`` oder ``410`` für eine URL ohne Dokument im Index wird weiterhin als Fehler-URL erfasst. Ist diese Einstellung deaktiviert, löscht ein ``404`` oder ``410`` das Dokument nicht.
 
 Seiten, deren ``Last-Modified``-Wert der HEAD-Antwort nicht neuer ist als das im Index gespeicherte
 Änderungsdatum, gelten als unverändert und werden nicht erneut abgerufen. Hat der Server einmal ein

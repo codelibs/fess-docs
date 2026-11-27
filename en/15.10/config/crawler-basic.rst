@@ -130,6 +130,9 @@ SMB/CIFS (Windows File Share)
     Thread Count: 5
     Depth: blank (unlimited)
 
+.. note::
+   For a server that requires SMB3 encryption, see :ref:`crawler-smb-encryption`.
+
 Authentication Configuration
 -----------------------------
 
@@ -665,16 +668,36 @@ To ignore robots.txt, edit ``fess_config.properties``.
 The default value of ``crawler.ignore.robots.txt`` is ``false`` (|Fess| obeys robots.txt). Set it
 to ``true`` to ignore robots.txt.
 
-To also ignore HTML robots meta tags (``noindex`` / ``nofollow``), use the following property
-(default ``false``):
+.. warning::
+   When crawling external sites, respect robots.txt.
+   Ignoring it may place excessive load on servers or violate terms of service.
+
+Robots Meta Tag and X-Robots-Tag Header
+---------------------------------------
+
+|Fess| also obeys the robots directives of a page, given in the robots meta tag of an HTML page (``<meta name="robots" content="noindex">``) or in the ``X-Robots-Tag`` response header:
+
+- ``noindex``: the document is not indexed.
+- ``nofollow``: the links of the page are not followed.
+- ``none``: the same as ``noindex`` and ``nofollow``.
+
+For an HTML page, both the meta tag and the header are read. A document that is not HTML, such as a PDF or an Office file, has no meta tag; from 15.10 it is not indexed when its ``X-Robots-Tag`` header gives ``noindex`` or ``none``.
+
+The value is read directive by directive:
+
+- Separate directives with commas, as in ``noindex, nofollow``. Each directive is compared as a whole, ignoring case and the blanks around it, so a directive with a value such as ``max-image-preview:none`` or ``unavailable_after: ...`` does not count as ``none`` or ``noindex``.
+- A value that starts with a name and a colon, such as ``googlebot: noindex``, is a rule for a particular crawler, and the whole value is ignored. A rule addressed to |Fess| by name is not read either; write the directives without a name.
+- In an HTML page, directives separated by blanks only (``noindex nofollow``) are read as well.
+
+The crawl does not delete a document that was indexed before the page asked not to be indexed. To remove it from the search results, delete it on the Search page (System Info > Search) of the admin console.
+
+To ignore the robots meta tag and the ``X-Robots-Tag`` header, set the following property in ``fess_config.properties`` (default ``false``):
 
 ::
 
     crawler.ignore.robots.tags=true
 
-.. warning::
-   When crawling external sites, respect robots.txt.
-   Ignoring it may place excessive load on servers or violate terms of service.
+To ignore them in one crawl configuration only, add ``config.ignore.robots.tags=true`` to its "Config Parameters". A value there takes precedence over the property, so with ``config.ignore.robots.tags=false`` that configuration obeys the directives even when the property is ``true``.
 
 User-Agent Configuration
 =========================

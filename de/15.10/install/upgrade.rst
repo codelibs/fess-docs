@@ -482,12 +482,7 @@ Sie es anhand der folgenden Schritte.
 
    .. warning::
 
-      Existiert ein Plugin-Verzeichnis bereits, schlägt ``opensearch-plugin install`` mit ``plugin
-      directory [...] already exists`` fehl und lässt das alte Plugin bestehen. ``bin/fess-setup install
-      opensearch-plugins`` behandelt ein solches Verzeichnis als installiert, ersetzt nichts und endet
-      mit Exit-Code ``0``. OpenSearch 3.10.0 verweigert dann den Start mit ``Plugin [...] was built for
-      OpenSearch version 3.9.0 but version 3.10.0 is running``. Entfernen Sie die alten Plugins wie oben
-      gezeigt, bevor Sie die neuen installieren.
+      Ist ein Plugin-Verzeichnis bereits vorhanden, schlägt ``opensearch-plugin install`` mit ``plugin directory [...] already exists`` fehl und lässt das alte Plugin bestehen. OpenSearch 3.10.0 verweigert dann den Start mit ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running``. ``bin/fess-setup install opensearch-plugins`` belässt ein Plugin, das bereits in der angeforderten Version installiert ist; für ein Plugin einer anderen Version gibt es den Plugin-Namen, die installierte und die angeforderte Version sowie den auszuführenden Befehl ``opensearch-plugin remove`` aus und endet mit Exit-Code ``1``. Entfernen Sie die alten Plugins wie oben gezeigt, bevor Sie die neuen installieren.
 
       ``opensearch-plugin install`` fragt bei einem Plugin, das zusätzliche Berechtigungen anfordert,
       nach einer Bestätigung (``Continue with installation?``). Kann niemand antworten (kein Terminal,
@@ -738,6 +733,22 @@ Request-rate und Visit-time in robots.txt
 -----------------------------------------
 
 Bis 15.9 wurden die Zeilen ``Request-rate`` und ``Visit-time`` einer robots.txt ignoriert. 15.10 beachtet sie, solange die robots.txt-Verarbeitung aktiv ist (``crawler.ignore.robots.txt`` ist ``false``, der Standard). Eine Website, die ``Request-rate`` angibt, wird nun getaktet: |Fess| wartet den Abstand, den die Rate ergibt (höchstens 60 Sekunden), bevor es die nächste URL dieses Origin abruft; der Crawl dieser Website kann dadurch länger dauern. Eine Website, die ``Visit-time`` angibt, wird nur in dieser Tageszeit (UTC) gecrawlt: Eine URL dieses Origin, die außerhalb des Fensters aus der Warteschlange genommen wird, wird übersprungen, im selben Crawl nicht erneut versucht und nicht als Fehler-URL erfasst. Ein Crawl-Job, der nie innerhalb des Fensters läuft, aktualisiert die Dokumente dieser Website nicht; mit der Standardeinstellung „Alte Dokumente löschen“ (``day.for.cleanup``, 3 Tage) laufen sie etwa 3 Tage nach dem letzten Crawl ab, der sie erreicht hat. Planen Sie den Crawl-Job innerhalb des Fensters. Es gibt keine Einstellung, die nur ``Request-rate`` oder nur ``Visit-time`` abschaltet; ``crawler.ignore.robots.txt=true`` schaltet die gesamte robots.txt-Verarbeitung ab. Einzelheiten finden Sie unter :doc:`../config/rate-limiting`.
+
+.. _upgrade-1510-removed-pages-robots:
+
+Entfernte Seiten und Robots-Direktiven
+--------------------------------------
+
+- Eine Seite, die bei einem erneuten Crawl ``410 Gone`` antwortet, wird aus dem Index entfernt, wie eine Seite, die ``404`` antwortet. Bis 15.9 blieb ihr Dokument im Index, bis es ablief („Alte Dokumente löschen“), und die URL wurde als Fehler-URL erfasst.
+- Ein Dokument ohne Änderungsdatum (die Site sendet keinen ``Last-Modified``-Header) wird aus dem Index entfernt, wenn seine Seite bei einem erneuten Crawl ``404`` oder ``410`` antwortet. Bis 15.9 blieb ein solches Dokument auffindbar, bis es ablief. Dasselbe gilt jetzt, wenn die HEAD-Anfrage keine Entscheidung erlaubt, etwa wenn der Server darauf ``405`` antwortet.
+- Eine Antwort ``404`` oder ``410``, die ein Dokument entfernt, wird nicht als Fehler-URL erfasst. Eine Antwort ``404`` oder ``410`` für eine URL ohne Dokument im Index wird weiterhin erfasst.
+
+Diese drei Änderungen gelten für HTTP/HTTPS-URLs, solange „Letzte Änderung prüfen“ aktiviert ist (Standard; siehe :doc:`../admin/general-guide`).
+
+- Ein Dokument, das kein HTML ist, etwa eine PDF- oder Office-Datei, wird nicht indexiert, wenn sein Antwort-Header ``X-Robots-Tag`` ``noindex`` oder ``none`` angibt. Bis 15.9 wurden nur HTML-Seiten geprüft. Eine früher indexierte Kopie wird beim Crawl nicht gelöscht; löschen Sie sie in der Suchliste (Verwaltungsoberfläche).
+- Das Robots-Meta-Tag und der Header ``X-Robots-Tag`` werden Direktive für Direktive gelesen. Bis 15.9 wurde der Wert als Text nach ``none``, ``noindex`` und ``nofollow`` durchsucht: Eine Seite mit ``max-image-preview:none`` wurde nicht indexiert und ihren Links wurde nicht gefolgt, und eine Regel für einen anderen Crawler wie ``googlebot: noindex`` galt auch für |Fess|. Beides wird jetzt ignoriert.
+
+``crawler.ignore.robots.tags=true`` oder ``config.ignore.robots.tags=true`` im „Konfigurationsparameter“ einer Crawl-Konfiguration schaltet beide Robots-Änderungen ab, wie bei HTML. Wie der Wert gelesen wird, beschreibt :doc:`../config/crawler-basic`.
 
 .. _upgrade-1510-user-agent:
 

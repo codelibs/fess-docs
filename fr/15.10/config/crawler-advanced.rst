@@ -861,6 +861,27 @@ Remplacez la ligne par défaut ``-XX:-HeapDumpOnOutOfMemoryError`` par ces deux 
 
 Consultez :doc:`setup-memory` pour plus de détails.
 
+.. _crawler-smb-encryption:
+
+Paramètres du client SMB
+------------------------
+
+Le client SMB du robot (``smb://``) lit ses paramètres ``jcifs.*`` uniquement dans les propriétés système de la JVM du processus d'exploration. Définissez-les comme options ``-D`` dans ``jvm.crawler.options``, comme le fait la valeur par défaut pour les délais SMB. Une ligne ``jcifs.*`` dans les « Paramètres de configuration » d'une configuration d'exploration de fichiers n'atteint pas le client SMB.
+
+**Pour un serveur qui exige le chiffrement SMB3 :**
+
+Avec les réglages par défaut, le client ne chiffre pas, et un partage d'un serveur qui exige le chiffrement (par exemple Samba avec ``server smb encrypt = required``) ne peut pas être exploré : le crawl échoue avec ``SmbAuthException: Access is denied.`` et rien n'est indexé. Ajoutez la ligne suivante à la valeur de ``jvm.crawler.options`` en conservant les autres lignes :
+
+::
+
+    -Djcifs.client.encryptionRequired=true\n\
+
+Le robot chiffre alors chaque connexion SMB dès le début. Une connexion qui ne peut pas être chiffrée échoue au lieu de passer en clair : un serveur ou une version du protocole sans chiffrement SMB3, et une session anonyme. L'option s'applique à toutes les configurations d'exploration de fichiers. Si certains des serveurs explorés ne peuvent pas chiffrer, utilisez plutôt ``-Djcifs.client.encryptionEnabled=true`` : selon jcifs, le client propose alors le chiffrement, chiffre les sessions et les partages pour lesquels le serveur l'exige, et se connecte aux autres serveurs sans chiffrement.
+
+La tâche des miniatures lit les fichiers dans son propre processus, démarré avec ``jvm.thumbnail.options``. Si des miniatures sont générées pour des fichiers d'un tel partage, ajoutez aussi la même ligne à cette option.
+
+``smb1://`` utilise SMB1, qui n'a pas de chiffrement.
+
 Optimisation des performances
 =============================
 

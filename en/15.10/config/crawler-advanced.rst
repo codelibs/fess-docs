@@ -861,6 +861,27 @@ Replace the default ``-XX:-HeapDumpOnOutOfMemoryError`` line with these two line
 
 For details, see :doc:`setup-memory`.
 
+.. _crawler-smb-encryption:
+
+SMB Client Settings
+-------------------
+
+The SMB client of the crawler (``smb://``) reads its ``jcifs.*`` settings only from the JVM system properties of the crawler process. Set them as ``-D`` options in ``jvm.crawler.options``, as the default value does for the SMB timeouts. A ``jcifs.*`` line in the "Config Parameters" of a file crawl configuration does not reach the SMB client.
+
+**For a server that requires SMB3 encryption:**
+
+With the default settings the client does not encrypt, and a share on a server that requires encryption (for example Samba with ``server smb encrypt = required``) cannot be crawled: the crawl fails with ``SmbAuthException: Access is denied.`` and nothing is indexed. Add the following line to the value of ``jvm.crawler.options`` and keep the other lines:
+
+::
+
+    -Djcifs.client.encryptionRequired=true\n\
+
+The crawler then encrypts every SMB connection from the start. A connection that cannot be encrypted fails instead of falling back to cleartext: a server or a protocol version without SMB3 encryption, and an anonymous session. The option applies to every file crawl configuration. If some of the servers you crawl cannot encrypt, use ``-Djcifs.client.encryptionEnabled=true`` instead: according to jcifs, the client then offers encryption, encrypts the sessions and shares for which the server requires it, and connects to the other servers without encryption.
+
+The thumbnail job reads the files in a process of its own, started with ``jvm.thumbnail.options``. If thumbnails are generated for files on such a share, add the same line to that option, too.
+
+``smb1://`` uses SMB1, which has no encryption.
+
 Performance Tuning
 ==================
 

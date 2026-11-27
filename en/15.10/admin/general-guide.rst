@@ -131,10 +131,12 @@ Enable to perform differential crawling.
 
 For HTTP/HTTPS URLs, when the ``Last-Modified`` of the HEAD response cannot decide (no last
 modified date is indexed, the HEAD response has no ``Last-Modified``, or the HEAD returns a status
-other than 200/404), the GET is sent as a conditional GET with ``If-None-Match`` (the indexed
+other than 200/404/410), the GET is sent as a conditional GET with ``If-None-Match`` (the indexed
 ``ETag``) and/or ``If-Modified-Since``. A page answered with ``304 Not Modified`` is handled like an
 unchanged page and is not fetched again. To fetch everything again, for example after changing crawl
 settings, turn this setting off for a crawl.
+
+For an HTTP/HTTPS page whose document is in the index, a ``404`` or ``410`` answer, to the HEAD request or to the GET, deletes the document from the index, and the URL is not recorded as a failure URL. A ``404`` or ``410`` for a URL that has no document in the index is still recorded as a failure URL. When this setting is off, a ``404`` or ``410`` does not delete the document.
 
 A page whose HEAD ``Last-Modified`` is equal to or older than the last modified date recorded in the index is judged unchanged and is not fetched again. If the server has ever returned a ``Last-Modified`` newer than the actual modification time (for example, the time of the response), that value is recorded in the index, and later updates whose ``Last-Modified`` stays at or below that value are not detected. A document judged unchanged has its expiration extended on every crawl, so while crawls continue it is not fetched again even when the period set by "Delete old documents" passes. To apply the change, delete the document from the index and crawl again, or turn this setting off for a crawl.
 
