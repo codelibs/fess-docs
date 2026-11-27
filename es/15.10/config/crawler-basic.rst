@@ -131,6 +131,9 @@ SMB/CIFS (Compartición de Archivos Windows)
     Número de Hilos: 5
     Profundidad: en blanco (ilimitada)
 
+.. note::
+   Para un servidor que exige cifrado SMB3, consulte :ref:`crawler-smb-encryption`.
+
 Configuración de Información de Autenticación
 ----------------------------------------------
 
@@ -676,16 +679,36 @@ Para ignorar robots.txt, edite ``fess_config.properties``.
 El valor predeterminado de esta propiedad es ``false``, por lo que |Fess| respeta robots.txt.
 Establézcala en ``true`` para ignorarlo.
 
-Para ignorar las metaetiquetas robots de HTML (``noindex``, ``nofollow``, etc.),
-utilice la siguiente propiedad (el valor predeterminado es ``false``):
+.. warning::
+   Al rastrear sitios externos, respete robots.txt.
+   Ignorarlo puede causar carga excesiva en el servidor o violar términos de uso.
+
+Metaetiqueta robots y encabezado X-Robots-Tag
+---------------------------------------------
+
+|Fess| también obedece las directivas robots de una página, indicadas en la metaetiqueta robots de una página HTML (``<meta name="robots" content="noindex">``) o en el encabezado de respuesta ``X-Robots-Tag``:
+
+- ``noindex``: el documento no se indexa.
+- ``nofollow``: no se siguen los enlaces de la página.
+- ``none``: equivale a ``noindex`` y ``nofollow``.
+
+En una página HTML se leen tanto la metaetiqueta como el encabezado. Un documento que no es HTML, como un PDF o un archivo de Office, no tiene metaetiqueta; desde 15.10 no se indexa cuando su encabezado ``X-Robots-Tag`` indica ``noindex`` o ``none``.
+
+El valor se lee directiva por directiva:
+
+- Separe las directivas con comas, como en ``noindex, nofollow``. Cada directiva se compara completa, sin distinguir mayúsculas de minúsculas y sin tener en cuenta los espacios que la rodean, de modo que una directiva con valor como ``max-image-preview:none`` o ``unavailable_after: ...`` no cuenta como ``none`` ni ``noindex``.
+- Un valor que empieza por un nombre seguido de dos puntos, como ``googlebot: noindex``, es una regla para un rastreador concreto y se ignora entero. Tampoco se lee una regla dirigida a |Fess| por su nombre; escriba las directivas sin nombre.
+- En una página HTML también se leen las directivas separadas solo por espacios (``noindex nofollow``).
+
+El rastreo no elimina un documento que se indexó antes de que la página pidiera no ser indexada. Para quitarlo de los resultados de búsqueda, elimínelo en la lista de búsqueda (pantalla de administración).
+
+Para ignorar la metaetiqueta robots y el encabezado ``X-Robots-Tag``, establezca la siguiente propiedad en ``fess_config.properties`` (el valor predeterminado es ``false``):
 
 ::
 
     crawler.ignore.robots.tags=true
 
-.. warning::
-   Al rastrear sitios externos, respete robots.txt.
-   Ignorarlo puede causar carga excesiva en el servidor o violar términos de uso.
+Para ignorarlos solo en una configuración de rastreo, añada ``config.ignore.robots.tags=true`` a su «Parámetro de configuración». Ese valor tiene prioridad sobre la propiedad, de modo que con ``config.ignore.robots.tags=false`` esa configuración obedece las directivas aunque la propiedad sea ``true``.
 
 Configuración de User-Agent
 ============================

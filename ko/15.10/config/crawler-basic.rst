@@ -131,6 +131,9 @@ SMB/CIFS(Windows 파일 공유)
     스레드 수: 5
     깊이: 공란(무제한)
 
+.. note::
+   SMB3 암호화를 요구하는 서버에 대해서는 :ref:`crawler-smb-encryption` 을 참조하십시오.
+
 인증 정보 설정
 --------------
 
@@ -672,16 +675,36 @@ robots.txt 를 무시하는 경우 ``fess_config.properties`` 를 편집합니�
 이 프로퍼티의 기본값은 ``false`` 이며, |Fess| 는 robots.txt 를 준수합니다.
 ``true`` 로 설정하면 robots.txt 를 무시합니다.
 
-또한 HTML의 robots 메타 태그(``noindex``, ``nofollow`` 등)를 무시하려면
-다음 프로퍼티를 사용합니다(기본값은 ``false``).
+.. warning::
+   외부 사이트를 크롤링하는 경우 robots.txt 를 준수하십시오.
+   무시하면 서버에 과도한 부하를 주거나 이용 약관을 위반할 수 있습니다.
+
+robots 메타 태그와 X-Robots-Tag 헤더
+------------------------------------
+
+|Fess| 는 HTML 페이지의 robots 메타 태그( ``<meta name="robots" content="noindex">`` )나 ``X-Robots-Tag`` 응답 헤더로 지정된 robots 지시문도 따릅니다.
+
+- ``noindex`` : 문서를 색인하지 않습니다.
+- ``nofollow`` : 페이지의 링크를 따라가지 않습니다.
+- ``none`` : ``noindex`` 와 ``nofollow`` 를 모두 지정한 것과 같습니다.
+
+HTML 페이지에서는 메타 태그와 헤더를 모두 읽습니다. PDF 나 Office 파일 등 HTML 이 아닌 문서에는 메타 태그가 없으므로, 15.10 부터는 ``X-Robots-Tag`` 헤더에 ``noindex`` 또는 ``none`` 이 있으면 색인하지 않습니다.
+
+값은 지시문 단위로 읽습니다.
+
+- 지시문은 ``noindex, nofollow`` 처럼 쉼표로 구분합니다. 각 지시문은 대소문자와 앞뒤 공백을 구분하지 않고 전체로 비교합니다. 따라서 ``max-image-preview:none`` 이나 ``unavailable_after: ...`` 처럼 값을 갖는 지시문은 ``none`` 이나 ``noindex`` 로 간주되지 않습니다.
+- ``googlebot: noindex`` 처럼 이름과 콜론으로 시작하는 값은 특정 크롤러를 위한 규칙으로 간주되어 값 전체가 무시됩니다. |Fess| 의 이름을 붙인 규칙도 읽지 않으므로, 지시문은 이름을 붙이지 말고 쓰십시오.
+- HTML 페이지에서는 공백만으로 구분한 지시문( ``noindex nofollow`` )도 읽습니다.
+
+페이지가 색인하지 않도록 요청하기 전에 색인된 문서는 크롤링으로 삭제되지 않습니다. 검색 결과에서 없애려면 검색 목록(관리 화면)에서 삭제하십시오.
+
+robots 메타 태그와 ``X-Robots-Tag`` 헤더를 무시하려면 ``fess_config.properties`` 에 다음 프로퍼티를 설정합니다(기본값은 ``false`` ).
 
 ::
 
     crawler.ignore.robots.tags=true
 
-.. warning::
-   외부 사이트를 크롤링하는 경우 robots.txt 를 준수하십시오.
-   무시하면 서버에 과도한 부하를 주거나 이용 약관을 위반할 수 있습니다.
+특정 크롤 설정에서만 무시하려면 그 설정의 "설정 파라미터"에 ``config.ignore.robots.tags=true`` 를 추가합니다. 이 값이 프로퍼티보다 우선하므로, 프로퍼티가 ``true`` 여도 ``config.ignore.robots.tags=false`` 를 지정한 크롤 설정에서는 지시문을 따릅니다.
 
 User-Agent 설정
 =================

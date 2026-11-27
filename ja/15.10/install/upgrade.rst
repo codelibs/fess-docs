@@ -453,7 +453,7 @@ Docker 版
 
    .. warning::
 
-      プラグインのディレクトリがすでにある場合、 ``opensearch-plugin install`` は ``plugin directory [...] already exists`` で失敗し、古いプラグインがそのまま残ります。 ``bin/fess-setup install opensearch-plugins`` は、そのようなディレクトリをインストール済みとみなし、何も置き換えずに終了コード ``0`` で終了します。その後、OpenSearch 3.10.0 は ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running`` を出力して起動を拒否します。新しいプラグインをインストールする前に、上記のとおり古いプラグインを削除してください。
+      プラグインのディレクトリがすでにある場合、 ``opensearch-plugin install`` は ``plugin directory [...] already exists`` で失敗し、古いプラグインがそのまま残ります。その後、OpenSearch 3.10.0 は ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running`` を出力して起動を拒否します。 ``bin/fess-setup install opensearch-plugins`` は、要求したバージョンでインストール済みのプラグインはそのまま残し、別のバージョンのプラグインについては、プラグイン名、インストール済みのバージョンと要求したバージョン、実行する ``opensearch-plugin remove`` コマンドを表示して、終了コード ``1`` で終了します。新しいプラグインをインストールする前に、上記のとおり古いプラグインを削除してください。
 
       ``opensearch-plugin install`` は、追加の権限を要求するプラグインについて確認（ ``Continue with installation?`` ）を求めます。答えられない環境（端末がない、入力が ``/dev/null`` など）では、そのプラグインはインストールされません。 ``y`` と答えるか、 ``-b`` を付けて確認を省略してください。
 
@@ -689,6 +689,22 @@ robots.txt の Request-rate と Visit-time
 ----------------------------------------
 
 15.9 までは、robots.txt の ``Request-rate`` 行と ``Visit-time`` 行は無視されていました。15.10 は、robots.txt の処理が有効なとき（ ``crawler.ignore.robots.txt`` が既定の ``false`` のとき）に、これらを尊重します。 ``Request-rate`` を宣言しているサイトにはペース配分が働くようになり、 |Fess| はそのレートが示す間隔（最大 60 秒）だけ、そのオリジンの次の URL まで待つため、そのサイトのクロールに時間がかかることがあります。 ``Visit-time`` を宣言しているサイトは、その時刻帯（UTC）の中でだけクロールされます。時刻帯の外でキューから取り出したそのオリジンの URL はスキップされ、同じクロール中に再試行されず、障害 URL としても記録されません。時刻帯の中で一度も実行されないクロールジョブは、そのサイトの文書を更新しません。既定の「以前のドキュメントを削除」設定（ ``day.for.cleanup`` 、3 日）では、その文書に最後に到達したクロールから約 3 日で期限切れになります。クロールジョブは時刻帯の中で実行されるようにスケジュールしてください。 ``Request-rate`` または ``Visit-time`` だけを無効にする設定はなく、 ``crawler.ignore.robots.txt=true`` は robots.txt の処理全体を無効にします。詳細は :doc:`../config/rate-limiting` を参照してください。
+
+.. _upgrade-1510-removed-pages-robots:
+
+削除されたページと robots ディレクティブ
+----------------------------------------
+
+- 再クロールで ``410 Gone`` を返すページは、 ``404`` を返すページと同じく索引から削除されます。15.9 までは、その文書は期限切れ（「以前のドキュメントを削除」）まで索引に残り、URL は障害 URL に記録されていました。
+- 最終更新日時がない文書（サイトが ``Last-Modified`` ヘッダーを送らない）は、再クロールでそのページが ``404`` または ``410`` を返すと索引から削除されます。15.9 までは、このような文書は期限切れまで検索できる状態のままでした。HEAD リクエストで判断できない場合（サーバーが HEAD に ``405`` を返す場合など）も、同じように扱われるようになりました。
+- 文書を削除した ``404`` や ``410`` は、障害 URL に記録されません。索引に文書がない URL の ``404`` や ``410`` は、引き続き記録されます。
+
+これら 3 つの変更は、「最終更新日時の確認」が有効な間（既定で有効。 :doc:`../admin/general-guide` を参照）、HTTP/HTTPS の URL に適用されます。
+
+- PDF や Office ファイルなど HTML 以外の文書は、 ``X-Robots-Tag`` レスポンスヘッダーに ``noindex`` または ``none`` があると索引されません。15.9 までは HTML のページだけを確認していました。以前に索引された文書はクロールでは削除されないため、検索リスト（管理画面）で削除してください。
+- robots メタタグと ``X-Robots-Tag`` ヘッダーの値は、ディレクティブごとに読み取られます。15.9 までは値の中から ``none`` 、 ``noindex`` 、 ``nofollow`` を文字列として探していたため、 ``max-image-preview:none`` を指定したページは索引されずリンクもたどられず、 ``googlebot: noindex`` のような別のクローラー向けの規則も |Fess| に適用されていました。15.10 では、どちらも無視されます。
+
+``crawler.ignore.robots.tags=true`` 、またはクロール設定の「設定パラメーター」の ``config.ignore.robots.tags=true`` は、HTML と同じく、これら 2 つの robots の変更も無効にします。値の読み取り方は :doc:`../config/crawler-basic` を参照してください。
 
 .. _upgrade-1510-user-agent:
 

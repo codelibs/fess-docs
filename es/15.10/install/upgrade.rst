@@ -480,12 +480,7 @@ anterior, actualícelo siguiendo estos procedimientos.
 
    .. warning::
 
-      Si ya existe el directorio de un plugin, ``opensearch-plugin install`` falla con ``plugin
-      directory [...] already exists`` y deja el plugin antiguo en su sitio. ``bin/fess-setup install
-      opensearch-plugins`` considera instalado un directorio así, no sustituye nada y termina con el
-      código ``0``. Entonces OpenSearch 3.10.0 se niega a arrancar con ``Plugin [...] was built for
-      OpenSearch version 3.9.0 but version 3.10.0 is running``. Elimine los plugins antiguos como se
-      muestra arriba antes de instalar los nuevos.
+      Si el directorio de un plugin ya existe, ``opensearch-plugin install`` falla con ``plugin directory [...] already exists`` y deja el plugin antiguo en su sitio. Entonces OpenSearch 3.10.0 se niega a arrancar con ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running``. ``bin/fess-setup install opensearch-plugins`` conserva un plugin que ya está instalado en la versión solicitada; para un plugin de otra versión, muestra el nombre del plugin, la versión instalada y la solicitada y el comando ``opensearch-plugin remove`` que hay que ejecutar, y termina con el código ``1``. Elimine los plugins antiguos como se muestra arriba antes de instalar los nuevos.
 
       ``opensearch-plugin install`` pide confirmación (``Continue with installation?``) para un plugin
       que solicita permisos adicionales. Donde nadie puede responder (sin terminal, entrada desde
@@ -733,6 +728,22 @@ Request-rate y Visit-time en robots.txt
 ---------------------------------------
 
 Hasta la versión 15.9 se ignoraban las líneas ``Request-rate`` y ``Visit-time`` de robots.txt. La versión 15.10 las respeta mientras el manejo de robots.txt está activado (``crawler.ignore.robots.txt`` es ``false``, el valor predeterminado). Un sitio que declara ``Request-rate`` ahora se rastrea con ritmo: |Fess| espera el intervalo que implica la tasa (como máximo 60 segundos) antes de la siguiente URL de ese origen, por lo que el rastreo de ese sitio puede tardar más. Un sitio que declara ``Visit-time`` solo se rastrea en esa franja horaria (UTC): una URL de ese origen que se saca de la cola fuera de la franja se omite, no se reintenta en el mismo rastreo y no se registra como URL fallida. Un trabajo de rastreo que nunca se ejecuta dentro de la franja no actualiza los documentos de ese sitio, y con el ajuste predeterminado «Eliminar documentos anteriores» (``day.for.cleanup``, 3 días) caducan unos 3 días después del último rastreo que los alcanzó. Programe el trabajo de rastreo dentro de la franja. No existe un ajuste que desactive solo ``Request-rate`` o solo ``Visit-time``; ``crawler.ignore.robots.txt=true`` desactiva todo el manejo de robots.txt. Para más detalles, consulte :doc:`../config/rate-limiting`.
+
+.. _upgrade-1510-removed-pages-robots:
+
+Páginas eliminadas y directivas robots
+--------------------------------------
+
+- Una página que responde ``410 Gone`` en un nuevo rastreo se elimina del índice, igual que una página que responde ``404``. Hasta 15.9, su documento permanecía en el índice hasta caducar («Eliminar documentos anteriores») y la URL se registraba como URL de fallo.
+- Un documento sin fecha de última modificación (el sitio no envía el encabezado ``Last-Modified``) se elimina del índice cuando su página responde ``404`` o ``410`` en un nuevo rastreo. Hasta 15.9, ese documento seguía apareciendo en las búsquedas hasta caducar. Lo mismo se aplica ahora cuando la solicitud HEAD no permite decidir, por ejemplo cuando el servidor le responde ``405``.
+- Una respuesta ``404`` o ``410`` que elimina un documento no se registra como URL de fallo. Una respuesta ``404`` o ``410`` de una URL que no tiene documento en el índice se sigue registrando.
+
+Estos tres cambios se aplican a las URL HTTP/HTTPS mientras «Comprobar fecha de última modificación» esté habilitado (valor predeterminado; consulte :doc:`../admin/general-guide`).
+
+- Un documento que no es HTML, como un PDF o un archivo de Office, no se indexa cuando su encabezado de respuesta ``X-Robots-Tag`` indica ``noindex`` o ``none``. Hasta 15.9 solo se comprobaban las páginas HTML. El rastreo no elimina una copia indexada antes; elimínela en la lista de búsqueda (pantalla de administración).
+- La metaetiqueta robots y el encabezado ``X-Robots-Tag`` se leen directiva por directiva. Hasta 15.9 se buscaban ``none``, ``noindex`` y ``nofollow`` como texto dentro del valor, de modo que una página con ``max-image-preview:none`` no se indexaba ni se seguían sus enlaces, y una regla para otro rastreador como ``googlebot: noindex`` se aplicaba a |Fess|. Ahora se ignoran ambas.
+
+``crawler.ignore.robots.tags=true``, o ``config.ignore.robots.tags=true`` en el «Parámetro de configuración» de una configuración de rastreo, desactiva los dos cambios de robots, como en HTML. Para saber cómo se lee el valor, consulte :doc:`../config/crawler-basic`.
 
 .. _upgrade-1510-user-agent:
 

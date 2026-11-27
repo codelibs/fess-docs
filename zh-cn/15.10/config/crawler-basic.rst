@@ -131,6 +131,9 @@ SMB/CIFS(Windows文件共享)
     线程数: 5
     深度: 空白(无限制)
 
+.. note::
+   对于要求 SMB3 加密的服务器，请参阅 :ref:`crawler-smb-encryption`\ 。
+
 认证信息配置
 --------------
 
@@ -651,16 +654,36 @@ robots.txt 是向爬虫指示是否允许爬取的文件。
 此属性的默认值为 ``false``,\ |Fess| 遵守 robots.txt。
 设置为 ``true`` 则忽略 robots.txt。
 
-如需忽略HTML的robots元标签(``noindex``、``nofollow`` 等),
-请使用以下属性(默认值为 ``false``):
+.. warning::
+   爬取外部网站时,请遵守 robots.txt。
+   忽略可能会对服务器造成过大负载或违反使用条款。
+
+robots 元标签与 X-Robots-Tag 头
+-------------------------------
+
+|Fess| 也遵守页面的 robots 指令，即 HTML 页面的 robots 元标签（ ``<meta name="robots" content="noindex">`` ）或 ``X-Robots-Tag`` 响应头中指定的指令：
+
+- ``noindex``\ ：不索引该文档。
+- ``nofollow``\ ：不跟踪页面中的链接。
+- ``none``\ ：等同于同时指定 ``noindex`` 和 ``nofollow``\ 。
+
+对于 HTML 页面，元标签和响应头都会读取。PDF、Office 文件等非 HTML 文档没有元标签，从 15.10 起，如果其 ``X-Robots-Tag`` 头中有 ``noindex`` 或 ``none``\ ，则不索引该文档。
+
+值按指令逐个读取：
+
+- 指令之间用逗号分隔，例如 ``noindex, nofollow``\ 。每个指令作为整体比较，不区分大小写，也忽略前后的空白。因此 ``max-image-preview:none`` 或 ``unavailable_after: ...`` 这类带值的指令不会被视为 ``none`` 或 ``noindex``\ 。
+- 以名称加冒号开头的值（例如 ``googlebot: noindex``\ ）被视为针对特定爬虫的规则，整个值都会被忽略。以 |Fess| 的名称指定的规则也不会被读取，请不加名称直接书写指令。
+- 对于 HTML 页面，仅用空白分隔的指令（ ``noindex nofollow`` ）也会被读取。
+
+在页面要求不被索引之前已经索引的文档，不会因爬取而被删除。若要将其从搜索结果中移除，请在搜索列表（管理页面）中删除。
+
+如需忽略 robots 元标签和 ``X-Robots-Tag`` 头，请在 ``fess_config.properties`` 中设置以下属性（默认值为 ``false``\ ）：
 
 ::
 
     crawler.ignore.robots.tags=true
 
-.. warning::
-   爬取外部网站时,请遵守 robots.txt。
-   忽略可能会对服务器造成过大负载或违反使用条款。
+如只需在某个爬取配置中忽略，请在该配置的“配置参数”中添加 ``config.ignore.robots.tags=true``\ 。该值优先于属性，因此即使属性为 ``true``\ ，指定了 ``config.ignore.robots.tags=false`` 的爬取配置也会遵守这些指令。
 
 User-Agent 配置
 =================

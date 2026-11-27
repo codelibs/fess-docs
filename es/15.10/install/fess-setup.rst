@@ -112,6 +112,8 @@ cuatro veces su ``bin/opensearch-plugin install``. ``--opensearch-home`` es el d
 instalación de OpenSearch y es obligatorio. ``--version`` establece la versión de los plugins, que
 debe coincidir con la versión de OpenSearch.
 
+Un plugin que ya está instalado en la versión solicitada se deja como está. Cuando un plugin está instalado en otra versión, por ejemplo en un directorio de OpenSearch que aún tiene los plugins de la versión anterior, el comando intenta igualmente los demás plugins, después indica cada uno de esos plugins con la versión instalada y la solicitada y el comando ``opensearch-plugin remove``, y termina con el código ``1``. Elimine esos plugins y vuelva a ejecutar el comando (consulte :doc:`upgrade`).
+
 Este comando no modifica ``opensearch.yml``. Añada usted mismo ``configsync.config_path`` y el
 resto de la configuración, tal como se describe en :doc:`install-linux` o :doc:`install-windows`.
 

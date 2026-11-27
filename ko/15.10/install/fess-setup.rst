@@ -80,6 +80,8 @@ install opensearch-plugins
 
 이미 있는 OpenSearch 에 |Fess| 가 필요로 하는 4개의 플러그인을 설치합니다. 해당 OpenSearch 의 ``bin/opensearch-plugin install`` 을 4번 실행하는 대신 사용할 수 있습니다. ``--opensearch-home`` 에는 OpenSearch 설치 디렉터리를 지정합니다(필수). ``--version`` 은 플러그인 버전이며, OpenSearch 버전과 일치시켜야 합니다.
 
+요청한 버전으로 이미 설치된 플러그인은 그대로 둡니다. 다른 버전의 플러그인이 설치되어 있으면(예: 이전 릴리스의 플러그인이 남아 있는 OpenSearch 디렉터리), 명령은 나머지 플러그인도 시도한 뒤 해당 플러그인마다 설치된 버전과 요청한 버전, ``opensearch-plugin remove`` 명령을 표시하고 종료 코드 ``1`` 로 끝납니다. 그 플러그인을 삭제한 후 명령을 다시 실행하십시오( :doc:`upgrade` 참조).
+
 이 명령은 ``opensearch.yml`` 을 변경하지 않습니다. ``configsync.config_path`` 등의 설정은 :doc:`install-linux` 또는 :doc:`install-windows` 에 따라 직접 추가하십시오.
 
 install nodejs

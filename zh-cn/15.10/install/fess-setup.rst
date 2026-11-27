@@ -80,6 +80,8 @@ install opensearch-plugins
 
 向已有的 OpenSearch 安装 |Fess| 所需的 4 个插件，可代替执行 4 次该 OpenSearch 的 ``bin/opensearch-plugin install``\ 。\ ``--opensearch-home`` 为 OpenSearch 的安装目录，必须指定。\ ``--version`` 用于设置插件版本，该版本必须与 OpenSearch 版本一致。
 
+已按请求版本安装的插件会保持原样。如果某个插件安装的是其他版本（例如 OpenSearch 目录中仍留有上一版本的插件），该命令仍会尝试其余插件，然后列出每个这样的插件及其已安装的版本、请求的版本和 ``opensearch-plugin remove`` 命令，并以代码 ``1`` 退出。请删除这些插件后重新执行该命令（请参阅 :doc:`upgrade`\ ）。
+
 此命令不会修改 ``opensearch.yml``\ 。请按照 :doc:`install-linux` 或 :doc:`install-windows` 的说明，自行添加 ``configsync.config_path`` 等配置。
 
 install nodejs

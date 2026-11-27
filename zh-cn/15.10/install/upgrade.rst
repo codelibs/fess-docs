@@ -452,12 +452,7 @@ Docker 版
 
    .. warning::
 
-      如果插件目录已存在，``opensearch-plugin install`` 会失败并提示 ``plugin
-      directory [...] already exists``，旧插件保持原样。``bin/fess-setup install
-      opensearch-plugins`` 会把这样的目录视为已安装，不替换任何内容，并以代码 ``0`` 退出。
-      之后 OpenSearch 3.10.0 会拒绝启动，并提示 ``Plugin [...] was built for
-      OpenSearch version 3.9.0 but version 3.10.0 is running``。请先按上文所示删除旧插件，
-      再安装新插件。
+      如果插件目录已经存在，\ ``opensearch-plugin install`` 会以 ``plugin directory [...] already exists`` 失败，旧插件保持原样。之后 OpenSearch 3.10.0 会拒绝启动，并提示 ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running``\ 。\ ``bin/fess-setup install opensearch-plugins`` 会保留已按请求版本安装的插件；对于其他版本的插件，会显示插件名称、已安装的版本和请求的版本，以及需要执行的 ``opensearch-plugin remove`` 命令，并以代码 ``1`` 退出。请先按上文所示删除旧插件，再安装新插件。
 
       对于请求额外权限的插件，``opensearch-plugin install`` 会请求确认（``Continue with installation?``）。
       在无人可以应答的环境（没有终端、输入来自 ``/dev/null``）中，这样的插件不会被安装：
@@ -695,6 +690,22 @@ robots.txt 中的 Request-rate 和 Visit-time
 ------------------------------------------
 
 直到 15.9，robots.txt 中的 ``Request-rate`` 行和 ``Visit-time`` 行都会被忽略。15.10 在 robots.txt 处理启用时（ ``crawler.ignore.robots.txt`` 为默认的 ``false`` ）会遵守它们。声明了 ``Request-rate`` 的站点现在会被限速： |Fess| 会在该源的下一个 URL 之前等待该速率所对应的间隔（最长 60 秒），因此该站点的爬取可能耗时更长。声明了 ``Visit-time`` 的站点只会在该时间段（UTC）内被爬取：在时间段之外从队列取出的该源的 URL 会被跳过，在同一次爬取中不会重试，也不会记录为失败 URL。从不在该时间段内运行的爬取作业不会刷新该站点的文档，在默认的“删除以前的文档”设置（ ``day.for.cleanup`` ，3 天）下，这些文档会在最后一次到达它们的爬取之后约 3 天过期。请将爬取作业安排在该时间段内运行。没有只关闭 ``Request-rate`` 或 ``Visit-time`` 的设置， ``crawler.ignore.robots.txt=true`` 会关闭全部 robots.txt 处理。详情请参阅 :doc:`../config/rate-limiting` 。
+
+.. _upgrade-1510-removed-pages-robots:
+
+已删除的页面与 robots 指令
+--------------------------
+
+- 重新爬取时返回 ``410 Gone`` 的页面，会像返回 ``404`` 的页面一样从索引中删除。在 15.9 及之前，其文档会一直留在索引中直到过期（“删除以前的文档”），且该 URL 会被记录为失败 URL。
+- 没有最后修改时间的文档（网站不发送 ``Last-Modified`` 头），在重新爬取时如果其页面返回 ``404`` 或 ``410``\ ，会从索引中删除。在 15.9 及之前，这类文档在过期前一直可以被搜索到。现在，HEAD 请求无法判断时（例如服务器对 HEAD 返回 ``405``\ ）也同样处理。
+- 删除了文档的 ``404`` 或 ``410`` 不会被记录为失败 URL。索引中没有文档的 URL 的 ``404`` 或 ``410`` 仍会被记录。
+
+这三项变更在“检查上次修改时间”启用期间（默认启用，请参阅 :doc:`../admin/general-guide`\ ）适用于 HTTP/HTTPS 的 URL。
+
+- PDF、Office 文件等非 HTML 文档，如果其 ``X-Robots-Tag`` 响应头中有 ``noindex`` 或 ``none``\ ，则不会被索引。在 15.9 及之前，只检查 HTML 页面。之前已索引的副本不会因爬取而被删除，请在搜索列表（管理页面）中删除。
+- robots 元标签和 ``X-Robots-Tag`` 头按指令逐个读取。在 15.9 及之前，会在值中按文本查找 ``none``\ 、\ ``noindex`` 和 ``nofollow``\ ，因此带有 ``max-image-preview:none`` 的页面不会被索引，其链接也不会被跟踪，而 ``googlebot: noindex`` 这样针对其他爬虫的规则也会应用到 |Fess|\ 。现在两者都会被忽略。
+
+``crawler.ignore.robots.tags=true``\ ，或在爬取配置的“配置参数”中指定的 ``config.ignore.robots.tags=true``\ ，会像对 HTML 一样关闭这两项 robots 变更。值的读取方式请参阅 :doc:`../config/crawler-basic`\ 。
 
 .. _upgrade-1510-user-agent:
 

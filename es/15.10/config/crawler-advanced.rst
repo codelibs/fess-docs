@@ -861,6 +861,27 @@ Sustituya la línea predeterminada ``-XX:-HeapDumpOnOutOfMemoryError`` por estas
 
 Para más detalles, consulte :doc:`setup-memory`.
 
+.. _crawler-smb-encryption:
+
+Configuración del cliente SMB
+-----------------------------
+
+El cliente SMB del rastreador (``smb://``) lee su configuración ``jcifs.*`` solo de las propiedades del sistema de la JVM del proceso del rastreador. Establézcala como opciones ``-D`` en ``jvm.crawler.options``, como hace el valor predeterminado con los tiempos de espera de SMB. Una línea ``jcifs.*`` en el «Parámetro de configuración» de una configuración de rastreo de archivos no llega al cliente SMB.
+
+**Para un servidor que exige cifrado SMB3:**
+
+Con la configuración predeterminada el cliente no cifra, y no se puede rastrear un recurso compartido de un servidor que exige cifrado (por ejemplo, Samba con ``server smb encrypt = required``): el rastreo falla con ``SmbAuthException: Access is denied.`` y no se indexa nada. Añada la siguiente línea al valor de ``jvm.crawler.options`` y conserve las demás líneas:
+
+::
+
+    -Djcifs.client.encryptionRequired=true\n\
+
+El rastreador cifra entonces todas las conexiones SMB desde el principio. Una conexión que no se puede cifrar falla en lugar de continuar sin cifrar: un servidor o una versión del protocolo sin cifrado SMB3, y una sesión anónima. La opción se aplica a todas las configuraciones de rastreo de archivos. Si algunos de los servidores que rastrea no pueden cifrar, use en su lugar ``-Djcifs.client.encryptionEnabled=true``: según jcifs, el cliente ofrece entonces el cifrado, cifra las sesiones y los recursos compartidos para los que el servidor lo exige y se conecta sin cifrado a los demás servidores.
+
+El trabajo de miniaturas lee los archivos en un proceso propio, iniciado con ``jvm.thumbnail.options``. Si se generan miniaturas para archivos de un recurso compartido así, añada también allí la misma línea.
+
+``smb1://`` usa SMB1, que no tiene cifrado.
+
 Optimización del Rendimiento
 =============================
 

@@ -486,12 +486,7 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
 
    .. warning::
 
-      Si un répertoire de plugin existe déjà, ``opensearch-plugin install`` échoue avec ``plugin
-      directory [...] already exists`` et laisse l'ancien plugin en place. ``bin/fess-setup install
-      opensearch-plugins`` considère un tel répertoire comme installé, ne remplace rien et se termine
-      avec le code ``0``. OpenSearch 3.10.0 refuse alors de démarrer avec ``Plugin [...] was built for
-      OpenSearch version 3.9.0 but version 3.10.0 is running``. Supprimez les anciens plugins comme
-      indiqué ci-dessus avant d'installer les nouveaux.
+      Si le répertoire d'un plugin existe déjà, ``opensearch-plugin install`` échoue avec ``plugin directory [...] already exists`` et laisse l'ancien plugin en place. OpenSearch 3.10.0 refuse alors de démarrer avec ``Plugin [...] was built for OpenSearch version 3.9.0 but version 3.10.0 is running``. ``bin/fess-setup install opensearch-plugins`` conserve un plugin déjà installé dans la version demandée ; pour un plugin d'une autre version, il affiche le nom du plugin, la version installée et la version demandée ainsi que la commande ``opensearch-plugin remove`` à exécuter, et se termine avec le code ``1``. Supprimez les anciens plugins comme indiqué ci-dessus avant d'installer les nouveaux.
 
       ``opensearch-plugin install`` demande une confirmation (``Continue with installation?``) pour un
       plugin qui réclame des permissions supplémentaires. Là où personne ne peut répondre (pas de
@@ -741,6 +736,22 @@ Request-rate et Visit-time dans robots.txt
 ------------------------------------------
 
 Jusqu'à la version 15.9, les lignes ``Request-rate`` et ``Visit-time`` d'un robots.txt étaient ignorées. La version 15.10 les respecte tant que le traitement de robots.txt est activé (``crawler.ignore.robots.txt`` vaut ``false``, la valeur par défaut). Un site qui déclare ``Request-rate`` est désormais cadencé : |Fess| attend l'intervalle que le débit implique (60 secondes au plus) avant l'URL suivante de cette origine, si bien que le crawl de ce site peut durer plus longtemps. Un site qui déclare ``Visit-time`` n'est crawlé que pendant cette plage horaire (UTC) : une URL de cette origine retirée de la file en dehors de la plage est ignorée, n'est pas réessayée dans le même crawl et n'est pas enregistrée comme URL en échec. Une tâche de crawl qui ne s'exécute jamais dans la plage n'actualise pas les documents de ce site, et avec le réglage par défaut « Supprimer les anciens documents » (``day.for.cleanup``, 3 jours) ils expirent environ 3 jours après le dernier crawl qui les a atteints. Planifiez la tâche de crawl dans la plage. Aucun réglage ne désactive ``Request-rate`` ou ``Visit-time`` seul ; ``crawler.ignore.robots.txt=true`` désactive tout le traitement de robots.txt. Pour les détails, voir :doc:`../config/rate-limiting`.
+
+.. _upgrade-1510-removed-pages-robots:
+
+Pages supprimées et directives robots
+-------------------------------------
+
+- Une page qui répond ``410 Gone`` lors d'un nouveau crawl est retirée de l'index, comme une page qui répond ``404``. Jusqu'à 15.9, son document restait dans l'index jusqu'à son expiration (« Supprimer les anciens documents ») et l'URL était enregistrée comme URL en échec.
+- Un document sans date de dernière modification (le site n'envoie pas d'en-tête ``Last-Modified``) est retiré de l'index lorsque sa page répond ``404`` ou ``410`` lors d'un nouveau crawl. Jusqu'à 15.9, un tel document restait trouvable jusqu'à son expiration. Il en va désormais de même lorsque la requête HEAD ne permet pas de décider, par exemple quand le serveur y répond ``405``.
+- Une réponse ``404`` ou ``410`` qui retire un document n'est pas enregistrée comme URL en échec. Une réponse ``404`` ou ``410`` pour une URL qui n'a pas de document dans l'index l'est toujours.
+
+Ces trois changements s'appliquent aux URL HTTP/HTTPS tant que « Vérifier la dernière modification » est activé (par défaut ; voir :doc:`../admin/general-guide`).
+
+- Un document qui n'est pas du HTML, comme un PDF ou un fichier Office, n'est pas indexé lorsque son en-tête de réponse ``X-Robots-Tag`` indique ``noindex`` ou ``none``. Jusqu'à 15.9, seules les pages HTML étaient vérifiées. Le crawl ne supprime pas une copie indexée auparavant ; supprimez-la dans la liste de recherche (interface d'administration).
+- La balise meta robots et l'en-tête ``X-Robots-Tag`` sont lus directive par directive. Jusqu'à 15.9, on cherchait le texte ``none``, ``noindex`` et ``nofollow`` dans la valeur : une page avec ``max-image-preview:none`` n'était pas indexée et ses liens n'étaient pas suivis, et une règle pour un autre robot comme ``googlebot: noindex`` s'appliquait à |Fess|. Les deux sont désormais ignorées.
+
+``crawler.ignore.robots.tags=true``, ou ``config.ignore.robots.tags=true`` dans les « Paramètres de configuration » d'une configuration de crawl, désactive les deux changements liés aux robots, comme pour le HTML. Pour la lecture de la valeur, voir :doc:`../config/crawler-basic`.
 
 .. _upgrade-1510-user-agent:
 

@@ -131,10 +131,12 @@ Habilite esto para realizar rastreo diferencial.
 
 Para las URL HTTP/HTTPS, cuando el ``Last-Modified`` de la respuesta HEAD no permite decidir (no hay
 fecha de modificación en el índice, la respuesta HEAD no tiene ``Last-Modified`` o el HEAD devuelve un
-estado distinto de 200/404), el GET se envía como GET condicional con ``If-None-Match`` (el ``ETag``
+estado distinto de 200/404/410), el GET se envía como GET condicional con ``If-None-Match`` (el ``ETag``
 indexado) y/o ``If-Modified-Since``. Una página que responde ``304 Not Modified`` se trata como una
 página sin cambios y no se vuelve a obtener. Para obtener todo de nuevo, por ejemplo tras cambiar la
 configuración de rastreo, desactive esta opción durante un rastreo.
+
+Cuando una página HTTP/HTTPS cuyo documento está en el índice responde ``404`` o ``410`` a la solicitud HEAD o al GET, el documento se elimina del índice y la URL no se registra como URL de fallo. Un ``404`` o ``410`` de una URL que no tiene documento en el índice se sigue registrando como URL de fallo. Con esta opción desactivada, un ``404`` o ``410`` no elimina el documento.
 
 Una página cuyo ``Last-Modified`` de la respuesta HEAD es igual o anterior a la fecha de última modificación registrada en el índice se considera sin cambios y no se vuelve a obtener. Si el servidor ha devuelto alguna vez un ``Last-Modified`` más reciente que la fecha real de modificación (por ejemplo, la hora de la respuesta), ese valor queda registrado en el índice y, a partir de entonces, no se detectan las modificaciones cuyo ``Last-Modified`` siga siendo igual o anterior a ese valor. La fecha de caducidad de un documento considerado sin cambios se prolonga en cada rastreo. Por ello, mientras se siga rastreando, el documento no se vuelve a obtener aunque venza el plazo determinado por «Eliminar documentos anteriores». Para que se refleje el cambio, elimine el documento del índice y vuelva a rastrear, o desactive esta opción durante un rastreo.
 

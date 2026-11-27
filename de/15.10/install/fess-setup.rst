@@ -118,6 +118,8 @@ dessen ``bin/opensearch-plugin install`` viermal auszuführen. ``--opensearch-ho
 Installationsverzeichnis von OpenSearch und muss angegeben werden. ``--version`` legt die
 Plugin-Version fest, die mit der OpenSearch-Version übereinstimmen muss.
 
+Ein Plugin, das bereits in der angeforderten Version installiert ist, bleibt unverändert. Ist ein Plugin in einer anderen Version installiert, etwa in einem OpenSearch-Verzeichnis, das noch die Plugins des vorigen Release enthält, versucht der Befehl trotzdem die übrigen Plugins, nennt dann jedes solche Plugin mit der installierten und der angeforderten Version sowie dem Befehl ``opensearch-plugin remove`` und endet mit Exit-Code ``1``. Entfernen Sie diese Plugins und führen Sie den Befehl erneut aus (siehe :doc:`upgrade`).
+
 Dieser Befehl ändert ``opensearch.yml`` nicht. Fügen Sie ``configsync.config_path`` und die übrigen
 Einstellungen selbst hinzu, wie in :doc:`install-linux` oder :doc:`install-windows` beschrieben.
 

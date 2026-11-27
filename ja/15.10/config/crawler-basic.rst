@@ -131,6 +131,9 @@ SMB/CIFS(Windowsファイル共有)
     スレッド数: 5
     深さ: 空欄(無制限)
 
+.. note::
+   SMB3 の暗号化を必須とするサーバーについては、 :ref:`crawler-smb-encryption` を参照してください。
+
 認証情報の設定
 --------------
 
@@ -660,16 +663,36 @@ robots.txt を無視する場合は、``fess_config.properties`` を編集しま
 このプロパティのデフォルトは ``false`` で、|Fess| は robots.txt を遵守します。
 ``true`` に設定すると robots.txt を無視します。
 
-なお、HTMLの robots メタタグ(``noindex``、``nofollow`` など)を無視する場合は、
-以下のプロパティを使用します(デフォルトは ``false``)。
+.. warning::
+   外部サイトをクロールする場合は、robots.txt を遵守してください。
+   無視すると、サーバーに過度な負荷をかけたり、利用規約に違反する可能性があります。
+
+robots メタタグと X-Robots-Tag ヘッダー
+---------------------------------------
+
+|Fess| は、HTML のページの robots メタタグ（ ``<meta name="robots" content="noindex">`` ）や ``X-Robots-Tag`` レスポンスヘッダーで指定された robots ディレクティブにも従います。
+
+- ``noindex`` : 文書を索引しません。
+- ``nofollow`` : ページのリンクをたどりません。
+- ``none`` : ``noindex`` と ``nofollow`` の両方を指定したのと同じです。
+
+HTML のページでは、メタタグとヘッダーの両方を読み取ります。PDF や Office ファイルなど HTML 以外の文書にはメタタグがないため、15.10 からは ``X-Robots-Tag`` ヘッダーに ``noindex`` または ``none`` があれば索引しません。
+
+値はディレクティブごとに読み取ります。
+
+- ディレクティブは ``noindex, nofollow`` のようにカンマで区切ります。各ディレクティブは、大文字・小文字と前後の空白を区別せずに全体で比較します。そのため、 ``max-image-preview:none`` や ``unavailable_after: ...`` のような値を取るディレクティブは、 ``none`` や ``noindex`` とはみなされません。
+- ``googlebot: noindex`` のように名前とコロンで始まる値は、特定のクローラー向けの規則とみなされ、値全体が無視されます。 |Fess| の名前を付けた規則も読み取られないため、ディレクティブは名前を付けずに書いてください。
+- HTML のページでは、空白だけで区切ったディレクティブ（ ``noindex nofollow`` ）も読み取ります。
+
+ページが索引しないよう求める前に索引された文書は、クロールでは削除されません。検索結果から消すには、検索リスト（管理画面）で削除してください。
+
+robots メタタグと ``X-Robots-Tag`` ヘッダーを無視する場合は、 ``fess_config.properties`` に次のプロパティを設定します（デフォルトは ``false`` ）。
 
 ::
 
     crawler.ignore.robots.tags=true
 
-.. warning::
-   外部サイトをクロールする場合は、robots.txt を遵守してください。
-   無視すると、サーバーに過度な負荷をかけたり、利用規約に違反する可能性があります。
+特定のクロール設定だけで無視する場合は、その設定の「設定パラメーター」に ``config.ignore.robots.tags=true`` を追加します。この値はプロパティより優先されるため、プロパティが ``true`` でも、 ``config.ignore.robots.tags=false`` を指定したクロール設定ではディレクティブに従います。
 
 User-Agent の設定
 =================

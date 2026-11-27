@@ -859,6 +859,27 @@ Ersetzen Sie die Standardzeile ``-XX:-HeapDumpOnOutOfMemoryError`` durch diese b
 
 Details siehe :doc:`setup-memory`.
 
+.. _crawler-smb-encryption:
+
+Einstellungen des SMB-Clients
+-----------------------------
+
+Der SMB-Client des Crawlers (``smb://``) liest seine Einstellungen ``jcifs.*`` nur aus den JVM-Systemeigenschaften des Crawler-Prozesses. Setzen Sie sie als ``-D``-Optionen in ``jvm.crawler.options``, wie es der Standardwert für die SMB-Timeouts tut. Eine Zeile ``jcifs.*`` in den „Konfigurationsparameter“ einer Dateisystem-Crawl-Konfiguration erreicht den SMB-Client nicht.
+
+**Für einen Server, der SMB3-Verschlüsselung verlangt:**
+
+Mit den Standardeinstellungen verschlüsselt der Client nicht, und eine Freigabe auf einem Server, der Verschlüsselung verlangt (etwa Samba mit ``server smb encrypt = required``), kann nicht gecrawlt werden: Der Crawl schlägt mit ``SmbAuthException: Access is denied.`` fehl, und nichts wird indexiert. Fügen Sie dem Wert von ``jvm.crawler.options`` folgende Zeile hinzu und behalten Sie die übrigen Zeilen bei:
+
+::
+
+    -Djcifs.client.encryptionRequired=true\n\
+
+Der Crawler verschlüsselt dann jede SMB-Verbindung von Anfang an. Eine Verbindung, die nicht verschlüsselt werden kann, schlägt fehl, statt unverschlüsselt weiterzulaufen: ein Server oder eine Protokollversion ohne SMB3-Verschlüsselung sowie eine anonyme Sitzung. Die Option gilt für alle Dateisystem-Crawl-Konfigurationen. Können einige der gecrawlten Server nicht verschlüsseln, verwenden Sie stattdessen ``-Djcifs.client.encryptionEnabled=true``: Laut jcifs bietet der Client dann Verschlüsselung an, verschlüsselt die Sitzungen und Freigaben, für die der Server sie verlangt, und verbindet sich mit den übrigen Servern unverschlüsselt.
+
+Der Thumbnail-Job liest die Dateien in einem eigenen Prozess, der mit ``jvm.thumbnail.options`` gestartet wird. Werden für Dateien auf einer solchen Freigabe Thumbnails erzeugt, fügen Sie dieselbe Zeile auch dort hinzu.
+
+``smb1://`` verwendet SMB1, das keine Verschlüsselung kennt.
+
 Leistungsoptimierung
 ==========================
 
