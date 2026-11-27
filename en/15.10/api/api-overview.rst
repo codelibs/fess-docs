@@ -88,7 +88,7 @@ On error, an ``error`` object is added to the envelope.
    * - code
      - A stable error code (``snake_case``). Clients are recommended to use this value for localization.
    * - message
-     - A human-readable error message. Messages that have a translation, such as the refusals of search parameters and of the tag API, are written in the language of the ``Accept-Language`` request header (when the request has no ``Accept-Language`` header, in the language of the server's default locale, that is the JVM default, not necessarily English); the others (for example ``internal error`` or ``invalid access token``) are the same English text in every language. ``code`` and the HTTP status code do not change with the language, so clients should branch on ``code``, not on the text of ``message``. When every message must be shown in the user's language, localize based on ``code`` on the client side.
+     - A human-readable error message. Messages that have a translation, such as the refusals of search parameters and of the tag API, are written in the language of the ``Accept-Language`` request header (in English when the request has no ``Accept-Language`` header); the others (for example ``internal error`` or ``invalid access token``) are the same English text in every language. ``code`` and the HTTP status code do not change with the language, so clients should branch on ``code``, not on the text of ``message``. When every message must be shown in the user's language, localize based on ``code`` on the client side.
    * - details
      - An optional object containing additional structured information (may be omitted). Only some endpoints include it. For example, :doc:`api-health` embeds a search engine cluster snapshot under ``error.details.engine``.
 
