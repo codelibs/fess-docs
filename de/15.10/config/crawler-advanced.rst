@@ -957,7 +957,7 @@ Schließen Sie unnötige Elemente (Navigation, Werbung usw.) aus.
 ::
 
     crawler.document.html.content.xpath=//DIV[@id='main-content']
-    crawler.document.html.pruned.tags=noscript,script,style,header,footer,aside,nav,form,iframe
+    crawler.document.html.pruned.tags=noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow],form,iframe
 
 **2. Digest optimieren**
 
