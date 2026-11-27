@@ -299,7 +299,7 @@ La version RPM est utilisée sur les distributions Linux basées sur RPM telles 
 
    .. note::
 
-      À partir d'OpenSearch 2.12, l'installation du paquet crée aussi la configuration de sécurité de démonstration, qui exige un mot de passe administrateur pour OpenSearch (distinct du compte ``admin`` de |Fess|). Indiquez-le dans la variable d'environnement ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` comme ci-dessus. Sans elle, l'installation échoue (rpm affiche ``%post scriptlet failed``).
+      À partir d'OpenSearch 2.12, l'installation du paquet crée aussi la configuration de sécurité de démonstration, qui exige un mot de passe administrateur pour OpenSearch (distinct du compte ``admin`` de |Fess|). Indiquez-le dans la variable d'environnement ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` comme ci-dessus. Sans elle, la configuration effectuée par le paquet échoue : rpm affiche ``%post scriptlet failed``, mais se termine quand même avec le code 0 et laisse le paquet installé. Dans ce cas, supprimez le paquet avec ``sudo rpm -e opensearch`` et réinstallez-le avec la variable.
 
       Remplacez ``<password>`` par un mot de passe fort : de 8 à 100 caractères, avec au moins une majuscule, une minuscule, un chiffre et un caractère spécial, et évalué ``strong`` ou mieux par le contrôle de robustesse ``zxcvbn`` d'OpenSearch. Si le mot de passe contient des caractères interprétés par le shell, placez-le entre apostrophes simples. Il en va de même si vous installez depuis un dépôt.
 

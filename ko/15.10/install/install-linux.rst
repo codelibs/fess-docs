@@ -282,7 +282,7 @@ RPM 버전은 Red Hat Enterprise Linux, CentOS, Fedora 등 RPM 기반 Linux 배�
 
    .. note::
 
-      OpenSearch 2.12 이후 버전에서는 패키지를 설치할 때 데모용 보안 설정도 함께 생성되므로 OpenSearch 관리자 비밀번호(|Fess| 의 ``admin`` 계정과는 별개입니다)가 필요합니다. 위와 같이 환경 변수 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 로 지정하십시오. 지정하지 않으면 설치가 실패합니다(rpm 이 ``%post scriptlet failed`` 를 출력합니다).
+      OpenSearch 2.12 이후 버전에서는 패키지를 설치할 때 데모용 보안 설정도 함께 생성되므로 OpenSearch 관리자 비밀번호(|Fess| 의 ``admin`` 계정과는 별개입니다)가 필요합니다. 위와 같이 환경 변수 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 로 지정하십시오. 지정하지 않으면 패키지의 설정 처리가 실패합니다. rpm 은 ``%post scriptlet failed`` 를 출력하지만 종료 코드는 0 이며 패키지는 설치된 상태로 남습니다. 이 경우 ``sudo rpm -e opensearch`` 로 패키지를 제거한 뒤 환경 변수를 지정하여 다시 설치하십시오.
 
       ``<password>`` 는 강력한 비밀번호로 바꾸십시오. 8~100자이며 대문자, 소문자, 숫자, 특수 문자를 각각 1자 이상 포함해야 하고, OpenSearch 의 강도 검사(``zxcvbn``)에서 ``strong`` 이상으로 평가되어야 합니다. 셸이 해석하는 문자가 포함된 경우에는 작은따옴표로 감싸십시오. 저장소에서 설치하는 경우에도 마찬가지입니다.
 

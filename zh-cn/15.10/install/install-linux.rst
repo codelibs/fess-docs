@@ -282,7 +282,7 @@ RPM 版用于 Red Hat Enterprise Linux、CentOS、Fedora 等基于 RPM 的 Linux
 
    .. note::
 
-      从 OpenSearch 2.12 起，安装软件包时还会创建演示用的安全配置，因此需要 OpenSearch 的管理员密码（与 |Fess| 的 ``admin`` 账户无关）。请如上所示通过环境变量 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 指定。未指定时安装会失败（rpm 会输出 ``%post scriptlet failed``）。
+      从 OpenSearch 2.12 起，安装软件包时还会创建演示用的安全配置，因此需要 OpenSearch 的管理员密码（与 |Fess| 的 ``admin`` 账户无关）。请如上所示通过环境变量 ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` 指定。未指定时，软件包中的设置处理会失败：rpm 会输出 ``%post scriptlet failed``，但退出码仍为 0，软件包也会保持已安装状态。此时请用 ``sudo rpm -e opensearch`` 删除软件包，然后指定该环境变量重新安装。
 
       请将 ``<password>`` 替换为强密码：长度为 8 到 100 个字符，至少包含一个大写字母、一个小写字母、一个数字和一个特殊字符，并且在 OpenSearch 的强度检查（``zxcvbn``）中被评为 ``strong`` 或更高。如果密码包含会被 shell 解释的字符，请用单引号括起来。从软件仓库安装时同样如此。
 

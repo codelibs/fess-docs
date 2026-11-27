@@ -317,7 +317,7 @@ Paso 1: Instalación de OpenSearch
 
    .. note::
 
-      A partir de OpenSearch 2.12, al instalar el paquete también se crea la configuración de seguridad de demostración, que requiere una contraseña de administrador de OpenSearch (distinta de la cuenta ``admin`` de |Fess|). Indíquela en la variable de entorno ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` como se muestra arriba. Sin ella, la instalación falla (rpm muestra ``%post scriptlet failed``).
+      A partir de OpenSearch 2.12, al instalar el paquete también se crea la configuración de seguridad de demostración, que requiere una contraseña de administrador de OpenSearch (distinta de la cuenta ``admin`` de |Fess|). Indíquela en la variable de entorno ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` como se muestra arriba. Sin ella, la configuración que realiza el paquete falla: rpm muestra ``%post scriptlet failed``, pero aun así termina con el código 0 y deja el paquete instalado. En ese caso, elimine el paquete con ``sudo rpm -e opensearch`` y vuelva a instalarlo con la variable.
 
       Sustituya ``<password>`` por una contraseña segura: de 8 a 100 caracteres, con al menos una letra mayúscula, una minúscula, un dígito y un carácter especial, y que la comprobación de robustez ``zxcvbn`` de OpenSearch valore como ``strong`` o superior. Si la contraseña contiene caracteres que interpreta el shell, enciérrela entre comillas simples. Lo mismo se aplica si instala desde un repositorio.
 
