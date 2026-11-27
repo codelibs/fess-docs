@@ -281,7 +281,7 @@ Nginx에서 액세스 제한 예::
 - ``ACCESS_DENIED``: 거부된 Admin API 요청에서는 요청 경로만 기록됩니다. 액세스 토큰도, 그것을 전달한 파라미터도 기록되지 않습니다.
 - ``REGISTER_PASSKEY`` 와 ``DELETE_PASSKEY``: ``user`` 는 작업을 수행한 사용자이고 ``target`` 은 패스키를 소유한 사용자의 이름입니다. ``credentialId`` 는 자격 증명 ID의 앞 8자이며, 더 길면 뒤에 ``...`` 가 붙습니다. 패스키의 키는 기록되지 않습니다.
 - ``UPDATE_PASSWORD``: ``user`` 는 비밀번호를 변경한 사용자이고 ``target`` 은 비밀번호가 변경된 사용자의 이름입니다. 비밀번호와 그 해시는 기록되지 않으며, 거부된 변경은 기록되지 않습니다.
-- ``SESSION_END``: ``user`` 는 세션이 종료된 사용자이고 ``reason`` 은 종료된 이유입니다. ``password_changed`` 는 세션을 연 뒤에 사용자의 비밀번호가 변경되었음을, ``permissions_changed`` 는 세션을 연 뒤에 로컬 사용자의 역할이나 그룹이 변경되었음(사용자 편집, 또는 사용자가 가지고 있던 역할이나 그룹의 삭제)을, ``user_not_found`` 는 로컬 사용자의 문서가 더 이상 없음(예: 사용자가 삭제되었거나 이름이 변경됨)을, ``idp_session_ended`` 는 IdP(ID 공급자)가 자신의 세션을 종료했음(SAML의 ``SessionNotOnOrAfter``, :doc:`../config/sso-saml` 참조)을 나타냅니다.
+- ``SESSION_END``: ``user`` 는 세션이 종료된 사용자이고 ``reason`` 은 종료된 이유입니다. ``password_changed`` 는 세션을 연 뒤에 사용자의 비밀번호가 변경되었음을, ``permissions_changed`` 는 세션을 연 뒤에 로컬 사용자의 역할이나 그룹이 변경되었음(사용자 편집, 또는 사용자가 가지고 있던 역할이나 그룹의 삭제)을, ``user_not_found`` 는 로컬 사용자의 문서가 더 이상 없음(예: 사용자가 삭제되었거나 이름이 변경됨)을, ``idp_session_ended`` 는 IdP(ID 공급자)가 자신의 세션을 종료했음(SAML의 ``SessionNotOnOrAfter``, :doc:`../config/sso-saml` 참조, 또는 OpenID Connect의 백채널 로그아웃, :doc:`../config/sso-oidc` 참조)을 나타냅니다.
 
 정기적인 보안 업데이트
 ------------------------------

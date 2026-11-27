@@ -38,7 +38,7 @@ Dans l'authentification OpenID Connect, |Fess| fonctionne comme une Relying Part
 Pour l'intégration avec la recherche basée sur les rôles, voir :doc:`security-role`.
 
 .. note::
-   La session de connexion de |Fess| ne prend pas fin lorsque les jetons émis par l'OP expirent. |Fess| ne vérifie ``exp`` du jeton d'ID que lorsque l'utilisateur se connecte, et la durée de vie du jeton n'est pas utilisée pour la session. La connexion dure jusqu'à ce que l'utilisateur se déconnecte ou que le délai d'expiration de la session soit atteint. SAML est différent : sa session prend fin avec celle de l'IdP (voir :doc:`sso-saml`).
+   La session de connexion de |Fess| ne prend pas fin lorsque les jetons émis par l'OP expirent. |Fess| ne vérifie ``exp`` du jeton d'ID que lorsque l'utilisateur se connecte, et la durée de vie du jeton n'est pas utilisée pour la session. Lorsque ``oic.jwks.uri`` n'est pas défini, la connexion dure jusqu'à ce que l'utilisateur se déconnecte ou que le délai d'expiration de la session soit atteint. Pour mettre fin à la session |Fess| lorsque l'utilisateur se déconnecte auprès de l'OP, configurez la `Déconnexion par canal arrière (back-channel logout)`_. SAML est différent : sa session prend fin avec celle de l'IdP (voir :doc:`sso-saml`).
 
 .. note::
    Lorsque vous exécutez plusieurs nœuds, définissez la variable d'environnement ``FESS_SESSION_STORE=opensearch`` pour partager la session HTTP entre eux ; une connexion commencée sur un nœud peut alors être terminée sur un autre. Mettez à jour le plugin sur chaque nœud en 15.10 avant de l'activer : un plugin 15.9.0 ne partage pas l'état de la connexion, et un utilisateur qui revient sur un autre nœud reste anonyme. Sans session partagée, configurez le répartiteur de charge pour qu'il rattache chaque session à un seul nœud.
@@ -77,9 +77,9 @@ Pour activer l'authentification OpenID Connect, ajoutez le paramètre suivant da
     sso.type=oic
 
 .. note::
-   ``sso.type`` ainsi que les paramètres ``oic.*`` décrits ci-après, à l'exception de ``oic.issuer``, peuvent également être configurés et modifiés depuis la page « Système > Général » de l'interface d'administration.
+   ``sso.type`` ainsi que les paramètres ``oic.*`` décrits ci-après, à l'exception de ``oic.issuer`` et ``oic.jwks.uri``, peuvent également être configurés et modifiés depuis la page « Système > Général » de l'interface d'administration.
    Les paramètres modifiés dans l'interface d'administration sont enregistrés dans ``system.properties`` et sont conservés après redémarrage.
-   ``oic.issuer`` ne peut être défini que dans ``system.properties``.
+   ``oic.issuer`` et ``oic.jwks.uri`` ne peuvent être définis que dans ``system.properties``.
 
 Configuration du fournisseur
 ----------------------------
@@ -102,6 +102,9 @@ Configurez les informations obtenues de votre OP.
    * - ``oic.issuer``
      - Identifiant de l'émetteur (optionnel). Lorsqu'il est défini, le claim ``iss`` de l'ID Token doit lui être strictement égal (une barre oblique finale compte)
      - (vide : ``iss`` n'est pas vérifié)
+   * - ``oic.jwks.uri``
+     - Le ``jwks_uri`` de l'OP (optionnel). Le définir active le back-channel logout (voir `Déconnexion par canal arrière (back-channel logout)`_)
+     - (vide : pas de back-channel logout)
 
 .. note::
    Ces URLs et l'émetteur peuvent être obtenus depuis le endpoint Discovery de l'OP (``/.well-known/openid-configuration``) ; l'émetteur correspond à sa valeur ``issuer``.
@@ -235,6 +238,44 @@ Obtenez les informations suivantes depuis l'écran de configuration ou le endpoi
 .. note::
    La plupart des OP vous permettent de vérifier les URLs des endpoints d'autorisation et de token depuis le
    endpoint Discovery (``https://<OP>/.well-known/openid-configuration``).
+
+Déconnexion par canal arrière (back-channel logout)
+===================================================
+
+Avec `OpenID Connect Back-Channel Logout 1.0 <https://openid.net/specs/openid-connect-backchannel-1_0.html>`__, l'OP signale à |Fess|, de serveur à serveur, qu'une connexion a pris fin auprès de l'OP, et |Fess| met fin à la session de cette connexion.
+Sans cette fonction, une session |Fess| se poursuit après la déconnexion auprès de l'OP.
+
+Activation
+----------
+
+Définissez le ``jwks_uri`` de l'OP dans ``app/WEB-INF/conf/system.properties``. Le définir active le back-channel logout ; aucun autre paramètre n'est à modifier.
+
+::
+
+    oic.jwks.uri=https://op.example.com/jwks
+
+- ``oic.jwks.uri`` ne peut être défini que dans ``system.properties`` (l'interface d'administration n'a pas de champ pour cela).
+- ``oic.issuer`` et ``oic.client.id`` doivent aussi être définis, car le jeton de déconnexion est vérifié par rapport à eux. Si l'un d'eux est vide, toutes les requêtes de déconnexion sont refusées.
+- ``oic.jwks.uri`` doit être en HTTPS. Comme pour le endpoint de token, ``http`` n'est accepté que lorsque l'hôte est ``localhost``, ``127.x.x.x`` ou ``::1``. Le contrôle a lieu lorsque les clés sont récupérées pour une requête de déconnexion, et une URL qui ne le respecte pas fait refuser la requête.
+- ``jwks_uri`` et ``issuer`` peuvent être obtenus depuis le endpoint Discovery de l'OP (``/.well-known/openid-configuration``), où ``backchannel_logout_supported`` indique si l'OP prend en charge cette fonction.
+
+Enregistrement auprès de l'OP
+-----------------------------
+
+- Dans les paramètres du client de l'OP, enregistrez ``https://<hôte de Fess>/sso/logout`` comme URL de back-channel logout.
+- Si l'OP propose l'option (``backchannel_logout_session_required``), faites-lui inclure l'identifiant de session (``sid``) dans le jeton de déconnexion. Avec ``sid``, seule la session correspondante prend fin, et non toutes les sessions de l'utilisateur. L'ID Token émis à la connexion doit contenir le même ``sid``.
+
+Comportement
+------------
+
+- L'OP envoie par POST un paramètre ``logout_token`` à ``/sso/logout``. |Fess| répond ``200`` lorsque la déconnexion a été enregistrée et ``400`` sinon, avec ``Cache-Control: no-store`` dans les deux cas.
+- Sont vérifiés : la signature du jeton de déconnexion (RS256, RS384, RS512, ES256, ES384 ou ES512, avec une clé du document ``jwks_uri``), ``iss`` (``oic.issuer``), ``aud`` (``oic.client.id``), ``iat`` et ``exp`` (avec le même décalage d'horloge de 300 secondes que pour l'ID Token ; un jeton émis il y a plus d'une heure est refusé), ``jti``, ``events``, l'absence de ``nonce`` et la présence de ``sid`` ou ``sub``. Un jeton qui échoue à une vérification et un jeton déjà accepté (même ``jti``) sont refusés avec ``400``, et aucune session ne prend fin. Lorsque ``oic.jwks.uri`` n'est pas défini, toutes les requêtes de déconnexion sont également refusées avec ``400``.
+- Avec ``sid`` dans le jeton, seule la session de la connexion qui porte ce ``sid`` prend fin. Avec ``sub`` seul, toutes les sessions de cet utilisateur ouvertes avant que |Fess| reçoive la requête prennent fin. Une connexion dont l'ID Token ne contenait pas de ``sid`` n'est pas terminée par un jeton qui contient ``sid``.
+- Une session prend fin lors de sa prochaine utilisation, et cette requête est traitée comme anonyme. Aucune déconnexion n'est renvoyée à l'OP ; seule la session |Fess| prend fin. Le journal d'audit enregistre ``SESSION_END`` avec le ``reason`` ``idp_session_ended`` (voir :doc:`../install/security`).
+- La déconnexion est enregistrée dans l'index coordinateur du moteur de recherche (``fess_config.coordinator``), que tous les nœuds lisent ; elle fonctionne donc avec plusieurs nœuds, que les sessions HTTP soient partagées avec ``FESS_SESSION_STORE=opensearch`` ou non. Sur le nœud qui a reçu la requête, la session prend fin sans délai à sa requête suivante. Un autre nœud vérifie l'enregistrement au plus toutes les 30 secondes ; une session peut donc s'y poursuivre jusqu'à 30 secondes après la requête.
+- Si l'index coordinateur ne peut pas être lu, aucune session ne prend fin (un avertissement est journalisé). Avec ``sub`` seul, l'heure d'une connexion peut être comparée à l'heure à laquelle un autre nœud a reçu la requête ; gardez donc les horloges des nœuds synchronisées.
+- La première requête refusée de chaque type est journalisée comme avertissement, et les suivantes au niveau DEBUG. Ni le jeton, ni ``sid``, ni ``sub`` ne sont journalisés.
+- Les jetons de déconnexion chiffrés (JWE) et le front-channel logout ne sont pas pris en charge.
 
 Exemples de configuration
 =========================

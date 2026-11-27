@@ -35,7 +35,7 @@ OpenID Connect认证的工作原理
 有关基于角色的搜索集成，请参阅 :doc:`security-role`。
 
 .. note::
-   即使 OP 签发的令牌过期，|Fess| 的登录会话也不会结束。|Fess| 只在用户登录时检查 ID 令牌的 ``exp`` ，令牌的有效期不用于会话。登录会一直持续到用户退出登录或达到会话超时为止。SAML 则不同：其会话随 IdP 会话一起结束（参见 :doc:`sso-saml` ）。
+   即使 OP 签发的令牌过期，|Fess| 的登录会话也不会结束。|Fess| 只在用户登录时检查 ID 令牌的 ``exp`` ，令牌的有效期不用于会话。未设置 ``oic.jwks.uri`` 时，登录会一直持续到用户退出登录或达到会话超时为止。要在用户于OP端登出时结束 |Fess| 的会话，请设置 `后端通道登出`_ 。SAML 则不同：其会话随 IdP 会话一起结束（参见 :doc:`sso-saml` ）。
 
 .. note::
    运行多个节点时，请设置环境变量 ``FESS_SESSION_STORE=opensearch`` 以在节点之间共享HTTP会话；这样在一个节点上发起的登录就可以在另一个节点上完成。启用之前，请将每个节点上的插件更新到15.10：15.9.0的插件不会共享登录状态，返回到另一个节点的用户会保持匿名。未共享会话时，请在负载均衡器上将每个会话固定到一个节点。
@@ -74,9 +74,9 @@ OpenID Connect认证的工作原理
     sso.type=oic
 
 .. note::
-   ``sso.type`` 以及后文说明的各项 ``oic.*`` 设置（``oic.issuer`` 除外），也可以通过管理画面的"系统 > 全局"页面进行设置和修改。
+   ``sso.type`` 以及后文说明的各项 ``oic.*`` 设置（``oic.issuer`` 和 ``oic.jwks.uri`` 除外），也可以通过管理画面的"系统 > 全局"页面进行设置和修改。
    在管理画面中修改的设置将保存到 ``system.properties``，重启后仍会保留。
-   ``oic.issuer`` 只能在 ``system.properties`` 中设置。
+   ``oic.issuer`` 和 ``oic.jwks.uri`` 只能在 ``system.properties`` 中设置。
 
 提供者配置
 ----------
@@ -99,6 +99,9 @@ OpenID Connect认证的工作原理
    * - ``oic.issuer``
      - 颁发者标识符（可选）。设置后，ID Token的 ``iss`` 声明必须与其完全一致（末尾的斜杠也会区分）
      - (空字符串：不校验 ``iss``)
+   * - ``oic.jwks.uri``
+     - OP的 ``jwks_uri`` （可选）。设置后启用后端通道登出（参见 `后端通道登出`_ ）
+     - (空字符串：不使用后端通道登出)
 
 .. note::
    这些URL和颁发者可以从OP的Discovery端点（``/.well-known/openid-configuration``）获取，颁发者即其中的 ``issuer`` 值。
@@ -225,6 +228,44 @@ OP侧配置
 .. note::
    大多数OP允许您从Discovery端点（``https://<OP>/.well-known/openid-configuration``）
    确认授权端点和令牌端点的URL。
+
+后端通道登出
+============
+
+使用 `OpenID Connect Back-Channel Logout 1.0 <https://openid.net/specs/openid-connect-backchannel-1_0.html>`__ 时，登录在OP端结束后，OP会通过服务器之间的通信通知 |Fess| ，|Fess| 随即结束该登录的会话。
+不使用此功能时，即使在OP端登出，|Fess| 的会话也会继续存在。
+
+启用
+----
+
+在 ``app/WEB-INF/conf/system.properties`` 中设置OP的 ``jwks_uri`` 。设置后即启用后端通道登出，无需切换其他设置。
+
+::
+
+    oic.jwks.uri=https://op.example.com/jwks
+
+- ``oic.jwks.uri`` 只能在 ``system.properties`` 中设置（管理画面中没有对应的项目）。
+- 登出令牌要根据 ``oic.issuer`` 和 ``oic.client.id`` 进行校验，因此这两项也必须设置。任意一项为空时，所有登出请求都会被拒绝。
+- ``oic.jwks.uri`` 必须为HTTPS。与令牌端点相同，只有当主机是 ``localhost`` 、 ``127.x.x.x`` 或 ``::1`` 时才允许使用 ``http`` 。此检查在收到登出请求并获取密钥时进行，不满足条件时请求会被拒绝。
+- ``jwks_uri`` 和 ``issuer`` 可以从OP的Discovery端点（ ``/.well-known/openid-configuration`` ）获取。OP是否支持此功能，可以通过同一文档中的 ``backchannel_logout_supported`` 确认。
+
+在OP端注册
+----------
+
+- 在OP的客户端设置中，将 ``https://<Fess主机>/sso/logout`` 注册为后端通道登出URL。
+- 如果OP提供该选项（ ``backchannel_logout_session_required`` ），请让OP在登出令牌中包含会话ID（ ``sid`` ）。包含 ``sid`` 时，只结束对应的一个会话，而不是该用户的所有会话。登录时签发的ID Token中也必须包含相同的 ``sid`` 。
+
+行为
+----
+
+- OP向 ``/sso/logout`` POST ``logout_token`` 参数。|Fess| 在记录登出成功时返回 ``200`` ，否则返回 ``400`` ，两种响应都带有 ``Cache-Control: no-store`` 。
+- 登出令牌的校验内容包括：签名（使用 ``jwks_uri`` 文档中的密钥，算法为RS256、RS384、RS512、ES256、ES384或ES512）、 ``iss`` （ ``oic.issuer`` ）、 ``aud`` （ ``oic.client.id`` ）、 ``iat`` 和 ``exp`` （与ID Token相同，允许最多300秒的时钟偏差；签发时间超过1小时的令牌会被拒绝）、 ``jti`` 、 ``events`` 、不含 ``nonce`` 、含有 ``sid`` 或 ``sub`` 。校验失败的令牌和已经接受过的令牌（相同的 ``jti`` ）会以 ``400`` 被拒绝，会话不会结束。未设置 ``oic.jwks.uri`` 时，所有登出请求也都会以 ``400`` 被拒绝。
+- 令牌包含 ``sid`` 时，只结束具有该 ``sid`` 的登录的会话。令牌只包含 ``sub`` 时，该用户在 |Fess| 收到请求之前开始的所有会话都会结束。ID Token中没有 ``sid`` 的登录，不会被包含 ``sid`` 的令牌结束。
+- 会话在下一次被使用时结束，该请求按未登录处理。不会向OP发送登出，只结束 |Fess| 的会话。审计日志会记录 ``reason`` 为 ``idp_session_ended`` 的 ``SESSION_END`` （参见 :doc:`../install/security` ）。
+- 登出记录在搜索引擎的协调器索引（ ``fess_config.coordinator`` ）中，所有节点都会读取它。因此，运行多个节点时，无论是否通过 ``FESS_SESSION_STORE=opensearch`` 共享HTTP会话，此功能都能工作。在收到请求的节点上，会话会在下一次请求时立即结束。其他节点最多每30秒检查一次记录，因此在请求之后，会话在这些节点上最多可能继续存在30秒。
+- 无法读取协调器索引时，不会结束任何会话（记录一次警告）。令牌只包含 ``sub`` 时，可能会将登录时间与其他节点收到请求的时间进行比较，因此请保持各节点的时钟同步。
+- 被拒绝的请求按种类只将第一次记录为警告，之后的以DEBUG级别记录。令牌、 ``sid`` 和 ``sub`` 不会被记录到日志中。
+- 不支持加密的登出令牌（JWE）和前端通道登出。
 
 配置示例
 ========
