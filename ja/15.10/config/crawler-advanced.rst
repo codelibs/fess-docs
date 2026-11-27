@@ -525,7 +525,7 @@ HTML タグ処理
 ::
 
     # 削除するタグを追加
-    crawler.document.html.pruned.tags=noscript,script,style,header,footer,aside,nav,a[rel=nofollow],form
+    crawler.document.html.pruned.tags=noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow],form
 
     # ダイジェストの長さを200文字に
     crawler.document.html.max.digest.length=200

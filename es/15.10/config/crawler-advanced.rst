@@ -527,7 +527,7 @@ Ejemplo de Configuración
 ::
 
     # Agregar etiquetas a eliminar
-    crawler.document.html.pruned.tags=noscript,script,style,header,footer,aside,nav,a[rel=nofollow],form
+    crawler.document.html.pruned.tags=noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow],form
 
     # Longitud del resumen a 200 caracteres
     crawler.document.html.max.digest.length=200

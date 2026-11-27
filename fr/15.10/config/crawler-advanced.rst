@@ -527,7 +527,7 @@ Exemple de configuration
 ::
 
     # Ajouter des balises à supprimer
-    crawler.document.html.pruned.tags=noscript,script,style,header,footer,aside,nav,a[rel=nofollow],form
+    crawler.document.html.pruned.tags=noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow],form
 
     # Résumé de 200 caractères
     crawler.document.html.max.digest.length=200
