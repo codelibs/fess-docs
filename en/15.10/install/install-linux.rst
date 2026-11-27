@@ -311,7 +311,7 @@ Step 1: Install OpenSearch
 
    .. note::
 
-      Since OpenSearch 2.12, installing the package also sets up the demo security configuration, which requires an administrator password for OpenSearch (not the ``admin`` account of |Fess|). Pass it in the ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` environment variable as shown above. Without it, the installation fails (rpm reports ``%post scriptlet failed``).
+      Since OpenSearch 2.12, installing the package also sets up the demo security configuration, which requires an administrator password for OpenSearch (not the ``admin`` account of |Fess|). Pass it in the ``OPENSEARCH_INITIAL_ADMIN_PASSWORD`` environment variable as shown above. Without it, the setup in the package fails: rpm reports ``%post scriptlet failed``, but it still exits with 0 and leaves the package installed. In that case, remove the package with ``sudo rpm -e opensearch`` and install it again with the variable.
 
       Replace ``<password>`` with a strong password: 8 to 100 characters, with at least one uppercase letter, one lowercase letter, one digit and one special character, and rated ``strong`` or higher by the ``zxcvbn`` strength check of OpenSearch. If the password contains characters that the shell interprets, enclose it in single quotes. The same applies when you install from a repository.
 
