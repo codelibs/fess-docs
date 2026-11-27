@@ -486,9 +486,9 @@ Docker 版
    OpenSearch は、そのパスが自身の設定ディレクトリの中にある場合にだけ、そのインデックスを開きます。
    ``bin/fess-setup install opensearch`` のように OpenSearch 3.10.0 を別のディレクトリにインストールし（ ``opensearch-3.9.0`` の隣に ``opensearch-3.10.0`` が作られます）、
    ``data/`` と辞書ファイルを手作業でそこへ移すと、文書インデックスと、同じく 15.9.0 の絶対パスの ``*_path`` 設定を持つ ``fess_suggest_analyzer`` は未割り当てのままになり（割り当ての説明に ``Resource path must be inside config directory`` と出ます）、クラスターは red になります。
-   一度起動したホームに ``data/`` をコピーした場合も同じです。ステップ 7 の「再インデクシング」は ``fess_suggest_analyzer`` を作り直しません。
+   一度起動したホームに ``data/`` をコピーした場合も同じです。
    15.9.0 で取得したスナップショットを、OpenSearch のホームが別のパスにある新しい 15.10 の環境に復元した場合も同じで、復元した文書インデックスは ``Resource path must be inside config directory`` で red になります。
-   旧バージョンと同じパスにあるエンジンに復元するか、文書インデックスを復元せずにインデックスを作り直してください。次の手順で、新しいエンジンを、インデックスが作成されたときのパスに置きます。
+   そのようなスナップショットは、旧バージョンと同じパスにあるエンジンに復元してください。次の手順で、新しいエンジンを、インデックスが作成されたときのパスに置きます。
 
    1. OpenSearch を停止した状態（ステップ 2）で、OpenSearch 3.10.0 とそのプラグインを別のディレクトリにインストールし
       （たとえば ``fess-15.10.0`` で ``bin/fess-setup install opensearch`` ）、起動はしません。旧ホームの ``data/`` と ``config/dictionary/`` をコピーします::
@@ -513,8 +513,12 @@ Docker 版
       ``dictionary/`` であれば、新しいインデックスには相対パスが記録され、古いインデックスと並んで green になり、検索できます。
       15.10 の ``bin/fess-setup install opensearch`` で新しくインストールした場合も ``dictionary/`` が設定されます。
       ``bin/fess.in.sh`` が自動で設定するのは |Fess| のディレクトリ内の ``opensearch/`` にある OpenSearch だけなので、
-      環境変数または ``bin/fess.in.sh`` で明示的に設定してください。ステップ 3 で 15.9.0 の ``bin/fess.in.sh`` をコピーし、何も設定しないと、
+      環境変数または ``bin/fess.in.sh`` で明示的に設定してください。ステップ 3（ZIP 版の手順 2）で 15.9.0 の ``bin/fess.in.sh`` をコピーし、何も設定しないと、
       この配置では ``FESS_DICTIONARY_PATH`` が設定されず、ステップ 7 の「再インデクシング」は ``Failed to create index`` を出力して何も作成しません。
+
+      ステップ 7 の「再インデクシング」は ``fess_suggest_analyzer`` を作り直さないため、15.9.0 の絶対パスの ``*_path`` 設定が残ります。
+      相対パスで作り直すには、 |Fess| を停止して ``fess_suggest_analyzer`` を削除し、 ``FESS_DICTIONARY_PATH=dictionary/`` で |Fess| を起動します。
+      |Fess| は起動時に相対パスでこれを作り直し、次に「Suggest Indexer」ジョブが実行された後からサジェストが動作します。
 
    4. ``$OLD`` から OpenSearch を起動し、失敗したシャードの割り当てを再試行させ（以前に別のパスで起動したためにクラスターが red の場合に必要です）、
       ヘルスを確認します::
@@ -794,7 +798,7 @@ robots.txt の Request-rate と Visit-time
 - 新しい設定 ``authentication.local.username.policy`` （既定は ``preserved`` ）があります。 |Fess| は、15.9 までと同じく、ローカルユーザーの名前を入力されたとおりに比較するため、 ``Alice`` と ``alice`` は 2 人のユーザーです。 ``mapped`` にすると、ユーザー管理画面または Admin API でのローカルユーザーの作成と名前の変更は、文字幅、大文字小文字、Unicode の合成の違いを無視したときに、名前がほかのユーザーの名前と同じになる場合や、 ``authentication.admin.users`` のエントリの別の表記になる場合に拒否されます。ログイン、ユーザー ID、保存される名前、パーミッション、インデックス済みの文書は変わりません。詳細と制限は :ref:`local-username-policy` を参照してください。
 - スクリプト、スタイルシート、SVG ファイルのうち 1 KB 以上のものは、既定で gzip 圧縮して送信されます。15.9 は何も圧縮しませんでした。ページと JSON は圧縮されません。 ``tomcat_config.properties`` の ``tomcat.compression`` （ ``on`` または ``off`` ）と ``tomcat.compression.mime`` （一覧に追加する種別。カンマ区切り）で制御します。15.9 から引き継いだ ``tomcat_config.properties`` にはどちらのキーもないため、圧縮は有効です。|Fess| の前段にあるリバースプロキシが自分で応答を圧縮する場合は、 ``tomcat.compression=off`` を設定してください。
 - 同梱の ``bootstrap`` テーマのファイルは、 ``Cache-Control: no-cache`` と ``ETag`` を付けて送信されます。ブラウザは ``If-None-Match`` で再確認し、ファイルが変わっていなければ ``304`` を受け取ります。15.9 までは ``max-age=86400`` が付いていたため、更新したファイルがブラウザに最長 24 時間残ることがありました。
-- 設定は、 ``-D`` オプションの代わりに環境変数でも指定できます。 ``fess_config.properties`` のキーは ``FESS_CONFIG_<KEY>`` 、 ``system.properties`` のキーは ``FESS_SYSTEM_<KEY>`` です（キーは大文字にし、英数字以外の文字は ``_`` に置き換えます。 ``search_engine.password`` は ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。値を持つ ``-D`` オプションが環境変数より優先され、環境変数は ``fess_config.properties`` より優先されます。 ``system.properties`` にすでにあるキーは上書きされません。環境変数は ``-D`` オプションと違って ``ps`` や ``docker top`` に表示されず、システム情報では値がマスクされます。15.9.0 では、「全般」画面を保存すると ``FESS_SYSTEM_*`` 環境変数から来た値が ``system.properties`` に書き込まれ、そこに保存されたキーは環境変数より優先されます。このため、アップグレード後は、15.9.0 で「全般」画面の保存によって保存されたキーには ``FESS_SYSTEM_*`` 環境変数が効かず、その行を ``system.properties`` から削除するまでその状態が続きます。15.10 は、「全般」画面を保存しても、環境変数から来た値を書き込みません。
+- 設定は、 ``-D`` オプションの代わりに環境変数でも指定できます。 ``fess_config.properties`` のキーは ``FESS_CONFIG_<KEY>`` 、 ``system.properties`` のキーは ``FESS_SYSTEM_<KEY>`` です（キーは大文字にし、英数字以外の文字は ``_`` に置き換えます。 ``search_engine.password`` は ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。値を持つ ``-D`` オプションが環境変数より優先され、環境変数は ``fess_config.properties`` より優先されます。 ``system.properties`` にすでにあるキーは上書きされません。環境変数は ``-D`` オプションと違って ``ps`` や ``docker top`` に表示されず、システム情報では値がマスクされます。15.9.0 では、「全般」画面を保存すると、既定値のままの値も含めて「全般」のすべての設定が ``system.properties`` に書き込まれ、そこに保存されたキーは ``FESS_SYSTEM_<KEY>`` より優先されます。このため、アップグレード後は、15.9.0 で「全般」画面の保存によって保存されたキーには ``FESS_SYSTEM_*`` 環境変数が効かず、その行を ``system.properties`` から削除するまでその状態が続きます。15.10 は「全般」画面を保存するとき、 ``system.properties`` にまだないキーについて、 ``-Dfess.system.<key>`` または ``FESS_SYSTEM_<KEY>`` から来た値を書き込みません。
 - シークレット（パスワード、API キー、秘密鍵）を ``-Dfess.config.<key>`` または ``-Dfess.system.<key>`` のオプションで渡すと、15.10 は起動時に、そのキーと代わりに使う環境変数の名前を示す警告を ``fess.log`` に出力します。値は出力しません。
 - 環境変数 ``FESS_SESSION_STORE=opensearch`` を指定すると、HTTP セッションを検索エンジンに保存し、複数のノードで共有します。既定では無効です（ :ref:`セッション用のインデックス fess_config.session <upgrade-1510-session-index>` と :doc:`../config/session-store` を参照）。
 - ほかの 19 の管理 API（たとえば ``webconfig`` 、 ``fileconfig`` 、 ``dataconfig`` 、 ``role`` 、 ``group`` 、 ``labeltype`` 、 ``pathmap`` 、 ``scheduler`` 。 ``tagtype`` 、 ``general`` 、 ``theme`` 、 ``dict`` は対象外）の ``PUT /api/admin/<name>/setting`` も、上のユーザー API と同じように古い ``version_no`` を HTTP 400 と ``status`` ``1`` で拒否します。15.9 までは値が比較されず、一覧は ``-1`` を返していたため、 ``version_no`` に固定値を送るスクリプトは失敗するようになります。 ``GET /api/admin/<name>/setting/{id}`` で読み取った値を送り、拒否されたら設定を読み直してください。同じ設定への同時の更新も拒否されます。同じ ``version_no`` を付けた 5 つの ``PUT`` を同時に送ると、反映されるのは 1 つだけで、残りの 4 つは ``status`` ``1`` で HTTP 400 になります。現在の ``version_no`` を付けて更新を送り直してください。
@@ -1374,12 +1378,17 @@ RPM 版では、同じように ``/etc/fess/fess_config.properties`` と
 その設定の種類・名前・ID と、復号できなかったパラメーターのキーが示され、 ``app.cipher.key`` が保存したときの鍵と
 異なる可能性があることも書かれています（暗号化された値と鍵そのものは出力されません）。 ``app.cipher.key`` を元の値に戻してください。
 
-意図して ``app.cipher.key`` を変更する場合は、変更後に、保存されている秘密の値を入力し直してください。パスワードや
-暗号化されたパラメーターを持つすべての Web 認証、ファイル認証、クロール設定、データストア設定を開き、同じ設定の中で
-それらの値を平文で入力し直します。対象は、パスワード欄と、 ``{cipher}`` で始まる各パラメーターの値（平文の値に置き換えます）です。
-保存すると、 |Fess| が新しい鍵で暗号化し直します。設定を削除して作り直すのではなく、その設定のまま入力し直してください。
-作り直した設定には新しい ID が付きますが、ほかの設定（認証の Web クロール設定やファイルクロール設定など）やクロールの
-スケジュールは古い ID を参照しています。
+意図して ``app.cipher.key`` を変更する場合は、変更後に、保存されている秘密の値を入力し直してください。暗号化された値を持つ
+Web・ファイルのクロール設定、Web 認証・ファイル認証、データストア設定をそれぞれ編集画面で開き、 ``{cipher}`` で始まる
+パラメーターの値をすべて平文の値に置き換えます。1 つでも残っていると保存は失敗し、「データの更新に失敗しました。」と
+``Failed to decrypt a parameter: key=...`` でそのキーが示されます。Web 認証とファイル認証では、パスワードも入力し直してください。
+画面ではパスワード欄が空欄になり、「保存されたパスワードを現在の app.cipher.key で復号できません。パスワードを入力し直してください。」と
+表示されます。保存に失敗した後は、エラーの画面から送信し直すのではなく、編集画面を開き直してください。保存すると |Fess| が
+新しい鍵で値を暗号化し、次のクロールでそれが復号されます。
+
+設定は、削除して作り直すのではなく、その場で編集してください。作り直したクロール設定には新しい ID が付きますが、
+その Web 認証・ファイル認証とリクエストヘッダー、その ID を指定したスケジュールのジョブ、インデックスされた文書（その ``config_id`` ）は
+古い ID を参照しています。Web クロール設定を削除すると、その認証とリクエストヘッダーも削除されます。
 
 .. note::
 
@@ -2015,7 +2024,7 @@ RPM/DEB 版の場合::
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   ステップ 1 の方法で取得したスナップショットには、 ``.opensearch-sap-log-types-config`` などの OpenSearch プラグインのシステムインデックスを含む、クラスターのすべてのインデックスが含まれています。このようなインデックスは稼働中のクラスターでオープンされているため、 ``indices`` を指定しない復元は ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists`` で拒否されます。 ``indices`` を指定すると、Fess のインデックスと ``configsync`` インデックスだけが復元されます。
+   ステップ 1 の方法で取得したスナップショットには、 ``.plugins-ml-config`` や ``.opensearch-sap-log-types-config`` などの OpenSearch プラグインのシステムインデックスを含む、クラスターのすべてのインデックスが含まれています。このようなインデックスは稼働中のクラスターでオープンされているため、 ``indices`` を指定しない復元は ``cannot restore index [<index>] because an open index with same name already exists`` で拒否されます。 ``indices`` を指定すると、Fess のインデックスと ``configsync`` インデックスだけが復元されます。
 
 .. note::
 

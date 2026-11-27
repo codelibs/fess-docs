@@ -492,9 +492,9 @@ Docker 版
    词典文件移到那里，文档索引以及同样保留 15.9.0 的绝对路径 ``*_path`` 设置的 ``fess_suggest_analyzer``
    会保持未分配状态（分配说明中为 ``Resource path must
    be inside config directory``），集群变为红色。把 ``data/`` 复制到已启动过一次的主目录中，
-   也会出现同样的情况。步骤 7 的「重新索引」不会重新创建 ``fess_suggest_analyzer`` 。
+   也会出现同样的情况。
    把在 15.9.0 上创建的快照恢复到 OpenSearch 主目录位于其他路径的新 15.10 环境中时，也会出现同样的情况：恢复后的文档索引为红色，并显示 ``Resource path must be inside config directory`` 。
-   请将其恢复到位于旧路径的引擎中，或者不恢复文档索引而重新建立索引。下面的步骤会把新引擎放在创建索引时使用的路径上：
+   请将这样的快照恢复到位于旧路径的引擎中。下面的步骤会把新引擎放在创建索引时使用的路径上：
 
    1. 在 OpenSearch 已停止的状态下（步骤 2），将 OpenSearch 3.10.0 及其插件安装到另一个目录
       （例如在 ``fess-15.10.0`` 中执行 ``bin/fess-setup install opensearch``），并且不要启动它。
@@ -520,9 +520,13 @@ Docker 版
       使用 ``dictionary/`` 时，新索引记录的是相对路径，与旧索引并存时为绿色且可以搜索。
       用 15.10 的 ``bin/fess-setup install opensearch`` 全新安装时也会设置 ``dictionary/`` 。
       请显式设置它（环境变量或 ``bin/fess.in.sh``），因为 ``bin/fess.in.sh``
-      只会对位于 |Fess| 目录下 ``opensearch/`` 中的 OpenSearch 自行设置它：如果在步骤 3 中复制了 15.9.0 的
+      只会对位于 |Fess| 目录下 ``opensearch/`` 中的 OpenSearch 自行设置它：如果在步骤 3（ZIP 版的第 2 步）中复制了 15.9.0 的
       ``bin/fess.in.sh`` 且没有进行任何设置，在这种布局下 ``FESS_DICTIONARY_PATH`` 不会被设置，
       步骤 7 的「重新索引」会记录 ``Failed to create index`` 且不创建任何索引。
+
+      步骤 7 的「重新索引」不会重新创建 ``fess_suggest_analyzer`` ，因此它会保留 15.9.0 的绝对路径 ``*_path`` 设置。
+      要以相对路径重新创建它，请停止 |Fess| ，删除 ``fess_suggest_analyzer`` ，然后以 ``FESS_DICTIONARY_PATH=dictionary/`` 启动 |Fess| ：
+      |Fess| 会在启动时以相对路径重新创建它，在下一次运行「Suggest Indexer」作业之后，建议词功能即可正常工作。
 
    4. 从 ``$OLD`` 启动 OpenSearch，让它重试分配失败的分片（当集群因 OpenSearch 之前在其他路径下
       启动而为红色时需要这样做），然后确认健康状态::
@@ -798,7 +802,7 @@ URL 的协议不在列表中的搜索结果不会成为链接。对于经过「�
 - 新增设置 ``authentication.local.username.policy`` （默认 ``preserved`` ）。与 15.9 相同， |Fess| 仍按输入原样比较本地用户的名称，因此 ``Alice`` 和 ``alice`` 是两个用户。设为 ``mapped`` 后，在用户管理页面或通过 Admin API 创建或重命名本地用户时，如果忽略字符宽度、大小写和 Unicode 组合方式后名称与其他用户的名称相同，或是 ``authentication.admin.users`` 中某个条目的另一种写法，就会被拒绝。登录、用户 ID、保存的名称、权限和已建立索引的文档都不会改变。详细信息和限制请参见 :ref:`local-username-policy` 。
 - 1 KB 及以上的脚本、样式和 SVG 文件现在默认以 gzip 压缩后发送；15.9 不压缩任何内容。页面和 JSON 不会被压缩。可通过 ``tomcat_config.properties`` 中的 ``tomcat.compression`` （ ``on`` 或 ``off`` ）和 ``tomcat.compression.mime`` （添加到列表中的类型，以逗号分隔）进行控制。沿用自 15.9 的 ``tomcat_config.properties`` 中没有这两个键，因此压缩处于开启状态。如果 |Fess| 前面的反向代理自行压缩响应，请设置 ``tomcat.compression=off`` 。
 - 内置 ``bootstrap`` 主题的文件以 ``Cache-Control: no-cache`` 和 ``ETag`` 发送，文件未变化时，浏览器会携带 ``If-None-Match`` 再次请求并得到 ``304`` 。直到 15.9，它们带有 ``max-age=86400`` ，因此浏览器会将已更新的文件保留最长 24 小时。
-- 设置可以通过环境变量而不是 ``-D`` 选项来指定： ``fess_config.properties`` 的键使用 ``FESS_CONFIG_<KEY>`` ， ``system.properties`` 的键使用 ``FESS_SYSTEM_<KEY>`` （键使用大写，字母和数字以外的每个字符都替换为 ``_`` ； ``search_engine.password`` 对应 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。有值的 ``-D`` 选项优先于环境变量，环境变量优先于 ``fess_config.properties`` ； ``system.properties`` 中已有的键不会被覆盖。与 ``-D`` 选项不同，环境变量不会被 ``ps`` 或 ``docker top`` 显示，系统信息也会屏蔽其值。在 15.9.0 中，保存常规页面时会把来自 ``FESS_SYSTEM_*`` 环境变量的值写入 ``system.properties`` ，而保存在那里的键优先于环境变量。因此升级后，对于 15.9.0 中保存常规页面时存入的任何键， ``FESS_SYSTEM_*`` 环境变量都不起作用，直到从 ``system.properties`` 中删除这些行为止。15.10 在保存常规页面时不再写入来自环境变量的值。
+- 设置可以通过环境变量而不是 ``-D`` 选项来指定： ``fess_config.properties`` 的键使用 ``FESS_CONFIG_<KEY>`` ， ``system.properties`` 的键使用 ``FESS_SYSTEM_<KEY>`` （键使用大写，字母和数字以外的每个字符都替换为 ``_`` ； ``search_engine.password`` 对应 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` ）。有值的 ``-D`` 选项优先于环境变量，环境变量优先于 ``fess_config.properties`` ； ``system.properties`` 中已有的键不会被覆盖。与 ``-D`` 选项不同，环境变量不会被 ``ps`` 或 ``docker top`` 显示，系统信息也会屏蔽其值。在 15.9.0 中，保存常规页面时会把常规的所有设置（包括保持默认值的值）写入 ``system.properties`` ，而保存在那里的键优先于 ``FESS_SYSTEM_<KEY>`` 。因此升级后，对于 15.9.0 中保存常规页面时存入的键， ``FESS_SYSTEM_*`` 环境变量不起作用，直到从 ``system.properties`` 中删除这些行为止。15.10 在保存常规页面时，对于 ``system.properties`` 中尚未包含的键，不会写入来自 ``-Dfess.system.<key>`` 或 ``FESS_SYSTEM_<KEY>`` 的值。
 - 当密钥（密码、API 密钥或密钥串）以 ``-Dfess.config.<key>`` 或 ``-Dfess.system.<key>`` 选项给出时，15.10 会在启动时向 ``fess.log`` 输出一条警告，其中包含键名和应改用的变量，但不包含值。
 - 环境变量 ``FESS_SESSION_STORE=opensearch`` 会把 HTTP 会话保存在搜索引擎中，以便多个节点共享。默认关闭（请参阅 :ref:`用于会话的 fess_config.session 索引 <upgrade-1510-session-index>` 和 :doc:`../config/session-store` ）。
 - 另外 19 个管理 API（例如 ``webconfig`` 、 ``fileconfig`` 、 ``dataconfig`` 、 ``role`` 、 ``group`` 、 ``labeltype`` 、 ``pathmap`` 和 ``scheduler`` ；不包括 ``tagtype`` 、 ``general`` 、 ``theme`` 和 ``dict`` ）的 ``PUT /api/admin/<name>/setting`` 会像上面的用户 API 一样拒绝过期的 ``version_no`` ，返回 HTTP 400， ``status`` 为 ``1`` 。直到 15.9，该值从不比较，列表返回 ``-1`` ，因此发送固定 ``version_no`` 的脚本现在会失败：请发送从 ``GET /api/admin/<name>/setting/{id}`` 读取的值，被拒绝后请重新读取该设置。对同一设置的并发更新也会被拒绝：使用相同的 ``version_no`` 同时发送 5 个 ``PUT`` 请求时，只有 1 个生效，其余 4 个返回 HTTP 400， ``status`` 为 ``1`` 。请使用当前的 ``version_no`` 重新发送更新。
@@ -1345,10 +1349,14 @@ RPM 版请以同样方式比较 ``/etc/fess/fess_config.properties`` 与
 该配置的类型、名称和 ID，以及无法解密的参数的键，并写明 ``app.cipher.key`` 可能与保存时的密钥不同
 （加密后的值和密钥本身不会被输出）。请将 ``app.cipher.key`` 恢复为原来的值。
 
-如果要有意更改 ``app.cipher.key`` ，请在更改后重新输入已保存的机密值。打开每个含有密码或加密参数的 Web 认证、
-文件认证、爬取配置和数据存储配置，在同一个设置中以明文重新输入这些值：密码字段，以及每个以 ``{cipher}`` 开头的
-参数值（替换为其明文值）。保存时， |Fess| 会用新密钥重新加密它们。请在原设置中重新输入，而不要删除后重新创建：
-重新创建的设置会获得新的 ID，而其他设置（例如认证所属的 Web 或文件爬取配置）和爬取计划引用的是旧 ID。
+如果要有意更改 ``app.cipher.key`` ，请在更改后重新输入已保存的机密值。从编辑页面打开每个含有加密值的 Web 或文件爬取配置、
+Web 认证或文件认证以及数据存储配置，把每个以 ``{cipher}`` 开头的参数值替换为其明文值。只要还剩一个，保存就会失败，并显示
+“无法更新数据。”和指明该键的 ``Failed to decrypt a parameter: key=...`` 。对于 Web 认证或文件认证，还要重新输入密码：
+页面上的密码字段为空，并显示“无法使用当前的 app.cipher.key 解密已保存的密码。请重新输入密码。”保存失败后，请重新打开编辑页面，
+而不要从错误页面再次提交。保存时 |Fess| 会用新密钥加密这些值，下一次爬取会对其解密。
+
+请在原处编辑这些设置，而不要删除后重新创建。重新创建的爬取配置会获得新的 ID，而它的 Web 认证或文件认证和请求头、
+指定该 ID 的计划任务，以及已索引的文档（其 ``config_id`` ）引用的都是旧 ID。删除 Web 爬取配置时，其认证和请求头也会被删除。
 
 .. note::
 
@@ -1910,7 +1918,7 @@ RPM/DEB 版的情况::
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   按步骤 1 创建的快照包含集群中的所有索引，其中包括 ``.opensearch-sap-log-types-config`` 等 OpenSearch 插件的系统索引。这类索引在运行中的集群上处于打开状态，因此不指定 ``indices`` 的恢复会被拒绝，并提示 ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists`` 。指定 ``indices`` 后，只会恢复 Fess 的索引和 ``configsync`` 索引。
+   按步骤 1 创建的快照包含集群中的所有索引，其中包括 ``.plugins-ml-config`` 或 ``.opensearch-sap-log-types-config`` 等 OpenSearch 插件的系统索引。这类索引在运行中的集群上处于打开状态，因此不指定 ``indices`` 的恢复会被拒绝，并提示 ``cannot restore index [<index>] because an open index with same name already exists`` 。指定 ``indices`` 后，只会恢复 Fess 的索引和 ``configsync`` 索引。
 
 .. note::
 

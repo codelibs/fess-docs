@@ -501,9 +501,9 @@ Docker 버전
    직접 옮기면, 문서 인덱스와, 마찬가지로 15.9.0 의 절대 경로 ``*_path`` 설정을 가진 ``fess_suggest_analyzer`` 는
    할당되지 않은 상태로 남고(할당 설명에 ``Resource path must
    be inside config directory`` 가 표시됩니다) 클러스터는 red가 됩니다. 한 번 시작한 홈에 ``data/`` 를
-   복사한 경우에도 마찬가지입니다. 단계 7의 「재인덱싱」은 ``fess_suggest_analyzer`` 를 다시 만들지 않습니다.
+   복사한 경우에도 마찬가지입니다.
    15.9.0 에서 만든 스냅샷을 OpenSearch 홈이 다른 경로에 있는 새 15.10 환경에 복원한 경우에도 마찬가지로, 복원된 문서 인덱스는 ``Resource path must be inside config directory`` 로 red가 됩니다.
-   이전과 같은 경로에 있는 엔진에 복원하거나, 문서 인덱스를 복원하지 말고 인덱스를 다시 만드십시오. 다음 절차는 새 엔진을 인덱스가 만들어졌을 때의 경로에 둡니다.
+   그러한 스냅샷은 이전과 같은 경로에 있는 엔진에 복원하십시오. 다음 절차는 새 엔진을 인덱스가 만들어졌을 때의 경로에 둡니다.
 
    1. OpenSearch를 중지한 상태(단계 2)에서 OpenSearch 3.10.0과 플러그인을 다른 디렉터리에 설치하고
       (예: ``fess-15.10.0`` 에서 ``bin/fess-setup install opensearch``), 시작하지 마십시오. 이전 홈의
@@ -531,9 +531,14 @@ Docker 버전
       green 이 되고 검색할 수 있습니다. 15.10 의 ``bin/fess-setup install opensearch`` 로 새로 설치한 경우에도
       ``dictionary/`` 가 설정됩니다. 환경 변수 또는 ``bin/fess.in.sh`` 로 명시적으로 설정하십시오.
       ``bin/fess.in.sh`` 는 |Fess| 디렉터리의 ``opensearch/`` 아래에 있는 OpenSearch에 대해서만
-      스스로 설정하기 때문입니다. 단계 3에서 15.9.0 의 ``bin/fess.in.sh`` 를 복사하고 아무것도 설정하지 않으면
+      스스로 설정하기 때문입니다. 단계 3(ZIP 버전의 절차 2)에서 15.9.0 의 ``bin/fess.in.sh`` 를 복사하고 아무것도 설정하지 않으면
       이 배치에서는 ``FESS_DICTIONARY_PATH`` 가 설정되지 않으며, 단계 7의 「재인덱싱」은 ``Failed to create index`` 를
       기록하고 아무것도 만들지 않습니다.
+
+      단계 7의 「재인덱싱」은 ``fess_suggest_analyzer`` 를 다시 만들지 않으므로 15.9.0 의 절대 경로 ``*_path`` 설정이 남습니다.
+      상대 경로로 다시 만들려면 |Fess| 를 중지하고 ``fess_suggest_analyzer`` 를 삭제한 뒤 ``FESS_DICTIONARY_PATH=dictionary/`` 로
+      |Fess| 를 시작하십시오. |Fess| 는 시작할 때 상대 경로로 이를 다시 만들며, 다음에 「Suggest Indexer」 작업이 실행된 후부터
+      추천어가 동작합니다.
 
    4. ``$OLD`` 에서 OpenSearch를 시작하고, 실패한 샤드의 할당을 다시 시도하도록 요청한 뒤(이전에
       다른 경로에서 OpenSearch를 시작하여 클러스터가 red인 경우에 필요합니다) 상태를 확인합니다::
@@ -811,7 +816,7 @@ URL의 스킴이 목록에 없는 검색 결과는 링크가 되지 않습니다
 - 새 설정 ``authentication.local.username.policy`` (기본값 ``preserved`` )가 있습니다. |Fess| 는 15.9까지와 같이 로컬 사용자의 이름을 입력된 그대로 비교하므로 ``Alice`` 와 ``alice`` 는 두 명의 사용자입니다. ``mapped`` 로 하면, 사용자 관리 화면 또는 Admin API에서 로컬 사용자를 만들거나 이름을 바꿀 때, 문자 폭, 대소문자, 유니코드 합성의 차이를 무시했을 때 이름이 다른 사용자의 이름과 같아지거나 ``authentication.admin.users`` 항목의 다른 표기가 되면 거부됩니다. 로그인, 사용자 ID, 저장되는 이름, 권한, 색인된 문서는 바뀌지 않습니다. 자세한 내용과 제한은 :ref:`local-username-policy` 를 참조하십시오.
 - 1 KB 이상의 스크립트, 스타일, SVG 파일은 기본적으로 gzip으로 압축되어 전송됩니다. 15.9는 아무것도 압축하지 않았습니다. 페이지와 JSON은 압축되지 않습니다. ``tomcat_config.properties`` 의 ``tomcat.compression`` (``on`` 또는 ``off``)과 ``tomcat.compression.mime`` (목록에 추가할 타입, 쉼표로 구분)으로 제어합니다. 15.9에서 이어받은 ``tomcat_config.properties`` 에는 두 키가 모두 없으므로 압축이 켜집니다. |Fess| 앞단의 리버스 프록시가 응답을 직접 압축하는 경우에는 ``tomcat.compression=off`` 로 설정하십시오.
 - 번들된 ``bootstrap`` 테마의 파일은 ``Cache-Control: no-cache`` 와 ``ETag`` 로 전송되며, 브라우저는 ``If-None-Match`` 로 다시 요청하고 파일이 바뀌지 않았으면 ``304`` 를 받습니다. 15.9까지는 ``max-age=86400`` 이 붙어 있어 갱신된 파일을 브라우저가 최대 24시간 동안 유지했습니다.
-- 설정은 ``-D`` 옵션 대신 환경 변수로도 지정할 수 있습니다. ``fess_config.properties`` 의 키에는 ``FESS_CONFIG_<KEY>`` , ``system.properties`` 의 키에는 ``FESS_SYSTEM_<KEY>`` 를 사용합니다(키를 대문자로 하고 영문자와 숫자 이외의 문자는 모두 ``_`` 로 바꿉니다. ``search_engine.password`` 는 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` 입니다). 값이 있는 ``-D`` 옵션이 환경 변수보다 우선하고, 환경 변수가 ``fess_config.properties`` 보다 우선합니다. ``system.properties`` 에 이미 있는 키는 덮어쓰지 않습니다. 환경 변수는 ``-D`` 옵션과 달리 ``ps`` 나 ``docker top`` 에 표시되지 않으며, 시스템 정보에서는 값이 마스킹됩니다. 15.9.0 에서는 일반 화면을 저장하면 ``FESS_SYSTEM_*`` 환경 변수에서 온 값이 ``system.properties`` 에 기록되었고, 거기에 저장된 키는 환경 변수보다 우선합니다. 따라서 업그레이드 후에는 15.9.0 에서 일반 화면 저장으로 저장된 키에 대해 ``FESS_SYSTEM_*`` 환경 변수가 효과가 없으며, 그 줄을 ``system.properties`` 에서 삭제할 때까지 그대로입니다. 15.10 은 일반 화면을 저장할 때 환경 변수에서 온 값을 기록하지 않습니다.
+- 설정은 ``-D`` 옵션 대신 환경 변수로도 지정할 수 있습니다. ``fess_config.properties`` 의 키에는 ``FESS_CONFIG_<KEY>`` , ``system.properties`` 의 키에는 ``FESS_SYSTEM_<KEY>`` 를 사용합니다(키를 대문자로 하고 영문자와 숫자 이외의 문자는 모두 ``_`` 로 바꿉니다. ``search_engine.password`` 는 ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD`` 입니다). 값이 있는 ``-D`` 옵션이 환경 변수보다 우선하고, 환경 변수가 ``fess_config.properties`` 보다 우선합니다. ``system.properties`` 에 이미 있는 키는 덮어쓰지 않습니다. 환경 변수는 ``-D`` 옵션과 달리 ``ps`` 나 ``docker top`` 에 표시되지 않으며, 시스템 정보에서는 값이 마스킹됩니다. 15.9.0 에서는 일반 화면을 저장하면 기본값 그대로인 값까지 포함하여 일반의 모든 설정이 ``system.properties`` 에 기록되었고, 거기에 저장된 키는 ``FESS_SYSTEM_<KEY>`` 보다 우선합니다. 따라서 업그레이드 후에는 15.9.0 에서 일반 화면 저장으로 저장된 키에 대해 ``FESS_SYSTEM_*`` 환경 변수가 효과가 없으며, 그 줄을 ``system.properties`` 에서 삭제할 때까지 그대로입니다. 15.10 은 일반 화면을 저장할 때 ``system.properties`` 에 아직 없는 키에 대해 ``-Dfess.system.<key>`` 또는 ``FESS_SYSTEM_<KEY>`` 에서 온 값을 기록하지 않습니다.
 - 비밀(비밀번호, API 키, 시크릿 키)을 ``-Dfess.config.<key>`` 또는 ``-Dfess.system.<key>`` 옵션으로 지정하면, 15.10은 시작할 때 해당 키와 대신 사용할 환경 변수를 알리는 경고를 ``fess.log`` 에 출력합니다. 값은 출력하지 않습니다.
 - 환경 변수 ``FESS_SESSION_STORE=opensearch`` 는 HTTP 세션을 검색 엔진에 보관하여 여러 노드가 공유하게 합니다. 기본값은 꺼짐입니다(:ref:`세션용 fess_config.session 인덱스 <upgrade-1510-session-index>` 와 :doc:`../config/session-store` 참조).
 - 관리 API 19개(예: ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap``, ``scheduler``. ``tagtype``, ``general``, ``theme``, ``dict`` 는 제외)의 ``PUT /api/admin/<name>/setting`` 도 위의 사용자 API와 마찬가지로 오래된 ``version_no`` 를 HTTP 400과 ``status`` ``1`` 로 거부합니다. 15.9까지는 값을 비교하지 않았고 목록은 ``-1`` 을 반환했으므로, 상수 ``version_no`` 를 보내는 스크립트는 이제 실패합니다. ``GET /api/admin/<name>/setting/{id}`` 에서 읽은 값을 보내고, 거부된 후에는 설정을 다시 읽으십시오. 같은 설정에 대한 동시 업데이트도 거부됩니다. 같은 ``version_no`` 로 5개의 ``PUT`` 요청을 동시에 보내면 1개만 반영되고 나머지 4개는 HTTP 400과 ``status`` ``1`` 을 받습니다. 현재 ``version_no`` 로 업데이트를 다시 보내십시오.
@@ -1400,12 +1405,17 @@ RPM 버전에서는 같은 방식으로 ``/etc/fess/fess_config.properties`` 와
 그 설정의 종류·이름·ID와 복호화하지 못한 파라미터의 키가 표시되며, ``app.cipher.key`` 가 저장했을 때의 키와
 다를 가능성이 있다는 내용도 적혀 있습니다(암호화된 값과 키 자체는 출력되지 않습니다). ``app.cipher.key`` 를 원래 값으로 되돌리십시오.
 
-의도적으로 ``app.cipher.key`` 를 변경하는 경우에는 변경한 후에 저장된 비밀 값을 다시 입력하십시오. 비밀번호나
-암호화된 파라미터를 가진 모든 웹 인증, 파일 인증, 크롤링 설정, 데이터스토어 설정을 열고, 같은 설정 안에서
-그 값들을 평문으로 다시 입력합니다. 대상은 비밀번호 필드와, ``{cipher}`` 로 시작하는 각 파라미터 값(평문 값으로 바꿉니다)입니다.
-저장하면 |Fess| 가 새 키로 다시 암호화합니다. 설정을 삭제하고 다시 만들지 말고 그 설정에서 그대로 다시 입력하십시오.
-다시 만든 설정에는 새 ID가 붙지만, 다른 설정(인증의 웹 또는 파일 크롤링 설정 등)과 크롤링 스케줄은 이전 ID를
-참조합니다.
+의도적으로 ``app.cipher.key`` 를 변경하는 경우에는 변경한 후에 저장된 비밀 값을 다시 입력하십시오. 암호화된 값을 가진
+웹·파일 크롤링 설정, 웹 인증·파일 인증, 데이터스토어 설정을 각각 편집 화면에서 열고, ``{cipher}`` 로 시작하는 파라미터 값을
+모두 평문 값으로 바꿉니다. 하나라도 남아 있으면 저장이 실패하고 "데이터를 업데이트하지 못했습니다."와
+``Failed to decrypt a parameter: key=...`` 로 그 키가 표시됩니다. 웹 인증과 파일 인증에서는 비밀번호도 다시 입력하십시오.
+화면에는 비밀번호 필드가 비어 있고 "저장된 비밀번호를 현재 app.cipher.key로 복호화할 수 없습니다. 비밀번호를 다시 입력하십시오."가
+표시됩니다. 저장에 실패한 후에는 오류 화면에서 다시 제출하지 말고 편집 화면을 다시 여십시오. 저장하면 |Fess| 가 새 키로
+값을 암호화하며, 다음 크롤링에서 이를 복호화합니다.
+
+설정은 삭제하고 다시 만들지 말고 그 자리에서 편집하십시오. 다시 만든 크롤링 설정에는 새 ID가 붙지만, 그 웹 인증·파일 인증과
+요청 헤더, 그 ID를 지정한 예약 작업, 색인된 문서(그 ``config_id``)는 이전 ID를 참조합니다. 웹 크롤링 설정을 삭제하면 그 인증과
+요청 헤더도 삭제됩니다.
 
 .. note::
 
@@ -2026,7 +2036,7 @@ RPM/DEB 버전의 경우::
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   단계 1의 방법으로 만든 스냅샷에는 ``.opensearch-sap-log-types-config`` 등 OpenSearch 플러그인의 시스템 인덱스를 포함하여 클러스터의 모든 인덱스가 들어 있습니다. 이러한 인덱스는 실행 중인 클러스터에서 열려 있으므로, ``indices`` 설정 없이 복원하면 ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists`` 로 거부됩니다. ``indices`` 를 지정하면 Fess의 인덱스와 ``configsync`` 인덱스만 복원됩니다.
+   단계 1의 방법으로 만든 스냅샷에는 ``.plugins-ml-config`` 나 ``.opensearch-sap-log-types-config`` 등 OpenSearch 플러그인의 시스템 인덱스를 포함하여 클러스터의 모든 인덱스가 들어 있습니다. 이러한 인덱스는 실행 중인 클러스터에서 열려 있으므로, ``indices`` 설정 없이 복원하면 ``cannot restore index [<index>] because an open index with same name already exists`` 로 거부됩니다. ``indices`` 를 지정하면 Fess의 인덱스와 ``configsync`` 인덱스만 복원됩니다.
 
 .. note::
 

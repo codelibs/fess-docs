@@ -531,12 +531,11 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
    les fichiers de dictionnaire, l'index de documents et ``fess_suggest_analyzer``, qui conserve lui
    aussi les paramètres ``*_path`` absolus de 15.9.0, restent non assignés (``Resource path must
    be inside config directory`` dans l'explication d'allocation) et le cluster est rouge. Il en va de même
-   lorsque vous copiez ``data/`` dans un répertoire racine déjà démarré une fois. La « Réindexation »
-   de l'étape 7 ne recrée pas ``fess_suggest_analyzer``. Il en va de même lorsqu'un snapshot pris en
-   15.9.0 est restauré dans une nouvelle installation 15.10 dont le répertoire racine d'OpenSearch se
-   trouve à un autre chemin : l'index de documents restauré est rouge avec
-   ``Resource path must be inside config directory``. Restaurez-le dans un moteur situé à l'ancien chemin,
-   ou réindexez les documents au lieu de restaurer l'index de documents. La procédure
+   lorsque vous copiez ``data/`` dans un répertoire racine déjà démarré une fois, et lorsqu'un snapshot
+   pris en 15.9.0 est restauré dans une nouvelle installation 15.10 dont le répertoire racine d'OpenSearch
+   se trouve à un autre chemin : l'index de documents restauré est rouge avec
+   ``Resource path must be inside config directory``. Restaurez un tel snapshot dans un moteur situé à
+   l'ancien chemin. La procédure
    ci-dessous place le nouveau moteur au chemin avec lequel les index ont été créés :
 
    1. OpenSearch étant arrêté (étape 2), installez OpenSearch 3.10.0 et ses plugins dans un autre
@@ -567,8 +566,15 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
       ``bin/fess-setup install opensearch`` de 15.10 définit aussi ``dictionary/``. Définissez-le explicitement (variable d'environnement ou
       ``bin/fess.in.sh``), car ``bin/fess.in.sh`` ne le définit de lui-même que pour un OpenSearch situé sous
       ``opensearch/`` dans le répertoire de |Fess| : avec le ``bin/fess.in.sh`` de 15.9.0 copié à
-      l'étape 3 et rien de défini, ``FESS_DICTIONARY_PATH`` n'est pas défini dans cette disposition, et
-      la « Réindexation » de l'étape 7 journalise ``Failed to create index`` et ne crée rien.
+      l'étape 3 (Version ZIP, étape 2) et rien de défini, ``FESS_DICTIONARY_PATH`` n'est pas défini dans
+      cette disposition, et la « Réindexation » de l'étape 7 journalise ``Failed to create index`` et ne
+      crée rien.
+
+      La « Réindexation » de l'étape 7 ne recrée pas ``fess_suggest_analyzer`` ; il garde donc les
+      paramètres ``*_path`` absolus de 15.9.0. Pour le recréer avec des chemins relatifs, arrêtez |Fess|,
+      supprimez ``fess_suggest_analyzer`` et démarrez |Fess| avec ``FESS_DICTIONARY_PATH=dictionary/`` :
+      |Fess| le recrée au démarrage avec des chemins relatifs, et les suggestions fonctionnent après la
+      prochaine exécution de la tâche « Suggest Indexer ».
 
    4. Démarrez OpenSearch depuis ``$OLD``, demandez-lui de réessayer l'allocation des shards en échec (nécessaire
       lorsque le cluster est rouge parce qu'OpenSearch a été démarré auparavant à un autre chemin), et vérifiez
@@ -852,7 +858,7 @@ Autres changements de comportement
 - Nouveau paramètre ``authentication.local.username.policy`` (``preserved`` par défaut). |Fess| compare toujours les noms des utilisateurs locaux exactement tels qu'ils sont saisis, comme en 15.9 ; ``Alice`` et ``alice`` sont donc deux utilisateurs. Avec ``mapped``, la création ou le renommage d'un utilisateur local sur l'écran de gestion des utilisateurs ou avec l'API d'administration est refusé lorsque le nom, sans tenir compte de la largeur des caractères, de la casse ni de la composition Unicode, est identique au nom d'un autre utilisateur ou est une autre graphie d'une entrée de ``authentication.admin.users``. La connexion, les ID d'utilisateur, les noms stockés, les permissions et les documents indexés ne changent pas. Pour les détails et les limites, voir :ref:`local-username-policy`.
 - Les scripts, les feuilles de style et les fichiers SVG de 1 Ko ou plus sont envoyés compressés avec gzip par défaut ; la 15.9 ne compressait rien. Les pages et le JSON ne sont pas compressés. ``tomcat.compression`` (``on`` ou ``off``) et ``tomcat.compression.mime`` (types ajoutés à la liste, séparés par des virgules) dans ``tomcat_config.properties`` le contrôlent. Un ``tomcat_config.properties`` repris de la 15.9 n'a aucune de ces clés ; la compression est donc active. Définissez ``tomcat.compression=off`` lorsqu'un proxy inverse placé devant |Fess| compresse lui-même les réponses.
 - Les fichiers du thème ``bootstrap`` fourni sont envoyés avec ``Cache-Control: no-cache`` et un ``ETag`` ; un navigateur les redemande avec ``If-None-Match`` et obtient ``304`` tant que le fichier est inchangé. Jusqu'à la 15.9, ils portaient ``max-age=86400`` : un navigateur conservait donc un fichier mis à jour jusqu'à 24 heures.
-- Un paramètre peut être fourni par une variable d'environnement au lieu d'une option ``-D`` : ``FESS_CONFIG_<KEY>`` pour une clé de ``fess_config.properties`` et ``FESS_SYSTEM_<KEY>`` pour une clé de ``system.properties`` (la clé en majuscules, chaque caractère autre qu'une lettre ou un chiffre remplacé par ``_`` ; ``search_engine.password`` devient ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). Une option ``-D`` avec une valeur l'emporte sur la variable, et la variable l'emporte sur ``fess_config.properties`` ; une clé que ``system.properties`` possède déjà n'est pas remplacée. Une variable, contrairement à une option ``-D``, n'est pas affichée par ``ps`` ni ``docker top``, et Informations système masque sa valeur. En 15.9.0, l'enregistrement de l'écran Général écrivait dans ``system.properties`` les valeurs qui provenaient de variables ``FESS_SYSTEM_*``, et une clé enregistrée là l'emporte sur la variable ; après la mise à niveau, une variable ``FESS_SYSTEM_*`` reste donc sans effet pour toute clé qu'un enregistrement de l'écran Général a stockée en 15.9.0, jusqu'à ce que cette ligne soit supprimée de ``system.properties``. 15.10 n'écrit plus une valeur qui provient d'une variable lors de l'enregistrement de l'écran Général.
+- Un paramètre peut être fourni par une variable d'environnement au lieu d'une option ``-D`` : ``FESS_CONFIG_<KEY>`` pour une clé de ``fess_config.properties`` et ``FESS_SYSTEM_<KEY>`` pour une clé de ``system.properties`` (la clé en majuscules, chaque caractère autre qu'une lettre ou un chiffre remplacé par ``_`` ; ``search_engine.password`` devient ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). Une option ``-D`` avec une valeur l'emporte sur la variable, et la variable l'emporte sur ``fess_config.properties`` ; une clé que ``system.properties`` possède déjà n'est pas remplacée. Une variable, contrairement à une option ``-D``, n'est pas affichée par ``ps`` ni ``docker top``, et Informations système masque sa valeur. En 15.9.0, l'enregistrement de l'écran Général écrivait dans ``system.properties`` tous les paramètres de Général, y compris les valeurs restées à leur valeur par défaut, et une clé enregistrée là l'emporte sur ``FESS_SYSTEM_<KEY>`` ; après la mise à niveau, une variable ``FESS_SYSTEM_*`` reste donc sans effet pour une clé qu'un enregistrement de l'écran Général en 15.9.0 a stockée, jusqu'à ce que cette ligne soit supprimée de ``system.properties``. Lors de l'enregistrement de l'écran Général, 15.10 n'écrit pas une valeur qui provient de ``-Dfess.system.<key>`` ou de ``FESS_SYSTEM_<KEY>`` pour une clé que ``system.properties`` ne contient pas encore.
 - Lorsqu'un secret (un mot de passe, une clé d'API ou une clé secrète) est fourni par une option ``-Dfess.config.<key>`` ou ``-Dfess.system.<key>``, la 15.10 écrit au démarrage un avertissement dans ``fess.log`` qui nomme la clé et la variable à utiliser à la place, jamais la valeur.
 - La variable d'environnement ``FESS_SESSION_STORE=opensearch`` conserve les sessions HTTP dans le moteur de recherche afin que plusieurs nœuds les partagent. Elle est désactivée par défaut (voir :ref:`L'index fess_config.session pour les sessions <upgrade-1510-session-index>` et :doc:`../config/session-store`).
 - ``PUT /api/admin/<name>/setting`` de 19 autres API d'administration (par exemple ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` et ``scheduler`` ; pas ``tagtype``, ``general``, ``theme`` ni ``dict``) refuse un ``version_no`` obsolète comme l'API des utilisateurs ci-dessus, avec HTTP 400 et ``status`` ``1``. Jusqu'à la 15.9, la valeur n'était jamais comparée et les listes renvoyaient ``-1`` ; un script qui envoie un ``version_no`` constant échoue donc maintenant : envoyez la valeur lue avec ``GET /api/admin/<name>/setting/{id}`` et relisez le paramètre après un refus. Les mises à jour simultanées d'un même paramètre sont également refusées : sur 5 requêtes ``PUT`` envoyées en même temps avec le même ``version_no``, 1 est appliquée et les 4 autres reçoivent HTTP 400 avec ``status`` ``1``. Renvoyez la mise à jour avec le ``version_no`` actuel.
@@ -1467,14 +1473,22 @@ les valeurs enregistrées ne peuvent pas être déchiffrées : ``fess-crawler.lo
 Dès qu'une seule configuration contient une valeur qui ne peut pas être déchiffrée, l'exploration s'arrête à ce point. La configuration non déchiffrable n'est pas simplement ignorée : les autres configurations visées par la même exploration ne sont pas indexées non plus. Le message de la ``CipherFailureException`` indique le type, le nom et l'ID de cette configuration ainsi que la clé du paramètre qui n'a pas pu être déchiffré, et précise que ``app.cipher.key`` peut différer de la clé utilisée lors de l'enregistrement (ni la valeur chiffrée ni la clé elle-même ne sont affichées). Rétablissez la valeur d'origine de ``app.cipher.key``.
 
 Pour changer ``app.cipher.key`` délibérément, saisissez de nouveau les secrets enregistrés après le
-changement. Ouvrez chaque authentification Web, authentification de fichiers, configuration
-d'exploration et configuration DataStore qui contient un mot de passe ou un paramètre chiffré, et
-saisissez de nouveau ces valeurs en clair dans le même paramétrage : le champ du mot de passe, et chaque
-valeur de paramètre qui commence par ``{cipher}``, remplacée par sa valeur en clair. |Fess| les chiffre
-de nouveau avec la nouvelle clé à l'enregistrement. Saisissez-les de nouveau sur place plutôt que de
-supprimer le paramétrage et de le recréer : un paramétrage recréé reçoit un nouvel ID, alors que
-d'autres paramétrages (comme la configuration Web ou de fichiers d'une authentification) et la
-planification de l'exploration font référence à l'ancien.
+changement. Ouvrez depuis son écran de modification chaque configuration d'exploration Web ou de
+fichiers, authentification Web ou de fichiers et configuration DataStore qui contient des valeurs
+chiffrées, et remplacez chaque valeur de paramètre qui commence par ``{cipher}`` par sa valeur en clair.
+Tant qu'il en reste une, l'enregistrement échoue avec « Échec de la mise à jour des données. » et
+``Failed to decrypt a parameter: key=...``, qui nomme la clé. Pour une authentification Web ou de
+fichiers, saisissez aussi de nouveau le mot de passe : l'écran affiche le champ vide avec « Le mot de
+passe enregistré n'a pas pu être déchiffré avec le app.cipher.key actuel. Saisissez à nouveau le mot de
+passe. » Après un enregistrement qui a échoué, rouvrez l'écran de modification au lieu de soumettre de
+nouveau la page d'erreur. |Fess| chiffre les valeurs avec la nouvelle clé à l'enregistrement, et
+l'exploration suivante les déchiffre.
+
+Modifiez les paramétrages sur place plutôt que de les supprimer et de les recréer. Une configuration
+d'exploration recréée reçoit un nouvel ID, alors que ses authentifications Web ou de fichiers et ses
+en-têtes de requête, les tâches planifiées qui nomment l'ID et les documents indexés (leur
+``config_id``) font référence à l'ancien ID. Supprimer une configuration d'exploration Web supprime
+aussi ses authentifications et ses en-têtes de requête.
 
 .. note::
 
@@ -2154,7 +2168,7 @@ Restauration depuis le snapshot. OpenSearch doit être en cours d'exécution et 
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   Un snapshot pris comme à l'étape 1 contient tous les index du cluster, y compris des index système de plugins d'OpenSearch comme ``.opensearch-sap-log-types-config``. Un tel index est ouvert sur le cluster en cours d'exécution ; une restauration sans le paramètre ``indices`` est donc refusée avec ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists``. Avec ce paramètre, seuls les index de Fess et l'index ``configsync`` sont restaurés.
+   Un snapshot pris comme à l'étape 1 contient tous les index du cluster, y compris des index système de plugins d'OpenSearch comme ``.plugins-ml-config`` ou ``.opensearch-sap-log-types-config``. Un tel index est ouvert sur le cluster en cours d'exécution ; une restauration sans le paramètre ``indices`` est donc refusée avec ``cannot restore index [<index>] because an open index with same name already exists``. Avec ce paramètre, seuls les index de Fess et l'index ``configsync`` sont restaurés.
 
 .. note::
 

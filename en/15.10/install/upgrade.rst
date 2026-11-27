@@ -512,11 +512,10 @@ upgrade it using the following procedure.
    the dictionary files there by hand, the document index and ``fess_suggest_analyzer``, which
    also keeps the absolute ``*_path`` settings of 15.9.0, stay unassigned (``Resource path must
    be inside config directory`` in the allocation explanation) and the cluster is red. The same
-   happens when you copy ``data/`` into a home that has already been started once. "Re-indexing"
-   in Step 7 does not create ``fess_suggest_analyzer`` again. The same happens when a snapshot taken
-   on 15.9.0 is restored into a new 15.10 installation whose OpenSearch home is at another path: the
-   restored document index is red with ``Resource path must be inside config directory``. Restore it into an
-   engine at the old path, or re-index the documents instead of restoring the document index. The procedure below puts the new
+   happens when you copy ``data/`` into a home that has already been started once, and when a
+   snapshot taken on 15.9.0 is restored into a new 15.10 installation whose OpenSearch home is at
+   another path: the restored document index is red with ``Resource path must be inside config directory``.
+   Restore such a snapshot into an engine at the old path. The procedure below puts the new
    engine at the path the indices were created with:
 
    1. With OpenSearch stopped (Step 2), install OpenSearch 3.10.0 and its plugins in another
@@ -546,9 +545,15 @@ upgrade it using the following procedure.
       searchable next to the old indices. A fresh ``bin/fess-setup install opensearch`` of 15.10
       also sets ``dictionary/``. Set it explicitly (environment variable or ``bin/fess.in.sh``),
       because ``bin/fess.in.sh`` sets it on its own only for an OpenSearch under ``opensearch/`` in
-      the |Fess| directory: with the ``bin/fess.in.sh`` of 15.9.0 copied in Step 3 and nothing
-      set, ``FESS_DICTIONARY_PATH`` is unset in this layout, and "Re-indexing" in Step 7 logs
-      ``Failed to create index`` and creates nothing.
+      the |Fess| directory: with the ``bin/fess.in.sh`` of 15.9.0 copied in Step 3 (ZIP Version,
+      step 2) and nothing set, ``FESS_DICTIONARY_PATH`` is unset in this layout, and "Re-indexing" in
+      Step 7 logs ``Failed to create index`` and creates nothing.
+
+      "Re-indexing" in Step 7 does not create ``fess_suggest_analyzer`` again, so it keeps the
+      absolute ``*_path`` settings of 15.9.0. To re-create it with relative paths, stop |Fess|, delete
+      ``fess_suggest_analyzer`` and start |Fess| with ``FESS_DICTIONARY_PATH=dictionary/``: |Fess|
+      creates it again at startup with relative paths, and suggestions work after the next run of
+      the "Suggest Indexer" job.
 
    4. Start OpenSearch from ``$OLD``, ask it to retry the allocation of shards that failed (needed
       when the cluster is red because OpenSearch was started at another path before), and check
@@ -830,7 +835,7 @@ Other Behavior Changes
 - New setting ``authentication.local.username.policy`` (default ``preserved``). |Fess| still compares the names of local users exactly as typed, as in 15.9, so ``Alice`` and ``alice`` are two users. With ``mapped``, creating or renaming a local user on the user management screen or with the Admin API is refused when the name is the same as the name of another user, or a different spelling of an entry of ``authentication.admin.users``, once width, case and Unicode composition are ignored. Login, user IDs, stored names, permissions and indexed documents do not change. For the details and the limits, see :ref:`local-username-policy`.
 - Scripts, styles and SVG files of 1 KB or more are sent compressed with gzip by default; 15.9 compressed nothing. Pages and JSON are not compressed. ``tomcat.compression`` (``on`` or ``off``) and ``tomcat.compression.mime`` (types added to the list, comma-separated) in ``tomcat_config.properties`` control it. A ``tomcat_config.properties`` carried over from 15.9 has neither key, so the compression is on. Set ``tomcat.compression=off`` when a reverse proxy in front of |Fess| compresses the responses itself.
 - The files of the bundled ``bootstrap`` theme are sent with ``Cache-Control: no-cache`` and an ``ETag``, and a browser asks again with ``If-None-Match`` and gets ``304`` while the file is unchanged. Up to 15.9 they carried ``max-age=86400``, so a browser kept an updated file for up to 24 hours.
-- A setting can be given as an environment variable instead of a ``-D`` option: ``FESS_CONFIG_<KEY>`` for a key of ``fess_config.properties`` and ``FESS_SYSTEM_<KEY>`` for a key of ``system.properties`` (the key in upper case, every character other than a letter or digit replaced by ``_``; ``search_engine.password`` is ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). A ``-D`` option with a value wins over the variable, and the variable wins over ``fess_config.properties``; a key that ``system.properties`` already has is not overridden. A variable, unlike a ``-D`` option, is not shown by ``ps`` or ``docker top``, and System Info masks its value. In 15.9.0, saving the General screen wrote the values that came from ``FESS_SYSTEM_*`` variables into ``system.properties``, and a key stored there wins over the variable, so after the upgrade a ``FESS_SYSTEM_*`` variable has no effect for any key that a save of the General screen stored in 15.9.0, until that line is removed from ``system.properties``. 15.10 no longer writes a value that comes from a variable when the General screen is saved.
+- A setting can be given as an environment variable instead of a ``-D`` option: ``FESS_CONFIG_<KEY>`` for a key of ``fess_config.properties`` and ``FESS_SYSTEM_<KEY>`` for a key of ``system.properties`` (the key in upper case, every character other than a letter or digit replaced by ``_``; ``search_engine.password`` is ``FESS_CONFIG_SEARCH_ENGINE_PASSWORD``). A ``-D`` option with a value wins over the variable, and the variable wins over ``fess_config.properties``; a key that ``system.properties`` already has is not overridden. A variable, unlike a ``-D`` option, is not shown by ``ps`` or ``docker top``, and System Info masks its value. In 15.9.0, saving the General screen wrote every General setting into ``system.properties``, including values left at the default, and a key stored there wins over ``FESS_SYSTEM_<KEY>``, so after the upgrade a ``FESS_SYSTEM_*`` variable has no effect for a key that a save of the General screen in 15.9.0 stored, until that line is removed from ``system.properties``. When the General screen is saved, 15.10 does not write a value that comes from ``-Dfess.system.<key>`` or ``FESS_SYSTEM_<KEY>`` for a key that ``system.properties`` does not already hold.
 - When a secret (a password, an API key or a secret key) is given as a ``-Dfess.config.<key>`` or ``-Dfess.system.<key>`` option, 15.10 writes a warning to ``fess.log`` at startup that names the key and the variable to use instead, never the value.
 - The environment variable ``FESS_SESSION_STORE=opensearch`` keeps the HTTP sessions in the search engine so that several nodes share them. It is off by default (see :ref:`The fess_config.session Index for Sessions <upgrade-1510-session-index>` and :doc:`../config/session-store`).
 - ``PUT /api/admin/<name>/setting`` of 19 more admin APIs (for example ``webconfig``, ``fileconfig``, ``dataconfig``, ``role``, ``group``, ``labeltype``, ``pathmap`` and ``scheduler``; not ``tagtype``, ``general``, ``theme`` or ``dict``) refuses a stale ``version_no`` like the user API above, with HTTP 400 and ``status`` ``1``. Up to 15.9 the value was never compared and the lists returned ``-1``, so a script that sends a constant ``version_no`` fails now: send the value read from ``GET /api/admin/<name>/setting/{id}`` and read the setting again after a refusal. Concurrent updates of the same setting are refused as well: of 5 ``PUT`` requests sent at the same time with the same ``version_no``, 1 is applied and the other 4 get HTTP 400 with ``status`` ``1``. Send the update again with the current ``version_no``.
@@ -1417,14 +1422,20 @@ the other configurations targeted by the same crawl are not indexed either. The 
 configuration and the key of the parameter that could not be decrypted, and it also says that ``app.cipher.key`` may differ from the key used when the value was saved
 (neither the encrypted value nor the key itself is output). Set ``app.cipher.key`` back to the original value.
 
-To change ``app.cipher.key`` on purpose, re-enter the stored secrets after the change. Open every web
-authentication, file authentication, crawling configuration and data store configuration that holds a
-password or an encrypted parameter, and enter those values again in plain text in the same setting:
-the password field, and each parameter value that starts with ``{cipher}``, replaced by its plain
-value. |Fess| encrypts them again with the new key when the setting is saved. Re-enter them in place
-instead of deleting the setting and creating it again: a re-created setting gets a new ID, while other
-settings (such as the web or file configuration of an authentication) and the crawl schedule refer to
-the old one.
+To change ``app.cipher.key`` on purpose, re-enter the stored secrets after the change. Open each web
+or file crawling configuration, web or file authentication and data store configuration that holds
+encrypted values from its edit screen, and replace every parameter value that starts with
+``{cipher}`` with its plain value. While one is left, the save fails with "Failed to update the
+data." and ``Failed to decrypt a parameter: key=...``, which names the key. For a web or file
+authentication, also enter the password again: the screen shows the field blank with "The stored
+password could not be decrypted with the current app.cipher.key. Enter the password again." After a
+failed save, open the edit screen again rather than submitting the error page again. |Fess| encrypts
+the values with the new key when the setting is saved, and the next crawl decrypts them.
+
+Edit the settings in place rather than deleting and re-creating them. A re-created crawling
+configuration gets a new ID, while its web or file authentications and request headers, the
+scheduled jobs that name the ID and the indexed documents (their ``config_id``) refer to the old ID.
+Deleting a web crawling configuration also deletes its authentications and request headers.
 
 .. note::
 
@@ -2060,7 +2071,7 @@ Restore from snapshot. OpenSearch must be running and |Fess| stopped:
            -H 'Content-Type: application/json' \
            -d '{"indices":"fess*,.fess*,configsync,.configsync*","include_global_state":false}'
 
-   A snapshot taken as in Step 1 holds every index of the cluster, including system indices of OpenSearch plugins such as ``.opensearch-sap-log-types-config``. Such an index is open on the running cluster, so a restore without the ``indices`` setting is refused with ``cannot restore index [.opensearch-sap-log-types-config] because an open index with same name already exists``. The setting restores only the Fess indices and the ``configsync`` index.
+   A snapshot taken as in Step 1 holds every index of the cluster, including system indices of OpenSearch plugins such as ``.plugins-ml-config`` or ``.opensearch-sap-log-types-config``. Such an index is open on the running cluster, so a restore without the ``indices`` setting is refused with ``cannot restore index [<index>] because an open index with same name already exists``. The setting restores only the Fess indices and the ``configsync`` index.
 
 .. note::
 
