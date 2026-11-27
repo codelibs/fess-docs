@@ -956,7 +956,7 @@ HTTP 爬取的重试次数（默认5次）和重试间隔（默认500毫秒）�
 ::
 
     crawler.document.html.content.xpath=//DIV[@id='main-content']
-    crawler.document.html.pruned.tags=noscript,script,style,header,footer,aside,nav,form,iframe
+    crawler.document.html.pruned.tags=noscript,script,style,template,header,footer,aside,nav,a[rel=nofollow],form,iframe
 
 **2. 优化摘要**
 
