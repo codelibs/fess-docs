@@ -532,7 +532,11 @@ antérieur à cette version, effectuez la mise à niveau en suivant la procédur
    aussi les paramètres ``*_path`` absolus de 15.9.0, restent non assignés (``Resource path must
    be inside config directory`` dans l'explication d'allocation) et le cluster est rouge. Il en va de même
    lorsque vous copiez ``data/`` dans un répertoire racine déjà démarré une fois. La « Réindexation »
-   de l'étape 7 ne recrée pas ``fess_suggest_analyzer``. La procédure
+   de l'étape 7 ne recrée pas ``fess_suggest_analyzer``. Il en va de même lorsqu'un snapshot pris en
+   15.9.0 est restauré dans une nouvelle installation 15.10 dont le répertoire racine d'OpenSearch se
+   trouve à un autre chemin : l'index de documents restauré est rouge avec
+   ``Resource path must be inside config directory``. Restaurez-le dans un moteur situé à l'ancien chemin,
+   ou réindexez les documents au lieu de restaurer l'index de documents. La procédure
    ci-dessous place le nouveau moteur au chemin avec lequel les index ont été créés :
 
    1. OpenSearch étant arrêté (étape 2), installez OpenSearch 3.10.0 et ses plugins dans un autre

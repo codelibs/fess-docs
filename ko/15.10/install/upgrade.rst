@@ -501,7 +501,9 @@ Docker 버전
    직접 옮기면, 문서 인덱스와, 마찬가지로 15.9.0 의 절대 경로 ``*_path`` 설정을 가진 ``fess_suggest_analyzer`` 는
    할당되지 않은 상태로 남고(할당 설명에 ``Resource path must
    be inside config directory`` 가 표시됩니다) 클러스터는 red가 됩니다. 한 번 시작한 홈에 ``data/`` 를
-   복사한 경우에도 마찬가지입니다. 단계 7의 「재인덱싱」은 ``fess_suggest_analyzer`` 를 다시 만들지 않습니다. 다음 절차는 새 엔진을 인덱스가 만들어졌을 때의 경로에 둡니다.
+   복사한 경우에도 마찬가지입니다. 단계 7의 「재인덱싱」은 ``fess_suggest_analyzer`` 를 다시 만들지 않습니다.
+   15.9.0 에서 만든 스냅샷을 OpenSearch 홈이 다른 경로에 있는 새 15.10 환경에 복원한 경우에도 마찬가지로, 복원된 문서 인덱스는 ``Resource path must be inside config directory`` 로 red가 됩니다.
+   이전과 같은 경로에 있는 엔진에 복원하거나, 문서 인덱스를 복원하지 말고 인덱스를 다시 만드십시오. 다음 절차는 새 엔진을 인덱스가 만들어졌을 때의 경로에 둡니다.
 
    1. OpenSearch를 중지한 상태(단계 2)에서 OpenSearch 3.10.0과 플러그인을 다른 디렉터리에 설치하고
       (예: ``fess-15.10.0`` 에서 ``bin/fess-setup install opensearch``), 시작하지 마십시오. 이전 홈의

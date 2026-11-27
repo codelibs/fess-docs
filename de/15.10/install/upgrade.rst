@@ -529,7 +529,11 @@ Sie es anhand der folgenden Schritte.
    ``*_path``-Einstellungen von 15.9.0 behält, unzugewiesen (``Resource path must
    be inside config directory`` in der Erklärung der Zuweisung), und der Cluster ist rot. Dasselbe
    geschieht, wenn Sie ``data/`` in ein Home kopieren, das bereits einmal gestartet wurde. Die
-   „Neuindizierung" in Schritt 7 legt ``fess_suggest_analyzer`` nicht neu an. Das folgende
+   „Neuindizierung" in Schritt 7 legt ``fess_suggest_analyzer`` nicht neu an. Dasselbe geschieht, wenn
+   ein unter 15.9.0 erstellter Snapshot in eine neue 15.10-Installation wiederhergestellt wird, deren
+   OpenSearch-Home unter einem anderen Pfad liegt: Der wiederhergestellte Dokumentindex ist rot mit
+   ``Resource path must be inside config directory``. Stellen Sie ihn in einer Engine unter dem alten Pfad
+   wieder her, oder indexieren Sie die Dokumente neu, statt den Dokumentindex wiederherzustellen. Das folgende
    Verfahren legt die neue Engine unter den Pfad, mit dem die Indizes erstellt wurden:
 
    1. Installieren Sie bei gestopptem OpenSearch (Schritt 2) OpenSearch 3.10.0 und seine Plugins in einem

@@ -492,7 +492,9 @@ Docker 版
    词典文件移到那里，文档索引以及同样保留 15.9.0 的绝对路径 ``*_path`` 设置的 ``fess_suggest_analyzer``
    会保持未分配状态（分配说明中为 ``Resource path must
    be inside config directory``），集群变为红色。把 ``data/`` 复制到已启动过一次的主目录中，
-   也会出现同样的情况。步骤 7 的「重新索引」不会重新创建 ``fess_suggest_analyzer`` 。下面的步骤会把新引擎放在创建索引时使用的路径上：
+   也会出现同样的情况。步骤 7 的「重新索引」不会重新创建 ``fess_suggest_analyzer`` 。
+   把在 15.9.0 上创建的快照恢复到 OpenSearch 主目录位于其他路径的新 15.10 环境中时，也会出现同样的情况：恢复后的文档索引为红色，并显示 ``Resource path must be inside config directory`` 。
+   请将其恢复到位于旧路径的引擎中，或者不恢复文档索引而重新建立索引。下面的步骤会把新引擎放在创建索引时使用的路径上：
 
    1. 在 OpenSearch 已停止的状态下（步骤 2），将 OpenSearch 3.10.0 及其插件安装到另一个目录
       （例如在 ``fess-15.10.0`` 中执行 ``bin/fess-setup install opensearch``），并且不要启动它。

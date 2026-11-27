@@ -513,7 +513,10 @@ upgrade it using the following procedure.
    also keeps the absolute ``*_path`` settings of 15.9.0, stay unassigned (``Resource path must
    be inside config directory`` in the allocation explanation) and the cluster is red. The same
    happens when you copy ``data/`` into a home that has already been started once. "Re-indexing"
-   in Step 7 does not create ``fess_suggest_analyzer`` again. The procedure below puts the new
+   in Step 7 does not create ``fess_suggest_analyzer`` again. The same happens when a snapshot taken
+   on 15.9.0 is restored into a new 15.10 installation whose OpenSearch home is at another path: the
+   restored document index is red with ``Resource path must be inside config directory``. Restore it into an
+   engine at the old path, or re-index the documents instead of restoring the document index. The procedure below puts the new
    engine at the path the indices were created with:
 
    1. With OpenSearch stopped (Step 2), install OpenSearch 3.10.0 and its plugins in another

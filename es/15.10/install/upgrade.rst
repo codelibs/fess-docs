@@ -525,7 +525,11 @@ anterior, actualícelo siguiendo estos procedimientos.
    conserva los ajustes ``*_path`` absolutos de 15.9.0, quedan sin asignar (``Resource path must
    be inside config directory`` en la explicación de la asignación) y el clúster está en rojo. Lo mismo
    ocurre cuando copia ``data/`` en un directorio principal que ya se ha iniciado una vez. La
-   "Reindexación" del Paso 7 no vuelve a crear ``fess_suggest_analyzer``. El
+   "Reindexación" del Paso 7 no vuelve a crear ``fess_suggest_analyzer``. Lo mismo ocurre cuando una
+   instantánea tomada en 15.9.0 se restaura en una nueva instalación de 15.10 cuyo directorio principal
+   de OpenSearch está en otra ruta: el índice de documentos restaurado queda en rojo con
+   ``Resource path must be inside config directory``. Restáurelo en un motor situado en la ruta antigua, o
+   vuelva a indexar los documentos en lugar de restaurar el índice de documentos. El
    procedimiento siguiente coloca el nuevo motor en la ruta con la que se crearon los índices:
 
    1. Con OpenSearch detenido (Paso 2), instale OpenSearch 3.10.0 y sus plugins en otro directorio (por

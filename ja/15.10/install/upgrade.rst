@@ -486,7 +486,9 @@ Docker 版
    OpenSearch は、そのパスが自身の設定ディレクトリの中にある場合にだけ、そのインデックスを開きます。
    ``bin/fess-setup install opensearch`` のように OpenSearch 3.10.0 を別のディレクトリにインストールし（ ``opensearch-3.9.0`` の隣に ``opensearch-3.10.0`` が作られます）、
    ``data/`` と辞書ファイルを手作業でそこへ移すと、文書インデックスと、同じく 15.9.0 の絶対パスの ``*_path`` 設定を持つ ``fess_suggest_analyzer`` は未割り当てのままになり（割り当ての説明に ``Resource path must be inside config directory`` と出ます）、クラスターは red になります。
-   一度起動したホームに ``data/`` をコピーした場合も同じです。ステップ 7 の「再インデクシング」は ``fess_suggest_analyzer`` を作り直しません。次の手順で、新しいエンジンを、インデックスが作成されたときのパスに置きます。
+   一度起動したホームに ``data/`` をコピーした場合も同じです。ステップ 7 の「再インデクシング」は ``fess_suggest_analyzer`` を作り直しません。
+   15.9.0 で取得したスナップショットを、OpenSearch のホームが別のパスにある新しい 15.10 の環境に復元した場合も同じで、復元した文書インデックスは ``Resource path must be inside config directory`` で red になります。
+   旧バージョンと同じパスにあるエンジンに復元するか、文書インデックスを復元せずにインデックスを作り直してください。次の手順で、新しいエンジンを、インデックスが作成されたときのパスに置きます。
 
    1. OpenSearch を停止した状態（ステップ 2）で、OpenSearch 3.10.0 とそのプラグインを別のディレクトリにインストールし
       （たとえば ``fess-15.10.0`` で ``bin/fess-setup install opensearch`` ）、起動はしません。旧ホームの ``data/`` と ``config/dictionary/`` をコピーします::
