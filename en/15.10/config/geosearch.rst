@@ -1,3 +1,5 @@
+:canonical: search-geosearch
+
 ===========================
 Location Information Search
 ===========================

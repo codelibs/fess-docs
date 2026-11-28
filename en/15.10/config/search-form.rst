@@ -1,3 +1,5 @@
+:canonical: search-form-integration
+
 ========================
 Placement of Search Form
 ========================

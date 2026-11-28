@@ -1,3 +1,5 @@
+:canonical: search-scroll
+
 ================================
 Bulk Retrieval of Search Results
 ================================

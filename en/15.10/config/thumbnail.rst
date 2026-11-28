@@ -1,3 +1,5 @@
+:canonical: crawler-thumbnail
+
 =============================
 Thumbnail Image Configuration
 =============================

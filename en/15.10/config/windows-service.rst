@@ -1,3 +1,5 @@
+:canonical: setup-windows-service
+
 ============================
 Register for Windows Service
 ============================
