@@ -1,326 +1,359 @@
-=========================================
-第22回 検索データから組織の知識地図を描く
-=========================================
+============================================
+OpenSearch Dashboards で検索ログを深掘りする
+============================================
 
 はじめに
 ========
 
-検索システムは情報を「見つける」ためのツールですが、検索ログ自体も貴重な情報源です。
-「何が検索されているか」「何が見つからないか」「どの情報がよく閲覧されるか」――これらのデータは、組織の情報ニーズと知識ギャップを映し出す鏡です。
+Fess 15.9 では、管理画面の［システム情報］>［検索ログ］で、ゼロヒット率、クリック率、クリック順位の分布、応答時間、曜日・時間帯別の検索数、ロール・グループ別の検索数を確認できます。
+各表は CSV でダウンロードできます。
+問題のある検索語を見つけて同義語やキーマッチで直す流れは :doc:`guide-08` で説明しています。
 
-本記事では、Fess の検索ログと OpenSearch Dashboards を組み合わせて、組織のナレッジ活用状況を可視化する分析ダッシュボードを構築します。
+一方で、この画面では次のような集計はできません。
 
-対象読者
-========
+- 366 日を超える期間の推移（画面の「カスタム」期間は最大 366 日です）
+- ロール別やラベル別に、どの語がゼロヒットになっているか
+- 検索語ごとに、実際にどの URL が開かれたか
+- 自分で決めた切り口のグラフを並べたダッシュボード
 
-- 検索システムの利用状況を定量的に把握したい方
-- 情報活用戦略のためのデータを収集したい方
-- OpenSearch Dashboards の基本操作を知りたい方
+検索ログとクリックログは OpenSearch のインデックスに保存されているので、OpenSearch Dashboards から直接集計できます。
+本記事では、docker-fess の Compose ファイルで OpenSearch Dashboards を起動し、Fess 同梱のダッシュボードを読み込み、ログのフィールドを確かめたうえで、上の 4 つの集計を作るところまでを説明します。
 
-検索データの価値
-=================
+始める前に：アクセス制限について
+================================
 
-検索ログから読み取れること
---------------------------
+docker-fess の OpenSearch Dashboards は、OpenSearch 側と同じくセキュリティプラグインを外した構成です。
+ポート 5601 に届く人は、ログインなしで検索ログのすべてのフィールド（ユーザー ID、IP アドレスなど）を読めます。
+さらに Dev Tools から、Fess のユーザーや設定のインデックスを含むすべてのインデックスを変更・削除できます。
 
-検索ログは、組織の情報ニーズを定量的に把握できる希少なデータです。
+そのため、ポート 5601（と 9200）は管理者の端末からだけ届くようにしてください。
+管理者以外の人に検索ログの集計を見せたい場合は、OpenSearch Dashboards を公開するのではなく、Fess の［ユーザー］>［ロール］で ``admin-searchlog-view`` という名前のロールを作ってその人に割り当てます。
+このロールでは［システム情報］>［検索ログ］を閲覧でき、ログの削除はできません。
 
-.. list-table:: 検索データから得られるインサイト
-   :header-rows: 1
-   :widths: 30 70
+OpenSearch Dashboards を起動する
+================================
 
-   * - データ
-     - インサイト
-   * - 検索キーワード
-     - 社員が何を探しているか（情報ニーズ）
-   * - ゼロヒットクエリ
-     - 組織に不足している情報（知識ギャップ）
-   * - クリックログ
-     - どの検索結果が役立ったか（コンテンツの価値）
-   * - 検索頻度の時系列
-     - 情報ニーズの変化（トレンド）
-   * - 人気ワード
-     - 組織全体の関心事
+:doc:`guide-02` の手順で ``compose.yaml`` と ``compose-opensearch3.yaml`` を置いたディレクトリに、Dashboards 用のファイルを追加します。
+``compose-dashboards3.yaml`` は ``dashboards/`` ディレクトリの Dockerfile からイメージをビルドするので、3 つのファイルが必要です。
 
-Fess が収集するデータ
-======================
+::
 
-Fess は以下のデータを自動的に収集・蓄積しています。
+    $ cd fess-docker
+    $ curl -LO https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/compose-dashboards3.yaml
+    $ mkdir dashboards
+    $ curl -L -o dashboards/Dockerfile https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/dashboards/Dockerfile
+    $ curl -L -o dashboards/opensearch_dashboards.yml https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/dashboards/opensearch_dashboards.yml
 
-検索ログ（``fess_log.search_log``）
--------------------------------------
+3 つの Compose ファイルを指定して起動します。
 
-管理画面の ［システム情報］ > ［検索ログ］ で確認できます。
-OpenSearch のインデックス ``fess_log.search_log`` に保存されます。
+::
 
-主なフィールド:
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-dashboards3.yaml up -d
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15 60
+初回の ``up`` で、``opensearch-dashboards:3.9.0`` から ``securityDashboards`` プラグインを削除したイメージがビルドされます。
+コンテナはネットワーク ``search_net`` 上で ``OPENSEARCH_HOSTS='["http://search01:9200"]'`` に接続し、ポート 5601 を公開します。
 
-   * - フィールド名
-     - 型
-     - 説明
-   * - ``searchWord``
-     - keyword
-     - 検索キーワード
-   * - ``requestedAt``
-     - date
-     - 検索日時
-   * - ``hitCount``
-     - long
-     - 検索結果件数（0 の場合がゼロヒット）
-   * - ``queryTime``
-     - long
-     - クエリ実行時間（ミリ秒）
-   * - ``responseTime``
-     - long
-     - 合計レスポンス時間（ミリ秒）
-   * - ``userAgent``
-     - keyword
-     - ユーザーエージェント
-   * - ``clientIp``
-     - keyword
-     - クライアント IP アドレス
-   * - ``accessType``
-     - keyword
-     - アクセス種別（web, json, gsa, admin など）
-   * - ``queryId``
-     - keyword
-     - クエリ ID（クリックログとの紐付けに使用）
+ブラウザーで ``http://localhost:5601`` を開き、ホーム画面が表示されれば起動しています。
+停止や状態確認でも、``-f`` で 3 つのファイルを指定してください。
+ダッシュボードなどの保存オブジェクトは OpenSearch の ``.kibana`` インデックスに保存されるので、``down -v`` でボリュームを消すと一緒に消えます。
 
-クリックログ（``fess_log.click_log``）
-----------------------------------------
+同梱のダッシュボードを読み込む
+==============================
 
-検索結果のリンクがクリックされた記録です。
-OpenSearch のインデックス ``fess_log.click_log`` に保存されます。
+Fess には、検索ログ用のダッシュボード定義 ``fess_log.ndjson`` が同梱されています。
+Docker の場合はコンテナから取り出します。
+ZIP 版では展開したディレクトリの ``extension/kibana/fess_log.ndjson`` にあります。
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15 60
+::
 
-   * - フィールド名
-     - 型
-     - 説明
-   * - ``url``
-     - keyword
-     - クリックされた URL
-   * - ``queryId``
-     - keyword
-     - 検索ログの queryId（どの検索からクリックされたか）
-   * - ``order``
-     - integer
-     - 検索結果内の表示順位
-   * - ``requestedAt``
-     - date
-     - クリック日時
-   * - ``docId``
-     - keyword
-     - ドキュメント ID
+    $ docker cp fess01:/usr/share/fess/extension/kibana/fess_log.ndjson .
 
-人気ワード
-----------
+GitHub の ``https://raw.githubusercontent.com/codelibs/fess/fess-15.9.0/src/main/assemblies/extension/kibana/fess_log.ndjson`` からも同じファイルを取得できます。
 
-検索画面に表示される人気ワードは、検索ログを基に Fess の suggest インデックスに集計されます。
-一定の検索ヒット数を超えたクエリが、検索回数に基づいてランキングされます。
+1. 左メニューの［Dashboards Management］を開き、［Saved objects］を選びます
+2. ［Import］をクリックし、``fess_log.ndjson`` を選んで読み込みます
+3. 左メニューの［Dashboards］から ``fess_log`` ダッシュボードを開きます
 
-OpenSearch Dashboards での可視化
+読み込むと、インデックスパターン ``fess_log*``\ （時刻フィールドは ``requestedAt``）、6 つのビジュアライゼーション、``fess_log`` ダッシュボードが登録されます。
+インデックスパターンも含まれているので、先に手動で ``fess_log*`` を作る必要はありません。
+手動で作ったあとに読み込むと、同じ名前のパターンが 2 つになります。
+
+同梱ダッシュボードの数え方に注意する
+------------------------------------
+
+``fess_log*`` は ``fess_log`` で始まるすべてのインデックスにまたがり、同梱のビジュアライゼーションはインデックスで絞り込んでいません。
+15.9 のクリックログには検索語（``searchWord``）と ``requestedAt`` が入るので、たとえば「search-term-rank」の件数には検索の回数とクリックの回数が合算されます。
+AI 検索モードを使っている場合は、チャットのログ（``fess_log.chat_log``）も件数や応答時間に混ざります。
+
+検索だけを数えたい場合は、ダッシュボード上部の検索バーに次の条件を入れてから見てください。
+
+::
+
+    _index : "fess_log.search_log"
+
+また、``fess_log*`` に保存されているフィールドの一覧は古い版のもので、``rank`` などの新しいフィールドを含みません。
+自分で集計を作るときは、次の節のインデックスパターンを使います。
+
+集計用のインデックスパターンを作る
 ==================================
 
-Fess の検索ログは OpenSearch に保存されるため、OpenSearch Dashboards を使って高度な可視化が可能です。
+検索ログとクリックログを別々のインデックスパターンにしておくと、混ざる心配がなく、現在のフィールドをすべて選べます。
 
-OpenSearch Dashboards のセットアップ
--------------------------------------
+1. ［Dashboards Management］>［Index patterns］で［Create index pattern］をクリックします
+2. 「Index pattern name」に ``fess_log.search_log`` と入力し、［Next step］をクリックします
+3. 「Time field」で ``requestedAt`` を選び、［Create index pattern］をクリックします
+4. 同じ手順で ``fess_log.click_log``\ （時刻フィールドは ``requestedAt``）も作ります
 
-Docker Compose 構成に OpenSearch Dashboards を追加します。
+あとからフィールドが増えた場合（たとえば初めてラベルで絞り込んだ検索が記録されたとき）は、インデックスパターンの画面で［Refresh field list］をクリックします。
 
-.. code-block:: yaml
+時刻の扱い
+----------
 
-    services:
-      opensearch-dashboards:
-        image: public.ecr.aws/opensearchproject/opensearch-dashboards:3.6.0
-        ports:
-          - "5601:5601"
-        environment:
-          OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
-          DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
+Fess は日時を UTC で保存します。
+OpenSearch Dashboards は既定でブラウザーのタイムゾーンで表示し、日ごとの区切りもそれに従います。
+別のタイムゾーンで見たい場合は、［Dashboards Management］>［Advanced settings］の ``dateFormat:tz`` を ``Asia/Tokyo`` などに変えます。
 
-``http://localhost:5601`` にアクセスして、Dashboards の UI を利用します。
+Fess の［検索ログ］画面は、サーバーのタイムゾーンで日付を区切ります。
+docker-fess のコンテナは既定で UTC なので、日別の数字を両者で突き合わせると、区切りの違いだけずれることがあります。
 
-インデックスパターンの作成
----------------------------
+ログのフィールド
+================
 
-OpenSearch Dashboards で Fess のログデータを可視化するには、まずインデックスパターンを作成します。
-
-1. Dashboards にアクセスし、左メニューから ［Stack Management］ > ［Index Patterns］ を選択
-2. ［Create index pattern］ をクリック
-3. 以下のインデックスパターンを作成
+検索ログ（``fess_log.search_log``）は検索 1 回につき 1 件です。
+集計によく使うフィールドは次のとおりです。
 
 .. list-table::
    :header-rows: 1
-   :widths: 35 25 40
+   :widths: 25 15 60
 
-   * - インデックスパターン
-     - 時刻フィールド
-     - 用途
-   * - ``fess_log.search_log``
-     - ``requestedAt``
-     - 検索ログの分析
-   * - ``fess_log.click_log``
-     - ``requestedAt``
-     - クリックログの分析
+   * - フィールド
+     - 型
+     - 内容
+   * - ``queryId``
+     - keyword
+     - 検索ごとの ID。クリックログの ``queryId`` と対応します
+   * - ``searchWord``
+     - keyword
+     - 検索語。ラベルで絞り込んだ検索では ``申請 label:"hr"`` のように条件も含みます
+   * - ``searchField.*``
+     - keyword
+     - 検索語をフィールドごとに分けたもの。通常の語は ``searchField._default``、ラベルの絞り込みは ``searchField.label`` に入ります
+   * - ``requestedAt``
+     - date
+     - 検索した日時（UTC で保存）
+   * - ``hitCount``
+     - long
+     - ヒット件数。``0`` がゼロヒットです
+   * - ``responseTime`` / ``queryTime``
+     - long
+     - 検索全体の処理時間と、OpenSearch での検索時間（ミリ秒）
+   * - ``queryOffset`` / ``queryPageSize``
+     - integer
+     - 取得開始位置と 1 ページの件数。2 ページ目以降なら ``queryOffset`` が 0 より大きくなります
+   * - ``accessType``
+     - keyword
+     - ``json``、``gsa``、``admin``、``other``、``web`` のいずれか。標準テーマの検索画面は ``/api/v2/search`` を呼ぶので ``json`` になり、管理画面の［システム情報］>［検索］からの検索は ``admin`` です
+   * - ``user`` / ``roles``
+     - keyword
+     - ログインユーザーの ID と、検索に使われたロールの一覧。``roles`` の値は先頭 1 文字で種類を表し、``R`` がロール、``2`` がグループ、``1`` がユーザーです（例: ``Rguest``）
+   * - ``userSessionId`` / ``clientIp`` / ``userAgent`` / ``referer`` / ``virtualHost``
+     - keyword
+     - 利用者を識別する Cookie の値、IP アドレス、ブラウザー、参照元、仮想ホスト
 
-ダッシュボードの設計
-=====================
+クリックログ（``fess_log.click_log``）は、検索結果のリンクが ``/go/`` 経由で開かれたときに記録されます。
+ただし、ブラウザーが Fess のセッションを持っていない（有効なセッション Cookie を送っていない）リクエストでは記録されません。
 
-以下の分析視点でダッシュボードを設計します。
-左メニューの ［Visualize］ から各ビジュアライゼーションを作成し、［Dashboard］ にまとめます。
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
 
-検索利用状況の概要
-------------------
+   * - フィールド
+     - 型
+     - 内容
+   * - ``queryId``
+     - keyword
+     - クリック元の検索の ``queryId``
+   * - ``url`` / ``docId``
+     - keyword
+     - 開かれた文書の URL と文書 ID
+   * - ``rank``
+     - integer
+     - 検索結果全体での順位（1 位が 1）。2 ページ目の 1 件目なら 11 です
+   * - ``order``
+     - integer
+     - ページ内での位置（先頭が 0）。順位の集計には ``rank`` を使います
+   * - ``searchWord`` / ``accessType``
+     - keyword
+     - クリック元の検索から写した検索語とアクセス種別。検索ログと結合しなくても検索語ごとに集計できます
+   * - ``requestedAt`` / ``queryRequestedAt``
+     - date
+     - クリックした日時と、クリック元の検索の日時
 
-**日別検索回数の推移**
+``searchWord``、``accessType``、``rank`` がクリックログに入るのは 15.9 からです。
+それより前に記録されたクリックにはこれらがありません。
 
-検索の利用量がどう変化しているかを把握します。
+集計のレシピ
+============
 
-- インデックスパターン: ``fess_log.search_log``
-- ビジュアライゼーション: Line（折れ線グラフ）
-- X 軸: Date Histogram（フィールド: ``requestedAt``、間隔: 1d）
-- Y 軸: Count
+ここでは、冒頭に挙げた「画面ではできない集計」を 4 つ作ります。
+1 つ目は Visualize で作り、残りは左メニューの［Dev Tools］から検索 API で実行します。
 
-利用が増加していれば検索システムが定着している証拠であり、減少していれば改善が必要です。
+検索語ごとに開かれた URL
+------------------------
 
-**時間帯別検索回数**
+検索語ごとに、どの文書がどの順位で開かれたかを表にします。
+キーマッチやドキュメントブーストの候補を選ぶときに使えます。
 
-検索が多い時間帯を把握します。
+1. 左メニューの［Visualize］で［Create visualization］をクリックし、「Data Table」を選びます
+2. ソースに ``fess_log.click_log`` を選びます
+3. Metrics の［Add］で Metric を追加し、「Aggregation」に「Average」、「Field」に ``rank`` を選びます
+4. Buckets の［Add］>［Split rows］で、「Aggregation」に「Terms」、「Field」に ``searchWord``、「Size」に 20 を指定します
+5. もう一度［Split rows］を追加し、「Terms」、「Field」に ``url``、「Size」に 5 を指定します
+6. ［Update］をクリックし、右上の期間を選んで保存します
 
-- ビジュアライゼーション: Vertical Bar（棒グラフ）
-- X 軸: Date Histogram（フィールド: ``requestedAt``、間隔: 1h）
-- Y 軸: Count
+平均の順位が大きい組み合わせは、利用者が下までたどって開いている文書です。
 
-業務開始時や昼食後に検索が多い場合、情報収集が業務の一部として定着していることがわかります。
+ロール別のゼロヒット語
+----------------------
 
-検索品質の分析
---------------
+部署ごとにロールを分けている場合、どの部署の検索で何が見つかっていないかを確認します。
 
-**ゼロヒット率の推移**
+.. code-block:: text
 
-ゼロヒット率は検索品質の重要な指標です。
-検索ログの ``hitCount`` フィールドが ``0`` のレコードがゼロヒットクエリに該当します。
+    GET fess_log.search_log/_search
+    {
+      "size": 0,
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "hitCount": 0 } },
+            { "range": { "requestedAt": { "gte": "now-90d/d" } } }
+          ]
+        }
+      },
+      "aggs": {
+        "roles": {
+          "terms": { "field": "roles", "size": 20, "exclude": "1.*" },
+          "aggs": {
+            "words": { "terms": { "field": "searchWord", "size": 10 } }
+          }
+        }
+      }
+    }
 
-- インデックスパターン: ``fess_log.search_log``
-- フィルタ: ``hitCount: 0`` を追加してゼロヒットクエリを抽出
-- ビジュアライゼーション: Line（折れ線グラフ）
-- X 軸: Date Histogram（フィールド: ``requestedAt``、間隔: 1d）
-- Y 軸: Count
+``exclude`` で ``1`` から始まる値（ユーザー個人）を除き、ロールとグループだけを並べています。
+1 回の検索は、その利用者のすべてのロールとグループに数えられます。
+未ログインの検索は ``Rguest`` に入ります。
 
-ゼロヒット率が高い場合、シノニムの追加やクロール範囲の拡大が必要です（第8回参照）。
+ラベル別の検索数とゼロヒット数
+------------------------------
 
-なお、管理画面の ［システム情報］ > ［検索ログ］ でも、ゼロヒットクエリの一覧を確認できます。
+検索画面でラベルを選んで検索された回数と、そのうちのゼロヒットの回数をラベルごとに数えます。
 
-**ゼロヒットクエリのワードクラウド**
+.. code-block:: text
 
-ゼロヒットクエリをワードクラウドで表示すると、どのような情報が不足しているかが一目でわかります。
+    GET fess_log.search_log/_search
+    {
+      "size": 0,
+      "query": { "range": { "requestedAt": { "gte": "now-90d/d" } } },
+      "aggs": {
+        "labels": {
+          "terms": { "field": "searchField.label", "size": 20 },
+          "aggs": {
+            "zero_hit": { "filter": { "term": { "hitCount": 0 } } }
+          }
+        }
+      }
+    }
 
-- フィルタ: ``hitCount: 0``
-- ビジュアライゼーション: Tag Cloud
-- フィールド: Terms Aggregation（フィールド: ``searchWord``、サイズ: 50）
+ラベルで絞り込んだ検索が 1 件も記録されていないと、``searchField.label`` フィールドがまだないため、``labels`` のバケットは空になります。
 
-コンテンツの価値分析
---------------------
+月ごとのゼロヒット率（2 年分）
+------------------------------
 
-**クリック数の多い検索結果**
+画面の期間の上限を超えて、ゼロヒット率（件数ではなく比率）の長期の推移を見ます。
 
-よくクリックされる検索結果は、組織にとって価値の高いコンテンツです。
+.. code-block:: text
 
-- インデックスパターン: ``fess_log.click_log``
-- ビジュアライゼーション: Data Table
-- フィールド: Terms Aggregation（フィールド: ``url``、サイズ: 20、並び順: Count 降順）
+    GET fess_log.search_log/_search
+    {
+      "size": 0,
+      "query": {
+        "bool": {
+          "filter": [ { "range": { "requestedAt": { "gte": "now-2y/d" } } } ],
+          "must_not": [ { "term": { "accessType": "admin" } } ]
+        }
+      },
+      "aggs": {
+        "per_month": {
+          "date_histogram": {
+            "field": "requestedAt",
+            "calendar_interval": "month",
+            "time_zone": "Asia/Tokyo"
+          },
+          "aggs": {
+            "zero_hit": { "filter": { "term": { "hitCount": 0 } } },
+            "zero_hit_rate": {
+              "bucket_script": {
+                "buckets_path": { "zero": "zero_hit>_count", "total": "_count" },
+                "script": "params.zero / params.total"
+              }
+            }
+          }
+        }
+      }
+    }
 
-これらのコンテンツの更新・メンテナンスを優先しましょう。
+月ごとのバケットに、検索数（``doc_count``）、ゼロヒット数（``zero_hit.doc_count``）、ゼロヒット率（``zero_hit_rate.value``、0〜1）が返ります。
+``time_zone`` により月の区切りは日本時間になり、管理画面からの検索は ``must_not`` で除いています。
+2 年分のログが残っているかどうかは、次の節の保存期間の設定によります。
 
-**クリック位置の分布**
+保存期間と個人情報
+==================
 
-検索結果の何番目がクリックされているかの分布を確認します。
+既定では、検索ログはいつまでも残ります。
+［システム］>［全般］の「以前の検索ログを削除」が既定で ``-1``\ （削除しない）になっているためです。
+日数を指定すると、毎日 0 時に動くジョブ「Log Purger」が、その日数より古い検索ログを削除します。
+クリックログ、お気に入りログ、チャットログも同じ日数で削除されます。
+利用者の記録は別の設定「以前のユーザーログを削除」で、こちらも既定は ``-1`` です。
 
-- インデックスパターン: ``fess_log.click_log``
-- ビジュアライゼーション: Vertical Bar（棒グラフ）
-- X 軸: Histogram（フィールド: ``order``、間隔: 1）
-- Y 軸: Count
+長期の推移を見たい期間と、社内の個人情報の扱いの両方を考えて日数を決めてください。
+検索ログには、ログインユーザーの ID（``user``、``roles`` の ``1`` で始まる値）、IP アドレス、User-Agent が入ります。
+また、既定では検索結果に表示された文書の URL やタイトルも ``documents`` フィールドに記録されます（``logging.search.docs.enabled=true``）。
+OpenSearch Dashboards ではこれらがすべて見えるので、冒頭のアクセス制限を守ってください。
 
-1〜3位のクリックが多ければ検索品質は良好、10位以降のクリックが多ければランキングの改善が必要です。
+うまくいかないとき
+==================
 
-情報ニーズの傾向分析
----------------------
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
 
-**人気キーワードのランキング**
+   * - 症状
+     - 確認すること
+   * - Discover やビジュアライゼーションにデータが出ない
+     - 右上の期間にログのある日時が入っているか。検索してからログが書き込まれるまで、1 分ほどかかることがあります（毎分動くジョブ「Log Aggregator」が書き込みます）
+   * - ``rank`` や ``searchField.label`` を選べない
+     - ``fess_log*`` を使っていないか。専用のインデックスパターンを作るか、［Refresh field list］をクリックする
+   * - 件数が［検索ログ］画面より多い
+     - ``fess_log*`` でクリックやチャットのログまで数えていないか。アクセス種別の絞り込みと、日付の区切りのタイムゾーンが同じか
+   * - クリックの件数が少ない
+     - リンクが ``/go/`` を経由していない、［全般］の「検索ログ」が無効、またはブラウザーが Fess のセッションを持たないまま ``/go/`` を開いている。:doc:`guide-08` の前提も確認する
 
-組織全体で何に関心があるかを把握します。
+次に読む記事
+============
 
-- インデックスパターン: ``fess_log.search_log``
-- ビジュアライゼーション: Data Table
-- フィールド: Terms Aggregation（フィールド: ``searchWord``、サイズ: 20、並び順: Count 降順）
-
-人気キーワードの変化は、組織の課題や関心事の変化を反映します。
-
-分析結果の活用
-===============
-
-検索データの分析結果は、以下のような施策に活用できます。
-
-コンテンツ戦略
---------------
-
-- **ゼロヒットクエリ**: 不足しているコンテンツを特定し、作成を依頼
-- **人気キーワード**: よく検索されるトピックの情報を充実させる
-- **クリック率の低い結果**: コンテンツの改善または削除を検討
-
-検索品質の改善
---------------
-
-- **シノニムの追加**: ゼロヒットクエリから同義語候補を発見
-- **キーマッチの設定**: 人気クエリに対する最適な結果を設定
-- **ブーストの調整**: クリック率に基づいてランキングを改善
-
-IT 投資の判断
---------------
-
-- **利用量の増加**: サーバーリソースの増強計画
-- **新しい情報ニーズ**: 追加のデータソース連携の検討
-- **AI 機能のニーズ**: AI 検索モードの導入判断（第19回参照）
-
-定期レポートの作成
-===================
-
-分析結果を定期的にレポートとしてまとめ、関係者に共有しましょう。
-
-月次レポートの項目例
---------------------
-
-1. 検索利用状況のサマリ（総検索回数、前月比）
-2. ゼロヒット率の推移と改善状況
-3. 人気キーワード Top 10
-4. 新しく発見された知識ギャップ
-5. 実施した改善策とその効果
-6. 次月の改善計画
-
-まとめ
-======
-
-本記事では、検索ログを活用した組織のナレッジ可視化について解説しました。
-
-- 検索ログから得られるインサイト（情報ニーズ、知識ギャップ、コンテンツ価値）
-- OpenSearch Dashboards による可視化ダッシュボードの構築
-- 分析結果のコンテンツ戦略・検索品質改善・IT 投資への活用
-- 定期レポートによる継続的な改善
-
-検索データは「組織の知識地図」を描くための貴重な資産です。
-AI・次世代検索編はここまでです。次回は最終回として、シリーズ全体の総括を行います。
+- 見つけた検索語を同義語やキーマッチで改善したい: :doc:`guide-08`
+- ロールやグループの設計を見直したい: :doc:`guide-05`
+- 監視とバックアップを含めた運用を整えたい: :doc:`guide-10`
+- 全社展開の段階ごとに何を測るかを決めたい: :doc:`guide-23`
 
 参考資料
 ========
 
-- `Fess 検索ログ <https://fess.codelibs.org/ja/15.5/admin/searchlog.html>`__
-
-- `OpenSearch Dashboards <https://opensearch.org/docs/latest/dashboards/>`__
+- `検索ログ <https://fess.codelibs.org/ja/stable/admin/searchlog-guide.html>`__
+- `検索ログ可視化の設定 <https://fess.codelibs.org/ja/stable/config/admin-opensearch-dashboards.html>`__
+- `全般 <https://fess.codelibs.org/ja/stable/admin/general-guide.html>`__
+- `Docker でのインストール (詳細) <https://fess.codelibs.org/ja/stable/install/install-docker.html>`__
+- `docker-fess の Compose ファイル（GitHub） <https://github.com/codelibs/docker-fess/tree/v15.9.0/compose>`__
+- `OpenSearch Dashboards <https://opensearch.org/docs/latest/dashboards/index/>`__

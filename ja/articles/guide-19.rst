@@ -1,257 +1,365 @@
-===============================
-第19回 社内AIアシスタントの構築
-===============================
+==========================================
+AI 検索モード（RAG）で社内文書に答えさせる
+==========================================
 
 はじめに
 ========
 
-前回はセマンティック検索の概念を整理しました。
-本記事では、その発展形として RAG（Retrieval-Augmented Generation）を使った社内 AI アシスタントを構築します。
+検索結果を 1 件ずつ開いて読み比べる代わりに、「経費精算の締め日は？」と質問して社内文書に基づく答えを受け取りたい、という要望はよくあります。
+Fess の AI 検索モード（RAG チャット）は、質問に関係する文書を Fess 自身が検索し、その内容を LLM（大規模言語モデル）に渡して回答を作らせ、根拠にした文書へのリンクを添えて返します。
 
-RAG は「検索で関連ドキュメントを見つけ、LLM（大規模言語モデル）がその内容を基に回答を生成する」仕組みです。
-社内のドキュメントに基づいた回答を生成するため、一般的なチャット AI では答えられない社内固有の質問にも対応できます。
+本記事では、Fess 15.9 で AI 検索モードを動かし、使える人と参照する文書を絞り、画面と API で動作を確かめるところまでを扱います。
+記事の手順を終えると、次のことができるようになります。
 
-対象読者
-========
+- 4 種類の LLM プロバイダーから 1 つを選び、対応するプラグインと設定を入れる
+- Docker の Fess に、docker-fess が用意している重ね合わせ用の Compose ファイルで LLM をつなぐ
+- チャットを使える利用者と、回答の根拠にする文書の範囲を絞る
+- 検索画面、``/api/v2/chat``\ 、検索ログで、動いていることを確かめる
 
-- 社内 AI アシスタントの構築に興味がある方
-- RAG の実装方法を学びたい方
-- LLM 連携の選択肢を理解したい方
+前提として、Fess が起動していて、文書がクロール済みである必要があります。
+まだの場合は :doc:`guide-02` の手順で準備してください。
+意味の近い文書を探すセマンティック検索は :doc:`guide-18`\ 、AI エージェントから Fess を検索させる MCP は :doc:`guide-20` で扱います。
 
-RAG の仕組み
-=============
-
-RAG のパイプライン
-------------------
-
-Fess の AI 検索モードは、以下のパイプラインで動作します。
-
-1. **意図分析（Intent）**: 利用者の質問を分析し、意図を分類（検索、要約、FAQ、不明確）
-2. **検索（Search）**: Fess のインデックスから関連ドキュメントを取得（ゼロヒット時はクエリを自動再生成して再検索）
-3. **評価（Evaluate）**: 取得したドキュメントの関連性を LLM が評価
-4. **全文取得（Fetch）**: 関連性の高いドキュメントの全文を取得
-5. **回答生成（Answer）**: ドキュメントの内容を基に LLM が引用付きの回答をストリーミング生成
-
-このパイプラインにより、LLM の「もっともらしいが不正確な回答（ハルシネーション）」を軽減し、社内ドキュメントに裏付けられた回答を提供します。
-
-Fess の AI 検索モードは、ベクトル検索（埋め込みモデル）を必要としません。
-既存の全文検索インデックスをそのまま活用し、LLM が検索結果の評価と回答生成を担います。
-そのため、埋め込みモデルの選定やベクトルデータベースの構築といった追加のインフラ準備なしに、すぐに RAG ベースの AI 検索を導入できます。
-
-LLM プロバイダの選択
+AI 検索モードの仕組み
 =====================
 
-Fess は3つの LLM バックエンドに対応しています。
-それぞれの特徴と選択基準を整理します。
+AI 検索モードは、専用のベクトルインデックスを使いません。
+ふだんの検索と同じ検索処理（既定ではキーワード検索）で文書を探すため、埋め込みモデルやチャンク分割の準備なしで始められます。
+セマンティック検索を有効にしている場合は、AI 検索モードの検索にも自動で加わります。
 
-.. list-table:: LLM プロバイダの比較
+処理の流れは、呼び出すエンドポイントによって異なります。
+
+.. list-table::
    :header-rows: 1
-   :widths: 15 25 25 35
+   :widths: 35 65
 
-   * - プロバイダ
+   * - エンドポイント
+     - 処理の流れ
+   * - ``POST /api/v2/chat/stream``\ （検索画面の AI 検索が使う）
+     - 意図の判定 → 検索 → LLM による関連度の評価 → 本文の取得 → 回答の生成。各段階の進み具合と回答の断片を Server-Sent Events で順に返します
+   * - ``POST /api/v2/chat``
+     - 意図の判定 → 検索 → 回答の生成。関連度の評価はなく、結果は 1 つの JSON で返ります
+
+どちらも、検索結果が 0 件のときは LLM が検索語を作り直して検索し直します（既定で最大 2 回、``rag.chat.query.regeneration.max.count``\ ）。
+1 つの質問で LLM を複数回呼び出すため、通常の検索より応答に時間がかかり、クラウドの LLM では呼び出しごとに料金がかかります。
+
+LLM には、利用者の質問と、検索で見つかった文書の本文やその抜粋が送られます。
+プロバイダーを選ぶときは、この送り先を確認してください。
+
+会話は ``session_id`` で識別され、Fess のメモリ上に保持されます。
+既定では 30 分操作がないと消え（``rag.chat.session.timeout.minutes``\ ）、1 つの会話に残すメッセージは 30 件までです（``rag.chat.history.max.messages``\ ）。
+会話は Fess を再起動しても消えます。
+
+LLM プロバイダーを選ぶ
+======================
+
+Fess 15.9 では、LLM との接続はプロバイダーごとの ``fess-llm-*`` プラグインで提供されます。
+どのプロバイダーを使うかは ``rag.llm.name`` で指定します。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 14 12 18 22 34
+
+   * - プロバイダー
+     - ``rag.llm.name``
      - プラグイン
-     - コスト
-     - 特徴
-   * - OpenAI
-     - fess-llm-openai
-     - API 従量課金
-     - 高い回答品質、GPT-4o 対応、手軽に始められる
-   * - Google Gemini
-     - fess-llm-gemini
-     - API 従量課金
-     - 拡張思考対応、長いコンテキスト
+     - 既定のモデル
+     - 接続に必要な設定と、質問・文書の送り先
    * - Ollama
-     - fess-llm-ollama
-     - ハードウェア費用
-     - ローカル実行、データが外部に出ない、プライバシー重視
+     - ``ollama``
+     - ``fess-llm-ollama``
+     - ``gemma4:e4b``
+     - ``rag.llm.ollama.api.url``\ （既定 ``http://localhost:11434``\ ）。送り先は自分で動かす Ollama サーバーです
+   * - OpenAI
+     - ``openai``
+     - ``fess-llm-openai``
+     - ``gpt-5-mini``
+     - ``rag.llm.openai.api.key``\ 。送り先は OpenAI です
+   * - Google Gemini
+     - ``gemini``
+     - ``fess-llm-gemini``
+     - ``gemini-3.1-flash-lite-preview``
+     - ``rag.llm.gemini.api.key``\ 。送り先は Google です
+   * - Amazon Bedrock
+     - ``bedrock``
+     - ``fess-llm-bedrock``
+     - ``us.amazon.nova-2-lite-v1:0``
+     - ``rag.llm.bedrock.region``\ （既定 ``us-east-1``\ ）と、``rag.llm.bedrock.api.key`` または AWS 認証情報。送り先は指定したリージョンの Amazon Bedrock です
 
-選択の判断基準
---------------
+モデルは ``rag.llm.<プロバイダー>.model`` で変えられます。
 
-**クラウド API（OpenAI / Gemini）を選ぶ場合**
+OpenAI と Gemini は API キーを用意するだけで始められますが、質問と文書がそれぞれのサービスに送られます。
+Ollama は質問と文書を自分のサーバーの外に出しませんが、モデルを動かすサーバーが必要です。
+docker-fess の Ollama 用 Compose ファイルは NVIDIA の GPU を前提にしています。
+Bedrock は AWS の認証情報とリージョンの設定が必要です。
+設定方法は `Amazon Bedrock の設定 <https://fess.codelibs.org/ja/stable/config/llm-bedrock.html>`__ を参照してください。
 
-- 初期コストを抑えたい
-- GPU サーバーを用意できない
-- 回答品質を最優先したい
-- データの外部送信が許容される
+必要な設定は 3 つ
+=================
 
-**ローカル実行（Ollama）を選ぶ場合**
+AI 検索モードを動かすには、次の 3 つがそろっている必要があります。
 
-- 社内データの外部送信が許可されない
-- セキュリティ・プライバシー要件が厳しい
-- GPU サーバーを用意できる
-- ランニングコストを抑えたい（大量利用時）
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 40
 
-AI 検索モードの設定
-===================
+   * - 設定
+     - 設定する場所
+     - Docker での渡し方
+   * - ``rag.chat.enabled=true``\ （既定は ``false``\ ）
+     - ``fess_config.properties``\ 。管理画面には項目がありません
+     - ``FESS_JAVA_OPTS`` に ``-Dfess.config.rag.chat.enabled=true``
+   * - ``fess-llm-*`` プラグイン
+     - ［システム］>［プラグイン］、または ``bin/fess-setup``
+     - ``FESS_PLUGINS=fess-llm-openai:15.9.0`` など
+   * - ``rag.llm.name`` と、プロバイダーごとの接続設定
+     - ``rag.llm.name`` は［システム］>［全般］、接続設定（``rag.llm.<プロバイダー>.*``\ ）は ``fess_config.properties``
+     - ``-Dfess.system.rag.llm.name=openai``\ 、``-Dfess.config.rag.llm.openai.api.key=...`` など
 
-プラグインのインストール
-------------------------
+``rag.llm.name`` の既定値は ``ollama`` です。
+OpenAI のプラグインだけを入れて ``rag.llm.name`` を変えないと、Fess は存在しない Ollama 用のクライアントを探し続け、AI 検索モードは使えません。
+このとき、ログに ``[LLM] LlmClient not found. componentName=ollamaLlmClient`` という警告が出ます。
 
-使用する LLM プロバイダに対応するプラグインをインストールします。
+``-Dfess.system.rag.llm.name`` は、``system.properties`` に値がないときだけ使われる初期値です。
+［全般］で保存した値が ``system.properties`` に書かれると、そちらが優先されます。
 
-1. 管理画面の ［システム］ > ［プラグイン］ を選択
-2. 対応するプラグインをインストール（例: ``fess-llm-openai``）
+Docker で動かす（OpenAI・Gemini）
+=================================
 
-AI 検索モードの有効化
----------------------
+docker-fess には、LLM をつなぐための重ね合わせ用 Compose ファイルが用意されています。
+:doc:`guide-02` で Compose ファイルを置いたディレクトリで、v15.9.0 のファイルを取得します。
 
-Fess の設定で AI 検索モードを有効にします。
+::
 
-管理画面の設定または設定ファイルで ``rag.chat.enabled=true`` を設定します。
+    $ curl -LO https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/compose-openai.yaml
 
-LLM 接続の設定
----------------
+API キーをシェルの環境変数に入れて、3 つのファイルを指定して起動します。
 
-各 LLM プロバイダに応じた接続情報を設定します。
+::
 
-**OpenAI の場合**
+    $ export OPENAI_API_KEY="sk-..."
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml up -d
 
-- API キー
-- 使用するモデル（gpt-4o、gpt-4o-mini など）
-- 最大トークン数
-
-**Ollama の場合**
-
-- Ollama サーバーの URL
-- 使用するモデル名
-- Docker Compose でのサービス追加
+``compose-openai.yaml`` は ``fess01`` に次の環境変数を足します。
+API キーとモデル名は、シェルの ``OPENAI_API_KEY`` と ``OPENAI_MODEL``\ （未設定なら ``gpt-5-mini``\ ）から設定されるため、ファイルにキーを書く必要はありません。
 
 .. code-block:: yaml
 
     services:
-      ollama:
-        image: ollama/ollama
-        volumes:
-          - ollama-data:/root/.ollama
-        deploy:
-          resources:
-            reservations:
-              devices:
-                - driver: nvidia
-                  count: 1
-                  capabilities: [gpu]
+      fess01:
+        environment:
+          - "FESS_PLUGINS=fess-llm-openai:15.9.0"
+          - "FESS_JAVA_OPTS=-Dfess.config.rag.chat.enabled=true -Dfess.config.rag.llm.openai.api.key=${OPENAI_API_KEY:-} -Dfess.config.rag.llm.openai.model=${OPENAI_MODEL:-gpt-5-mini} -Dfess.system.rag.llm.name=openai"
 
-AI チャットの体験
-==================
+``FESS_PLUGINS`` のプラグインは、コンテナの起動時に Fess より先に導入されるため、別途再起動する必要はありません。
+すでに ``fess01`` が動いている場合、このコマンドで ``fess01`` は作り直され、［全般］で変更していた設定はコンテナと一緒に消えます。
+以降の ``ps``\ ・``logs``\ ・``down`` などのコマンドにも、同じ 3 つのファイルを指定してください。
 
-チャット UI
------------
+Gemini の場合は ``compose-gemini.yaml`` を取得し、``GEMINI_API_KEY`` を設定して、同じように 3 つ目のファイルとして指定します。
+このファイルはモデルを ``GEMINI_MODEL``\ （未設定なら ``gemini-2.5-flash``\ ）から設定するので、プラグインの既定モデルではなく ``gemini-2.5-flash`` が使われます。
 
-AI 検索モードを有効にすると、Fess の検索画面に AI 検索モードが追加されます。
-利用者はキーワード検索と AI チャットを切り替えて利用できます。
+.. note::
 
-質問と回答の例
---------------
+   ``FESS_JAVA_OPTS`` を設定する重ね合わせ用ファイルを 2 つ以上指定すると、最後のファイルの値だけが使われます（OCR 用の設定などと組み合わせる場合）。
+   その場合は、必要な ``-D`` オプションをすべて 1 つの ``FESS_JAVA_OPTS`` にまとめた Compose ファイルを自分で用意します。
+   ``FESS_JAVA_OPTS`` は空白で区切られるため、値に空白を含むオプションは書けません。
 
-**質問**: 「有給休暇の申請方法を教えてください」
+``-Dfess.config.rag.llm.openai.api.key`` のように渡した API キーは、［システム情報］>［設定情報］ではマスクされて表示されます。
+社内のプロキシを通して外部に出る必要がある場合は、``-Dfess.config.http.proxy.host=...`` と ``-Dfess.config.http.proxy.port=...`` を追加します。
+LLM プラグインは Fess 共通のプロキシ設定を使います。
 
-**AI の回答**:
+Docker で動かす（Ollama）
+=========================
 
-    有給休暇の申請は、以下の手順で行います。
+``compose-ollama.yaml`` は、Ollama のコンテナ ``ollama01`` を追加し、``fess01`` をそこにつなぎます。
 
-    1. 社内ポータルの「勤怠管理」ページにアクセスします
-    2. 「休暇申請」メニューから「有給休暇」を選択します
-    3. 日程を入力し、上長を選択して申請します
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
 
-    申請は休暇の3営業日前までに行ってください。
+   * - 対象
+     - 設定される内容
+   * - ``fess01``
+     - ``FESS_PLUGINS=fess-llm-ollama:15.9.0``\ 、``-Dfess.config.rag.chat.enabled=true``\ 、``-Dfess.config.rag.llm.ollama.api.url=http://ollama01:11434``
+   * - ``ollama01``
+     - イメージ ``ollama/ollama:latest``\ 、ネットワーク ``search_net``\ 、ポート 11434、ボリューム ``ollama-data``\ 、NVIDIA GPU 1 基の割り当て
 
-    参考: [就業規則 第15条](https://portal/rules/chapter15.html)
-
-回答には情報源のリンクが含まれるため、利用者は原典を確認できます。
-
-Chat API（SSE）の活用
-========================
-
-プログラムから AI 検索モードを利用する場合は、Chat API を使用します。
-Chat API は Server-Sent Events（SSE）でストリーミング応答を返します。
-
-ストリーミング応答（SSE）を利用する場合:
+``rag.llm.name`` とモデルは設定されないため、既定値の ``ollama`` と ``gemma4:e4b`` が使われます。
+URL を ``ollama01`` に向けているのは、既定の ``http://localhost:11434`` が ``fess01`` コンテナ自身を指してしまうためです。
 
 ::
 
-    GET /api/v1/chat/stream?message=有給休暇の申請方法
+    $ curl -LO https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/compose-ollama.yaml
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-ollama.yaml up -d
+    $ docker exec -it ollama01 ollama pull gemma4:e4b
 
-非ストリーミングの JSON レスポンスを取得する場合:
+このファイルを使うには、NVIDIA Container Toolkit が入った環境が必要です。
+GPU のない環境で試す場合は、取得したファイルから ``ollama01`` の ``deploy:`` 以下を削除します。
+CPU で動くため、回答には時間がかかります。
+
+Fess は、設定されたモデルが Ollama のモデル一覧（``/api/tags``\ ）にあるときだけ Ollama を利用可能と判断し、この確認を既定で 60 秒ごとに行います。
+そのため、モデルを取得してから 1 分ほどで AI 検索モードが使えるようになります。
+ファイル冒頭のコメントには別のファイル名と ``gpt-oss:20b`` の取得手順が書かれていますが、上記の手順に従ってください。
+別のモデルを使う場合は、そのモデルを ``ollama pull`` したうえで、``FESS_JAVA_OPTS`` に ``-Dfess.config.rag.llm.ollama.model=<モデル名>`` を追加します。
+
+Docker 以外（ZIP・RPM・DEB）で設定する
+======================================
+
+1. プラグインを導入します。［システム］>［プラグイン］>［インストール］から選ぶか、コマンドで導入します
+
+   ::
+
+       $ bin/fess-setup install plugin fess-llm-openai:15.9.0
+
+2. ``fess_config.properties`` に設定を追加します。ZIP 版は ``app/WEB-INF/classes/fess_config.properties``\ 、RPM/DEB 版は ``/etc/fess/fess_config.properties`` です
+
+   ::
+
+       rag.chat.enabled=true
+       rag.llm.openai.api.key=sk-...
+       rag.llm.openai.model=gpt-5-mini
+
+3. Fess を再起動します。プラグインも ``fess_config.properties`` の変更も、再起動で読み込まれます
+4. ［システム］>［全般］を開き、「AI検索」欄の「LLMプロバイダー」で ``openai`` を選んで［更新］をクリックします
+
+「AI検索」欄は、``rag.chat.enabled=true`` で、かつ LLM プラグインが 1 つ以上読み込まれているときだけ表示されます。
+「LLMプロバイダー」の選択肢は、導入済みのプラグインに対応するプロバイダーだけです。
+欄が見当たらない場合は、手順 1〜3 を見直してください。
+
+動作を確かめる
+==============
+
+検索画面で確かめる
+------------------
+
+1. ``http://localhost:8080/`` を開きます。上部のナビゲーションバーに、ロボットのアイコンが付いた［AI 検索］が表示されます
+2. ［AI 検索］をクリックすると、チャットの画面（``/chat``\ ）が開きます
+3. クロール済みの文書に答えがありそうな質問を入力します。:doc:`guide-02` で検索ガイドをクロールした場合は、「ワイルドカード検索で使える記号を教えてください」などで試せます
+
+回答の生成中は、意図・検索・評価・取得・回答の各段階が順に表示されます。
+回答の下には根拠にした文書が「出典」として番号付きで並び、本文中の ``[1]`` のような番号と対応します。
+話題を変えるときは［新しいチャット］をクリックすると、会話の履歴が消えます。
+
+［AI 検索］が表示されない場合は、後述の「つまずきやすい点」を確認してください。
+
+API で確かめる
+--------------
+
+画面を使わずに確かめるには、``/api/v2/ui/config`` を呼びます。
+``response.features.rag_chat_enabled`` が ``true`` なら、その利用者は AI 検索モードを使えます。
+
+``/api/v2/chat`` などの状態を変えるリクエストには、セッションに結び付いた CSRF トークンを ``X-Fess-CSRF-Token`` ヘッダーで送る必要があります。
+``/api/v2/ui/config`` の応答にトークンが含まれるので、Cookie を保存しながら取得し、同じ Cookie で呼び出します（例では ``jq`` を使います）。
 
 ::
 
-    POST /api/v1/chat
-    Content-Type: application/x-www-form-urlencoded
+    $ curl -s -c cookies.txt http://localhost:8080/api/v2/ui/config > ui-config.json
+    $ jq '.response.features.rag_chat_enabled' ui-config.json
+    true
+    $ TOKEN=$(jq -r '.response.csrf_token' ui-config.json)
+    $ curl -s -b cookies.txt -X POST http://localhost:8080/api/v2/chat \
+        -H 'Content-Type: application/json' \
+        -H "X-Fess-CSRF-Token: $TOKEN" \
+        -d '{"message":"ワイルドカード検索で使える記号を教えてください"}' | jq '.response'
 
-    message=有給休暇の申請方法
+応答の ``content`` が回答、``sources`` が根拠にした文書（``rank``\ 、``title``\ 、``url`` など）、``session_id`` が会話の ID です。
+続けて質問するときは、``{"message":"...","session_id":"<前回の session_id>"}`` のように ``session_id`` を送り返します。
 
-SSE により、回答が生成されるたびにリアルタイムでクライアントに送信されます。
-利用者は回答が完全に生成されるのを待たずに、徐々に表示される回答を読み始めることができます。
+この例はログインしない匿名の利用者として呼ぶため、``{role}guest`` が付いた文書だけが検索対象になります。
+ログインした利用者として呼ぶ方法、ストリーミング版の ``/api/v2/chat/stream`` のイベント、エラーコードは `Chat API <https://fess.codelibs.org/ja/stable/api/api-chat.html>`__ と `API の概要 <https://fess.codelibs.org/ja/stable/api/api-overview.html>`__ を参照してください。
+``/api/v1/chat`` は ``fess-webapp-v1-api`` プラグインを導入した場合だけ使える旧形式の API です。
+新しく作る連携には ``/api/v2/chat`` を使ってください。
 
-会話履歴
---------
+管理画面とログで確かめる
+------------------------
 
-Chat API はセッションベースの会話履歴をサポートしています。
-前の質問の文脈を踏まえた追加質問が可能です。
+［システム情報］>［検索ログ］の［AIチャット］タブに、リクエスト数、利用者数、合計トークン数、平均応答時間、エラー率と、利用者別・意図別・モデル別の件数が表示されます。
+この記録は ``rag.chat.log.enabled``\ （既定 ``true``\ ）で有効になっており、質問と回答の本文は記録されません。
+トークン数は LLM プラグインが報告した場合だけ記録されます。
 
-例:
+Docker の場合、プラグインが導入されたかどうかはコンテナのログで確かめられます。
 
-- Q1: 「有給休暇の申請方法を教えてください」
-- A1: （上記の回答）
-- Q2: 「申請期限を過ぎた場合はどうすればいいですか？」
-- A2: （Q1 の文脈を踏まえた回答）
+::
 
-RAG のチューニング
-===================
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-openai.yaml logs fess01 | grep -E 'Installing|\[LLM\]'
 
-回答品質の改善
---------------
+``Installing fess-llm-openai-15.9.0.jar`` があれば導入済みです。
+``[LLM] LlmClient not found`` が続けて出ている場合は、``rag.llm.name`` と導入したプラグインが合っていません。
 
-RAG の回答品質は、以下の要素に影響されます。
+利用者と参照する文書を絞る
+==========================
 
-**検索品質**
+AI 検索モードの検索には、ふだんの検索と同じロールによる絞り込みがかかります。
+利用者が検索結果で見られない文書は、回答の根拠にも出典にも使われません。
+文書ごとの見せ分けは、クロール設定の「パーミッション」で決まります。
+設計の考え方は :doc:`guide-05` を参照してください。
 
-RAG は検索結果を基に回答を生成するため、検索品質が回答品質に直結します。
-第8回のチューニングサイクルで検索品質を改善することが、RAG の品質改善にもつながります。
+そのうえで、［システム］>［全般］の「AI検索」欄で、チャットそのものの利用範囲を絞れます。
 
-**ドキュメントの品質**
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
 
-検索対象のドキュメント自体が古い、不正確、または曖昧な場合、RAG の回答も品質が下がります。
-ドキュメントの定期的な更新と品質管理が重要です。
+   * - 項目
+     - 内容
+   * - 「チャット権限」（``rag.chat.permissions``\ ）
+     - チャットを使える利用者を ``{role}rag_user,{group}sales,{user}taro`` のようにカンマ区切りで指定します。空のときは全員が使えます。ログインしていない利用者にも使わせる場合は ``{role}guest`` を含めます
+   * - 「チャットラベル」（``rag.chat.labels``\ ）
+     - 回答の根拠にする文書を、指定したラベル値のいずれかが付いた文書に限ります。``faq,policy`` のようにカンマ区切りで指定し、空のときは利用者が見られるすべての文書が対象です
 
-**プロンプト設定**
+「チャット権限」の対象外の利用者には［AI 検索］が表示されず、API はログインしていなければ 401、ログインしていれば 403 を返します。
+ログインした利用者には ``{role}guest`` が付かないため、``{role}guest`` だけを指定すると、ログインした利用者はチャットを使えなくなります。
+有効な項目が 1 つもない値（``{role}`` だけ、など）を保存すると、誰も使えなくなります。
 
-LLM に送信するプロンプト（指示文）のチューニングにより、回答のスタイルや精度を調整できます。
+「チャットラベル」は、たとえば社内規程と FAQ のように、回答の根拠として信頼できる文書にラベルを付けておき、そこだけから答えさせたい場合に使います。
+ラベルの作り方と付け方は :doc:`guide-04` を参照してください。
 
-安全性の考慮
-=============
+つまずきやすい点
+================
 
-プロンプトインジェクション対策
-------------------------------
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
 
-Fess の RAG 機能にはプロンプトインジェクション防御が組み込まれています。
-悪意のある入力により LLM の動作を操作しようとする攻撃から保護します。
+   * - 症状
+     - 確認すること
+   * - ［AI 検索］が表示されない
+     - 次の順に確認します。(1) ``rag.chat.enabled=true`` が渡っているか。(2) プラグインが導入されているか（ログの ``Installing``\ ）。(3) ``rag.llm.name`` が導入したプラグインと合っているか（``LlmClient not found`` の警告）。(4) API キーが空でないか、Ollama ではモデルを取得したか。(5) 「チャット権限」から自分が外れていないか
+   * - ［全般］に「AI検索」欄がない
+     - ``rag.chat.enabled`` が ``false`` のままか、LLM プラグインが読み込まれていません。設定とプラグインの導入後に Fess を再起動したか確認します
+   * - ``down`` と ``up -d`` の後に「LLMプロバイダー」が元に戻った
+     - ［全般］の値は ``fess01`` コンテナ内の ``system.properties`` に保存されるため、コンテナを作り直すと消えます。``FESS_JAVA_OPTS`` の ``-Dfess.system.rag.llm.name`` で指定しておきます
+   * - API が ``403`` を返す
+     - CSRF トークンを ``X-Fess-CSRF-Token`` で送っているか、トークンを取得したときの Cookie を送っているかを確認します。ログインした利用者が「チャット権限」から外れている場合も 403 です
+   * - API が ``429`` を返す
+     - 利用者ごとに 1 分あたり 30 回までの制限があります（``api.chat.rate.limit.per.user.per.minute``\ ）
+   * - クラウドの LLM に接続できない
+     - コンテナから外部に出られるかを確認し、プロキシが必要なら ``http.proxy.host`` と ``http.proxy.port`` を設定します
 
-情報漏洩の防止
---------------
+回答の質を上げたいときは、まず検索の質を確かめます。
+AI 検索モードは、通常の検索で上位に来た文書（既定 5 件、``rag.chat.context.max.documents``\ ）を根拠にするため、同じ質問の言葉で検索して関係のない文書が上位に来るなら、回答もそれに引きずられます。
+検索の改善は :doc:`guide-08` で扱います。
+プロンプトタイプごとの温度や最大トークン数、プロンプトの差し替えは `LLM 統合の概要 <https://fess.codelibs.org/ja/stable/config/llm-overview.html>`__ を参照してください。
 
-RAG は検索結果を基に回答するため、ロールベース検索（第5回）と組み合わせることで、利用者の権限に応じた回答のみが生成されます。
-権限のないドキュメントの内容は、RAG の回答にも含まれません。
+次に読む記事
+============
 
-まとめ
-======
-
-本記事では、Fess の AI 検索モードを使った社内 AI アシスタントの構築方法を解説しました。
-
-- RAG パイプラインの仕組み（意図分析→検索→評価→回答生成）
-- 3つの LLM プロバイダ（OpenAI、Gemini、Ollama）の選択基準
-- AI 検索モードの設定と体験
-- Chat API（SSE）によるプログラムからの利用
-- 回答品質のチューニングと安全性の考慮
-
-社内ドキュメントに基づいた AI アシスタントにより、「探す」から「聞く」へ、ナレッジ活用の形が変わります。
-
-次回は、Fess を MCP サーバーとして AI エージェントに統合する方法を扱います。
+- キーワードが一致しなくても意味の近い文書を検索に加えたい: :doc:`guide-18`
+- Claude などの AI エージェントから Fess を検索させたい: :doc:`guide-20`
+- 部署やロールによって検索できる文書を分けたい: :doc:`guide-05`
+- 検索ログを見て検索の質を改善したい: :doc:`guide-08`
+- SSO でログインさせて、利用者ごとに見せ分けたい: :doc:`guide-15`
 
 参考資料
 ========
 
-- `Fess AI 検索モード設定 <https://fess.codelibs.org/ja/15.5/config/rag-chat.html>`__
-
-- `Fess Chat API <https://fess.codelibs.org/ja/15.5/api/api-chat.html>`__
+- `AI検索モード機能の設定 <https://fess.codelibs.org/ja/stable/config/rag-chat.html>`__
+- `AI検索（RAG）と LLM 統合の概要 <https://fess.codelibs.org/ja/stable/config/llm-overview.html>`__
+- `Ollama の設定 <https://fess.codelibs.org/ja/stable/config/llm-ollama.html>`__
+- `OpenAI の設定 <https://fess.codelibs.org/ja/stable/config/llm-openai.html>`__
+- `Google Gemini の設定 <https://fess.codelibs.org/ja/stable/config/llm-gemini.html>`__
+- `Amazon Bedrock の設定 <https://fess.codelibs.org/ja/stable/config/llm-bedrock.html>`__
+- `Chat API <https://fess.codelibs.org/ja/stable/api/api-chat.html>`__
+- `AI検索モード（利用者向け） <https://fess.codelibs.org/ja/stable/user/chat-search.html>`__
+- `プラグイン <https://fess.codelibs.org/ja/stable/admin/plugin-guide.html>`__
+- `docker-fess の compose ディレクトリ（v15.9.0） <https://github.com/codelibs/docker-fess/tree/v15.9.0/compose>`__

@@ -1,298 +1,367 @@
-=================================================================
-Partie 6 : Hub de connaissances pour les équipes de développement
-=================================================================
+==============================================
+Rechercher dans Git, Confluence, Jira et Slack
+==============================================
 
 Introduction
 ============
 
-Les équipes de développement logiciel utilisent quotidiennement divers outils dans leur travail.
-Le code se trouve dans des repositories Git, les spécifications dans Confluence, les tâches dans Jira, et les échanges quotidiens dans Slack.
-Chaque outil dispose de sa propre fonction de recherche, mais pour répondre à la question "Où avait-on discuté de cela ?", effectuer des recherches séparées dans chaque outil est inefficace.
+Les informations d'une équipe de développement sont réparties entre plusieurs outils : le code et les README dans Git, les documents de conception dans Confluence, les tickets dans Jira et les discussions dans Slack.
+Chercher successivement dans les quatre outils chaque fois que l'on veut savoir « où cette spécification a-t-elle été décidée ? » est fastidieux.
+Avec les plugins de magasin de données de Fess, vous pouvez rechercher les informations des quatre outils depuis une seule page de recherche.
 
-Dans cet article, nous construisons un hub de connaissances qui centralise dans Fess les informations des outils utilisés quotidiennement par l'équipe de développement et permet une recherche unifiée.
+Une configuration erronée conduit toutefois à des situations comme celles-ci :
 
-Public cible
-============
+- Tous les fichiers Git sont enregistrés avec une URL vide, si bien que le fichier d'origine ne peut pas être ouvert depuis les résultats de recherche
+- Tous les messages Slack s'affichent sans titre
+- Les messages des canaux privés apparaissent aussi dans les résultats de recherche des utilisateurs non connectés
+- Les fichiers Git disparaissent de l'index au bout de quelques jours
 
-- Responsables d'équipes de développement logiciel et administrateurs d'infrastructure
-- Personnes souhaitant effectuer des recherches transversales sur les outils de développement
-- Personnes souhaitant apprendre les bases de l'utilisation des plugins de datastore
+Pour chaque outil, cet article présente une configuration minimale qui fonctionne telle quelle, et explique comment chaque réglage évite les pièges ci-dessus.
+Les étapes communes à tous les magasins de données, comme l'installation des plugins, la saisie du nom du gestionnaire, des paramètres et du script, ou la création des tâches, sont regroupées dans :doc:`datastore-basics`.
+Lisez d'abord cet article avant de poursuivre.
+Les réglages de cet article correspondent à Fess 15.9 et à la version 15.9.0 de chaque plugin.
 
-Scénario
-========
+Ce que nous allons construire
+=============================
 
-Nous allons rendre les informations d'une équipe de développement (20 personnes) accessibles via une recherche unifiée.
-
-.. list-table:: Sources de données cibles
+.. list-table::
    :header-rows: 1
-   :widths: 20 30 50
+   :widths: 14 20 26 40
 
    * - Outil
-     - Usage
-     - Informations à rechercher
-   * - Repository Git
-     - Gestion du code source
-     - Code, README, fichiers de configuration
-   * - Confluence
-     - Gestion documentaire
-     - Documents de conception, comptes rendus de réunion, procédures
-   * - Jira
-     - Gestion des tickets
-     - Rapports de bugs, tâches, stories
+     - Plugin
+     - Nom du gestionnaire
+     - À préparer côté outil
+   * - Git
+     - ``fess-ds-git``
+     - ``GitDataStore``
+     - Un jeton d'accès avec droit de lecture (le clonage en HTTPS doit être possible)
+   * - Confluence / Jira
+     - ``fess-ds-atlassian``
+     - ``ConfluenceDataStore`` / ``JiraDataStore``
+     - Un jeton d'API du compte d'exploration
    * - Slack
-     - Communication
-     - Discussions techniques, historique des décisions
+     - ``fess-ds-slack``
+     - ``SlackDataStore``
+     - Le Bot User OAuth Token (``xoxb-``) d'une application Slack
 
-Qu'est-ce que le crawl de datastore ?
-=====================================
+Si Fess tourne sous Docker, vous pouvez installer tous les plugins au démarrage en listant leurs noms et versions, séparés par des espaces, dans la variable d'environnement ``FESS_PLUGINS``.
 
-Le crawl Web et le crawl de fichiers collectent les documents en parcourant les URL ou les chemins de fichiers.
-En revanche, pour collecter les informations des outils SaaS, on utilise le "crawl de datastore".
+.. code-block:: yaml
 
-Le crawl de datastore récupère les données via l'API de chaque outil et les enregistre dans l'index de Fess.
-Dans Fess, un plugin de datastore est disponible pour chaque outil.
+    environment:
+      - FESS_PLUGINS=fess-ds-git:15.9.0 fess-ds-atlassian:15.9.0 fess-ds-slack:15.9.0
 
-Installation des plugins
-========================
+Si vous les installez depuis la console d'administration ou avec ``fess-setup``, redémarrez Fess après l'installation.
 
-Les plugins de datastore peuvent être installés depuis l'interface d'administration de Fess.
+À décider d'abord : qui peut voir les résultats
+===============================================
 
-1. Sélectionnez [Système] > [Plugins] dans l'interface d'administration
-2. Consultez la liste des plugins installés
-3. Accédez à l'écran d'installation via le bouton [Installer], puis installez les plugins nécessaires depuis l'onglet [Distant]
+Lorsque vous créez une nouvelle configuration de magasin de données, le champ « Autorisations » contient déjà ``{role}guest``.
+Si vous le laissez ainsi, les informations importées sont trouvées aussi par les utilisateurs non connectés.
 
-Pour le scénario de cet article, nous utilisons les plugins suivants.
+Les plugins Git, Confluence et Jira ne transposent pas dans Fess les droits d'accès de l'outil d'origine.
+Tout ce que le compte d'exploration peut lire est importé, et devient visible pour quiconque possède un rôle ou un groupe inscrit dans le champ « Autorisations ».
+Vous définissez donc la portée en combinant les deux points suivants :
 
-- ``fess-ds-git`` : Crawl de repositories Git
-- ``fess-ds-atlassian`` : Crawl de Confluence / Jira
-- ``fess-ds-slack`` : Crawl des messages Slack
+- Remplacer ``{role}guest`` dans le champ « Autorisations » par les personnes qui doivent voir le contenu (par ex. ``{group}developers``)
+- Limiter ce qui est importé à ce que ces personnes peuvent voir, au moyen des droits du compte d'exploration ainsi que de ``jira.jql`` et ``include_pattern`` décrits plus loin
 
-Configuration des sources de données
-=====================================
+Seul le plugin Slack peut importer les membres des canaux privés en tant qu'autorisations (voir plus loin).
+Pour le fonctionnement des groupes et des rôles, consultez :doc:`guide-05`.
 
-Configuration du repository Git
----------------------------------
+Dépôts Git
+==========
 
-Crawlez le repository Git pour rendre le code et les documents disponibles à la recherche.
+Préparation
+-----------
 
-1. [Crawler] > [Datastore] > [Nouveau]
-2. Nom du handler : sélectionnez GitDataStore
-3. Configuration des paramètres
+``fess-ds-git`` clone en HTTPS.
+Les URI SSH (de la forme ``git@...``) ne sont pas prises en charge.
+Pour les dépôts privés, créez un jeton d'accès en lecture.
+Pour un jeton classique GitHub, il s'agit du scope ``repo`` ; pour GitLab, du scope ``read_repository``.
 
-**Exemple de configuration des paramètres**
+Paramètres et script
+--------------------
+
+Dans [Robot d'exploration] > [Magasin de données] > [Créer nouveau], sélectionnez ``GitDataStore`` comme « Nom du gestionnaire ».
 
 .. code-block:: properties
 
-    uri=https://github.com/example/my-repo.git
-    username=git-user
+    script_type=javascript
+    uri=https://github.com/example/dev-platform.git
+    username=fess-crawler
     password=ghp_xxxxxxxxxxxxxxxxxxxx
-    include_pattern=.*\.(java|py|js|ts|md|rst|txt)$
-    max_size=10000000
-
-**Exemple de configuration des scripts**
+    base_url=https://github.com/example/dev-platform/blob/main/
+    include_pattern=.*\.(md|rst|txt|java|py|ts|yml|yaml)$
+    time_to_live=5256000
 
 .. code-block:: properties
 
     url=url
-    title=name
+    title=path
     content=content
     mimetype=mimetype
     content_length=contentLength
     last_modified=timestamp
+    label="code"
 
-Spécifiez l'URL du repository dans ``uri``, et les informations d'authentification dans ``username`` / ``password``. Pour les repositories privés, définissez le jeton d'accès dans ``password``. ``include_pattern`` permet de filtrer les extensions de fichiers à crawler à l'aide d'une expression régulière.
+Chaque ligne a la signification suivante :
 
-Configuration de Confluence
------------------------------
+- ``base_url`` : l'``url`` du script est ``base_url`` concaténée telle quelle avec le chemin dans le dépôt. Si vous l'omettez, ``url`` devient une chaîne vide ; tous les fichiers reçoivent alors le même ID de document et s'écrasent mutuellement. Terminez la valeur par ``/`` et faites correspondre le nom de branche à la branche explorée (par défaut la branche par défaut du dépôt distant ; pour la changer, utilisez ``commit_id``).
+- ``username`` / ``password`` : utilisés pour l'authentification uniquement lorsque les deux sont renseignés. N'intégrez pas le jeton dans ``uri`` ; écrivez-le dans ``password`` (``password`` est chiffré à l'enregistrement, ``uri`` ne l'est pas).
+- ``include_pattern`` : une expression régulière qui doit correspondre au chemin complet dans le dépôt (par ex. ``docs/setup.md``). Ce n'est pas une URL.
+- ``title=path`` : avec ``name``, qui ne contient que le nom du fichier, les fichiers de même nom comme ``README.md`` ne se distinguent pas dans les résultats de recherche ; on utilise donc le chemin.
 
-Rendez les pages et articles de blog Confluence disponibles à la recherche.
+Exploration différentielle et expiration
+----------------------------------------
 
-1. [Crawler] > [Datastore] > [Nouveau]
-2. Nom du handler : sélectionnez ConfluenceDataStore
-3. Configuration des paramètres
+Lorsqu'une exploration réussit, ``fess-ds-git`` réécrit son ID de commit dans ``prev_commit_id`` du champ « Paramètres ».
+À partir de la deuxième exploration, il n'enregistre que les fichiers figurant dans le diff par rapport au commit précédent, et supprime les documents des fichiers supprimés ou renommés (la prise en compte des suppressions nécessite ``base_url``).
 
-**Exemple de configuration des paramètres**
+Cette exploration différentielle s'accorde mal avec l'expiration des documents de Fess ; c'est pourquoi l'exemple ci-dessus précise ``time_to_live``.
+Les documents d'un magasin de données reçoivent une date d'expiration lors de leur enregistrement.
+Par défaut, elle est déterminée par « Supprimer les anciens documents » dans [Système] > [Général] (3 jours par défaut), et les documents expirés sont supprimés par la tâche « Doc Purger », exécutée chaque minute.
+En exploration différentielle, les fichiers inchangés ne sont pas réenregistrés ; leur expiration n'est donc pas prolongée et ils disparaissent quelques jours après la première exploration.
+``time_to_live`` est un paramètre qui indique en minutes l'expiration des documents de cette configuration ; ``5256000`` correspond à environ 10 ans.
+
+Pour la même raison, les modifications du script, de ``base_url``, d'``include_pattern`` ou du champ « Autorisations » ne s'appliquent pas aux fichiers inchangés.
+Pour réenregistrer tous les fichiers, procédez comme suit :
+
+1. Dans [Informations système] > [Rechercher], recherchez ``label:code`` et supprimez les anciens documents avec [Tout supprimer par cette requête]
+2. Effacez la valeur de ``prev_commit_id=`` dans le champ « Paramètres » et enregistrez
+3. Exécutez la tâche
+
+Si vous avez modifié le champ « Autorisations » ou ``base_url``, les ID de document changent ; si vous sautez l'étape 1, les anciens documents restent.
+De même, avant de supprimer cette configuration de magasin de données, supprimez d'abord ses documents avec l'étape 1.
+
+Confluence
+==========
+
+Sur Atlassian Cloud, créez un jeton d'API avec le compte d'exploration et utilisez-le comme mot de passe de l'authentification Basic.
+Sont importés les pages et les billets de blog des espaces que ce compte peut consulter.
+Sélectionnez ``ConfluenceDataStore`` comme « Nom du gestionnaire ».
 
 .. code-block:: properties
 
-    home=https://your-domain.atlassian.net/wiki
+    script_type=javascript
+    home=https://example.atlassian.net
+    deployment=cloud
     auth_type=basic
-    basic.username=user@example.com
+    basic.username=fess-crawler@example.com
     basic.password=your-api-token
-
-**Exemple de configuration des scripts**
+    include_pattern=https://example\.atlassian\.net/wiki/spaces/(DEV|OPS)/.*
 
 .. code-block:: properties
 
     url=content.view_url
     title=content.title
-    content=content.body
+    content=content.body + content.comments
     last_modified=content.last_modified
+    label="docs"
 
-Spécifiez l'URL de Confluence dans ``home`` et choisissez la méthode d'authentification avec ``auth_type``. Pour Confluence Cloud, utilisez l'authentification ``basic`` et définissez le jeton API dans ``basic.password``.
+- ``home`` fonctionne avec ou sans ``/wiki``. Sur Cloud, ``/wiki`` est ajouté pour Confluence.
+- Si ``deployment`` est omis, il est considéré comme ``cloud`` lorsque le nom d'hôte se termine par ``.atlassian.net``, et comme ``datacenter`` sinon.
+- Avec ``content.comments``, les commentaires de la page deviennent eux aussi interrogeables comme partie du corps. Les commentaires sont concaténés, séparés par des lignes vides.
+- ``include_pattern`` est comparé à l'URL complète du document. Sur Cloud, les URL des pages ont la forme ``https://<site>/wiki/spaces/<clé-d-espace>/pages/<id-de-page>`` ; vous pouvez donc filtrer par clé d'espace. Les URL de Data Center (``/pages/viewpage.action?pageId=...``) ne contiennent pas la clé d'espace ; cette méthode n'y est donc pas utilisable.
 
-Configuration de Jira
-----------------------
+Sur Data Center, indiquez ``deployment=datacenter`` ; pour utiliser un jeton d'accès personnel, spécifiez ``auth_type=pat`` et ``pat.token``.
 
-Rendez les tickets (Issues) Jira disponibles à la recherche.
+Jira
+====
 
-Le handler JiraDataStore est inclus dans le même plugin ``fess-ds-atlassian``.
-Vous pouvez utiliser JQL (Jira Query Language) pour filtrer les tickets à crawler.
-Par exemple, vous pouvez cibler uniquement les tickets d'un projet spécifique ou uniquement les tickets ayant un statut particulier (autre que Closed).
-
-1. [Crawler] > [Datastore] > [Nouveau]
-2. Nom du handler : sélectionnez JiraDataStore
-3. Configuration des paramètres
-
-**Exemple de configuration des paramètres**
+L'authentification est la même que pour Confluence.
+Sélectionnez ``JiraDataStore`` comme « Nom du gestionnaire » et limitez les tickets à importer avec JQL.
 
 .. code-block:: properties
 
-    home=https://your-domain.atlassian.net
+    script_type=javascript
+    home=https://example.atlassian.net
+    deployment=cloud
     auth_type=basic
-    basic.username=user@example.com
+    basic.username=fess-crawler@example.com
     basic.password=your-api-token
-    issue.jql=project = MYPROJ AND status != Closed
-
-**Exemple de configuration des scripts**
+    jira.jql=project in (DEV, OPS)
 
 .. code-block:: properties
 
     url=issue.view_url
     title=issue.summary
-    content=issue.description
+    content=issue.description + issue.comments
     last_modified=issue.last_modified
+    label="tickets"
 
-Spécifiez la requête JQL dans ``issue.jql`` pour filtrer les tickets à crawler.
+Le paramètre JQL s'appelle ``jira.jql``.
+L'ancien nom ``issue.jql`` fonctionne encore, mais le journal affiche alors l'avertissement ``Parameter "issue.jql" is deprecated``.
+L'ancien nom doit être supprimé en 16.0.
+Si ``jira.jql`` est omis, ``created is not empty`` s'applique, c'est-à-dire tous les tickets que le compte peut consulter.
 
-Configuration de Slack
------------------------
+Avec ``issue.comments``, les commentaires du ticket sont aussi ajoutés au corps, séparés par des lignes vides, et deviennent interrogeables.
+Les commentaires sont récupérés par l'API pour chaque ticket, ce qui augmente le nombre d'appels (voir les limites de débit plus loin).
 
-Rendez les messages Slack disponibles à la recherche.
+Slack
+=====
 
-1. [Crawler] > [Datastore] > [Nouveau]
-2. Nom du handler : sélectionnez SlackDataStore
-3. Configuration des paramètres
+Préparer l'application Slack
+----------------------------
 
-**Exemple de configuration des paramètres**
+Créez une application sur https://api.slack.com/apps et ajoutez les scopes suivants dans Bot Token Scopes sous [OAuth & Permissions] ; installez-la ensuite dans l'espace de travail.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Scope
+     - Quand il est nécessaire
+   * - ``channels:read``, ``channels:history``, ``users:read``, ``team:read``
+     - Toujours
+   * - ``groups:read``, ``groups:history``
+     - Importer les canaux privés (``include_private=true``)
+   * - ``users:read.email``
+     - Utiliser les membres des canaux privés comme autorisations (``permission_sync=true``)
+   * - ``files:read``
+     - Importer aussi les fichiers (``file_crawl=true``)
+
+Sans ``team:read``, le plugin appelle ``chat.getPermalink`` pour chaque message, ce qui augmente fortement le nombre d'appels d'API.
+Après l'installation, ajoutez l'application à chaque canal à importer.
+Les canaux que l'application n'a pas rejoints sont ignorés avec un avertissement.
+
+Créez deux configurations de magasin de données distinctes, l'une pour les canaux publics et l'autre pour les canaux privés.
+La raison en est expliquée dans la section « Canaux privés ».
+
+Canaux publics
+--------------
+
+Sélectionnez ``SlackDataStore`` comme « Nom du gestionnaire » et indiquez dans le champ « Autorisations » les personnes qui doivent voir les canaux publics.
 
 .. code-block:: properties
 
+    script_type=javascript
     token=xoxb-xxxxxxxxxxxx-xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx
-    channels=general,engineering,design
+    channels=*all
     include_private=false
-
-**Exemple de configuration des scripts**
 
 .. code-block:: properties
 
     url=message.permalink
-    title=message.title
+    title=message.user + " #" + message.channel
     content=message.text
+    created=message.timestamp
     last_modified=message.timestamp
+    label="slack"
 
-Spécifiez le jeton OAuth du Bot Slack dans ``token``. Vous pouvez spécifier les canaux à crawler avec ``channels`` ; pour cibler tous les canaux, définissez ``*all``. Pour inclure les canaux privés, définissez ``include_private=true`` et assurez-vous que le Bot a été invité dans ces canaux.
+``message.title`` est toujours une chaîne vide pour les messages ; si vous écrivez ``title=message.title``, aucun résultat n'a de titre.
+Comme dans l'exemple ci-dessus, construisez le titre à partir de l'auteur et du nom du canal.
+Les réponses dans les fils sont elles aussi enregistrées comme documents individuels.
+Les messages système tels que ``channel_join`` sont exclus par défaut (``ignore_system_events=true``).
 
-Utilisation des labels
-======================
+Canaux privés
+-------------
 
-Différencier les sources d'information avec des labels
--------------------------------------------------------
+Avec ``permission_sync=true``, le plugin crée, à partir des adresses e-mail des membres d'un canal privé, un rôle utilisateur par membre et les place dans ``message.roles``.
+Toutefois, les valeurs de ``default_permissions`` et du champ « Autorisations » sont aussi ajoutées à cette valeur.
+Les canaux publics n'ont pas de rôles propres ; si ces deux réglages sont vides, les documents des canaux publics ne sont visibles par personne.
+À l'inverse, si vous indiquez dans l'un des deux le public des canaux publics, ce public voit aussi les documents des canaux privés.
+Comme une seule configuration ne peut pas traiter correctement les deux cas, les canaux privés font l'objet d'une configuration distincte.
 
-En définissant des labels pour chaque source de données, vous permettez aux utilisateurs de filtrer par source lors de la recherche.
+Dans la deuxième configuration de magasin de données, supprimez ``{role}guest`` du champ « Autorisations » pour le laisser vide, et listez dans ``channels`` les noms des canaux privés à importer.
 
-- ``code`` : Code provenant des repositories Git
-- ``docs`` : Documents de Confluence
-- ``tickets`` : Tickets de Jira
-- ``discussions`` : Messages de Slack
+.. code-block:: properties
 
-Les utilisateurs peuvent effectuer une recherche transversale avec "Tout", puis affiner les résultats par label si nécessaire.
+    script_type=javascript
+    token=xoxb-xxxxxxxxxxxx-xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx
+    channels=dev-security,dev-incident
+    include_private=true
+    permission_sync=true
 
-Amélioration de la qualité de recherche
-========================================
+.. code-block:: properties
 
-Utilisation du boost de documents
-----------------------------------
+    url=message.permalink
+    title=message.user + " #" + message.channel
+    content=message.text
+    created=message.timestamp
+    last_modified=message.timestamp
+    role=message.roles
+    label="slack"
 
-Dans un hub de connaissances pour équipe de développement, tous les documents n'ont pas la même importance.
-Par exemple, on peut envisager les priorités suivantes.
+- Sans ``role=message.roles``, les rôles calculés ne sont pas utilisés. Dans ce cas, l'avertissement ``no script value references message.roles`` s'affiche au démarrage de l'exploration.
+- Si vous mélangez des canaux publics dans ``channels``, leurs documents ont des rôles vides et ne sont visibles par personne.
+- Avec cette configuration, l'avertissement ``default_permissions is not set and this crawl's DataConfig permission field is empty`` s'affiche au démarrage de l'exploration. Tant qu'aucun canal public n'est inclus, ce n'est pas un problème.
+- Les canaux dont les membres n'ont pas pu être récupérés, ou pour lesquels aucune adresse e-mail n'a pu être résolue (par exemple parce que ``users:read.email`` a été oublié), ne sont pas importés lors de cette exploration. Ils sont enregistrés dans [Informations système] > [URL d'échec] avec l'ID et le nom du canal.
 
-1. Documents Confluence (spécifications officielles, procédures)
-2. Tickets Jira (problèmes actuels, tâches en cours)
-3. Repositories Git (code, README)
-4. Messages Slack (historique des discussions)
+Lors de la recherche, le nom de l'utilisateur connecté à Fess est comparé à ces adresses e-mail.
+Le nom d'utilisateur Fess doit donc correspondre à l'adresse e-mail Slack.
+Slack traite les adresses e-mail en minuscules ; les noms d'utilisateur Fess doivent donc aussi être en minuscules.
+Les utilisateurs sans correspondance ne voient simplement pas les documents des canaux privés ; ils ne voient jamais les documents d'autres personnes.
+Pour savoir quelle valeur devient le nom d'utilisateur lors d'une connexion par SSO, consultez :doc:`guide-15`.
 
-Le boost de documents permet d'augmenter le score de recherche des documents correspondant à certains critères.
-Depuis l'interface d'administration, sous [Crawler] > [Boost de documents], vous pouvez définir des valeurs de boost basées sur les patterns d'URL ou les labels.
+Si vous aviez déjà importé des canaux privés sans ``permission_sync``, ces documents restent sans autorisations jusqu'à leur expiration.
+Supprimez ces documents dans [Informations système] > [Rechercher] avant d'explorer avec cette configuration.
 
-Utilisation du contenu associé
--------------------------------
+Étiquettes, boost et planification
+==================================
 
-En affichant du "contenu associé" dans les résultats de recherche, vous aidez les utilisateurs à trouver les informations qu'ils recherchent.
-Par exemple, lors de la recherche d'un document de conception dans Confluence, il est pratique de voir les tickets Jira associés affichés comme "contenu associé".
+Les étiquettes sont attribuées par la ligne ``label="..."`` de chacun des scripts ci-dessus.
+Pour les afficher comme filtres sur la page de recherche, créez dans [Robot d'exploration] > [Étiquette] des étiquettes ayant les mêmes valeurs (``code``, ``docs``, ``tickets``, ``slack``).
+Attention : si une étiquette possède des « Chemins inclus » qui correspondent à l'URL du document, l'étiquette du script est perdue (:doc:`datastore-basics`).
 
-Considérations opérationnelles
-===============================
+Les règles de [Robot d'exploration] > [Boost de document] ne s'appliquent pas aux documents des magasins de données.
+Pour faire remonter les documents de conception de Confluence au-dessus des messages Slack, augmentez le « Boost » (valeur initiale ``1.0``) de la configuration de magasin de données de Confluence.
+La valeur est multipliée par le score de recherche ; modifiez-la donc progressivement en comparant les résultats.
 
-Planification du crawl
------------------------
+Pour explorer chaque outil à une fréquence différente, utilisez [Créer une nouvelle tâche] sur la page de détails de chaque configuration de magasin de données (:doc:`datastore-basics`).
 
-Définissez une fréquence de crawl appropriée pour chaque source de données.
+Limites de débit des API
+========================
 
-.. list-table:: Exemple de planification
+Les plugins Slack et Atlassian renvoient automatiquement la requête en cas de réponse ``429`` ou ``5xx`` et, en présence d'un en-tête ``Retry-After``, attendent le nombre de secondes indiqué (60 secondes au maximum pour Slack).
+
+.. list-table::
    :header-rows: 1
-   :widths: 25 25 50
+   :widths: 20 80
 
-   * - Source de données
-     - Fréquence recommandée
-     - Raison
-   * - Confluence
-     - Toutes les 4 heures
-     - La fréquence de mise à jour des documents est modérée
-   * - Jira
-     - Toutes les 2 heures
-     - Les mises à jour des tickets sont fréquentes
-   * - Git
-     - Quotidien
-     - Aligné sur le cycle de release
+   * - Plugin
+     - Paramètres réglables
    * - Slack
-     - Toutes les 4 heures
-     - Le temps réel n'est pas nécessaire, mais la fraîcheur est importante
+     - ``read_interval`` (attente par message, en millisecondes, ``0`` par défaut), ``max_retry_count`` (``3`` par défaut), ``retry_interval`` (attente avant la première nouvelle tentative, en millisecondes, ``3000`` par défaut ; doublée à chaque tentative, 60 secondes au maximum)
+   * - Atlassian
+     - ``read_interval`` (intervalle minimal entre appels d'API, en millisecondes, ``0`` par défaut ; partagé entre les threads). Le nombre et l'intervalle des nouvelles tentatives sont fixes
 
-Gestion des limites de débit API
----------------------------------
+Lorsque Slack épuise ses nouvelles tentatives, l'exploration est interrompue.
+L'état dans le journal des tâches reste « OK » ; vérifiez donc avec les étapes de la section suivante.
 
-Les API des outils SaaS sont soumises à des limites de débit.
-Configurez un intervalle de crawl adéquat pour ne pas dépasser les limites de débit de l'API.
-L'API Slack en particulier a des limites de débit strictes, il est donc important de prévoir une marge suffisante dans l'intervalle de crawl.
+Vérifier le fonctionnement
+==========================
 
-Gestion des jetons d'accès
----------------------------
+La lecture des résultats de tâche et des journaux est expliquée dans :doc:`datastore-basics`.
+Une exploration de magasin de données peut échouer alors que la tâche s'affiche « OK » ; jugez donc d'après le nombre de documents et les journaux.
+Pour la configuration de cet article, vérifiez en outre les points suivants :
 
-La configuration des plugins de datastore nécessite les jetons d'accès API de chaque outil.
-Du point de vue de la sécurité, veuillez tenir compte des points suivants.
+1. Dans [Informations système] > [Rechercher], recherchez successivement ``label:code``, ``label:docs``, ``label:tickets`` et ``label:slack``, et vérifiez que le nombre n'est pas 0
+2. Ouvrez l'URL d'un document Git et vérifiez que le fichier du dépôt s'affiche. Si ``fess-crawler.log`` contient l'avertissement ``base_url is blank``, revoyez ``base_url``
+3. Ouvrez la page de détails de la configuration Git et vérifiez que ``prev_commit_id`` a été réécrit dans les paramètres
+4. Déconnecté, recherchez un mot qui n'apparaît que dans un canal privé et vérifiez qu'aucun résultat ne s'affiche
+5. Connectez-vous en tant que membre de ce canal et vérifiez que le même mot est trouvé
 
-- Principe du moindre privilège : utilisez des jetons d'accès en lecture seule
-- Rotation régulière : renouvelez périodiquement les jetons
-- Utilisation de comptes dédiés : utilisez des comptes de service plutôt que des comptes personnels
+S'il n'est pas trouvé à l'étape 5, vérifiez que le nom d'utilisateur Fess correspond à l'adresse e-mail Slack, et que ``fess-crawler.log`` ne contient pas l'avertissement ``private channel(s) skipped``.
+Si une configuration échoue dans son ensemble, par exemple à cause d'une erreur d'authentification, l'échec est enregistré par configuration dans [Informations système] > [URL d'échec].
 
-Conclusion
-==========
+Résumé
+======
 
-Dans cet article, nous avons construit un hub de connaissances qui centralise dans Fess les informations des outils utilisés quotidiennement par l'équipe de développement et permet une recherche unifiée.
-
-- Collecte des données de Git, Confluence, Jira et Slack avec les plugins de datastore
-- Labels offrant une expérience de recherche conviviale pour les développeurs
-- Boost de documents pour contrôler la priorité des informations
-- Considérations opérationnelles telles que les limites de débit API et la gestion des jetons
-
-Avec un hub de connaissances pour l'équipe de développement, vous pouvez répondre rapidement aux questions telles que "Où a eu lieu cette discussion ?" ou "Où est cette spécification ?".
-
-Le prochain article traitera de la recherche transversale dans les services de stockage cloud.
+- Pour Git, indiquez toujours ``base_url`` et ajoutez ``time_to_live`` pour que les documents n'expirent pas en exploration différentielle.
+- Pour Confluence et Jira, importez aussi les commentaires avec ``content.comments`` / ``issue.comments``, et écrivez le JQL dans ``jira.jql``.
+- Pour Slack, construisez le titre à partir de ``message.user`` et ``message.channel``.
+- Git, Confluence et Jira ne transposent pas les droits d'origine ; définissez donc la portée avec le champ « Autorisations » et le périmètre d'import.
+- Placez les canaux privés Slack dans une configuration distincte, et importez-les avec ``permission_sync=true``, ``role=message.roles`` et un champ « Autorisations » vide.
+- Ajustez la priorité de chaque source d'information avec le « Boost » de sa configuration de magasin de données.
 
 Références
 ==========
 
-- `Configuration des datastores Fess <https://fess.codelibs.org/ja/15.5/admin/dataconfig.html>`__
-
-- `Gestion des plugins Fess <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__
+- `Connecteur Git <https://fess.codelibs.org/fr/stable/config/datastore/ds-git.html>`__
+- `Connecteur Atlassian <https://fess.codelibs.org/fr/stable/config/datastore/ds-atlassian.html>`__
+- `Connecteur Slack <https://fess.codelibs.org/fr/stable/config/datastore/ds-slack.html>`__
+- `Crawl de magasin de données <https://fess.codelibs.org/fr/stable/admin/dataconfig-guide.html>`__
+- `Général <https://fess.codelibs.org/fr/stable/admin/general-guide.html>`__
+- `README de fess-ds-slack 15.9.0 (scopes et synchronisation des autorisations) <https://github.com/codelibs/fess-ds-slack/blob/fess-ds-slack-15.9.0/README.md>`__

@@ -1,313 +1,290 @@
-=========================
-Casos de uso de Fess
-=========================
+===============================================
+Casos de uso y escenarios de aplicación de Fess
+===============================================
 
 Introducción
 ============
 
-Fess es utilizado por organizaciones de diversas industrias y escalas.
-Esta página presenta casos de uso representativos y ejemplos prácticos de implementación de Fess.
+Esta página presenta las situaciones en las que se suele utilizar Fess, organizadas por sector, por escala y por objetivo técnico.
+Para cada escenario se indican el problema que se quiere resolver, las funciones y los plugins de Fess que se utilizan y los artículos que explican los pasos.
+Los pasos de configuración en sí están en cada artículo, así que parta del escenario más parecido a su situación para elegir qué artículos leer.
+
+Los nombres de funciones y plugins de esta página corresponden a Fess 15.9.
+En la versión 15.9, la importación desde bases de datos y servicios SaaS, el SSO y el rastreo de S3 y GCS se ofrecen mediante plugins.
+Utilice para los plugins la misma versión 15.9.x que Fess y reinicie Fess después de instalarlos.
+Para saber cómo instalarlos, consulte `Plugins <https://fess.codelibs.org/es/stable/admin/plugin-guide.html>`__.
 
 .. note::
 
-   Los siguientes ejemplos ilustran patrones de implementación comunes para Fess.
-   Para estudios de casos reales, contacte al `Soporte Comercial <../support-services.html>`__.
+   Lo que sigue son patrones de uso generales. Para conocer casos reales de implantación, póngase en contacto con el `soporte comercial <../support-services.html>`__.
 
-----
+Buscar funciones según el objetivo
+==================================
 
-Casos de uso por industria
-===========================
+.. list-table::
+   :header-rows: 1
+   :widths: 34 38 28
 
-Manufactura
------------
+   * - Lo que quiere hacer
+     - Funciones y plugins
+     - Artículos que leer
+   * - Probarlo primero en local
+     - Docker Compose (docker-fess)
+     - :doc:`guide-02`
+   * - Buscar a la vez en el sitio de la intranet y en los servidores de archivos
+     - Rastreo web, rastreo del sistema de archivos, Autenticación de archivos, etiquetas
+     - :doc:`guide-04`, :doc:`file-server-search`
+   * - Mostrar documentos distintos según el departamento o el cargo
+     - Permisos, roles y grupos, LDAP (Active Directory)
+     - :doc:`guide-05`
+   * - Añadir un cuadro de búsqueda a un sitio existente
+     - Formulario de búsqueda, Fess Site Search (``fess-webapp-v1-api``), temas
+     - :doc:`guide-03`
+   * - Buscar en Git, Confluence, Jira y Slack
+     - ``fess-ds-git``, ``fess-ds-atlassian``, ``fess-ds-slack``
+     - :doc:`datastore-basics`, :doc:`guide-06`
+   * - Buscar en Google Drive, SharePoint Online y Box
+     - ``fess-ds-gsuite``, ``fess-ds-microsoft365``, ``fess-ds-box``
+     - :doc:`datastore-basics`, :doc:`guide-07`
+   * - Buscar en bases de datos, CSV y Salesforce
+     - ``fess-ds-db``, ``fess-ds-csv``, ``fess-ds-salesforce``
+     - :doc:`datastore-basics`, :doc:`guide-12`
+   * - Buscar desde los sistemas de negocio
+     - API de búsqueda (``/api/v2``), tokens de acceso
+     - :doc:`guide-11`
+   * - Permitir buscar con el inicio de sesión de la empresa
+     - ``fess-sso-entraid``, ``fess-sso-oidc``, ``fess-sso-saml``, ``fess-sso-spnego``
+     - :doc:`guide-15`
+   * - Compartir un solo Fess entre varias organizaciones
+     - Hosts virtuales, roles, etiquetas
+     - :doc:`guide-13`
+   * - Analizar los términos sin resultados y el uso de la búsqueda para mejorarla
+     - [Información del sistema] > [Registro de búsqueda]
+     - :doc:`guide-08`
+   * - Encontrar documentos de significado parecido, obtener respuestas de una IA
+     - Búsqueda semántica, modo de búsqueda IA, ``fess-webapp-mcp``
+     - :doc:`guide-18`, :doc:`guide-19`, :doc:`guide-20`
+   * - Prepararse para el aumento de documentos y usuarios
+     - Separación y clúster de OpenSearch, varios servidores Fess
+     - :doc:`guide-14`
+   * - Funcionar de forma estable en producción
+     - ``/api/v2/health``, copias de seguridad, registros
+     - :doc:`guide-10`
 
-**Desafío**: Los planos de diseño, documentos técnicos y documentos de gestión de calidad están dispersos en múltiples servidores de archivos, lo que hace que encontrar la información necesaria consuma mucho tiempo.
+Casos de uso por sector
+=======================
 
-**Solución con Fess**:
+Industria manufacturera: encontrar documentos técnicos dispersos
+----------------------------------------------------------------
 
-- Búsqueda unificada de planos CAD, documentos técnicos en PDF y documentos de Office en servidores de archivos
-- Búsqueda cruzada por números de modelo de producto, números de plano y nombres de proyecto
-- Visualización de resultados de búsqueda basada en permisos de acceso (búsqueda basada en roles)
+**Problema**: los documentos de diseño, las especificaciones y los registros de calidad están repartidos en los servidores de archivos de cada departamento, y encontrar el material relacionado a partir de un número de plano o de modelo lleva tiempo.
 
-**Ejemplo de arquitectura**:
+**Funciones que se utilizan**:
 
-.. code-block:: text
+- Rastree los servidores de archivos con ``smb://`` para que el texto de los PDF y de los documentos de Office se pueda buscar. Los permisos de acceso de Windows (ACL) se importan de forma predeterminada como permisos de los documentos
+- Cree etiquetas con nombres visibles como "Diseño" y "Calidad", clasifique los documentos según las rutas que abarcan y permita filtrar por ellas en la página de búsqueda
+- Los registros en papel escaneados se pueden buscar por su texto si se activa el OCR. El OCR está desactivado de forma predeterminada y requiere ``tesseract`` en el host donde se ejecuta el rastreador (`Configuración de OCR <https://fess.codelibs.org/es/stable/config/crawler-ocr.html>`__)
 
-    [Servidores de archivos]  →  [Fess]  →  [Portal interno]
-         │                        │
-         ├─ Planos                ├─ Cluster OpenSearch
-         ├─ Docs tecnicos         └─ Integracion con Active Directory
-         └─ Registros de calidad
+Los archivos en formatos de los que Fess no puede extraer el texto solo se encuentran por su nombre o su ruta.
+Compruebe los formatos admitidos en `Archivos compatibles <../supported-files.html>`__.
 
-**Funciones relacionadas**:
+**Artículos que leer**: construya la configuración con :doc:`guide-04`, compruebe los requisitos previos de las ACL en :doc:`file-server-search` y configure la visibilidad por departamento con :doc:`guide-05`.
 
-- `Rastreo de servidores de archivos <https://fess.codelibs.org/es/15.5/config/config-filecrawl.html>`__
-- `Búsqueda basada en roles <https://fess.codelibs.org/es/15.5/config/config-role.html>`__
-- `Visualización de miniaturas <https://fess.codelibs.org/es/15.5/admin/admin-general.html>`__
+Finanzas y seguros: encontrar normativas y contratos con permisos
+-----------------------------------------------------------------
 
-Servicios financieros y seguros
--------------------------------
+**Problema**: hay una gran cantidad de normativas internas, manuales y contratos, y buscarlos en cada consulta o auditoría supone un esfuerzo. Al mismo tiempo, se quiere separar de forma estricta por departamento quién puede consultarlos.
 
-**Desafío**: Los documentos de cumplimiento, contratos y regulaciones internas son extensos, lo que hace que las respuestas a auditorías y el manejo de consultas consuman mucho tiempo.
+**Funciones que se utilizan**:
 
-**Solución con Fess**:
+- Con los permisos por documento se limita a quién se muestra cada documento en los resultados de búsqueda. Los permisos de una nueva configuración de rastreo incluyen ``{role}guest`` desde el principio; elimínelo en los documentos que no sean públicos
+- Para que los usuarios que no han iniciado sesión no puedan buscar, active "Requiere inicio de sesión" en [General]
+- Para iniciar sesión con la plataforma de identidad de la empresa, utilice SSO: ``fess-sso-saml`` para SAML y ``fess-sso-entraid`` para Entra ID (la imagen de Docker incluye los cuatro plugins de SSO)
+- Para buscar desde los sistemas de negocio, guarde un token de acceso en el lado del servidor y llame a la API de búsqueda
 
-- Búsqueda cruzada de regulaciones internas, manuales y preguntas frecuentes
-- Búsqueda de texto en contratos y documentos de solicitud
-- Búsqueda de conocimiento en el historial de consultas anteriores
+**Artículos que leer**: diseñe los permisos con :doc:`guide-05` y configure SSO y HTTPS con :doc:`guide-15`. La integración con los sistemas de negocio se trata en :doc:`guide-11`.
 
-**Funciones de seguridad**:
+Educación: buscar de forma transversal en los sitios y unidades compartidas del campus
+--------------------------------------------------------------------------------------
 
-- Autenticación mediante integración con LDAP/Active Directory
-- Inicio de sesión único mediante SAML
-- Autenticación de API mediante tokens de acceso
+**Problema**: los sitios web de cada facultad, los materiales de las clases y los documentos internos de la institución están en lugares distintos, y ni los estudiantes ni el personal llegan a la información que buscan.
 
-**Funciones relacionadas**:
+**Funciones que se utilizan**:
 
-- `Autenticación LDAP <https://fess.codelibs.org/es/15.5/config/config-security.html>`__
-- `Autenticación SAML <https://fess.codelibs.org/es/15.5/config/config-saml.html>`__
+- Importe los sitios web del campus mediante rastreo web. Los repositorios institucionales (como DSpace) no tienen un conector específico, así que rastree sus páginas públicas
+- Importe las unidades compartidas de Google Drive con ``fess-ds-gsuite`` y SharePoint Online con ``fess-ds-microsoft365``
+- Para mostrar ámbitos distintos a estudiantes y a personal, sepárelos con roles y permisos. Si quiere dividir el propio sitio, utilice hosts virtuales
 
-Educación
----------
+**Artículos que leer**: :doc:`guide-04`, :doc:`guide-07`, :doc:`guide-05`. Para dividir el sitio, consulte :doc:`guide-13`.
 
-**Desafío**: Los trabajos de investigación, materiales de clase y documentos del campus están distribuidos en servidores departamentales, dificultando el intercambio de información.
+TI y software: encontrar la información de desarrollo en un solo lugar
+----------------------------------------------------------------------
 
-**Solución con Fess**:
+**Problema**: el código está en Git, el diseño en Confluence, las incidencias en Jira y las conversaciones en Slack o Teams, por lo que cuesta reconstruir lo que se decidió en el pasado.
 
-- Búsqueda unificada desde el portal del campus
-- Búsqueda en repositorios de trabajos de investigación
-- Búsqueda de materiales de clase y programas de estudio
+**Funciones que se utilizan**:
 
-**Ejemplos de arquitectura**:
+- Importe los archivos de los repositorios con ``fess-ds-git``, Confluence y Jira con ``fess-ds-atlassian`` y los mensajes de Slack con ``fess-ds-slack``
+- Los canales y chats de Teams se pueden importar con el ``TeamsDataStore`` de ``fess-ds-microsoft365`` (`Conector de Microsoft 365 <https://fess.codelibs.org/es/stable/config/datastore/ds-microsoft365.html>`__)
+- Como configuración especializada en la búsqueda de código fuente, está publicado `docker-codesearch <https://github.com/codelibs/docker-codesearch>`__
+- Para integrar la búsqueda en herramientas internas, utilice la API de búsqueda; para que busquen agentes de IA, utilice ``fess-webapp-mcp``
 
-- Rastreo de sitios web del campus
-- Integración con repositorios de artículos (DSpace, etc.)
-- Búsqueda de materiales en Google Drive / SharePoint
-
-**Funciones relacionadas**:
-
-- `Rastreo web <https://fess.codelibs.org/es/15.5/config/config-webcrawl.html>`__
-- `Rastreo de Google Drive <https://fess.codelibs.org/es/15.5/config/config-crawl-gsuite.html>`__
-
-TI y Software
--------------
-
-**Desafío**: El código fuente, la documentación, las wikis y la información del sistema de gestión de tickets están dispersos, lo que reduce la eficiencia del desarrollo.
-
-**Solución con Fess**:
-
-- Búsqueda de código en repositorios de GitHub/GitLab
-- Búsqueda de páginas de Confluence/Wiki
-- Búsqueda de mensajes de Slack/Teams
-
-**Funciones para desarrolladores**:
-
-- Integración con sistemas existentes mediante la API de búsqueda
-- Resaltado de código
-- Filtrado por tipo de archivo
-
-**Funciones relacionadas**:
-
-- `Rastreo de repositorios Git <https://fess.codelibs.org/es/15.5/config/config-crawl-git.html>`__
-- `Rastreo de Confluence <https://fess.codelibs.org/es/15.5/config/config-crawl-atlassian.html>`__
-- `Rastreo de Slack <https://fess.codelibs.org/es/15.5/config/config-crawl-slack.html>`__
-
-----
+**Artículos que leer**: :doc:`datastore-basics` y después :doc:`guide-06`. La integración con agentes de IA se trata en :doc:`guide-20`.
 
 Casos de uso por escala
-========================
+=======================
 
-Pequeña empresa (hasta 100 empleados)
---------------------------------------
+El número de servidores y la memoria necesarios no dependen solo del número de usuarios o de documentos.
+La carga cambia con la longitud del texto, la proporción de archivos adjuntos y si los usuarios inician sesión o no, así que empiece con poco, mida y amplíe lo que falte.
+Los pasos para decidirlo se resumen en la sección sobre las orientaciones de escala de :doc:`guide-14`.
+Para los requisitos de servidor recomendados para producción (4 o más núcleos de CPU, 8 GB o más de memoria, etc.), consulte `Requisitos del sistema <https://fess.codelibs.org/es/stable/install/prerequisites.html>`__.
 
-**Características**: Desean una implementación y operación sencillas con recursos de TI limitados.
+Empezar con un servidor
+-----------------------
 
-**Configuración recomendada**:
+Para una implantación a nivel de departamento o una prueba, ejecute Fess y OpenSearch en un solo servidor.
+Con Docker Compose, se inicia con dos archivos: ``compose.yaml`` y ``compose-opensearch3.yaml``.
+Los pasos están en :doc:`guide-02`.
 
-- Implementación fácil mediante Docker Compose
-- Configuración de servidor único (Fess + OpenSearch)
-- Memoria requerida: 8 GB o más
+Incluso con un solo servidor, decida desde el principio los dos puntos siguientes.
 
-**Pasos de implementación**:
+- Cómo hacer las copias de seguridad. La configuración se puede descargar desde [Información del sistema] > [Copia de seguridad], pero no incluye los diccionarios (:doc:`guide-10`)
+- Con Docker, la configuración modificada en [Sistema] > [General] se guarda en ``system.properties`` dentro del contenedor y vuelve a su estado original al recrear el contenedor (consulte la sección sobre detener y reanudar en :doc:`guide-02`)
 
-.. code-block:: bash
+Cuando se suman más departamentos
+---------------------------------
 
-    # Implementacion en 5 minutos
-    mkdir fess && cd fess
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose.yaml
-    curl -OL https://raw.githubusercontent.com/codelibs/docker-fess/main/compose/compose-opensearch3.yaml
-    docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+Cuando la búsqueda o el rastreo se vuelvan lentos, averigüe primero si la causa está en el propio Fess, en el rastreador o en OpenSearch.
+En la mayoría de los casos, se amplía en el orden siguiente.
 
-**Costo**:
+1. Con un solo servidor, ajustar el heap de Fess, del rastreador y de OpenSearch, así como el paralelismo del rastreo
+2. Separar OpenSearch en otro servidor
+3. Convertir OpenSearch en un clúster de tres nodos
+4. Ejecutar varios servidores Fess y repartir las peticiones con un balanceador de carga
 
-- Software: Gratuito (Código abierto)
-- Solo costos de servidor (Nube o local)
+Con varios servidores Fess, mantenga iguales en todos ellos la configuración de [General], ``app.cipher.key`` en ``fess_config.properties`` y los plugins instalados.
+En Fess 15.9, las sesiones de inicio de sesión se guardan en la memoria de cada servidor, por lo que, al repartir pantallas que se usan con sesión iniciada, active las sesiones persistentes (sticky sessions) en el balanceador de carga.
+Guardar las sesiones en OpenSearch para compartirlas entre servidores es posible a partir de la versión 15.10.
 
-Mediana empresa (100-1000 empleados)
--------------------------------------
+**Artículos que leer**: :doc:`guide-14`, :doc:`guide-10`.
 
-**Características**: Uso multidepartamental, requiere disponibilidad razonable.
+Uso en toda la empresa
+----------------------
 
-**Configuración recomendada**:
+A escala de toda la empresa, considere lo siguiente además de la configuración anterior.
 
-- 2 servidores Fess (redundancia)
-- Clúster OpenSearch de 3 nodos
-- Balanceador de carga para distribución de tráfico
-- Integración con Active Directory
+- Asigne el rastreo a un único servidor Fess (``scheduler.target.name`` y el "Objetivo" del trabajo). Así la carga del rastreo no recae en los servidores que atienden las búsquedas
+- Utilice ``/api/v2/health`` para el balanceador de carga y la monitorización. Devuelve 503 cuando el clúster de OpenSearch está en ``RED`` o no se puede conectar con él
+- Para separar la página de búsqueda o los destinos de búsqueda por organización, utilice hosts virtuales o instancias de Fess separadas (:doc:`guide-13`)
+- Revise periódicamente en el registro de búsqueda los términos sin resultados y los términos cuyos resultados no reciben clics (:doc:`guide-08`)
 
-**Directrices de capacidad**:
+Fess también puede ejecutarse en Kubernetes, pero no se ofrece un chart de Helm oficial.
+Convierta los archivos de Docker Compose o escriba usted mismo los manifiestos (consulte las preguntas frecuentes de `Instalación con Docker (detalles) <https://fess.codelibs.org/es/stable/install/install-docker.html>`__).
 
-- Documentos: hasta 5 millones
-- Usuarios de búsqueda simultáneos: hasta 100
-
-**Funciones relacionadas**:
-
-- `Configuración de clúster <https://fess.codelibs.org/es/15.5/install/clustering.html>`__
-- `Copia de seguridad y restauración <https://fess.codelibs.org/es/15.5/admin/admin-backup.html>`__
-
-Gran empresa (más de 1000 empleados)
--------------------------------------
-
-**Características**: Datos a gran escala, alta disponibilidad, requisitos estrictos de seguridad.
-
-**Configuración recomendada**:
-
-- Múltiples servidores Fess (ejecutándose en Kubernetes)
-- Clúster OpenSearch (configuración de nodos dedicados)
-- Servidores de rastreo dedicados
-- Integración con infraestructura de monitoreo y recopilación de registros
-
-**Escalabilidad**:
-
-- Documentos: cientos de millones posibles
-- Escalado horizontal mediante división de shards de OpenSearch
-
-**Funciones empresariales**:
-
-- Gestión de etiquetas por departamento
-- Registro detallado de accesos
-- Integración con otros sistemas mediante API
-
-.. note::
-
-   Para implementaciones a gran escala, recomendamos utilizar el `Soporte Comercial <../support-services.html>`__.
-
-----
+Para implantaciones en entornos de gran escala, considere también el `soporte comercial <../support-services.html>`__.
 
 Casos de uso técnicos
-======================
+=====================
 
-Búsqueda en Wiki interno / Base de conocimiento
--------------------------------------------------
+Búsqueda transversal en wikis internos y bases de conocimiento
+--------------------------------------------------------------
 
-**Descripción**: Permitir la búsqueda cruzada en Confluence, MediaWiki y wikis internas.
+La forma de importar el contenido depende del tipo de wiki.
 
-**Beneficios**:
+.. list-table::
+   :header-rows: 1
+   :widths: 30 35 35
 
-- Búsqueda unificada en múltiples sistemas wiki
-- Rastreo automático basado en la frecuencia de actualización
-- Los archivos adjuntos de las páginas wiki se incluyen en el alcance de la búsqueda
+   * - Destino
+     - Forma de importación
+     - Referencia
+   * - Confluence
+     - ``fess-ds-atlassian`` (``ConfluenceDataStore``)
+     - :doc:`guide-06`
+   * - Notion
+     - ``fess-ds-notion``
+     - `Conector de Notion <https://fess.codelibs.org/es/stable/config/datastore/ds-notion.html>`__
+   * - Backlog
+     - ``fess-ds-backlog``
+     - `Conector de Backlog <https://fess.codelibs.org/es/stable/config/datastore/ds-backlog.html>`__
+   * - Wikis que se pueden consultar en la web, como MediaWiki
+     - Rastreo web (si se requiere inicio de sesión, configure también la Autenticación web)
+     - :doc:`guide-04`
 
-**Implementación**:
-
-1. Instalar el plugin de almacén de datos de Confluence
-2. Configurar los ajustes de conexión desde el panel de administración
-3. Establecer el cronograma de rastreo (por ejemplo, diario)
+Los documentos importados mediante un almacén de datos también incluyen ``{role}guest`` en sus permisos desde el principio.
+Si importa espacios que solo puede leer un grupo limitado de personas, lea primero la sección de :doc:`guide-06` sobre a quién mostrar los resultados de búsqueda.
 
 Búsqueda unificada en servidores de archivos
----------------------------------------------
+--------------------------------------------
 
-**Descripción**: Buscar documentos en servidores de archivos Windows y NAS.
+Los protocolos que admite el rastreo de archivos de Fess 15.9 son los siguientes.
 
-**Protocolos soportados**:
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
 
-- SMB/CIFS (carpetas compartidas de Windows)
-- NFS
-- Sistema de archivos local
+   * - Formato de la ruta
+     - Destino
+   * - ``smb://``
+     - Carpetas compartidas de Windows o NAS compartidos por SMB
+   * - ``smb1://``
+     - Servidores antiguos que solo admiten SMB1
+   * - ``file:``
+     - Directorios visibles desde el servidor de Fess. Los recursos compartidos NFS se montan primero en el sistema operativo y luego se indican en este formato
+   * - ``ftp://``
+     - Servidores FTP
+   * - ``s3://`` / ``gcs://``
+     - Almacenamiento compatible con Amazon S3 / Google Cloud Storage. Requiere ``fess-storage-s3`` / ``fess-storage-gcs`` (incluidos en la imagen de Docker)
 
-**Seguridad**:
+Los protocolos activados de forma predeterminada son ``file``, ``smb``, ``smb1`` y ``ftp`` (``crawler.file.protocols``).
+Para que las ACL de SMB se reflejen en los resultados de búsqueda, debe eliminar ``{role}guest`` de los permisos de la configuración de rastreo.
+El motivo y la forma de comprobarlo están en :doc:`file-server-search`, y la configuración concreta en :doc:`guide-04`.
 
-- Control de acceso basado en autenticación NTLM
-- Las ACL de archivos se reflejan en los resultados de búsqueda
+Búsqueda dentro de un sitio web
+-------------------------------
 
-**Puntos de configuración**:
+Hay tres formas de añadir búsqueda a un sitio público, y se pueden combinar.
 
-- Crear una cuenta dedicada para el rastreo
-- Rastreo por fases para grandes volúmenes de archivos
-- Considerar el ancho de banda de la red
+- Colocar un formulario de búsqueda que lleve a la página de búsqueda de Fess. No hace falta ninguna configuración adicional en Fess
+- Mostrar los resultados de búsqueda dentro de una página existente con Fess Site Search (FSS). FSS llama a ``/api/v1``, por lo que en 15.9 requiere el plugin ``fess-webapp-v1-api``. Fess no sirve el JavaScript de FSS, así que genérelo con FSS JS Generator y colóquelo en su propio sitio
+- Adaptar la página de búsqueda de Fess al aspecto del sitio existente mediante un tema
 
-Búsqueda en sitios web (Site Search)
--------------------------------------
-
-**Descripción**: Agregar funcionalidad de búsqueda a sitios web públicos.
-
-**Métodos de implementación**:
-
-1. **Inserción de JavaScript**
-
-   Use Fess Site Search (FSS) para agregar un cuadro de búsqueda con solo unas pocas líneas de JavaScript
-
-2. **Integración por API**
-
-   Construya una interfaz de búsqueda personalizada utilizando la API de búsqueda
-
-**Ejemplo de FSS**:
-
-.. code-block:: html
-
-    <script>
-    (function() {
-      var fess = document.createElement('script');
-      fess.type = 'text/javascript';
-      fess.async = true;
-      fess.src = 'https://your-fess-server/js/fess-ss.min.js';
-      fess.charset = 'utf-8';
-      fess.setAttribute('id', 'fess-ss');
-      fess.setAttribute('fess-url', 'https://your-fess-server/json');
-      document.body.appendChild(fess);
-    })();
-    </script>
-    <fess:search></fess:search>
+Los pasos están en :doc:`guide-03`.
+Para crear su propia página de búsqueda, utilice ``/api/v2/search`` (:doc:`guide-11`).
 
 Búsqueda en bases de datos
----------------------------
+--------------------------
 
-**Descripción**: Hacer que los datos en bases de datos relacionales sean buscables.
+La información almacenada en bases de datos, como los maestros de productos o las preguntas frecuentes, se importa con ``fess-ds-db``.
+Admite bases de datos compatibles con JDBC (MySQL, PostgreSQL, Oracle, SQL Server, etc.), y el controlador JDBC adecuado para el destino se proporciona por separado.
+Un script asigna las columnas obtenidas con una sentencia SELECT a campos como ``title`` y ``content``.
 
-**Bases de datos soportadas**:
+Si construye la URL de la pantalla de negocio original y la guarda en ``url``, los usuarios pueden abrir los datos originales directamente desde el enlace del resultado de búsqueda.
+Los pasos están en :doc:`guide-12`.
 
-- MySQL / MariaDB
-- PostgreSQL
-- Oracle
-- SQL Server
+Combinar con IA generativa
+--------------------------
 
-**Casos de uso**:
+- Encontrar documentos de significado parecido aunque las palabras clave no coincidan: búsqueda semántica (:doc:`guide-18`)
+- Hacer que una IA responda basándose en los documentos internos: modo de búsqueda IA. Funciona también sin búsqueda vectorial (:doc:`guide-19`)
+- Permitir que agentes de IA como Claude Code busquen en Fess: ``fess-webapp-mcp`` (:doc:`guide-20`)
 
-- Búsqueda en maestro de clientes
-- Búsqueda en catálogo de productos
-- Búsqueda en base de datos de preguntas frecuentes
+Con cualquiera de los métodos, los documentos buscados se filtran con los mismos permisos que una búsqueda normal (en el modo de búsqueda IA, los del usuario que ha iniciado sesión; en MCP, los del token de acceso, o los permisos de invitado si MCP se usa sin autenticación).
+Estos permisos también determinan qué documentos llegan a la IA, así que complete primero el diseño de permisos de :doc:`guide-05`.
 
-**Implementación**:
+Cómo llevar a cabo la implantación
+==================================
 
-1. Configurar el plugin de almacén de datos de base de datos
-2. Especificar el objetivo de rastreo con una consulta SQL
-3. Configurar el mapeo de campos
+1. Iniciar Fess con :doc:`guide-02`, rastrear una parte de los destinos y probar la búsqueda
+2. En la tabla anterior, elegir los artículos que se ajustan a su problema y realizar la configuración
+3. Decidir los permisos (:doc:`guide-05`) y la operación (:doc:`guide-10`) antes de abrirlo a los usuarios
 
-----
+Referencias
+===========
 
-Resumen
-=======
-
-Fess, con su diseño flexible, puede adaptarse a diversas industrias, escalas y casos de uso.
-
-**Para quienes están considerando la implementación**:
-
-1. Primero, pruebe Fess con el `Inicio rápido <../quick-start.html>`__
-2. Verifique las funciones requeridas en la `Documentación <../documentation.html>`__
-3. Para implementación en producción, consulte el `Soporte Comercial <../support-services.html>`__
-
-**Recursos relacionados**:
-
-- `Lista de artículos <../articles.html>`__ - Artículos técnicos detallados
-- `Foro de discusión <https://discuss.codelibs.org/c/fessen/>`__ - Soporte de la comunidad
-- `GitHub <https://github.com/codelibs/fess>`__ - Código fuente y seguimiento de incidencias
+- `Inicio rápido <../quick-start.html>`__
+- `Documentación <../documentation.html>`__
+- `Plugins <https://fess.codelibs.org/es/stable/admin/plugin-guide.html>`__
+- `Guía de conectores de almacén de datos <https://fess.codelibs.org/es/stable/config/datastore/index.html>`__
+- `Foro de discusión <https://discuss.codelibs.org/c/FessEN/>`__
+- `GitHub <https://github.com/codelibs/fess>`__

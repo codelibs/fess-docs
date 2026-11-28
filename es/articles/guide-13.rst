@@ -1,230 +1,352 @@
-=============================================
-Parte 13: Plataforma de búsqueda multi-tenant
-=============================================
+=======================================
+Un solo Fess para varias organizaciones
+=======================================
 
 Introducción
-=============
+============
 
-Cuando se desea ofrecer Fess a múltiples departamentos internos o a múltiples clientes como MSP (Proveedor de Servicios Gestionados), construir una instancia de Fess independiente para cada tenant resulta ineficiente.
+Si quiere ofrecer un servicio de búsqueda a cada empresa de un grupo o a cada departamento y construye un Fess por organización, los servidores y las configuraciones de rastreo que debe administrar se multiplican por el número de organizaciones.
+Con la función de hosts virtuales de Fess, puede publicar un único Fess con varios nombres de host y cambiar, según el nombre de host, los destinos de búsqueda, las etiquetas y la página de búsqueda.
 
-En este artículo se explica un diseño multi-tenant que permite servir a múltiples tenants (organizaciones, departamentos o clientes) desde una única instancia de Fess.
+Sin embargo, un host virtual solo cambia lo que se muestra según el nombre de host por el que llegó la solicitud; no es un control de acceso.
+Para garantizar que los documentos de una organización no sean visibles para otra, hay que combinarlo con permisos basados en roles y con el inicio de sesión.
 
-Audiencia objetivo
-===================
+En este artículo, tomamos como ejemplo dos inquilinos, la Empresa A y la Empresa B, y configuramos paso a paso lo siguiente en Fess 15.9.
 
-- Personas que desean ofrecer servicios de búsqueda a múltiples organizaciones o departamentos
-- Personas interesadas en el diseño multi-tenant con Fess
-- Personas que desean aprender a utilizar la función de host virtual
+- Asociar los nombres de host con los inquilinos en "Host virtual" de [General]
+- Indicar el host virtual y los permisos en las configuraciones de rastreo y en las etiquetas para separar los documentos de cada inquilino
+- Dar a cada inquilino su propia página de búsqueda con un tema que se llame igual que la clave del host virtual
+- Iniciar sesión con un usuario de un inquilino y comprobar que no se ven los documentos de los demás inquilinos
+- Añadir y eliminar inquilinos en el orden correcto
 
-Escenario
-=========
+Los fundamentos de roles, grupos y usuarios se tratan en :doc:`guide-05`.
 
-Suponemos un escenario en el que el departamento de TI de un grupo empresarial ofrece servicios de búsqueda a tres filiales.
+Lo primero: un host virtual no es un control de acceso
+======================================================
 
-.. list-table:: Configuración de tenants
+En cada solicitud, Fess evalúa de arriba abajo las líneas escritas en "Host virtual" de [General] y usa el nombre de host virtual (en adelante, la clave) de la primera línea cuyo encabezado indicado (normalmente ``Host``) coincida.
+Una vez determinada la clave, las siguientes funciones se filtran por esa clave.
+
+- Resultados de búsqueda: solo se devuelven los documentos cuya configuración de rastreo tiene esa clave en "Hosts virtuales" (lo mismo ocurre con la API de búsqueda)
+- Etiquetas: solo se muestran las etiquetas cuyo campo "Host virtual" es esa clave
+- Coincidencia de clave, Contenido relacionado y Consulta relacionada: solo se usan los ajustes cuyo campo "Host virtual" es esa clave
+- Página de búsqueda: si existe un tema cuyo nombre es la clave en minúsculas, la página se muestra con ese tema
+
+En cambio, en una solicitud que no coincide con ninguna línea, no se aplica ninguno de estos filtros.
+Si alguien accede directamente al servidor por su dirección IP, o si un proxy inverso reescribe el encabezado ``Host``, desaparece el filtrado por host virtual y los documentos de todos los inquilinos que permitan los permisos pasan a ser buscables.
+Un nombre de host mal escrito o un número de puerto olvidado en [General] tampoco produce un error: simplemente se trata como "sin coincidencia".
+
+Por eso, para que los documentos no sean visibles entre inquilinos, combine las dos medidas siguientes.
+
+- Limitar los permisos de los documentos de cada inquilino al rol de ese inquilino (por ejemplo, ``{role}tenanta_user``)
+- Exigir el inicio de sesión en la página de búsqueda y asignar a los usuarios el rol de su inquilino
+
+La configuración de este artículo
+=================================
+
+.. list-table::
    :header-rows: 1
-   :widths: 25 35 40
+   :widths: 16 26 14 18 26
 
-   * - Tenant
-     - Dominio
-     - Objetivo de búsqueda
-   * - Empresa A (Manufactura)
-     - search-a.example.com
-     - Especificaciones de productos, documentos de control de calidad
-   * - Empresa B (Comercio minorista)
-     - search-b.example.com
-     - Manuales de tienda, información de productos
-   * - Empresa C (Servicios)
-     - search-c.example.com
-     - Manuales de atención al cliente, FAQ
+   * - Inquilino
+     - Nombre de host público
+     - Clave
+     - Rol
+     - Destino del rastreo
+   * - Empresa A
+     - ``search-a.example.com``
+     - ``tenanta``
+     - ``tenanta_user``
+     - ``https://portal-a.example.com/``
+   * - Empresa B
+     - ``search-b.example.com``
+     - ``tenantb``
+     - ``tenantb_user``
+     - ``https://portal-b.example.com/``
 
-Cada tenant tiene los siguientes requisitos:
+En una clave solo se pueden usar caracteres alfanuméricos y guiones bajos (``a-zA-Z0-9_``).
+Los demás caracteres se eliminan al guardar, así que si escribe ``tenant-a``, la clave pasa a ser ``tenanta``, y un ``tenant-a`` escrito en una configuración de rastreo no coincidirá.
+``admin``, ``common``, ``error``, ``login`` y ``profile`` están reservados y no se pueden usar.
 
-- Los datos no deben ser visibles entre tenants (aislamiento de datos)
-- Cada tenant necesita un diseño diferente (branding)
-- Cada tenant necesita configuraciones de rastreo independientes
+Los campos "Hosts virtuales" de las configuraciones de rastreo y "Host virtual" de las etiquetas son de texto libre, y la comparación con la clave distingue entre mayúsculas y minúsculas.
+Los nombres de tema tampoco admiten mayúsculas, así que usar desde el principio claves alfanuméricas en minúsculas evita errores.
 
-Función de host virtual
-=========================
+Paso 1: asociar los nombres de host con las claves
+==================================================
 
-La función de host virtual de Fess permite ofrecer diferentes experiencias de búsqueda según el nombre de host utilizado para acceder.
-
-Configuración del host virtual
--------------------------------
-
-Establezca el valor del host virtual en la consola de administración.
-Al asociar este valor con las configuraciones de rastreo y las etiquetas, se puede lograr el aislamiento de datos para cada tenant.
-
-Consideraciones de diseño
---------------------------
-
-**Configuración de DNS / balanceador de carga**
-
-Configure el DNS para que el dominio de cada tenant apunte al mismo servidor Fess.
+En la consola de administración, abra [Sistema] > [General], escriba en "Host virtual" una entrada ``nombre-encabezado:valor=clave`` por línea y actualice.
 
 ::
 
-    search-a.example.com → Servidor Fess (192.168.1.100)
-    search-b.example.com → Servidor Fess (192.168.1.100)
-    search-c.example.com → Servidor Fess (192.168.1.100)
+    Host:search-a.example.com=tenanta
+    Host:search-b.example.com=tenantb
 
-Fess examina las cabeceras HTTP de la solicitud para determinar a cuál host virtual se está accediendo.
-Por defecto se utiliza la cabecera Host, pero puede especificar cualquier cabecera mediante la configuración ``virtual.host.headers``.
-El formato de configuración es ``NombreCabecera:Valor=ClaveHostVirtual`` (por ejemplo, ``Host:search-a.example.com=tenant-a``).
+El valor del encabezado se compara por coincidencia exacta, sin distinguir entre mayúsculas y minúsculas.
+Cuando un navegador accede a un puerto distinto de los estándar (80 y 443), añade el número de puerto al encabezado ``Host``; por eso, si los usuarios acceden directamente al puerto 8080 de Fess, incluya también el puerto como se muestra a continuación.
+También puede escribir ambas formas una tras otra.
 
-Diseño de aislamiento de tenants
-==================================
+::
 
-Aislamiento de datos
----------------------
+    Host:search-a.example.com:8080=tenanta
+    Host:search-b.example.com:8080=tenantb
 
-El aislamiento de datos entre tenants se logra mediante el campo ``virtual_host`` en los documentos, proporcionado por la función de host virtual.
+El ajuste se aplica en cuanto se guarda; no es necesario reiniciar.
+También puede escribirlo con el mismo formato en ``virtual.host.headers`` de ``fess_config.properties``, pero si [General] tiene un valor, este tiene prioridad.
 
-**Aislamiento mediante host virtual**
+Si coloca Fess detrás de un proxy inverso, haga llegar hasta Fess el encabezado ``Host`` que envía el navegador.
+De forma predeterminada, Nginx establece ``Host`` en el destino de ``proxy_pass``, por lo que se necesita ``proxy_set_header Host $host;``.
 
-Cuando se establece la clave de host virtual en el campo "Host virtual" de la configuración de rastreo, los documentos rastreados reciben un campo ``virtual_host``.
-Durante la búsqueda, este campo se utiliza para el filtrado automático, de modo que los usuarios que acceden a través del dominio de cada tenant solo ven los documentos de ese tenant en los resultados de búsqueda.
+::
 
-- ``tenant-a``: Documentos de la Empresa A
-- ``tenant-b``: Documentos de la Empresa B
-- ``tenant-c``: Documentos de la Empresa C
+    server {
+        server_name search-a.example.com search-b.example.com;
+        location / {
+            proxy_pass http://127.0.0.1:8080;
+            proxy_set_header Host $host;
+        }
+    }
 
-Además, al configurar el campo "Host virtual" en las etiquetas, también se pueden separar las etiquetas mostradas para cada tenant.
+En una configuración que reescribe ``Host``, también puede indicar ``X-Forwarded-Host`` como nombre del encabezado (por ejemplo, ``X-Forwarded-Host:search-a.example.com=tenanta``).
 
-**Aislamiento mediante roles**
+.. warning::
 
-Cuando se requiere un aislamiento más estricto, se combina con la búsqueda basada en roles (véase Parte 5).
-Cree roles para cada tenant y asígnelos a las configuraciones de rastreo y a los usuarios.
+   Los ajustes de [General] se guardan en ``system.properties`` dentro del contenedor.
+   ``fess01`` de docker-fess no tiene volumen, así que si vuelve a crear el contenedor con ``docker compose down``, también se pierde el valor de "Host virtual" (con ``stop`` y ``start`` se conserva).
+   El tema que subirá en un paso posterior también se guarda dentro del contenedor, por lo que se pierde de la misma manera.
+   Para saber cómo conservar los ajustes, consulte `Instalación con Docker (Detalles) <https://fess.codelibs.org/es/stable/install/install-docker.html>`__.
 
-Configuración de rastreo
---------------------------
+Paso 2: crear los roles y los usuarios de los inquilinos
+========================================================
 
-La configuración de rastreo de cada tenant se gestiona de forma independiente.
+1. En [Usuario] > [Rol], cree los roles llamados ``tenanta_user`` y ``tenantb_user``.
+2. En [Usuario] > [Usuario], cree los usuarios de cada inquilino y seleccione en "Roles" el rol de su inquilino.
+3. En [Sistema] > [General], active "Requiere inicio de sesión".
 
-.. list-table:: Configuración de rastreo por tenant
+Los usuarios que han iniciado sesión no reciben ``{role}guest`` y buscan solo con los permisos de su usuario, sus grupos y sus roles.
+Si quiere usar directamente los grupos de LDAP o SSO, puede indicar ``{group}<nombre del grupo>`` en lugar de un rol.
+Para el funcionamiento de los permisos y la integración con LDAP, consulte :doc:`guide-05`; para el SSO, consulte :doc:`guide-15`.
+
+Paso 3: crear una etiqueta para cada inquilino
+==============================================
+
+Una etiqueta se asigna, durante el rastreo, a los documentos cuya URL coincide con "Rutas incluidas".
+Créela antes de rastrear.
+
+En [Rastreador] > [Etiqueta], pulse [Crear nuevo] e introduzca lo siguiente para la Empresa A (cree la de la Empresa B de la misma manera).
+
+.. list-table::
    :header-rows: 1
-   :widths: 15 30 25 30
+   :widths: 30 70
 
-   * - Tenant
-     - Objetivo de rastreo
-     - Programación
-     - Etiqueta
-   * - Empresa A
-     - smb://fs-a/docs/
-     - Diariamente a las 1:00
-     - tenant-a
-   * - Empresa B
-     - https://portal-b.example.com/
-     - Diariamente a las 2:00
-     - tenant-b
-   * - Empresa C
-     - smb://fs-c/manuals/
-     - Diariamente a las 3:00
-     - tenant-c
+   * - Campo
+     - Valor
+   * - Nombre
+     - ``Portal Empresa A``
+   * - Valor
+     - ``tenanta_docs`` (solo caracteres alfanuméricos y guiones bajos)
+   * - Rutas incluidas
+     - ``https://portal-a\.example\.com/.*``
+   * - Permisos
+     - ``{role}tenanta_user``
+   * - Host virtual
+     - ``tenanta``
 
-Temas por tenant
-=================
+Los permisos de una etiqueta nueva contienen ``{role}guest``.
+Una etiqueta solo se muestra cuando el usuario tiene un rol incluido en sus permisos, así que si deja ``{role}guest``, la etiqueta no se muestra a los usuarios del inquilino que han iniciado sesión.
 
-Utilizando la función de temas de Fess, se pueden ofrecer diseños diferentes para cada tenant.
+Una etiqueta cuyo "Host virtual" está vacío no se muestra cuando se accede a través de un host virtual.
+Una etiqueta solo admite un host virtual, así que si quiere que varios inquilinos vean la misma etiqueta, cree tantas etiquetas con el mismo nombre y valor como inquilinos haya y escriba en el "Host virtual" de cada una la clave correspondiente.
+Lo mismo ocurre con Coincidencia de clave, Contenido relacionado y Consulta relacionada: los ajustes cuyo "Host virtual" está vacío no se usan en los hosts de los inquilinos.
 
-Diseño de temas
-----------------
+Paso 4: indicar el host virtual y los permisos en la configuración de rastreo
+=============================================================================
 
-Prepare temas que se ajusten a los colores de marca y el logotipo de cada tenant.
+En [Rastreador] > [Web], cree la configuración de rastreo de la Empresa A.
+Las configuraciones de rastreo de sistemas de archivos y de almacenes de datos tienen los mismos dos campos.
 
-- Empresa A: Un diseño sólido propio de una empresa manufacturera (tonos azules)
-- Empresa B: Un diseño brillante para el comercio minorista (tonos verdes)
-- Empresa C: Un diseño amigable para una empresa de servicios (tonos naranjas)
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
 
-Vinculación de hosts virtuales y temas
-----------------------------------------
+   * - Campo
+     - Valor
+   * - Nombre
+     - ``Portal Empresa A``
+   * - URLs
+     - ``https://portal-a.example.com/``
+   * - URLs a incluir en el rastreo
+     - ``https://portal-a.example.com/.*``
+   * - Permisos
+     - ``{role}tenanta_user`` (elimine el ``{role}guest`` que aparece de forma predeterminada)
+   * - Hosts virtuales
+     - ``tenanta``
 
-Al cambiar los temas para cada host virtual, los usuarios de cada tenant verán una pantalla de búsqueda con la imagen de marca de su propia empresa.
+Si deja ``{role}guest``, esos documentos quedan visibles al acceder por la dirección IP o antes de iniciar sesión.
 
-Fess ofrece temas integrados como ``simple``, ``docsearch`` y ``codesearch``, y también admite temas personalizados.
+Para documentos que deben ver varios inquilinos, como un compendio de normas de todo el grupo, escriba en una sola configuración de rastreo una línea por inquilino, para ambos inquilinos, en "Hosts virtuales" y en "Permisos".
 
-Aislamiento del acceso API
+::
+
+    Hosts virtuales:
+    tenanta
+    tenantb
+
+    Permisos:
+    {role}tenanta_user
+    {role}tenantb_user
+
+Los hosts virtuales y los permisos se escriben en los documentos durante el rastreo.
+Si los cambia en una configuración que ya se ha rastreado, los documentos existentes no reflejan el cambio hasta que se vuelvan a rastrear.
+
+Después de guardar la configuración, cree un trabajo exclusivo para el inquilino con [Crear nuevo trabajo] en la pantalla de detalles, o ejecute ``Default Crawler`` con [Iniciar ahora] en [Sistema] > [Programador].
+
+Paso 5: preparar una página de búsqueda propia para cada inquilino
+==================================================================
+
+En Fess 15.9, la página de búsqueda se muestra mediante un tema.
+Si instala un tema cuyo ``name`` en ``theme.yml`` es igual a la clave en minúsculas, ese tema se usa para las solicitudes con esa clave.
+No es necesario establecerlo como tema predeterminado; las solicitudes que no coinciden con ninguna clave usan el tema predeterminado.
+
+Créelo copiando el tema ``bootstrap`` incluido.
+Con Docker, extráigalo del contenedor de la siguiente manera.
+
+::
+
+    $ docker cp fess01:/usr/share/fess/app/themes/bootstrap ./tenanta
+
+1. En ``tenanta/theme.yml``, cambie ``name`` a ``tenanta`` y ``displayName`` a algo como ``Búsqueda Empresa A``.
+2. Sustituya ``assets/styles.css`` (colores) y ``assets/logo-head.png`` y ``assets/logo.png`` (logotipos). No es necesario modificar ``index.html``.
+3. Empaquételo de modo que ``theme.yml`` quede en la raíz del ZIP.
+
+   ::
+
+       $ cd tenanta && zip -r ../tenanta.zip .
+
+4. Suba ``tenanta.zip`` con [Subir] en [Sistema] > [Tema].
+
+La página de inicio de sesión (``/login/``) es común a todos los inquilinos y no se puede cambiar con un tema.
+Para más detalles sobre cómo copiar el tema incluido, consulte la `Guía de Desarrollo de Temas <https://fess.codelibs.org/es/stable/dev/theme-development.html>`__.
+
+Comprobar la separación
+=======================
+
+Antes de cambiar el DNS, puede añadir ``127.0.0.1 search-a.example.com search-b.example.com`` al archivo ``/etc/hosts`` de su equipo y probar cada host desde un navegador, por ejemplo ``http://search-a.example.com:8080/`` ([General] necesita entonces las líneas con el puerto).
+Compruebe los cuatro casos siguientes buscando una palabra que aparezca en los destinos del rastreo.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 45 55
+
+   * - Acceso
+     - Resultado esperado
+   * - Usuario de la Empresa A desde ``search-a.example.com``
+     - Solo aparecen documentos de la Empresa A. La única etiqueta es "Portal Empresa A". La página se muestra con el tema de la Empresa A
+   * - Usuario de la Empresa A desde ``search-b.example.com``
+     - 0 resultados (no tiene permiso sobre los documentos de la Empresa B, y los de la Empresa A quedan excluidos por el host virtual)
+   * - Usuario de la Empresa A desde la dirección IP (``http://<servidor>:8080/``)
+     - Solo aparecen documentos de la Empresa A (no hay filtrado por host virtual, pero los permisos los protegen)
+   * - Acceso sin iniciar sesión
+     - No se puede buscar hasta iniciar sesión
+
+Si creó documentos comunes para ambos inquilinos, también aparecen en las filas 1 a 3.
+Si en la fila 3 aparecen documentos de la Empresa B, queda un ``{role}guest`` en alguna configuración de rastreo.
+Si la fila 1 da 0 resultados, compare las líneas de [General] (con o sin número de puerto) con la ortografía de "Hosts virtuales" en la configuración de rastreo.
+
+La misma comprobación se puede hacer con la API de búsqueda.
+En [Sistema] > [Token de acceso], cree un token con el permiso ``{role}tenanta_user`` y llame a la API cambiando el encabezado ``Host``.
+
+::
+
+    $ curl -s -H "Authorization: Bearer <token de la Empresa A>" \
+        -H "Host: search-a.example.com:8080" \
+        "http://localhost:8080/api/v2/search?q=fess"
+    $ curl -s -H "Authorization: Bearer <token de la Empresa A>" \
+        -H "Host: search-b.example.com:8080" \
+        "http://localhost:8080/api/v2/search?q=fess"
+
+El resultado es el esperado si ``response.record_count`` es 1 o más en la primera llamada y 0 en la segunda.
+Un token de acceso no está vinculado a un host virtual: el host virtual se determina por el nombre de host al que se envía la solicitud.
+Lo que un token puede ver lo determinan sus permisos, así que asigne siempre a los tokens que entregue a los sistemas de un inquilino solo el rol de ese inquilino.
+Para el uso de la API, consulte :doc:`guide-11`.
+
+Una vez en producción, puede consultar el número de búsquedas por host virtual en la pestaña [Audiencia] de [Información del sistema] > [Registro de búsqueda].
+
+Añadir y eliminar inquilinos
 ============================
 
-Tokens de acceso API por tenant
----------------------------------
+Para añadir un inquilino, siga este orden, ya que los pasos posteriores usan valores de los anteriores.
 
-Emita tokens de acceso individuales para cada tenant.
-Al asociar roles con los tokens, el aislamiento de tenants también se aplica al acceso por API.
+1. Añadir una línea en "Host virtual" de [General]
+2. Crear el rol, los usuarios y, si es necesario, los tokens de acceso
+3. Crear las etiquetas (con host virtual y permisos)
+4. Crear las configuraciones de rastreo (con host virtual y permisos) y rastrear
+5. Subir el tema
+6. Comprobar los cuatro casos de "Comprobar la separación"
+7. Publicarlo mediante el DNS y el proxy inverso
 
-.. list-table:: Configuración de tokens de acceso
-   :header-rows: 1
-   :widths: 20 30 50
+Para eliminar un inquilino, a la inversa, empiece por cerrar los puntos de entrada.
 
-   * - Tenant
-     - Nombre del token
-     - Rol asignado
-   * - Empresa A
-     - tenant-a-api-token
-     - tenant-a-role
-   * - Empresa B
-     - tenant-b-api-token
-     - tenant-b-role
-   * - Empresa C
-     - tenant-c-api-token
-     - tenant-c-role
+1. Quitar el nombre de host del DNS y del proxy inverso
+2. Eliminar las configuraciones de rastreo y los trabajos creados para ellas ([Sistema] > [Programador])
+3. Eliminar los documentos del índice (ver más abajo)
+4. Eliminar los tokens de acceso, los usuarios y el rol
+5. Eliminar las etiquetas, las coincidencias de clave y demás ajustes de esa clave, y el tema
+6. Eliminar la línea de "Host virtual" en [General]
 
-Cuando el sistema de cada tenant se integra mediante API (véase Parte 11), el uso de tokens específicos del tenant garantiza que no se pueda acceder a los datos de otros tenants.
+Eliminar una configuración de rastreo no elimina del índice los documentos ya rastreados.
+Elimine los documentos en [Información del sistema] > [Búsqueda].
+Esta pantalla no aplica el filtrado por roles ni por host virtual, así que abarca los documentos de todos los inquilinos.
+Busque en el cuadro de búsqueda con la etiqueta del inquilino, por ejemplo ``label:tenantb_docs``, compruebe que el número y los resultados corresponden solo a documentos de la Empresa B y, después, pulse [Eliminar todo con esta consulta].
+En el caso de documentos web, también puede indicar el principio de la URL, por ejemplo ``site:portal-b.example.com``.
 
-Consideraciones operativas
-============================
+No use una consulta como ``virtual_host:tenantb``.
+De forma predeterminada, ``virtual_host`` no está entre los campos disponibles para la búsqueda, así que toda la cadena se trata como una búsqueda de ese texto en el cuerpo de los documentos y no permite seleccionar los documentos deseados.
 
-Gestión de recursos
---------------------
+La opción de separar instancias
+===============================
 
-Dado que una única instancia de Fess sirve a múltiples tenants, es necesario prestar atención a la asignación de recursos.
+En una configuración en la que se comparte un solo Fess, no se pueden separar los siguientes elementos.
 
-- **Distribución de carga del rastreo**: Escalone las programaciones de rastreo de los tenants para evitar la ejecución simultánea
-- **Tamaño del índice**: Supervise el tamaño total del índice de todos los tenants
-- **Memoria**: Ajuste el heap de la JVM según el número de tenants y documentos
+- La consola de administración y los administradores: cualquier administrador puede operar sobre los ajustes, usuarios y documentos de todos los inquilinos
+- Los ajustes de todo el sistema, como los de [General] y los diccionarios
+- La página de inicio de sesión
 
-Adición y eliminación de tenants
-----------------------------------
+Si quiere delegar la administración en cada inquilino, o si un contrato exige índices separados, ejecute un Fess por inquilino y use nombres de índice distintos.
+``compose/multi-instance`` de docker-fess conecta dos Fess (puertos 8080 y 8081) a un mismo OpenSearch.
 
-Estandarice el procedimiento para agregar nuevos tenants.
+::
 
-1. Crear una etiqueta
-2. Crear un rol
-3. Registrar la configuración de rastreo
-4. Configurar el host virtual
-5. Emitir un token de acceso
-6. Agregar la configuración DNS
+    $ git clone https://github.com/codelibs/docker-fess.git
+    $ cd docker-fess
+    $ git checkout v15.9.0
+    $ cd compose/multi-instance
+    $ docker compose -f compose.yaml -f compose-fess01.yaml -f compose-fess02.yaml up -d
 
-Al eliminar un tenant, no olvide eliminar también los datos de índice asociados.
+En el ``FESS_JAVA_OPTS`` de cada Fess, los nombres de índice de documentos, sugerencias, rastreo, configuración, usuarios, registros y diccionarios (8 elementos, como ``-Dfess.config.index.document.search.index=fess01.search``) son distintos en cada instancia.
+Como la configuración y los usuarios también se separan por índice, la consola de administración, los usuarios y los registros de búsqueda también son por inquilino.
+Para añadir un inquilino, copie ``compose-fess02.yaml`` y cambie el nombre del servicio, el puerto y todos los nombres de índice.
 
-Criterios de escalado
-----------------------
+.. warning::
 
-Si observa los siguientes síntomas, considere dividir o escalar las instancias de Fess (véase Parte 14).
+   En esta configuración, OpenSearch expone el puerto 9200 con el plugin de seguridad desactivado.
+   Cualquiera que llegue al puerto 9200 puede leer los índices de todos los inquilinos, así que cierre el puerto en producción.
 
-- Degradación de los tiempos de respuesta de búsqueda
-- Los rastreos no se completan dentro del período programado
-- Errores frecuentes por falta de memoria
-- El número de tenants supera los 10
+Siguientes lecturas
+===================
 
-Resumen
-========
-
-En este artículo se explicó el diseño multi-tenant utilizando la función de host virtual de Fess.
-
-- Acceso específico por tenant mediante hosts virtuales
-- Aislamiento de datos mediante etiquetas y roles
-- Branding específico por tenant mediante temas
-- Aislamiento de tenants mediante tokens de acceso API
-- Gestión de recursos y criterios de escalado
-
-Con una única instancia de Fess, puede servir eficientemente a múltiples tenants, manteniendo bajos los costos de gestión y cumpliendo con los requisitos de cada tenant.
-
-En el próximo artículo se abordarán las estrategias de escalado para sistemas de búsqueda.
+- Profundizar en el diseño de permisos con roles, grupos y LDAP: :doc:`guide-05`
+- Llamar a la API de búsqueda desde los sistemas de un inquilino: :doc:`guide-11`
+- Iniciar sesión con SSO y proteger el acceso: :doc:`guide-15`
+- Ampliar Fess y OpenSearch a medida que crecen los inquilinos: :doc:`guide-14`
+- Integrar la página de búsqueda en un sitio existente: :doc:`guide-03`
 
 Referencias
-============
+===========
 
-- `Fess Virtual Host <https://fess.codelibs.org/ja/15.5/config/virtual-host.html>`__
-
-- `Fess Configuración de etiquetas <https://fess.codelibs.org/ja/15.5/admin/labeltype.html>`__
+- `Host Virtual <https://fess.codelibs.org/es/stable/config/security-virtual-host.html>`__
+- `Configuración de multitenencia <https://fess.codelibs.org/es/stable/config/multitenancy.html>`__
+- `Configuración de Búsqueda Basada en Roles <https://fess.codelibs.org/es/stable/config/security-role.html>`__
+- `Etiquetas <https://fess.codelibs.org/es/stable/admin/labeltype-guide.html>`__
+- `Tema <https://fess.codelibs.org/es/stable/admin/theme-guide.html>`__
+- `Búsqueda <https://fess.codelibs.org/es/stable/admin/searchlist-guide.html>`__
+- `docker-fess multi-instance (v15.9.0) <https://github.com/codelibs/docker-fess/tree/v15.9.0/compose/multi-instance>`__

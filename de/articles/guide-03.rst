@@ -1,303 +1,353 @@
-==============================================
-Teil 3: Suche in ein internes Portal einbetten
-==============================================
+=========================================
+Suche in eine bestehende Website einbauen
+=========================================
 
 Einleitung
 ==========
 
-Im vorherigen Teil haben wir Fess mit Docker Compose gestartet und die Suche ausprobiert.
-In der Praxis besteht jedoch oft nicht nur der Wunsch, die Fess-Suchoberfläche direkt zu verwenden, sondern auch die Anforderung, eine Suchfunktion in bestehende interne Websites oder Portale zu integrieren.
+Wenn Sie ein Intranetportal oder eine Produktwebsite mit einer Suche ausstatten möchten, ist es nicht realistisch, dass sich die Benutzer die URL von Fess merken.
+Gefragt ist ein Suchfeld im Kopfbereich der Seiten, die ohnehin ständig geöffnet sind, und eine Ergebnisseite, die wie ein Teil dieser Website aussieht.
 
-In diesem Artikel stellen wir drei Ansätze vor, um die Suchfunktion von Fess in eine bestehende Website einzubinden, und erläutern die jeweiligen Merkmale und Auswahlkriterien.
+In diesem Artikel probieren wir mit Fess 15.9 nacheinander die folgenden drei Methoden aus, die sich alle allein auf der Browserseite umsetzen lassen.
 
-Zielgruppe
-==========
+- Ein HTML-Suchformular auf einer bestehenden Seite platzieren und die Ergebnisse auf der Suchseite von Fess anzeigen
+- Mit Fess Site Search (FSS) die Suchergebnisse innerhalb einer Seite der bestehenden Website anzeigen
+- Das Aussehen der Suchseite von Fess (das Theme) an die bestehende Website anpassen
 
-- Personen, die eine Suchfunktion in ein internes Portal oder eine Website integrieren möchten
-- Personen mit Grundkenntnissen in der Frontend-Entwicklung
-- Fess muss gemäß der Anleitung aus Teil 2 bereits gestartet sein
+Außerdem richten wir die „Pfadzuordnung“ ein, mit der die Linkziele der Suchergebnisse auf URLs umgestellt werden, die die Benutzer erreichen können.
+
+Wie Sie vom Server eines Geschäftssystems aus die Such-API aufrufen und eigene Oberflächen bauen, wird in :doc:`guide-11` behandelt.
 
 Voraussetzungen
 ===============
 
-- Die in Teil 2 eingerichtete Fess-Umgebung (Docker Compose)
-- Eine Test-Webseite (auch eine lokale HTML-Datei ist möglich)
+- Gemäß den Schritten in :doc:`guide-02` läuft Fess 15.9 mit Docker Compose unter ``http://localhost:8080/``, und es wurde bereits etwas gecrawlt
+- Eine lokale HTML-Datei als Ersatz für die bestehende Website
 
-Drei Integrationsansätze
-========================
-
-Es gibt im Wesentlichen drei Methoden, um die Suchfunktion von Fess in eine bestehende Website einzubinden.
-
-.. list-table:: Vergleich der Integrationsansätze
-   :header-rows: 1
-   :widths: 15 30 25 30
-
-   * - Ansatz
-     - Übersicht
-     - Entwicklungsaufwand
-     - Geeignete Anwendungsfälle
-   * - FSS (Fess Site Search)
-     - Einfaches Einbetten eines JavaScript-Tags
-     - Minimal (wenige Codezeilen)
-     - Wenn Sie schnell und unkompliziert eine Suche hinzufügen möchten
-   * - Suchformular-Integration
-     - Weiterleitung von einem HTML-Formular zu Fess
-     - Gering (nur HTML-Anpassung)
-     - Wenn Sie die Fess-Suchoberfläche direkt verwenden möchten
-   * - Such-API-Integration
-     - Aufbau einer individuellen Oberfläche über die JSON API
-     - Mittel bis hoch (Frontend-Entwicklung)
-     - Wenn Sie Design und Verhalten vollständig anpassen möchten
-
-Im Folgenden erläutern wir jede Methode anhand konkreter Szenarien.
-
-Ansatz 1: Einfache Integration mit FSS (Fess Site Search)
-==========================================================
-
-Szenario
---------
-
-Es existiert ein internes Portalsite, und Sie haben die Berechtigung, das HTML zu bearbeiten, möchten aber größere Umbauten vermeiden.
-Mit minimalen Änderungen soll es möglich sein, interne Dokumente direkt über das Portal zu durchsuchen.
-
-Was ist FSS?
-------------
-
-Fess Site Search (FSS) ist ein Mechanismus, mit dem Sie eine Suchfunktion hinzufügen können, indem Sie lediglich einen JavaScript-Tag in eine Webseite einbetten.
-Da Suchfeld und Suchergebnisanzeige vollständig in JavaScript verarbeitet werden, ist es kaum notwendig, die bestehende Seitenstruktur zu ändern.
-
-Implementierungsschritte
-------------------------
-
-1. Aktivieren Sie den API-Zugriff in der Fess-Administrationsoberfläche.
-   Aktivieren Sie unter [System] > [Allgemein] die JSON-Antwort.
-
-2. Betten Sie den folgenden Code in die Seite ein, der Sie die Suchfunktion hinzufügen möchten.
-
-.. code-block:: html
-
-    <script>
-      (function() {
-        var fess = document.createElement('script');
-        fess.type = 'text/javascript';
-        fess.async = true;
-        fess.src = 'http://localhost:8080/js/fess-ss.min.js';
-        fess.charset = 'utf-8';
-        fess.setAttribute('id', 'fess-ss');
-        fess.setAttribute('fess-url', 'http://localhost:8080/api/v1/documents');
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(fess, s);
-      })();
-    </script>
-
-    <fess:search></fess:search>
-
-An der Stelle, an der Sie den ``<fess:search>``-Tag platzieren, werden das Suchfeld und die Suchergebnisse angezeigt.
-
-Anpassung
----------
-
-Das Erscheinungsbild von FSS kann mit CSS angepasst werden.
-Indem Sie die von Fess bereitgestellten Standardstile überschreiben, können Sie das Design an Ihre bestehende Website anpassen.
-
-.. code-block:: css
-
-    .fessWrapper {
-      font-family: 'Noto Sans JP', sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .fessWrapper .searchButton {
-      background-color: #1a73e8;
-    }
-
-Ansatz 2: Einfache Umsetzung mit Suchformular-Integration
-==========================================================
-
-Szenario
---------
-
-Das interne Portal verfügt bereits über eine Navigationsleiste im Header.
-Sie möchten dort ein Suchfeld hinzufügen und bei der Suchausführung zur Fess-Suchergebnisseite weiterleiten.
-Dies soll ohne JavaScript, nur mit HTML umgesetzt werden.
-
-Implementierungsschritte
-------------------------
-
-Fügen Sie der bestehenden Navigationsleiste ein HTML-Formular wie das folgende hinzu.
-
-.. code-block:: html
-
-    <form action="http://localhost:8080/search" method="get">
-      <input type="text" name="q" placeholder="Interne Suche..." />
-      <button type="submit">Suchen</button>
-    </form>
-
-Das ist alles -- bei der Suchausführung erfolgt eine Weiterleitung zur Fess-Suchergebnisseite.
-Durch Anpassung des Designs der Fess-Suchoberfläche können Sie ein einheitliches Nutzungserlebnis bieten.
-
-Anpassung der Fess-Suchoberfläche
-----------------------------------
-
-Die Fess-Suchoberfläche besteht aus JSP-Dateien und kann auch über die Administrationsoberfläche bearbeitet werden.
-
-1. Wählen Sie in der Administrationsoberfläche [System] > [Seitendesign]
-2. Passen Sie Header, Footer, CSS und weitere Elemente an
-
-Beispielsweise können Sie durch Angleichung des Logos an das interne Portal oder Vereinheitlichung der Farbgebung ein nahtloses Sucherlebnis für die Nutzer schaffen.
-
-Nutzung der Pfadzuordnung
---------------------------
-
-Die in den Suchergebnissen angezeigten URLs können in benutzerfreundlichere URLs umgewandelt werden.
-Wenn die URL beim Crawling beispielsweise ``http://internal-server:8888/docs/`` lautet, kann in den Suchergebnissen stattdessen ``https://portal.example.com/docs/`` angezeigt werden.
-
-Diese Einstellung finden Sie in der Administrationsoberfläche unter [Crawler] > [Pfadzuordnung].
-
-Ansatz 3: Vollständige Individualisierung mit der Such-API
-===========================================================
-
-Szenario
---------
-
-Sie möchten eine Suchfunktion in eine interne Geschäftsanwendung integrieren.
-Design und Darstellung der Suchergebnisse sollen vollständig kontrolliert werden.
-Frontend-Entwicklungsressourcen stehen zur Verfügung.
-
-Grundlagen der Such-API
-------------------------
-
-Fess bietet eine JSON-basierte Such-API.
+Eine bestehende Website liegt normalerweise auf einem anderen Ursprung (der Kombination aus Schema, Host und Port) als Fess.
+Um in diesem Artikel dieselbe Bedingung herzustellen, führen Sie im Verzeichnis mit der HTML-Datei den folgenden Befehl aus und öffnen die Datei unter ``http://localhost:8000/``.
 
 ::
 
-    GET http://localhost:8080/api/v1/documents?q=Suchbegriff
+    $ python3 -m http.server 8000
 
-Die Antwort erfolgt im folgenden JSON-Format.
+Die passende Methode wählen
+===========================
 
-.. code-block:: json
-
-    {
-      "record_count": 10,
-      "page_count": 5,
-      "data": [
-        {
-          "title": "Dokumenttitel",
-          "url": "https://example.com/doc.html",
-          "content_description": "...Auszug aus dem Text mit dem Suchbegriff..."
-        }
-      ]
-    }
-
-Implementierungsbeispiel in JavaScript
----------------------------------------
-
-Im Folgenden ein grundlegendes Implementierungsbeispiel mit der Such-API.
-
-.. code-block:: javascript
-
-    async function searchFess(query) {
-      const url = new URL('http://localhost:8080/api/v1/documents');
-      url.searchParams.set('q', query);
-      const response = await fetch(url);
-      const data = await response.json();
-
-      const results = data.data;
-      const container = document.getElementById('search-results');
-      container.textContent = '';
-
-      results.forEach(item => {
-        const div = document.createElement('div');
-        const heading = document.createElement('h3');
-        const link = document.createElement('a');
-        link.href = item.url;
-        link.textContent = item.title;
-        heading.appendChild(link);
-        const desc = document.createElement('p');
-        desc.textContent = item.content_description;
-        div.appendChild(heading);
-        div.appendChild(desc);
-        container.appendChild(div);
-      });
-    }
-
-Zusätzliche API-Parameter
---------------------------
-
-Die Such-API ermöglicht die Anpassung des Suchverhaltens über verschiedene Parameter.
-
-.. list-table:: Wichtige API-Parameter
+.. list-table::
    :header-rows: 1
-   :widths: 20 50 30
+   :widths: 22 39 39
 
-   * - Parameter
-     - Beschreibung
-     - Beispiel
-   * - ``q``
-     - Suchbegriff
-     - ``q=Fess``
-   * - ``num``
-     - Anzahl der Ergebnisse pro Seite
-     - ``num=20``
-   * - ``start``
-     - Startposition der Suchergebnisse
-     - ``start=20``
-   * - ``fields.label``
-     - Filterung nach Label
-     - ``fields.label=intranet``
-   * - ``sort``
-     - Sortierreihenfolge
-     - ``sort=last_modified.desc``
+   * - Methode
+     - Wo die Suchergebnisse angezeigt werden
+     - Was auf der Fess-Seite nötig ist
+   * - Suchformular
+     - Wechsel zur Suchseite von Fess (``/search``) und Anzeige dort
+     - Nichts
+   * - Fess Site Search
+     - Innerhalb einer Seite der bestehenden Website
+     - Das Plugin ``fess-webapp-v1-api``
+   * - Theme ändern
+     - Suchseite von Fess (mit geändertem Aussehen)
+     - Ein Theme-ZIP (oder die Einstellungen unter [Allgemein])
 
-Durch die Nutzung der API sind eine detaillierte Steuerung der Suchergebnisse wie Filterung, Sortierung und Paginierung möglich.
+Suchformular und Theme-Änderung lassen sich kombinieren.
+Soll auch die Seite, auf die die Benutzer von der bestehenden Website aus gelangen, gleich aussehen, richten Sie beides ein.
 
-Welchen Ansatz sollten Sie wählen?
-===================================
+Ein Suchformular platzieren und an die Suchseite von Fess senden
+================================================================
 
-Die drei Ansätze werden je nach Situation ausgewählt.
+Das Formular platzieren
+-----------------------
 
-**Wann Sie FSS wählen sollten**
+Schreiben Sie das folgende Formular an die Stelle der bestehenden Seite, an der das Suchfeld erscheinen soll.
 
-- Die Entwicklungsressourcen sind begrenzt
-- Sie möchten eine Suche mit minimalen Änderungen an der bestehenden Seite hinzufügen
-- Ein standardmäßiges Erscheinungsbild der Suchfunktion ist ausreichend
+.. code-block:: html
 
-**Wann Sie die Suchformular-Integration wählen sollten**
+    <form method="get" action="http://localhost:8080/search">
+      <input type="text" name="q" maxlength="1000" autocomplete="off">
+      <button type="submit">Suchen</button>
+    </form>
 
-- Das Design der Fess-Suchoberfläche ist ausreichend
-- Sie möchten kein JavaScript verwenden
-- Es genügt, ein Suchfeld im Header oder in der Seitenleiste hinzuzufügen
+Die Suchbegriffe werden als Parameter ``q`` an ``/search`` von Fess gesendet, und die Ergebnisse erscheinen auf der Suchseite von Fess.
+``maxlength`` entspricht der Obergrenze für die Länge von Suchbegriffen auf der Fess-Seite, ``query.max.length`` (Standardwert ``1000``).
+Ändern Sie die URL in ``action`` im Produktivbetrieb auf die Fess-URL, die die Benutzer aufrufen.
 
-**Wann Sie die Such-API wählen sollten**
+Sollen nur Dokumente mit einem bestimmten Label durchsucht werden, senden Sie den Wert des Labels zusätzlich als ``fields.label``.
 
-- Sie möchten die Darstellung der Suchergebnisse vollständig individualisieren
-- Sie möchten die Suche in eine SPA (Single Page Application) integrieren
-- Sie möchten eigene Logik (Filterung, Hervorhebung usw.) auf die Suchergebnisse anwenden
-- Frontend-Entwicklungsressourcen stehen zur Verfügung
+.. code-block:: html
 
-Kombinationen sind möglich
---------------------------
+    <form method="get" action="http://localhost:8080/search">
+      <input type="text" name="q" maxlength="1000" autocomplete="off">
+      <input type="hidden" name="fields.label" value="intranet">
+      <button type="submit">Suchen</button>
+    </form>
 
-Diese Ansätze schließen sich nicht gegenseitig aus.
-Beispielsweise können Sie auf der Startseite mit FSS unkompliziert eine Suchfunktion hinzufügen und auf einer dedizierten Suchseite eine individuelle Oberfläche über die API bereitstellen -- auch eine solche Kombination ist sinnvoll.
+``intranet`` ist der Wert eines Labels, das unter [Crawler] > [Label] angelegt wurde.
+Wird ein Wert gesendet, der nicht existiert, gibt es 0 Treffer.
+Wie Sie Labels anlegen, lesen Sie in :doc:`guide-04`.
 
-Zusammenfassung
-===============
+Überprüfen
+----------
 
-In diesem Artikel haben wir drei Ansätze vorgestellt, um die Suchfunktion von Fess in eine bestehende Website zu integrieren.
+1. Öffnen Sie die HTML-Datei über ``http://localhost:8000/`` und suchen Sie nach einem Wort, das in einem gecrawlten Dokument vorkommt
+2. Wechselt der Browser zu ``http://localhost:8080/search?q=...`` und werden die Ergebnisse auf der Suchseite von Fess angezeigt, ist die Einrichtung abgeschlossen
 
-- **FSS**: Suchfunktion durch einfaches Einbetten eines JavaScript-Tags hinzufügen
-- **Suchformular-Integration**: Weiterleitung von einem HTML-Formular zur Fess-Suchoberfläche
-- **Such-API**: Aufbau eines vollständig individualisierten Sucherlebnisses über die JSON API
+Gibt es 0 Treffer, suchen Sie dasselbe Wort im Suchfeld unter ``http://localhost:8080/`` und vergleichen Sie.
+Gibt es auch dort 0 Treffer, liegt das Problem nicht am Formular, sondern am Crawling oder an den Berechtigungen.
 
-Unabhängig vom gewählten Ansatz können Sie die vom Fess-Backend bereitgestellte Suchqualität uneingeschränkt nutzen.
-Wählen Sie die optimale Methode entsprechend Ihren Anforderungen und verfügbaren Entwicklungsressourcen.
+Zu den Vorschlägen
+------------------
 
-Im nächsten Teil behandeln wir das Szenario der einheitlichen Suche über mehrere Datenquellen wie Dateiserver und Cloud-Speicher.
+Die Seite `Platzierung von Suchformularen <https://fess.codelibs.org/de/stable/config/search-form-integration.html>`__ enthält ein Beispiel, das das Formular mit Vorschlägen ausstattet.
+Die von diesem Beispiel geladenen Dateien ``/js/suggestor.js`` und ``/js/jquery-3.7.1.min.js`` sind in Fess 15.9 jedoch nicht enthalten, sodass das Beispiel in 15.9 so nicht funktioniert.
+Der Formularteil (``q`` an ``/search`` senden) lässt sich unverändert verwenden.
+
+Wenn das Suchfeld der bestehenden Website Vorschläge anzeigen soll, verwenden Sie eine der folgenden Möglichkeiten.
+
+- Die Vorschläge in Fess Site Search aus dem nächsten Abschnitt aktivieren
+- ``/api/v2/suggest-words`` aus einem eigenen Skript aufrufen (zur Verwendung der API siehe :doc:`guide-11`)
+
+Nach dem Wechsel zur Suchseite von Fess zeigt das mit Fess ausgelieferte Theme die Vorschläge an.
+
+Ergebnisse mit Fess Site Search innerhalb der Seite anzeigen
+============================================================
+
+Fess Site Search (FSS) ist ein JavaScript, das ein Suchformular und Suchergebnisse auf einer Seite der bestehenden Website anzeigt.
+Die Benutzer können suchen, ohne die bestehende Website zu verlassen.
+
+Das JavaScript von FSS wird nicht von Fess ausgeliefert.
+Laden Sie die mit dem FSS JS Generator (https://fss-generator.codelibs.org/) erzeugte Datei herunter und legen Sie sie auf dem Server der bestehenden Website ab.
+
+Das Plugin für die v1-API installieren
+--------------------------------------
+
+FSS ruft ``/api/v1`` von Fess auf.
+Fess 15.9 selbst stellt nur ``/api/v2`` bereit; ``/api/v1`` wird vom Plugin ``fess-webapp-v1-api`` bereitgestellt.
+Dieses Plugin ist im Docker-Image nicht enthalten.
+
+Fügen Sie bei Docker Compose unter ``environment`` von ``fess01`` in ``compose.yaml`` die folgende Zeile hinzu.
+
+.. code-block:: yaml
+
+    - "FESS_PLUGINS=fess-webapp-v1-api:15.9.0"
+
+Wenn Sie bereits andere Plugins angeben, führen Sie sie im selben Wert durch Leerzeichen getrennt auf.
+Führen Sie nach dem Speichern ``up -d`` mit beiden Compose-Dateien aus.
+``fess01`` wird neu erstellt, und das Plugin wird beim Start installiert.
+Da der Container neu erstellt wird, werden Einstellungen, die Sie unter [System] > [Allgemein] geändert haben, wie bei ``down`` zurückgesetzt (siehe den Abschnitt über das Stoppen und Neustarten in :doc:`guide-02`).
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
+
+Das Plugin lässt sich auch in der Administrationsoberfläche unter [System] > [Plugin] > [Installieren] installieren (nach der Installation muss Fess neu gestartet werden).
+Unter Docker liegt das Plugin jedoch im Container und verschwindet daher, wenn der Container mit ``down`` neu erstellt wird.
+Wenn Sie es in ``FESS_PLUGINS`` angeben, wird es bei jeder Neuerstellung erneut installiert.
+
+Sobald ``fess01`` healthy ist, prüfen Sie, ob die API antwortet.
+
+::
+
+    $ curl 'http://localhost:8080/api/v1/documents?q=fess'
+
+Wird JSON mit ``"record_count"`` zurückgegeben, ist alles bereit.
+Wird 404 zurückgegeben, ist das Plugin nicht installiert.
+In diesem Fall wird in ``fess.log`` einmalig eine WARN-Meldung ausgegeben, die mit ``No plugin serves the legacy API`` beginnt.
+Ist das Plugin installiert, wird aber kein JSON zurückgegeben, prüfen Sie, ob „JSON-Antwort“ unter [System] > [Allgemein] ausgeschaltet ist.
+Wenn „JSON-Antwort“ ausgeschaltet ist, antworten nicht nur ``/api/v1``, sondern auch ``/api/v2`` nicht mehr, und auch die Suchseite von Fess selbst ist nicht mehr nutzbar.
+
+Das JavaScript erzeugen und ablegen
+-----------------------------------
+
+1. Öffnen Sie https://fss-generator.codelibs.org/, legen Sie im Generator Farben, Schriftarten usw. fest und klicken Sie auf [Generate]
+2. Laden Sie die JavaScript-Datei mit [Download JS] herunter
+3. Benennen Sie die Datei in ``fess-ss.js`` um und legen Sie sie in dasselbe Verzeichnis wie die HTML-Datei
+
+Schreiben Sie auf der Seite, die die Suchergebnisse anzeigt (zum Beispiel ``result.html``), den folgenden Code.
+
+.. code-block:: html
+
+    <script src="fess-ss.js"></script>
+
+    <div class="fess-site-search">
+      <fess-search-form
+        language="de"
+        :enable-suggest="true"
+        suggest-url="http://localhost:8080"
+      ></fess-search-form>
+      <fess-search-result
+        fess-url="http://localhost:8080"
+        language="de"
+      ></fess-search-result>
+    </div>
+
+``fess-url`` ist die Fess-URL für die Suche, ``suggest-url`` die Fess-URL für die Vorschläge.
+Verwenden Sie im Produktivbetrieb eine Fess-URL, die von den Browsern der Benutzer aus erreichbar ist.
+
+Im Kopfbereich der übrigen Seiten platzieren Sie nur das Suchformular.
+
+.. code-block:: html
+
+    <script src="fess-ss.js"></script>
+
+    <div class="fess-site-search">
+      <fess-search-form result-page="result.html"></fess-search-form>
+    </div>
+
+Das Formular schreibt die Suchbegriffe in den Parameter ``fss.query`` und wechselt zu ``result.html``, und FSS auf ``result.html`` führt die Suche aus.
+Auch von Seiten, die FSS nicht laden, funktioniert das genauso, wenn Sie ein Formular schreiben, das zu ``result.html?fss.query=Suchbegriff`` wechselt.
+
+Weitere Attribute (Anzahl der Treffer pro Seite ``:page-size``, Eingrenzung nach Label ``:enable-label``, Öffnen von Links in einem neuen Tab ``link-target="_blank"`` usw.) finden Sie im Handbuch des FSS JS Generator.
+
+Überprüfen
+----------
+
+1. Öffnen Sie ``http://localhost:8000/result.html`` und suchen Sie über das Suchformular
+2. Werden die Suchergebnisse innerhalb der Seite angezeigt, ist die Einrichtung abgeschlossen
+3. Werden sie nicht angezeigt, prüfen Sie im Netzwerk-Tab der Entwicklertools des Browsers die Anfrage an ``/api/v1/documents``. Bei 404 prüfen Sie das Plugin, bei einem CORS-Fehler den nächsten Abschnitt
+
+Worauf Sie achten sollten
+-------------------------
+
+Aus Sicht des Browsers ist der Aufruf der API auf ``localhost:8080`` von einer Seite auf ``localhost:8000`` eine ursprungsübergreifende (Cross-Origin-)Kommunikation.
+Fess ist standardmäßig auf ``api.cors.allow.origin=*`` eingestellt und nimmt Aufrufe von jedem Ursprung an.
+Wie Sie die Aufrufer auf die bestehende Website beschränken, wird in :doc:`guide-11` behandelt.
+
+Suchen, die FSS von einem anderen Ursprung aus sendet, werden als Suchen eines nicht angemeldeten Benutzers (Gast) behandelt, auch wenn der Benutzer bei Fess angemeldet ist.
+Der Grund: FSS ruft die API ohne Cookies auf, und mit der Standardeinstellung ``api.cors.allow.origin=*`` ist ursprungsübergreifende Kommunikation mit Anmeldedaten ohnehin nicht erlaubt.
+Daher erscheinen in den Ergebnissen nur Dokumente, deren Berechtigungen ``{role}guest`` enthalten.
+Wenn jede Abteilung andere Dokumente sehen soll, lassen Sie die Benutzer sich auf der Suchseite von Fess anmelden (siehe :doc:`guide-05`).
+
+Das Aussehen der Suchseite von Fess ändern
+==========================================
+
+In 15.9 wird die Suchseite durch ein „Theme“ dargestellt, das HTML, CSS und JavaScript bündelt.
+Die Seite [Seitengestaltung] und das Bearbeiten von JSPs aus früheren Versionen gibt es nicht mehr.
+Ist nichts eingestellt, wird das mitgelieferte Theme ``bootstrap`` verwendet.
+
+Was sich ohne ZIP ändern lässt
+------------------------------
+
+Was Sie unter [System] > [Allgemein] im Bereich „Ankündigung“ in „Such-Startseite“ eintragen, wird im mitgelieferten Theme auf der Such-Startseite und auf der Suchergebnisseite angezeigt.
+Sie können auch HTML schreiben, Elemente wie ``<script>`` und ``<style>`` werden jedoch entfernt.
+Wenn Sie nur einen einzeiligen Hinweis für interne Benutzer anzeigen möchten, müssen Sie kein Theme erstellen.
+
+Ein veröffentlichtes Theme verwenden
+------------------------------------
+
+Das Fess-Projekt veröffentlicht Themes wie ``docsearch``, das für die Dokumentensuche gedacht ist.
+
+1. Öffnen Sie [System] > [Theme]
+2. Wählen Sie unter „Theme installieren“ in „Name“ ein Theme aus und klicken Sie auf [Auswählen]
+3. Wählen Sie in „Version“ die Version für 15.9 (``15.9.x``) und klicken Sie auf [Installieren]
+4. Wählen Sie oberhalb der Liste in „Standard-Theme“ das installierte Theme aus und klicken Sie auf [Festlegen]
+
+Wenn Sie ``http://localhost:8080/`` erneut öffnen, wird die Seite mit dem neuen Theme angezeigt.
+Wählen Sie „(kein Standard)“ und klicken Sie auf [Festlegen], um zum mitgelieferten ``bootstrap`` zurückzukehren.
+
+Das mitgelieferte Theme kopieren und Logo und Farben ändern
+-----------------------------------------------------------
+
+Das mitgelieferte Theme kann nicht direkt bearbeitet werden, und ein Theme namens ``bootstrap`` lässt sich auch nicht durch Hochladen ersetzen.
+Kopieren Sie es unter einem anderen Namen und ändern Sie die Kopie.
+Hier verwenden wir ``mytheme``.
+
+1. Kopieren Sie das mitgelieferte Theme aus dem Container
+
+   ::
+
+       $ docker compose -f compose.yaml -f compose-opensearch3.yaml cp fess01:/usr/share/fess/app/themes/bootstrap ./mytheme
+
+2. Ändern Sie in ``mytheme/theme.yml`` den Wert von ``name`` in ``mytheme`` und den von ``displayName`` beispielsweise in ``My Theme``
+3. Ändern Sie die folgenden Dateien
+
+   - Farben und Layout: ``assets/styles.css``
+   - Logo: ``assets/logo-head.png`` (Kopfbereich) und ``assets/logo.png`` (Such-Startseite)
+   - Name der Organisation in der Fußzeile: ``footer.copyright_org`` in ``i18n/messages.de.json`` (für die englische Oberfläche ``messages.en.json``)
+
+4. Packen Sie die Dateien so, dass ``theme.yml`` im Stammverzeichnis des ZIP liegt
+
+   ::
+
+       $ cd mytheme && zip -r ../mytheme.zip . && cd ..
+
+5. Laden Sie ``mytheme.zip`` unter [System] > [Theme] über [Hochladen] hoch
+6. Wählen Sie in „Standard-Theme“ ``mytheme`` aus und klicken Sie auf [Festlegen]
+
+``index.html`` ändern Sie nicht.
+Die mitgelieferte ``index.html`` verweist auf die Dateien im Theme in der Form ``{{themePath}}/assets/...``.
+Da Fess ``{{themePath}}`` bei der Auslieferung durch ``themes/mytheme`` ersetzt, genügt die Umbenennung, damit die Dateien des kopierten Themes geladen werden.
+
+Überprüfen
+----------
+
+Öffnen Sie ``http://localhost:8080/`` erneut und prüfen Sie, ob sich Logo und Farben geändert haben.
+Falls nicht, prüfen Sie im Netzwerk-Tab der Entwicklertools, ob das Stylesheet von ``/themes/mytheme/assets/styles.css`` geladen wird.
+Wird es von ``/themes/bootstrap/`` geladen, ist die Einstellung des Standard-Themes nicht wirksam.
+
+Worauf Sie bei Themes achten sollten
+------------------------------------
+
+- Die Suchseite erhält einen ``Content-Security-Policy``-Header, der die Quellen von Skripten, Styles und Bildern auf Fess selbst beschränkt. Schriftarten und Skripte von externen CDNs werden nicht geladen; nehmen Sie sie daher in das Theme-ZIP auf
+- Die Suchseite wird nicht im ``iframe`` einer anderen Seite angezeigt (weil der Standardwert von ``theme.index.frame.ancestors`` ``'none'`` ist). Um Suchergebnisse innerhalb eines Portals anzuzeigen, verwenden Sie FSS
+- ``fess01`` unter Docker hat keine Volumes. Hochgeladene Themes liegen im Container, und die Einstellung des Standard-Themes wird in ``system.properties`` gespeichert; beides geht daher verloren, wenn der Container mit ``down`` neu erstellt wird. Verwenden Sie im Alltag ``stop``/``start`` und wiederholen Sie nach einer Neuerstellung das Hochladen und die Einstellung
+- Das mitgelieferte Theme ist auf ``/api/v2`` der jeweiligen Fess-Version abgestimmt. Kopieren Sie nach einem Upgrade von Fess das neue mitgelieferte Theme erneut und übertragen Sie Ihre Änderungen darauf
+
+Zum Aufbau von Themes und zu den Einträgen in ``theme.yml`` siehe den `Theme-Entwicklungsleitfaden <https://fess.codelibs.org/de/stable/dev/theme-development.html>`__.
+
+Linkziele der Suchergebnisse auf URLs für die Benutzer umstellen
+================================================================
+
+Manchmal soll mit einem internen Hostnamen gecrawlt werden, während die Benutzer die Dokumente über die URL des Portals öffnen sollen.
+Zum Beispiel crawlen Sie ``http://intranet-web01:8080/docs/`` und möchten, dass die Suchergebnisse ``https://portal.example.com/docs/`` öffnen.
+In diesem Fall ersetzen Sie die URL mit der Pfadzuordnung nur für die Anzeige.
+
+1. Öffnen Sie [Crawler] > [Pfadzuordnung] und klicken Sie auf [Neu erstellen]
+2. Geben Sie Folgendes ein und klicken Sie auf [Erstellen]
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 25 75
+
+      * - Feld
+        - Wert
+      * - Regulärer Ausdruck
+        - ``^http://intranet-web01:8080/docs/``
+      * - Ersetzung
+        - ``https://portal.example.com/docs/``
+      * - Prozesstyp
+        - Anzeige
+      * - Sortierreihenfolge
+        - ``0``
+
+„Anzeige“ ersetzt nur die in den Suchergebnissen angezeigte URL und das Linkziel.
+Die im Index gespeicherte URL ändert sich nicht; ein erneutes Crawlen ist daher nicht nötig, und die Änderung wirkt sich ab dem Speichern auf die Suchergebnisse aus.
+Wenn Sie „Crawling“ oder „Crawling/Anzeige“ wählen, wird die ersetzte URL im Index gespeichert.
+Beachten Sie, dass bei dieser Wahl auch die URLs späterer Crawls geändert werden, obwohl Sie nur die Anzeige ändern wollten.
+
+Zur Überprüfung suchen Sie nach einem Wort, das das betreffende Dokument findet, und prüfen, ob URL und Linkziel in den Ergebnissen ``https://portal.example.com/docs/...`` lauten.
+Wenn Sie Ergebnisse über die API erhalten, steht die ersetzte URL nicht in ``url``, sondern in ``url_link`` (siehe :doc:`guide-11`).
+
+Ein Beispiel, das Pfade eines Dateiservers in URLs eines Webservers umwandelt, finden Sie unter `Pfad-Mapping <https://fess.codelibs.org/de/stable/admin/pathmap-guide.html>`__.
+
+Weiterführende Artikel
+======================
+
+- Die Such-API vom Server eines Geschäftssystems aus aufrufen: :doc:`guide-11`
+- Die im Portal angezeigten Dokumente je Abteilung unterscheiden: :doc:`guide-05`
+- Websites und Dateiserver gemeinsam durchsuchen und mit Labels trennen: :doc:`guide-04`
+- Jeder Organisation ein anderes Theme oder andere Suchziele zeigen: :doc:`guide-13`
+- Für die Suchseite eine Anmeldung voraussetzen: :doc:`guide-15`
 
 Referenzen
 ==========
 
-- `Fess Site Search <https://github.com/codelibs/fess-site-search>`__
-
-- `Fess Such-API <https://fess.codelibs.org/ja/15.5/api/api-search.html>`__
+- `Platzierung von Suchformularen <https://fess.codelibs.org/de/stable/config/search-form-integration.html>`__
+- `Theme <https://fess.codelibs.org/de/stable/admin/theme-guide.html>`__
+- `Theme-Entwicklungsleitfaden <https://fess.codelibs.org/de/stable/dev/theme-development.html>`__
+- `Pfad-Mapping <https://fess.codelibs.org/de/stable/admin/pathmap-guide.html>`__
+- `Plug-ins <https://fess.codelibs.org/de/stable/admin/plugin-guide.html>`__
+- `FSS JS Generator <https://fss-generator.codelibs.org/>`__
+- `fess-site-search (GitHub) <https://github.com/codelibs/fess-site-search>`__
+- `fess-webapp-v1-api (GitHub) <https://github.com/codelibs/fess-webapp-v1-api>`__

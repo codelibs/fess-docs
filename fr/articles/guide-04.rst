@@ -1,251 +1,373 @@
-========================================================
-Partie 4 : Recherche unifiée dans des fichiers dispersés
-========================================================
+============================================
+Rechercher sites web et serveurs de fichiers
+============================================
 
 Introduction
 ============
 
-Dans l'article précédent, nous avons présenté comment intégrer la fonction de recherche de Fess dans un site Web existant.
-Cependant, dans un environnement d'entreprise réel, les informations ne se trouvent pas uniquement sur des sites Web, mais sont dispersées dans divers emplacements tels que des serveurs de fichiers et des services de stockage cloud.
+Les documents internes ont tendance à être répartis entre plusieurs emplacements : le portail intranet, les dossiers partagés des services, un répertoire où l'on archive les anciens documents, etc.
+Pour trouver quelque chose, il faut d'abord se souvenir de l'endroit où il se trouve, puis chercher séparément à chaque endroit.
 
-Dans cet article, nous allons intégrer plusieurs sources de données dans Fess et construire un environnement permettant aux utilisateurs d'effectuer une recherche transversale sur tous les documents depuis une seule barre de recherche.
+Dans cet article, nous utilisons Fess 15.9 pour explorer les trois emplacements suivants et les rendre consultables depuis une seule zone de recherche.
+Sur la page de recherche, nous permettons de restreindre les résultats à l'aide d'étiquettes, par exemple « portail uniquement » ou « dossier partagé uniquement ».
 
-Public cible
-============
+- Le portail intranet (un site web)
+- Un dossier partagé sur un serveur de fichiers Windows (SMB)
+- Un répertoire d'archives sur le serveur (fichiers locaux)
 
-- Personnes dont les documents internes sont répartis dans plusieurs emplacements
-- Personnes insatisfaites de la recherche sur les serveurs de fichiers ou le stockage cloud
-- Avoir Fess en cours d'exécution selon la procédure de la Partie 2
+Les étapes supposent l'environnement Docker démarré dans :doc:`guide-02` (``fess01`` et ``search01``).
+Les stockages cloud comme Google Drive, SharePoint et Box sont traités dans :doc:`guide-07`.
+Les points à vérifier avant de mettre en place la recherche sur serveur de fichiers sont résumés dans :doc:`file-server-search`.
 
-Scénario
-========
+Ce que nous allons construire
+=============================
 
-Nous supposons une entreprise de taille moyenne. Dans cette entreprise, les documents sont dispersés dans les emplacements suivants :
-
-- **Site Web interne** : portail interne, blog interne
-- **Serveur de fichiers** : dossiers partagés par département (SMB/CIFS)
-- **Fichiers locaux** : répertoires spécifiques sur le serveur
-
-Lorsqu'un employé se demande "où est ce document ?", il doit effectuer des recherches séparées dans chaque outil.
-Nous allons centraliser cela avec Fess afin de permettre une recherche transversale depuis une seule barre de recherche.
-
-Conception des sources de données
-==================================
-
-Lors de la construction d'une recherche transversale, la première étape importante est de concevoir "quoi indexer et comment".
-
-Organisation des cibles de recherche
--------------------------------------
-
-Commencez par organiser les sources de données à indexer.
-
-.. list-table:: Organisation des sources de données
+.. list-table::
    :header-rows: 1
-   :widths: 20 25 25 30
+   :widths: 18 40 14 28
 
-   * - Source de données
-     - Type
-     - Estimation du volume
-     - Fréquence de mise à jour
-   * - Portail interne
-     - Exploration Web
-     - Quelques centaines de pages
-     - Hebdomadaire
-   * - Blog technique
-     - Exploration Web
-     - De quelques dizaines a quelques centaines de pages
-     - Irrégulière
+   * - Cible
+     - Chemin à explorer
+     - Valeur de l'étiquette
+     - Exécution de l'exploration
+   * - Portail intranet
+     - ``https://portal.example.com/``
+     - ``portal``
+     - Tous les jours à 2 h 00
    * - Dossier partagé
-     - Exploration de fichiers
-     - Dizaines de milliers de fichiers
-     - Quotidienne
+     - ``smb://fileserver.example.com/shared/``
+     - ``shared``
+     - Tous les jours à 3 h 00
    * - Archives
-     - Exploration de fichiers
-     - Quelques milliers de fichiers
-     - Mensuelle
+     - ``file:/data/archive/`` (``/srv/archive`` sur l'hôte)
+     - ``archive``
+     - Chaque dimanche à 4 h 00
 
-Conception de la classification par libellés
----------------------------------------------
+Les noms d'hôte et les répertoires sont des exemples.
+Adaptez-les à votre propre environnement.
+Nous supposons que vous disposez d'un compte de service capable de lire le dossier partagé (la lecture seule suffit) et que le conteneur ``fess01`` peut se connecter au port SMB (445) du serveur de fichiers.
 
-La fonction "Libellé" de Fess permet de catégoriser les cibles de recherche.
-Les utilisateurs peuvent sélectionner un libellé lors de la recherche pour affiner les résultats à une catégorie spécifique.
+Les étiquettes sont attribuées au moment de l'exploration ; créez-les donc avant les configurations d'exploration.
+Suivez les sections de cet article dans l'ordre.
 
-Dans ce scénario, nous configurons les libellés suivants :
+Rendre le répertoire d'archives lisible depuis le conteneur
+===========================================================
 
-- **Portail** : informations du portail interne et du blog
-- **Fichiers partagés** : documents du serveur de fichiers
-- **Archives** : documents anciens
+Dans le ``compose.yaml`` de docker-fess v15.9.0, aucun volume n'est défini pour ``fess01``.
+Par conséquent, le répertoire ``/srv/archive`` de l'hôte n'est pas visible tel quel depuis l'intérieur du conteneur.
+Ajoutez ``volumes`` à ``fess01`` dans ``compose.yaml``, et ajoutez également une ligne ``FESS_JAVA_OPTS`` à ``environment``.
 
-Configuration des libellés
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: yaml
 
-1. Dans l'écran d'administration, sélectionnez [Exploration] > [Libellés]
-2. Créez un libellé avec [Nouveau]
+    services:
+      fess01:
+        image: ghcr.io/codelibs/fess:15.9.0
+        container_name: fess01
+        environment:
+          - "SEARCH_ENGINE_HTTP_URL=http://search01:9200"
+          - "FESS_DICTIONARY_PATH=${FESS_DICTIONARY_PATH:-/usr/share/opensearch/config/dictionary/}"
+          - "FESS_JAVA_OPTS=-Duser.timezone=Asia/Tokyo -Dfess.system.day.for.cleanup=10"
+        volumes:
+          - /srv/archive:/data/archive:ro
+        # ports et la suite restent inchangés
 
-Définissez un "Nom" et une "Valeur" pour chaque libellé.
-La valeur doit être en caractères alphanumériques et sert à associer le libellé à la configuration d'exploration.
+- ``/srv/archive:/data/archive:ro`` monte ``/srv/archive`` de l'hôte en lecture seule sur ``/data/archive`` dans le conteneur
+- ``-Duser.timezone=Asia/Tokyo`` permet d'interpréter les heures d'exécution des tâches configurées plus loin en heure du Japon. Ni compose.yaml ni l'image ne définissent de fuseau horaire ; sans cette option, les tâches s'exécutent à des heures décalées par rapport à l'heure du Japon
+- ``-Dfess.system.day.for.cleanup=10`` fixe à 10 jours la valeur par défaut du délai d'expiration des documents (en jours). La raison est expliquée plus loin dans « Tâches hebdomadaires et expiration des documents »
 
-Construction de la configuration d'exploration
-================================================
+Après la modification, recréez les conteneurs.
 
-Configuration de l'exploration Web
-------------------------------------
+::
 
-Voici la configuration d'exploration pour le portail interne.
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
-1. [Exploration] > [Web] > [Nouveau]
-2. Configurez les éléments suivants :
+Comme ``fess01`` est recréé, les paramètres modifiés jusque-là dans [Système] > [Général] sont perdus (voir « Arrêt et redémarrage » dans :doc:`guide-02`).
+Effectuez les modifications dans [Général] après cette étape.
 
-   - URL : ``https://portal.example.com/``
-   - URL à explorer : ``https://portal.example.com/.*``
-   - URL à exclure de l'exploration : ``https://portal.example.com/admin/.*``
-   - Nombre maximum d'accès : ``500``
-   - Nombre de threads : ``3``
-   - Intervalle : ``5000``
-   - Libellé : Portail
+Dans le conteneur, Fess s'exécute sous l'utilisateur ``fess`` (UID 1001).
+Vérifiez que cet utilisateur peut lister les fichiers.
 
-3. Cliquez sur [Créer]
+::
 
-En définissant des URL d'exclusion, vous pouvez exclure les pages que vous ne souhaitez pas indexer, comme les écrans d'administration.
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml exec -u fess fess01 ls /data/archive
 
-Configuration de l'exploration de fichiers
--------------------------------------------
+Si vous obtenez ``Permission denied``, rendez le contenu de ``/srv/archive`` sur l'hôte lisible par l'UID 1001 (par exemple en accordant aux autres utilisateurs le droit de lecture, et le droit d'exécution sur les répertoires).
 
-Voici la configuration d'exploration pour le dossier partagé.
+Créer les étiquettes
+====================
 
-1. [Exploration] > [Système de fichiers] > [Nouveau]
-2. Configurez les éléments suivants :
+Une étiquette est attribuée lorsque l'URL d'un document correspond à une expression régulière.
+Les écrans de configuration d'exploration n'ont pas de champ pour choisir une étiquette (il est masqué par défaut) ; la portée de chaque étiquette se définit donc dans le champ « Chemins inclus » de l'étiquette elle-même.
 
-   - Chemin : ``smb://fileserver.example.com/shared/``
-   - Chemin à explorer : ``smb://fileserver.example.com/shared/.*``
-   - Chemin à exclure de l'exploration : ``.*\\.tmp$``
-   - Nombre maximum d'accès : ``10000``
-   - Nombre de threads : ``5``
-   - Intervalle : ``1000``
-   - Libellé : Fichiers partagés
+Dans [Robot d'exploration] > [Étiquette] > [Créer nouveau], créez les trois étiquettes suivantes.
 
-3. Cliquez sur [Créer]
+.. list-table::
+   :header-rows: 1
+   :widths: 18 14 68
 
-**Configuration de l'authentification SMB**
+   * - Nom
+     - Valeur
+     - Chemins inclus
+   * - Portail
+     - ``portal``
+     - ``https://portal.example.com/.*``
+   * - Dossier partagé
+     - ``shared``
+     - ``smb://fileserver.example.com/shared/.*``
+   * - Archives
+     - ``archive``
+     - ``file:/data/archive/.*``
 
-Si le serveur de fichiers nécessite une authentification, la configuration de l'authentification de fichiers est nécessaire.
+- « Nom » est le texte affiché sur la page de recherche ; il peut contenir des caractères non ASCII, comme des lettres accentuées ou du japonais
+- « Valeur » n'accepte que les caractères alphanumériques et le trait de soulignement (les traits d'union et les caractères non ASCII provoquent une erreur de saisie)
+- « Chemins inclus » doit correspondre à l'URL entière ; n'omettez donc pas le ``.*`` final. S'il reste vide, l'étiquette n'est attribuée à aucun document
+- « Autorisations » contient ``{role}guest``. L'étiquette est ainsi affichée aussi aux utilisateurs non connectés ; laissez-la telle quelle
 
-1. [Exploration] > [Authentification de fichiers] > [Nouveau]
-2. Configurez les éléments suivants :
+Les documents explorés avant la création des étiquettes n'ont pas d'étiquette.
+Si vous ajoutez ou modifiez des étiquettes par la suite, appliquez-les aux documents existants soit en relançant l'exploration, soit en exécutant « Label Updater » avec [Démarrer maintenant] dans [Système] > [Planificateur].
 
-   - Nom d'hôte : ``fileserver.example.com``
-   - Schéma : ``Samba``
-   - Nom d'utilisateur : nom d'utilisateur du compte de service
-   - Mot de passe : mot de passe du compte de service
+Créer les configurations d'exploration
+======================================
 
-3. Cliquez sur [Créer]
+Portail intranet (exploration Web)
+----------------------------------
 
-Exploration de fichiers locaux
--------------------------------
+Dans [Robot d'exploration] > [Web] > [Créer nouveau], saisissez les champs suivants, puis cliquez sur [Créer].
 
-Pour explorer un répertoire spécifique sur le serveur, spécifiez directement le chemin du fichier.
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
 
-1. [Exploration] > [Système de fichiers] > [Nouveau]
-2. Configurez les éléments suivants :
+   * - Champ
+     - Valeur
+   * - Nom
+     - ``Portail intranet``
+   * - URL
+     - ``https://portal.example.com/``
+   * - URL incluses
+     - ``https://portal.example.com/.*``
+   * - URL exclues
+     - Ajouter ``https://portal.example.com/admin/.*`` sous les lignes déjà présentes
 
-   - Chemin : ``file:///data/archive/``
-   - Chemin à explorer : ``file:///data/archive/.*``
-   - Chemin à exclure de l'exploration : ``.*\\.(log|bak)$``
-   - Nombre maximum d'accès : ``5000``
-   - Libellé : Archives
+« URL exclues » contient dès le départ des expressions régulières qui excluent les images, les CSS, etc.
+Ne les supprimez pas : ajoutez une ligne.
+« Nombre de threads » vaut ``1`` et « Intervalle » ``10000`` millisecondes par défaut, des réglages qui limitent la charge sur le portail.
 
-3. Cliquez sur [Créer]
+Dossier partagé (SMB) et authentification de fichier
+----------------------------------------------------
 
-Conception du calendrier d'exploration
-=======================================
+Créez d'abord la configuration suivante dans [Robot d'exploration] > [Système de fichiers] > [Créer nouveau].
 
-Lorsque vous explorez plusieurs sources de données, la conception du calendrier est importante.
-Exécuter toutes les explorations simultanément sollicite les ressources du serveur et impose une charge importante aux serveurs cibles.
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
 
-Répartition du calendrier
+   * - Champ
+     - Valeur
+   * - Nom
+     - ``Dossier partagé``
+   * - Chemins
+     - ``smb://fileserver.example.com/shared/``
+   * - Chemins inclus
+     - ``smb://fileserver.example.com/shared/.*``
+   * - Chemins exclus
+     - ``.*\.tmp$``
+
+Pour l'exploration de fichiers, « Nombre de threads » vaut ``5`` et « Intervalle » ``1000`` millisecondes par défaut.
+
+Associez ensuite le compte de service à cette configuration.
+Une authentification de fichier se crée en sélectionnant une configuration d'exploration de fichiers.
+Tant qu'aucune configuration d'exploration de fichiers n'existe, [Créer nouveau] n'est pas affiché sur l'écran [Authentification de fichier].
+
+Dans [Robot d'exploration] > [Authentification de fichier] > [Créer nouveau], saisissez les champs suivants, puis cliquez sur [Créer].
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Champ
+     - Valeur
+   * - Nom d'hôte
+     - ``fileserver.example.com`` (écrit exactement comme le nom d'hôte du chemin)
+   * - Port
+     - Vide
+   * - Schéma
+     - ``Samba``
+   * - Nom d'utilisateur / Mot de passe
+     - Ceux du compte de service
+   * - Paramètres
+     - Pour un compte de domaine, indiquer le nom de domaine, par exemple ``domain=EXAMPLE``
+   * - Configuration de l'exploration de fichiers
+     - ``Dossier partagé``
+
+« Nom d'hôte » doit correspondre littéralement au nom d'hôte du chemin.
+Si vous avez écrit le chemin avec une adresse IP, saisissez aussi l'adresse IP ici.
+Une authentification dont le « Port » est vide s'applique aux chemins qui ne précisent pas de port, comme ``smb://nom-hote/nom-partage/``.
+
+.. note::
+
+   Par défaut, les fichiers explorés via SMB reçoivent des rôles dérivés des droits d'accès (ACL) du fichier, qui sont ajoutés aux « Autorisations » de la configuration d'exploration.
+   Tant que la valeur initiale ``{role}guest`` reste dans « Autorisations », tout le monde peut les rechercher, y compris les utilisateurs non connectés.
+   Pour adapter les résultats de recherche aux droits d'accès, consultez :doc:`file-server-search` et :doc:`guide-05`.
+
+Archives (fichiers locaux)
 --------------------------
 
-Répartissez le calendrier d'exploration en fonction de la fréquence de mise à jour des sources de données.
+Dans [Robot d'exploration] > [Système de fichiers] > [Créer nouveau], créez la configuration suivante.
+Indiquez le chemin tel qu'il apparaît dans le conteneur.
 
-.. list-table:: Exemple de calendrier d'exploration
+.. list-table::
    :header-rows: 1
-   :widths: 25 25 50
+   :widths: 35 65
 
-   * - Source de données
-     - Moment d'exécution
-     - Raison
-   * - Portail interne
-     - Tous les jours à 2h00
-     - Le nombre de pages étant faible, l'exécution se termine rapidement
-   * - Dossier partagé
-     - Tous les jours à 3h00
-     - Le nombre de fichiers étant élevé, exécution pendant la nuit
-   * - Archives
-     - Chaque dimanche à 4h00
-     - La fréquence de mise à jour étant faible, une exécution hebdomadaire suffit
+   * - Champ
+     - Valeur
+   * - Nom
+     - ``Archives``
+   * - Chemins
+     - ``file:/data/archive/``
+   * - Chemins inclus
+     - ``file:/data/archive/.*``
+   * - Chemins exclus
+     - ``.*\.(log|bak)$``
 
-Configuration du planificateur
--------------------------------
+Les fichiers locaux s'écrivent avec une seule barre oblique après ``file:``, comme ``file:/data/archive/``.
+Les URL des fichiers trouvés par le robot ont la forme ``file:/data/archive/2020/report.pdf``, et « Chemins inclus » est comparé à ces URL.
+Si vous écrivez ``file:///data/archive/.*``, aucun fichier ne correspond et rien n'est indexé.
 
-Depuis l'écran d'administration, [Système] > [Planificateur], vous pouvez configurer le moment d'exécution des tâches d'exploration.
-La tâche "Default Crawler" par défaut exécute toutes les configurations d'exploration en une seule fois.
+Créer une tâche par configuration
+=================================
 
-Rendre les résultats de recherche plus accessibles avec le mappage de chemins
-==============================================================================
+La tâche « Default Crawler » du planificateur exécute ensemble toutes les configurations d'exploration actives, tous les jours à 0 h 00.
+Pour exécuter chaque cible à une heure différente, créez une tâche par configuration d'exploration.
 
-Les URL ou chemins de fichiers explorés peuvent être difficiles à comprendre pour les utilisateurs.
-Le mappage de chemins permet de transformer les URL affichées dans les résultats de recherche.
+1. Dans [Robot d'exploration] > [Web], cliquez sur « Portail intranet », puis sur [Créer une nouvelle tâche] dans l'écran de détails
+2. L'écran de création de tâche s'ouvre ; « Nom » contient ``Web Crawler - Portail intranet`` et « Script » un contenu qui n'explore que cette configuration
+3. « Planification » est vide ; saisissez une expression cron et cliquez sur [Créer]
+4. Faites de même pour « Dossier partagé » et « Archives » dans [Robot d'exploration] > [Système de fichiers] (les noms prennent la forme ``File Crawler - Dossier partagé``)
 
-Exemple de configuration
--------------------------
+.. list-table::
+   :header-rows: 1
+   :widths: 40 25 35
 
-Transformez les chemins du serveur de fichiers en URL accessibles depuis un navigateur pour les utilisateurs.
+   * - Tâche
+     - Planification
+     - Signification
+   * - ``Web Crawler - Portail intranet``
+     - ``0 2 * * *``
+     - Tous les jours à 2 h 00
+   * - ``File Crawler - Dossier partagé``
+     - ``0 3 * * *``
+     - Tous les jours à 3 h 00
+   * - ``File Crawler - Archives``
+     - ``0 4 * * 0``
+     - Chaque dimanche à 4 h 00
 
-1. [Exploration] > [Mappage de chemins] > [Nouveau]
-2. Configurez les éléments suivants :
+Une expression cron suit l'ordre « minute heure jour mois jour-de-la-semaine », et le jour de la semaine ``0`` correspond au dimanche.
 
-   - Expression régulière : ``smb://fileserver.example.com/shared/(.*)``
-   - Remplacement : ``https://fileserver.example.com/shared/$1``
+Enfin, empêchez « Default Crawler » d'explorer à nouveau les mêmes configurations à 0 h 00.
+Dans [Système] > [Planificateur], cliquez sur « Default Crawler », videz « Planification » via [Modifier], puis cliquez sur [Mettre à jour].
+Si vous laissez « Activé » coché dans « Statut », vous pouvez toujours l'exécuter avec [Démarrer maintenant] lorsque vous voulez explorer toutes les configurations ensemble (si vous la désactivez, [Démarrer maintenant] n'est plus affiché).
 
-Ainsi, lorsque l'utilisateur clique sur un lien dans les résultats de recherche, il peut accéder directement au fichier depuis son navigateur.
+Tâches hebdomadaires et expiration des documents
+------------------------------------------------
 
-Utilisation de la recherche transversale
-=========================================
+Les documents indexés par une exploration reçoivent une date d'expiration ; une fois celle-ci passée, la tâche « Doc Purger » (exécutée chaque minute) les supprime de l'index.
+La date d'expiration correspond à l'heure de début de l'exploration plus le nombre de jours défini dans « Supprimer les anciens documents » sous [Système] > [Général], soit ``3`` jours par défaut.
+Si l'exploration suivante retrouve le même fichier, sa date d'expiration est prolongée.
 
-Recherche avec filtrage par libellé
-------------------------------------
+Avec la valeur par défaut, les documents des archives, explorées uniquement le dimanche, ne sont plus trouvables dès le mercredi.
+Ce nombre de jours doit donc être supérieur à l'intervalle d'exploration le plus long (7 jours).
+Dans cet article, nous le fixons à ``10`` jours, avec une marge pour que les documents ne disparaissent pas même si une tâche échoue une fois.
 
-Une fois l'exploration terminée, testez la recherche transversale depuis l'écran de recherche.
+- Dans l'environnement Docker, l'option ``-Dfess.system.day.for.cleanup=10`` mentionnée plus haut devient cette valeur par défaut. Les valeurs saisies dans [Général] sont perdues lorsque ``fess01`` est recréé ; l'inscrire dans compose.yaml est donc plus sûr
+- Dans les environnements autres que Docker, réglez « Supprimer les anciens documents » à ``10`` dans [Général] et cliquez sur [Mettre à jour]
 
-L'écran de recherche affiche des onglets ou des menus déroulants pour les libellés.
-Les utilisateurs peuvent sélectionner "Tous" pour une recherche transversale, ou choisir un libellé spécifique pour limiter la recherche à cette catégorie.
+Allonger ce nombre de jours signifie aussi que les fichiers supprimés du serveur de fichiers restent dans les résultats de recherche jusqu'à ce nombre de jours après la dernière exploration qui les a trouvés.
 
-Par exemple, en recherchant "plan de projet", les résultats peuvent contenir un mélange d'articles du portail, de fichiers Word du dossier partagé et de PDF des archives.
-En filtrant avec le libellé "Fichiers partagés", seuls les documents du serveur de fichiers sont affichés.
+Exécuter et vérifier les résultats
+==================================
 
-Ordre de tri des résultats de recherche
-----------------------------------------
+Exécuter les tâches
+-------------------
 
-Par défaut, les résultats sont triés par pertinence (score) par rapport aux mots-clés de recherche.
-Indépendamment du type de source de données, les documents les plus pertinents apparaissent en premier.
+Sans attendre le lendemain, dans [Système] > [Planificateur], cliquez successivement sur les trois tâches, puis sur [Démarrer maintenant] pour chacune.
 
-Résumé
-======
+Vérifier la fin de l'exécution
+------------------------------
 
-Dans cet article, nous avons intégré plusieurs sources de données dans Fess et construit un environnement de recherche transversale.
+1. Dans [Informations système] > [Journal des tâches], attendez que le « Statut » des trois tâches passe de « En cours d'exécution » à « OK ». En cas d'« Échec », cliquez sur la ligne et consultez « Résultat »
+2. Dans [Informations système] > [Informations sur l'exploration], consultez « Taille de l'index (Web/Fichier) » de chaque session et vérifiez que le nombre de documents indexés est proche de vos attentes
+3. Si le nombre est faible, ouvrez [Informations système] > [URL d'échec]. Les URL qui n'ont pas pu être récupérées y sont enregistrées avec le type d'erreur et le journal
 
-- Configuration d'exploration pour trois types de sources : sites Web, serveurs de fichiers et fichiers locaux
-- Classification par libellés et recherche avec filtrage
-- Conception de la répartition du calendrier d'exploration
-- Transformation d'URL par mappage de chemins
+Les causes fréquentes sont les suivantes.
 
-L'introduction de la recherche transversale permet de trouver les informations nécessaires sans se soucier de "où elles sont stockées".
+- Le dossier partagé compte 0 document et des chemins du partage figurent dans URL d'échec : vérifiez le « Nom d'hôte » de l'authentification de fichier et l'écriture du chemin, la « Configuration de l'exploration de fichiers » sélectionnée et le mot de passe. Si le journal montre des erreurs de connexion, vérifiez que le conteneur peut résoudre le nom du serveur de fichiers et atteindre le port 445
+- Les archives comptent 0 document et URL d'échec est vide : vérifiez que le chemin n'est pas écrit avec ``file:///`` et que « Chemins inclus » a la même forme que le chemin
+- Des erreurs de lecture se produisent sur les archives : vérifiez avec la commande ``exec -u fess`` présentée plus haut que le conteneur peut lire les fichiers
 
-Dans le prochain article, nous aborderons la conception de la recherche basée sur les rôles, permettant de contrôler les résultats de recherche en fonction des autorisations de chaque département.
+Filtrer par étiquette
+---------------------
+
+Sur ``http://localhost:8080/``, recherchez un mot susceptible de figurer aux trois emplacements.
+Les résultats mêlent des pages du portail, des documents Office du dossier partagé, des PDF des archives, etc., classés par pertinence.
+
+Sur la page de recherche de la 15.9 (thème ``bootstrap``), le filtrage par étiquette se trouve à deux endroits.
+
+- La liste « Étiquette » affichée à côté des résultats de recherche : les étiquettes présentes dans les résultats y figurent avec leur nombre, et un clic restreint les résultats à cette étiquette
+- Le bouton en forme d'engrenage à droite de la zone de recherche : il ouvre « Options de recherche », où vous sélectionnez une ou plusieurs entrées dans la liste « Étiquettes » avant de cliquer sur [Rechercher]. Si vous en sélectionnez plusieurs, les documents portant l'une de ces étiquettes sont inclus ; si vous n'en sélectionnez aucune, tout est inclus
+
+Lors du filtrage, un paramètre comme ``fields.label=shared`` est ajouté à l'URL.
+Si « Étiquette » n'apparaît pas à côté des résultats, ou si le filtrage donne 0 résultat, vérifiez que vous n'avez pas lancé l'exploration avant de créer les étiquettes (exécuter « Label Updater » corrige le problème).
+Si la liste « Étiquettes » n'apparaît pas dans « Options de recherche », vérifiez que les « Autorisations » de l'étiquette incluent le rôle de la personne qui recherche.
+
+Liens des résultats de recherche et mappage de chemin
+=====================================================
+
+Lorsque vous cliquez sur un résultat provenant du dossier partagé ou des archives, Fess lit le fichier et le renvoie au navigateur.
+C'est le rôle de « Search File Proxy » dans [Général], activé par défaut.
+Les fichiers peuvent ainsi être ouverts même si le navigateur ne peut pas ouvrir directement les URL ``smb://`` ou ``file:``.
+
+Si les mêmes fichiers que les archives sont également publiés sur un serveur web interne (ici ``https://archive.example.com/``) et que vous voulez qu'ils soient ouverts depuis celui-ci, convertissez les URL avec un mappage de chemin.
+
+Dans [Robot d'exploration] > [Mappage de chemin] > [Créer nouveau], saisissez les champs suivants, puis cliquez sur [Créer].
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Champ
+     - Valeur
+   * - Expression régulière
+     - ``^file:/data/archive/(.*)$``
+   * - Remplacement
+     - ``https://archive.example.com/$1``
+   * - Type de processus
+     - Affichage
+
+« Type de processus » a initialement « Exploration » sélectionné ; changez-le impérativement en « Affichage ».
+
+- Affichage : l'URL dans l'index reste ``file:/data/archive/...`` ; seule la destination du lien d'un résultat de recherche change. Le réglage prend effet dès sa création, sans nouvelle exploration
+- Exploration : réécrit l'URL stockée elle-même dans l'index. Le réglage ne prend effet qu'après une nouvelle exploration, et les « Chemins inclus » des étiquettes doivent aussi être adaptés aux URL ``https://`` réécrites
+
+Après la configuration, effectuez une recherche et cliquez sur un résultat des archives pour vérifier que le serveur web ``https://archive.example.com/`` s'ouvre.
+
+Pour aller plus loin
+====================
+
+- Adapter les résultats de recherche visibles au service ou au poste de chacun : :doc:`guide-05`
+- Vérifier les prérequis de la recherche sur serveur de fichiers (formats pris en charge, reprise des droits d'accès) : :doc:`file-server-search`
+- Rechercher aussi les fichiers de Google Drive, SharePoint et Box : :doc:`guide-07`
+- Améliorer la qualité de recherche à partir des journaux de recherche : :doc:`guide-08`
+- Mettre en place la supervision et les sauvegardes pour l'exploitation en production : :doc:`guide-10`
 
 Références
 ==========
 
-- `Guide de l'administrateur Fess <https://fess.codelibs.org/ja/15.5/admin/index.html>`__
-
-- `Configuration de l'exploration de fichiers Fess <https://fess.codelibs.org/ja/15.5/admin/filecrawl.html>`__
+- `Crawl de système de fichiers (recherche sur serveur de fichiers) <https://fess.codelibs.org/fr/stable/admin/fileconfig-guide.html>`__
+- `Authentification de fichier <https://fess.codelibs.org/fr/stable/admin/fileauth-guide.html>`__
+- `Étiquette <https://fess.codelibs.org/fr/stable/admin/labeltype-guide.html>`__
+- `Planificateur de tâches <https://fess.codelibs.org/fr/stable/admin/scheduler-guide.html>`__
+- `Général <https://fess.codelibs.org/fr/stable/admin/general-guide.html>`__
+- `Mappage de chemin <https://fess.codelibs.org/fr/stable/admin/pathmap-guide.html>`__
+- `Installation avec Docker (Détails) <https://fess.codelibs.org/fr/stable/install/install-docker.html>`__

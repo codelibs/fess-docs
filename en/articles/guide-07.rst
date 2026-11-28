@@ -1,261 +1,354 @@
-=================================================
-Part 7: Search Strategy for the Cloud Storage Era
-=================================================
+===================================================
+Searching Files in Google Drive, SharePoint and Box
+===================================================
 
 Introduction
 ============
 
-For many organizations, using cloud storage has become the norm.
-However, it is not uncommon for different departments or use cases to rely on different cloud storage services.
-Time spent wondering "Was that file on Google Drive, SharePoint, or Box?" reduces productivity.
+When different departments use Google Drive, SharePoint Online and Box, people spend more and more time trying to remember where a document was saved.
+With Fess data store plugins, files from all three services can be found from a single search page.
 
-In this article, we integrate multiple cloud storage services with Fess and build an environment where all cloud-hosted files can be searched from a single search box.
+Cloud storage, however, mixes files with different access rights.
+A misconfiguration can expose confidential files such as contracts in the search results of users who are not even logged in.
+This article explains, for each service, a minimal configuration that works as written, and how to carry the original permissions over into Fess.
 
-Target Audience
-===============
+Steps common to all data stores, such as installing plugins, handler names, parameters, writing scripts and creating jobs, are covered in :doc:`datastore-basics`.
+Read that article first before continuing.
+The settings in this article are based on Fess 15.9 and version 15.9.0 of each plugin.
 
-- Administrators of organizations that use multiple cloud storage services
-- Those who find searching across cloud storage challenging
-- Those who understand the basic concepts of OAuth authentication
+What We Will Build
+==================
 
-Scenario
-========
-
-A company uses the following cloud storage services:
-
-.. list-table:: Cloud Storage Usage
+.. list-table::
    :header-rows: 1
-   :widths: 25 35 40
+   :widths: 18 22 22 38
 
    * - Service
-     - Department
-     - Primary Use
+     - Plugin
+     - Handler name
+     - What to prepare on the service side
    * - Google Drive
-     - Sales & Marketing
-     - Proposals, reports, spreadsheets
+     - ``fess-ds-gsuite``
+     - ``GoogleDriveDataStore``
+     - A JSON key for a service account, and domain-wide delegation
    * - SharePoint Online
-     - Company-wide
-     - Internal portal, shared documents
+     - ``fess-ds-microsoft365``
+     - ``OneDriveDataStore``
+     - An app registration in Entra ID (client secret) and Microsoft Graph application permissions
    * - Box
-     - Legal & Accounting
-     - Contracts, invoices, confidential documents
+     - ``fess-ds-box``
+     - ``BoxDataStore``
+     - A Box custom app with JWT authentication
 
-Preparing for Cloud Storage Integration
-=========================================
+If you run Fess on Docker, list the plugin names and versions, separated by spaces, in the ``FESS_PLUGINS`` environment variable to install them all at startup.
 
-Installing Data Store Plugins
-------------------------------------
+.. code-block:: yaml
 
-The following plugins are used for crawling cloud storage:
+    environment:
+      - FESS_PLUGINS=fess-ds-gsuite:15.9.0 fess-ds-microsoft365:15.9.0 fess-ds-box:15.9.0
 
-- ``fess-ds-gsuite``: Crawling Google Drive / Google Workspace
-- ``fess-ds-microsoft365``: Crawling SharePoint Online / OneDrive
-- ``fess-ds-box``: Crawling Box
+If you install them from the admin UI or with ``fess-setup``, restart Fess after the installation (``FESS_PLUGINS`` installs plugins before Fess starts, so no restart is needed).
 
-Install them from [System] > [Plugins] in the admin console.
+Decide First: Who May See the Search Results
+============================================
 
-Setting Up OAuth Authentication
---------------------------------
+When you create a new data store configuration, the "Permissions" field already contains ``{role}guest``.
+If this value is left in place, the imported files can be found by users who are not logged in.
+All three plugins put the roles derived from the original sharing settings into ``file.roles``.
+The configuration is therefore the same for all three in these two respects:
 
-To access cloud storage APIs, OAuth authentication must be configured.
-Register an application in each service's management console and obtain the client ID and secret.
+- Delete ``{role}guest`` from the "Permissions" field and leave it empty
+- Write ``role=file.roles`` in the script
 
-**Common Steps**
+Both are needed because the plugins treat the "Permissions" field differently.
 
-1. Register an application in each service's management console
-2. Configure the required API scopes (permissions) (read-only access is sufficient)
-3. Obtain the client ID and client secret
-4. Enter these credentials in the Fess data store settings
+.. list-table::
+   :header-rows: 1
+   :widths: 20 40 40
 
-Configuring Each Service
-=========================
+   * - Plugin
+     - Value of the "Permissions" field
+     - ``default_permissions`` parameter
+   * - Google Drive
+     - Not used if you write ``role=file.roles``. If you do not, the field value (initially ``{role}guest``) is attached as is to every file
+     - Used only for files for which nothing could be obtained from the Drive ACL. If it is not set either, such files are not imported
+   * - SharePoint (OneDriveDataStore)
+     - Merged into ``file.roles``. Leaving ``{role}guest`` makes every file public
+     - Added to every file
+   * - Box
+     - Merged into ``file.roles``. Leaving ``{role}guest`` makes every file public
+     - Added to every file
 
-Google Drive Configuration
----------------------------
+``file.roles`` contains strings that represent the users and groups of each service.
 
-Add Google Drive files to the search targets.
+- Google Drive: users and groups are email addresses, and file owners use the same format. Domain sharing becomes ``{group}<domain-name>`` (configurable with ``domain_permission_format``), and public sharing that can be found by search (``anyone``) becomes the ``guest`` role. Sharing with "anyone with the link" does not become a role.
+- SharePoint: users are their object ID and UPN, and groups are their ID and display name. A sharing link for "people in your organization" becomes the group ``EVERYONE_IN_TENANT``.
+- Box: users are their Box user ID and login (email address), and groups are their Box group ID. In addition to the file's own collaborations, the collaborations and owners of its parent folders are included.
 
-**Preparation in Google Cloud Console**
+At search time, these are matched against the user name and group names of the user logged in to Fess.
+For example, for Google Drive user permissions to take effect, the Fess user name must match the email address.
+See :doc:`guide-05` for how roles work and :doc:`guide-15` for login via SSO.
 
-1. Create a project in Google Cloud Console
-2. Enable the Google Drive API
-3. Create a service account and download the JSON key file
-4. Share the target drives or folders with the service account
+A data store configuration has no dedicated field for labels that let users narrow search results by service.
+Either add a line such as ``label="box"`` to the script, or create a label that matches the URLs (for details, see :doc:`datastore-basics`).
+Label values may contain only alphanumeric characters and ``_``, so a value with a hyphen such as ``google-drive`` cannot be created.
 
-**Configuration in Fess**
+Google Drive: Importing Shared Drives
+=====================================
 
-1. Go to [Crawler] > [Data Store] > [Create New]
-2. Select handler: GoogleDriveDataStore
-3. Configure parameters and scripts
-4. Set label: ``google-drive``
+Preparing Google
+----------------
 
-**Parameter Configuration Example**
+In 15.9, ``fess-ds-gsuite`` runs with ``crawl_target=shared_drives`` by default.
+It reads every shared drive in the domain by impersonating a domain administrator.
 
-.. code-block:: properties
+1. Create a project in the Google Cloud console and enable the Google Drive API
+2. Create a service account, then create and download a key in JSON format on the [Keys] tab
+3. Enable domain-wide delegation for the service account and note its OAuth 2 client ID
+4. In the Google Workspace Admin console, under [Security] > [Access and data control] > [API controls] > [Domain-wide delegation], authorize that client ID for the scope ``https://www.googleapis.com/auth/drive.readonly``
 
-    private_key=-----BEGIN RSA PRIVATE KEY-----\nMIIE...\n-----END RSA PRIVATE KEY-----
-    private_key_id=your-private-key-id
-    client_email=fess-crawler@your-project.iam.gserviceaccount.com
-    supported_mimetypes=.*
-    include_pattern=
-    exclude_pattern=
+The account specified in ``impersonate_user`` must be a domain administrator of Google Workspace.
+If ``crawl_target`` is anything other than ``legacy`` and ``impersonate_user`` is missing, the crawl stops with an error when it starts.
 
-**Script Configuration Example**
-
-.. code-block:: properties
-
-    url=url
-    title=name
-    content=contents
-    mimetype=mimetype
-    content_length=size
-    last_modified=modified_time
-
-Set the ``private_key``, ``private_key_id``, and ``client_email`` values from the service account's JSON key file. Google-native formats such as Google Docs, Spreadsheets, and Slides can also be extracted and searched as text.
-
-SharePoint Online Configuration
----------------------------------
-
-Add SharePoint Online document libraries to the search targets.
-
-**Preparation in Entra ID (Azure AD)**
-
-1. Register an application in Entra ID
-2. Configure Microsoft Graph API permissions (e.g., Sites.Read.All)
-3. Create a client secret or certificate
-
-**Configuration in Fess**
-
-1. Go to [Crawler] > [Data Store] > [Create New]
-2. Select handler: SharePointDocLibDataStore (for document libraries; SharePointListDataStore, SharePointPageDataStore, and OneDriveDataStore are also available depending on the use case)
-3. Configure parameters and scripts
-4. Set label: ``sharepoint``
-
-**Parameter Configuration Example**
-
-.. code-block:: properties
-
-    tenant=your-tenant-id
-    client_id=your-client-id
-    client_secret=your-client-secret
-    site_id=your-site-id
-
-**Script Configuration Example**
-
-.. code-block:: properties
-
-    url=url
-    title=name
-    content=content
-    last_modified=modified
-
-Set ``tenant``, ``client_id``, and ``client_secret`` to the values obtained from the Entra ID application registration. Specifying ``site_id`` limits crawling to a specific site. If omitted, all accessible sites will be crawled.
-
-Box Configuration
-------------------
-
-Add Box files to the search targets.
-
-**Preparation in Box Developer Console**
-
-1. Create a custom application in the Box Developer Console
-2. Select "Server Authentication (with Client Credentials)" as the authentication method
-3. Request application authorization from the administrator
-
-**Configuration in Fess**
-
-1. Go to [Crawler] > [Data Store] > [Create New]
-2. Select handler: BoxDataStore
-3. Configure parameters and scripts
-4. Set label: ``box``
-
-**Parameter Configuration Example**
-
-.. code-block:: properties
-
-    client_id=your-client-id
-    client_secret=your-client-secret
-    enterprise_id=your-enterprise-id
-    public_key_id=your-public-key-id
-    private_key=-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIE...\n-----END ENCRYPTED PRIVATE KEY-----
-    passphrase=your-passphrase
-    supported_mimetypes=.*
-
-**Script Configuration Example**
-
-.. code-block:: properties
-
-    url=url
-    title=name
-    content=contents
-    mimetype=mimetype
-    content_length=size
-    last_modified=modified_at
-
-Set the authentication credentials from the custom application created in the Box Developer Console. Use ``supported_mimetypes`` to filter crawl targets by file type using a regular expression.
-
-Optimizing Cross-Search
-=========================
-
-Leveraging Incremental Crawling
----------------------------------
-
-When crawling cloud storage, incremental crawling -- fetching only files updated since the last crawl rather than retrieving all files every time -- is more efficient.
-
-Check whether incremental crawling options are available in each plugin's settings.
-Incremental crawling reduces the number of API calls and shortens crawl times.
-
-Search Result URLs
--------------------
-
-For documents crawled from cloud storage, clicking a link in the search results opens the file in the respective service's web UI.
-This is a natural experience for users, and no special configuration is typically required.
-
-Operational Considerations
-===========================
-
-OAuth Token Renewal
---------------------
-
-When integrating with cloud storage, pay attention to OAuth token expiration.
-
-- **Google Drive**: With service accounts, tokens are automatically refreshed
-- **SharePoint Online**: Client secrets have an expiration date and must be renewed periodically
-- **Box**: Application re-authorization may be required in some cases
-
-Register token expiration dates in your calendar to prevent crawl interruptions caused by expired credentials.
-
-Monitoring API Usage
+Parameters and Script
 ---------------------
 
-Cloud storage APIs have usage limits.
-When crawling large numbers of files, monitor API usage and adjust crawl settings to avoid exceeding the limits.
+Under [Crawler] > [Data Store] > [Create New], select ``GoogleDriveDataStore`` as the "Handler Name" and empty the "Permissions" field.
+Copy the values of the same names from the JSON key into ``private_key``, ``private_key_id`` and ``client_email``.
+Write ``private_key`` on a single line, keeping the line breaks as ``\n``.
 
-Permissions and Security
--------------------------
+.. code-block:: properties
 
-Configure read-only access permissions for the Fess service account used with cloud storage.
-Write permissions are unnecessary and should be avoided following the principle of minimizing security risk.
+    private_key=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBg...\n-----END PRIVATE KEY-----\n
+    private_key_id=46812a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p8q9r
+    client_email=fess-crawler@your-project.iam.gserviceaccount.com
+    impersonate_user=admin@example.com
+    crawl_target=shared_drives
+    script_type=javascript
 
-Additionally, by combining this with the role-based search covered in Part 5, you can also control search results in accordance with the cloud storage permission structure.
+.. code-block:: properties
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filetype=file.filetype
+    content_length=file.size
+    created=file.created_time
+    last_modified=file.modified_time
+    role=file.roles
+
+``file.url`` is the file's ``webViewLink``.
+Deletions are reflected on the assumption that the indexed URL contains the Drive file ID.
+For that reason, use ``url`` as is, without rewriting it.
+
+The other import scopes are as follows.
+
+- ``crawl_target=users``: reads every user's My Drive. You need to enable the Admin SDK API and add the scope ``https://www.googleapis.com/auth/admin.directory.user.readonly`` (both in the delegation settings and in the ``scopes`` parameter).
+- ``crawl_target=legacy``: reads only files shared directly with the service account's address. Neither delegation nor ``impersonate_user`` is needed.
+
+Incremental Crawling
+--------------------
+
+If you add ``incremental=true``, the second and later crawls read only the Drive change feed.
+In this mode, ``delete_old_docs`` is forced to ``false``, and files deleted from Drive may remain in the index.
+Also, unchanged files are not re-registered, so as things stand they disappear from the search results once the number of days in "Delete old documents" (3 days by default) has passed (see the section on document expiration in :doc:`datastore-basics`).
+
+If you use incremental crawling, combine it as follows.
+
+- Also create a configuration for a full crawl without ``incremental``, and run it regularly, for example once a week
+- Specify in both configurations a ``time_to_live`` slightly longer than the full crawl interval (for a weekly full crawl, ``time_to_live=11520``, 8 days)
+
+Files deleted from Drive disappear from the search results when this period expires.
+The plugin writes the change feed position back to the "Parameters" field, so do not edit the value it writes back.
+
+SharePoint Online: Importing Files from Document Libraries
+==========================================================
+
+Which Handler to Use
+--------------------
+
+To search the content of files in SharePoint document libraries, use ``OneDriveDataStore`` from ``fess-ds-microsoft365``.
+
+- ``SharePointDocLibDataStore`` only registers each library as a single document and does not import the files in it.
+- ``fess-ds-sharepoint`` (``SharePointDataStore``) is for on-premises SharePoint Server. It does not support Microsoft Graph, and its documentation directs SharePoint Online users to ``fess-ds-microsoft365``.
+
+Preparing Entra ID
+------------------
+
+1. Create a new registration under [App registrations] in the Azure Portal
+2. Under [Certificates & secrets], create a new client secret and note its value (this is where you choose its expiration)
+3. Under [API permissions] > [Microsoft Graph] > [Application permissions], add the four permissions below
+4. Run [Grant admin consent]
+
+Add the following application permissions.
+
+- ``Files.Read.All``
+- ``User.Read.All``, ``Group.Read.All``: needed for every import scope to look up the user and group names in ACLs
+- ``Sites.Read.All``: needed to enumerate sites with ``shared_documents_drive_crawler=true``
+
+Parameters and Script
+---------------------
+
+If nothing is specified, ``OneDriveDataStore`` reads every SharePoint site, and also every user's OneDrive and the drives of every Microsoft 365 group.
+To target SharePoint only, set the three flags explicitly.
+
+.. code-block:: properties
+
+    tenant=12345678-1234-1234-1234-123456789abc
+    client_id=87654321-4321-4321-4321-123456789abc
+    client_secret=your-client-secret
+    shared_documents_drive_crawler=true
+    user_drive_crawler=false
+    group_drive_crawler=false
+    script_type=javascript
+
+.. code-block:: properties
+
+    url=file.web_url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filetype=file.filetype
+    content_length=file.size
+    created=file.created
+    last_modified=file.last_modified
+    role=file.roles
+
+To limit the import to specific libraries, set all three flags to ``false`` and specify the drive ID in ``drive_id``.
+You can look up the drive ID with ``GET /sites/{site-id}/drives`` in Microsoft Graph.
+If you specify only ``drive_id`` and leave the flags as they are, that drive is merely "added" to the overall import.
+
+Missing Permissions and Retries
+-------------------------------
+
+The ACL of each file is obtained with a separate Graph call per file.
+What happens when this call fails is determined by ``permission_failure_policy``.
+With the default ``skip``, the file is not registered and is recorded in [System Info] > [Failure URL] and in a WARN log.
+If you change it to ``index_without_acl``, files are registered with incomplete ACLs, so for highly confidential libraries it is safer to keep the default.
+
+Retries of Graph calls can be tuned with ``max_retry_count`` (default 3, maximum 10) and ``retry_interval`` (seconds, default 3, maximum 180).
+``OneDriveDataStore`` has no incremental crawling option and reads everything every time.
+
+Box: Importing a Contracts Folder with Permissions
+==================================================
+
+Preparing Box
+-------------
+
+``fess-ds-box`` supports only server authentication with JWT.
+
+1. In the Box Developer Console, create a "Custom App" and select "Server Authentication (with JWT)" as the authentication method
+2. On the [Configuration] tab, enable "Read all files and folders stored in Box" under Application Scopes
+3. Select "App + Enterprise Access" as the App Access Level
+4. Create a key pair with [Generate a Public/Private Keypair] and save the JSON file
+5. Authorize the app in the Box Admin Console
+
+``clientID``, ``clientSecret``, ``publicKeyID``, ``privateKey``, ``passphrase`` and ``enterpriseID`` in the JSON file correspond to ``client_id``, ``client_secret``, ``public_key_id``, ``private_key``, ``passphrase`` and ``enterprise_id``, respectively.
+All six are required.
+
+Limiting the Import to a Single Folder
+--------------------------------------
+
+When the target is fixed, such as the legal department's contracts, use ``root_folder_id`` to read just one folder.
+In this mode, the plugin does not impersonate users; it reads the folder as the app's service account.
+You therefore need to add the service account as a collaborator on the target folder.
+The folder ID is the number at the end of the URL when you open the folder in the Box web interface.
+
+.. code-block:: properties
+
+    client_id=hdf8a7sd9f8a7sdf9a87sdf98a7sd
+    client_secret=kMN7sd8f7a9sd8f7a9sd8f7a9sd8f
+    public_key_id=4tg5h6j7
+    private_key=-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIFDj...\n-----END ENCRYPTED PRIVATE KEY-----\n
+    passphrase=7ba8sd9f7a9sd8f7a9sd8f7a9sd8f
+    enterprise_id=1923456
+    root_folder_id=123456789
+    default_permissions={group}legal
+    script_type=javascript
+
+.. code-block:: properties
+
+    url=file.url
+    title=file.name
+    content=file.contents
+    mimetype=file.mimetype
+    filetype=file.filetype
+    content_length=file.size
+    created=file.created_at
+    last_modified=file.modified_at
+    role=file.roles
+
+Be sure to delete ``{role}guest`` from the "Permissions" field.
+In Box, the field value is merged into ``file.roles``, so if you leave it, the contracts can be found by users who are not logged in.
+
+Box groups become roles as group IDs, so as they are they do not match the group names in Fess.
+In this example, ``default_permissions={group}legal`` makes every file visible to the Fess ``legal`` group.
+Users with whom a file is shared individually in Box can also find it, provided their login (email address) matches their Fess user name.
+To add a role to files that have a company-wide shared link, use ``company_shared_link_role``.
+
+Reading Every User's Files
+--------------------------
+
+If you omit ``root_folder_id``, the plugin enumerates every user in the enterprise and reads their files by impersonating them one at a time.
+You can narrow down the target users with ``filter_term``.
+API calls through impersonation must be allowed in the app settings on the Box side, so check the settings in Box's developer documentation.
+
+Handling Rate Limits
+--------------------
+
+The number of retries for ``429`` and ``5xx`` responses is ``max_retry_attempts`` (default 5).
+``max_retry_count`` (default 10) is the number of times the connection is re-created on a ``401`` response and has nothing to do with rate limits.
+To space out API calls, set a wait per item with ``readInterval`` (milliseconds).
+``fess-ds-box`` has no incremental crawling option.
+
+Operational Notes
+=================
+
+Credential Expiration
+---------------------
+
+- An Entra ID client secret has the expiration chosen when it was created. Once it expires, authentication fails and nothing is imported, so create a new secret before the expiration and replace ``client_secret`` in the parameters.
+- Google access tokens are refreshed automatically by the library the plugin uses. In 15.9, ``refresh_token_interval`` is ignored and a warning is logged.
+- Box access tokens are refreshed automatically every ``refresh_token_interval`` (default 3540 seconds).
+
+When Not Everything Gets Imported
+---------------------------------
+
+At the end of a crawl, all three plugins wait 60 seconds by default for their worker threads to finish, and anything not finished by then is not imported.
+If the document count falls short on a large tenant, extend the wait time.
+The parameter is ``thread_pool_timeout_seconds`` for Google Drive, ``executor_shutdown_timeout`` for SharePoint and ``thread_pool_await_timeout`` for Box (all in seconds).
+
+In Google Drive, 429, 500, 502, 503 and 504 responses and 403 responses caused by rate limits are retried with exponential backoff.
+Retries can be tuned with ``max_retries`` (default 5), ``retry_initial_interval_ms`` (default 1000) and ``max_backoff_ms`` (default 32000).
+
+Verifying the Results
+=====================
+
+How to read job results and logs is explained in :doc:`datastore-basics`.
+A data store crawl may show the job as "OK" even when fetching files failed, so judge by the document count and the logs.
+For the configuration in this article, also check the following three points.
+
+1. While logged out, search for a word contained in an imported file and confirm that no results are returned (to make sure you did not forget to clear the "Permissions" field)
+2. Log in as a user the file is shared with and confirm that the same file is returned
+3. For the Google Drive configuration, check that ``fess-crawler.log`` does not contain ``Skipped ... because no permission could be resolved`` (these are files that were not imported because their ACL was empty)
+
+If the file is not returned in step 2, check whether the user's user name and group names match the values in ``file.roles``.
 
 Summary
 =======
 
-In this article, we integrated three cloud storage services -- Google Drive, SharePoint Online, and Box -- with Fess to build a cross-search environment.
-
-- Data store plugin and OAuth authentication configuration for each cloud storage service
-- Distinguishing and filtering information sources using labels
-- Optimizing the search experience with incremental crawling
-- OAuth token management and API usage monitoring
-
-This creates an environment where users can instantly find the files they need without having to think about which cloud service they are stored in.
-
-In the next article, we will cover the tuning cycle for continuously improving search quality.
+- Import the content of SharePoint files with ``OneDriveDataStore``, setting OneDrive and group drives to ``false`` if you do not need them.
+- For all three services, delete ``{role}guest`` from the "Permissions" field and write ``role=file.roles`` in the script.
+- ``default_permissions`` replaces an empty ACL in Google Drive, and is added to every file in SharePoint and Box.
+- Only Google Drive offers incremental crawling (``incremental=true``). If you use it, combine it with a configuration for full crawls and specify ``time_to_live`` in both.
 
 References
 ==========
 
-- `Fess Data Store Configuration <https://fess.codelibs.org/ja/15.5/admin/dataconfig.html>`__
-
-- `Fess Plugin List <https://fess.codelibs.org/ja/15.5/admin/plugin.html>`__
+- `Google Workspace Connector <https://fess.codelibs.org/stable/config/datastore/ds-gsuite.html>`__
+- `Microsoft 365 Connector <https://fess.codelibs.org/stable/config/datastore/ds-microsoft365.html>`__
+- `Box Connector <https://fess.codelibs.org/stable/config/datastore/ds-box.html>`__
+- `Data Store Configuration <https://fess.codelibs.org/stable/admin/dataconfig-guide.html>`__
+- `fess-ds-microsoft365 15.9.0 README (list of Graph permissions) <https://github.com/codelibs/fess-ds-microsoft365/blob/fess-ds-microsoft365-15.9.0/README.md>`__
+- `fess-ds-box 15.9.0 README (file.roles and root_folder_id) <https://github.com/codelibs/fess-ds-box/blob/fess-ds-box-15.9.0/README.md>`__
