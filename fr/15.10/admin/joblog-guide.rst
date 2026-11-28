@@ -38,7 +38,7 @@ Nom de la tâche exécutée.
 Résultat de l'exécution de la tâche.
 
 .. note::
-   Une tâche d'exploration à l'état OK (``ok``) n'a pas forcément ajouté tous les documents à l'index. L'état indique si le processus du robot d'exploration s'est terminé normalement. Un document dont le moteur de recherche refuse l'écriture n'est pas indexé, et la tâche se termine tout de même avec OK. Chaque document refusé est consigné dans ``fess-crawler.log`` sous la forme d'un avertissement ``Failed to index a document``. Pour les explorations Web et de fichiers, il n'est pas enregistré comme URL en échec. Vérifiez aussi le nombre de documents de l'index (voir « Nombre de documents de l'index et fraîcheur du crawl » dans :doc:`../config/admin-logging`).
+   Une tâche d'exploration à l'état OK (``ok``) n'a pas forcément ajouté tous les documents à l'index. L'état indique si le processus du robot d'exploration s'est terminé normalement. Un document dont le moteur de recherche refuse l'écriture n'est pas indexé, et la tâche peut tout de même se terminer avec OK. Un document refusé est consigné dans ``fess-crawler.log`` avec un avertissement tel que ``Failed to index a document``. Pour les explorations Web et de fichiers, il n'est pas enregistré comme URL en échec. Vérifiez aussi le nombre de documents de l'index (voir « Nombre de documents de l'index et fraîcheur du crawl » dans :doc:`../config/admin-logging`).
 
 Cible
 :::::

@@ -38,7 +38,7 @@ Status
 Das Ausführungsergebnis des Jobs.
 
 .. note::
-   Ein Crawl-Job mit dem Status OK (``ok``) hat nicht unbedingt jedes Dokument in den Index aufgenommen. Der Status gibt an, ob der Crawler-Prozess normal beendet wurde. Ein Dokument, dessen Schreiben die Suchmaschine ablehnt, wird nicht indexiert, und der Job endet trotzdem mit OK. Jedes abgelehnte Dokument wird in ``fess-crawler.log`` als Warnung ``Failed to index a document`` protokolliert. Bei Web- und Datei-Crawls wird es nicht als Fehler-URL erfasst. Prüfen Sie zusätzlich die Anzahl der Dokumente im Index (siehe "Dokumentanzahl im Index und Aktualität des Crawls" in :doc:`../config/admin-logging`).
+   Ein Crawl-Job mit dem Status OK (``ok``) hat nicht unbedingt jedes Dokument in den Index aufgenommen. Der Status gibt an, ob der Crawler-Prozess normal beendet wurde. Ein Dokument, dessen Schreiben die Suchmaschine ablehnt, wird nicht indexiert, und der Job kann trotzdem mit OK enden. Ein abgelehntes Dokument wird in ``fess-crawler.log`` mit einer Warnung wie ``Failed to index a document`` protokolliert. Bei Web- und Datei-Crawls wird es nicht als Fehler-URL erfasst. Prüfen Sie zusätzlich die Anzahl der Dokumente im Index (siehe "Dokumentanzahl im Index und Aktualität des Crawls" in :doc:`../config/admin-logging`).
 
 Ziel
 ::::
