@@ -38,10 +38,12 @@ In Entra ID authentication, |Fess| operates as an OAuth 2.0/OpenID Connect clien
 For role-based search integration, see :doc:`security-role`.
 
 .. note::
-   The |Fess| login session does not end when the tokens issued by Entra ID expire. The login lasts until the user logs out or the session timeout is reached. SAML differs: its session ends with the IdP session (see :doc:`sso-saml`).
+   The |Fess| login session does not end when the tokens issued by Entra ID expire. The login lasts until the user logs out, the session timeout is reached, or Entra ID refuses to renew the tokens. SAML differs: its session ends with the IdP session (see :doc:`sso-saml`).
+
+   |Fess| renews the tokens when the access token is about to expire. If Entra ID refuses the renewal — the refresh token was revoked, the account was disabled, its password was reset, its sign-in was blocked, or Entra ID requires a fresh sign-in for a policy reason such as Conditional Access or a sign-in frequency policy — |Fess| ends the login session at the next request, on the search screen, ``/api/v2`` and the admin screens alike, and the user signs in again through Entra ID. A renewal that fails for another reason, such as a timeout or an unreachable endpoint, does not end the session.
 
 .. note::
-   When you run several nodes, set the environment variable ``FESS_SESSION_STORE=opensearch`` to share the HTTP session between them; a login started on one node can then be completed on another. Update the plugin on every node to 15.10 before you enable it: a 15.9.0 plugin does not share the login state, and a user who returns to another node stays anonymous. Without a shared session, pin each session to one node on the load balancer.
+   When you run several nodes, set the environment variable ``FESS_SESSION_STORE=opensearch`` to share the HTTP session between them; a login started on one node can then be completed on another. Update the plugin on every node to 15.10 before you enable it: a 15.9.0 plugin does not share the login state, and a user who returns to another node stays anonymous. Without a shared session, pin each session to one node on the load balancer. A session used on a node other than the one that handled the login cannot learn there that Entra ID refused to renew the tokens, and is not ended on that node.
 
    With ``FESS_SESSION_STORE=opensearch``, adding or removing an SSO plugin (``fess-sso-saml``, ``fess-sso-oidc`` or ``fess-sso-entraid``) changes the format version of the stored sessions. Every stored session then becomes invalid and all users have to log in again. Install or remove these plugins on all nodes: a node whose set of these plugins differs from that of the other nodes cannot read the sessions they stored, and they cannot read its sessions. Other plugins, such as the storage, script and SPNEGO plugins, do not change the format.
 
@@ -126,7 +128,7 @@ The following settings can be added as needed.
      - Group/role fields (comma-separated) to additionally use as permission values. The group/role ID (GUID) is always used as a permission, and the values of the fields specified here (e.g., ``mail``) are added. Only a field whose value is a string can be used. Microsoft Graph answers a field such as ``securityEnabled`` with a boolean and ``groupTypes`` with a list, and neither can become a permission value, so such a field is ignored and a warning naming it is written to the log.
      - ``mail``
    * - ``entraid.use.ds``
-     - Domain service integration. When ``true``, for permission values in the ``name@domain`` format, the local part (``name``) with the domain part removed is also added as a permission. This applies to the signed-in user as well as to groups and roles: the local part of the user principal name is added as a user-level permission. Setting it to ``false`` therefore removes that user-level permission too, not only the group ones.
+     - Domain service integration. When ``true``, for permission values in the ``name@domain`` format, the local part (``name``) with the domain part removed is also added as a permission. This applies to the signed-in user as well as to groups and roles: the local part of the user principal name is added as a user-level permission, but only for a member account of the tenant (``userType`` is ``Member`` in Microsoft Graph), not for a guest account. Setting it to ``false`` therefore removes that user-level permission too, not only the group ones. |Fess| reads whether the account is a member from Microsoft Graph in the background, together with the group membership, after login; this uses the ``User.Read`` permission that the group lookup already needs. Until Microsoft Graph has answered, the local part is not a permission yet; the full user principal name and the object ID always are. If that lookup fails before it has been answered, the search screen tells the user that their group and role permissions could not be fully loaded, as it does when the group lookup fails.
      - ``true``
 
 .. note::
@@ -147,6 +149,15 @@ The following settings can be added as needed.
    default. For example, if Entra ID has a group named ``Administrators``, it also matches
    documents whose access rights name the built-in Windows ``Administrators`` group. Before adding
    it, check that the names do not collide with the ones already used in your access rights.
+
+.. note::
+
+   With ``entraid.use.ds=true``, the local part of a group's ``mail`` is also added as a
+   permission. The mail address of a Microsoft 365 group is chosen when the group is created, and
+   by default any user of the tenant can create one, so its local part can match the name of an
+   unrelated group in the file system access rights. If users can create Microsoft 365 groups in
+   your tenant, check the names used in your access rights, or set ``entraid.use.ds=false``, which
+   also removes the user-level local part described above.
 
 .. note::
    With the default ``query``, the authorization code is included in the query string of the
@@ -395,7 +406,7 @@ Cannot Retrieve Group Information
   permissions could not be fully loaded, asks them to log out and log in again, and to contact an
   administrator if it keeps happening. "Not fully" is deliberate: the resolution counts as failed
   unless both the direct membership lookup and the nested group walk succeeded, so a user who
-  holds their direct groups but not their parent groups gets that message too. One case is
+  holds their direct groups but not their parent groups gets that message too. The message is also shown when |Fess| could not find out whether the account is a member of the tenant or a guest. One case is
   exempt, and it is the one the previous item describes: when Microsoft Graph refuses the nested
   group lookup with ``Authorization_RequestDenied`` because ``GroupMember.Read.All`` was never
   granted, |Fess| takes that as an answer meaning the group has no parents rather than as a

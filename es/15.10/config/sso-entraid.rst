@@ -39,10 +39,12 @@ En la autenticación de Entra ID, |Fess| opera como un cliente OAuth 2.0/OpenID 
 Para la integración con la búsqueda basada en roles, consulte :doc:`security-role`.
 
 .. note::
-   La sesión de inicio de sesión de |Fess| no termina cuando caducan los tokens emitidos por Entra ID. El inicio de sesión dura hasta que el usuario cierra sesión o se alcanza el tiempo de espera de la sesión. SAML es distinto: su sesión termina con la sesión del IdP (consulte :doc:`sso-saml`).
+   La sesión de inicio de sesión de |Fess| no termina cuando caducan los tokens emitidos por Entra ID. El inicio de sesión dura hasta que el usuario cierra sesión, se alcanza el tiempo de espera de la sesión o Entra ID rechaza renovar los tokens. SAML es distinto: su sesión termina con la sesión del IdP (consulte :doc:`sso-saml`).
+
+   |Fess| renueva los tokens cuando el token de acceso está a punto de caducar. Si Entra ID rechaza la renovación (se revocó el token de actualización, se deshabilitó la cuenta, se restableció su contraseña, se bloqueó su inicio de sesión, o Entra ID exige volver a iniciar sesión por un motivo de directiva, como el acceso condicional o una directiva de frecuencia de inicio de sesión), |Fess| termina la sesión de inicio de sesión en la siguiente solicitud, tanto en la pantalla de búsqueda como en ``/api/v2`` y en las pantallas de administración, y el usuario vuelve a iniciar sesión a través de Entra ID. Una renovación que falla por otro motivo, como un tiempo de espera agotado o un punto de conexión inaccesible, no termina la sesión.
 
 .. note::
-   Si ejecuta varios nodos, defina la variable de entorno ``FESS_SESSION_STORE=opensearch`` para compartir la sesión HTTP entre ellos; un inicio de sesión iniciado en un nodo podrá entonces completarse en otro. Actualice el plugin en cada nodo a 15.10 antes de activarlo: un plugin 15.9.0 no comparte el estado del inicio de sesión, y un usuario que vuelve a otro nodo permanece como anónimo. Sin una sesión compartida, haga que el balanceador de carga fije cada sesión a un nodo.
+   Si ejecuta varios nodos, defina la variable de entorno ``FESS_SESSION_STORE=opensearch`` para compartir la sesión HTTP entre ellos; un inicio de sesión iniciado en un nodo podrá entonces completarse en otro. Actualice el plugin en cada nodo a 15.10 antes de activarlo: un plugin 15.9.0 no comparte el estado del inicio de sesión, y un usuario que vuelve a otro nodo permanece como anónimo. Sin una sesión compartida, haga que el balanceador de carga fije cada sesión a un nodo. Una sesión que se usa en un nodo distinto del que procesó el inicio de sesión no puede saber allí que Entra ID rechazó renovar los tokens, y no se termina en ese nodo.
 
    Con ``FESS_SESSION_STORE=opensearch``, añadir o quitar un plugin SSO (``fess-sso-saml``, ``fess-sso-oidc`` o ``fess-sso-entraid``) cambia la versión de formato de las sesiones almacenadas. Todas las sesiones almacenadas dejan entonces de ser válidas y todos los usuarios deben iniciar sesión de nuevo. Instale o quite estos plugins en todos los nodos: un nodo cuyo conjunto de estos plugins difiere del de los demás nodos no puede leer las sesiones que estos almacenaron, y ellos no pueden leer las suyas. Los demás plugins, como los de almacenamiento, de scripts y SPNEGO, no cambian el formato.
 
@@ -127,7 +129,7 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
      - Campos de grupo/rol (separados por comas) que se utilizan adicionalmente como valores de permiso. El ID de grupo/rol (GUID) siempre se usa como permiso, y los valores de los campos especificados aquí (ej: ``mail``) se agregan. Solo pueden utilizarse campos cuyo valor sea una cadena de texto. Microsoft Graph devuelve un campo como ``securityEnabled`` en forma de booleano y ``groupTypes`` en forma de lista, y ninguno de los dos puede convertirse en un valor de permiso, por lo que un campo así se ignora y se escribe en el registro una advertencia que indica su nombre.
      - ``mail``
    * - ``entraid.use.ds``
-     - Integración con el servicio de dominio. Cuando es ``true``, para los valores de permiso en formato ``name@domain``, la parte local (``name``) con la parte del dominio eliminada también se agrega como permiso. Esto se aplica no solo a los grupos y roles, sino también al propio usuario que ha iniciado sesión: la parte local de su nombre principal de usuario (UPN) se agrega como permiso a nivel de usuario. Por lo tanto, establecerlo en ``false`` elimina también ese permiso a nivel de usuario, no solo los de los grupos.
+     - Integración con el servicio de dominio. Cuando es ``true``, para los valores de permiso en formato ``name@domain``, la parte local (``name``) con la parte del dominio eliminada también se agrega como permiso. Esto se aplica no solo a los grupos y roles, sino también al propio usuario que ha iniciado sesión: la parte local de su nombre principal de usuario (UPN) se agrega como permiso a nivel de usuario, pero solo para una cuenta miembro del inquilino (``userType`` es ``Member`` en Microsoft Graph), no para una cuenta de invitado. Por lo tanto, establecerlo en ``false`` elimina también ese permiso a nivel de usuario, no solo los de los grupos. |Fess| obtiene de Microsoft Graph si la cuenta es miembro en segundo plano, junto con la pertenencia a grupos, después del inicio de sesión; para ello usa el permiso ``User.Read`` que ya necesita la consulta de grupos. Hasta que Microsoft Graph responda, la parte local todavía no es un permiso; el nombre principal de usuario completo y el ID de objeto siempre lo son. Si esa consulta falla antes de obtener respuesta, la pantalla de búsqueda indica al usuario que sus permisos de grupo y rol no se pudieron cargar por completo, igual que cuando falla la consulta de grupos.
      - ``true``
 
 .. note::
@@ -150,6 +152,16 @@ Las siguientes configuraciones pueden agregarse según sea necesario.
    coincidirá con documentos cuyos derechos de acceso indiquen el grupo integrado de Windows
    ``Administrators``. Antes de agregarlo, compruebe que los nombres no entren en conflicto con los
    que ya se usan en sus derechos de acceso.
+
+.. note::
+
+   Con ``entraid.use.ds=true``, la parte local del ``mail`` de un grupo también se agrega como
+   permiso. La dirección de correo de un grupo de Microsoft 365 se elige al crear el grupo y, de
+   forma predeterminada, cualquier usuario del inquilino puede crear uno, por lo que su parte local
+   puede coincidir con el nombre de un grupo no relacionado en los derechos de acceso del sistema de
+   archivos. Si los usuarios pueden crear grupos de Microsoft 365 en su inquilino, compruebe los
+   nombres que se usan en sus derechos de acceso o establezca ``entraid.use.ds=false``, lo que
+   también elimina la parte local a nivel de usuario descrita arriba.
 
 .. note::
    Con el valor por defecto ``query``, el código de autorización se incluye en la cadena de
@@ -406,7 +418,7 @@ No se puede recuperar la información de grupo
   vuelva a iniciarla, y que contacte con el administrador si el problema persiste. Lo de «por
   completo» es deliberado: la resolución solo se considera correcta si han tenido éxito tanto la
   consulta de pertenencias directas como el recorrido de los grupos anidados, así que un usuario
-  que tiene sus grupos directos pero no sus grupos padre también recibe ese mensaje. Hay un caso
+  que tiene sus grupos directos pero no sus grupos padre también recibe ese mensaje. El mensaje también aparece cuando |Fess| no pudo averiguar si la cuenta es miembro del inquilino o invitada. Hay un caso
   exento, y es precisamente el que describe el punto anterior: cuando Microsoft Graph rechaza la
   consulta de grupos anidados con ``Authorization_RequestDenied`` porque nunca se otorgó
   ``GroupMember.Read.All``, |Fess| lo interpreta como una respuesta que significa que el grupo no
