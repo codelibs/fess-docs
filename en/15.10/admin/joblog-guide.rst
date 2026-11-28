@@ -37,6 +37,9 @@ Status
 
 The execution result of the job.
 
+.. note::
+   A crawl job with the status OK (``ok``) has not necessarily put every document in the index. The status tells whether the crawler process ended normally. A document whose write the search engine refuses is not indexed, and the job can still end with OK. A refused document is logged in ``fess-crawler.log`` with a warning such as ``Failed to index a document``. For Web and file crawls it is not recorded as a failure URL. Check the number of documents in the index as well (see "Index Document Count and Crawl Freshness" in :doc:`../config/admin-logging`).
+
 Target
 ::::::
 
