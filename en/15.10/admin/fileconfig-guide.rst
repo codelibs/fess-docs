@@ -134,7 +134,7 @@ Permissions
 Specifies permissions for this configuration.
 The permission format is as follows: to display search results to users in the developer group, specify {group}developer.
 User-level: {user}username, Role-level: {role}rolename, Group-level: {group}groupname.
-Prefix an entry with ``(deny)``, for example ``(deny){role}rolename``, to deny access. In 15.10, the following entries are rejected with an error when saved: whitespace (including a full-width space) right after ``(allow)`` / ``(deny)``, or at the start of a line before ``{user}``, ``{group}`` or ``{role}``; ``(deny)``, ``{role}`` and the like typed with full-width characters; and an invisible character (such as a zero-width space or a byte order mark) at the start of an entry or right after ``(allow)`` / ``(deny)``. If a value saved by an earlier version has one of these forms, enter it again. See :doc:`../config/security-role` for details.
+Prefix an entry with ``(deny)``, for example ``(deny){role}rolename``, to deny access. In 15.10, the following entries are rejected with an error when saved: whitespace (including a full-width space and a no-break space) right after ``(allow)`` / ``(deny)``, or at the start of a line before ``{user}``, ``{group}`` or ``{role}``; ``(deny)``, ``{role}`` and the like typed with full-width characters; and an invisible character (such as a zero-width space or a byte order mark) at the start of an entry or right after ``(allow)`` / ``(deny)``. If a value saved by an earlier version has one of these forms, enter it again. See :doc:`../config/security-role` for details.
 
 Virtual Hosts
 :::::::::::::

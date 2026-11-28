@@ -37,6 +37,9 @@ Estado
 
 Resultado de la ejecución del trabajo.
 
+.. note::
+   Un trabajo de rastreo con el estado OK (``ok``) no ha incorporado necesariamente todos los documentos al índice. El estado indica si el proceso del rastreador terminó con normalidad. Un documento cuya escritura rechaza el motor de búsqueda no se indexa, y aun así el trabajo termina con OK. Cada documento rechazado se registra en ``fess-crawler.log`` como una advertencia ``Failed to index a document``. En los rastreos web y de archivos no se registra como URL de fallo. Compruebe también el número de documentos del índice (consulte "Número de documentos del índice y actualidad del rastreo" en :doc:`../config/admin-logging`).
+
 Objetivo
 ::::::::
 
