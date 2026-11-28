@@ -159,6 +159,8 @@ Fess は検索インデックスの格納に OpenSearch を使います。小規
 
 手順を追って構築する例は `第4回 散在するファイルを一元検索 <https://fess.codelibs.org/ja/articles/guide-04.html>`__ で扱っています。複数のファイルサーバと社内 Web サイトをまとめて 1 つの検索窓から探せるようにするところまでを通しで説明しています。
 
+Namazu や Hyper Estraier など、すでに動いている全文検索を置き換える場合は、 `Namazu・Hyper Estraier から Fess への移行ガイド <https://fess.codelibs.org/ja/articles/legacy-search-migration.html>`__ で、今の構成と Fess の機能の対応や、棚卸しから旧システムの撤去までの手順を説明しています。
+
 まとめ
 ======
 
