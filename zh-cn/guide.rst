@@ -1,83 +1,114 @@
-============================================
+========
 实践指南
-============================================
+========
 
-用 Fess 实现知识活用战略
-=========================
+用 Fess 实现知识活用
+====================
 
-以目标为导向的企业搜索实践指南。
-以用例为起点，全23回从 Fess 的导入到 AI 活用进行全面解说。
+本实践指南介绍如何用 Fess 让企业内部的信息可被搜索，并将其发展为持续被使用的搜索平台。
+各篇文章均以 Fess 15.9 为对象，具体说明设置页面中的项目、配置键，以及如何确认操作是否成功。
+仅在 15.10 及以后版本中可用的功能，会在文中明确注明。
 
-**基础篇（面向初学者）**
-
-- :doc:`articles/guide-01` - 解析企业信息检索的必要性与分散信息的活用课题
-- :doc:`articles/guide-02` - 用 Docker Compose 几分钟内启动 Fess 并体验搜索的快速入门
-- :doc:`articles/guide-03` - 向现有网站嵌入搜索小部件的3种模式介绍
-- :doc:`articles/guide-04` - 构建跨文件服务器和云存储等多数据源的统一检索
-- :doc:`articles/guide-05` - 使用角色和标签实现按部门·权限的搜索结果过滤
-
-**实践解决方案篇（面向中级用户）**
-
-- :doc:`articles/guide-06` - 构建统一检索 Git·Wiki·工单等开发知识的环境
-- :doc:`articles/guide-07` - 配置和运维 Google Drive·SharePoint·Box 的统一搜索
-- :doc:`articles/guide-08` - 基于搜索日志分析的调优改进循环实践
-- :doc:`articles/guide-09` - 正确搜索日语·英语·中文文档的分析器配置
-- :doc:`articles/guide-10` - 生产环境的监控·备份·故障对策最佳实践
-- :doc:`articles/guide-11` - 使用 REST API 与 CRM·内部系统的集成模式集
-- :doc:`articles/guide-12` - Salesforce·数据库等 SaaS 数据的索引化步骤
-
-**架构与扩展篇（面向高级用户）**
-
-- :doc:`articles/guide-13` - 用一个 Fess 实例为多个组织提供服务的租户设计
-- :doc:`articles/guide-14` - 从单服务器到集群架构的分阶段扩展策略
-- :doc:`articles/guide-15` - SSO（OIDC/SAML）集成与零信任环境下的访问控制设计
-- :doc:`articles/guide-16` - Fess 配置的代码管理与 CI/CD 流水线自动化部署
-- :doc:`articles/guide-17` - 自定义数据源插件和 Ingest 流水线的实现方法
-
-**AI·下一代搜索篇（面向高级用户）**
-
-- :doc:`articles/guide-18` - 概述从关键词搜索到向量搜索·语义搜索的进化
-- :doc:`articles/guide-19` - 利用 RAG 构建基于企业文档的问答系统的步骤
-- :doc:`articles/guide-20` - 将 Fess 作为 MCP 服务器与 Claude 等外部 AI 工具集成
-- :doc:`articles/guide-21` - 通过向量嵌入实现文本·图像的跨模态搜索
-- :doc:`articles/guide-22` - 用 OpenSearch Dashboards 可视化搜索日志并分析信息活用
-
-**总结**
-
-- :doc:`articles/guide-23` - 整合全23回要素的全公司知识基础设施参考架构
-
-用例与示例
+按目的选择
 ==========
 
-- :doc:`articles/use-cases` - 按行业和企业规模分类的用例
-- :doc:`articles/comparison` - Fess与其他搜索解决方案的比较（Elasticsearch、Solr等）
-- :doc:`articles/file-server-search` - 在文件服务器上引入全文检索前需要确认的要点
+- **想先试用一下**\ ：\ :doc:`articles/guide-01` → :doc:`articles/guide-02`
+- **想搜索文件服务器**\ ：\ :doc:`articles/file-server-search` → :doc:`articles/guide-04` → :doc:`articles/guide-05`
+- **想搜索云端和 SaaS 中的数据**\ ：\ :doc:`articles/datastore-basics` → :doc:`articles/guide-07` / :doc:`articles/guide-06` / :doc:`articles/guide-12`
+- **想在现有网站或系统中嵌入搜索**\ ：\ :doc:`articles/guide-03` → :doc:`articles/guide-11`
+- **想按部门或用户区分显示的信息**\ ：\ :doc:`articles/guide-05` → :doc:`articles/guide-15` → :doc:`articles/guide-13`
+- **想用 AI 增强搜索**\ ：\ :doc:`articles/guide-18` → :doc:`articles/guide-19` → :doc:`articles/guide-20`
+- **开始生产环境运维**\ ：\ :doc:`articles/guide-10` → :doc:`articles/guide-16` → :doc:`articles/guide-14`
+
+入门
+====
+
+- :doc:`articles/guide-01` - Fess 的组成、本体与插件的分工，以及按目的选择的阅读路线
+- :doc:`articles/guide-02` - 用 Docker Compose 启动 Fess，完整体验从爬取到搜索的流程
+
+收集信息
+========
+
+- :doc:`articles/guide-04` - 爬取网站和文件服务器，并支持用标签筛选结果
+- :doc:`articles/datastore-basics` - 数据存储插件的设置项、权限、标签、计划，以及结果的确认方法
+- :doc:`articles/guide-07` - 将 Google Drive、SharePoint Online / OneDrive、Box 中的文件纳入搜索范围
+- :doc:`articles/guide-06` - 将 Git 仓库、Confluence、Jira、Slack 中的信息纳入搜索范围
+- :doc:`articles/guide-12` - 将数据库、CSV 文件、Salesforce 中的数据纳入搜索范围
+
+嵌入搜索与调整显示方式
+======================
+
+- :doc:`articles/guide-03` - 在现有网站中放置搜索框，并用主题调整搜索页面的外观
+- :doc:`articles/guide-11` - 使用搜索 API 和访问令牌，从业务系统中进行搜索和注册
+
+控制访问
+========
+
+- :doc:`articles/guide-05` - 按角色和组区分显示搜索结果，并与 LDAP / Active Directory 集成
+- :doc:`articles/guide-15` - 引入 SSO（OIDC / SAML / Entra ID / SPNEGO），保护来自外部的访问
+- :doc:`articles/guide-13` - 通过虚拟主机和角色，让多个组织共用一个 Fess
+
+提升搜索质量
+============
+
+- :doc:`articles/guide-08` - 在搜索日志的分析页面中发现问题，并通过同义词和关键词匹配加以改进
+- :doc:`articles/guide-09` - 了解多语言文档如何被索引和搜索，并按语言进行调整
+- :doc:`articles/guide-22` - 使用 OpenSearch Dashboards 自行统计和可视化搜索日志
+
+运维
+====
+
+- :doc:`articles/guide-10` - 健康检查、日志、通知、备份与恢复，以及失败 URL 的处理
+- :doc:`articles/guide-16` - 使用 fessctl 和管理 API 将设置作为代码管理，并重现环境
+- :doc:`articles/guide-14` - 内存设置、外部 OpenSearch 集群，以及 Fess 的多台服务器配置
+- :doc:`articles/guide-17` - 自行开发数据存储插件或 Ingester 来添加功能
+
+用 AI 增强搜索
+==============
+
+- :doc:`articles/guide-18` - 借助向量搜索和排名融合，即使措辞不同也能找到文档
+- :doc:`articles/guide-19` - 连接 LLM，使用以企业内部文档为依据进行回答的 AI 搜索模式
+- :doc:`articles/guide-20` - 通过 MCP 服务器插件，让 AI 代理搜索 Fess
+- :doc:`articles/guide-21` - 构建可同时搜索图像和文本的多模态搜索
+
+规划全公司推广
+==============
+
+- :doc:`articles/guide-23` - 按从引入到全公司推广的各个阶段，整理需要配置和确认的事项
+
+用例与比较
+==========
+
+- :doc:`articles/use-cases` - 按行业和规模划分的应用案例，以及对各案例有帮助的文章
+- :doc:`articles/comparison` - Fess 与其他搜索解决方案（单独使用 OpenSearch、Solr、商业产品等）的比较
+- :doc:`articles/file-server-search` - 引入文件服务器全文搜索之前需要确认的事项
 
 .. toctree::
    :hidden:
 
    articles/guide-01
    articles/guide-02
-   articles/guide-03
    articles/guide-04
-   articles/guide-05
-   articles/guide-06
+   articles/datastore-basics
    articles/guide-07
+   articles/guide-06
+   articles/guide-12
+   articles/guide-03
+   articles/guide-11
+   articles/guide-05
+   articles/guide-15
+   articles/guide-13
    articles/guide-08
    articles/guide-09
+   articles/guide-22
    articles/guide-10
-   articles/guide-11
-   articles/guide-12
-   articles/guide-13
-   articles/guide-14
-   articles/guide-15
    articles/guide-16
+   articles/guide-14
    articles/guide-17
    articles/guide-18
    articles/guide-19
    articles/guide-20
    articles/guide-21
-   articles/guide-22
    articles/guide-23
    articles/use-cases
    articles/comparison

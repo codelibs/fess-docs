@@ -1,213 +1,327 @@
-===========================================================
-Teil 9: Suchinfrastruktur für mehrsprachige Organisationen
-===========================================================
+===================================================
+Dokumente in Japanisch, Englisch, Chinesisch suchen
+===================================================
 
-Einführung
-============
-
-In Unternehmen, die global tätig sind, oder in Organisationen mit Mitarbeitern verschiedener Nationalitäten werden interne Dokumente in mehreren Sprachen erstellt.
-Eine Suchinfrastruktur, die Dokumente in gemischten Sprachen -- wie japanische Sitzungsprotokolle, englische technische Spezifikationen und chinesische Marktberichte -- angemessen durchsuchen kann, ist unerlässlich.
-
-In diesem Artikel gehen wir von einer Umgebung aus, in der Dokumente auf Japanisch, Englisch und Chinesisch nebeneinander existieren, und bauen eine Umgebung auf, in der Dokumente in jeder Sprache korrekt durchsucht werden können.
-
-Zielgruppe
+Einleitung
 ==========
 
-- Administratoren von Organisationen, die mehrsprachige Dokumente verwalten
-- Personen, die die Suchqualität für andere Sprachen als Japanisch verbessern möchten
-- Personen, die die Grundlagen von Volltext-Analyzern erlernen möchten
+Wenn japanische Besprechungsprotokolle, englische technische Spezifikationen und chinesische Marktberichte nebeneinander auf demselben Dateiserver oder derselben Intranet-Site liegen, hört man bald Aussagen wie „Englische Dokumente werden gefunden, aber japanische Beugungsformen treffen nicht“, „Ich möchte nur die chinesischen Dokumente durchsuchen“ oder „Ich möchte englischsprachige Unterlagen mit japanischen Begriffen finden“.
 
-Szenario
-========
+Fess kann Dokumente in jeder Sprache ohne besondere Konfiguration durchsuchen.
+Wenn Sie jedoch Wörterbucheinträge hinzufügen, ohne zu wissen, wo welche Sprachanalyse greift, ändern sich die Ergebnisse nicht.
+Dieser Artikel erklärt anhand der tatsächlichen Werte in den Konfigurationsdateien, wie Fess 15.9 mehrsprachige Dokumente indexiert und durchsucht.
+Darauf aufbauend können Sie anschließend Folgendes tun:
 
-Wir gehen von einem Unternehmen mit Standorten in Japan, den USA und China aus.
+- Die für jedes Dokument erkannte Sprache prüfen und die Suche mit ``lang:`` auf eine Sprache eingrenzen
+- Mit ``query.default.languages`` und verwandten Einstellungen festlegen, welche Sprachanalyse bei der Suche verwendet wird
+- Wörterbücher (Synonyme, Kuromoji, Stoppwörter usw.) passend zu den Feldern bearbeiten, auf die sie wirken, und die Änderungen übernehmen
+- Anhand der Suchergebnisse und der ``_analyze``-API bestätigen, dass eine Änderung wirkt
 
-- Standort Japan: Erstellung japanischer Dokumente (Spezifikationen, Sitzungsprotokolle, Berichte)
-- Standort USA: Erstellung englischer Dokumente (technische Dokumente, Präsentationsmaterialien)
-- Standort China: Erstellung chinesischer Dokumente (Marktforschung, Geschäftspartnerinformationen)
-- Gemeinsam: Globale Richtliniendokumente in englischer Sprache
+Wie Sie Verbesserungen anhand von Suchprotokollen vorantreiben, behandelt :doc:`guide-08`.
 
-Das Ziel ist es, eine Umgebung zu schaffen, in der Mitarbeiter an jedem Standort Dokumente unabhängig von der Sprache durchsuchen können.
+So funktioniert die Indexierung: gemeinsame und sprachspezifische Felder
+========================================================================
 
-Grundlagen der mehrsprachigen Suche
-=====================================
+Im Fess-Index werden Fließtext und Titel in zwei Formen gespeichert.
+Definiert ist dies in den mit Fess ausgelieferten Dateien ``fess_indices/fess.json`` (Analyzer) und ``fess_indices/fess/doc.json`` (Mapping).
 
-Sprachverarbeitung in der Volltextsuche
-----------------------------------------
+.. list-table::
+   :header-rows: 1
+   :widths: 28 32 40
 
-Damit eine Volltextsuchmaschine Dokumente durchsuchbar machen kann, muss sie Text in sogenannte ``Token`` (durchsuchbare Einheiten) aufteilen.
-Dieser Vorgang wird als ``Tokenisierung`` bezeichnet.
+   * - Feld
+     - Analyzer
+     - Art der Analyse
+   * - ``content``, ``title``, ``important_content``
+     - ``standard_analyzer`` (bei der Suche ``standard_search_analyzer``)
+     - Gemeinsam für alle Dokumente. Kanji, Hiragana, Katakana und Hangul werden in Einheiten von je zwei Zeichen (Bi-Gramme) zerlegt; außerdem werden englische Stoppwörter entfernt und Stemming angewendet. Synonyme werden nur bei der Suche expandiert
+   * - ``content_ja``, ``title_ja`` usw.
+     - ``japanese_analyzer``
+     - Morphologische Analyse mit Kuromoji. Verben und andere Wörter werden auf ihre Grundform zurückgeführt; Partikeln, Hilfsverben und Symbole werden entfernt
+   * - ``content_en``, ``title_en`` usw.
+     - ``english_analyzer``
+     - Entfernung englischer Stoppwörter und Stemming
+   * - ``content_zh-cn``, ``title_zh-cn`` usw.
+     - ``simplified_chinese_analyzer``
+     - Zerlegt den Text mit einem Tokenizer für Chinesisch in Wörter
+   * - ``content_zh-tw``, ``title_zh-tw`` usw.
+     - ``traditional_chinese_analyzer``
+     - Wandelt traditionelle in vereinfachte Schriftzeichen um und zerlegt den Text dann mit demselben Tokenizer wie bei vereinfachtem Chinesisch
 
-Die Methode der Tokenisierung unterscheidet sich je nach Sprache erheblich.
+Die gemeinsamen Felder hat jedes Dokument.
+Sprachspezifische Felder werden nur angelegt, wenn die Sprache des Dokuments bestimmt wurde.
+Bei der Indexierung wird der Sprachcode in das Feld ``lang`` geschrieben, und die Werte von ``content``, ``important_content`` und ``title`` (``indexer.language.fields``) werden in Felder der Form ``<Feld>_<Sprache>`` wie ``content_ja`` kopiert.
+Einem Dokument wird genau eine Sprache zugeordnet.
 
-**Englisch**: Durch Leerzeichen getrennte Wörter werden direkt zu Token.
-Zusätzlich werden Stemming (z. B. running -> run) und Kleinschreibung angewendet.
+Wie die Sprache eines Dokuments bestimmt wird
+---------------------------------------------
 
-**Japanisch**: Da Wörter nicht durch Leerzeichen getrennt sind, wird ein morphologischer Analysator (wie Kuromoji) verwendet, um den Text in Wörter aufzuteilen.
-Zum Beispiel wird ein Ausdruck wie folgt aufgeteilt: ``Volltextsuchserver`` -> ``Volltext`` ``Such`` ``Server``.
+``lang`` wird in der folgenden Reihenfolge bestimmt.
 
-**Chinesisch**: Wie im Japanischen sind die Wörter nicht durch Leerzeichen getrennt, sodass ein spezieller Tokenizer erforderlich ist. Fess verwendet einen eigenen chinesischen Tokenizer für die Verarbeitung.
+1. Bei HTML aus einem Web-Crawl wird der Wert von ``<html lang="...">`` verwendet (``crawler.document.html.lang.xpath=//HTML/@lang``). Wenn Sie in den „Konfigurationsparameter“ einer Crawl-Konfiguration ``field.xpath.default.lang=<XPath>`` eintragen, ändern Sie nur für diese Konfiguration, woher der Wert gelesen wird
+2. Bei Dokumenten, deren Sprache durch Schritt 1 nicht feststeht, wird sie automatisch aus dem Text erkannt. Dabei werden die ersten 1000 Zeichen (``indexer.language.detect.length``) von ``content``, ``important_content`` und ``title`` in dieser Reihenfolge ausgewertet. Bei Datei-Crawls wird nur der extrahierte Fließtext herangezogen
+3. Wenn die erkannte Sprache nicht in ``supported.languages`` enthalten ist oder sich keine Sprache erkennen lässt, wird kein ``lang`` gesetzt und es werden keine sprachspezifischen Felder angelegt
 
-Mehrsprachige Unterstützung von Fess
----------------------------------------
+Werte wie ``ja-JP`` oder ``zh_CN`` werden einheitlich in Kleinbuchstaben mit Bindestrich (``ja``, ``zh-cn``) gespeichert.
 
-Fess verwendet OpenSearch als Backend und kann die von OpenSearch bereitgestellten mehrsprachigen Analyzer nutzen.
-In der Standardkonfiguration von Fess ist der japanische (Kuromoji) Analyzer aktiviert, es werden jedoch auch andere Sprachen unterstützt.
+Auch Dokumente aus Datenspeichern durchlaufen bei der Indexierung dieselbe automatische Erkennung.
+Setzt ein Skript ``lang`` auf eine in ``supported.languages`` enthaltene Sprache (etwa ``ja``), hat dieser Wert Vorrang vor der automatischen Erkennung.
 
-Fess verfügt über Indexeinstellungen für über 20 Sprachen und bietet eine Funktion, die die Sprache eines Dokuments automatisch erkennt und den entsprechenden Analyzer anwendet.
+So funktioniert die Suche: welche Sprachfelder durchsucht werden
+================================================================
 
-Sprachspezifische Einstellungen
-================================
+Suchbegriffe werden immer in den gemeinsamen Feldern gesucht.
+Zusätzlich werden für jede „Suchsprache“, die bei jeder Suche ermittelt wird, die entsprechenden sprachspezifischen Felder in die Suchbedingung aufgenommen.
+Die Bedingungen der einzelnen Felder sind mit OR verknüpft (``should`` einer ``bool``-Abfrage); ein Dokument erscheint also im Ergebnis, sobald es in einem beliebigen Feld übereinstimmt.
 
-Einstellungen für Japanisch
-------------------------------
+.. list-table::
+   :header-rows: 1
+   :widths: 30 40 30
 
-Japanische Dokumente werden mit dem Kuromoji Analyzer verarbeitet.
-Da Japanisch durch die Standardeinstellungen von Fess angemessen verarbeitet wird, ist keine spezielle zusätzliche Konfiguration erforderlich.
+   * - Feld
+     - Konfigurationsschlüssel
+     - Standardwert
+   * - ``title``
+     - ``query.boost.title``
+     - ``0.5``
+   * - ``content``
+     - ``query.boost.content``
+     - ``0.05``
+   * - ``title_<Suchsprache>``
+     - ``query.boost.title.lang``
+     - ``1.0``
+   * - ``content_<Suchsprache>``
+     - ``query.boost.content.lang``
+     - ``0.1``
 
-Die Suchqualität kann jedoch durch die folgenden Anpassungen verbessert werden.
+Die Suchsprachen werden aus der ersten der folgenden Quellen übernommen, die einen Wert hat.
 
-**Benutzerlexikon**
+1. ``query.default.languages`` in ``fess_config.properties`` (standardmäßig leer). Ist ein Wert gesetzt, werden alle anderen Angaben ignoriert
+2. Der Parameter ``lang`` der Anfrage: die Sprache, die auf der Suchseite unter [Optionen] > „Bevorzugte Sprache“ oder in der erweiterten Suche unter „Bevorzugte Sprache“ gewählt wurde, oder ``lang`` von ``/api/v2/search``
+3. Die Sprache aus dem vom Browser gesendeten Header ``Accept-Language``
 
-Registrieren Sie branchenspezifische Begriffe und interne Terminologie im Wörterbuch.
-Dies kann über die Administrationsoberfläche unter [System] > [Wörterbuch] durch Auswahl des Kuromoji-Wörterbuchs konfiguriert werden.
+Suchen Sie beispielsweise in einem auf Japanisch eingestellten Browser nach „会議“ („Besprechung“), ist die Suchsprache ``ja``, und neben ``content`` wird auch ``content_ja`` durchsucht.
+Englische Dokumente haben kein ``content_ja`` und treffen daher nur über die Bi-Gramme der gemeinsamen Felder.
+Umgekehrt steigt die Bewertung eines japanischen Dokuments, wenn es zusätzlich in ``title_ja`` oder ``content_ja`` übereinstimmt, sodass es eher weiter oben erscheint.
+Da Kuromoji Beugungsformen auf die Grundform zurückführt, findet eine Suche nach „走った“ („lief“) über ``content_ja`` auch japanische Dokumente, in denen „走る“ („laufen“) steht.
 
-Dies ist beispielsweise nützlich, wenn Sie möchten, dass ein zusammengesetzter Begriff als einzelnes Token behandelt wird, anstatt in separate Wörter aufgeteilt zu werden.
+„Bevorzugte Sprache“ schiebt also Dokumente in dieser Sprache nach oben; es ist kein Filter, der Dokumente in anderen Sprachen ausschließt.
 
-**Synonyme**
+Nach Sprache eingrenzen: die ``lang:``-Suche
+============================================
 
-Behandlung von japanischspezifischen Schreibvarianten.
+Um nach Sprache einzugrenzen, geben Sie bei der Suche das Feld ``lang`` an.
+``lang`` ist ein durchsuchbares Keyword-Feld; Sie müssen also nicht für jede Sprache ein Label anlegen.
 
 ::
 
-    サーバー,サーバ
-    データベース,DB,ディービー
-    ユーザー,ユーザ,利用者
+    lang:en meeting
+    lang:ja 会議
+    lang:zh-cn 会议
+    会議 -lang:ja
 
-Einstellungen für Englisch
------------------------------
+Das letzte Beispiel sucht nach „会議“ und schließt dabei als Japanisch erkannte Dokumente aus.
+Über die API schreiben Sie denselben Ausdruck in ``q`` oder hängen ``fields.lang=en`` an (dadurch wird die Bedingung ``lang:"en"`` hinzugefügt).
 
-Englische Dokumente werden durch den mehrsprachigen Index von Fess automatisch mit dem entsprechenden Analyzer verarbeitet.
+::
 
-Englischspezifische Anpassungen umfassen Folgendes.
+    $ curl -s "http://localhost:8080/api/v2/search?q=meeting&fields.lang=en"
 
-**Stoppwörter**
+Dokumente ohne ``lang`` (Dokumente, deren Sprache nicht erkannt werden konnte) treffen auf keine ``lang:``-Bedingung zu.
 
-Gängige englische Stoppwörter (the, a, an, is, are usw.) werden standardmäßig ausgeschlossen. Es können jedoch auch branchenspezifische Stoppwörter hinzugefügt werden.
-
-**Stemmer-Override**
-
-Überschreiben Sie das Stemming bestimmter Wörter.
-Dies kann über die Administrationsoberfläche unter [System] > [Wörterbuch] durch Auswahl des Stemmer-Override-Wörterbuchs konfiguriert werden.
-
-Dies wird beispielsweise verwendet, wenn Fachbegriffe unbeabsichtigte Transformationen erfahren.
-
-Einstellungen für Chinesisch
--------------------------------
-
-Für chinesische Dokumente wird der Fess-eigene chinesische Tokenizer verwendet.
-Im mehrsprachigen Index von Fess werden sowohl vereinfachte als auch traditionelle chinesische Texte korrekt tokenisiert.
-
-Chinesischspezifische Überlegungen umfassen Folgendes.
-
-- Zuordnung zwischen vereinfachten und traditionellen chinesischen Zeichen
-- Suchunterstützung über Pinyin-Eingabe
-- Chinesischspezifische Synonymeinstellungen
-
-Sucherlebnis in einer mehrsprachigen Umgebung
-==============================================
-
-Überlegungen zur Such-UI
+Die erkannte Sprache prüfen
 ---------------------------
 
-In einer mehrsprachigen Umgebung muss auch die Such-UI an die Sprache des Benutzers angepasst werden.
+Prüfen Sie, bevor Sie Wörterbücher oder Einstellungen ändern, welche Sprache Ihren Dokumenten zugeordnet ist.
 
-Fess verfügt über eine Funktion, die die UI-Sprache automatisch basierend auf den Spracheinstellungen des Browsers umschaltet.
-Die Suchoberfläche wird in mehreren Sprachen bereitgestellt, darunter Japanisch, Englisch und Chinesisch.
+1. Suchen Sie auf der Suchseite nacheinander nach ``lang:ja``, ``lang:en``, ``lang:zh-cn`` und ``lang:zh-tw`` und vergleichen Sie die Trefferzahlen. Über die API finden Sie die Anzahl in ``response.record_count``
 
-Überlegungen zur sprachübergreifenden Suche
------------------------------------------------
+   ::
 
-Es besteht auch der Bedarf an sprachübergreifender Suche, z. B. ``englische Dokumente mit japanischen Suchbegriffen finden``.
-Derzeit unterstützt Fess allein keine vollständig automatische übersetzungsbasierte Suche, aber die folgenden Methoden können diesen Bedarf teilweise abdecken.
+       $ curl -s "http://localhost:8080/api/v2/search?q=lang:zh-cn&num=1"
 
-**Mehrsprachige Synonymeinstellungen**
+2. Einzelne Dokumente suchen Sie in der Verwaltungsoberfläche unter [Systeminformationen] > [Suche] etwa anhand der URL und öffnen sie; den Wert sehen Sie im Feld ``lang``
 
-Registrieren Sie Übersetzungen zwischen Japanisch und Englisch als Synonyme.
+Weicht die Erkennung von Ihren Erwartungen ab, prüfen Sie die folgenden Punkte.
+
+- ``<html lang>`` im HTML hat Vorrang vor der automatischen Erkennung. Gibt die Vorlage der Site auch auf japanischen Seiten ``lang="en"`` aus, werden diese Seiten als Englisch behandelt
+- Chinesisch ohne Region, etwa ``<html lang="zh">``, wird zu ``zh``. Für ``zh`` gibt es kein sprachspezifisches Feld mit einem Analyzer für Chinesisch, daher beschränkt sich die chinesische Analyse auf die Bi-Gramme der gemeinsamen Felder
+- Kurze japanische Dokumente mit vielen Kanji und wenig Kana werden mitunter als ``zh-cn`` o. Ä. erkannt
+
+Es gibt auch Einstellungen, die alle HTML-Dokumente bzw. alle Dateien als eine einzige Sprache behandeln.
+Wenn Sie ``crawler.document.html.default.lang`` und ``crawler.document.file.default.lang`` einen Wert geben, werden weder ``<html lang>`` noch die automatische Erkennung verwendet, und die Sprache ist für alle Crawls in Fess auf diesen Wert festgelegt.
+In einer Umgebung mit Dokumenten in gemischten Sprachen lassen Sie diese Einstellungen leer.
+
+Die Suchsprachen festlegen: ``query.default.languages``
+=======================================================
+
+Standardmäßig richtet sich die Suchsprache nach der Browsersprache des jeweiligen Benutzers.
+Sucht etwa ein Mitarbeiter mit englischem Browser nach japanischen Dokumenten, wird ``content_ja`` nicht verwendet, und die Reihenfolge der Ergebnisse unterscheidet sich von Benutzer zu Benutzer.
+Wenn Sie das vermeiden möchten, legen Sie die Suchsprachen mit ``query.default.languages`` fest.
 
 ::
 
-    会議,meeting,ミーティング
-    報告書,report,レポート
-    仕様書,specification,スペック
+    query.default.languages=ja,en,zh-cn,zh-tw
 
-Dadurch werden bei einer Suche nach dem japanischen Wort für ``Meeting`` auch englische Dokumente gefunden, die ``meeting`` enthalten.
+In diesem Beispiel werden alle vier sprachspezifischen Felder in die Suchbedingung aufgenommen, unabhängig davon, wer in welcher Sprache sucht.
+Jedes Dokument hat nur ein Feld für seine eigene Sprache, daher profitieren Dokumente aller Sprachen unter denselben Bedingungen von der sprachspezifischen Analyse.
+Im Gegenzug hat das Hochstufen einer bestimmten Sprache über „Bevorzugte Sprache“ keine Wirkung mehr.
+Bestehen Ihre Dokumente überwiegend aus Japanisch, können Sie auch nur eine Sprache angeben, etwa ``query.default.languages=ja``.
 
-**Sprachfilterung mit Labels**
+Tragen Sie die Einstellung in ``fess_config.properties`` ein und starten Sie Fess neu.
+Die Datei liegt bei der ZIP-Version unter ``app/WEB-INF/classes/fess_config.properties``, bei den RPM/DEB-Versionen unter ``/etc/fess/fess_config.properties``.
+Bei Docker fügen Sie sie als JVM-Option unter ``environment`` von ``fess01`` in ``compose.yaml`` hinzu und erstellen den Container neu.
 
-Richten Sie Labels für jede Sprache ein, damit Benutzer den Sprachbereich ihrer Suche auswählen können.
+::
 
-- ``lang-ja``: Japanische Dokumente
-- ``lang-en``: Englische Dokumente
-- ``lang-zh``: Chinesische Dokumente
+    - "FESS_JAVA_OPTS=-Dfess.config.query.default.languages=ja,en,zh-cn,zh-tw"
 
-Best Practices für die Wörterbuchverwaltung
-===============================================
+``FESS_JAVA_OPTS`` wird an Leerzeichen aufgetrennt, verwenden Sie im Wert daher keine Leerzeichen.
+Beim Neuerstellen des Containers gehen Einstellungen, die unter [System] > [Allgemein] geändert wurden, zusammen mit ``system.properties`` im Container verloren (:doc:`guide-02`).
 
-In einer mehrsprachigen Umgebung hat die Wörterbuchverwaltung einen erheblichen Einfluss auf die Suchqualität.
+Wie stark Treffer in sprachspezifischen Feldern gewichtet werden, stellen Sie mit ``query.boost.title.lang`` und ``query.boost.content.lang`` ein.
+Vergleichen Sie nach einer Änderung die Reihenfolge der Suchergebnisse anhand der Schritte unter „Überprüfen“ weiter unten.
 
-Wörterbuchpflege nach Sprache
---------------------------------
+Wörterbücher je nach Sprache einsetzen
+======================================
 
-.. list-table:: Punkte zur Wörterbuchpflege
+Wörterbücher bearbeiten Sie unter [System] > [Wörterbuch].
+Jedes Wörterbuch wirkt auf bestimmte Felder; wählen Sie nicht das Wörterbuch, das auf das gewünschte Feld wirkt, ändern sich die Suchergebnisse nicht.
+
+.. list-table::
    :header-rows: 1
-   :widths: 20 40 40
+   :widths: 24 36 40
 
-   * - Wörterbuch
-     - Japanisch
-     - Englisch / Chinesisch
-   * - Synonyme
-     - Schreibvarianten, Abkürzungen, Fachbegriffe
-     - Abkürzungserweiterung, Synonyme
-   * - Stoppwörter
-     - Branchenspezifische überflüssige Wörter
-     - Domänenspezifische überflüssige Wörter
-   * - Benutzerlexikon
-     - Interne Begriffe, Produktnamen
-     - (Kuromoji-spezifisch)
-   * - Protwords (Geschützte Wörter)
-     - Wörter, die nicht gestemmt werden sollen
-     - Fachbegriffe, Eigennamen
+   * - Wörterbuch (Datei)
+     - Wirkt auf
+     - Einsatz in einer mehrsprachigen Umgebung
+   * - Synonyme (``synonym.txt``)
+     - ``content``, ``title`` (nur bei der Suche)
+     - Sprachübergreifende Umschreibungen („会議“ und „meeting“) und Schreibvarianten. Wirkt nicht auf sprachspezifische Felder
+   * - Kuromoji (``ja/kuromoji.txt``)
+     - Nur ``_ja``-Felder
+     - Interne Begriffe und Produktnamen als ein japanisches Wort behandeln lassen
+   * - Stoppwörter (``ja/stopwords.txt``)
+     - Nur ``_ja``-Felder
+     - Wörter, die bei japanischen Dokumenten nicht für die Suche verwendet werden sollen
+   * - Stoppwörter (``en/stopwords.txt``)
+     - ``content``, ``title`` und ``_en``-Felder
+     - Überflüssige englische Wörter. Da sie auf die gemeinsamen Felder wirken, betreffen sie Dokumente aller Sprachen
+   * - Protwords (``en/protwords.txt``)
+     - ``content``, ``title`` und ``_en``-Felder
+     - Englische Wörter, die nicht gestemmt werden sollen (etwa Produktnamen)
+   * - Stemmer-Überschreibung (``en/stemmer_override.txt``)
+     - ``content``, ``title`` und ``_en``-Felder
+     - Das Ergebnis des englischen Stemmings vorgeben
+   * - Zuordnung (``mapping.txt``)
+     - ``content``, ``title``
+     - Zeichenersetzung. ``ja/mapping.txt`` ist eine separate Datei für die ``_ja``-Felder
 
-Regelmäßige Wörterbuchpflege
----------------------------------
+Ein Wörterbuch geschützter Wörter (Protwords) für Japanisch gibt es nicht.
+Der Grund ist, dass ``japanese_analyzer`` keinen Filter hat, der geschützte Wörter liest.
+Für die Felder für vereinfachtes und traditionelles Chinesisch gibt es kein Benutzerwörterbuch, das sich in der Verwaltungsoberfläche bearbeiten lässt (die Stoppwörter liegen in ``zh-cn/stopwords.txt`` bzw. ``zh-tw/stopwords.txt``).
 
-Wörterbücher sind nicht etwas, das man einmal einrichtet und dann vergisst; sie müssen regelmäßig überprüft werden.
+Sprachübergreifende Synonyme
+----------------------------
 
-- Neue Produkt- und Projektnamen hinzufügen
-- Nicht mehr verwendete Begriffe bereinigen
-- Neue Synonymkandidaten aus Suchprotokollen hinzufügen
+Um englische Dokumente mit japanischen Begriffen zu finden, registrieren Sie die Übersetzungen als Synonyme.
+Im Format der hochzuladenden Datei stehen bedeutungsgleiche Wörter kommagetrennt in einer Zeile.
 
-Kombinieren Sie dies mit dem in Teil 8 vorgestellten Zyklus zur Optimierung der Suchqualität, um Wörterbücher kontinuierlich zu pflegen.
+::
+
+    会議,ミーティング,meeting
+    見積,quotation
+
+Synonyme werden bei der Suche in den gemeinsamen Feldern expandiert, daher ist kein erneutes Crawlen nötig.
+Regeln für die Registrierung, etwa Hiragana als Katakana und Vollbreiten-Alphanumerik als Halbbreite zu erfassen, finden Sie unter `Synonym-Wörterbuch <https://fess.codelibs.org/de/stable/admin/synonym-guide.html>`__.
+
+Kuromoji-Benutzerwörterbuch
+---------------------------
+
+Im Kuromoji-Wörterbuch registrieren Sie ein Token, seine zerlegten Tokens, seine Lesung (in Katakana) und seine Wortart.
+Damit ein interner Begriff oder Produktname, den Kuromoji zu fein zerlegt, als ein Wort behandelt wird, tragen Sie dasselbe Wort als Token und als zerlegte Tokens ein.
+
+::
+
+    東京スカイツリー,東京スカイツリー,トウキョウスカイツリー,カスタム名詞
+
+Dieses Wörterbuch wirkt nur auf die ``_ja``-Felder.
+Das gemeinsame Feld ``content`` wird in Bi-Gramme zerlegt, daher ändern sich Treffer in ``content`` nicht, wenn Sie das Kuromoji-Wörterbuch ändern.
+Eine Wirkung zeigt sich nur bei Suchen, deren Suchsprachen ``ja`` enthalten, und nur bei Dokumenten, die als Japanisch erkannt wurden.
+
+Wörterbuchänderungen übernehmen
+-------------------------------
+
+Allein durch das Speichern eines Wörterbuchs ändern sich die Suchergebnisse nicht.
+
+1. Öffnen Sie [Systeminformationen] > [Wartung] und klicken Sie unter „Dokumentenindex neu laden“ auf [Neu laden]. Der Index wird geschlossen und wieder geöffnet; währenddessen liefern Suchen Fehler oder 0 Treffer. Führen Sie dies zu einer Zeit mit geringer Nutzung aus
+2. Synonyme werden nur bei der Suche verwendet, daher sind sie nach dem Neuladen bereits übernommen
+3. Die übrigen Wörterbücher (Kuromoji, Zuordnung, Stoppwörter, Protwords, Stemmer-Überschreibung) ändern auch die Analyse beim Aufbau des Index. Bereits indexierte Dokumente bleiben mit dem alten Wörterbuch analysiert; crawlen Sie die betroffenen Inhalte daher erneut
+
+Ist beim erneuten Crawlen „Letzte Änderung prüfen“ unter [System] > [Allgemein] aktiviert (Standard), werden nicht aktualisierte Dateien und Seiten nicht erneut abgerufen.
+Deaktivieren Sie die Option vorübergehend, führen Sie den Crawl aus und aktivieren Sie sie danach wieder.
+
+Überprüfen
+==========
+
+Token-Grenzen mit der ``_analyze``-API ansehen
+----------------------------------------------
+
+Am zuverlässigsten prüfen Sie, ob eine Wörterbuchänderung übernommen wurde, indem Sie mit der ``_analyze``-API von OpenSearch dieselbe Zeichenfolge durch die Analyzer des gemeinsamen Felds und des japanischen Felds schicken und die Ergebnisse vergleichen.
+In der Docker-Umgebung aus :doc:`guide-02` ist OpenSearch über Port 9200 des Hosts erreichbar.
+
+::
+
+    $ curl -s -X POST "http://localhost:9200/fess.search/_analyze" \
+        -H "Content-Type: application/json" \
+        -d '{"analyzer":"japanese_analyzer","text":"全文検索エンジンを導入した"}'
+
+    $ curl -s -X POST "http://localhost:9200/fess.search/_analyze" \
+        -H "Content-Type: application/json" \
+        -d '{"analyzer":"standard_analyzer","text":"全文検索エンジンを導入した"}'
+
+Mit ``japanese_analyzer`` wird der Text in Wörter zerlegt, und „を“ und „た“ werden entfernt.
+Mit ``standard_analyzer`` wird er in Einheiten von je zwei Zeichen wie „全文“, „文検“ und „検索“ zerlegt.
+Nachdem Sie „東京スカイツリー“ im Kuromoji-Wörterbuch registriert und neu geladen haben, liefert ``japanese_analyzer`` für dieses Wort ein einziges Token.
+Ein registriertes Synonym prüfen Sie, indem Sie „会議“ mit ``"analyzer":"standard_search_analyzer"`` analysieren und bestätigen, dass ein aus „meeting“ erzeugtes Token (gestemmt zu ``meet``) erscheint.
+
+In den Suchergebnissen prüfen
+-----------------------------
+
+1. Suchen Sie auf der Suchseite nach einem Wort, das sowohl in japanischen als auch in englischen Dokumenten vorkommt
+2. Wechseln Sie unter [Optionen] die „Bevorzugte Sprache“ zwischen „Japanisch“ und „Englisch“ und prüfen Sie, dass sich die Sprache der obersten Dokumente ändert. Wenn Sie ``query.default.languages`` gesetzt haben, prüfen Sie, dass sich die Reihenfolge beim Wechseln nicht ändert
+3. Prüfen Sie nach dem Registrieren von Übersetzungssynonymen und dem Neuladen, dass ``lang:en 会議`` englische Dokumente findet
+4. Suchen Sie nach dem Ändern des Kuromoji-Wörterbuchs und erneutem Crawlen nach dem registrierten Wort und prüfen Sie, dass japanische Dokumente gefunden werden, die es enthalten. Dass sich die Zerlegung selbst geändert hat, prüfen Sie mit ``_analyze`` wie oben beschrieben
+
+Ändern sich die Ergebnisse nicht, gleichen Sie die Spalte „Wirkt auf“ der Wörterbuchtabelle mit dem ``lang`` des Dokuments ab.
+Fügen Sie beispielsweise ``en/stopwords.txt`` ein japanisches Wort mit drei oder mehr Zeichen hinzu, hat das keine Wirkung, weil der Text in den gemeinsamen Feldern zu Tokens aus je zwei Zeichen wird und das Wort nie übereinstimmt.
 
 Zusammenfassung
-================
+===============
 
-In diesem Artikel haben wir den Aufbau einer Suchinfrastruktur in einer Umgebung erläutert, in der japanische, englische und chinesische Dokumente koexistieren.
+- Jedes Dokument ist über die gemeinsamen Felder (``content``, ``title``) durchsuchbar, die Bi-Gramme und englisches Stemming anwenden
+- Die erkannte Sprache in ``lang`` und die sprachspezifischen Felder (etwa ``content_ja``) ergänzen eine zur Sprache passende Analyse
+- Die Suchsprachen werden in der Reihenfolge ``query.default.languages``, ``lang`` der Anfrage und Browsersprache bestimmt; sie schieben Dokumente nach oben, statt sie zu filtern
+- Um nach Sprache einzugrenzen, geben Sie das Feld ``lang`` an, etwa ``lang:en``
+- Bearbeiten Sie das Wörterbuch, das auf das gewünschte Feld wirkt, und übernehmen Sie die Änderung durch Neuladen des Dokumentenindex und bei Bedarf durch erneutes Crawlen
 
-- Verständnis der unterschiedlichen Tokenisierungsprozesse für jede Sprache
-- Mehrsprachiger Index und Analyzer-Einstellungen von Fess
-- Anpassungen für Japanisch (Kuromoji), Englisch und Chinesisch
-- Unterstützung der sprachübergreifenden Suche durch mehrsprachige Synonyme
-- Best Practices für die Wörterbuchverwaltung
+Weiterführende Artikel
+======================
 
-Mehrsprachige Unterstützung ist nicht etwas, das mit einer einmaligen Konfiguration abgeschlossen werden kann; eine kontinuierliche Verbesserung basierend auf den Nutzungsmustern ist wichtig.
-
-Im nächsten Artikel behandeln wir den stabilen Betrieb von Suchsystemen.
+- Verbesserungspunkte in Suchprotokollen finden und mit Synonymen und Schlüsselübereinstimmungen beheben: :doc:`guide-08`
+- Interne Websites und Dateiserver gemeinsam crawlen: :doc:`guide-04`
+- Dokumente mit ähnlicher Bedeutung finden, auch wenn die Stichwörter nicht übereinstimmen: :doc:`guide-18`
+- Die Such-API aus Geschäftsanwendungen aufrufen: :doc:`guide-11`
 
 Referenzen
 ==========
 
-- `Fess Wörterbuchverwaltung <https://fess.codelibs.org/ja/15.5/admin/dict.html>`__
-
-- `OpenSearch Analyzer <https://opensearch.org/docs/latest/analyzers/>`__
+- `Wörterbuch <https://fess.codelibs.org/de/stable/admin/dict-guide.html>`__
+- `Kuromoji-Wörterbuch <https://fess.codelibs.org/de/stable/admin/kuromoji-guide.html>`__
+- `Synonym-Wörterbuch <https://fess.codelibs.org/de/stable/admin/synonym-guide.html>`__
+- `Stoppwort-Wörterbuch <https://fess.codelibs.org/de/stable/admin/stopwords-guide.html>`__
+- `Wartung <https://fess.codelibs.org/de/stable/admin/maintenance-guide.html>`__
+- `Suchbezogene Konfigurationen (Standardsprache für die Suche) <https://fess.codelibs.org/de/stable/config/search-advanced.html>`__
+- `Erweiterte Crawler-Konfiguration <https://fess.codelibs.org/de/stable/config/crawler-advanced.html>`__
+- `Feldsuche <https://fess.codelibs.org/de/stable/user/search-field.html>`__
+- `Such-API <https://fess.codelibs.org/de/stable/api/api-search.html>`__

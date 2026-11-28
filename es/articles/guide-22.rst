@@ -1,326 +1,359 @@
-========================================================================================
-Parte 22: Dibujando un mapa de conocimiento organizacional a partir de datos de búsqueda
-========================================================================================
+==============================================
+Registros de búsqueda en OpenSearch Dashboards
+==============================================
 
 Introducción
-=============
-
-Un sistema de búsqueda es una herramienta para "encontrar" información, pero los propios registros de búsqueda también son una valiosa fuente de información.
-"¿Qué se busca?", "¿Qué no se puede encontrar?", "¿Qué información se consulta con frecuencia?" -- estos datos sirven como un espejo que refleja las necesidades de información y las brechas de conocimiento de la organización.
-
-En este artículo, combinamos los registros de búsqueda de Fess con OpenSearch Dashboards para construir un panel de análisis que visualiza el estado de utilización del conocimiento en la organización.
-
-Público objetivo
-=================
-
-- Personas que desean comprender cuantitativamente cómo se utiliza su sistema de búsqueda
-- Personas que desean recopilar datos para estrategias de utilización de la información
-- Personas que desean aprender las operaciones básicas de OpenSearch Dashboards
-
-El valor de los datos de búsqueda
-==================================
-
-Lo que los registros de búsqueda pueden revelar
--------------------------------------------------
-
-Los registros de búsqueda son un tipo de datos poco común que permite comprender cuantitativamente las necesidades de información de una organización.
-
-.. list-table:: Información obtenida de los datos de búsqueda
-   :header-rows: 1
-   :widths: 30 70
-
-   * - Datos
-     - Información
-   * - Palabras clave de búsqueda
-     - Que buscan los empleados (necesidades de información)
-   * - Consultas sin resultados
-     - Información que falta en la organización (brechas de conocimiento)
-   * - Registros de clics
-     - Que resultados de búsqueda fueron útiles (valor del contenido)
-   * - Frecuencia de búsqueda en el tiempo
-     - Cambios en las necesidades de información (tendencias)
-   * - Palabras populares
-     - Temas de interés en toda la organización
-
-Datos recopilados por Fess
-============================
-
-Fess recopila y almacena automáticamente los siguientes datos.
-
-Registros de búsqueda (``fess_log.search_log``)
--------------------------------------------------
-
-Se pueden consultar en la consola de administración en [Información del sistema] > [Registro de búsqueda].
-Se almacenan en el índice de OpenSearch ``fess_log.search_log``.
-
-Campos principales:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15 60
-
-   * - Nombre del campo
-     - Tipo
-     - Descripción
-   * - ``searchWord``
-     - keyword
-     - Palabra clave de búsqueda
-   * - ``requestedAt``
-     - date
-     - Fecha y hora de la búsqueda
-   * - ``hitCount``
-     - long
-     - Número de resultados de búsqueda (0 indica una consulta sin resultados)
-   * - ``queryTime``
-     - long
-     - Tiempo de ejecución de la consulta (milisegundos)
-   * - ``responseTime``
-     - long
-     - Tiempo total de respuesta (milisegundos)
-   * - ``userAgent``
-     - keyword
-     - Agente de usuario
-   * - ``clientIp``
-     - keyword
-     - Dirección IP del cliente
-   * - ``accessType``
-     - keyword
-     - Tipo de acceso (web, json, gsa, admin, etc.)
-   * - ``queryId``
-     - keyword
-     - ID de consulta (utilizado para vincular con registros de clics)
-
-Registros de clics (``fess_log.click_log``)
----------------------------------------------
-
-Son registros de cuando se hace clic en los enlaces de los resultados de búsqueda.
-Se almacenan en el índice de OpenSearch ``fess_log.click_log``.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 15 60
-
-   * - Nombre del campo
-     - Tipo
-     - Descripción
-   * - ``url``
-     - keyword
-     - URL clicada
-   * - ``queryId``
-     - keyword
-     - queryId del registro de búsqueda (identifica que búsqueda llevo al clic)
-   * - ``order``
-     - integer
-     - Posición de visualización en los resultados de búsqueda
-   * - ``requestedAt``
-     - date
-     - Fecha y hora del clic
-   * - ``docId``
-     - keyword
-     - ID del documento
-
-Palabras populares
--------------------
-
-Las palabras populares que se muestran en la pantalla de búsqueda se agregan a partir de los registros de búsqueda en el índice suggest de Fess.
-Las consultas que superan un cierto número de resultados de búsqueda se clasifican según el número de búsquedas.
-
-Visualización con OpenSearch Dashboards
-=========================================
-
-Dado que los registros de búsqueda de Fess se almacenan en OpenSearch, es posible realizar una visualización avanzada utilizando OpenSearch Dashboards.
-
-Configuración de OpenSearch Dashboards
-----------------------------------------
-
-Agregue OpenSearch Dashboards a su configuración de Docker Compose.
-
-.. code-block:: yaml
-
-    services:
-      opensearch-dashboards:
-        image: public.ecr.aws/opensearchproject/opensearch-dashboards:3.6.0
-        ports:
-          - "5601:5601"
-        environment:
-          OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
-          DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
-
-Acceda a ``http://localhost:5601`` para utilizar la interfaz de Dashboards.
-
-Creación de patrones de índice
---------------------------------
-
-Para visualizar los datos de registro de Fess en OpenSearch Dashboards, primero debe crear patrones de índice.
-
-1. Acceda a Dashboards y seleccione [Stack Management] > [Index Patterns] en el menú izquierdo
-2. Haga clic en [Create index pattern]
-3. Cree los siguientes patrones de índice
-
-.. list-table::
-   :header-rows: 1
-   :widths: 35 25 40
-
-   * - Patrón de índice
-     - Campo de tiempo
-     - Propósito
-   * - ``fess_log.search_log``
-     - ``requestedAt``
-     - Análisis de registros de búsqueda
-   * - ``fess_log.click_log``
-     - ``requestedAt``
-     - Análisis de registros de clics
-
-Diseño del panel
-==================
-
-Diseñe el panel con las siguientes perspectivas analíticas.
-Cree cada visualización desde [Visualize] en el menú izquierdo y combínelas en un [Dashboard].
-
-Resumen del uso de búsqueda
------------------------------
-
-**Tendencia diaria de búsquedas**
-
-Comprenda como cambia el uso de la búsqueda a lo largo del tiempo.
-
-- Patrón de índice: ``fess_log.search_log``
-- Visualización: Line (gráfico de líneas)
-- Eje X: Date Histogram (campo: ``requestedAt``, intervalo: 1d)
-- Eje Y: Count
-
-Si el uso aumenta, es evidencia de que el sistema de búsqueda se ha consolidado; si disminuye, se necesitan mejoras.
-
-**Búsquedas por hora del día**
-
-Comprenda en que momentos del día se realizan más búsquedas.
-
-- Visualización: Vertical Bar (gráfico de barras)
-- Eje X: Date Histogram (campo: ``requestedAt``, intervalo: 1h)
-- Eje Y: Count
-
-Si las búsquedas son frecuentes al inicio de la jornada laboral o después del almuerzo, indica que la recopilación de información se ha convertido en una parte establecida del trabajo diario.
-
-Análisis de la calidad de búsqueda
-------------------------------------
-
-**Tendencia de la tasa de consultas sin resultados**
-
-La tasa de consultas sin resultados es un indicador importante de la calidad de búsqueda.
-Los registros donde el campo ``hitCount`` en el registro de búsqueda es ``0`` corresponden a consultas sin resultados.
-
-- Patrón de índice: ``fess_log.search_log``
-- Filtro: Agregar ``hitCount: 0`` para extraer consultas sin resultados
-- Visualización: Line (gráfico de líneas)
-- Eje X: Date Histogram (campo: ``requestedAt``, intervalo: 1d)
-- Eje Y: Count
-
-Si la tasa de consultas sin resultados es alta, es necesario agregar sinónimos o ampliar el alcance del rastreo (véase la Parte 8).
-
-Tenga en cuenta que también puede ver una lista de consultas sin resultados en la consola de administración en [Información del sistema] > [Registro de búsqueda].
-
-**Nube de palabras de consultas sin resultados**
-
-Mostrar las consultas sin resultados como una nube de palabras proporciona una visión rápida de que información falta.
-
-- Filtro: ``hitCount: 0``
-- Visualización: Tag Cloud
-- Campo: Terms Aggregation (campo: ``searchWord``, tamaño: 50)
-
-Análisis del valor del contenido
-----------------------------------
-
-**Resultados de búsqueda más clicados**
-
-Los resultados de búsqueda que reciben clics con frecuencia representan contenido de alto valor para la organización.
-
-- Patrón de índice: ``fess_log.click_log``
-- Visualización: Data Table
-- Campo: Terms Aggregation (campo: ``url``, tamaño: 20, orden: Count descendente)
-
-Priorice el mantenimiento y la actualización de estos contenidos.
-
-**Distribución de posiciones de clic**
-
-Revise la distribución de en que posición de los resultados de búsqueda se hace clic.
-
-- Patrón de índice: ``fess_log.click_log``
-- Visualización: Vertical Bar (gráfico de barras)
-- Eje X: Histogram (campo: ``order``, intervalo: 1)
-- Eje Y: Count
-
-Si las posiciones 1-3 reciben la mayoría de los clics, la calidad de búsqueda es buena; si las posiciones 10 en adelante reciben muchos clics, se necesitan mejoras en el ranking.
-
-Análisis de tendencias en las necesidades de información
-----------------------------------------------------------
-
-**Ranking de palabras clave populares**
-
-Comprenda en qué está interesada la organización en su conjunto.
-
-- Patrón de índice: ``fess_log.search_log``
-- Visualización: Data Table
-- Campo: Terms Aggregation (campo: ``searchWord``, tamaño: 20, orden: Count descendente)
-
-Los cambios en las palabras clave populares reflejan los cambios en los desafíos e intereses de la organización.
-
-Aprovechamiento de los resultados del análisis
-=================================================
-
-Los resultados del análisis de datos de búsqueda pueden aplicarse a las siguientes iniciativas.
-
-Estrategia de contenido
--------------------------
-
-- **Consultas sin resultados**: Identificar contenido faltante y solicitar su creación
-- **Palabras clave populares**: Enriquecer la información sobre temas buscados con frecuencia
-- **Resultados con baja tasa de clics**: Considerar la mejora o eliminación del contenido
-
-Mejora de la calidad de búsqueda
-----------------------------------
-
-- **Agregar sinónimos**: Descubrir candidatos a sinónimos a partir de consultas sin resultados
-- **Configuración de Key Match**: Establecer resultados óptimos para consultas populares
-- **Ajuste de Boost**: Mejorar los rankings basándose en las tasas de clics
-
-Decisiones de inversión en TI
--------------------------------
-
-- **Aumento del uso**: Planificar la ampliación de recursos del servidor
-- **Nuevas necesidades de información**: Considerar la conexión de fuentes de datos adicionales
-- **Necesidades de funciones de IA**: Decidir sobre la introducción del modo de búsqueda con IA (véase la Parte 19)
-
-Creación de informes periódicos
-=================================
-
-Resuma los resultados del análisis en informes periódicos y compártalos con las partes interesadas.
-
-Ejemplo de elementos del informe mensual
--------------------------------------------
-
-1. Resumen del uso de búsqueda (total de búsquedas, comparación con el mes anterior)
-2. Tendencia de la tasa de consultas sin resultados y estado de mejora
-3. Top 10 de palabras clave populares
-4. Brechas de conocimiento recién descubiertas
-5. Medidas de mejora implementadas y sus efectos
-6. Planes de mejora para el próximo mes
-
-Conclusión
-===========
-
-En este artículo, explicamos cómo visualizar la utilización del conocimiento organizacional mediante registros de búsqueda.
-
-- Información obtenida de los registros de búsqueda (necesidades de información, brechas de conocimiento, valor del contenido)
-- Construcción de paneles de visualización con OpenSearch Dashboards
-- Aplicación de los resultados del análisis a la estrategia de contenido, mejora de la calidad de búsqueda e inversiones en TI
-- Mejora continua a través de informes periódicos
-
-Los datos de búsqueda son un activo valioso para dibujar un "mapa de conocimiento organizacional."
-Con esto concluye la sección de IA y búsqueda de próxima generación. En la próxima y última entrega, presentaremos un resumen general de la serie.
-
-Referencias
 ============
 
-- `Registro de búsqueda de Fess <https://fess.codelibs.org/ja/15.5/admin/searchlog.html>`__
+En Fess 15.9, [Información del sistema] > [Registro de búsqueda] de la pantalla de administración muestra la tasa de cero resultados, la tasa de clics, la distribución de posiciones de clic, los tiempos de respuesta, el número de búsquedas por día de la semana y por hora, y el número de búsquedas por rol y por grupo.
+Cada tabla se puede descargar en formato CSV.
+El proceso de encontrar términos de búsqueda problemáticos y corregirlos con sinónimos o coincidencias de clave se explica en :doc:`guide-08`.
 
-- `OpenSearch Dashboards <https://opensearch.org/docs/latest/dashboards/>`__
+Sin embargo, esta pantalla no permite agregaciones como las siguientes:
+
+- Tendencias en periodos de más de 366 días (el periodo "Personalizado" de la pantalla tiene un máximo de 366 días)
+- Qué términos no obtienen resultados, desglosados por rol o por etiqueta
+- Qué URL se abrieron realmente para cada término de búsqueda
+- Un panel con gráficos según los criterios que usted elija
+
+Los registros de búsqueda y de clics se guardan en índices de OpenSearch, por lo que puede agregarlos directamente desde OpenSearch Dashboards.
+En este artículo se inicia OpenSearch Dashboards con los archivos Compose de docker-fess, se importa el panel incluido en Fess, se revisan los campos de los registros y, por último, se crean las cuatro agregaciones mencionadas.
+
+Antes de empezar: restricción del acceso
+========================================
+
+En docker-fess, OpenSearch Dashboards funciona sin el plugin de seguridad, igual que OpenSearch.
+Cualquier persona que llegue al puerto 5601 puede leer, sin iniciar sesión, todos los campos de los registros de búsqueda (ID de usuario, direcciones IP, etc.).
+Además, desde Dev Tools puede modificar o eliminar cualquier índice, incluidos los índices de Fess con los usuarios y la configuración.
+
+Por eso, haga que el puerto 5601 (y el 9200) solo sea accesible desde los equipos de los administradores.
+Si quiere mostrar las estadísticas de los registros de búsqueda a personas que no son administradores, no publique OpenSearch Dashboards; en su lugar, cree en Fess un rol llamado ``admin-searchlog-view`` en [Usuario] > [Rol] y asígnelo a esas personas.
+Con este rol se puede consultar [Información del sistema] > [Registro de búsqueda], pero no eliminar registros.
+
+Inicio de OpenSearch Dashboards
+===============================
+
+Añada los archivos para Dashboards al directorio donde colocó ``compose.yaml`` y ``compose-opensearch3.yaml`` siguiendo :doc:`guide-02`.
+``compose-dashboards3.yaml`` construye su imagen a partir del Dockerfile del directorio ``dashboards/``, por lo que se necesitan tres archivos.
+
+::
+
+    $ cd fess-docker
+    $ curl -LO https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/compose-dashboards3.yaml
+    $ mkdir dashboards
+    $ curl -L -o dashboards/Dockerfile https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/dashboards/Dockerfile
+    $ curl -L -o dashboards/opensearch_dashboards.yml https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/dashboards/opensearch_dashboards.yml
+
+Inicie especificando los tres archivos Compose.
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml -f compose-dashboards3.yaml up -d
+
+En el primer ``up`` se construye, a partir de ``opensearch-dashboards:3.9.0``, una imagen sin el plugin ``securityDashboards``.
+El contenedor se conecta a ``OPENSEARCH_HOSTS='["http://search01:9200"]'`` en la red ``search_net`` y publica el puerto 5601.
+
+Abra ``http://localhost:5601`` en el navegador; si aparece la página de inicio, ya está en marcha.
+Para detenerlo o comprobar su estado, especifique también los tres archivos con ``-f``.
+Los objetos guardados, como los paneles, se almacenan en el índice ``.kibana`` de OpenSearch, de modo que si elimina los volúmenes con ``down -v`` también se borran.
+
+Importación del panel incluido
+==============================
+
+Fess incluye una definición de panel para los registros de búsqueda, ``fess_log.ndjson``.
+Con Docker, cópiela desde el contenedor.
+En la versión ZIP se encuentra en ``extension/kibana/fess_log.ndjson`` del directorio descomprimido.
+
+::
+
+    $ docker cp fess01:/usr/share/fess/extension/kibana/fess_log.ndjson .
+
+También puede obtener el mismo archivo desde GitHub en ``https://raw.githubusercontent.com/codelibs/fess/fess-15.9.0/src/main/assemblies/extension/kibana/fess_log.ndjson``.
+
+1. Abra [Dashboards Management] en el menú de la izquierda y seleccione [Saved objects]
+2. Haga clic en [Import], seleccione ``fess_log.ndjson`` e impórtelo
+3. Abra el panel ``fess_log`` desde [Dashboards] en el menú de la izquierda
+
+La importación registra el patrón de índice ``fess_log*`` (campo de tiempo ``requestedAt``), seis visualizaciones y el panel ``fess_log``.
+Como incluye el patrón de índice, no es necesario crear ``fess_log*`` manualmente antes.
+Si lo crea manualmente y después importa el archivo, tendrá dos patrones con el mismo nombre.
+
+Cuidado con cómo cuenta el panel incluido
+-----------------------------------------
+
+``fess_log*`` abarca todos los índices cuyo nombre empieza por ``fess_log``, y las visualizaciones incluidas no filtran por índice.
+En 15.9, los registros de clics contienen el término de búsqueda (``searchWord``) y ``requestedAt``, así que el recuento de "search-term-rank", por ejemplo, suma búsquedas y clics.
+Si utiliza el modo Búsqueda IA, los registros de chat (``fess_log.chat_log``) también se mezclan en los recuentos y los tiempos de respuesta.
+
+Para contar solo las búsquedas, introduzca la siguiente condición en la barra de búsqueda de la parte superior del panel antes de consultarlo.
+
+::
+
+    _index : "fess_log.search_log"
+
+Además, la lista de campos guardada en ``fess_log*`` corresponde a una versión antigua y no incluye campos nuevos como ``rank``.
+Para crear sus propias agregaciones, use los patrones de índice de la sección siguiente.
+
+Creación de patrones de índice para las agregaciones
+====================================================
+
+Si separa los registros de búsqueda y de clics en patrones de índice distintos, no se mezclan y puede elegir todos los campos actuales.
+
+1. En [Dashboards Management] > [Index patterns], haga clic en [Create index pattern]
+2. Escriba ``fess_log.search_log`` en "Index pattern name" y haga clic en [Next step]
+3. Seleccione ``requestedAt`` en "Time field" y haga clic en [Create index pattern]
+4. Cree del mismo modo ``fess_log.click_log`` (campo de tiempo ``requestedAt``)
+
+Si más adelante aparecen campos nuevos (por ejemplo, cuando se registra la primera búsqueda filtrada por etiqueta), haga clic en [Refresh field list] en la pantalla del patrón de índice.
+
+Tratamiento de la hora
+----------------------
+
+Fess guarda las fechas y horas en UTC.
+De forma predeterminada, OpenSearch Dashboards las muestra en la zona horaria del navegador y también divide los días según ella.
+Para verlas en otra zona horaria, cambie ``dateFormat:tz`` en [Dashboards Management] > [Advanced settings] a su zona horaria, por ejemplo ``Asia/Tokyo``.
+
+La pantalla [Registro de búsqueda] de Fess divide los días según la zona horaria del servidor.
+Los contenedores de docker-fess usan UTC de forma predeterminada, así que, al comparar las cifras diarias de ambos, pueden diferir por la distinta frontera entre días.
+
+Campos de los registros
+=======================
+
+El registro de búsqueda (``fess_log.search_log``) tiene una entrada por búsqueda.
+Los campos más utilizados en las agregaciones son los siguientes.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Campo
+     - Tipo
+     - Contenido
+   * - ``queryId``
+     - keyword
+     - ID de cada búsqueda. Corresponde al ``queryId`` del registro de clics
+   * - ``searchWord``
+     - keyword
+     - El término de búsqueda. En una búsqueda filtrada por etiqueta incluye también la condición, como en ``solicitud label:"hr"``
+   * - ``searchField.*``
+     - keyword
+     - El término de búsqueda dividido por campos. Los términos normales van a ``searchField._default`` y los filtros de etiqueta a ``searchField.label``
+   * - ``requestedAt``
+     - date
+     - Fecha y hora de la búsqueda (guardadas en UTC)
+   * - ``hitCount``
+     - long
+     - Número de resultados. ``0`` indica una búsqueda sin resultados
+   * - ``responseTime`` / ``queryTime``
+     - long
+     - Tiempo de procesamiento de toda la búsqueda y tiempo de búsqueda en OpenSearch (milisegundos)
+   * - ``queryOffset`` / ``queryPageSize``
+     - integer
+     - Posición inicial y número de resultados por página. A partir de la segunda página, ``queryOffset`` es mayor que 0
+   * - ``accessType``
+     - keyword
+     - Uno de ``json``, ``gsa``, ``admin``, ``other`` y ``web``. La página de búsqueda del tema predeterminado llama a ``/api/v2/search``, por lo que es ``json``; las búsquedas desde [Información del sistema] > [Búsqueda] de la pantalla de administración son ``admin``
+   * - ``user`` / ``roles``
+     - keyword
+     - El ID del usuario que ha iniciado sesión y la lista de roles usados en la búsqueda. El primer carácter de un valor de ``roles`` indica su tipo: ``R`` es un rol, ``2`` un grupo y ``1`` un usuario (ejemplo: ``Rguest``)
+   * - ``userSessionId`` / ``clientIp`` / ``userAgent`` / ``referer`` / ``virtualHost``
+     - keyword
+     - El valor de la cookie que identifica al usuario, la dirección IP, el navegador, la página de referencia y el host virtual
+
+El registro de clics (``fess_log.click_log``) se guarda cuando se abre un enlace de los resultados de búsqueda a través de ``/go/``.
+Sin embargo, no se guarda en las solicitudes en las que el navegador no tiene una sesión de Fess (no envía una cookie de sesión válida).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Campo
+     - Tipo
+     - Contenido
+   * - ``queryId``
+     - keyword
+     - ``queryId`` de la búsqueda de la que procede el clic
+   * - ``url`` / ``docId``
+     - keyword
+     - URL e ID del documento abierto
+   * - ``rank``
+     - integer
+     - Posición en el conjunto de los resultados (el primer puesto es 1). El primer resultado de la segunda página es 11
+   * - ``order``
+     - integer
+     - Posición dentro de la página (la primera es 0). Para agregar posiciones, use ``rank``
+   * - ``searchWord`` / ``accessType``
+     - keyword
+     - Término de búsqueda y tipo de acceso copiados de la búsqueda de origen. Permiten agregar por término de búsqueda sin combinar con el registro de búsqueda
+   * - ``requestedAt`` / ``queryRequestedAt``
+     - date
+     - Fecha y hora del clic y de la búsqueda de origen
+
+``searchWord``, ``accessType`` y ``rank`` se incluyen en el registro de clics a partir de 15.9.
+Los clics registrados antes no los tienen.
+
+Recetas de agregación
+=====================
+
+Aquí creamos las cuatro "agregaciones que la pantalla no permite" mencionadas al principio.
+La primera se crea con Visualize y las demás se ejecutan con la API de búsqueda desde [Dev Tools] en el menú de la izquierda.
+
+URL abiertas para cada término de búsqueda
+------------------------------------------
+
+Esta tabla muestra, para cada término de búsqueda, qué documentos se abrieron y en qué posición.
+Sirve para elegir candidatos para coincidencia de clave o impulso de documento.
+
+1. En [Visualize] del menú de la izquierda, haga clic en [Create visualization] y elija "Data Table"
+2. Seleccione ``fess_log.click_log`` como origen
+3. En Metrics, añada una Metric con [Add] y elija "Average" en "Aggregation" y ``rank`` en "Field"
+4. En Buckets, elija [Add] > [Split rows] y establezca "Aggregation" en "Terms", "Field" en ``searchWord`` y "Size" en 20
+5. Añada otro [Split rows] con "Terms", "Field" en ``url`` y "Size" en 5
+6. Haga clic en [Update], elija el periodo en la esquina superior derecha y guarde
+
+Las combinaciones con una posición media alta son documentos que los usuarios abrieron tras bajar mucho en los resultados.
+
+Términos sin resultados por rol
+-------------------------------
+
+Si asigna los roles por departamento, compruebe qué no encuentran las búsquedas de cada departamento.
+
+.. code-block:: text
+
+    GET fess_log.search_log/_search
+    {
+      "size": 0,
+      "query": {
+        "bool": {
+          "filter": [
+            { "term": { "hitCount": 0 } },
+            { "range": { "requestedAt": { "gte": "now-90d/d" } } }
+          ]
+        }
+      },
+      "aggs": {
+        "roles": {
+          "terms": { "field": "roles", "size": 20, "exclude": "1.*" },
+          "aggs": {
+            "words": { "terms": { "field": "searchWord", "size": 10 } }
+          }
+        }
+      }
+    }
+
+``exclude`` descarta los valores que empiezan por ``1`` (usuarios individuales), de modo que solo se listan roles y grupos.
+Una misma búsqueda se cuenta en cada uno de los roles y grupos del usuario.
+Las búsquedas de usuarios sin sesión iniciada se cuentan en ``Rguest``.
+
+Búsquedas y búsquedas sin resultados por etiqueta
+-------------------------------------------------
+
+Para cada etiqueta, cuente cuántas búsquedas se hicieron con esa etiqueta seleccionada en la página de búsqueda y cuántas de ellas no obtuvieron resultados.
+
+.. code-block:: text
+
+    GET fess_log.search_log/_search
+    {
+      "size": 0,
+      "query": { "range": { "requestedAt": { "gte": "now-90d/d" } } },
+      "aggs": {
+        "labels": {
+          "terms": { "field": "searchField.label", "size": 20 },
+          "aggs": {
+            "zero_hit": { "filter": { "term": { "hitCount": 0 } } }
+          }
+        }
+      }
+    }
+
+Si todavía no se ha registrado ninguna búsqueda filtrada por etiqueta, el campo ``searchField.label`` aún no existe y los buckets de ``labels`` quedan vacíos.
+
+Tasa mensual de cero resultados (dos años)
+------------------------------------------
+
+Observe, más allá del límite de periodo de la pantalla, la evolución a largo plazo de la tasa de cero resultados (una proporción, no un recuento).
+
+.. code-block:: text
+
+    GET fess_log.search_log/_search
+    {
+      "size": 0,
+      "query": {
+        "bool": {
+          "filter": [ { "range": { "requestedAt": { "gte": "now-2y/d" } } } ],
+          "must_not": [ { "term": { "accessType": "admin" } } ]
+        }
+      },
+      "aggs": {
+        "per_month": {
+          "date_histogram": {
+            "field": "requestedAt",
+            "calendar_interval": "month",
+            "time_zone": "Asia/Tokyo"
+          },
+          "aggs": {
+            "zero_hit": { "filter": { "term": { "hitCount": 0 } } },
+            "zero_hit_rate": {
+              "bucket_script": {
+                "buckets_path": { "zero": "zero_hit>_count", "total": "_count" },
+                "script": "params.zero / params.total"
+              }
+            }
+          }
+        }
+      }
+    }
+
+Cada bucket mensual devuelve el número de búsquedas (``doc_count``), el número de búsquedas sin resultados (``zero_hit.doc_count``) y la tasa de cero resultados (``zero_hit_rate.value``, entre 0 y 1).
+Con ``time_zone``, los meses empiezan a medianoche en la zona horaria indicada (aquí ``Asia/Tokyo``; sustitúyala por la suya), y ``must_not`` excluye las búsquedas hechas desde la pantalla de administración.
+Que haya dos años de registros disponibles depende de la configuración de conservación que se describe en la sección siguiente.
+
+Conservación y datos personales
+===============================
+
+De forma predeterminada, los registros de búsqueda se conservan indefinidamente.
+Esto se debe a que "Eliminar registros de búsqueda anteriores" en [Sistema] > [General] tiene ``-1`` (no eliminar) como valor predeterminado.
+Si indica un número de días, el trabajo "Log Purger", que se ejecuta cada día a medianoche, elimina los registros de búsqueda con más antigüedad que ese número de días.
+Los registros de clics, de favoritos y de chat se eliminan tras el mismo número de días.
+Los datos de los usuarios dependen de otra opción, "Eliminar registros de usuarios anteriores", cuyo valor predeterminado también es ``-1``.
+
+Decida el número de días teniendo en cuenta tanto hasta dónde quiere remontarse para ver tendencias como las normas de su organización sobre el tratamiento de datos personales.
+Los registros de búsqueda contienen el ID del usuario que ha iniciado sesión (``user`` y los valores de ``roles`` que empiezan por ``1``), la dirección IP y el User-Agent.
+Además, de forma predeterminada, las URL y los títulos de los documentos mostrados en los resultados de búsqueda se guardan en el campo ``documents`` (``logging.search.docs.enabled=true``).
+Todo ello es visible en OpenSearch Dashboards, así que respete las restricciones de acceso descritas al principio.
+
+Solución de problemas
+=====================
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Síntoma
+     - Qué comprobar
+   * - No aparecen datos en Discover ni en las visualizaciones
+     - Si el periodo de la esquina superior derecha incluye las fechas de los registros. Tras una búsqueda, el registro puede tardar alrededor de un minuto en escribirse (lo escribe el trabajo "Log Aggregator", que se ejecuta cada minuto)
+   * - No se pueden seleccionar ``rank`` ni ``searchField.label``
+     - Si está usando ``fess_log*``. Cree un patrón de índice propio o haga clic en [Refresh field list]
+   * - Los recuentos son mayores que en la pantalla [Registro de búsqueda]
+     - Si ``fess_log*`` también cuenta los registros de clics o de chat. Si el filtro por tipo de acceso y la zona horaria de la frontera entre días coinciden
+   * - Hay pocos clics
+     - Los enlaces no pasan por ``/go/``, "Registro de búsqueda" está desactivado en [General] o el navegador abre ``/go/`` sin una sesión de Fess. Compruebe también los requisitos previos de :doc:`guide-08`
+
+Artículos relacionados
+======================
+
+- Mejorar los términos de búsqueda encontrados con sinónimos o coincidencias de clave: :doc:`guide-08`
+- Revisar el diseño de roles y grupos: :doc:`guide-05`
+- Organizar la operación, incluidas la supervisión y las copias de seguridad: :doc:`guide-10`
+- Decidir qué medir en cada fase de una implantación en toda la empresa: :doc:`guide-23`
+
+Referencias
+===========
+
+- `Registro de búsqueda <https://fess.codelibs.org/es/stable/admin/searchlog-guide.html>`__
+- `Configuración de Visualización de Registros de Búsqueda <https://fess.codelibs.org/es/stable/config/admin-opensearch-dashboards.html>`__
+- `General <https://fess.codelibs.org/es/stable/admin/general-guide.html>`__
+- `Instalación con Docker (Detalles) <https://fess.codelibs.org/es/stable/install/install-docker.html>`__
+- `Archivos Compose de docker-fess (GitHub) <https://github.com/codelibs/docker-fess/tree/v15.9.0/compose>`__
+- `OpenSearch Dashboards <https://opensearch.org/docs/latest/dashboards/index/>`__

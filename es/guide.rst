@@ -1,83 +1,114 @@
-============================================
+=============
 Guía Práctica
-============================================
+=============
 
-Estrategia de aprovechamiento del conocimiento con Fess
-========================================================
+Aprovechar el conocimiento con Fess
+===================================
 
-Guía práctica de búsqueda empresarial orientada a objetivos.
-Esta serie de 23 partes cubre desde la implementación de Fess hasta la integración con IA, basada en casos de uso reales.
+Esta guía práctica explica cómo hacer que la información de su organización se pueda buscar con Fess y convertirla en una plataforma de búsqueda que se siga utilizando.
+Cada artículo se basa en Fess 15.9 y explica de forma concreta los campos de las pantallas de configuración, las claves de configuración y cómo comprobar que todo ha funcionado.
+Las funciones que solo están disponibles a partir de la versión 15.10 se indican de forma explícita en los artículos.
 
-**Fundamentos (Para principiantes)**
-
-- :doc:`articles/guide-01` - Por qué la búsqueda empresarial es importante y los desafíos de la información dispersa
-- :doc:`articles/guide-02` - Inicio rápido: lanzar Fess con Docker Compose y experimentar la búsqueda en minutos
-- :doc:`articles/guide-03` - Tres patrones para integrar widgets de búsqueda en sitios web existentes
-- :doc:`articles/guide-04` - Construir búsqueda transversal entre servidores de archivos y almacenamiento en la nube
-- :doc:`articles/guide-05` - Filtrado de resultados de búsqueda por rol, etiqueta, departamento y permisos
-
-**Soluciones prácticas (Para nivel intermedio)**
-
-- :doc:`articles/guide-06` - Búsqueda unificada de repositorios Git, wikis, tickets y chat para equipos de desarrollo
-- :doc:`articles/guide-07` - Configuración y operación de búsqueda transversal en Google Drive, SharePoint y Box
-- :doc:`articles/guide-08` - Ciclo de mejora continua de calidad de búsqueda mediante análisis de logs
-- :doc:`articles/guide-09` - Configuración de analizadores para buscar correctamente documentos en japonés, inglés y chino
-- :doc:`articles/guide-10` - Mejores prácticas de monitoreo, respaldo y recuperación ante desastres en producción
-- :doc:`articles/guide-11` - Patrones de integración API REST con CRM y sistemas internos de negocio
-- :doc:`articles/guide-12` - Indexación de datos de Salesforce, bases de datos y otras plataformas SaaS
-
-**Arquitectura y escalamiento (Para nivel avanzado)**
-
-- :doc:`articles/guide-13` - Diseño multi-tenant para servir múltiples organizaciones desde una sola instancia Fess
-- :doc:`articles/guide-14` - Estrategia de escalamiento gradual de servidor único a arquitectura de clúster
-- :doc:`articles/guide-15` - Integración SSO (OIDC/SAML) y control de acceso en entornos Zero Trust
-- :doc:`articles/guide-16` - Gestión de configuración como código y despliegue automatizado vía pipelines CI/CD
-- :doc:`articles/guide-17` - Implementación de plugins de fuentes de datos personalizadas y pipelines de ingesta
-
-**IA y búsqueda de próxima generación (Para nivel avanzado)**
-
-- :doc:`articles/guide-18` - Panorama de la evolución de búsqueda por palabras clave a búsqueda vectorial y semántica
-- :doc:`articles/guide-19` - Construir un sistema de preguntas y respuestas interno con RAG sobre documentos corporativos
-- :doc:`articles/guide-20` - Integrar Fess como servidor MCP con Claude y otras herramientas de IA
-- :doc:`articles/guide-21` - Búsqueda multimodal de texto e imágenes mediante embeddings vectoriales
-- :doc:`articles/guide-22` - Visualizar el uso de información con analíticas de OpenSearch Dashboards
-
-**Conclusión**
-
-- :doc:`articles/guide-23` - Arquitectura de referencia para una plataforma de conocimiento empresarial basada en Fess
-
-Casos de uso y ejemplos
+Elegir según el objetivo
 ========================
 
-- :doc:`articles/use-cases` - Casos de uso por sector y tamaño de empresa
-- :doc:`articles/comparison` - Comparación de Fess con otras soluciones de búsqueda (Elasticsearch, Solr, etc.)
-- :doc:`articles/file-server-search` - Que comprobar antes de buscar en servidores de archivos
+- **Quiero probar Fess primero**: :doc:`articles/guide-01` → :doc:`articles/guide-02`
+- **Quiero buscar en servidores de archivos**: :doc:`articles/file-server-search` → :doc:`articles/guide-04` → :doc:`articles/guide-05`
+- **Quiero buscar datos de la nube y de servicios SaaS**: :doc:`articles/datastore-basics` → :doc:`articles/guide-07` / :doc:`articles/guide-06` / :doc:`articles/guide-12`
+- **Quiero integrar la búsqueda en un sitio o sistema existente**: :doc:`articles/guide-03` → :doc:`articles/guide-11`
+- **Quiero mostrar información distinta a cada departamento o usuario**: :doc:`articles/guide-05` → :doc:`articles/guide-15` → :doc:`articles/guide-13`
+- **Quiero mejorar la búsqueda con IA**: :doc:`articles/guide-18` → :doc:`articles/guide-19` → :doc:`articles/guide-20`
+- **Voy a empezar a operar en producción**: :doc:`articles/guide-10` → :doc:`articles/guide-16` → :doc:`articles/guide-14`
+
+Primeros pasos
+==============
+
+- :doc:`articles/guide-01` - La estructura de Fess, el reparto de funciones entre Fess y los plugins, y los itinerarios de lectura por objetivo
+- :doc:`articles/guide-02` - Iniciar Fess con Docker Compose y probar todo el proceso, desde el rastreo hasta la búsqueda
+
+Recopilar información
+=====================
+
+- :doc:`articles/guide-04` - Rastrear sitios web y servidores de archivos, y permitir acotar los resultados con etiquetas
+- :doc:`articles/datastore-basics` - Ajustes de los plugins de almacén de datos, permisos, etiquetas, programación y cómo comprobar los resultados
+- :doc:`articles/guide-07` - Hacer que se puedan buscar los archivos de Google Drive, SharePoint Online / OneDrive y Box
+- :doc:`articles/guide-06` - Hacer que se puedan buscar los repositorios Git, Confluence, Jira y Slack
+- :doc:`articles/guide-12` - Hacer que se puedan buscar los datos de bases de datos, archivos CSV y Salesforce
+
+Integrar la búsqueda y cambiar su aspecto
+=========================================
+
+- :doc:`articles/guide-03` - Colocar un cuadro de búsqueda en un sitio existente y ajustar el aspecto de la página de búsqueda con temas
+- :doc:`articles/guide-11` - Buscar y registrar documentos desde aplicaciones de negocio con la API de búsqueda y tokens de acceso
+
+Controlar el acceso
+===================
+
+- :doc:`articles/guide-05` - Mostrar resultados de búsqueda distintos según roles y grupos, e integrarse con LDAP / Active Directory
+- :doc:`articles/guide-15` - Implantar SSO (OIDC / SAML / Entra ID / SPNEGO) y proteger el acceso desde el exterior
+- :doc:`articles/guide-13` - Compartir una sola instancia de Fess entre varias organizaciones con hosts virtuales y roles
+
+Mejorar la calidad de la búsqueda
+=================================
+
+- :doc:`articles/guide-08` - Detectar problemas en las pantallas de análisis de los registros de búsqueda y corregirlos con sinónimos y coincidencias de clave
+- :doc:`articles/guide-09` - Entender cómo se indexan y buscan los documentos multilingües, y ajustar cada idioma
+- :doc:`articles/guide-22` - Agregar y visualizar los registros de búsqueda a su manera con OpenSearch Dashboards
+
+Operación
+=========
+
+- :doc:`articles/guide-10` - Comprobaciones de estado, registros, notificaciones, copia de seguridad y restauración, y tratamiento de las URL de fallo
+- :doc:`articles/guide-16` - Gestionar la configuración como código con fessctl y la API de administración, y reproducir entornos
+- :doc:`articles/guide-14` - Ajustes de memoria, clúster externo de OpenSearch y ejecución de Fess en varios servidores
+- :doc:`articles/guide-17` - Añadir funciones escribiendo sus propios plugins de almacén de datos e ingesters
+
+Mejorar la búsqueda con IA
+==========================
+
+- :doc:`articles/guide-18` - Usar la búsqueda vectorial y la fusión de rankings para encontrar documentos aunque estén redactados de otra forma
+- :doc:`articles/guide-19` - Conectar un LLM y usar el modo de búsqueda con IA, que responde basándose en los documentos internos
+- :doc:`articles/guide-20` - Permitir que agentes de IA busquen en Fess mediante el plugin de servidor MCP
+- :doc:`articles/guide-21` - Crear una búsqueda multimodal que busque imágenes y texto a la vez
+
+Planificar el despliegue en toda la empresa
+===========================================
+
+- :doc:`articles/guide-23` - Qué configurar y comprobar en cada etapa, desde la implantación hasta el despliegue en toda la empresa
+
+Casos de uso y comparaciones
+============================
+
+- :doc:`articles/use-cases` - Casos de uso por sector y tamaño, y los artículos útiles para cada uno
+- :doc:`articles/comparison` - Comparación de Fess con otras soluciones de búsqueda (OpenSearch por sí solo, Solr, productos comerciales, etc.)
+- :doc:`articles/file-server-search` - Qué comprobar antes de implantar la búsqueda de texto completo en servidores de archivos
 
 .. toctree::
    :hidden:
 
    articles/guide-01
    articles/guide-02
-   articles/guide-03
    articles/guide-04
-   articles/guide-05
-   articles/guide-06
+   articles/datastore-basics
    articles/guide-07
+   articles/guide-06
+   articles/guide-12
+   articles/guide-03
+   articles/guide-11
+   articles/guide-05
+   articles/guide-15
+   articles/guide-13
    articles/guide-08
    articles/guide-09
+   articles/guide-22
    articles/guide-10
-   articles/guide-11
-   articles/guide-12
-   articles/guide-13
-   articles/guide-14
-   articles/guide-15
    articles/guide-16
+   articles/guide-14
    articles/guide-17
    articles/guide-18
    articles/guide-19
    articles/guide-20
    articles/guide-21
-   articles/guide-22
    articles/guide-23
    articles/use-cases
    articles/comparison

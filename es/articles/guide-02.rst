@@ -1,279 +1,330 @@
-=============================================
-Parte 2: Experiencia de búsqueda en 5 minutos
-=============================================
+=================================
+Ejecutar Fess con Docker y buscar
+=================================
 
 Introducción
 ============
 
-En la entrega anterior, presentamos la necesidad de una plataforma de búsqueda en el ámbito empresarial y una visión general de Fess.
-En este artículo, mostraremos el procedimiento más rápido para iniciar Fess y experimentar la búsqueda.
+Cuando se empieza a evaluar Fess, lo primero que se quiere saber es "¿qué búsquedas puedo hacer si lo ejecuto yo mismo?".
+En este artículo iniciamos Fess 15.9 con Docker, rastreamos unas 20 páginas web y probamos la sintaxis de búsqueda, paso a paso.
 
-El objetivo es comprender rápidamente qué tipo de experiencia de búsqueda ofrece Fess.
-Usando Docker Compose, levantaremos un entorno de Fess con tan solo unas pocas líneas de comandos, rastrearemos un sitio web y experimentaremos la búsqueda.
+Como ejemplo utilizamos la "Guía de búsqueda" en español del sitio oficial de Fess (un conjunto de páginas que explican la búsqueda AND, la búsqueda con comodines, etc.).
+Como el objetivo se limita a un único lugar, el rastreo termina en pocos minutos y puede leer el contenido de los resultados para comprobarlos.
 
-Lectores objetivo
-=================
+Si sigue los pasos de este artículo tal como están, podrá:
 
-- Personas que prueban Fess por primera vez
-- Personas que desean realizar rápidamente una PoC (prueba de concepto) para evaluar su implementación
-- Personas con conocimientos básicos de operación de Docker
+- Iniciar Fess y OpenSearch con Docker Compose, y detenerlos y reanudarlos
+- Completar el primer inicio de sesión del administrador y el cambio de contraseña que se exige
+- Crear una configuración de rastreo web, ejecutar el rastreo y comprobar que ha terminado
+- Probar las búsquedas AND, OR, de exclusión, de frase y por campo
 
-Requisitos del entorno
-======================
+No se tratan los ajustes para entornos de producción (supervisión, copias de seguridad, SSO, escalado).
+Desde "Artículos recomendados", al final, continúe con el artículo que se ajuste a su objetivo.
 
-- Un entorno donde Docker y Docker Compose estén disponibles
-- Memoria de 4 GB o más (se recomiendan 8 GB o más)
-- Conexión a internet
+El entorno que se crea en este artículo
+=======================================
 
-Preparación previa (en el caso de Linux / WSL2)
-------------------------------------------------
+Con los archivos Compose del repositorio docker-fess se inician los dos contenedores siguientes.
 
-OpenSearch, utilizado por Fess, requiere una gran cantidad de áreas de mapeo de memoria al iniciarse.
-En entornos Linux o WSL2, aumente el valor de ``vm.max_map_count`` con el siguiente comando.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 40 40
+
+   * - Servicio
+     - Función
+     - Dónde se guardan los datos
+   * - ``fess01``
+     - Fess (imagen ``ghcr.io/codelibs/fess:15.9.0``). Ofrece la página de búsqueda y la consola de administración en el puerto 8080
+     - Sin volumen (dentro del contenedor)
+   * - ``search01``
+     - OpenSearch (imagen ``ghcr.io/codelibs/fess-opensearch``). También se publica el puerto 9200
+     - Volúmenes ``search01_data`` y ``search01_dictionary``
+
+El índice, las configuraciones de rastreo, los usuarios, los registros de trabajo, etc. se guardan todos en OpenSearch, por lo que se conservan en el volumen ``search01_data``.
+En cambio, los ajustes modificados en [Sistema] > [General] de la consola de administración se guardan en ``system.properties`` dentro del contenedor ``fess01``.
+Esta diferencia será importante más adelante, en "Detención y reanudación".
+
+.. warning::
+
+   En esta configuración, OpenSearch se ejecuta con el plugin de seguridad desactivado y se publica en el puerto 9200 del host.
+   Úsela para hacer pruebas en su propio PC; si la ejecuta en un servidor compartido, consulte primero :doc:`guide-10` y :doc:`guide-15`.
+
+Requisitos previos
+==================
+
+- Docker y Docker Compose (el comando ``docker compose``) están disponibles
+- Docker dispone de al menos 4 GB de memoria (solo el heap de OpenSearch reserva 1 GB)
+- Hay conexión a Internet (se usa para descargar las imágenes y para el rastreo)
+
+En Linux o WSL2, aumente ``vm.max_map_count``, que OpenSearch necesita para iniciarse.
 
 ::
 
     $ sudo sysctl -w vm.max_map_count=262144
 
-Esta configuración se restablece al reiniciar el sistema operativo. Para hacerla permanente, agréguela a ``/etc/sysctl.conf``.
+Este valor se restablece al reiniciar el sistema operativo.
+Si va a seguir usando el entorno, escríbalo también en ``/etc/sysctl.conf``.
 
 ::
 
     $ echo 'vm.max_map_count=262144' | sudo tee -a /etc/sysctl.conf
 
-.. note::
-
-   Si utiliza Docker Desktop en macOS, esta configuración no es necesaria.
-
 Iniciar Fess
-=============
+============
 
-Obtención del archivo Docker Compose
--------------------------------------
-
-El archivo Docker Compose de Fess está publicado en el repositorio de GitHub.
-Obténgalo con los siguientes comandos.
-
-::
-
-    $ git clone https://github.com/codelibs/docker-fess.git
-    $ cd docker-fess/compose
-
-En el directorio compose se encuentran varios archivos de configuración.
-Primero, iniciemos con una configuración sencilla.
-
-Inicio
-------
-
-Inicie Fess y OpenSearch con el siguiente comando.
-
-::
-
-    $ docker compose up -d
-
-Durante el primer inicio, se descargan las imágenes de Docker, por lo que puede tardar varios minutos.
-Puede verificar el estado del inicio con el siguiente comando.
-
-::
-
-    $ docker compose ps
-
-Cuando todos los contenedores muestren el estado "running", el inicio se habrá completado.
-
-Acceder a la pantalla de búsqueda
----------------------------------
-
-Acceda a ``http://localhost:8080/`` desde el navegador.
-Si se muestra la pantalla principal de búsqueda de Fess, el sistema se ha iniciado correctamente.
-
-En este punto, el índice está vacío, por lo que las búsquedas no devolverán resultados.
-En el siguiente paso, registraremos los objetivos de rastreo y habilitaremos la búsqueda.
-
-Verificar la pantalla de administración
-========================================
-
-Inicio de sesión en la pantalla de administración
--------------------------------------------------
-
-Acceda a ``http://localhost:8080/admin/`` e inicie sesión en la pantalla de administración.
-Las credenciales predeterminadas son las siguientes.
-
-- Nombre de usuario: ``admin``
-- Contraseña: ``admin``
-
-En el panel de control de la pantalla de administración, puede ver el estado general del sistema.
-
-Estructura de la pantalla de administración
--------------------------------------------
-
-En el menú lateral izquierdo de la pantalla de administración, se encuentran las principales funciones de administración de Fess.
-Aquí solo revisaremos una descripción general.
-
-**Rastreador**
-
-Es la sección donde se registran los objetivos de búsqueda. Administra la configuración de rastreo para tres tipos: web, sistema de archivos y almacén de datos.
-
-**Sistema**
-
-Funciones de administración del sistema en general, como el programador, el diseño y los diccionarios. En los diccionarios se administran configuraciones relacionadas con la calidad de búsqueda, como sinónimos y palabras vacías (stop words).
-
-**Información del sistema**
-
-Proporciona registros de búsqueda, registros de trabajos, información de rastreo, copias de seguridad y otras funciones de registro y mantenimiento.
-
-Rastrear un sitio web
-======================
-
-Registro del objetivo de rastreo
----------------------------------
-
-Rastreemos un sitio web real para que sea posible realizar búsquedas.
-Aquí utilizaremos el sitio oficial de Fess como objetivo.
-
-1. En el menú izquierdo de la pantalla de administración, seleccione [Rastreador] > [Web]
-2. Haga clic en [Crear nuevo]
-3. Ingrese la siguiente información
-
-   - URL: ``https://fess.codelibs.org/ja/``
-   - URL objetivo de rastreo: ``https://fess.codelibs.org/ja/.*``
-   - Número máximo de accesos: ``50``
-   - Número de hilos: ``2``
-   - Intervalo: ``10000``
-
-4. Haga clic en [Crear] para guardar
-
-Con esto, se ha completado la configuración para rastrear un máximo de 50 páginas del sitio oficial de Fess (páginas en japonés) con un intervalo de 10 segundos.
-
-Ejecución del rastreo
-----------------------
-
-Solo guardar la configuración no inicia el rastreo.
-Para iniciar el rastreo, ejecute el trabajo desde el programador.
-
-1. Seleccione [Sistema] > [Programador]
-2. Seleccione "Default Crawler"
-3. Haga clic en [Iniciar ahora]
-
-El rastreo comenzará.
-Puede verificar el progreso desde [Información del sistema] > [Información de rastreo].
-Para aproximadamente 50 páginas, el rastreo se completará en unos pocos minutos.
-
-Experimentar la búsqueda
-=========================
-
-Realizar una búsqueda
----------------------
-
-Después de completar el rastreo, vuelva a la pantalla de búsqueda ``http://localhost:8080/`` y realice una búsqueda.
-
-Por ejemplo, si ingresa "インストール" (instalación) y busca, se mostrarán como resultados de búsqueda las páginas del sitio de Fess relacionadas con la instalación.
-
-Elementos de la pantalla de resultados de búsqueda
----------------------------------------------------
-
-En la pantalla de resultados de búsqueda se muestran los siguientes elementos.
-
-**Lista de resultados de búsqueda**
-
-Cada resultado muestra el título, la URL y un extracto del texto (snippet).
-Las partes que coinciden con las palabras clave de búsqueda se muestran resaltadas.
-
-**Número de resultados y tiempo de respuesta**
-
-En la parte superior de los resultados de búsqueda se muestran el número de coincidencias y el tiempo que tardó la búsqueda.
-
-**Paginación**
-
-Cuando los resultados abarcan múltiples páginas, se muestra una navegación para pasar entre páginas.
-
-Funciones de búsqueda avanzadas
--------------------------------
-
-Fess cuenta con diversas funciones de búsqueda además de la búsqueda simple por palabras clave.
-
-**Búsqueda AND/OR**
-
-Al separar múltiples palabras clave con espacios, se realiza una búsqueda AND.
-Usando ``OR``, también es posible realizar una búsqueda OR.
-
-::
-
-    インストール Docker       # Busqueda AND (contiene ambos)
-    インストール OR Docker    # Busqueda OR (contiene alguno de los dos)
-
-**Búsqueda por frase**
-
-Al encerrar el texto entre comillas dobles, se buscan documentos que coincidan en ese orden de palabras.
-
-::
-
-    "全文検索サーバー"
-
-**Búsqueda con exclusión**
-
-Para buscar resultados que no contengan una palabra clave específica, utilice el signo menos.
-
-::
-
-    インストール -Windows    # Resultados que no contienen "Windows"
-
-Detención y reanudación del entorno
-====================================
-
-Detención
----------
-
-Una vez finalizada la experiencia de búsqueda, detenga el entorno con el siguiente comando.
-
-::
-
-    $ docker compose down
-
-El entorno se detiene conservando los datos (índice), por lo que al reiniciar podrá continuar en el mismo estado.
-
-Limpieza completa, incluyendo los datos
+Obtener los archivos Compose para 15.9.0
 ----------------------------------------
 
-Si desea eliminar también los volúmenes, ejecute el siguiente comando.
+Los archivos Compose de la rama predeterminada de docker-fess se actualizan con cada nueva versión.
+Para fijar la versión en 15.9.0, obtenga los archivos de la etiqueta ``v15.9.0``.
 
 ::
 
-    $ docker compose down -v
+    $ mkdir fess-docker
+    $ cd fess-docker
+    $ curl -LO https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/compose.yaml
+    $ curl -LO https://raw.githubusercontent.com/codelibs/docker-fess/v15.9.0/compose/compose-opensearch3.yaml
 
-En este caso, los índices creados durante el rastreo también se eliminarán.
+``compose.yaml`` solo define ``fess01``; ``search01``, del que depende ``fess01``, está en ``compose-opensearch3.yaml``.
+Por eso, en todos los comandos ``docker compose`` que siguen se indican siempre los dos archivos con ``-f``.
+Si ejecuta un comando con solo uno de ellos, ni el inicio ni la detención funcionan correctamente.
 
-Lo que revela la experiencia de búsqueda
-=========================================
+Iniciar y esperar a que esté listo
+----------------------------------
 
-Con la experiencia realizada hasta aquí, hemos verificado el funcionamiento básico de Fess.
-Al considerar su uso en el entorno laboral real, pueden surgir algunas preguntas.
+::
 
-- "¿Se pueden incluir los servidores de archivos internos como objetivo de búsqueda?" -> Se aborda en la **Parte 4**
-- "¿Se puede integrar un cuadro de búsqueda en el sitio interno existente?" -> Se aborda en la **Parte 3**
-- "¿Se puede controlar la información visible por departamento?" -> Se aborda en la **Parte 5**
-- "Quiero buscar también en Slack y Confluence" -> Se aborda en la **Parte 6**
-- "Quiero que una IA responda preguntas" -> Se aborda en la **Parte 19**
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml up -d
 
-Fess puede manejar todos estos escenarios.
-A lo largo de esta serie, presentaremos de forma progresiva cómo lograr cada uno de ellos.
+La primera vez tarda unos minutos, porque hay que descargar las imágenes.
+Compruebe el estado con el siguiente comando.
 
-Resumen
-=======
+::
 
-En este artículo, iniciamos Fess con Docker Compose y experimentamos desde el rastreo de un sitio web hasta la búsqueda.
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml ps
 
-- Inicio de Fess + OpenSearch con un solo comando mediante Docker Compose
-- Registro de objetivos de rastreo desde la pantalla de administración y ejecución mediante el programador
-- Experiencia de búsqueda por palabras clave, búsqueda AND/OR y búsqueda por frase en la pantalla de búsqueda
-- Detención y reanudación del entorno de forma sencilla
+``fess01`` se inicia cuando ``search01`` pasa a healthy.
+Fess está listo cuando el STATUS de ``fess01`` muestra ``(healthy)``.
+La comprobación de estado de ``fess01`` llama a ``/api/v2/health``, y los primeros 120 segundos tras el inicio se tratan como periodo de gracia.
 
-En la próxima entrega, presentaremos cómo integrar la función de búsqueda de Fess en sitios web o portales existentes.
+Si tarda mucho en pasar a healthy, revise los registros.
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml logs -f fess01
+
+Si otra aplicación usa el puerto 8080, cambie ``ports`` en ``compose.yaml``, por ejemplo a ``"9080:8080"``.
+Para otros problemas de inicio, consulte la `solución de problemas de instalación <https://fess.codelibs.org/es/stable/install/troubleshooting.html>`__.
+
+Al abrir ``http://localhost:8080/`` en el navegador, aparece la página de búsqueda de Fess.
+Como todavía no se ha rastreado nada, en este momento las búsquedas no devuelven resultados.
+
+Iniciar sesión en la consola de administración
+==============================================
+
+Abra ``http://localhost:8080/admin/`` e inicie sesión con el nombre de usuario ``admin`` y la contraseña ``admin``.
+
+La contraseña inicial ``admin`` está configurada para que no se pueda seguir usando, así que al iniciar sesión pasará a una pantalla que indica "Debe actualizar su contraseña".
+
+1. Escriba la misma contraseña en "Nueva contraseña" y "Confirmar nueva contraseña" (8 caracteres como mínimo)
+2. Haga clic en [Actualizar]
+
+Al terminar la actualización, se abre el tablero de la consola de administración.
+A partir de ahora, inicie sesión con la nueva contraseña.
+Esta contraseña se guarda en OpenSearch, por lo que se conserva aunque vuelva a crear los contenedores (si elimina también los volúmenes, vuelve a ser ``admin``).
+
+Crear una configuración de rastreo
+==================================
+
+Decidir el objetivo
+-------------------
+
+En esta ocasión rastreamos la "Guía de búsqueda" en español del sitio oficial de Fess.
+Son unas 20 páginas bajo ``https://fess.codelibs.org/es/stable/user/``; ``stable`` hace referencia a la documentación de la versión estable actual (15.9).
+
+Registrar una configuración de rastreo web
+------------------------------------------
+
+1. En el menú izquierdo de la consola de administración, abra [Rastreador] > [Web]
+2. Haga clic en [Crear nuevo]
+3. Introduzca los siguientes campos. Deje el resto con sus valores predeterminados
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 30 70
+
+      * - Campo
+        - Valor
+      * - Nombre
+        - ``Guía de búsqueda de Fess``
+      * - URLs
+        - ``https://fess.codelibs.org/es/stable/user/index.html``
+      * - URLs a incluir en el rastreo
+        - ``https://fess.codelibs.org/es/stable/user/.*``
+      * - Número máximo de accesos
+        - ``50``
+
+4. Haga clic en [Crear]
+
+Cada campo significa lo siguiente.
+
+- "Nombre" es obligatorio. Si está vacío, no se puede crear la configuración
+- "URLs" es el punto de partida del rastreo
+- "URLs a incluir en el rastreo" es una expresión regular; no se siguen los enlaces a URL que no coincidan con ella. Si lo deja vacío, el rastreador sigue los enlaces de las páginas hasta otras versiones, otros idiomas e incluso sitios externos
+- "Número máximo de accesos" es un límite superior por si la expresión regular está mal escrita
+
+De los campos que se dejan con su valor predeterminado, "Número de hilos" es ``1`` e "Intervalo" es ``10000`` milisegundos.
+Como el rastreador espera 10 segundos por cada página, la carga sobre el sitio de destino se mantiene baja.
+"Permisos" contiene ``{role}guest``, así que los usuarios que no han iniciado sesión también pueden ver los resultados de búsqueda.
+Cómo mostrar resultados distintos según el departamento se trata en :doc:`guide-05`.
+
+.. note::
+
+   Si apunta a URL con número de versión, como ``/es/15.9/``, no se registra ni una sola página.
+   Estas páginas contienen un ``<link rel="canonical">`` que apunta a ``/es/stable/``.
+   El rastreador de Fess no registra una página así y, en su lugar, sigue la URL canónica.
+   Esa URL queda fuera de la expresión regular de "URLs a incluir en el rastreo", por lo que no se registra nada.
+   Si rastrea el sitio de su propia empresa, compruebe también que las URL canónicas quedan cubiertas por la expresión regular.
+
+.. tip::
+
+   Con [Sistema] > [Asistente] también puede crear una configuración de rastreo con solo introducir "Nombre", "Ruta de rastreo", "Número máximo de accesos" y "Profundidad", y pasar directamente a [Iniciar rastreo].
+   Sin embargo, la configuración creada con el asistente no tiene "URLs a incluir en el rastreo", por lo que no puede limitar el alcance de los enlaces que se siguen.
+   Si quiere limitar el objetivo como en este caso, cree la configuración desde [Rastreador] > [Web], como se ha descrito.
+
+Ejecutar el rastreo y comprobar que ha terminado
+================================================
+
+Iniciar el rastreo
+------------------
+
+Guardar la configuración no inicia el rastreo.
+
+1. Abra [Sistema] > [Programador]
+2. Haga clic en "Default Crawler" en la lista
+3. Haga clic en [Iniciar ahora]
+
+"Default Crawler" es el trabajo que ejecuta juntas todas las configuraciones de rastreo web, de sistema de archivos y de almacén de datos habilitadas.
+De forma predeterminada, este trabajo tiene la expresión cron ``0 0 * * *`` y también se ejecuta automáticamente una vez al día.
+Si deja los contenedores en marcha, las mismas configuraciones se vuelven a rastrear los días siguientes.
+
+Con esta configuración se obtienen unas 20 páginas a intervalos de 10 segundos, así que tardará unos minutos.
+
+Comprobar que ha terminado
+--------------------------
+
+Compruébelo en el siguiente orden.
+
+1. Abra [Información del sistema] > [Registro de trabajo]. Cuando el "Estado" de la fila "Default Crawler" cambia de "En ejecución" a "OK", el trabajo ha terminado. Si muestra "Fallo", haga clic en esa fila para abrir los detalles y revise el "Resultado"
+2. Abra [Información del sistema] > [Información de rastreo] y haga clic en la sesión de más arriba (la más reciente) de la lista. "Tamaño del índice (Web/Archivo)" es el número de documentos registrados en este rastreo. En esta ocasión será de unos 20
+3. Si el número es menor de lo esperado, abra [Información del sistema] > [URL de fallo]. Allí se registran las URL que no se pudieron obtener, por ejemplo por errores de conexión, junto con el motivo
+
+Aunque el trabajo muestre "OK", el número de documentos registrados puede ser 0.
+Las URL que no coinciden con la expresión regular de "URLs a incluir en el rastreo" se tratan como fuera del objetivo, no como errores, por lo que tampoco se registran en URL de fallo.
+Si el número es 0 y URL de fallo también está vacío, revise cómo están escritas la URL y la expresión regular (``https`` o ``http``, si está el ``.*`` final, etc.).
+
+Probar algunas búsquedas
+========================
+
+Abra ``http://localhost:8080/`` y busque.
+La página de búsqueda usa ``bootstrap``, el tema incluido con Fess.
+
+Primero, escriba ``comodines`` y busque.
+En los resultados aparecen páginas como "Búsqueda con comodines" y "Caracteres especiales".
+Al hacer clic en el título de un resultado, se abre la página original (fess.codelibs.org).
+
+A continuación, introduzca uno tras otro los siguientes términos de búsqueda.
+Puede comprobar los resultados de todos ellos con las páginas que acaba de rastrear.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Términos que se introducen
+     - Significado
+   * - ``campo URL``
+     - Separar los términos con un espacio crea una búsqueda AND, y solo aparecen las páginas que contienen ambos
+   * - ``comodines OR difusa``
+     - Aparecen las páginas que contienen cualquiera de los dos. ``OR`` va en mayúsculas, con un espacio antes y después
+   * - ``búsqueda -etiqueta``
+     - Quita de los resultados las páginas que contienen "etiqueta". Ponga ``-`` justo delante del término que quiere excluir
+   * - ``"búsqueda por rango"``
+     - Busca páginas que contengan las palabras entre comillas exactamente en ese orden (búsqueda de frase)
+   * - ``title:ordenamiento``
+     - Busca solo las páginas cuyo título contiene "ordenamiento" (búsqueda por campo)
+
+Si escribe ``or`` o ``and`` en minúsculas, no funcionan como operadores, sino que se tratan como términos de búsqueda normales.
+
+La sintaxis usada aquí y el resto, como la búsqueda con comodines, la búsqueda difusa o la búsqueda por rango, se explican en la `Guía de búsqueda <https://fess.codelibs.org/es/stable/user/index.html>`__ que acaba de rastrear.
+También puede buscar en su propio Fess una sintaxis que le interese y abrir y leer esa página.
+
+Detención y reanudación
+=======================
+
+Lo que se conserva depende de cómo detenga los contenedores.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Operación
+     - Qué se conserva
+     - Qué se pierde
+   * - ``stop`` → ``start``
+     - Todo
+     - Nada
+   * - ``down`` → ``up -d``
+     - Lo guardado en OpenSearch (índice, configuraciones de rastreo, usuarios y contraseñas, registros de trabajo, etc.)
+     - Lo guardado dentro del contenedor ``fess01`` (ajustes modificados en [Sistema] > [General], etc.)
+   * - ``down -v``
+     - Nada
+     - Todo (la contraseña del administrador también vuelve a ser ``admin``)
+
+Para detener en el día a día, use ``stop``, y para reanudar, ``start``.
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml stop
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml start
+
+``down`` elimina los contenedores.
+Los datos de OpenSearch se conservan en los volúmenes, pero los ajustes de [General] están escritos en ``system.properties`` dentro del contenedor ``fess01``, por lo que desaparecen junto con el contenedor.
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down
+
+Cuando termine la prueba y quiera eliminarlo todo, incluidos los datos, añada ``-v``.
+También se eliminan los volúmenes, y no se puede deshacer.
+
+::
+
+    $ docker compose -f compose.yaml -f compose-opensearch3.yaml down -v
+
+Algunos de los ajustes modificados en [General] se conservan aunque vuelva a crear los contenedores si los indica en ``FESS_JAVA_OPTS`` de ``compose.yaml`` (hay elementos, como los ajustes de conexión de SSO, que no se pueden indicar de esta manera).
+Para el procedimiento, consulte `Instalación con Docker (Detalles) <https://fess.codelibs.org/es/stable/install/install-docker.html>`__.
+
+Artículos recomendados
+======================
+
+Continúe con el artículo que se ajuste a su objetivo.
+
+- Conocer la estructura de Fess y cómo recorrer los artículos: :doc:`guide-01`
+- Colocar un cuadro de búsqueda en un sitio interno o portal existente: :doc:`guide-03`
+- Buscar a la vez en los sitios web internos y en los servidores de archivos: :doc:`guide-04`
+- Cambiar los resultados de búsqueda visibles según el departamento o el cargo: :doc:`guide-05`
+- Buscar también datos de Slack, Confluence, bases de datos, etc.: primero :doc:`datastore-basics` y después :doc:`guide-06`, :doc:`guide-07` y :doc:`guide-12`
+- Hacer que la IA generativa responda a partir de documentos internos: :doc:`guide-19`
+- Encontrar documentos de significado similar aunque las palabras clave no coincidan: :doc:`guide-18`
+- Preparar la supervisión y las copias de seguridad para la operación en producción: :doc:`guide-10`
+- Configurar SSO y la protección de acceso: :doc:`guide-15`
+- Escalar a medida que crecen los documentos y los usuarios: :doc:`guide-14`
 
 Referencias
 ===========
 
-- `Fess <https://fess.codelibs.org/ja/>`__
-
-- `Docker Fess <https://github.com/codelibs/docker-fess>`__
-
-- `Guía de instalación de Fess <https://fess.codelibs.org/ja/15.5/install/index.html>`__
+- `Instalación con Docker (Detalles) <https://fess.codelibs.org/es/stable/install/install-docker.html>`__
+- `docker-fess (GitHub) <https://github.com/codelibs/docker-fess>`__
+- `Configuración del rastreo web <https://fess.codelibs.org/es/stable/admin/webconfig-guide.html>`__
+- `Registro de trabajos <https://fess.codelibs.org/es/stable/admin/joblog-guide.html>`__
+- `Guía de búsqueda <https://fess.codelibs.org/es/stable/user/index.html>`__

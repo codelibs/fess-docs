@@ -1,204 +1,206 @@
-=================================================================
-Partie 1 Pourquoi la recherche est-elle essentielle en entreprise
-=================================================================
+=========================================
+Ce que permet Fess et comment le déployer
+=========================================
 
 Introduction
 ============
 
-« Ce fichier, où est-ce qu'il était déjà ? »
+Les documents internes sont répartis entre les sites web, les serveurs de fichiers, le stockage cloud, des services SaaS comme la messagerie instantanée ou la gestion de tickets, et les bases de données.
+Même si chacun de ces outils dispose de sa propre recherche, il est impossible de chercher dans tous ces emplacements à la fois.
+Fess est un serveur de recherche qui rassemble les documents de ces emplacements dans un index unique, afin de pouvoir les rechercher depuis une seule page de recherche ou une seule API.
 
-C'est une question à laquelle de nombreux professionnels sont confrontés au quotidien.
-Serveurs de fichiers internes, stockage cloud, outils de messagerie instantanée, wikis, systèmes de gestion de tickets -- les informations ne cessent de croître et sont dispersées dans une multitude d'emplacements.
-Nous savons que l'information dont nous avons besoin existe quelque part, mais il faut parfois plusieurs minutes, voire des dizaines de minutes, pour la retrouver.
-Ce « temps passé à chercher l'information » constitue l'un des défis majeurs auxquels les entreprises modernes sont confrontées.
+Cet article s'adresse aux responsables informatiques et aux développeurs qui envisagent de déployer Fess, et explique les points suivants :
 
-Dans cette série « Stratégie d'exploitation des connaissances avec Fess », nous expliquerons de manière pratique comment résoudre ce problème à l'aide de Fess, un serveur de recherche plein texte open source.
-Dans cette Partie 1, nous commencerons par clarifier « pourquoi une infrastructure de recherche est nécessaire en entreprise » et présenterons le positionnement de Fess en tant que logiciel.
+- De quoi Fess est constitué et comment il fonctionne
+- Quelles fonctionnalités sont disponibles en standard et lesquelles nécessitent des plugins supplémentaires
+- Quels articles lire ensuite selon votre objectif
 
-Public cible
-============
+Les procédures de configuration de chaque fonctionnalité sont traitées dans les articles correspondants.
 
-- Personnes confrontées à des difficultés d'exploitation de l'information en interne
-- Personnes envisageant l'adoption d'une solution de recherche d'entreprise
-- Personnes découvrant Fess pour la première fois
+Version couverte par ce guide pratique
+======================================
 
-Les défis de l'ère de la surcharge informationnelle
-=====================================================
+Tous les articles de ce guide pratique portent sur Fess 15.9.
+Les noms des champs à l'écran, les clés de configuration et les valeurs par défaut ont été vérifiés avec la version 15.9.
+Lorsqu'un article présente une fonctionnalité disponible uniquement à partir de la version 15.10, il le précise explicitement.
 
-L'explosion de l'information et le problème de la « non-trouvabilité »
-------------------------------------------------------------------------
-
-Les données numériques détenues par les entreprises augmentent d'année en année.
-Rapports, comptes rendus de réunion, documents de conception, e-mails, journaux de messagerie, code source, données clients -- toutes ces informations constituent le savoir de l'organisation.
-Cependant, plus la quantité d'informations augmente, plus il devient difficile de trouver celle dont on a besoin.
-
-De nombreuses études indiquent que les travailleurs du savoir consacrent 20 à 30 % de leur temps de travail à la recherche d'informations.
-Pour une organisation de 50 personnes, cela signifie que l'équivalent de 10 à 15 personnes-jours est consommé chaque jour par des « activités de recherche ».
-
-Les silos d'information : un problème structurel
----------------------------------------------------
-
-Si l'information est introuvable, ce n'est pas uniquement en raison de son volume.
-Dans de nombreuses entreprises, des « silos d'information » se forment, où les données sont cloisonnées par département ou par outil.
-
-- L'équipe commerciale utilise Salesforce et des dossiers partagés
-- L'équipe de développement utilise Confluence et des dépôts Git
-- Les services généraux utilisent le portail interne et le serveur de fichiers
-
-Chaque outil dispose de sa propre fonction de recherche, mais il n'existe aucun moyen de rechercher de manière transversale entre les outils.
-En conséquence, il arrive fréquemment que l'on ne trouve pas « le document créé par l'équipe voisine » et que l'on recrée un document similaire de zéro.
-
-Résoudre le problème grâce à une infrastructure de recherche
----------------------------------------------------------------
-
-La solution à ces défis est la « recherche d'entreprise (infrastructure de recherche interne) ».
-La recherche d'entreprise fournit un mécanisme permettant de rechercher de manière transversale les différentes sources de données au sein de l'organisation.
-
-L'adoption d'une solution de recherche d'entreprise permet d'obtenir les bénéfices suivants :
-
-- **Réduction du temps de recherche d'information** : rechercher en un seul point les informations dispersées
-- **Promotion de la réutilisation des connaissances** : faciliter la découverte des productions et expertises passées
-- **Accélération de la prise de décision** : accéder rapidement à l'information nécessaire pour décider
-- **Réduction de la dépendance aux individus** : diminuer les situations où « il faut demander à telle personne pour savoir »
+Les liens vers la documentation de référence commencent par ``https://fess.codelibs.org/fr/stable/`` et pointent vers la documentation de la version stable actuelle.
+Si vous utilisez une autre version, remplacez ``stable`` dans l'URL par le numéro de version (par exemple ``15.9``) et vérifiez les noms de champs et les valeurs par défaut sur cette page.
 
 Qu'est-ce que Fess ?
-=====================
+====================
 
-Fess est un serveur de recherche plein texte open source.
-Distribué sous licence Apache, il peut être utilisé gratuitement, y compris pour un usage commercial.
-Construit en Java, il utilise OpenSearch comme moteur de recherche.
+Fess est un serveur de recherche plein texte open source écrit en Java.
+Il est distribué sous licence Apache 2.0 et peut être utilisé gratuitement, y compris dans un environnement commercial.
 
-Vue d'ensemble de Fess
-------------------------
+Fess utilise OpenSearch pour stocker et rechercher les documents.
+Au démarrage, Fess 15.9 vérifie le serveur auquel il se connecte et interrompt le démarrage s'il ne s'agit pas d'OpenSearch 3 ou d'une version ultérieure.
+Il ne peut pas se connecter à OpenSearch 2 ou antérieur, ni à Elasticsearch.
+Dans la version 15.9, le moteur de recherche autrefois intégré à Fess a été supprimé : vous devez donc toujours fournir OpenSearch séparément (dans la configuration Docker, un conteneur OpenSearch est démarré en même temps que Fess).
 
-Fess n'est pas un simple moteur de recherche, mais un « système de recherche » complet intégrant toutes les fonctionnalités nécessaires.
+Une seule instance de Fess comprend tous les éléments suivants :
 
-**Robot d'indexation (crawler)**
+- Des robots d'exploration qui collectent les documents (web, serveurs de fichiers et divers services via des plugins)
+- Une interface d'administration pour configurer l'exploration, les utilisateurs, les autorisations, les dictionnaires, les planifications, etc.
+- Une page de recherche pour les utilisateurs
+- Des API (``/api/v2/``) permettant d'appeler la recherche et les suggestions depuis des systèmes externes
 
-Il collecte automatiquement les documents depuis diverses sources de données telles que les sites web, les serveurs de fichiers, le stockage cloud et les applications SaaS.
-Il prend en charge plus de 100 formats de fichiers, notamment HTML, PDF, Word, Excel et PowerPoint.
+La page de recherche est affichée par un thème statique qui regroupe HTML, CSS et JavaScript.
+Fess est livré avec le thème ``bootstrap`` ; vous pouvez ajouter d'autres thèmes sous forme de fichiers ZIP dans [Système] > [Thème].
 
-**Moteur de recherche**
+Architecture de Fess
+====================
 
-Il offre une recherche plein texte rapide avec OpenSearch en backend.
-Il prend en charge plus de 20 langues, dont le japonais, et peut monter en charge pour de grands volumes de documents.
+Les composants qui interviennent dans le fonctionnement de Fess sont les suivants.
 
-**Interface de recherche**
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
 
-Une interface de recherche basée sur un navigateur est fournie en standard.
-Elle offre une expérience de recherche conviviale avec la mise en surbrillance des résultats, les facettes (filtrage), et les suggestions (autocomplétion).
+   * - Composant
+     - Rôle
+   * - Fess lui-même (application web)
+     - Fournit la page de recherche, l'interface d'administration et les API. Le planificateur s'exécute également ici et lance aux heures configurées des tâches comme l'exploration
+   * - Robot d'exploration (processus séparé)
+     - Les tâches d'exploration sont lancées sous forme de processus Java distincts de Fess. Elles récupèrent les pages web et les fichiers, en extraient le texte et l'enregistrent dans OpenSearch. Les tâches de création des suggestions, de génération des miniatures et de création des vecteurs pour la recherche sémantique s'exécutent elles aussi de la même façon, dans des processus séparés
+   * - OpenSearch
+     - Contient l'index des documents à rechercher et exécute les recherches. Une grande partie des informations enregistrées dans l'interface d'administration, comme les paramètres d'exploration, les utilisateurs, les journaux des tâches et les journaux de recherche, y est également stockée
 
-**Console d'administration**
+Comme le robot d'exploration est un processus Java distinct, sa mémoire se configure séparément de celle de Fess (voir :doc:`guide-14`).
 
-La configuration du crawl, la gestion des utilisateurs, la gestion des dictionnaires et autres paramètres opérationnels peuvent être effectués depuis le navigateur.
-Le système de recherche peut être administré depuis la console d'administration sans nécessiter de connaissances en ligne de commande.
+Voici les étapes qui mènent à des documents consultables :
 
-**API**
+1. Enregistrez une configuration d'exploration dans l'interface d'administration (URL ou chemins cibles, autorisations qui déterminent qui peut voir les résultats, etc.)
+2. Le planificateur lance la tâche d'exploration. Vous pouvez aussi la lancer manuellement depuis l'interface d'administration avec [Démarrer maintenant]
+3. Le robot d'exploration récupère les documents, en extrait le texte et les enregistre dans OpenSearch avec leurs autorisations
+4. Lorsqu'un utilisateur effectue une recherche, Fess filtre les résultats selon les rôles et les groupes de cet utilisateur avant de les renvoyer
 
-Une API de recherche basée sur JSON est fournie, permettant d'intégrer des fonctionnalités de recherche dans les systèmes existants.
+Vous pouvez essayer l'ensemble de la séquence, du démarrage avec Docker à la recherche en passant par l'exploration, dans :doc:`guide-02`.
 
-Pourquoi choisir Fess ?
--------------------------
+Fonctionnalités de base et plugins
+==================================
 
-Il existe plusieurs options en matière de recherche d'entreprise.
-On peut utiliser directement OpenSearch ou Elasticsearch, ou opter pour des solutions de recherche commerciales.
-Voici les raisons de choisir Fess parmi ces alternatives.
+Dans Fess 15.9, de nombreuses fonctionnalités sont fournies sous forme de plugins séparés de Fess.
+La présence des plugins nécessaires dépend de la méthode d'installation.
 
-**Comparaison avec une solution développée en interne**
+- Un Fess installé à partir du ZIP, du RPM ou du DEB ne contient aucun plugin
+- L'image Docker standard (par exemple ``ghcr.io/codelibs/fess:15.9.0``) contient les sept plugins suivants préinstallés : ``fess-script-groovy``, ``fess-storage-s3``, ``fess-storage-gcs``, ``fess-sso-saml``, ``fess-sso-spnego``, ``fess-sso-entraid``, ``fess-sso-oidc``
+- L'image Docker slim (par exemple ``15.9.0-slim``) ne contient aucun plugin
 
-OpenSearch et Elasticsearch sont des moteurs de recherche puissants, mais ils ne suffisent pas à eux seuls pour constituer un système de recherche complet.
-Il est nécessaire de développer soi-même de nombreuses fonctionnalités : implémentation du crawler, traitement de l'analyse des documents, développement de l'interface de recherche, mécanisme de gestion des droits, etc.
-Fess fournit tout cela de manière intégrée, réduisant ainsi considérablement l'effort de développement nécessaire à la mise en place d'un système de recherche.
+Le tableau suivant résume les principales fonctionnalités et les plugins qu'elles nécessitent.
 
-**Comparaison avec les produits commerciaux**
+.. list-table::
+   :header-rows: 1
+   :widths: 22 39 39
 
-Les produits commerciaux de recherche d'entreprise sont riches en fonctionnalités, mais les coûts de licence tendent à être élevés.
-Fess étant open source, il n'y a aucun coût logiciel.
-De plus, le code source étant ouvert, il n'y a aucun risque de dépendance à un fournisseur (vendor lock-in).
-Si des personnalisations sont nécessaires, elles peuvent être réalisées librement.
+   * - Fonctionnalité
+     - Disponible avec Fess seul
+     - Nécessite un plugin
+   * - Exploration
+     - Web (http et https), systèmes de fichiers, serveurs de fichiers (SMB), FTP
+     - Amazon S3 (``fess-storage-s3``), Google Cloud Storage (``fess-storage-gcs``), exploration web qui exécute le JavaScript dans un navigateur pour récupérer les pages (``fess-crawler-playwright``)
+   * - SaaS, bases de données, etc.
+     - L'écran de configuration des magasins de données et le mécanisme qui les exécute
+     - Un plugin de magasin de données (``fess-ds-*``) pour chaque source à importer. Slack, Confluence et Jira, Google Drive, Microsoft 365, Box, bases de données, CSV, Git, etc.
+   * - Connexion et autorisations
+     - Utilisateurs, rôles et groupes enregistrés dans Fess, et intégration avec LDAP / Active Directory
+     - SSO (``fess-sso-oidc`` pour OpenID Connect, ``fess-sso-saml`` pour SAML, ``fess-sso-entraid`` pour Entra ID, ``fess-sso-spnego`` pour SPNEGO)
+   * - Scripts
+     - JavaScript
+     - Groovy (``fess-script-groovy``), OGNL (``fess-script-ognl``)
+   * - Page de recherche
+     - Le thème fourni ``bootstrap``
+     - On ajoute un fichier ZIP de thème, et non un plugin
+   * - API
+     - ``/api/v2/`` (recherche, étiquettes, suggestions, mots populaires, contrôle d'état, etc.) et l'API d'administration
+     - ``/api/v1/`` (``fess-webapp-v1-api``), ``/json`` et ``/suggest`` (``fess-webapp-classic-api``). Fess Site Search utilise ``/api/v1/`` et nécessite donc ``fess-webapp-v1-api``
+   * - IA
+     - Les mécanismes de recherche sémantique et du mode de recherche IA (RAG). Si vous utilisez un modèle d'embedding déployé dans OpenSearch, la recherche sémantique ne nécessite aucun plugin
+     - Connexion aux LLM et aux modèles d'embedding externes (``fess-llm-ollama``, ``fess-llm-openai``, ``fess-llm-gemini``, ``fess-llm-bedrock``), serveur MCP (``fess-webapp-mcp``), recherche d'images (``fess-webapp-multimodal``)
 
-**Extensibilité par les plugins**
+Parmi les éléments de la colonne « Nécessite un plugin », seuls S3 et GCS, les quatre types de SSO et Groovy sont inclus dans l'image Docker standard.
+Tout le reste doit être installé en plus, quelle que soit la méthode d'installation.
 
-Fess adopte une architecture basée sur des plugins.
-Des plugins sont disponibles pour diverses sources de données telles que Slack, SharePoint, Box, Dropbox, Confluence et Jira.
-De plus, des extensions adaptées à l'ère de l'IA sont possibles, comme les plugins LLM permettant l'intégration avec des grands modèles de langage (LLM).
+Les configurations dont le type de script est Groovy, ainsi que les configurations reprises de versions antérieures dont le type de script n'est pas enregistré, sont exécutées en Groovy.
+Pour les utiliser, ``fess-script-groovy`` est nécessaire.
+Pour les nouvelles configurations de magasin de données, le type de script par défaut est JavaScript.
 
-Scénarios de recherche réalisables avec Fess
-===============================================
+Installez les plugins de l'une des façons suivantes.
+Après avoir installé ou supprimé un plugin, redémarrez Fess.
+Alignez la version du plugin sur celle de Fess (15.9.x pour Fess 15.9).
 
-Quels types d'environnements de recherche peut-on concrètement construire avec Fess ?
-Voici un aperçu des scénarios abordés dans cette série.
+- Dans l'interface d'administration, ouvrez [Système] > [Plugin], cliquez sur [Installer] et choisissez dans la liste
+- En ligne de commande, exécutez ``bin/fess-setup install plugin <nom-du-plugin>:<version>``
+- Avec Docker, définissez la variable d'environnement ``FESS_PLUGINS`` avec une liste séparée par des espaces, par exemple ``fess-ds-slack:15.9.0 fess-webapp-mcp:15.9.0``
 
-Recherche transversale de documents internes
-----------------------------------------------
+L'utilisation des plugins de magasin de données est expliquée dans :doc:`datastore-basics`, et l'écriture de vos propres plugins dans :doc:`guide-17`.
 
-Il est possible de rechercher depuis un point unique des sources de données multiples telles que les serveurs de fichiers, le stockage cloud et les sites web.
-Même si chaque département utilise des outils différents, les utilisateurs peuvent accéder à l'information dont ils ont besoin depuis une seule barre de recherche.
+Formats de fichiers consultables
+================================
 
-Contrôle d'accès par département
------------------------------------
+Le texte est extrait des fichiers par des traitements d'extraction comme Apache Tika.
+Vous pouvez rechercher dans le HTML, le PDF, les documents Microsoft Office, le texte, le contenu des fichiers d'archive, etc.
+Pour la liste des formats vérifiés, consultez `Fichiers recherchables <https://fess.codelibs.org/fr/supported-files.html>`__.
 
-Les documents affichés dans les résultats de recherche peuvent être contrôlés en fonction de l'appartenance et des droits de l'utilisateur.
-Les documents confidentiels du département des ressources humaines n'apparaîtront pas dans les résultats de recherche de l'équipe commerciale.
-Il est également possible de s'intégrer aux services d'annuaire existants (Active Directory, LDAP) pour refléter automatiquement les informations de droits d'accès.
+Le texte contenu dans les images et dans les PDF numérisés n'est pas consultable par défaut.
+Il le devient si vous installez ``tesseract`` sur l'hôte où s'exécute le robot d'exploration et que vous activez l'OCR.
+Pour la procédure, consultez `Configuration de l'OCR <https://fess.codelibs.org/fr/stable/config/crawler-ocr.html>`__.
 
-Ajout de fonctionnalités de recherche aux systèmes existants
----------------------------------------------------------------
+Choisir une méthode d'installation
+==================================
 
-Les fonctionnalités de recherche de Fess peuvent être intégrées dans les portails internes ou les systèmes métier.
-Plusieurs approches sont disponibles, notamment FSS (Fess Site Search) qui s'intègre facilement en JavaScript, ou l'intégration personnalisée via l'API.
+Fess est distribué sous forme d'image Docker et de paquets ZIP, RPM et DEB.
+Pour un premier essai, Docker est le plus rapide, car il démarre Fess et OpenSearch ensemble.
+La procédure est décrite dans :doc:`guide-02`.
 
-Expérience de recherche enrichie par l'IA
--------------------------------------------
+En production, vous pouvez aussi fournir OpenSearch sous la forme d'un serveur ou d'un cluster séparé.
+Pour les versions de Java et d'OpenSearch requises ainsi que les recommandations en matière de CPU, de mémoire et de disque, consultez `Configuration requise <https://fess.codelibs.org/fr/stable/install/prerequisites.html>`__.
 
-Le RAG (Retrieval-Augmented Generation), qui suscite un intérêt croissant ces dernières années, peut être mis en œuvre avec Fess.
-Lorsqu'un utilisateur pose une question en langage naturel, Fess recherche les informations pertinentes dans les documents internes et le LLM génère une réponse.
-En tant qu'« assistant IA interne », il permet de faire évoluer encore davantage l'exploitation des connaissances.
+Parcours de lecture par objectif
+================================
 
-Structure de la série
-=======================
+Les articles sont organisés pour être lus selon votre objectif.
+Choisissez la ligne la plus proche de votre objectif et lisez les articles de gauche à droite.
 
-Cette série est composée de 23 parties au total.
-Elle est conçue pour permettre une compréhension progressive, des débutants aux utilisateurs avancés.
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
 
-**Partie fondamentale (Parties 1 à 5)**
+   * - Objectif
+     - Articles à lire
+   * - Je veux d'abord essayer Fess
+     - :doc:`guide-02`
+   * - Je veux rechercher dans des serveurs de fichiers
+     - :doc:`file-server-search` → :doc:`guide-04` → :doc:`guide-05`
+   * - Je veux rechercher des données du cloud et de services SaaS
+     - :doc:`datastore-basics` → :doc:`guide-07` / :doc:`guide-06` / :doc:`guide-12`
+   * - Je veux intégrer la recherche à un site ou un système existant
+     - :doc:`guide-03` → :doc:`guide-11`
+   * - Je veux afficher des informations différentes selon le service ou l'utilisateur
+     - :doc:`guide-05` → :doc:`guide-15` → :doc:`guide-13`
+   * - Je veux améliorer la recherche avec l'IA
+     - :doc:`guide-18` → :doc:`guide-19` → :doc:`guide-20`
+   * - Je commence l'exploitation en production
+     - :doc:`guide-10` → :doc:`guide-16` → :doc:`guide-14`
 
-Les cinq premières parties, dont le présent article, couvrent l'installation de Fess et les scénarios de base.
-Vous apprendrez le démarrage rapide avec Docker Compose, l'ajout de fonctionnalités de recherche à un site web, la construction d'une recherche multi-sources et le contrôle d'accès basé sur les droits.
+Les articles suivants sont également disponibles :
 
-**Partie solutions pratiques (Parties 6 à 12)**
+- Améliorer la qualité de la recherche : :doc:`guide-08`, :doc:`guide-09`, :doc:`guide-22`
+- Rechercher des images et du texte ensemble : :doc:`guide-21`
+- Écrire vos propres plugins : :doc:`guide-17`
+- Planifier un déploiement à l'échelle de l'entreprise : :doc:`guide-23`
+- Cas d'utilisation et comparaisons avec d'autres produits : :doc:`use-cases`, :doc:`comparison`
 
-Cette section couvre des sujets pratiques basés sur des scénarios métier réels : construction d'un hub de connaissances pour les équipes de développement, recherche transversale dans le stockage cloud, optimisation de la qualité de recherche, support multilingue, gestion opérationnelle et intégration API.
-
-**Partie architecture et mise à l'échelle (Parties 13 à 17)**
-
-Cette section aborde des sujets d'architecture avancés : conception multi-tenant, mise à l'échelle pour les environnements de grande taille, architecture de sécurité, automatisation opérationnelle de type DevOps et développement de plugins.
-
-**Partie IA et recherche de nouvelle génération (Parties 18 à 22)**
-
-Cette section couvre les dernières technologies de recherche, depuis les bases de la recherche sémantique jusqu'à la construction d'un assistant IA par RAG, l'utilisation en tant que serveur MCP, la recherche multimodale et l'analytique de recherche.
-
-**Conclusion (Partie 23)**
-
-La dernière partie synthétise les enseignements de l'ensemble de la série et présente une architecture de référence pour une plateforme de connaissances centrée sur Fess.
-
-Résumé
-======
-
-Dans cet article, nous avons présenté la nécessité d'une infrastructure de recherche en entreprise et le positionnement de Fess.
-
-- La surcharge informationnelle et les silos d'information sont des défis communs à de nombreuses entreprises
-- La recherche d'entreprise permet de rechercher de manière transversale les informations dispersées
-- Fess est open source et fournit un ensemble complet de fonctionnalités nécessaires à un système de recherche
-- Il prend en charge l'extensibilité par plugins et l'intégration avec l'IA
-
-Dans la prochaine partie, nous présenterons comment démarrer Fess avec Docker Compose et tester l'expérience de recherche le plus rapidement possible.
+La liste des articles est également disponible sur la page :doc:`../guide`.
 
 Références
 ==========
 
-- `Fess <https://fess.codelibs.org/ja/>`__
-
-- `OpenSearch <https://opensearch.org/>`__
-
-- `GitHub - codelibs/fess <https://github.com/codelibs/fess>`__
+- `Documentation de Fess (version stable) <https://fess.codelibs.org/fr/stable/>`__
+- `Configuration requise <https://fess.codelibs.org/fr/stable/install/prerequisites.html>`__
+- `Plugins <https://fess.codelibs.org/fr/stable/admin/plugin-guide.html>`__
+- `Architecture des plugins <https://fess.codelibs.org/fr/stable/dev/plugin-architecture.html>`__
+- `Thème <https://fess.codelibs.org/fr/stable/admin/theme-guide.html>`__
+- `Fichiers recherchables <https://fess.codelibs.org/fr/supported-files.html>`__
+- `docker-fess (GitHub) <https://github.com/codelibs/docker-fess>`__
+- `codelibs/fess (GitHub) <https://github.com/codelibs/fess>`__
