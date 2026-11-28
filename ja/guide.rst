@@ -47,11 +47,12 @@ Fess で実現するナレッジ活用戦略
 - :doc:`articles/guide-23` - 全23回の要素を統合した全社ナレッジ基盤のリファレンスアーキテクチャ
 
 ユースケース・活用事例
-====================
+======================
 
 - :doc:`articles/use-cases` - 業種別・規模別の活用事例とユースケース
 - :doc:`articles/comparison` - Fess と他の検索ソリューション（Elasticsearch、Solr 等）の比較
 - :doc:`articles/file-server-search` - ファイルサーバの全文検索を導入する前に確認すべき点
+- :doc:`articles/legacy-search-migration` - Namazu・Hyper Estraier などの全文検索から Fess へ移行する手順
 
 .. toctree::
    :hidden:
@@ -82,3 +83,4 @@ Fess で実現するナレッジ活用戦略
    articles/use-cases
    articles/comparison
    articles/file-server-search
+   articles/legacy-search-migration
