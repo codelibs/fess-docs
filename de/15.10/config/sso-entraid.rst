@@ -40,10 +40,12 @@ Bei der Entra ID-Authentifizierung fungiert |Fess| als OAuth 2.0/OpenID Connect-
 Informationen zur Integration mit der rollenbasierten Suche finden Sie unter :doc:`security-role`.
 
 .. note::
-   Die |Fess|-Anmeldesitzung endet nicht, wenn die von Entra ID ausgestellten Token ablaufen. Die Anmeldung besteht, bis sich der Benutzer abmeldet oder das Sitzungs-Timeout erreicht ist. Bei SAML ist das anders: Die Sitzung endet mit der Sitzung des IdP (siehe :doc:`sso-saml`).
+   Die |Fess|-Anmeldesitzung endet nicht, wenn die von Entra ID ausgestellten Token ablaufen. Die Anmeldung besteht, bis sich der Benutzer abmeldet, das Sitzungs-Timeout erreicht ist oder Entra ID die Erneuerung der Token verweigert. Bei SAML ist das anders: Die Sitzung endet mit der Sitzung des IdP (siehe :doc:`sso-saml`).
+
+   |Fess| erneuert die Token, wenn das Zugriffstoken kurz vor dem Ablauf steht. Verweigert Entra ID die Erneuerung – das Aktualisierungstoken wurde widerrufen, das Konto wurde deaktiviert, sein Kennwort wurde zurückgesetzt, seine Anmeldung wurde blockiert, oder Entra ID verlangt aus einem Richtliniengrund wie bedingtem Zugriff oder einer Richtlinie zur Anmeldehäufigkeit eine erneute Anmeldung –, beendet |Fess| die Anmeldesitzung bei der nächsten Anfrage, auf der Suchseite, bei ``/api/v2`` und in der Administration gleichermaßen, und der Benutzer meldet sich erneut über Entra ID an. Schlägt die Erneuerung aus einem anderen Grund fehl, etwa wegen einer Zeitüberschreitung oder eines nicht erreichbaren Endpunkts, endet die Sitzung nicht.
 
 .. note::
-   Wenn Sie mehrere Knoten betreiben, setzen Sie die Umgebungsvariable ``FESS_SESSION_STORE=opensearch``, um die HTTP-Sitzung zwischen ihnen zu teilen; eine auf einem Knoten begonnene Anmeldung kann dann auf einem anderen abgeschlossen werden. Aktualisieren Sie das Plugin auf jedem Knoten auf 15.10, bevor Sie dies aktivieren: Ein Plugin 15.9.0 teilt den Anmeldestatus nicht, und ein Benutzer, der zu einem anderen Knoten zurückkehrt, bleibt anonym. Ohne gemeinsame Sitzung binden Sie jede Sitzung am Load Balancer an einen Knoten.
+   Wenn Sie mehrere Knoten betreiben, setzen Sie die Umgebungsvariable ``FESS_SESSION_STORE=opensearch``, um die HTTP-Sitzung zwischen ihnen zu teilen; eine auf einem Knoten begonnene Anmeldung kann dann auf einem anderen abgeschlossen werden. Aktualisieren Sie das Plugin auf jedem Knoten auf 15.10, bevor Sie dies aktivieren: Ein Plugin 15.9.0 teilt den Anmeldestatus nicht, und ein Benutzer, der zu einem anderen Knoten zurückkehrt, bleibt anonym. Ohne gemeinsame Sitzung binden Sie jede Sitzung am Load Balancer an einen Knoten. Eine Sitzung, die auf einem anderen Knoten als dem verwendet wird, der die Anmeldung verarbeitet hat, kann dort nicht erfahren, dass Entra ID die Erneuerung der Token verweigert hat, und wird auf diesem Knoten nicht beendet.
 
    Mit ``FESS_SESSION_STORE=opensearch`` ändert das Hinzufügen oder Entfernen eines SSO-Plugins (``fess-sso-saml``, ``fess-sso-oidc`` oder ``fess-sso-entraid``) die Formatversion der gespeicherten Sitzungen. Alle gespeicherten Sitzungen werden dadurch ungültig, und alle Benutzer müssen sich erneut anmelden. Installieren oder entfernen Sie diese Plugins auf allen Knoten: Ein Knoten, dessen Plugin-Satz sich von dem der anderen Knoten unterscheidet, kann die von diesen gespeicherten Sitzungen nicht lesen, und diese können seine Sitzungen nicht lesen. Andere Plugins, etwa die Storage-, Skript- und SPNEGO-Plugins, ändern das Format nicht.
 
@@ -128,7 +130,7 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
      - Gruppen-/Rollenfelder (kommagetrennt), die zusätzlich als Berechtigungswerte verwendet werden. Die Gruppen-/Rollen-ID (GUID) wird stets als Berechtigung verwendet; die hier angegebenen Felder (z.B. ``mail``) werden zusätzlich hinzugefügt. Verwendbar sind nur Felder, deren Wert eine Zeichenkette ist. Microsoft Graph liefert ein Feld wie ``securityEnabled`` als booleschen Wert und ``groupTypes`` als Liste; keines von beiden kann ein Berechtigungswert werden, ein solches Feld wird daher ignoriert und eine Warnung mit seinem Namen ins Protokoll geschrieben.
      - ``mail``
    * - ``entraid.use.ds``
-     - Domänendienst-Integration. Bei ``true`` wird für Berechtigungswerte im Format ``name@domain`` auch der lokale Teil (``name``) ohne den Domänenanteil als Berechtigung hinzugefügt. Das gilt nicht nur für Gruppen und Rollen, sondern auch für den angemeldeten Benutzer selbst: Der lokale Teil seines Benutzerprinzipalnamens (UPN) wird als benutzerbezogene Berechtigung hinzugefügt. Mit ``false`` entfällt daher auch diese benutzerbezogene Berechtigung, nicht nur die der Gruppen.
+     - Domänendienst-Integration. Bei ``true`` wird für Berechtigungswerte im Format ``name@domain`` auch der lokale Teil (``name``) ohne den Domänenanteil als Berechtigung hinzugefügt. Das gilt nicht nur für Gruppen und Rollen, sondern auch für den angemeldeten Benutzer selbst: Der lokale Teil seines Benutzerprinzipalnamens (UPN) wird als benutzerbezogene Berechtigung hinzugefügt, allerdings nur bei einem Mitgliedskonto des Mandanten (``userType`` ist in Microsoft Graph ``Member``), nicht bei einem Gastkonto. Mit ``false`` entfällt daher auch diese benutzerbezogene Berechtigung, nicht nur die der Gruppen. Ob das Konto ein Mitglied ist, liest |Fess| nach der Anmeldung zusammen mit der Gruppenmitgliedschaft im Hintergrund aus Microsoft Graph; dafür wird die Berechtigung ``User.Read`` verwendet, die schon die Gruppenabfrage benötigt. Bis Microsoft Graph geantwortet hat, ist der lokale Teil noch keine Berechtigung; der vollständige UPN und die Objekt-ID sind immer Berechtigungen. Schlägt diese Abfrage fehl, bevor sie beantwortet wurde, teilt die Suchseite dem Benutzer wie bei einer fehlgeschlagenen Gruppenabfrage mit, dass seine Gruppen- und Rollenberechtigungen nicht vollständig geladen werden konnten.
      - ``true``
 
 .. note::
@@ -151,6 +153,17 @@ Die folgenden Einstellungen können bei Bedarf hinzugefügt werden.
    passt sie auch auf Dokumente, deren Zugriffsrechte die integrierte Windows-Gruppe
    ``Administrators`` benennen. Prüfen Sie vor dem Hinzufügen, dass die Namen nicht mit den bereits
    in Ihren Zugriffsrechten verwendeten kollidieren.
+
+.. note::
+
+   Mit ``entraid.use.ds=true`` wird auch der lokale Teil des ``mail``-Werts einer Gruppe als
+   Berechtigung hinzugefügt. Die E-Mail-Adresse einer Microsoft-365-Gruppe wird beim Erstellen der
+   Gruppe festgelegt, und standardmäßig kann jeder Benutzer des Mandanten eine solche Gruppe
+   erstellen. Ihr lokaler Teil kann daher mit dem Namen einer anderen, nicht zugehörigen Gruppe in
+   den Zugriffsrechten des Dateisystems übereinstimmen. Wenn Benutzer in Ihrem Mandanten
+   Microsoft-365-Gruppen erstellen können, prüfen Sie die in Ihren Zugriffsrechten verwendeten
+   Namen oder setzen Sie ``entraid.use.ds=false``; damit entfällt auch der oben beschriebene
+   benutzerbezogene lokale Teil.
 
 .. note::
    Beim Standardwert ``query`` steht der Autorisierungscode in der Query-Zeichenfolge der
@@ -411,7 +424,7 @@ Gruppeninformationen können nicht abgerufen werden
   „Nicht vollständig“ ist bewusst gewählt: Die Auflösung gilt nur dann als erfolgreich, wenn sowohl
   die Abfrage der direkten Mitgliedschaften als auch der Durchlauf der verschachtelten Gruppen
   gelungen ist — ein Benutzer, der seine direkten Gruppen, aber nicht seine übergeordneten Gruppen
-  besitzt, erhält diesen Hinweis also ebenfalls. Ein Fall ist davon ausgenommen, und zwar genau
+  besitzt, erhält diesen Hinweis also ebenfalls. Der Hinweis erscheint auch, wenn |Fess| nicht ermitteln konnte, ob das Konto ein Mitglied des Mandanten oder ein Gast ist. Ein Fall ist davon ausgenommen, und zwar genau
   der aus dem vorherigen Punkt: Verweigert Microsoft Graph die Abfrage der verschachtelten Gruppen
   mit ``Authorization_RequestDenied``, weil ``GroupMember.Read.All`` nie erteilt wurde, wertet
   |Fess| das nicht als Fehlschlag, sondern als Antwort, die besagt, dass die Gruppe keine

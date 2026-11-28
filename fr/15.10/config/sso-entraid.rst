@@ -40,10 +40,12 @@ Dans l'authentification Entra ID, |Fess| opère en tant que client OAuth 2.0/Ope
 Pour l'intégration avec la recherche basée sur les rôles, consultez :doc:`security-role`.
 
 .. note::
-   La session de connexion de |Fess| ne prend pas fin lorsque les jetons émis par Entra ID expirent. La connexion dure jusqu'à ce que l'utilisateur se déconnecte ou que le délai d'expiration de la session soit atteint. SAML est différent : sa session prend fin avec celle de l'IdP (voir :doc:`sso-saml`).
+   La session de connexion de |Fess| ne prend pas fin lorsque les jetons émis par Entra ID expirent. La connexion dure jusqu'à ce que l'utilisateur se déconnecte, que le délai d'expiration de la session soit atteint ou qu'Entra ID refuse de renouveler les jetons. SAML est différent : sa session prend fin avec celle de l'IdP (voir :doc:`sso-saml`).
+
+   |Fess| renouvelle les jetons lorsque le jeton d'accès est sur le point d'expirer. Si Entra ID refuse le renouvellement (le jeton d'actualisation a été révoqué, le compte a été désactivé, son mot de passe a été réinitialisé, sa connexion a été bloquée, ou Entra ID exige une nouvelle connexion pour une raison de stratégie, comme l'accès conditionnel ou une stratégie de fréquence de connexion), |Fess| met fin à la session de connexion à la requête suivante, sur l'écran de recherche, ``/api/v2`` et les écrans d'administration de la même manière, et l'utilisateur se reconnecte via Entra ID. Un renouvellement qui échoue pour une autre raison, comme un délai dépassé ou un point de terminaison injoignable, ne met pas fin à la session.
 
 .. note::
-   Lorsque vous exécutez plusieurs nœuds, définissez la variable d'environnement ``FESS_SESSION_STORE=opensearch`` pour partager la session HTTP entre eux ; une connexion commencée sur un nœud peut alors être terminée sur un autre. Mettez à jour le plugin sur chaque nœud en 15.10 avant de l'activer : un plugin 15.9.0 ne partage pas l'état de la connexion, et un utilisateur qui revient sur un autre nœud reste anonyme. Sans session partagée, configurez le répartiteur de charge pour qu'il rattache chaque session à un seul nœud.
+   Lorsque vous exécutez plusieurs nœuds, définissez la variable d'environnement ``FESS_SESSION_STORE=opensearch`` pour partager la session HTTP entre eux ; une connexion commencée sur un nœud peut alors être terminée sur un autre. Mettez à jour le plugin sur chaque nœud en 15.10 avant de l'activer : un plugin 15.9.0 ne partage pas l'état de la connexion, et un utilisateur qui revient sur un autre nœud reste anonyme. Sans session partagée, configurez le répartiteur de charge pour qu'il rattache chaque session à un seul nœud. Une session utilisée sur un autre nœud que celui qui a traité la connexion ne peut pas y apprendre qu'Entra ID a refusé de renouveler les jetons, et n'est pas terminée sur ce nœud.
 
    Avec ``FESS_SESSION_STORE=opensearch``, ajouter ou retirer un plugin SSO (``fess-sso-saml``, ``fess-sso-oidc`` ou ``fess-sso-entraid``) change la version de format des sessions stockées. Toutes les sessions stockées deviennent alors invalides et tous les utilisateurs doivent se reconnecter. Installez ou retirez ces plugins sur tous les nœuds : un nœud dont l'ensemble de ces plugins diffère de celui des autres nœuds ne peut pas lire les sessions que ceux-ci ont stockées, et ils ne peuvent pas lire les siennes. Les autres plugins, tels que les plugins de stockage, de scripts et SPNEGO, ne changent pas le format.
 
@@ -128,7 +130,7 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
      - Champs de groupe/rôle (séparés par des virgules) à utiliser en plus comme valeurs de permission. L'ID (GUID) du groupe/rôle est toujours utilisé comme permission, et les valeurs des champs indiqués ici (ex : ``mail``) sont ajoutées. Seuls les champs dont la valeur est une chaîne de caractères peuvent être utilisés. Microsoft Graph renvoie un champ tel que ``securityEnabled`` sous forme de booléen et ``groupTypes`` sous forme de liste ; ni l'un ni l'autre ne peut devenir une valeur de permission, un tel champ est donc ignoré et un avertissement mentionnant son nom est écrit dans le journal.
      - ``mail``
    * - ``entraid.use.ds``
-     - Intégration avec le service de domaine. Quand ``true``, pour les valeurs de permission au format ``name@domain``, la partie locale (``name``) sans la partie domaine est également ajoutée comme permission. Cela s'applique non seulement aux groupes et aux rôles, mais aussi à l'utilisateur connecté lui-même : la partie locale de son nom principal d'utilisateur (UPN) est ajoutée comme permission au niveau utilisateur. Le passage à ``false`` supprime donc également cette permission au niveau utilisateur, et pas seulement celles des groupes.
+     - Intégration avec le service de domaine. Quand ``true``, pour les valeurs de permission au format ``name@domain``, la partie locale (``name``) sans la partie domaine est également ajoutée comme permission. Cela s'applique non seulement aux groupes et aux rôles, mais aussi à l'utilisateur connecté lui-même : la partie locale de son nom principal d'utilisateur (UPN) est ajoutée comme permission au niveau utilisateur, mais uniquement pour un compte membre du locataire (``userType`` vaut ``Member`` dans Microsoft Graph), pas pour un compte invité. Le passage à ``false`` supprime donc également cette permission au niveau utilisateur, et pas seulement celles des groupes. |Fess| lit dans Microsoft Graph si le compte est membre, en arrière-plan avec l'appartenance aux groupes, après la connexion ; cette lecture utilise l'autorisation ``User.Read`` dont la requête des groupes a déjà besoin. Tant que Microsoft Graph n'a pas répondu, la partie locale n'est pas encore une permission ; le nom principal d'utilisateur complet et l'ID d'objet le sont toujours. Si cette requête échoue avant d'avoir obtenu une réponse, l'écran de recherche indique à l'utilisateur que ses autorisations de groupe et de rôle n'ont pas pu être entièrement chargées, comme lorsque la requête des groupes échoue.
      - ``true``
 
 .. note::
@@ -152,6 +154,16 @@ Les paramètres suivants peuvent être ajoutés si nécessaire.
    correspondra aussi aux documents dont les droits d'accès désignent le groupe Windows intégré
    ``Administrators``. Avant de l'ajouter, vérifiez que les noms n'entrent pas en conflit avec ceux
    déjà utilisés dans vos droits d'accès.
+
+.. note::
+
+   Avec ``entraid.use.ds=true``, la partie locale du ``mail`` d'un groupe est également ajoutée
+   comme permission. L'adresse de messagerie d'un groupe Microsoft 365 est choisie à la création du
+   groupe et, par défaut, tout utilisateur du locataire peut en créer un : sa partie locale peut
+   donc correspondre au nom d'un groupe sans rapport dans les droits d'accès du système de
+   fichiers. Si les utilisateurs peuvent créer des groupes Microsoft 365 dans votre locataire,
+   vérifiez les noms utilisés dans vos droits d'accès ou définissez ``entraid.use.ds=false``, ce
+   qui supprime aussi la partie locale au niveau utilisateur décrite ci-dessus.
 
 .. note::
    Avec la valeur par défaut ``query``, le code d'autorisation figure dans la chaîne de requête de
@@ -411,7 +423,7 @@ Impossible de récupérer les informations de groupe
   « Entièrement » est délibéré : la résolution n'est considérée comme réussie que si la requête
   des appartenances directes et le parcours des groupes imbriqués ont tous deux abouti ; un
   utilisateur qui possède ses groupes directs mais pas ses groupes parents reçoit donc aussi ce
-  message. Un cas fait exception, et c'est celui que décrit le point précédent : lorsque
+  message. Ce message s'affiche aussi lorsque |Fess| n'a pas pu déterminer si le compte est membre du locataire ou invité. Un cas fait exception, et c'est celui que décrit le point précédent : lorsque
   Microsoft Graph refuse la recherche des groupes imbriqués avec ``Authorization_RequestDenied``
   parce que ``GroupMember.Read.All`` n'a jamais été accordé, |Fess| l'interprète non pas comme un
   échec, mais comme une réponse signifiant que le groupe n'a pas de groupe parent. La résolution
